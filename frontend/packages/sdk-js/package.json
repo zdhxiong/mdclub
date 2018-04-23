@@ -1,0 +1,23 @@
+{
+  "name": "mdclub-sdk-js",
+  "version": "0.0.1",
+  "description": "MDClub 的 Javascript 版 SDK",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zdhxiong/mdclub-sdk-js.git"
+  },
+  "keywords": [
+    "MDClub"
+  ],
+  "author": "zdhxiong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zdhxiong/mdclub-sdk-js/issues"
+  },
+  "homepage": "https://github.com/zdhxiong/mdclub-sdk-js#readme",
+  "dependencies": {
+    "sha-1": "^0.1.1"
+  }
+}
