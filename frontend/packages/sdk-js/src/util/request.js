@@ -1,69 +1,112 @@
-import globalOptions from 'defaults';
+import globalOptions from './defaults';
 
 // 判断是否支持 webp
 const isSupportWebp = !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
 
+// 对象转为查询字符串
+function param(obj) {
+  const args = [];
+
+  Object.keys(obj).forEach((key) => {
+    let value = '';
+
+    if (obj[key] !== null && obj[key] !== '') {
+      value = `=${encodeURIComponent(obj[key])}`;
+    }
+
+    args.push(encodeURIComponent(key) + value);
+  });
+
+  return args.join('&');
+}
+
+// 扩展函数
+function extend(_obj, ...args) {
+  const { length } = args;
+  const obj = _obj;
+  let i;
+  let options;
+
+  for (i = 0; i < length; i += 1) {
+    options = args[i];
+
+    /* eslint no-loop-func: "off" */
+    Object.keys(options).forEach((prop) => {
+      obj[prop] = options[prop];
+    });
+  }
+
+  return obj;
+}
+
+// 发送请求
 function request(opts) {
   // 默认参数
   const defaults = {
-    method: 'GET',                   // 请求方式
-    url: '',                         // 请求的 URL
-    data: false,                     // 请求的数据，查询字符串或对象
-    headers: {},                     // 一个键值对，随着请求一起发送
-    contentType: 'application/json', // 发送信息至服务器时内容编码类型
+    method: 'GET',
+    url: '',
+    data: false,
+    // beforeSend:    function (XMLHttpRequest) 请求发送前执行，返回 false 可取消本次 ajax 请求
+    // success:       function (data, textStatus, XMLHttpRequest) 请求成功时调用
+    // error:         function (XMLHttpRequest, textStatus) 请求失败时调用
+    // complete:      function (XMLHttpRequest, textStatus) 请求完成后回调函数 (请求成功或失败之后均调用)
   };
 
-  if (globalOptions['headers']) {
-    defaults['headers'] = globalOptions['headers'];
-  }
-
-  const options = Object.assign({}, defaults, opts);
-
-  const method = options.method.toUpperCase();
-  const contentType = options.contentType;
-  const headers = options.headers;
-  let data = options.data;
-  let url = options.url;
+  const options = extend({}, defaults, opts);
+  let { data, url, method } = options;
+  url = globalOptions.baseURL + url;
+  method = method.toUpperCase();
 
   // 触发 xhr 回调
-  function triggerCallback(callback) {
+  function triggerCallback(callback, ...args) {
+    // 全局回调
+    if (globalOptions[callback]) {
+      globalOptions[callback](...args);
+    }
+
+    // 自定义回调
     if (options[callback]) {
-      options[callback](arguments[1], arguments[2], arguments[3], arguments[4]);
+      options[callback](...args);
     }
   }
 
-  // 需要发送的数据
-  if (method === 'GET' && data && FormData !== data.constructor && typeof data !== 'string') {
-    data = JSON.stringify(data);
+  // headers
+  const headers = {
+    Accept: `application/json, text/javascript${isSupportWebp ? ', image/webp' : ''}`,
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/json',
+  };
+
+  if (globalOptions.token) {
+    headers.token = globalOptions.token;
   }
 
-  if (['POST', 'PATCH', 'PUT'].indexOf(method) > -1) {
+  // data
+  if (method === 'GET' && data && typeof data !== 'string') {
+    // GET 请求参数序列化
+    data = param(data);
+  }
+
+  if (method === 'GET' && data) {
+    // GET 请求，把 data 数据添加到 URL 中。URL 中不存在 ? 时，自动把第一个 & 替换为 ?
+    url = `${url}&${data}`.replace(/[&?]{1,2}/, '?');
+  }
+
+  if (['POST', 'PATCH', 'PUT'].indexOf(method) > -1 && FormData !== data.constructor) {
+    // JSON 数据转为字符串
     data = typeof data === 'string' ? data : JSON.stringify(data);
   }
 
-  // 对于 GET、HEAD 类型的请求，把 data 数据添加到 URL 中
-  if (method === 'GET' && data) {
-    // 添加参数到 URL 上，且 URL 中不存在 ? 时，自动把第一个 & 替换为 ?
-    url = (url + '&' + data).replace(/[&?]{1,2}/, '?');
-    data = null;
+  if (FormData === data.constructor) {
+    delete headers['Content-Type'];
   }
 
   const xhr = new XMLHttpRequest();
   xhr.open(method, url, true, '', '');
 
-  headers['X-Requested-With'] = 'XMLHttpRequest';
-  headers['Accept'] = `application/json, text/javascript${isSupportWebp ? ', image/webp' : ''}`;
-
-  if (data && method !== 'GET' && contentType !== false || contentType) {
-    headers['Content-Type'] = contentType;
-  }
-
-  // 添加 headers
-  if (headers) {
-    for (const key in headers) {
-      xhr.setRequestHeader(key, headers[key]);
-    }
-  }
+  Object.keys(headers).forEach((key) => {
+    xhr.setRequestHeader(key, headers[key]);
+  });
 
   xhr.onload = function () {
     let textStatus = 'success';
@@ -106,24 +149,4 @@ function request(opts) {
   return xhr;
 }
 
-function get(url, data, success) {
-  request({method: 'GET', url, data, success});
-}
-
-function post(url, data, success) {
-  request({method: 'POST', url, data, success});
-}
-
-function patch(url, data, success) {
-  request({method: 'PATCH', url, data, success});
-}
-
-function put(url, data, success) {
-  request({method: 'put', url, data, success});
-}
-
-function del(url, data, success) {
-  request({method: 'DELETE', url, data, success});
-}
-
-export { setup, request, get, post, patch, put, del };
+export default request;
