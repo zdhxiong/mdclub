@@ -8,7 +8,7 @@ import Token from './Token';
 import Topic from './Topic';
 import User from './User';
 
-export default {
+export {
   defaults,
   Answer,
   Captcha,
