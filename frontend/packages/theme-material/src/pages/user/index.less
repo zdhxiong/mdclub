@@ -1,0 +1,172 @@
+#page-user {
+  padding-top: 0;
+
+  .cover {
+    height: 0;
+    padding-bottom: 56%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    overflow: visible;
+
+    .mc-cover-upload {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      display: none;
+    }
+
+    &:hover .mc-cover-upload {
+      display: block;
+    }
+  }
+
+  .gradient {
+    height: 100px;
+  }
+
+  .info {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 24px 16px 16px;
+    color: #fff;
+
+    .avatar-box {
+      position: relative;
+      float: left;
+      margin-right: 16px;
+      height: 60px;
+
+      .avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        user-select: none;
+      }
+
+      .mc-avatar-upload {
+        display: none;
+      }
+
+      &:hover .mc-avatar-upload {
+        display: block;
+      }
+    }
+
+    .username,
+    .meta {
+      margin-left: 76px;
+    }
+
+    .username {
+      font-size: 30px;
+      display: block;
+      line-height: 36px;
+      opacity: 1;
+    }
+
+    .meta {
+      position: relative;
+      opacity: 1;
+      line-height: 24px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.54);
+      margin-right: 188px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .meta a {
+      color: #fff;
+      text-decoration: none;
+
+      &:hover {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    .menu {
+      position: absolute;
+      right: 152px;
+      bottom: 28px;
+    }
+
+    .right-btn {
+      background-color: #fff;
+      color: rgba(0, 0, 0, 0.87);
+      width: 120px;
+      font-size: 15px;
+      height: 42px;
+      line-height: 42px;
+      position: absolute;
+      right: 16px;
+      bottom: 25px;
+
+      &.following {
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
+
+    @media (max-width: 599px) {
+      padding: 0;
+      height: 0;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.87);
+
+      .avatar-box {
+        float: none;
+        margin: -30px 0 0 0;
+      }
+
+      .username {
+        margin: 16px 0 0 0;
+        padding: 0 16px;
+      }
+
+      .meta {
+        margin: 46px 0 0 0;
+        padding: 0 16px;
+        color: rgba(0, 0, 0, 0.54);
+        overflow: visible;
+
+        a {
+          color: rgba(0, 0, 0, 0.87);
+
+          &:hover {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+          }
+        }
+
+        .followers+span {
+          display: none;
+        }
+
+        .headline {
+          position: absolute;
+          top: -32px;
+          left: 16px;
+          right: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .menu {
+        right: 16px;
+        bottom: 16px;
+        text-align: left;
+      }
+
+      .right-btn {
+        position: relative;
+        right: 0;
+        bottom: 0;
+        margin-top: 24px;
+      }
+    }
+  }
+}

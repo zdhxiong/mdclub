@@ -1,0 +1,77 @@
+#page-users {
+  .item {
+    margin-bottom: 16px;
+
+    .info {
+      display: block;
+      text-decoration: none;
+      box-sizing: border-box;
+
+      .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        margin: 24px auto 16px auto;
+        background-size: 96px 96px;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .username,
+      .headline {
+        padding: 0 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-break: break-all;
+        text-align: center;
+      }
+
+      .username {
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 17px;
+        line-height: 20px;
+        height: 20px;
+      }
+
+      .headline {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 15px;
+        margin: 8px 0 16px 0;
+        line-height: 20px;
+        height: 20px;
+      }
+    }
+
+    .actions {
+      padding: 8px 0;
+      height: 36px;
+
+      .mdui-btn {
+        &.following {
+          opacity: 0.54;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 559px) {
+    .item {
+      margin-bottom: 8px;
+
+      .info {
+        .avatar {
+          height: 80px;
+          width: 80px;
+          margin: 16px auto 12px auto;
+          background-size: 80px 80px;
+          background-position: center;
+        }
+
+        .headline {
+          margin: 8px 0;
+        }
+      }
+    }
+  }
+}

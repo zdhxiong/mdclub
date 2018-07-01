@@ -1,0 +1,56 @@
+#page-topics {
+  .item {
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-bottom: 16px;
+
+    .info {
+      padding: 56% 16px 0 16px;
+      display: block;
+      text-decoration: none;
+      box-sizing: border-box;
+
+      .name,
+      .follower {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-break: break-all;
+      }
+
+      .name {
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 16px;
+        padding-top: 10px;
+      }
+
+      .follower {
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 12px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+
+    .actions {
+      padding: 8px;
+
+      .mdui-btn {
+        padding-left: 8px;
+        padding-right: 8px;
+        min-width: 0;
+
+        &.following {
+          opacity: 0.54;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 599px) {
+    .item {
+      margin-bottom: 8px;
+    }
+  }
+}
+

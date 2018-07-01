@@ -1,0 +1,44 @@
+@import "../../helper/mixin";
+
+.mc-users-dialog {
+  max-width: 530px;
+  height: 94% !important;
+  max-height: 720px !important;
+
+  .mdui-dialog-title {
+    line-height: 36px;
+    padding: 16px 24px;
+  }
+
+  .mdui-dialog-content,
+  .mdui-list {
+    padding: 0;
+  }
+
+  .mdui-dialog-content {
+    padding-bottom: 62px;
+  }
+
+  .mdui-list-item {
+    padding: 8px 24px;
+  }
+
+  .close {
+    display: none;
+  }
+
+  @media (max-width: 599px) {
+    .mc-dialog-fullscreen();
+
+    .mdui-dialog-title {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .close {
+      float: left;
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}

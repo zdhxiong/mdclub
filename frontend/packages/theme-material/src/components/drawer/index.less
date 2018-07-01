@@ -1,0 +1,48 @@
+.mc-drawer {
+  /* 图标颜色 */
+  .mdui-text-color-theme {
+    .mdui-list-item-icon {
+      color: inherit;
+    }
+  }
+
+  /* 桌面端文字不加粗 */
+  @media (min-width: 1024px) {
+    .mdui-list-item:hover,
+    .mdui-list-item-active {
+      background-color: rgba(0, 0, 0, .042);
+      font-weight: normal;
+
+      .mdui-list-item-content {
+        font-weight: normal;
+      }
+    }
+  }
+
+  .mdui-list {
+    min-height: ~'calc(100% - 80px)';
+    box-sizing: border-box;
+  }
+
+  .copyright {
+    padding: 20px 16px;
+    width: 100%;
+    box-sizing: border-box;
+
+    p {
+      margin: 0;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.38);
+      font-size: 13px;
+    }
+
+    a {
+      color: rgba(0, 0, 0, 0.52);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

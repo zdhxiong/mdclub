@@ -1,0 +1,21 @@
+#page-topics,
+#page-users {
+
+  @media (max-width: 599px) {
+    .mdui-row,
+    [class*="mdui-row-"] {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .mdui-col:nth-child(odd) {
+      padding-left: 8px;
+      padding-right: 4px;
+    }
+
+    .mdui-col:nth-child(even) {
+      padding-left: 4px;
+      padding-right: 8px;
+    }
+  }
+}

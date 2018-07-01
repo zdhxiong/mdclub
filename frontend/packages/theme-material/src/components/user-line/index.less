@@ -1,0 +1,54 @@
+.mc-user-line {
+  position: relative;
+  height: 40px;
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    float: left;
+  }
+
+  .info {
+    margin-left: 64px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .username {
+      line-height: 22px;
+    }
+
+    .username a {
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    .headline {
+      line-height: 18px;
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.54);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .more {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    .time {
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.54);
+      font-size: 13px;
+    }
+  }
+}
