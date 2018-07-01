@@ -2,6 +2,7 @@ import { JQ as $ } from 'mdui';
 
 const hljs = require('../../node_modules/highlight.js/lib/highlight');
 
+/* eslint-disable */
 // hljs.registerLanguage('1c', require('../../node_modules/highlight.js/lib/languages/1c'));
 // hljs.registerLanguage('abnf', require('../../node_modules/highlight.js/lib/languages/abnf'));
 // hljs.registerLanguage('accesslog', require('../../node_modules/highlight.js/lib/languages/accesslog'));
@@ -178,6 +179,7 @@ hljs.registerLanguage('scss', require('../../node_modules/highlight.js/lib/langu
 // hljs.registerLanguage('xl', require('../../node_modules/highlight.js/lib/languages/xl'));
 // hljs.registerLanguage('xquery', require('../../node_modules/highlight.js/lib/languages/xquery'));
 // hljs.registerLanguage('zephir', require('../../node_modules/highlight.js/lib/languages/zephir'));
+/* eslint-enable */
 
 export default (element) => {
   $(element).find('pre').each((i, block) => {

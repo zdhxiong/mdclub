@@ -1,4 +1,4 @@
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 
 /**
  * 验证列表是否被包裹在 <p> 之内，因为可能同时操作多个列表，所以检查所有列表

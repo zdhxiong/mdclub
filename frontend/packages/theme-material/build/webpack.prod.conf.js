@@ -44,8 +44,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // 替换 HTML 中的 JS、CSS
     function() {
       const files = [
-        path.resolve(__dirname, '../../../../../application/home/view/default/Public/header.php'),
-        path.resolve(__dirname, '../../../../../application/home/view/default/Public/footer.php'),
+        path.resolve(__dirname, '../view/Public/header.php'),
+        path.resolve(__dirname, '../view/Public/footer.php'),
       ];
       this.plugin('done', function(statsData) {
         let stats = statsData.toJson();
@@ -79,12 +79,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&
-          /\.js$/.test(module.resource) &&
           module.resource.indexOf(
             path.join(__dirname, '../node_modules')
-          ) === 0 ||
-          module.resource.indexOf(
-            path.join(__dirname, '../vendor')
           ) === 0
         )
       }

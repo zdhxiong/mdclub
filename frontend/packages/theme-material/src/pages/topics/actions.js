@@ -1,7 +1,5 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import TopicService from '../../service/Topic';
-import TopicFollowService from '../../service/TopicFollow';
+import mdui, { JQ as $ } from 'mdui';
+import { Topic } from 'mdclub-sdk-js';
 
 const TAB_INDEX = {
   FOLLOWING: 0,
@@ -107,14 +105,14 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.FOLLOWING:
-        TopicFollowService.getMyFollowingTopics({}, loaded);
+        Topic.getMyFollowing({}, loaded);
         break;
 
       case TAB_INDEX.RECOMMENDED:
         if (global_actions.getState().user.user.user_id) {
-          TopicFollowService.getMyNotFollowingTopics({}, loaded);
+          Topic.getMyNotFollowing({}, loaded);
         } else {
-          TopicService.getList({}, loaded);
+          Topic.getList({}, loaded);
         }
         break;
 
@@ -165,14 +163,14 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.FOLLOWING:
-        TopicFollowService.getMyFollowingTopics(data, loaded);
+        Topic.getMyFollowing(data, loaded);
         break;
 
       case TAB_INDEX.RECOMMENDED:
         if (global_actions.getState().user.user.user_id) {
-          TopicFollowService.getMyNotFollowingTopics(data, loaded);
+          Topic.getMyNotFollowing(data, loaded);
         } else {
-          TopicService.getList(data, loaded);
+          Topic.getList(data, loaded);
         }
         break;
 
@@ -221,9 +219,9 @@ export default {
       };
 
       if (topic.relationship.is_following) {
-        TopicFollowService.addFollow(topic_id, done);
+        Topic.addFollow(topic_id, done);
       } else {
-        TopicFollowService.deleteFollow(topic_id, done);
+        Topic.deleteFollow(topic_id, done);
       }
     });
   },

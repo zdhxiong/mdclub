@@ -1,4 +1,4 @@
-import hljs from './hljs';
+import highlight from './highlight';
 
 export default _html => (_element) => {
   let html = _html;
@@ -9,5 +9,5 @@ export default _html => (_element) => {
   }
 
   element.innerHTML = html;
-  hljs(element);
+  highlight(element);
 };

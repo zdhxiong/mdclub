@@ -1,5 +1,4 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
+import mdui, { JQ as $ } from 'mdui';
 import Cookies from 'js-cookie';
 
 // 判断是否支持 webp

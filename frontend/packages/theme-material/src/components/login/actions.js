@@ -1,9 +1,6 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import sha1 from 'sha-1';
+import mdui, { JQ as $ } from 'mdui';
 import Cookies from 'js-cookie';
-import TokenService from '../../service/Token';
-import CaptchaService from '../../service/Captcha';
+import { Token, Captcha } from 'mdclub-sdk-js';
 
 let Dialog;
 let $name;
@@ -78,7 +75,7 @@ export default {
    * 刷新验证码
    */
   captchaRefresh: () => (state, actions) => {
-    CaptchaService.post((response) => {
+    Captcha.create((response) => {
       if (response.code === 0) {
         actions.setState({
           captcha_token: response.data.captcha_token,
@@ -120,7 +117,7 @@ export default {
 
     const data = {
       name: state.name,
-      password: sha1(state.password),
+      password: state.password,
       device: navigator.userAgent,
     };
 
@@ -129,7 +126,7 @@ export default {
       data.captcha_code = state.captcha_code;
     }
 
-    TokenService.post(data, (response) => {
+    Token.create(data, (response) => {
       // 成功
       if (response.code === 0) {
         Cookies.set('token', response.data.token, { expires: 15 });

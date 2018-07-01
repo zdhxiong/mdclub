@@ -86,8 +86,8 @@ module.exports = new Promise((resolve, reject) => {
         // 替换 HTML 中的 JS、CSS
         function() {
           const files = [
-            path.resolve(__dirname, '../../../../../application/home/view/default/Public/header.php'),
-            path.resolve(__dirname, '../../../../../application/home/view/default/Public/footer.php'),
+            path.resolve(__dirname, '../view/Public/header.php'),
+            path.resolve(__dirname, '../view/Public/footer.php'),
           ];
           this.plugin('done', function(statsData) {
             let stats = statsData.toJson();

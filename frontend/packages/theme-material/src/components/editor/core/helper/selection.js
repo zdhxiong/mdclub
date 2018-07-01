@@ -1,4 +1,4 @@
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import UA from './ua';
 
 /**

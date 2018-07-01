@@ -1,2 +1,2 @@
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 

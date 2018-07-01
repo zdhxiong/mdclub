@@ -1,7 +1,7 @@
 import { h } from 'hyperapp';
 import { Link, location } from '@hyperapp/router';
 import cc from 'classcat';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import timeHelper from '../../../../helper/time';
 import './index.less';
 

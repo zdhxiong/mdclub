@@ -1,6 +1,5 @@
 import { location } from '@hyperapp/router';
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
+import mdui, { JQ as $ } from 'mdui';
 
 import IndexActions from '../pages/index/actions';
 import QuestionsActions from '../pages/questions/actions';

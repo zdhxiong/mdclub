@@ -1,4 +1,3 @@
-import $ from 'mdui.JQ';
 import { replaceHtmlSymbol } from '../helper/utils';
 
 function Head(editor) {

@@ -50,15 +50,12 @@ module.exports = {
   output: {
     path: resolve('./dist'),
     filename: '[name].js',
-    publicPath: isProduction ? '../' : '../static/home/default/dist/'
+    publicPath: isProduction ? '../' : '../home/material/dist/'
   },
   resolve: {
     extensions: ['.js'],
     alias: {
       '@': resolve('src'),
-      'mdui': resolve('./vendor/mdui/js/mdui.js'),
-      'mdui.JQ': resolve('./src/helper/JQ.js'),
-      'emitter': 'tiny-emitter/instance',
     }
   },
   module: {

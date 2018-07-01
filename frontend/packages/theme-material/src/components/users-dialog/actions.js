@@ -1,15 +1,13 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-
-import UserFollowService from '../../service/UserFollow';
+import mdui, { JQ as $ } from 'mdui';
+import { User } from 'mdclub-sdk-js';
 
 let Dialog;
 let $dialog;
 let $content;
 
 const service = {
-  following: UserFollowService.getFollowing,
-  followers: UserFollowService.getFollowers,
+  following: User.getFollowing,
+  followers: User.getFollowers,
   topic_followers: '',
   question_followers: '',
   article_followers: '',

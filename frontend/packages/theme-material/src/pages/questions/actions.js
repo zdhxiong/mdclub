@@ -1,8 +1,6 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
+import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
-import QuestionService from '../../service/Question';
-import QuestionFollowService from '../../service/QuestionFollow';
+import { Question } from 'mdclub-sdk-js';
 
 const TAB_INDEX = {
   RECENT: 0,
@@ -150,15 +148,15 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.RECENT:
-        QuestionService.getRecentList({}, loaded);
+        Question.getRecentList({}, loaded);
         break;
 
       case TAB_INDEX.POPULAR:
-        QuestionService.getPopularList({}, loaded);
+        Question.getPopularList({}, loaded);
         break;
 
       case TAB_INDEX.FOLLOWING:
-        QuestionFollowService.getMyFollowingQuestions({}, loaded);
+        Question.getMyFollowing({}, loaded);
         break;
 
       default:
@@ -212,15 +210,15 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.RECENT:
-        QuestionService.getRecentList(data, loaded);
+        Question.getRecentList(data, loaded);
         break;
 
       case TAB_INDEX.POPULAR:
-        QuestionService.getPopularList(data, loaded);
+        Question.getPopularList(data, loaded);
         break;
 
       case TAB_INDEX.FOLLOWING:
-        QuestionFollowService.getMyFollowingQuestions(data, loaded);
+        Question.getMyFollowing(data, loaded);
         break;
 
       default:
@@ -308,7 +306,7 @@ export default {
       publishing: true,
     });
 
-    QuestionService.create({
+    Question.create({
       title,
       content_rendered,
       topic_id: 0,

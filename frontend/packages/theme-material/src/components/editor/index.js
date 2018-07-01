@@ -1,5 +1,5 @@
 import { h } from 'hyperapp';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import EditorCore from './core';
 import './index.less';
 

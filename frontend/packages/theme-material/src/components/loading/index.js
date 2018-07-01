@@ -1,5 +1,5 @@
 import { h } from 'hyperapp';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import cc from 'classcat';
 import './index.less';
 

@@ -1,4 +1,4 @@
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import Bold from './bold';
 import Italic from './italic';
 import Head from './head';

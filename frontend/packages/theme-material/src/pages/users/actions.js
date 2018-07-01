@@ -1,6 +1,5 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import UserFollowService from '../../service/UserFollow';
+import mdui, { JQ as $ } from 'mdui';
+import { User } from 'mdclub-sdk-js';
 
 const TAB_INDEX = {
   FOLLOWING: 0,
@@ -123,15 +122,15 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.FOLLOWING:
-        UserFollowService.getMyFollowing({}, loaded);
+        User.getMyFollowing({}, loaded);
         break;
 
       case TAB_INDEX.FOLLOWERS:
-        UserFollowService.getMyFollowers({}, loaded);
+        User.getMyFollowers({}, loaded);
         break;
 
       case TAB_INDEX.RECOMMENDED:
-        UserFollowService.getMyNotFollowing({}, loaded);
+        User.getMyNotFollowing({}, loaded);
         break;
 
       default:
@@ -185,15 +184,15 @@ export default {
 
     switch (tabIndex) {
       case TAB_INDEX.FOLLOWING:
-        UserFollowService.getMyFollowing(data, loaded);
+        User.getMyFollowing(data, loaded);
         break;
 
       case TAB_INDEX.FOLLOWERS:
-        UserFollowService.getMyFollowers(data, loaded);
+        User.getMyFollowers(data, loaded);
         break;
 
       case TAB_INDEX.RECOMMENDED:
-        UserFollowService.getMyNotFollowing(data, loaded);
+        User.getMyNotFollowing(data, loaded);
         break;
 
       default:
@@ -234,9 +233,9 @@ export default {
       };
 
       if (user.relationship.is_following) {
-        UserFollowService.addFollow(user_id, done);
+        User.addFollow(user_id, done);
       } else {
-        UserFollowService.deleteFollow(user_id, done);
+        User.deleteFollow(user_id, done);
       }
     });
   },

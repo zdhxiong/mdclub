@@ -1,4 +1,4 @@
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import Command from './helper/command';
 import Selection from './helper/selection';
 import Purifier from './helper/purifier';

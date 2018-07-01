@@ -1,9 +1,6 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import sha1 from 'sha-1';
+import mdui, { JQ as $ } from 'mdui';
 import Cookies from 'js-cookie';
-import UserRegisterService from '../../service/UserRegister';
-import CaptchaService from '../../service/Captcha';
+import { User, Captcha } from 'mdclub-sdk-js';
 
 let Dialog;
 let $email;
@@ -86,7 +83,7 @@ export default {
    * 刷新验证码
    */
   captchaRefresh: () => (state, actions) => {
-    CaptchaService.post((response) => {
+    Captcha.create((response) => {
       if (response.code === 0) {
         actions.setState({
           captcha_token: response.data.captcha_token,
@@ -175,9 +172,8 @@ export default {
       data.captcha_code = state.captcha_code;
     }
 
-    UserRegisterService.sendEmail(data, (response) => {
+    User.sendRegisterEmail(data, (response) => {
       actions.sendEnd();
-
       actions.setState({
         captcha_token: response.captcha_token || '',
         captcha_image: response.captcha_image || '',
@@ -247,7 +243,7 @@ export default {
       email_code: state.email_code,
     };
 
-    UserRegisterService.create(data, (response) => {
+    User.create(data, (response) => {
       actions.verifyEnd();
 
       // 仅邮箱验证成功一定返回 100002
@@ -323,11 +319,11 @@ export default {
       email: state.email,
       email_code: state.email_code,
       username: state.username,
-      password: sha1(state.password),
+      password: state.password,
       device: navigator.userAgent,
     };
 
-    UserRegisterService.create(data, (response) => {
+    User.create(data, (response) => {
       // 成功
       if (response.code === 0) {
         Cookies.set('token', response.data.token, { expires: 15 });

@@ -1,7 +1,7 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
 import { Link } from '@hyperapp/router';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import './index.less';
 
 const Item = ({ url, icon, title }) => (

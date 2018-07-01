@@ -1,5 +1,4 @@
 import { h } from 'hyperapp';
-import $ from 'mdui.JQ';
 import cc from 'classcat';
 import Editor from '../editor';
 import './index.less';

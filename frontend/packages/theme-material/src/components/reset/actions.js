@@ -1,8 +1,5 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import sha1 from 'sha-1';
-import UserPasswordService from '../../service/UserPassword';
-import CaptchaService from '../../service/Captcha';
+import mdui, { JQ as $ } from 'mdui';
+import { User, Captcha } from 'mdclub-sdk-js';
 
 let Dialog;
 let $email;
@@ -87,7 +84,7 @@ export default {
    * 刷新验证码
    */
   captchaRefresh: () => (state, actions) => {
-    CaptchaService.post((response) => {
+    Captcha.create((response) => {
       if (response.code === 0) {
         actions.setState({
           captcha_token: response.data.captcha_token,
@@ -176,7 +173,7 @@ export default {
       data.captcha_code = state.captcha_code;
     }
 
-    UserPasswordService.sendResetEmail(data, (response) => {
+    User.sendResetEmail(data, (response) => {
       actions.sendEnd();
 
       actions.setState({
@@ -252,7 +249,7 @@ export default {
       email_code: state.email_code,
     };
 
-    UserPasswordService.updateByEmail(data, (response) => {
+    User.updatePasswordByEmail(data, (response) => {
       actions.verifyEnd();
 
       // 仅验证邮箱成功一定返回 100002
@@ -336,12 +333,12 @@ export default {
     const data = {
       email: state.email,
       email_code: state.email_code,
-      password: sha1(state.password),
+      password: state.password,
     };
 
     actions.submitStart();
 
-    UserPasswordService.updateByEmail(data, (response) => {
+    User.updatePasswordByEmail(data, (response) => {
       actions.submitEnd();
 
       // 成功

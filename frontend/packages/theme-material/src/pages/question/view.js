@@ -1,11 +1,9 @@
 import { h } from 'hyperapp';
 import { Link } from '@hyperapp/router';
 import cc from 'classcat';
-import $ from 'mdui.JQ';
 import './index.less';
 
 import rawHtml from '../../helper/rawHtml';
-import hljs from '../../helper/hljs';
 
 import Loading from '../../components/loading';
 import Loaded from '../../components/loaded';

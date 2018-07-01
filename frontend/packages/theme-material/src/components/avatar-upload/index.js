@@ -1,8 +1,7 @@
 import { h } from 'hyperapp';
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
+import mdui, { JQ as $ } from 'mdui';
+import { User } from 'mdclub-sdk-js';
 import './index.less';
-import UserAvatarService from '../../service/UserAvatar';
 
 const upload = (e, global_actions) => {
   const file = e.target.files[0];
@@ -21,7 +20,7 @@ const upload = (e, global_actions) => {
 
   $.loadStart();
 
-  UserAvatarService.uploadMine(file, (response) => {
+  User.uploadMyAvatar(file, (response) => {
     $.loadEnd();
 
     if (!response.code) {

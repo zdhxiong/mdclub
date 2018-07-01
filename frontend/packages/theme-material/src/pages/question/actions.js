@@ -1,8 +1,5 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import QuestionService from '../../service/Question';
-import AnswerService from '../../service/Answer';
-import QuestionFollowService from '../../service/QuestionFollow';
+import mdui, { JQ as $ } from 'mdui';
+import { Question, Answer } from 'mdclub-sdk-js';
 
 let global_actions;
 let question_id;
@@ -108,7 +105,7 @@ export default {
         actions.setTitle(response.data.title);
       };
 
-      QuestionService.getOne(question_id, loaded);
+      Question.getOne(question_id, loaded);
     };
 
     if (loadFromPage()) {
@@ -168,7 +165,7 @@ export default {
         cb();
       };
 
-      AnswerService.getListByQuestionId(question_id, {}, loaded);
+      Answer.getListByQuestionId(question_id, {}, loaded);
     };
 
     if (loadFromPage()) {
@@ -221,7 +218,7 @@ export default {
       page: pagination.page + 1,
     };
 
-    AnswerService.getListByQuestionId(question_id, data, loaded);
+    Answer.getListByQuestionId(question_id, data, loaded);
   },
 
   /**
@@ -240,7 +237,7 @@ export default {
       answer_publishing: true,
     });
 
-    AnswerService.create(question_id, { content_rendered }, (response) => {
+    Answer.create(question_id, { content_rendered }, (response) => {
       actions.setState({
         answer_publishing: false,
       });
@@ -322,9 +319,9 @@ export default {
     };
 
     if (question.relationship.is_following) {
-      QuestionFollowService.addFollow(question_id, done);
+      Question.addFollow(question_id, done);
     } else {
-      QuestionFollowService.deleteFollow(question_id, done);
+      Question.deleteFollow(question_id, done);
     }
   },
 };

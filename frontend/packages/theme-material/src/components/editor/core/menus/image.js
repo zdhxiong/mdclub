@@ -1,4 +1,3 @@
-import $ from 'mdui.JQ';
 import { correctUrl } from '../helper/utils';
 
 function Image(editor) {

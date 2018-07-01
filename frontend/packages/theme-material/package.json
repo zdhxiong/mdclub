@@ -1,6 +1,6 @@
 {
-  "name": "default",
-  "description": "MDClub Home 模块 Default 主题",
+  "name": "mdclub-theme-material",
+  "description": "MDClub Home 模块 Material 主题",
   "version": "0.0.1",
   "homepage": "https://www.mdclub.org",
   "author": "zdhxiong",
@@ -74,8 +74,9 @@
     "hyperapp": "^1.2.5",
     "js-cookie": "^2.2.0",
     "jump.js": "^1.0.2",
+    "mdclub-sdk-js": "https://github.com/zdhxiong/mdclub-sdk-js",
     "mdn-polyfills": "^5.6.0",
-    "sha-1": "^0.1.1",
+    "mdui": "^0.4.1",
     "time-stamp": "^2.0.0"
   },
   "browserslist": [

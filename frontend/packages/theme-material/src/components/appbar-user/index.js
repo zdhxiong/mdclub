@@ -1,7 +1,6 @@
 import { h } from 'hyperapp';
 import { location } from '@hyperapp/router';
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
+import mdui, { JQ as $ } from 'mdui';
 import Cookies from 'js-cookie';
 import './index.less';
 import AvatarUpload from '../../components/avatar-upload';

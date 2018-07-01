@@ -1,6 +1,6 @@
 import { h } from 'hyperapp';
 import { location } from '@hyperapp/router';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import './index.less';
 
 import Loading from '../../components/loading';

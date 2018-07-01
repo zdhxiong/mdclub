@@ -1,7 +1,7 @@
 import { h } from 'hyperapp';
 import { location } from '@hyperapp/router';
 import cc from 'classcat';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import './index.less';
 
 export default ({ topic }) => (global_state, global_actions) => (

@@ -1,6 +1,6 @@
 import { h } from 'hyperapp';
 import { Link } from '@hyperapp/router';
-import $ from 'mdui.JQ';
+import { JQ as $ } from 'mdui';
 import './index.less';
 
 import timeHelper from '../../helper/time';

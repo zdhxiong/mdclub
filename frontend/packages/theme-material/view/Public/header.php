@@ -8,8 +8,8 @@
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <meta name="theme-color" content="#ffffff">
   <title><?php echo isset($title) ? $title.' - '.$setting['site_name'] : $setting['site_name'] ?></title>
-  <?php 'production'; echo '<link rel="stylesheet" href="__STATIC__/dist/css/vendor.57f492fe4d88c7538803b152fe84a7ca.css"/>'; ?>
-  <?php 'production'; echo '<link rel="stylesheet" href="__STATIC__/dist/css/app.9f89b1c04207c140cc3e10a13df2198d.css"/>'; ?>
+  <?php 'production';// echo '<link rel="stylesheet" href="__STATIC__/dist/css/vendor.173bc343aa556e66342d7444ad2c42e9.css"/>'; ?>
+  <?php 'production';// echo '<link rel="stylesheet" href="__STATIC__/dist/css/app.ca5d229ab5dff22b7bc6e148f629ba09.css"/>'; ?>
 </head>
 <body class="mdui-drawer-body-left">
 <div class="mdui-appbar-with-toolbar">

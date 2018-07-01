@@ -1,9 +1,5 @@
-import mdui from 'mdui';
-import $ from 'mdui.JQ';
-import UserAvatarService from '../../service/UserAvatar';
-import UserCoverService from '../../service/UserCover';
-import UserInfoService from '../../service/UserInfo';
-import UserFollowService from '../../service/UserFollow';
+import mdui, { JQ as $ } from 'mdui';
+import { User } from 'mdclub-sdk-js';
 
 let global_actions;
 let user_id;
@@ -105,7 +101,7 @@ export default {
       actions.setTitle(`${response.data.username}的个人主页`);
     };
 
-    UserInfoService.getOne(user_id, loaded);
+    User.getOne(user_id, loaded);
   },
 
   /**
@@ -118,7 +114,7 @@ export default {
       '系统将删除现有头像，并随机生成一个新头像。',
       '要删除现有头像吗？',
       () => {
-        UserAvatarService.deleteMine((response) => {
+        User.deleteMyAvatar((response) => {
           if (!response.code) {
             actions.user.setAvatar(response.data);
 
@@ -147,7 +143,7 @@ export default {
       '系统将删除现有封面，并重置为默认封面。',
       '要删除现有封面吗？',
       () => {
-        UserCoverService.deleteMine((response) => {
+        User.deleteMyCover((response) => {
           if (!response.code) {
             actions.user.setCover(response.data);
 
@@ -171,7 +167,7 @@ export default {
    */
   updateHeadline: e => (state, actions) => {
     mdui.prompt('一句话介绍你自己', (headline) => {
-      UserInfoService.updateMe(headline, (response) => {
+      User.updateMe(headline, (response) => {
         if (response.code) {
           mdui.snackbar(response.message);
           return;
@@ -223,9 +219,9 @@ export default {
     };
 
     if (user.relationship.is_following) {
-      UserFollowService.addFollow(user.user_id, done);
+      User.addFollow(user.user_id, done);
     } else {
-      UserFollowService.deleteFollow(user.user_id, done);
+      User.deleteFollow(user.user_id, done);
     }
   },
 
