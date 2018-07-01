@@ -7,11 +7,11 @@ export default {
   /**
    * 获取全部设置
    */
-  getAll(success, error) {
-    get('/settings', success, error);
+  getAll(success) {
+    get('/settings', success);
   },
 
-  update(data, success, error) {
-    patch('/settings', data, success, error);
+  update(data, success) {
+    patch('/settings', data, success);
   },
 };

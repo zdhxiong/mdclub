@@ -1,18 +1,9 @@
 import request from './request';
 
-function responseHandle(response, success, error) {
-  if (response.code) {
-    error(response.code, response);
-  } else {
-    success(response.data, response.pagination);
-  }
-}
-
 function requestHandle(method, url, ...args) {
-  let [data, success, error] = args;
+  let [data, success] = args;
 
   if (typeof data === 'function') {
-    error = success;
     success = data;
     data = false;
   }
@@ -21,7 +12,7 @@ function requestHandle(method, url, ...args) {
     method,
     url,
     data,
-    success: response => responseHandle(response, success, error),
+    success: response => success(response),
   });
 }
 
