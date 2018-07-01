@@ -7,8 +7,8 @@ export default {
   /**
    * 创建回答
    */
-  create(question_id, success) {
-    post(`/questions/${question_id}/answers`, success);
+  create(question_id, data, success) {
+    post(`/questions/${question_id}/answers`, data, success);
   },
 
   /**
