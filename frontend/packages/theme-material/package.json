@@ -6,7 +6,7 @@
   "author": "zdhxiong",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zdhxiong/mdclub"
+    "url": "https://github.com/zdhxiong/mdclub-theme-material"
   },
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -16,10 +16,10 @@
     "report": "npm run build --report"
   },
   "bugs": {
-    "url": "https://github.com/zdhxiong/mdclub/issues",
+    "url": "https://github.com/zdhxiong/mdclub-theme-material/issues",
     "email": "zdhxiong@gmail.com"
   },
-  "license": "GPL-2.0",
+  "license": "MIT",
   "devDependencies": {
     "@hyperapp/logger": "^0.4.1",
     "autoprefixer": "^7.1.2",
