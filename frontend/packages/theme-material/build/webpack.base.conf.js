@@ -50,7 +50,7 @@ module.exports = {
   output: {
     path: resolve('./dist'),
     filename: '[name].js',
-    publicPath: isProduction ? '../' : '../home/material/dist/'
+    publicPath: isProduction ? '../' : '../modules/home/material/dist/'
   },
   resolve: {
     extensions: ['.js'],
