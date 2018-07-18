@@ -82,23 +82,25 @@ function request(opts) {
   }
 
   // data
-  if (method === 'GET' && data && typeof data !== 'string') {
-    // GET 请求参数序列化
-    data = param(data);
-  }
+  if (data) {
+    if (method === 'GET' && typeof data !== 'string') {
+      // GET 请求参数序列化
+      data = param(data);
+    }
 
-  if (method === 'GET' && data) {
-    // GET 请求，把 data 数据添加到 URL 中。URL 中不存在 ? 时，自动把第一个 & 替换为 ?
-    url = `${url}&${data}`.replace(/[&?]{1,2}/, '?');
-  }
+    if (method === 'GET') {
+      // GET 请求，把 data 数据添加到 URL 中。URL 中不存在 ? 时，自动把第一个 & 替换为 ?
+      url = `${url}&${data}`.replace(/[&?]{1,2}/, '?');
+    }
 
-  if (['POST', 'PATCH', 'PUT'].indexOf(method) > -1 && FormData !== data.constructor) {
-    // JSON 数据转为字符串
-    data = typeof data === 'string' ? data : JSON.stringify(data);
-  }
+    if (['POST', 'PATCH', 'PUT'].indexOf(method) > -1 && FormData !== data.constructor) {
+      // JSON 数据转为字符串
+      data = typeof data === 'string' ? data : JSON.stringify(data);
+    }
 
-  if (FormData === data.constructor) {
-    delete headers['Content-Type'];
+    if (FormData === data.constructor) {
+      delete headers['Content-Type'];
+    }
   }
 
   const xhr = new XMLHttpRequest();

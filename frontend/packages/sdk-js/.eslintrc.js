@@ -2,20 +2,15 @@
 
 module.exports = {
   env: {
-    "browser": true
+    browser: true
   },
-  parser: 'babel-eslint',
   extends: 'airbnb-base',
+  plugins: [
+    "import",
+  ],
   rules: {
-    // don't require .js extension when importing
-    'import/extensions': ['error', 'always', {
-      js: 'never',
-    }],
-
-    'no-new': 0,
     'func-names': 0,
-    'camelcase': 0,
-    'no-unused-vars': 0,
-    'no-underscore-dangle': 0,
+    'no-param-reassign': 0,
+    'camelcase': 0
   }
 };
