@@ -3,7 +3,7 @@ import Answer from './Answer';
 import Captcha from './Captcha';
 import Email from './Email';
 import Question from './Question';
-import Setting from './Setting';
+import Option from './Option';
 import Token from './Token';
 import Topic from './Topic';
 import User from './User';
@@ -14,7 +14,7 @@ export {
   Captcha,
   Email,
   Question,
-  Setting,
+  Option,
   Token,
   Topic,
   User,

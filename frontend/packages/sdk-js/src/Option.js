@@ -8,10 +8,10 @@ export default {
    * 获取全部设置
    */
   getAll(success) {
-    get('/settings', success);
+    get('/options', success);
   },
 
   update(data, success) {
-    patch('/settings', data, success);
+    patch('/options', data, success);
   },
 };
