@@ -54,11 +54,11 @@ const init = (element) => {
 /**
  * Tab 选项卡的选项
  */
-const TabItem = ({ hash, title, type }) => state => (
+const TabItem = ({ hash, title, type }) => global_state => (
   <a href={`#${hash}`} class={cc([
-    $.rippleClass(state.theme.primary),
+    $.rippleClass(global_state.theme.primary),
     {
-      'mdui-tab-active': state[type].current_tab === hash,
+      'mdui-tab-active': global_state[type].current_tab === hash,
     },
   ])}>{title}</a>
 );

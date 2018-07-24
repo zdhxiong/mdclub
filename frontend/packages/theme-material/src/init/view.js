@@ -29,11 +29,10 @@ export default (global_state, global_actions) => (
     global_state.theme.primary ? `mdui-theme-primary-${global_state.theme.primary}` : false,
     global_state.theme.layout ? `mdui-theme-layout-${global_state.theme.layout}` : false,
     {
-      'mdui-appbar-with-tab':
-      $.isPathMatched('/questions') ||
-      $.isPathMatched('/articles') ||
-      ($.isPathMatched('/topics') && global_state.user.user.user_id) ||
-      ($.isPathMatched('/users') && global_state.user.user.user_id),
+      'mdui-appbar-with-tab': $.isPathMatched('/questions')
+      || $.isPathMatched('/articles')
+      || ($.isPathMatched('/topics') && global_state.user.user.user_id)
+      || ($.isPathMatched('/users') && global_state.user.user.user_id),
     },
   ])}>
     <Appbar/>
