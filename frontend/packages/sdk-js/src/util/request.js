@@ -21,9 +21,8 @@ function param(obj) {
 }
 
 // 扩展函数
-function extend(_obj, ...args) {
+function extend(obj, ...args) {
   const { length } = args;
-  const obj = _obj;
   let i;
   let options;
 
