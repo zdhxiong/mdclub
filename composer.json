@@ -1,0 +1,55 @@
+{
+    "name": "zdhxiong/mdclub",
+    "description": "a material design forum",
+    "keywords": ["material design"],
+    "version": "0.0.1",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zdhxiong",
+            "email": "zdhxiong@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-gd": "*",
+        "ext-fileinfo": "*",
+        "ext-json": "*",
+        "ext-PDO": "*",
+        "slim/slim": "^3.10",
+        "slim/php-view": "^2.2",
+        "slim/http-cache": "^0.4.0",
+        "symfony/cache": "^4.1",
+        "symfony/polyfill-mbstring": "^1.8",
+        "monolog/monolog": "^1.23",
+        "ezyang/htmlpurifier": "^4.10",
+        "gregwar/captcha": "^1.1",
+        "erusev/parsedown": "^1.7",
+        "pixel418/markdownify": "^2.3",
+        "lincanbin/material-design-avatars": "^1.4",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "phpmailer/phpmailer": "^6.0",
+        "predis/predis": "^1.1",
+        "league/flysystem": "^1.0",
+        "xxtime/flysystem-aliyun-oss": "^1.2",
+        "filp/whoops": "^2.2",
+        "catfan/Medoo": "dev-bugfix",
+        "thepixeldeveloper/sitemap": "^5.1",
+        "suin/php-rss-writer": "^1.6",
+        "algolia/algoliasearch-client-php": "^1.27"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/zdhxiong/Medoo"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "scripts": {
+        "start": "php -S localhost:8080 -t public public/index.php"
+    }
+}

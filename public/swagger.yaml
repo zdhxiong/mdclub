@@ -1,0 +1,2465 @@
+swagger: 2.0
+info:
+  title: MDClub API 文档
+  description: |
+    MDClub 是一个 Material Design 风格的社区应用。
+
+    **排序参数 order**：
+
+    需要排序的字段，用 , 分隔，在字段前加 - 表示倒序排列
+
+    order=field1,-field2 表示 field1 ASC, field2 DESC
+
+    **筛选参数 filter**：
+
+    需要筛选的字段，用 , 分隔，支持 =，>，>=，<，<=
+
+    filter=field1=value1,field2>value2,field3<=value3 表示 field1=value1 AND field2>value2 AND field3<=value3
+  termsOfService:
+  contact:
+    name: zdhxiong
+    url: https://github.com/zdhxiong
+    email: zdhxiong@gmail.com
+  license:
+    name: GPL-2.0
+    url: https://github.com/zdhxiong/mdclub/blob/master/LICENSE
+  version: 0.0.1
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+
+  /options:
+
+    get:
+      tags:
+        - Option
+      summary: 获取站点全局设置参数
+      description: 用于后台管理中的全局设置，需要管理员权限
+      parameters:
+        - $ref: '#/parameters/token'
+      responses:
+        200:
+          description: 全局设置参数列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Option'
+        default:
+          $ref: '#/responses/Error'
+
+    patch:
+      tags:
+        - Option
+      summary: 🔐更新站点全局设置
+      description:
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Option'
+      responses:
+        200:
+          description: 全局设置参数列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Option'
+        default:
+          $ref: '#/responses/Error'
+
+  /tokens:
+
+    post:
+      tags:
+        - UserLogin
+      summary: 生成 Token
+      description: |
+        通过账号密码登陆，返回带 Token 的用户信息
+        若登录失败，且返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - name
+              - password
+            properties:
+              name:
+                type: string
+                description: 用户名或邮箱
+              password:
+                type: string
+                description: 经过 hash1 加密后的密码
+              device:
+                type: string
+                description: 设备信息
+              captcha_token:
+                type: string
+                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+              captcha_code:
+                type: string
+                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
+
+        default:
+          $ref: '#/responses/Error'
+
+  /users:
+
+    get:
+      tags:
+        - UserInfo
+      summary: 获取用户列表
+      description: |
+        🔐仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效
+
+        **可排序的字段包括**：
+        `user_id`
+        `last_login_time`
+        `follower_count`
+        `following_article_count`
+        `following_question_count`
+        `following_topic_count`
+        `following_user_count`
+        `article_count`
+        `question_count`
+        `answer_count`
+        `notification_unread`
+        `inbox_unread`
+        `create_time`
+        `update_time`
+        `disable_time`
+        若未指定排序字段，则默认按 `follower_count` 倒序排列
+
+        **可筛选的字段包括**：
+        `user_id`
+        `username`
+        `email`
+        `create_ip`
+        `last_login_ip`
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: |
+            用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - UserRegister
+      summary: 验证邮箱并创建账号
+      description: 验证邮箱并创建账号
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+              - email_code
+              - username
+              - password
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              email_code:
+                type: string
+                description: 邮箱验证码
+              username:
+                type: string
+                description: 用户名
+              password:
+                type: string
+                description: hash1 加密后的密码
+              device:
+                type: string
+                description: 设备信息
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}:
+
+    get:
+      tags:
+        - UserInfo
+      summary: 获取指定用户信息
+      description: |
+        若是管理员调用该接口，将返回用户的所有信息；
+        若是普通用户调用该接口，仅返回开放信息。
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          type: integer
+          in: path
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - UserInfo
+      summary: 禁用指定用户
+      description: 🔐 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          type: integer
+          in: path
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/avatar:
+
+    delete:
+      tags:
+        - UserAvatar
+      summary: todo -  删除指定用户的头像，并重置为默认头像；仅管理员可操作
+      description: 删除指定用户的头像，并重置为默认头像；仅管理员可操作
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 新头像地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserAvatar'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/cover:
+
+    delete:
+      tags:
+        - UserCover
+      summary: todo -  删除指定用户的封面，并重置为默认封面；仅管理员可操作
+      description: 删除指定用户的封面，并重置为默认封面；仅管理员可操作
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 新封面地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserCover'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/followers:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 获取指定用户的关注者
+      description: 获取指定用户的关注者
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/following:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 获取指定用户关注的用户列表
+      description: 获取指定用户关注的用户列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/following/{target_user_id}:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 检查用户是否关注了另一用户
+      description: 检查用户是否关注了另一用户
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+        - name: target_user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/questions/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: todo -  获取指定用户关注的问题列表
+      description: 获取指定用户关注的问题列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+          required: true
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/articles/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: todo -  获取指定用户关注的文章列表
+      description: 获取指定用户关注的文章列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+          required: true
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/topics/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: todo -  获取指定用户关注的话题列表
+      description: 获取指定用户关注的话题列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/questions/{question_id}/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: todo -  判断指定用户是否关注了指定问题
+      description: 判断指定用户是否关注了指定问题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+          required: true
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+          required: true
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/articles/{article_id}/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: todo -  判断指定用户是否关注了指定文章
+      description: 判断指定用户是否关注了指定文章
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+          required: true
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+          required: true
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+  /users/{user_id}/topics/{topic_id}/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: todo -  检查指定用户是否关注了指定话题
+      description: 检查指定用户是否关注了指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+        - name: topic_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+  /user:
+
+    get:
+      tags:
+        - UserInfo
+      summary: 获取当前登录用户的信息
+      description: 获取当前登录用户的信息
+      parameters:
+        - $ref: '#/parameters/token'
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
+        default:
+          $ref: '#/responses/Error'
+
+    patch:
+      tags:
+        - UserInfo
+      summary: 更新当前登录用户信息
+      description: 更新当前登录用户信息
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          type: object
+          schema:
+            properties:
+              headline:
+                type: string
+                description: 一句话介绍
+              bio:
+                type: string
+                description: 个人简介
+              blog:
+                type: string
+                description: 个人主页
+              company:
+                type: string
+                description: 所属企业
+              location:
+                type: string
+                description: 所属地区
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/User'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/avatar:
+
+    post:
+      tags:
+        - UserAvatar
+      summary: todo -  上传当前登录用户的头像
+      description: 上传当前登录用户的头像
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: avatar
+          type: file
+          in: formData
+          required: true
+          description: 用户头像
+      responses:
+        200:
+          description: 新头像地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserAvatar'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - UserAvatar
+      summary: todo -  删除当前登录用户的头像，并重置为默认头像
+      description: 删除当前登录用户的头像，并重置为默认头像
+      parameters:
+        - $ref: '#/parameters/token'
+      responses:
+        200:
+          description: 新头像地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserAvatar'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/cover:
+
+    post:
+      tags:
+        - UserCover
+      summary: todo -  上传当前登录用户的封面
+      description: 上传当前登录用户的封面
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: cover
+          type: file
+          in: formData
+          required: true
+          description: 用户封面
+      responses:
+        200:
+          description: 新封面地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserCover'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - UserCover
+      summary: todo -  删除当前登录用户的封面，并重置为默认封面
+      description: 删除当前登录用户的封面，并重置为默认封面
+      parameters:
+        - $ref: '#/parameters/token'
+      responses:
+        200:
+          description: 新封面地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/UserCover'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/register/email:
+
+    post:
+      tags:
+        - UserRegister
+      summary: 发送注册邮箱验证码
+      description: |
+        发送注册邮箱验证码
+        返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              captcha_token:
+                type: string
+                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+              captcha_code:
+                type: string
+                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /user/password/email:
+
+    post:
+      tags:
+        - UserPasswordReset
+      summary: 发送重置密码邮箱验证码
+      description: |
+        发送重置密码邮箱验证码
+        返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              captcha_token:
+                type: string
+                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+              captcha_code:
+                type: string
+                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /user/password:
+
+    put:
+      tags:
+        - UserPasswordReset
+      summary: 验证邮箱并更新密码
+      description: 验证邮箱并更新密码
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+              - email_code
+              - password
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              email_code:
+                type: string
+                description: 邮箱验证码
+              password:
+                type: string
+                description: hash1 加密后的密码
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功或失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /user/followers:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 获取当前登录用户的关注者
+      description: 获取当前登录用户的关注者
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/following:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 获取当前登录用户关注的用户
+      description: 获取当前登录用户关注的用户
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/following/{user_id}:
+
+    put:
+      tags:
+        - UserFollow
+      summary: 添加关注
+      description: 添加关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - UserFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    get:
+      tags:
+        - UserFollow
+      summary: 检查当前用户是否关注了另一用户
+      description: 检查当前用户是否关注了另一用户
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+  /user/questions/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: todo -  获取登录用户关注的问题
+      description: 获取登录用户关注的问题
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/articles/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: todo -  获取登录用户关注的文章
+      description: 获取登录用户关注的文章
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/topics/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: todo -  获取当前用户关注的话题列表
+      description: 获取当前用户关注的话题列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/questions/{question_id}/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: todo -  判断登录用户是否关注了指定问题
+      description: 判断登录用户是否关注了指定问题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+          required: true
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+    put:
+      tags:
+        - QuestionFollow
+      summary: todo -  添加关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+          required: true
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - QuestionFollow
+      summary: todo -  取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+          required: true
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /user/articles/{article_id}/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: todo -  判断登录用户是否关注了指定文章
+      description: 判断登录用户是否关注了指定文章
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+          required: true
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+    put:
+      tags:
+        - ArticleFollow
+      summary: todo -  添加关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+          required: true
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - ArticleFollow
+      summary: todo -  取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+          required: true
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /articles/{article_id}/followers:
+
+    get:
+      tags:
+      - ArticleFollow
+      summary: todo - 获取指定文章的关注者
+      description: 获取指定文章的关注者
+      parameters:
+      - $ref: '#/parameters/token'
+      - $ref: '#/parameters/page'
+      - $ref: '#/parameters/per_page'
+      - name: article_id
+        in: path
+        type: integer
+        description: 文章ID
+      responses:
+        200:
+          description: 关注者列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /user/topics/{topic_id}/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: todo -  当前用户是否关注了指定话题
+      description: 当前用户是否关注了指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+    put:
+      tags:
+        - TopicFollow
+      summary: todo -  当前用户关注指定话题
+      description: 当前用户关注指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - TopicFollow
+      summary: todo -  当前用户取消关注指定话题
+      description: 当前用户取消关注指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /images:
+
+    post:
+      tags:
+        - Image
+      summary: todo -  上传图片
+      description: 上传图片
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: image
+          type: file
+          in: formData
+          required: true
+          description: 图片
+      responses:
+        200:
+          description: 图片信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Image'
+        default:
+          $ref: '#/responses/Error'
+
+  /images/{image_id}:
+    patch:
+      tags:
+        - Image
+      summary: todo -  更新图片信息
+      description: 更新图片信息
+
+  /questions/recent:
+
+    get:
+      tags:
+        - Question
+      summary: 获取最近更新的问题列表
+      description: 获取最近更新的问题列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+
+  /questions/popular:
+
+    get:
+      tags:
+        - Question
+      summary: 获取最近热门的问题列表
+      description: 获取最近热门的问题列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /questions:
+
+    get:
+      tags:
+        - Question
+      summary: 获取问题列表
+      description: |
+        管理员可排序的字段包括：`question_id`、`user_id`、`answer_count`、`view_count`、`follower_count`、`last_answer_time`、`create_time`、`update_time`、`delete_time`
+        管理员可筛选的字段包括：`question_id`、`user_id`
+        普通用户可排序的字段包括：无
+        普通用户可筛选的字段包括：无
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - Question
+      summary: todo(含 topic_ids 时未测试) -  发表问题
+      description: 发表问题。content_markdown 和 content_rendered 两个参数只需传入一个即可。若都传入，则以 content_markdown 为准。
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - title
+            properties:
+              title:
+                type: string
+                description: 标题
+              topic_ids:
+                type: string
+                description: 话题ID，多个ID用“,”分隔
+              content_markdown:
+                type: string
+                description: Markdown 格式的正文
+              content_rendered:
+                type: string
+                description: HTML 格式的正文
+      responses:
+        200:
+          description: 问题详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Question'
+        default:
+          $ref: '#/responses/Error'
+
+  /questions/{question_id}:
+
+    get:
+      tags:
+        - Question
+      summary: 获取指定问题信息
+      description: 获取指定问题信息
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          type: integer
+          in: path
+      responses:
+        200:
+          description: 问题信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Question'
+        default:
+          $ref: '#/responses/Error'
+
+    patch:
+      tags:
+        - Question
+      summary: todo -  更新问题信息
+      description: 更新问题信息
+
+    delete:
+      tags:
+        - Question
+      summary: 删除指定问题
+      description: 🔒 删除指定问题。仅管理员可以删除问题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          type: integer
+          in: path
+          description: 问题ID
+        - name: soft_delete
+          in: query
+          enum:
+            - 1
+            - 0
+          description: 是否软删除，默认为 1
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /questions/{question_id}/followers:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: todo -  获取指定问题的关注者
+      description: 获取指定问题的关注者
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 关注者列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+
+  /topics:
+
+    get:
+      tags:
+        - Topic
+      summary: todo -  获取全部话题
+      description: |
+        🔒 仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效
+        可排序的字段包括：`topic_id`、`article_count`、`question_count`、`follower_count`。若未指定排序字段，则按 `follower_count` 倒序排列
+        可筛选的字段包括：`topic_id`、`name`
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 全部话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - Topic
+      summary: todo -  发布话题
+      description: 发布话题，需要管理员权限
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - name
+              - description
+            properties:
+              name:
+                type: string
+                description: 话题名称
+              description:
+                type: string
+                description: 话题描述
+      responses:
+        200:
+          description: 话题信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topic'
+        default:
+          $ref: '#/responses/Error'
+
+  /topics/{topic_id}:
+
+    patch:
+      tags:
+        - Topic
+      summary: todo -  更新话题信息
+      description: 更新话题信息，需要管理员权限
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          type: integer
+          in: path
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: 话题名称
+              description:
+                type: string
+                description: 话题描述
+
+      responses:
+        200:
+          description: 更新后的话题信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topic'
+        default:
+          $ref: '#/responses/Error'
+
+  /topics/{topic_id}/cover:
+
+    post:
+      tags:
+        - Topic
+      summary: todo -  上传话题封面
+      description: 上传话题封面，需要管理员权限
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+          required: true
+        - name: cover
+          type: file
+          in: formData
+          required: true
+          description: 图片
+      responses:
+        200:
+          description: 新封面地址
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/TopicCover'
+        default:
+          $ref: '#/responses/Error'
+
+  /topics/{topic_id}/followers:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: todo -  获取指定话题的关注者
+      description: 获取指定话题的关注者
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 关注者列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+  /questions/{question_id}/answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo -  获取指定问题下的回答
+      description: 获取指定问题下的回答，可排序字段为 `create_time`
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - Answer
+      summary: todo -  在指定问题下创建一个回答
+      description: 在指定问题下创建一个回答
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              content_markdown:
+                type: string
+                description: markdown 格式的内容
+              content_rendered:
+                type: string
+                description: html 格式的内容
+      responses:
+        200:
+          description: 回答信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
+  /answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo -  获取所有回答列表
+      description: 获取所有回答列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+        default:
+          $ref: '#/responses/Error'
+
+  /answers/{answer_id}:
+
+    get:
+      tags:
+        - Answer
+      summary: todo -  获取回答详情
+      description: 获取回答详情
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+      responses:
+        200:
+          description: 回答信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
+  /emails:
+
+    post:
+      tags:
+        - Email
+      summary: todo -  发送邮件
+      description: 用于后台管理员发送邮件，需要管理员权限
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Email'
+      responses:
+        200:
+          description: 邮件信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Email'
+        default:
+          $ref: '#/responses/Error'
+
+  /captchas:
+
+    post:
+      tags:
+        - Captcha
+      summary: todo -  生成新的图形验证码
+      description: 调用该接口，会返回新的图形验证码
+      responses:
+        200:
+          description: 图形验证码信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+                properties:
+                  captcha_token:
+                    type: string
+                    description: 图形验证码token
+                  captcha_image:
+                    type: string
+                    description: base64格式的图形验证码图片
+        default:
+          $ref: '#/responses/Error'
+
+
+definitions:
+
+  Pagination:
+    type: object
+    properties:
+      page:
+        type: integer
+        description: 当前页码
+      per_page:
+        type: integer
+        description: 每页条数
+      from:
+        type: integer
+        description: 起始条数
+      to:
+        type: integer
+        description: 结束条数
+      total:
+        type: integer
+        description: 数据总数
+      total_page:
+        type: integer
+        description: 总页数
+
+  Option:
+    type: object
+    properties:
+      cache_type:
+        type: string
+        enum:
+        - pdo
+        - redis
+        - memcached
+        description: 🔐缓存类型
+      enable_markdown:
+        type: integer
+        enum:
+        - 0
+        - 1
+        description: 🔐是否启用 markdown
+      language:
+        type: string
+        description: 系统语言
+      site_description:
+        type: string
+        description: 站点简介
+      site_gongan_beian:
+        type: string
+        description: 站点公安备案号
+      site_icp_beian:
+        type: string
+        description: 站点 ICP 备案号
+      site_keywords:
+        type: string
+        description: 站点关键词
+      site_name:
+        type: string
+        description: 站点名称
+      site_static_url:
+        type: string
+        description: 🔐static 目录资源 URL 地址
+      smtp_host:
+        type: string
+        description: 🔐SMTP 服务器地址
+      smtp_password:
+        type: string
+        description: 🔐SMTP 密码
+      smtp_port:
+        type: integer
+        description: 🔐SMTP 端口
+      smtp_reply_to:
+        type: string
+        description: 🔐回信地址
+      smtp_secure:
+        type: string
+        description: 🔐SMTP 加密方式
+      smtp_username:
+        type: string
+        description: 🔐SMTP 账户
+      storage_ftp_host:
+        type: string
+        description: FTP 服务器地址
+      storage_ftp_passive:
+        type: integer
+        enum:
+          - 1
+          - 0
+        description: FTP 是否被动连接
+      storage_ftp_password:
+        type: string
+        description: FTP 密码
+      storage_ftp_port:
+        type: integer
+        description: FTP 端口号
+      storage_ftp_root:
+        type: string
+        description: FTP 存储目录
+      storage_ftp_ssl:
+        type: integer
+        enum:
+          - 1
+          - 0
+        description: FTP 是否启用 SSL
+      storage_ftp_timeout:
+        type: integer
+        description: FTP 连接超时时间
+      storage_ftp_url:
+        type: string
+        description: FTP 文件访问地址
+      storage_ftp_username:
+        type: string
+        description: FTP 用户名
+      storage_local_dir:
+        type: string
+        description: 🔐本地文件存储目录
+      storage_local_url:
+        type: string
+        description: 🔐本地文件访问链接
+      storage_type:
+        type: string
+        enum:
+          - local
+          - ftp
+          - aliyun-oss
+          - upyun
+          - qiniu
+        description: 🔐存储类型
+      theme:
+        type: string
+        description: 🔐主题名称
+
+  User:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: 用户 ID
+      username:
+        type: string
+        description: 用户名
+      email:
+        type: string
+        description: 🔐邮箱
+      avatar:
+        type: object
+        $ref: '#/definitions/UserAvatar'
+      cover:
+        type: object
+        $ref: '#/definitions/UserCover'
+      create_ip:
+        type: string
+        description: 🔐注册 IP
+      last_login_time:
+        type: integer
+        description: 🔐最后登陆时间
+      last_login_ip:
+        type: string
+        description: 🔐最后登陆 IP
+      follower_count:
+        type: integer
+        description: 关注者数量
+      following_article_count:
+        type: integer
+        description: 关注的文章数量
+      following_question_count:
+        type: integer
+        description: 关注的问题数量
+      following_topic_count:
+        type: integer
+        description: 关注的话题数量
+      following_user_count:
+        type: integer
+        description: 关注的用户数量
+      article_count:
+        type: integer
+        description: 发表的文章数量
+      question_count:
+        type: integer
+        description: 发表的问题数量
+      answer_count:
+        type: integer
+        description: 发表的问题回答数量
+      notification_unread:
+        type: integer
+        description: 🔐未读消息数量
+      inbox_unread:
+        type: integer
+        description: 🔐未读私信数量
+      headline:
+        type: string
+        description: 一句话介绍自己
+      bio:
+        type: string
+        description: 个人简介
+      blog:
+        type: string
+        description: 个人主页链接
+      company:
+        type: string
+        description: 所属企业
+      location:
+        type: string
+        description: 所在地区
+      create_time:
+        type: integer
+        description: 注册时间
+      update_time:
+        type: integer
+        description: 🔐更新时间
+      disable_time:
+        type: integer
+        description: 🔐禁用时间
+      relationship:
+        type: object
+        $ref: '#/definitions/UserRelationship'
+
+  Users:
+    type: array
+    items:
+      $ref: '#/definitions/User'
+
+  UserAvatar:
+    type: object
+    properties:
+      s:
+        type: string
+        description: 小头像地址
+      m:
+        type: string
+        description: 中头像地址
+      l:
+        type: string
+        description: 大头像地址
+
+  UserCover:
+    type: object
+    properties:
+      s:
+        type: string
+        description: 小型封面地址
+      m:
+        type: string
+        description: 中型封面地址
+      l:
+        type: string
+        description: 大型封面地址
+
+  UserRelationship:
+    type: object
+    properties:
+      is_me:
+        type: boolean
+        description: 该用户是否是当前登录用户
+      is_following:
+        type: boolean
+        description: 登录用户是否已关注该用户
+      is_followed:
+        type: boolean
+        description: 该用户是否已关注登录用户
+
+  Image:
+    type: object
+    properties:
+      hash:
+        type: string
+        description: 图片的 hash 值
+      extension:
+        type: string
+        description: 图片扩展名
+      filename:
+        type: string
+        description: 图片原始文件名
+      width:
+        type: integer
+        description: 原始图片宽度
+      height:
+        type: integer
+        description: 原始图片高度
+      create_time:
+        type: integer
+        description: 图片上传时间
+      image_id:
+        type: integer
+        description: 图片ID
+      url:
+        type: object
+        description: 图片访问地址
+
+  Question:
+    type: object
+    properties:
+      question_id:
+        type: integer
+        description: 问题ID
+      user_id:
+        type: integer
+        description: 用户ID
+      title:
+        type: string
+        description: 问题标题
+      content_markdown:
+        type: string
+        description: Markdown 格式的问题内容
+      content_rendered:
+        type: string
+        description: HTML 格式的问题内容
+      answer_count:
+        type: integer
+        description: 回答数量
+      view_count:
+        type: integer
+        description: 浏览量
+      follower_count:
+        type: integer
+        description: 关注者数量
+      last_answer_time:
+        type: integer
+        description: 最后回答时间
+      create_time:
+        type: integer
+        description: 创建时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/QuestionRelationship'
+
+  Questions:
+    type: array
+    items:
+      $ref: '#/definitions/Question'
+
+  QuestionRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      topic:
+        $ref: '#/definitions/TopicsInRelationship'
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该问题
+
+  Answer:
+    type: object
+    properties:
+      answer_id:
+        type: integer
+        description: 回答ID
+      question_id:
+        type: integer
+        description: 问题ID
+      user_id:
+        type: integer
+        description: 用户ID
+      content_markdown:
+        type: string
+        description: markdown 格式的内容
+      content_rendered:
+        type: string
+        description: html 格式的内容
+      comment_count:
+        type: integer
+        description: 评论数量
+      create_time:
+        type: integer
+        description: 创建时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/AnswerRelationship'
+
+  Answers:
+    type: array
+    items:
+      $ref: '#/definitions/Answer'
+
+  AnswerRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+
+  Topic:
+    type: object
+    properties:
+      topic_id:
+        type: integer
+        description: 话题ID
+      name:
+        type: string
+        description: 话题名称
+      cover:
+        type: object
+        $ref: '#/definitions/TopicCover'
+      description:
+        type: string
+        description: 话题描述
+      article_count:
+        type: integer
+        description: 文章数量
+      question_count:
+        type: integer
+        description: 问题数量
+      follower_count:
+        type: integer
+        description: 关注者数量
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/TopicRelationship'
+
+  TopicCover:
+    type: object
+    properties:
+      s:
+        type: string
+        description: 小型封面地址
+      m:
+        type: string
+        description: 中型封面地址
+      l:
+        type: string
+        description: 大型封面地址
+
+  Topics:
+    type: array
+    items:
+      $ref: '#/definitions/Topic'
+
+  TopicRelationship:
+    type: object
+    properties:
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该话题
+
+  Email:
+    type: object
+    required:
+      - email
+      - subject
+      - content
+    properties:
+      email:
+        type: string
+        description: 邮箱地址
+      subject:
+        type: string
+        description: 邮件标题
+      content:
+        type: string
+        description: 邮件内容
+
+  UserInRelationship:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      username:
+        type: string
+        description: 用户名
+      headline:
+        type: string
+        description: 一句话介绍
+      avatar:
+        type: object
+        $ref: '#/definitions/UserAvatar'
+
+  TopicsInRelationship:
+    type: array
+    items:
+      type: object
+      properties:
+        topic_id:
+          type: integer
+          description: 话题 ID
+        name:
+          type: string
+          description: 话题名称
+        cover:
+          type: object
+          $ref: '#/definitions/TopicCover'
+
+parameters:
+
+  token:
+    name: token
+    in: header
+    type: string
+    description: token
+
+  page:
+    name: page
+    in: query
+    type: string
+    description: 当前页数
+
+  per_page:
+    name: per_page
+    in: query
+    type: string
+    description: 每页条数（最大为 100）
+
+  order:
+    name: order
+    in: query
+    type: string
+    description: 排序条件
+
+  filter:
+    name: filter
+    in: query
+    type: string
+    description: 筛选条件
+
+responses:
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        description: 错误代码
+      message:
+        type: string
+        description: 错误描述
+      extra_message:
+        type: string
+        description: 额外的错误描述
+      captcha_token:
+        type: string
+        description: 图形验证码token。若返回了该参数，表示下次调用该接口需要输入图形验证码
+      captcha_image:
+        type: string
+        description: 图形验证码的base64格式图片
+      errors:
+        type: array
+        items:
+          $ref: '#/responses/ErrorField'
+
+  ErrorField:
+    type: object
+    required:
+      - field
+      - message
+    properties:
+      field:
+        type: string
+        description: 错误字段名
+      message:
+        type: string
+        description: 错误描述
+
+tags:
+  - name: Option
+    description: 系统设置
+  - name: UserLogin
+    description: 登录
+  - name: UserRegister
+    description: 注册
+  - name: UserPasswordReset
+    description: 重置密码
+  - name: UserInfo
+    description: 用户信息
+  - name: UserAvatar
+    description: 用户头像
+  - name: UserCover
+    description: 用户封面
+  - name: UserFollow
+    description: 用户关注
+  - name: Topic
+    description: 话题信息
+  - name: TopicFollow
+    description: 话题关注
+  - name: Question
+    description: 问题信息
+  - name: QuestionFollow
+    description: 问题关注
+  - name: Answer
+    description: 回答信息
+  - name: Article
+    description: 文章信息
+  - name: ArticleFollow
+    description: 文章关注
+  - name: Captcha
+    description: 图形验证码
+  - name: Email
+    description: 邮件
+  - name: Inbox
+    description: 私信
+  - name: Notification
+    description: 通知
+  - name: Image
+    description: 图片
+
+externalDocs:
+  description: 更多文档参见
+  url: https://mdclub.org
