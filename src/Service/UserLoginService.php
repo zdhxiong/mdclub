@@ -66,7 +66,6 @@ class UserLoginService extends Service
     {
         $errors = [];
 
-        // 判断字段不能为空
         if (!$name) {
             $errors['name'] = '账号不能为空';
         }
@@ -83,17 +82,21 @@ class UserLoginService extends Service
             throw new ValidationException($errors, $needCaptcha);
         }
 
-        // 查询用户信息
         if (ValidatorHelper::isEmail($name)) {
-            $userInfo = $this->userModel->where(['email' => $name])->force()->get();
+            $userInfo = $this->userModel->where(['email' => $name])->get();
         } else {
-            $userInfo = $this->userModel->where(['username' => $name])->force()->get();
+            $userInfo = $this->userModel->where(['username' => $name])->get();
         }
 
-        // 账号不存在，及密码不正确
-        if (!$userInfo || !password_verify($password, $userInfo['password'])) {
+        if (!$userInfo) {
             $errors['password'] = '账号或密码错误';
+        } elseif ($userInfo['disable_time']) {
+            $errors['name'] = '该账号已被禁用';
+        } elseif (!password_verify($password, $userInfo['password'])) {
+            $errors['password'] = '账号或密码错误';
+        }
 
+        if ($errors) {
             throw new ValidationException($errors, $needCaptcha);
         }
 

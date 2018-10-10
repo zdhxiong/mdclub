@@ -10,7 +10,7 @@ use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
 
 /**
- * 用户
+ * 用户，已禁用用户也要当普通用户处理
  *
  * Class UserService
  * @package App\Service
@@ -34,7 +34,6 @@ class UserService extends Service implements FollowableInterface
                 'notification_unread',
                 'inbox_unread',
                 'update_time',
-                'delete_time',
             ];
     }
 
@@ -61,7 +60,7 @@ class UserService extends Service implements FollowableInterface
                 'inbox_unread',
                 'create_time',
                 'update_time',
-                'delete_time',
+                'disable_time',
             ]
             : [];
     }
@@ -80,6 +79,7 @@ class UserService extends Service implements FollowableInterface
                 'email',
                 'create_ip',
                 'last_login_ip',
+                'disable_time',
             ]
             : [];
     }
@@ -95,7 +95,7 @@ class UserService extends Service implements FollowableInterface
         $excludeFields = ArrayHelper::push(['password'], $this->getPrivacyFields());
 
         $list = $this->userModel
-            ->where($this->getWhere())
+            ->where($this->getWhere(['disable_time' => 0]))        // 默认获取未禁用的用户
             ->order($this->getOrder(['follower_count' => 'DESC']))
             ->field($excludeFields, true)
             ->paginate();
@@ -272,11 +272,18 @@ class UserService extends Service implements FollowableInterface
      */
     public function disable(int $userId): bool
     {
-        $rowCount = $this->userModel->delete($userId);
+        $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
+
+        $rowCount = $this->userModel
+            ->where(['user_id' => $userId])
+            ->update(['disable_time' => $requestTime]);
 
         if (!$rowCount) {
             throw new ApiException(ErrorConstant::USER_NOT_FOUND);
         }
+
+        // 禁用后，删除该用户的所有token
+        $this->tokenModel->where(['user_id' => $userId])->delete();
 
         return true;
     }
@@ -309,7 +316,7 @@ class UserService extends Service implements FollowableInterface
      */
     public function isEmailExist(string $email): bool
     {
-        return $this->userModel->where(['email' => $email])->force()->has();
+        return $this->userModel->where(['email' => $email])->has();
     }
 
     /**
@@ -320,7 +327,7 @@ class UserService extends Service implements FollowableInterface
      */
     public function isUsernameExist(string $username): bool
     {
-        return $this->userModel->where(['username' => $username])->force()->has();
+        return $this->userModel->where(['username' => $username])->has();
     }
 
     /**
@@ -334,7 +341,6 @@ class UserService extends Service implements FollowableInterface
         $users = $this->userModel
             ->field(['user_id', 'username', 'email'])
             ->where(['OR' => $data])
-            ->force()
             ->select();
 
         if (!$users) {

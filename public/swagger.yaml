@@ -154,6 +154,7 @@ paths:
         `email`
         `create_ip`
         `last_login_ip`
+        `disable_time`
       parameters:
         - $ref: '#/parameters/token'
         - $ref: '#/parameters/page'
@@ -247,7 +248,7 @@ paths:
     delete:
       tags:
         - UserInfo
-      summary: 禁用指定用户
+      summary: 🔐禁用指定用户
       description: 🔐 仅管理员可调用该接口
       parameters:
         - $ref: '#/parameters/token'

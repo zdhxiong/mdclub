@@ -17,9 +17,6 @@ class UserModel extends Model
     protected $table = 'user';
     protected $primaryKey = 'user_id';
     protected $timestamps = true;
-    protected $softDelete = true;
-
-    const DELETE_TIME = 'disable_time';
 
     protected $columns = [
         'user_id',
@@ -85,6 +82,7 @@ class UserModel extends Model
             'blog' => '',
             'company' => '',
             'location' => '',
+            'disable_time' => 0,
         ]);
 
         $data['password'] = $this->passwordHash($data['password']);

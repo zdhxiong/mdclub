@@ -79,8 +79,16 @@ class UserPasswordResetService extends Service
             $errors['email'] = '邮箱不能为空';
         } elseif (!ValidatorHelper::isEmail($email)) {
             $errors['email'] = '邮箱格式错误';
-        } elseif (!$this->userService->isEmailExist($email)) {
-            $errors['email'] = '该邮箱尚未注册';
+        }
+
+        if (!$errors) {
+            $userInfo = $this->userModel->where(['email' => $email])->get();
+
+            if (!$userInfo) {
+                $errors['email'] = '该邮箱尚未注册';
+            } elseif ($userInfo['disable_time']) {
+                $errors['email'] = '该账号已被禁用';
+            }
         }
 
         if ($errors) {

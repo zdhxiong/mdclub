@@ -98,7 +98,12 @@ class ErrorConstant
     /**
      * 指定用户已被禁用
      */
-    const USER_HAS_BEEN_DISABLED      = [200013, '指定用户已被禁用'];
+    const USER_HAS_BEEN_DISABLED      = [200013, '该用户已被禁用'];
+
+    /**
+     * 账号或密码错误
+     */
+    const USER_PASSWORD_ERROR         = [200014, '账号或密码错误'];
 
     /**
      * 头像上传失败

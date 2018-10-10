@@ -190,7 +190,7 @@ class Service
      *
      * filter=field1=value1,field2>value2,field3<=value3 表示 field1=value1 AND field2>value2 AND field3<=value3
      *
-     * @param  array $defaultFilter 默认条件，该条件权重高于 query 参数
+     * @param  array $defaultFilter 默认条件。query 中存在相同键名的参数时，将覆盖默认条件
      * @return array
      */
     protected function getWhere(array $defaultFilter = []): array
@@ -215,7 +215,7 @@ class Service
         }
 
         $filter = ArrayHelper::filter($filter, $this->getAllowFilterFields());
-        $filter = array_merge($filter, $defaultFilter);
+        $filter = array_merge($defaultFilter, $filter);
 
         foreach ($filter as $key => $value) {
             if (is_array($value)) {
