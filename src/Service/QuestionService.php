@@ -46,6 +46,7 @@ class QuestionService extends Service implements FollowableInterface
             ? [
                 'question_id',
                 'user_id',
+                'comment_count',
                 'answer_count',
                 'view_count',
                 'follower_count',

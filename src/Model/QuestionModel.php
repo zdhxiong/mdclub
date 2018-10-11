@@ -24,6 +24,7 @@ class QuestionModel extends Model
         'title',
         'content_markdown',
         'content_rendered',
+        'comment_count',
         'answer_count',
         'view_count',
         'follower_count',
@@ -35,6 +36,7 @@ class QuestionModel extends Model
     protected function beforeInsert(array $data): array
     {
         return ArrayHelper::fill($data, [
+            'comment_count'    => 0,
             'answer_count'     => 0,
             'view_count'       => 0,
             'follower_count'   => 0,

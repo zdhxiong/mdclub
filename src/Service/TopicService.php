@@ -6,7 +6,9 @@ namespace App\Service;
 
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Helper\ValidatorHelper;
 use App\Interfaces\FollowableInterface;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 话题
@@ -135,8 +137,39 @@ class TopicService extends Service implements FollowableInterface
      * @param         $cover
      * @return int
      */
-    public function create(string $name, string $description, $cover): int
+    public function create(string $name, string $description, UploadedFileInterface $cover): int
     {
+
+    }
+
+    /**
+     * 创建话题前的字段验证
+     *
+     * @param string                $name
+     * @param string                $description
+     * @param UploadedFileInterface $cover
+     */
+    private function createValidator(string $name, string $description, UploadedFileInterface $cover): void
+    {
+        $errors = [];
+
+        // 验证名称
+        if (!$name) {
+            $errors['name'] = '名称不能为空';
+        } elseif (!ValidatorHelper::isMax($name, 20)) {
+            $errors['name'] = '名称长度不能超过 20 个字符';
+        }
+
+        // 验证描述
+        if (!$description) {
+            $errors['description'] = '描述不能为空';
+        } elseif (!ValidatorHelper::isMax($description, 1000)) {
+            $errors['description'] = '描述不能超过 1000 个字符';
+        }
+
+        if ($cover->getError() !== UPLOAD_ERR_OK) {
+            $errors['cover'] = $cover->getError();
+        }
 
     }
 

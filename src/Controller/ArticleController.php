@@ -132,4 +132,30 @@ class ArticleController extends Controller
     {
         return $response;
     }
+
+    /**
+     * 获取指定文章下的评论列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function getComments(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 在指定文章下发表评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function createComment(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
 }

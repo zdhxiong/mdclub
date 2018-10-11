@@ -63,6 +63,12 @@ class TopicController extends Controller
     {
         $this->roleService->managerIdOrFail();
 
+        $name = $request->getParsedBodyParam('name');
+        $description = $request->getParsedBodyParam('description');
+        $cover = $request->getUploadedFiles()['cover'];
+
+
+
         return $response;
     }
 

@@ -112,11 +112,19 @@ $app->group('/api', function () {
     $this->delete('/user/questions/{question_id:\d+}/following',                QuestionController::class . ':deleteFollow');
     $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
 
+    // 问题的评论
+    $this->get(   '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':getComments');
+    $this->post(  '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':createComment');
+
     // 回答
     $this->get(   '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':getListByQuestionId');
     $this->post(  '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':create');
     $this->get(   '/answers',                                              AnswerController::class . ':getList');
     $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getDetail');
+
+    // 回答的评论
+    $this->get(   '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':getComments');
+    $this->post(  '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':createComment');
 
     // 文章
 
@@ -128,6 +136,10 @@ $app->group('/api', function () {
     $this->put(   '/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':addFollow');
     $this->delete('/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':deleteFollow');
     $this->get(   '/articles/{article_id:\d+}/followers',                        ArticleController::class . ':getFollowers');
+
+    // 文章的评论
+    $this->get(   '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':getComments');
+    $this->post(  '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':createComment');
 
     // 私信
 

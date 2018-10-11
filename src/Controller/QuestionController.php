@@ -262,4 +262,30 @@ class QuestionController extends Controller
 
         return $this->success($response);
     }
+
+    /**
+     * 获取指定问题下的评论列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function getComments(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 在指定问题下发表评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function createComment(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
 }

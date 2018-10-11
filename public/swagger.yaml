@@ -271,6 +271,8 @@ paths:
         - name: user_id
           type: integer
           in: path
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 用户信息
@@ -293,6 +295,8 @@ paths:
         - name: user_id
           type: integer
           in: path
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -317,6 +321,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 新头像地址
@@ -341,6 +347,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 新封面地址
@@ -367,6 +375,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 用户列表
@@ -395,6 +405,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 用户列表
@@ -421,9 +433,13 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
         - name: target_user_id
           in: path
           type: integer
+          required: true
+          description: 目标用户ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -450,8 +466,8 @@ paths:
         - name: user_id
           in: path
           type: integer
-          description: 用户ID
           required: true
+          description: 用户ID
       responses:
         200:
           description: 问题列表
@@ -480,8 +496,8 @@ paths:
         - name: user_id
           in: path
           type: integer
-          description: 用户ID
           required: true
+          description: 用户ID
       responses:
         200:
           description: 文章列表
@@ -510,6 +526,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 话题列表
@@ -536,13 +554,13 @@ paths:
         - name: user_id
           in: path
           type: integer
-          description: 用户ID
           required: true
+          description: 用户ID
         - name: question_id
           in: path
           type: integer
-          description: 问题ID
           required: true
+          description: 问题ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -567,13 +585,13 @@ paths:
         - name: user_id
           in: path
           type: integer
-          description: 用户ID
           required: true
+          description: 用户ID
         - name: article_id
           in: path
           type: integer
-          description: 文章ID
           required: true
+          description: 文章ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -598,9 +616,13 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
         - name: topic_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -905,6 +927,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -927,6 +951,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -949,6 +975,8 @@ paths:
         - name: user_id
           in: path
           type: integer
+          required: true
+          description: 用户ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -1048,8 +1076,8 @@ paths:
         - name: question_id
           in: path
           type: integer
-          description: 问题ID
           required: true
+          description: 问题ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -1072,8 +1100,8 @@ paths:
         - name: question_id
           in: path
           type: integer
-          description: 问题ID
           required: true
+          description: 问题ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1096,8 +1124,8 @@ paths:
         - name: question_id
           in: path
           type: integer
-          description: 问题ID
           required: true
+          description: 问题ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1122,8 +1150,8 @@ paths:
         - name: article_id
           in: path
           type: integer
-          description: 文章ID
           required: true
+          description: 文章ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -1146,8 +1174,8 @@ paths:
         - name: article_id
           in: path
           type: integer
-          description: 文章ID
           required: true
+          description: 文章ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1170,8 +1198,8 @@ paths:
         - name: article_id
           in: path
           type: integer
-          description: 文章ID
           required: true
+          description: 文章ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1198,6 +1226,7 @@ paths:
       - name: article_id
         in: path
         type: integer
+        required: true
         description: 文章ID
       responses:
         200:
@@ -1213,6 +1242,70 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+  /articles/{article_id}/comments:
+
+    get:
+      tags:
+      - ArticleComment
+      summary: todo - 获取指定文章的评论列表
+      description: 获取指定文章的评论列表
+      parameters:
+      - $ref: '#/parameters/token'
+      - $ref: '#/parameters/page'
+      - $ref: '#/parameters/per_page'
+      - name: article_id
+        in: path
+        type: integer
+        required: true
+        description: 文章ID
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/ArticleComments'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+      - ArticleComment
+      summary: todo - 在指定文章下发表评论
+      description: 在指定文章下发表评论
+      parameters:
+      - $ref: '#/parameters/token'
+      - name: article_id
+        in: path
+        type: integer
+        required: true
+        description: 文章ID
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+          - content
+          properties:
+            content:
+              type: string
+              description: 评论内容
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/ArticleComment'
+        default:
+          $ref: '#/responses/Error'
+
   /user/topics/{topic_id}/following:
 
     get:
@@ -1225,6 +1318,8 @@ paths:
         - name: topic_id
           in: path
           type: integer
+          required: true
+          description: 话题ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -1247,6 +1342,8 @@ paths:
         - name: topic_id
           in: path
           type: integer
+          required: true
+          description: 话题ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1269,6 +1366,8 @@ paths:
         - name: topic_id
           in: path
           type: integer
+          required: true
+          description: 话题ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1374,7 +1473,7 @@ paths:
         - Question
       summary: 获取问题列表
       description: |
-        管理员可排序的字段包括：`question_id`、`user_id`、`answer_count`、`view_count`、`follower_count`、`last_answer_time`、`create_time`、`update_time`、`delete_time`
+        管理员可排序的字段包括：`question_id`、`user_id`、`comment_count`、`answer_count`、`view_count`、`follower_count`、`last_answer_time`、`create_time`、`update_time`、`delete_time`
         管理员可筛选的字段包括：`question_id`、`user_id`
         普通用户可排序的字段包括：无
         普通用户可筛选的字段包括：无
@@ -1446,8 +1545,10 @@ paths:
       parameters:
         - $ref: '#/parameters/token'
         - name: question_id
-          type: integer
           in: path
+          type: integer
+          required: true
+          description: 问题ID
       responses:
         200:
           description: 问题信息
@@ -1510,6 +1611,7 @@ paths:
         - name: question_id
           in: path
           type: integer
+          required: true
           description: 问题ID
       responses:
         200:
@@ -1525,6 +1627,69 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+  /questions/{question_id}/comments:
+
+    get:
+      tags:
+        - QuestionComment
+      summary: todo - 获取指定问题的评论列表
+      description: 获取指定问题的评论列表
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: question_id
+          in: path
+          type: integer
+          required: true
+          description: 问题ID
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/QuestionComments'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - QuestionComment
+      summary: todo - 在指定问题下发表评论
+      description: 在指定问题下发表评论
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          required: true
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/QuestionComment'
+        default:
+          $ref: '#/responses/Error'
 
   /topics:
 
@@ -1563,10 +1728,6 @@ paths:
       description: 🔐发布话题，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
-        - name: topic_id
-          in: path
-          type: integer
-          required: true
         - name: name
           type: string
           in: formData
@@ -1607,6 +1768,7 @@ paths:
           type: integer
           in: path
           required: true
+          description: 话题ID
         - name: name
           type: string
           in: formData
@@ -1676,6 +1838,7 @@ paths:
         - name: topic_id
           in: path
           type: integer
+          required: true
           description: 话题ID
       responses:
         200:
@@ -1706,6 +1869,7 @@ paths:
         - name: question_id
           in: path
           type: integer
+          required: true
           description: 问题ID
       responses:
         200:
@@ -1731,6 +1895,7 @@ paths:
         - name: question_id
           in: path
           type: integer
+          required: true
           description: 问题ID
         - name: body
           in: body
@@ -1792,6 +1957,7 @@ paths:
         - name: answer_id
           in: path
           type: integer
+          required: true
           description: 回答ID
       responses:
         200:
@@ -1802,6 +1968,70 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
+  /answers/{answer_id}/comments:
+
+    get:
+      tags:
+      - AnswerComment
+      summary: todo - 获取指定回答的评论列表
+      description: 获取指定回答的评论列表
+      parameters:
+      - $ref: '#/parameters/token'
+      - $ref: '#/parameters/page'
+      - $ref: '#/parameters/per_page'
+      - name: answer_id
+        in: path
+        type: integer
+        required: true
+        description: 回答ID
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/AnswerComments'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+      - AnswerComment
+      summary: todo - 在指定回答下发表评论
+      description: 在指定回答下发表评论
+      parameters:
+      - $ref: '#/parameters/token'
+      - name: answer_id
+        in: path
+        type: integer
+        required: true
+        description: 回答ID
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+          - content
+          properties:
+            content:
+              type: string
+              description: 评论内容
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/AnswerComment'
         default:
           $ref: '#/responses/Error'
 
@@ -2117,34 +2347,6 @@ definitions:
         type: boolean
         description: 该用户是否已关注登录用户
 
-  Image:
-    type: object
-    properties:
-      hash:
-        type: string
-        description: 图片的 hash 值
-      extension:
-        type: string
-        description: 图片扩展名
-      filename:
-        type: string
-        description: 图片原始文件名
-      width:
-        type: integer
-        description: 原始图片宽度
-      height:
-        type: integer
-        description: 原始图片高度
-      create_time:
-        type: integer
-        description: 图片上传时间
-      image_id:
-        type: integer
-        description: 图片ID
-      url:
-        type: object
-        description: 图片访问地址
-
   Question:
     type: object
     properties:
@@ -2163,6 +2365,9 @@ definitions:
       content_rendered:
         type: string
         description: HTML 格式的问题内容
+      comment_count:
+        type: integer
+        description: 评论数量
       answer_count:
         type: integer
         description: 回答数量
@@ -2203,6 +2408,39 @@ definitions:
       is_following:
         type: boolean
         description: 当前登录用户是否已关注该问题
+
+  QuestionComment:
+    type: object
+    properties:
+      comment_id:
+        type: integer
+        description: 评论ID
+      question_id:
+        type: integer
+        description: 问题ID
+      user_id:
+        type: integer
+        description: 用户ID
+      content:
+        type: string
+        description: 评论内容
+      create_time:
+        type: integer
+        description: 发表时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/CommentRelationship'
+
+  QuestionComments:
+    type: array
+    items:
+      $ref: '#/definitions/QuestionComment'
 
   Answer:
     type: object
@@ -2249,6 +2487,39 @@ definitions:
       user:
         $ref: '#/definitions/UserInRelationship'
 
+  AnswerComment:
+    type: object
+    properties:
+      comment_id:
+        type: integer
+        description: 评论ID
+      answer_id:
+        type: integer
+        description: 回答ID
+      user_id:
+        type: integer
+        description: 用户ID
+      content:
+        type: string
+        description: 评论内容
+      create_time:
+        type: integer
+        description: 发表时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/CommentRelationship'
+
+  AnswerComments:
+    type: array
+    items:
+      $ref: '#/definitions/AnswerComment'
+
   Topic:
     type: object
     properties:
@@ -2280,6 +2551,11 @@ definitions:
         type: object
         $ref: '#/definitions/TopicRelationship'
 
+  Topics:
+    type: array
+    items:
+      $ref: '#/definitions/Topic'
+
   TopicCover:
     type: object
     properties:
@@ -2293,17 +2569,129 @@ definitions:
         type: string
         description: 大型封面地址
 
-  Topics:
-    type: array
-    items:
-      $ref: '#/definitions/Topic'
-
   TopicRelationship:
     type: object
     properties:
       is_following:
         type: boolean
         description: 当前登录用户是否已关注该话题
+
+  Article:
+    type: object
+    properties:
+      article_id:
+        type: integer
+        description: 文章ID
+      user_id:
+        type: integer
+        description: 用户ID
+      title:
+        type: string
+        description: 文章标题
+      content_markdown:
+        type: string
+        description: Markdown 格式的文章内容
+      content_rendered:
+        type: string
+        description: HTML 格式的文章内容
+      comment_count:
+        type: integer
+        description: 评论数量
+      view_count:
+        type: integer
+        description: 浏览量
+      follower_count:
+        type: integer
+        description: 关注者数量
+      create_time:
+        type: integer
+        description: 创建时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/ArticleRelationship'
+
+  Articles:
+    type: array
+    items:
+      $ref: '#/definitions/Article'
+
+  ArticleRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      topic:
+        $ref: '#/definitions/TopicsInRelationship'
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该文章
+
+  ArticleComment:
+    type: object
+    properties:
+      comment_id:
+        type: integer
+        description: 评论ID
+      article_id:
+        type: integer
+        description: 文章ID
+      user_id:
+        type: integer
+        description: 用户ID
+      content:
+        type: string
+        description: 评论内容
+      create_time:
+        type: integer
+        description: 发表时间
+      update_time:
+        type: integer
+        description: 更新时间
+      delete_time:
+        type: integer
+        description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/CommentRelationship'
+
+  ArticleComments:
+    type: array
+    items:
+      $ref: '#/definitions/AnswerComment'
+
+  Image:
+    type: object
+    properties:
+      hash:
+        type: string
+        description: 图片的 hash 值
+      extension:
+        type: string
+        description: 图片扩展名
+      filename:
+        type: string
+        description: 图片原始文件名
+      width:
+        type: integer
+        description: 原始图片宽度
+      height:
+        type: integer
+        description: 原始图片高度
+      create_time:
+        type: integer
+        description: 图片上传时间
+      image_id:
+        type: integer
+        description: 图片ID
+      url:
+        type: object
+        description: 图片访问地址
 
   Email:
     type: object
@@ -2321,6 +2709,12 @@ definitions:
       content:
         type: string
         description: 邮件内容
+
+  CommentRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
 
   UserInRelationship:
     type: object
@@ -2450,12 +2844,18 @@ tags:
     description: 问题信息
   - name: QuestionFollow
     description: 问题关注
+  - name: QuestionComment
+    description: 问题评论
   - name: Answer
     description: 回答信息
+  - name: AnswerComment
+    description: 回答评论
   - name: Article
     description: 文章信息
   - name: ArticleFollow
     description: 文章关注
+  - name: ArticleComment
+    description: 文章评论
   - name: Inbox
     description: 私信
   - name: Notification
