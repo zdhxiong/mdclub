@@ -164,7 +164,9 @@ class QuestionController extends Controller
      */
     public function getFollowers(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $followers = $this->questionFollowService->getFollowers($question_id, true);
+
+        return $this->success($response, $followers);
     }
 
     /**
@@ -177,7 +179,9 @@ class QuestionController extends Controller
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $following = $this->questionFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -191,7 +195,9 @@ class QuestionController extends Controller
      */
     public function isFollowing(Request $request, Response $response, int $user_id, int $question_id): Response
     {
-        return $response;
+        $isFollowing = $this->questionFollowService->isFollowing($user_id, $question_id);
+
+        return $this->success($response, $isFollowing);
     }
 
     /**
@@ -203,7 +209,10 @@ class QuestionController extends Controller
      */
     public function getMyFollowing(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->questionFollowService->getFollowing($userId, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -216,7 +225,10 @@ class QuestionController extends Controller
      */
     public function isMyFollowing(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $isFollowing = $this->questionFollowService->isFollowing($userId, $question_id);
+
+        return $this->success($response, $isFollowing);
     }
 
     /**
@@ -229,7 +241,10 @@ class QuestionController extends Controller
      */
     public function addFollow(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $this->questionFollowService->addFollow($userId, $question_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -242,6 +257,9 @@ class QuestionController extends Controller
      */
     public function deleteFollow(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $this->questionFollowService->deleteFollow($userId, $question_id);
+
+        return $this->success($response);
     }
 }

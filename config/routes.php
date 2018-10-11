@@ -54,7 +54,6 @@ $app->group('/api', function () {
 
     // 用户信息
     $this->get(   '/users',                       UserController::class . ':getList');
-
     $this->get(   '/users/{user_id:\d+}',         UserController::class . ':getOne');
     $this->delete('/users/{user_id:\d+}',         UserController::class . ':disableOne');
     $this->get(   '/user',                        UserController::class . ':getMe');
@@ -73,11 +72,9 @@ $app->group('/api', function () {
     // 用户关注
     $this->get(   '/users/{user_id:\d+}/followers',                        UserController::class . ':getFollowers');
     $this->get(   '/users/{user_id:\d+}/following',                        UserController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/not_following',                    UserController::class . ':getNotFollowing');
     $this->get(   '/users/{user_id:\d+}/following/{target_user_id:\d+}',   UserController::class . ':isFollowing');
     $this->get(   '/user/followers',                                       UserController::class . ':getMyFollowers');
     $this->get(   '/user/following',                                       UserController::class . ':getMyFollowing');
-    $this->get(   '/user/not_following',                                   UserController::class . ':getMyNotFollowing');
     $this->put(   '/user/following/{target_user_id:\d+}',                  UserController::class . ':addFollow');
     $this->delete('/user/following/{target_user_id:\d+}',                  UserController::class . ':deleteFollow');
     $this->get(   '/user/following/{target_user_id:\d+}',                  UserController::class . ':isMyFollowing');
@@ -86,27 +83,25 @@ $app->group('/api', function () {
     $this->get(   '/topics',                                               TopicController::class . ':getList');
     $this->post(  '/topics',                                               TopicController::class . ':create');
     $this->patch( '/topics/{topic_id:\d+}',                                TopicController::class . ':update');
-    $this->get(   '/topics/{topic_id:\d+}/followers',                      TopicController::class . ':getFollowers');
+    $this->delete('/topics/{topic_id:\d+}',                                TopicController::class . ':delete');
 
     // 话题关注
-    $this->get(   '/users/{user_id:\d+}/topics/not_following',             TopicController::class . ':getNotFollowing');
     $this->get(   '/users/{user_id:\d+}/topics/following',                 TopicController::class . ':getFollowing');
     $this->get(   '/users/{user_id:\d+}/topics/{topic_id:\d+}/following',  TopicController::class . ':isFollowing');
-    $this->get(   '/user/topics/not_following',                            TopicController::class . ':getMyNotFollowing');
     $this->get(   '/user/topics/following',                                TopicController::class . ':getMyFollowing');
+    $this->get(   '/user/topics/{topic_id:\d+}/following',                 TopicController::class . ':isMyFollowing');
     $this->put(   '/user/topics/{topic_id:\d+}/following',                 TopicController::class . ':addFollow');
     $this->delete('/user/topics/{topic_id:\d+}/following',                 TopicController::class . ':deleteFollow');
-    $this->get(   '/user/topics/{topic_id:\d+}/following',                 TopicController::class . ':isMyFollowing');
+    $this->get(   '/topics/{topic_id:\d+}/followers',                      TopicController::class . ':getFollowers');
 
     // 问题信息
     $this->get(   '/questions/recent',                                     QuestionController::class . ':getRecentList');
     $this->get(   '/questions/popular',                                    QuestionController::class . ':getPopularList');
     $this->get(   '/questions',                                            QuestionController::class . ':getList');
     $this->post(  '/questions',                                            QuestionController::class . ':create');
-    $this->patch( '/questions/{question_id:\d+}',                          QuestionController::class . ':update');
     $this->get(   '/questions/{question_id:\d+}',                          QuestionController::class . ':getOne');
+    $this->patch( '/questions/{question_id:\d+}',                          QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                          QuestionController::class . ':delete');
-    $this->get(   '/questions/{question_id:\d+}/followers',                QuestionController::class . ':getFollowers');
 
     // 问题关注
     $this->get(   '/users/{user_id:\d+}/questions/following',                   QuestionController::class . ':getFollowing');
@@ -115,22 +110,38 @@ $app->group('/api', function () {
     $this->get(   '/user/questions/{question_id:\d+}/following',                QuestionController::class . ':isMyFollowing');
     $this->put(   '/user/questions/{question_id:\d+}/following',                QuestionController::class . ':addFollow');
     $this->delete('/user/questions/{question_id:\d+}/following',                QuestionController::class . ':deleteFollow');
+    $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
 
     // 回答
     $this->get(   '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':getListByQuestionId');
     $this->post(  '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':create');
-    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getDetail');
     $this->get(   '/answers',                                              AnswerController::class . ':getList');
+    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getDetail');
 
-    // 图片
-    $this->post(  '/images',                      ImageController::class . ':upload');
-    $this->patch( '/images/{image_id:\d+}',       ImageController::class . ':update');
+    // 文章
+
+    // 文章关注
+    $this->get(   '/users/{user_id:\d+}/articles/following',                     ArticleController::class . ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/articles/{article_id:\d+}/following',    ArticleController::class . ':isFollowing');
+    $this->get(   '/user/articles/following',                                    ArticleController::class . ':getMyFollowing');
+    $this->get(   '/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':isMyFollowing');
+    $this->put(   '/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':addFollow');
+    $this->delete('/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':deleteFollow');
+    $this->get(   '/articles/{article_id:\d+}/followers',                        ArticleController::class . ':getFollowers');
+
+    // 私信
+
+    // 通知
+
+    // 验证码
+    $this->post(  '/captcha',                     CaptchaController::class . ':create');
 
     // 邮件
     $this->post(  '/email',                       EmailController::class . ':send');
 
-    // 验证码
-    $this->post(  '/captcha',                     CaptchaController::class . ':create');
+    // 图片
+    $this->post(  '/images',                      ImageController::class . ':upload');
+    $this->patch( '/images/{image_id:\d+}',       ImageController::class . ':update');
 })
     ->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         /** @var ResponseInterface $response */

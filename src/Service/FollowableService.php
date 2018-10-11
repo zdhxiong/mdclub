@@ -77,7 +77,7 @@ abstract class FollowableService extends Service
                 $relationship = [];
             }
 
-            $list['data'] = $this->followableTargetService->addRelationship($list['data'], $relationship);
+            $list['data'] = $this->userService->addRelationship($list['data'], $relationship);
         }
 
         return $list;

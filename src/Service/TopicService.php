@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Constant\ErrorConstant;
+use App\Exception\ApiException;
 use App\Interfaces\FollowableInterface;
 
 /**
@@ -57,6 +59,7 @@ class TopicService extends Service implements FollowableInterface
             ? [
                 'topic_id',
                 'name',
+                'delete_time',
             ]
             : [];
     }
@@ -122,6 +125,45 @@ class TopicService extends Service implements FollowableInterface
         }
 
         return $topics;
+    }
+
+    /**
+     * 创建话题
+     *
+     * @param  string $name
+     * @param  string $description
+     * @param         $cover
+     * @return int
+     */
+    public function create(string $name, string $description, $cover): int
+    {
+
+    }
+
+    /**
+     * 删除话题
+     *
+     * @param  int  $topicId
+     * @param  bool $softDelete
+     * @return bool
+     */
+    public function delete(int $topicId, bool $softDelete): bool
+    {
+        if (!$softDelete) {
+            $this->topicModel->force();
+        }
+
+        $rowCount = $this->topicModel->delete($topicId);
+        if (!$rowCount) {
+            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+        }
+
+        // todo 删除话题后，删除话题封面图片
+
+        // todo 删除话题后，更新关联数据
+
+
+        return true;
     }
 
     /**

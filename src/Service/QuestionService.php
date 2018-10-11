@@ -68,6 +68,7 @@ class QuestionService extends Service implements FollowableInterface
             ? [
                 'question_id',
                 'user_id',
+                'delete_time',
             ]
             : [];
     }
@@ -362,6 +363,8 @@ class QuestionService extends Service implements FollowableInterface
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
         }
 
+        // TODO 删除问题后更新关联数据
+
         if (!$softDelete) {
             // 删除关联的话题
             $this->topicableModel
@@ -397,6 +400,8 @@ class QuestionService extends Service implements FollowableInterface
             // 删除问题关注记录
 
         }
+
+        return true;
     }
 
 

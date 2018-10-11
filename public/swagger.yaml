@@ -121,6 +121,44 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+  /user/register/email:
+
+    post:
+      tags:
+      - UserRegister
+      summary: 发送注册邮箱验证码
+      description: |
+        发送注册邮箱验证码
+        返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+      parameters:
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+          - email
+          properties:
+            email:
+              type: string
+              description: 邮箱
+            captcha_token:
+              type: string
+              description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+            captcha_code:
+              type: string
+              description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
   /users:
 
     get:
@@ -403,7 +441,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo -  获取指定用户关注的问题列表
+      summary: 获取指定用户关注的问题列表
       description: 获取指定用户关注的问题列表
       parameters:
         - $ref: '#/parameters/token'
@@ -491,7 +529,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo -  判断指定用户是否关注了指定问题
+      summary: 判断指定用户是否关注了指定问题
       description: 判断指定用户是否关注了指定问题
       parameters:
         - $ref: '#/parameters/token'
@@ -729,44 +767,6 @@ paths:
         default:
           $ref: '#/responses/Error'
 
-  /user/register/email:
-
-    post:
-      tags:
-        - UserRegister
-      summary: 发送注册邮箱验证码
-      description: |
-        发送注册邮箱验证码
-        返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
-      parameters:
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - email
-            properties:
-              email:
-                type: string
-                description: 邮箱
-              captcha_token:
-                type: string
-                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
-              captcha_code:
-                type: string
-                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-
   /user/password/email:
 
     post:
@@ -966,7 +966,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo -  获取登录用户关注的问题
+      summary: 获取登录用户关注的问题
       description: 获取登录用户关注的问题
       parameters:
         - $ref: '#/parameters/token'
@@ -1041,7 +1041,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo -  判断登录用户是否关注了指定问题
+      summary: 判断登录用户是否关注了指定问题
       description: 判断登录用户是否关注了指定问题
       parameters:
         - $ref: '#/parameters/token'
@@ -1065,7 +1065,7 @@ paths:
     put:
       tags:
         - QuestionFollow
-      summary: todo -  添加关注
+      summary: 添加关注
       description: 取消关注
       parameters:
         - $ref: '#/parameters/token'
@@ -1089,7 +1089,7 @@ paths:
     delete:
       tags:
         - QuestionFollow
-      summary: todo -  取消关注
+      summary: 取消关注
       description: 取消关注
       parameters:
         - $ref: '#/parameters/token'
@@ -1476,6 +1476,7 @@ paths:
         - name: question_id
           type: integer
           in: path
+          required: true
           description: 问题ID
         - name: soft_delete
           in: query
@@ -1500,7 +1501,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo -  获取指定问题的关注者
+      summary: 获取指定问题的关注者
       description: 获取指定问题的关注者
       parameters:
         - $ref: '#/parameters/token'
@@ -1558,24 +1559,29 @@ paths:
     post:
       tags:
         - Topic
-      summary: todo -  发布话题
-      description: 发布话题，需要管理员权限
+      summary: todo -  🔐发布话题
+      description: 🔐发布话题，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - name
-              - description
-            properties:
-              name:
-                type: string
-                description: 话题名称
-              description:
-                type: string
-                description: 话题描述
+        - name: topic_id
+          in: path
+          type: integer
+          required: true
+        - name: name
+          type: string
+          in: formData
+          required: true
+          description: 话题名称
+        - name: description
+          type: string
+          in: formData
+          required: true
+          description: 话题描述
+        - name: cover
+          type: file
+          in: formData
+          required: true
+          description: 封面图片
       responses:
         200:
           description: 话题信息
@@ -1593,24 +1599,26 @@ paths:
     patch:
       tags:
         - Topic
-      summary: todo -  更新话题信息
-      description: 更新话题信息，需要管理员权限
+      summary: todo -  🔐更新话题信息
+      description: 🔐更新话题信息，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
         - name: topic_id
           type: integer
           in: path
-        - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-                description: 话题名称
-              description:
-                type: string
-                description: 话题描述
+          required: true
+        - name: name
+          type: string
+          in: formData
+          description: 话题名称
+        - name: description
+          type: string
+          in: formData
+          description: 话题描述
+        - name: cover
+          type: file
+          in: formData
+          description: 封面图片
 
       responses:
         200:
@@ -1624,35 +1632,33 @@ paths:
         default:
           $ref: '#/responses/Error'
 
-  /topics/{topic_id}/cover:
-
-    post:
+    delete:
       tags:
         - Topic
-      summary: todo -  上传话题封面
-      description: 上传话题封面，需要管理员权限
-      consumes:
-        - multipart/form-data
+      summary: todo - 🔐删除话题
+      description: 🔐删除话题，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
         - name: topic_id
-          in: path
           type: integer
+          in: path
           required: true
-        - name: cover
-          type: file
-          in: formData
-          required: true
-          description: 图片
+          description: 话题ID
+        - name: soft_delete
+          in: query
+          enum:
+            - 1
+            - 0
+          description: 是否为软删除，默认为 1
       responses:
         200:
-          description: 新封面地址
+          description: 空数据，通过状态码区分成功还是失败
           schema:
             properties:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/TopicCover'
+                type: object
         default:
           $ref: '#/responses/Error'
 
@@ -2450,14 +2456,14 @@ tags:
     description: 文章信息
   - name: ArticleFollow
     description: 文章关注
-  - name: Captcha
-    description: 图形验证码
-  - name: Email
-    description: 邮件
   - name: Inbox
     description: 私信
   - name: Notification
     description: 通知
+  - name: Captcha
+    description: 图形验证码
+  - name: Email
+    description: 邮件
   - name: Image
     description: 图片
 

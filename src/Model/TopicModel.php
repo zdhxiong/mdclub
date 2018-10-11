@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Helper\ArrayHelper;
+
 /**
  * Class TopicModel
  *
@@ -25,4 +27,13 @@ class TopicModel extends Model
         'follower_count',
         'delete_time',
     ];
+
+    protected function beforeInsert(array $data): array
+    {
+        return ArrayHelper::fill($data, [
+            'article_count' => 0,
+            'question_count' => 0,
+            'follower_count' => 0,
+        ]);
+    }
 }
