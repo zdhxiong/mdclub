@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -63,11 +64,12 @@ class TopicController extends Controller
     {
         $this->roleService->managerIdOrFail();
 
+        /** @var UploadedFileInterface $cover */
+        $cover = $request->getUploadedFiles()['cover'];
         $name = $request->getParsedBodyParam('name');
         $description = $request->getParsedBodyParam('description');
-        $cover = $request->getUploadedFiles()['cover'];
 
-
+        $this->topicService->create($name, $description, $cover);
 
         return $response;
     }

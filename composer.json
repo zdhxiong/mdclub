@@ -36,7 +36,8 @@
         "catfan/Medoo": "dev-bugfix",
         "thepixeldeveloper/sitemap": "^5.1",
         "suin/php-rss-writer": "^1.6",
-        "algolia/algoliasearch-client-php": "^1.27"
+        "algolia/algoliasearch-client-php": "^1.27",
+        "sybio/image-workshop": "^2.1"
     },
     "repositories": [
         {

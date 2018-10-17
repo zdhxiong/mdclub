@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
 use App\Interfaces\FollowableInterface;
-use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 话题
@@ -16,8 +17,28 @@ use Psr\Http\Message\UploadedFileInterface;
  * Class TopicService
  * @package App\Service
  */
-class TopicService extends Service implements FollowableInterface
+class TopicService extends BrandImageService implements FollowableInterface
 {
+    /**
+     * @var string 图片类型
+     */
+    protected $imageType = 'topic-cover';
+
+    /**
+     * @var array 图片尺寸
+     */
+    protected $imageWidths = [
+        's' => 360,
+        'm' => 720,
+        'l' => 1084,
+    ];
+
+    /**
+     * @var float 图片高宽比
+     */
+    protected $imageScale = 0.56;
+
+
     /**
      * 获取隐私字段
      *
@@ -64,6 +85,16 @@ class TopicService extends Service implements FollowableInterface
                 'delete_time',
             ]
             : [];
+    }
+
+    /**
+     * 获取默认的封面图片地址
+     *
+     * @return array
+     */
+    protected function getDefaultImageUrls(): array
+    {
+        return [];
     }
 
     /**
@@ -132,14 +163,21 @@ class TopicService extends Service implements FollowableInterface
     /**
      * 创建话题
      *
-     * @param  string $name
-     * @param  string $description
-     * @param         $cover
+     * @param  string                $name
+     * @param  string                $description
+     * @param  UploadedFileInterface $cover
      * @return int
      */
     public function create(string $name, string $description, UploadedFileInterface $cover): int
     {
+        $this->createValidator($name, $description, $cover);
 
+        // todo 插入话题数据
+
+        // todo 保存图片
+        $this->uploadImage(1, $cover);
+
+        // todo 更新话题数据
     }
 
     /**
@@ -167,10 +205,14 @@ class TopicService extends Service implements FollowableInterface
             $errors['description'] = '描述不能超过 1000 个字符';
         }
 
-        if ($cover->getError() !== UPLOAD_ERR_OK) {
-            $errors['cover'] = $cover->getError();
+        // 验证文件
+        if ($coverError = $this->validateImage($cover)) {
+            $errors['cover'] = $coverError;
         }
 
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
     }
 
     /**

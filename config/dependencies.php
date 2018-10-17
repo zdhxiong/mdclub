@@ -190,7 +190,15 @@ $container[\League\Flysystem\FilesystemInterface::class] = function (ContainerIn
 
     switch ($option['storage_type']) {
         case 'local':
-            $uploadDir = $option['storage_local_dir'] ?: __DIR__ . '../public/upload/';
+            $uploadDir = $option['storage_local_dir'];
+            if ($uploadDir && !in_array(substr($uploadDir, -1), ['/', '\\'])) {
+                $uploadDir .= '/';
+            }
+
+            if (!$uploadDir) {
+                $uploadDir = __DIR__ . '/../public/upload/';
+            }
+
             $adapter = new \League\Flysystem\Adapter\Local($uploadDir);
             break;
 

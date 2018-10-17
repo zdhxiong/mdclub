@@ -22,7 +22,7 @@ class OptionService extends Service
         'site_keywords',       // 站点关键词
         'site_icp_beian',      // 站点 ICP 备案号
         'site_gongan_beian',   // 站点公安备案号
-        'site_static_url',     // static 目录资源 URL 地址
+        'site_static_url',     // static 目录资源 URL 地址（以 / 结尾）
 
         'smtp_host',           // SMTP 服务器地址
         'smtp_secure',         // SMTP 是否使用 ssl 连接
@@ -34,8 +34,8 @@ class OptionService extends Service
         'cache_type',          // 缓存类型
 
         'storage_type',        // 存储类型
-        'storage_local_dir',   // 本地文件存储目录
-        'storage_local_url',   // 本地文件存储的访问链接
+        'storage_url',         // 本地文件存储的访问链接（以 / 结尾）
+        'storage_local_dir',   // 本地文件存储目录（以 / 结尾）
         'storage_ftp_host',
         'storage_ftp_passive',
         'storage_ftp_password',
@@ -44,7 +44,6 @@ class OptionService extends Service
         'storage_ftp_ssl',
         'storage_ftp_timeout',
         'storage_ftp_username',
-        'storage_ftp_url',
         'storage_aliyun_oss_access_id',
         'storage_aliyun_oss_access_secret',
         'storage_aliyun_oss_bucket',
@@ -75,8 +74,8 @@ class OptionService extends Service
         'cache_type',
 
         'storage_type',
+        'storage_url',
         'storage_local_dir',
-        'storage_local_url',
         'storage_ftp_host',
         'storage_ftp_passive',
         'storage_ftp_password',
@@ -85,7 +84,6 @@ class OptionService extends Service
         'storage_ftp_ssl',
         'storage_ftp_timeout',
         'storage_ftp_username',
-        'storage_ftp_url',
         'storage_aliyun_oss_access_id',
         'storage_aliyun_oss_access_secret',
         'storage_aliyun_oss_bucket',

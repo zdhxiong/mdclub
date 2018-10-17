@@ -314,7 +314,7 @@ paths:
     delete:
       tags:
         - UserAvatar
-      summary: todo -  删除指定用户的头像，并重置为默认头像；仅管理员可操作
+      summary: todo - 🔐删除指定用户的头像，并重置为默认头像；仅管理员可操作
       description: 删除指定用户的头像，并重置为默认头像；仅管理员可操作
       parameters:
         - $ref: '#/parameters/token'
@@ -340,7 +340,7 @@ paths:
     delete:
       tags:
         - UserCover
-      summary: todo -  删除指定用户的封面，并重置为默认封面；仅管理员可操作
+      summary: todo - 🔐删除指定用户的封面，并重置为默认封面；仅管理员可操作
       description: 删除指定用户的封面，并重置为默认封面；仅管理员可操作
       parameters:
         - $ref: '#/parameters/token'
@@ -2193,16 +2193,13 @@ definitions:
       storage_ftp_timeout:
         type: integer
         description: FTP 连接超时时间
-      storage_ftp_url:
-        type: string
-        description: FTP 文件访问地址
       storage_ftp_username:
         type: string
         description: FTP 用户名
       storage_local_dir:
         type: string
         description: 🔐本地文件存储目录
-      storage_local_url:
+      storage_url:
         type: string
         description: 🔐本地文件访问链接
       storage_type:
