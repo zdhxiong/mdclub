@@ -82,7 +82,7 @@ $app->group('/api', function () {
     // 话题信息
     $this->get(   '/topics',                                               TopicController::class . ':getList');
     $this->post(  '/topics',                                               TopicController::class . ':create');
-    $this->patch( '/topics/{topic_id:\d+}',                                TopicController::class . ':update');
+    $this->post(  '/topics/{topic_id:\d+}',                                TopicController::class . ':update'); // formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
     $this->delete('/topics/{topic_id:\d+}',                                TopicController::class . ':delete');
 
     // 话题关注

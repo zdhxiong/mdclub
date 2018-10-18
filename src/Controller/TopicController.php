@@ -50,7 +50,9 @@ class TopicController extends Controller
      */
     public function getList(Request $request, Response $response): Response
     {
-        return $response;
+        $list = $this->topicService->getList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -65,7 +67,7 @@ class TopicController extends Controller
         $this->roleService->managerIdOrFail();
 
         /** @var UploadedFileInterface $cover */
-        $cover = $request->getUploadedFiles()['cover'];
+        $cover = $request->getUploadedFiles()['cover'] ?? null;
         $name = $request->getParsedBodyParam('name');
         $description = $request->getParsedBodyParam('description');
 
@@ -87,7 +89,15 @@ class TopicController extends Controller
     {
         $this->roleService->managerIdOrFail();
 
-        return $response;
+        /** @var UploadedFileInterface $cover */
+        $cover = $request->getUploadedFiles()['cover'] ?? null;
+        $name = $request->getParsedBodyParam('name');
+        $description = $request->getParsedBodyParam('description');
+
+        $this->topicService->update($topic_id, $name, $description, $cover);
+        $topicInfo = $this->topicService->get($topic_id, true);
+
+        return $this->success($response, $topicInfo);
     }
 
     /**

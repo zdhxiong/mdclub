@@ -125,28 +125,28 @@ paths:
 
     post:
       tags:
-      - UserRegister
+        - UserRegister
       summary: 发送注册邮箱验证码
       description: |
         发送注册邮箱验证码
         返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
       parameters:
-      - name: body
-        in: body
-        schema:
-          type: object
-          required:
-          - email
-          properties:
-            email:
-              type: string
-              description: 邮箱
-            captcha_token:
-              type: string
-              description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
-            captcha_code:
-              type: string
-              description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              captcha_token:
+                type: string
+                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+              captcha_code:
+                type: string
+                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -271,7 +271,6 @@ paths:
         - name: user_id
           type: integer
           in: path
-          required: true
           description: 用户ID
       responses:
         200:
@@ -295,7 +294,6 @@ paths:
         - name: user_id
           type: integer
           in: path
-          required: true
           description: 用户ID
       responses:
         200:
@@ -321,7 +319,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -347,7 +344,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -375,7 +371,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -405,7 +400,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -433,12 +427,10 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
         - name: target_user_id
           in: path
           type: integer
-          required: true
           description: 目标用户ID
       responses:
         200:
@@ -466,7 +458,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -496,7 +487,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -526,7 +516,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -554,12 +543,10 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -585,12 +572,10 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
         - name: article_id
           in: path
           type: integer
-          required: true
           description: 文章ID
       responses:
         200:
@@ -616,12 +601,10 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
         - name: topic_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -709,7 +692,6 @@ paths:
         - name: avatar
           type: file
           in: formData
-          required: true
           description: 用户头像
       responses:
         200:
@@ -756,7 +738,6 @@ paths:
         - name: cover
           type: file
           in: formData
-          required: true
           description: 用户封面
       responses:
         200:
@@ -927,7 +908,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -951,7 +931,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -975,7 +954,6 @@ paths:
         - name: user_id
           in: path
           type: integer
-          required: true
           description: 用户ID
       responses:
         200:
@@ -1076,7 +1054,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1100,7 +1077,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1124,7 +1100,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1150,7 +1125,6 @@ paths:
         - name: article_id
           in: path
           type: integer
-          required: true
           description: 文章ID
       responses:
         200:
@@ -1174,7 +1148,6 @@ paths:
         - name: article_id
           in: path
           type: integer
-          required: true
           description: 文章ID
       responses:
         200:
@@ -1198,7 +1171,6 @@ paths:
         - name: article_id
           in: path
           type: integer
-          required: true
           description: 文章ID
       responses:
         200:
@@ -1226,7 +1198,6 @@ paths:
       - name: article_id
         in: path
         type: integer
-        required: true
         description: 文章ID
       responses:
         200:
@@ -1256,7 +1227,6 @@ paths:
       - name: article_id
         in: path
         type: integer
-        required: true
         description: 文章ID
       responses:
         200:
@@ -1274,26 +1244,25 @@ paths:
 
     post:
       tags:
-      - ArticleComment
+        - ArticleComment
       summary: todo - 在指定文章下发表评论
       description: 在指定文章下发表评论
       parameters:
-      - $ref: '#/parameters/token'
-      - name: article_id
-        in: path
-        type: integer
-        required: true
-        description: 文章ID
-      - name: body
-        in: body
-        schema:
-          type: object
-          required:
-          - content
-          properties:
-            content:
-              type: string
-              description: 评论内容
+        - $ref: '#/parameters/token'
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
       responses:
         200:
           description: 评论详情
@@ -1318,7 +1287,6 @@ paths:
         - name: topic_id
           in: path
           type: integer
-          required: true
           description: 话题ID
       responses:
         200:
@@ -1342,7 +1310,6 @@ paths:
         - name: topic_id
           in: path
           type: integer
-          required: true
           description: 话题ID
       responses:
         200:
@@ -1366,7 +1333,6 @@ paths:
         - name: topic_id
           in: path
           type: integer
-          required: true
           description: 话题ID
       responses:
         200:
@@ -1394,7 +1360,6 @@ paths:
         - name: image
           type: file
           in: formData
-          required: true
           description: 图片
       responses:
         200:
@@ -1547,7 +1512,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1577,7 +1541,6 @@ paths:
         - name: question_id
           type: integer
           in: path
-          required: true
           description: 问题ID
         - name: soft_delete
           in: query
@@ -1611,7 +1574,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1641,7 +1603,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1667,7 +1628,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
         - name: body
           in: body
@@ -1696,11 +1656,11 @@ paths:
     get:
       tags:
         - Topic
-      summary: todo -  获取全部话题
+      summary: 获取全部话题
       description: |
         🔒 仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效
-        可排序的字段包括：`topic_id`、`article_count`、`question_count`、`follower_count`。若未指定排序字段，则按 `follower_count` 倒序排列
-        可筛选的字段包括：`topic_id`、`name`
+        可排序的字段包括：`topic_id`、`article_count`、`question_count`、`follower_count`、`delete_time`。若未指定排序字段，则按 `follower_count` 倒序排列
+        可筛选的字段包括：`topic_id`、`name`、`delete_time`
       parameters:
         - $ref: '#/parameters/token'
         - $ref: '#/parameters/page'
@@ -1731,17 +1691,14 @@ paths:
         - name: name
           type: string
           in: formData
-          required: true
           description: 话题名称
         - name: description
           type: string
           in: formData
-          required: true
           description: 话题描述
         - name: cover
           type: file
           in: formData
-          required: true
           description: 封面图片
       responses:
         200:
@@ -1757,17 +1714,16 @@ paths:
 
   /topics/{topic_id}:
 
-    patch:
+    post:
       tags:
         - Topic
-      summary: todo -  🔐更新话题信息
+      summary: 🔐更新话题信息
       description: 🔐更新话题信息，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
         - name: topic_id
           type: integer
           in: path
-          required: true
           description: 话题ID
         - name: name
           type: string
@@ -1804,7 +1760,6 @@ paths:
         - name: topic_id
           type: integer
           in: path
-          required: true
           description: 话题ID
         - name: soft_delete
           in: query
@@ -1838,7 +1793,6 @@ paths:
         - name: topic_id
           in: path
           type: integer
-          required: true
           description: 话题ID
       responses:
         200:
@@ -1869,7 +1823,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
       responses:
         200:
@@ -1895,7 +1848,6 @@ paths:
         - name: question_id
           in: path
           type: integer
-          required: true
           description: 问题ID
         - name: body
           in: body
@@ -1957,7 +1909,6 @@ paths:
         - name: answer_id
           in: path
           type: integer
-          required: true
           description: 回答ID
       responses:
         200:
@@ -1985,7 +1936,6 @@ paths:
       - name: answer_id
         in: path
         type: integer
-        required: true
         description: 回答ID
       responses:
         200:
@@ -2007,22 +1957,21 @@ paths:
       summary: todo - 在指定回答下发表评论
       description: 在指定回答下发表评论
       parameters:
-      - $ref: '#/parameters/token'
-      - name: answer_id
-        in: path
-        type: integer
-        required: true
-        description: 回答ID
-      - name: body
-        in: body
-        schema:
-          type: object
-          required:
-          - content
-          properties:
-            content:
-              type: string
-              description: 评论内容
+        - $ref: '#/parameters/token'
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
       responses:
         200:
           description: 评论详情

@@ -80,7 +80,7 @@ class QuestionService extends Service implements FollowableInterface
      * @param  bool $withRelationship
      * @return array
      */
-    public function getList($withRelationship = false): array
+    public function getList(bool $withRelationship = false): array
     {
         $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
         $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());

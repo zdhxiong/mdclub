@@ -170,26 +170,28 @@ abstract class BrandImageService extends Service
     }
 
     /**
-     * 删除旧图片
+     * 删除图片
      *
-     * @param int    $id
-     * @param string $fileName
+     * @param  int    $id
+     * @param  string $fileName
      */
-    protected function deleteOldImageFiles(int $id, string $fileName): void
+    public function deleteImage(int $id, string $fileName): void
     {
-        $sizes = array_keys($this->imageWidths);
-        array_push($sizes, '');
+        $fullFileName= $this->getFullImageFilename($id, $fileName);
 
+        // 删除原图
+        try {
+            $this->filesystem->delete($fullFileName);
+        } catch (\Exception $e) {}
+
+        // 仅 local 和 ftp 需要删除裁剪后的图片
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
-            // 删除所有尺寸的图片
-            foreach ($sizes as $size) {
-                $file = $this->getFullImageFilename($id, $fileName, $size);
-                $this->filesystem->delete($file);
+            foreach ($this->imageWidths as $size => $width) {
+                $fullFileName = $this->getFullImageFilename($id, $fileName, $size);
+                try {
+                    $this->filesystem->delete($fullFileName);
+                } catch (\Exception $e) {}
             }
-        } else {
-            // 仅删除原图
-            $file = $this->getFullImageFilename($id, $fileName);
-            $this->filesystem->delete($file);
         }
     }
 

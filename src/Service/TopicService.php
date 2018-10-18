@@ -190,6 +190,31 @@ class TopicService extends BrandImageService implements FollowableInterface
     }
 
     /**
+     * 获取话题列表
+     *
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getList(bool $withRelationship = false): array
+    {
+        $list = $this->topicModel
+            ->where($this->getWhere())
+            ->order($this->getOrder(['follower_count' => 'DESC']))
+            ->field($this->getPrivacyFields(), true)
+            ->paginate();
+
+        foreach ($list['data'] as &$topic) {
+            $topic = $this->handle($topic);
+        }
+
+        if ($withRelationship) {
+            $list['data'] = $this->addRelationship($list['data']);
+        }
+
+        return $list;
+    }
+
+    /**
      * 创建话题
      *
      * @param  string                $name
@@ -197,8 +222,11 @@ class TopicService extends BrandImageService implements FollowableInterface
      * @param  UploadedFileInterface $cover
      * @return int
      */
-    public function create(string $name, string $description, UploadedFileInterface $cover): int
-    {
+    public function create(
+        string $name = null,
+        string $description = null,
+        UploadedFileInterface $cover = null
+    ): int {
         $this->createValidator($name, $description, $cover);
 
         // 添加话题
@@ -223,8 +251,11 @@ class TopicService extends BrandImageService implements FollowableInterface
      * @param string                $description
      * @param UploadedFileInterface $cover
      */
-    private function createValidator(string $name, string $description, UploadedFileInterface $cover): void
-    {
+    private function createValidator(
+        string $name = null,
+        string $description = null,
+        UploadedFileInterface $cover = null
+    ): void {
         $errors = [];
 
         // 验证名称
@@ -241,14 +272,97 @@ class TopicService extends BrandImageService implements FollowableInterface
             $errors['description'] = '描述不能超过 1000 个字符';
         }
 
-        // 验证文件
-        if ($coverError = $this->validateImage($cover)) {
+        // 验证图片
+        if (!$cover) {
+            $errors['cover'] = '请选择要上传的封面图片';
+        } elseif ($coverError = $this->validateImage($cover)) {
             $errors['cover'] = $coverError;
         }
 
         if ($errors) {
             throw new ValidationException($errors);
         }
+    }
+
+    /**
+     * 更新话题
+     *
+     * @param  int                   $topicId
+     * @param  string                $name
+     * @param  string                $description
+     * @param  UploadedFileInterface $cover
+     * @return bool
+     */
+    public function update(
+        int $topicId,
+        string $name = null,
+        string $description = null,
+        UploadedFileInterface $cover = null
+    ): bool {
+        $topicInfo = $this->updateValidator($topicId, $name, $description, $cover);
+
+        $data = [];
+        !is_null($name) && $data['name'] = $name;
+        !is_null($description) && $data['description'] = $description;
+
+        if ($data) {
+            $this->topicModel->where(['topic_id' => $topicId])->update($data);
+        }
+
+        if (!is_null($cover)) {
+            // 先删除旧图片
+            $this->deleteImage($topicId, $topicInfo['cover']);
+
+            // 上传并更新图片
+            $fileName = $this->uploadImage($topicId, $cover);
+            $this->topicModel->where(['topic_id' => $topicId])->update(['cover' => $fileName]);
+        }
+
+        return true;
+    }
+
+    /**
+     * 更新话题前的字段验证
+     *
+     * @param  int                   $topicId
+     * @param  string                $name
+     * @param  string                $description
+     * @param  UploadedFileInterface $cover
+     * @return array                 $topicInfo
+     */
+    private function updateValidator(
+        int $topicId,
+        string $name = null,
+        string $description = null,
+        UploadedFileInterface $cover = null
+    ): array {
+        $topicInfo = $this->topicModel->get($topicId);
+        if (!$topicInfo) {
+            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+        }
+
+        $errors = [];
+
+        // 验证名称
+        if (!is_null($name) && !ValidatorHelper::isMax($name, 20)) {
+            $errors['name'] = '名称长度不能超过 20 个字符';
+        }
+
+        // 验证描述
+        if (!is_null($description) && !ValidatorHelper::isMax($description, 1000)) {
+            $errors['description'] = '描述不能超过 1000 个字符';
+        }
+
+        // 验证图片
+        if (!is_null($cover) && $coverError = $this->validateImage($cover)) {
+            $errors['cover'] = $coverError;
+        }
+
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        return $topicInfo;
     }
 
     /**
