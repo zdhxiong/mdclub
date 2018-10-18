@@ -337,7 +337,7 @@ paths:
     delete:
       tags:
         - UserCover
-      summary: todo - 🔐删除指定用户的封面，并重置为默认封面；仅管理员可操作
+      summary: 🔐删除指定用户的封面，并重置为默认封面；仅管理员可操作
       description: 删除指定用户的封面，并重置为默认封面；仅管理员可操作
       parameters:
         - $ref: '#/parameters/token'
@@ -729,7 +729,7 @@ paths:
     post:
       tags:
         - UserCover
-      summary: todo -  上传当前登录用户的封面
+      summary: 上传当前登录用户的封面
       description: 上传当前登录用户的封面
       consumes:
         - multipart/form-data
@@ -754,7 +754,7 @@ paths:
     delete:
       tags:
         - UserCover
-      summary: todo -  删除当前登录用户的封面，并重置为默认封面
+      summary: 删除当前登录用户的封面，并重置为默认封面
       description: 删除当前登录用户的封面，并重置为默认封面
       parameters:
         - $ref: '#/parameters/token'
@@ -1534,7 +1534,7 @@ paths:
     delete:
       tags:
         - Question
-      summary: 删除指定问题
+      summary: todo - 删除指定问题
       description: 🔒 删除指定问题。仅管理员可以删除问题
       parameters:
         - $ref: '#/parameters/token'

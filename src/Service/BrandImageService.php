@@ -57,27 +57,37 @@ abstract class BrandImageService extends Service
     }
 
     /**
+     * 判断是否支持 webp
+     *
+     * @return bool
+     */
+    protected function isSupportWebp(): bool
+    {
+        return strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp');
+    }
+
+    /**
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
      * 如果是 aliyun_oss、upyun、qiniu 存储，则添加 url 参数
      *
-     * @param  string $fileName  带图片后缀，用 . 分隔
+     * @param  string $filename  带图片后缀，用 . 分隔
      * @param  string $size      默认为原图
      * @return string
      */
-    protected function getImageFilename(string $fileName, string $size = ''): string
+    protected function getImageFilename(string $filename, string $size = ''): string
     {
         if (!in_array($size, array_keys($this->imageWidths))) {
             $size = '';
         }
 
         if (!$size) {
-            return $fileName;
+            return $filename;
         }
 
         $storageType = $this->optionService->get('storage_type');
-        $isSupportWebp = strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp');
+        $isSupportWebp = $this->isSupportWebp();
 
         $width = $this->imageWidths[$size];
         $height = round($width * $this->imageScale);
@@ -86,7 +96,7 @@ abstract class BrandImageService extends Service
             // local 和 ftp，返回已裁剪好的图片
             case 'local':
             case 'ftp':
-                list($name, $suffix) = explode('.', $fileName);
+                list($name, $suffix) = explode('.', $filename);
                 return "{$name}_{$size}.{$suffix}";
 
             // aliyun_oss 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
@@ -94,21 +104,21 @@ abstract class BrandImageService extends Service
                 $params = "?x-oss-process=image/resize,m_fill,w_{$width},h_{$height},limit_0";
                 $params .= $isSupportWebp ? '/format,webp' : '';
 
-                return $fileName . $params;
+                return $filename . $params;
 
             // upyun 添加缩略图参数：https://help.upyun.com/knowledge-base/image/#e7bca9e5b08fe694bee5a4a7
             case 'upyun':
                 $params = "!/both/{$width}x{$height}";
                 $params .= $isSupportWebp ? '/format/webp' : '';
 
-                return $fileName . $params;
+                return $filename . $params;
 
             // qiniu 添加缩略图参数：https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2
             case 'qiniu':
                 $params = "?imageView2/1/w/{$width}/h/{$height}";
                 $params .= $isSupportWebp ? '/format/webp' : '';
 
-                return $fileName . $params;
+                return $filename . $params;
         }
 
         throw new \Exception('不存在指定的存储类型：' . $storageType);
@@ -118,52 +128,46 @@ abstract class BrandImageService extends Service
      * 获取包含相对路径的文件名
      *
      * @param  int    $id
-     * @param  string $fileName
+     * @param  string $filename
      * @param  string $size     默认为原图
      * @return string
      */
-    protected function getFullImageFilename(int $id, string $fileName, string $size = ''): string
+    protected function getFullImageFilename(int $id, string $filename, string $size = ''): string
     {
-        return $this->getImagePath($id) . '/' . $this->getImageFilename($fileName, $size);
+        return $this->getImagePath($id) . '/' . $this->getImageFilename($filename, $size);
     }
 
     /**
      * 获取文件的访问路径
      *
      * @param  int    $id
-     * @param  string $fileName
+     * @param  string $filename
      * @param  string $size     默认为原图
      * @return string
      */
-    public function getImageUrl(int $id, string $fileName, string $size = ''): string
+    public function getImageUrl(int $id, string $filename = null, string $size = ''): string
     {
-        $storageUrl = $this->optionService->get('storage_url');
-        if ($storageUrl && substr($storageUrl, -1) !== '/') {
-            $storageUrl .= '/';
+        if (!$filename) {
+            return '';
         }
 
-        if (!$storageUrl) {
-            $uri = $this->request->getUri();
-            $storageUrl = $uri->getScheme() . '://' . $uri->getHost() . '/upload/';
-        }
-
-        return $storageUrl . $this->getFullImageFilename($id, $fileName, $size);
+        return $this->getStorageUrl() . $this->getFullImageFilename($id, $filename, $size);
     }
 
     /**
      * 获取各种尺寸文件的访问路径数组，除了原图
      *
      * @param  int    $id
-     * @param  string $fileName
+     * @param  string $filename
      * @return array
      */
-    public function getImageUrls(int $id, string $fileName): array
+    public function getImageUrls(int $id, string $filename = null): array
     {
         $array = [];
         $default = $this->getDefaultImageUrls();
 
-        foreach ($this->imageWidths as $size => $width) {
-            $array[$size] = $this->getImageUrl($id, $fileName, $size) ?: ($default[$size] ?? '');
+        foreach (array_keys($this->imageWidths) as $size) {
+            $array[$size] = $this->getImageUrl($id, $filename, $size) ?: ($default[$size] ?? '');
         }
 
         return $array;
@@ -173,23 +177,23 @@ abstract class BrandImageService extends Service
      * 删除图片
      *
      * @param  int    $id
-     * @param  string $fileName
+     * @param  string $filename
      */
-    public function deleteImage(int $id, string $fileName): void
+    public function deleteImage(int $id, string $filename): void
     {
-        $fullFileName= $this->getFullImageFilename($id, $fileName);
+        $fullFilename= $this->getFullImageFilename($id, $filename);
 
         // 删除原图
         try {
-            $this->filesystem->delete($fullFileName);
+            $this->filesystem->delete($fullFilename);
         } catch (\Exception $e) {}
 
         // 仅 local 和 ftp 需要删除裁剪后的图片
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
-            foreach ($this->imageWidths as $size => $width) {
-                $fullFileName = $this->getFullImageFilename($id, $fileName, $size);
+            foreach (array_keys($this->imageWidths) as $size) {
+                $fullFilename = $this->getFullImageFilename($id, $filename, $size);
                 try {
-                    $this->filesystem->delete($fullFileName);
+                    $this->filesystem->delete($fullFilename);
                 } catch (\Exception $e) {}
             }
         }
@@ -206,11 +210,11 @@ abstract class BrandImageService extends Service
     {
         $token = StringHelper::guid();
         $suffix = $file->getClientMediaType() === 'image/png' ? 'png' : 'jpg';
-        $fileName = "{$token}.{$suffix}";
-        $fullFileName = $this->getFullImageFilename($id, $fileName);
+        $filename = "{$token}.{$suffix}";
+        $fullFilename = $this->getFullImageFilename($id, $filename);
 
         // 写入原始文件
-        $this->filesystem->write($fullFileName, $file->getStream()->getContents());
+        $this->filesystem->write($fullFilename, $file->getStream()->getContents());
 
         // 仅 local 和 ftp 需要预先裁剪图片，云存储不需要裁剪
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
@@ -247,16 +251,16 @@ abstract class BrandImageService extends Service
                     $newImage->resizeInPixel($width, null, true);
                 }
 
-                $newImage->save(sys_get_temp_dir(), $fileName);
+                $newImage->save(sys_get_temp_dir(), $filename);
 
                 $this->filesystem->write(
-                    $this->getFullImageFilename($id, $fileName, $size),
-                    file_get_contents(sys_get_temp_dir() . '/' . $fileName)
+                    $this->getFullImageFilename($id, $filename, $size),
+                    file_get_contents(sys_get_temp_dir() . '/' . $filename)
                 );
             }
         }
 
-        return $fileName;
+        return $filename;
     }
 
     /**

@@ -94,7 +94,15 @@ class TopicService extends BrandImageService implements FollowableInterface
      */
     protected function getDefaultImageUrls(): array
     {
-        return [];
+        $suffix = $this->isSupportWebp() ? 'webp' : 'jpg';
+        $staticUrl = $this->getStaticUrl();
+        $data = [];
+
+        foreach (array_keys($this->imageWidths) as $size) {
+            $data[$size] = "{$staticUrl}topic-cover/default_{$size}.{$suffix}";
+        }
+
+        return $data;
     }
 
     /**
@@ -374,16 +382,21 @@ class TopicService extends BrandImageService implements FollowableInterface
      */
     public function delete(int $topicId, bool $softDelete): bool
     {
+        $topicInfo = $this->topicModel->force()->get($topicId);
+        if (!$topicInfo) {
+            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+        }
+
         if (!$softDelete) {
             $this->topicModel->force();
         }
 
-        $rowCount = $this->topicModel->delete($topicId);
-        if (!$rowCount) {
-            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
-        }
+        $this->topicModel->delete($topicId);
 
-        // todo 删除话题后，删除话题封面图片
+        // 删除话题后，删除话题封面图片
+        if (!$softDelete) {
+            $this->deleteImage($topicId, $topicInfo['cover']);
+        }
 
         // todo 删除话题后，更新关联数据
 

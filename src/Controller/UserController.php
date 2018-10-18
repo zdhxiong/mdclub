@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Service\UserService;
+use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -168,7 +168,12 @@ class UserController extends Controller
      */
     public function deleteCover(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $this->userCoverService->delete($user_id);
+        $newCovers = $this->userCoverService->getImageUrls($user_id);
+
+        return $this->success($response, $newCovers);
     }
 
     /**
@@ -181,7 +186,15 @@ class UserController extends Controller
      */
     public function uploadMyCover(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        /** @var UploadedFileInterface $cover */
+        $cover = $request->getUploadedFiles()['cover'] ?? null;
+
+        $filename = $this->userCoverService->upload($userId, $cover);
+        $newCovers = $this->userCoverService->getImageUrls($userId, $filename);
+
+        return $this->success($response, $newCovers);
     }
 
     /**
@@ -194,7 +207,12 @@ class UserController extends Controller
      */
     public function deleteMyCover(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        $this->userCoverService->delete($userId);
+        $newCovers = $this->userCoverService->getImageUrls($userId);
+
+        return $this->success($response, $newCovers);
     }
 
     /**

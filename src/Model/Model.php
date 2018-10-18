@@ -390,6 +390,18 @@ class Model
     }
 
     /**
+     * 查询数据后，对数据进行处理
+     *
+     * @param  array $data 处理前的数据
+     * @param  bool  $nest 是否是二维数组
+     * @return array       处理后的数据
+     */
+    protected function afterSelect(array $data, bool $nest = true): array
+    {
+        return $data;
+    }
+
+    /**
      * 根据条件获取多条数据
      *
      * @param  array  $primaryValues 若传入了该参数，则根据主键值数组获取，否则根据前面的 where 条件获取
@@ -404,10 +416,12 @@ class Model
         $this->reset();
 
         if ($join) {
-            return $this->database->select($this->table, $join, $columns, $where);
+            $data = $this->database->select($this->table, $join, $columns, $where);
         } else {
-            return $this->database->select($this->table, $columns, $where);
+            $data = $this->database->select($this->table, $columns, $where);
         }
+
+        return $this->afterSelect($data, true);
     }
 
     /**
@@ -567,7 +581,7 @@ class Model
      * 根据条件获取一条数据
      *
      * @param  int|string  $primaryValue 若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
-     * @return array|bool
+     * @return array|null
      */
     public function get($primaryValue = null)
     {
@@ -578,10 +592,16 @@ class Model
         $this->reset();
 
         if ($join) {
-            return $this->database->get($this->table, $join, $columns, $where);
+            $data = $this->database->get($this->table, $join, $columns, $where);
         } else {
-            return $this->database->get($this->table, $columns, $where);
+            $data = $this->database->get($this->table, $columns, $where);
         }
+
+        if (is_array($data)) {
+            $data = $this->afterSelect($data, false);
+        }
+
+        return $data;
     }
 
     /**

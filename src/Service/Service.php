@@ -121,10 +121,10 @@ class Service
     {
         $nameUcFirst = ucfirst($name);
 
+        // Model 和 Service 实例
         $modules = [
             'App\\Model\\' . $nameUcFirst,
             'App\\Service\\' . $nameUcFirst,
-            'App\\Validator\\' . $nameUcFirst,
         ];
 
         foreach ($modules as $module) {
@@ -133,6 +133,7 @@ class Service
             }
         }
 
+        // 其他容器中的实例
         $libs = [
             'filesystemCache'   => \App\Interfaces\FilesystemCacheInterface::class,
             'distributedCache'  => \App\Interfaces\DistributedCacheInterface::class,
@@ -225,5 +226,45 @@ class Service
         }
 
         return $filter;
+    }
+
+    /**
+     * 获取上传文件的访问路径
+     *
+     * @return string
+     */
+    protected function getStorageUrl(): string
+    {
+        $storageUrl = $this->optionService->get('storage_url');
+        if ($storageUrl && substr($storageUrl, -1) !== '/') {
+            $storageUrl .= '/';
+        }
+
+        if (!$storageUrl) {
+            $uri = $this->request->getUri();
+            $storageUrl = $uri->getScheme() . '://' . $uri->getHost() . '/upload/';
+        }
+
+        return $storageUrl;
+    }
+
+    /**
+     * 获取静态资源的访问路径
+     *
+     * @return string
+     */
+    protected function getStaticUrl(): string
+    {
+        $staticUrl = $this->optionService->get('site_static_url');
+        if ($staticUrl && substr($staticUrl, -1) !== '/') {
+            $staticUrl .= '/';
+        }
+
+        if (!$staticUrl) {
+            $uri = $this->request->getUri();
+            $staticUrl = $uri->getScheme() . '://' . $uri->getHost() . '/static/';
+        }
+
+        return $staticUrl;
     }
 }
