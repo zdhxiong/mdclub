@@ -60,7 +60,7 @@ abstract class BrandImageService extends Service
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
-     * 如果是 aliyun-oss、upyun、qiniu 存储，则添加 url 参数
+     * 如果是 aliyun_oss、upyun、qiniu 存储，则添加 url 参数
      *
      * @param  string $fileName  带图片后缀，用 . 分隔
      * @param  string $size      默认为原图
@@ -80,7 +80,7 @@ abstract class BrandImageService extends Service
         $isSupportWebp = strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp');
 
         $width = $this->imageWidths[$size];
-        $height = $width * $this->imageScale;
+        $height = round($width * $this->imageScale);
 
         switch ($storageType) {
             // local 和 ftp，返回已裁剪好的图片
@@ -89,8 +89,8 @@ abstract class BrandImageService extends Service
                 list($name, $suffix) = explode('.', $fileName);
                 return "{$name}_{$size}.{$suffix}";
 
-            // aliyun-oss 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
-            case 'aliyun-oss':
+            // aliyun_oss 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
+            case 'aliyun_oss':
                 $params = "?x-oss-process=image/resize,m_fill,w_{$width},h_{$height},limit_0";
                 $params .= $isSupportWebp ? '/format,webp' : '';
 
@@ -198,14 +198,9 @@ abstract class BrandImageService extends Service
      *
      * @param  int                   $id
      * @param  UploadedFileInterface $file UploadedFile对象
-     * @return array
-     * [
-     *     token  => '', // 图片的token
-     *     suffix => '', // 图片后缀
-     *     urls   => []  // 图片的各种尺寸的地址
-     * ]
+     * @return string                      文件名（不含路径）
      */
-    public function uploadImage(int $id, UploadedFileInterface $file): array
+    public function uploadImage(int $id, UploadedFileInterface $file): string
     {
         $token = StringHelper::guid();
         $suffix = $file->getClientMediaType() === 'image/png' ? 'png' : 'jpg';
@@ -259,11 +254,7 @@ abstract class BrandImageService extends Service
             }
         }
 
-        return [
-            'token' => $token,
-            'suffix' => $suffix,
-            'urls' => $this->getImageUrls($id, $fileName),
-        ];
+        return $fileName;
     }
 
     /**

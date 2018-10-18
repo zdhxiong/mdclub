@@ -135,6 +135,31 @@ class TopicService extends BrandImageService implements FollowableInterface
     }
 
     /**
+     * 获取话题信息
+     *
+     * @param  int   $topicId
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function get(int $topicId, bool $withRelationship = false): array
+    {
+        $excludeFields = $this->getPrivacyFields();
+        $topicInfo = $this->topicModel->field($excludeFields, true)->get($topicId);
+
+        if (!$topicInfo) {
+            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+        }
+
+        $topicInfo = $this->handle($topicInfo);
+
+        if ($withRelationship) {
+            $topicInfo = $this->addRelationship($topicInfo);
+        }
+
+        return $topicInfo;
+    }
+
+    /**
      * 获取多个话题信息
      *
      * @param  array $topicIds
@@ -157,6 +182,10 @@ class TopicService extends BrandImageService implements FollowableInterface
             $topic = $this->handle($topic);
         }
 
+        if ($withRelationship) {
+            $topics = $this->addRelationship($topics);
+        }
+
         return $topics;
     }
 
@@ -172,12 +201,19 @@ class TopicService extends BrandImageService implements FollowableInterface
     {
         $this->createValidator($name, $description, $cover);
 
-        // todo 插入话题数据
+        // 添加话题
+        $topicId = (int)$this->topicModel->insert([
+            'name' => $name,
+            'description' => $description,
+        ]);
 
-        // todo 保存图片
-        $this->uploadImage(1, $cover);
+        // 保存图片
+        $fileName = $this->uploadImage($topicId, $cover);
 
-        // todo 更新话题数据
+        // 更新图片到话题信息中
+        $this->topicModel->where(['topic_id' => $topicId])->update(['cover' => $fileName]);
+
+        return $topicId;
     }
 
     /**
@@ -253,8 +289,9 @@ class TopicService extends BrandImageService implements FollowableInterface
             return $topicInfo;
         }
 
-        // todo
-        isset($topicInfo['cover']) && $topicInfo['cover'] = '';
+        if (isset($topicInfo['cover'])) {
+            $topicInfo['cover'] = $this->getImageUrls($topicInfo['topic_id'], $topicInfo['cover']);
+        }
 
         return $topicInfo;
     }
@@ -291,7 +328,7 @@ class TopicService extends BrandImageService implements FollowableInterface
                     'user_id'         => $currentUserId,
                     'followable_id'   => $topicIds,
                     'followable_type' => 'topic',
-                ])->pluck('topic_id');
+                ])->pluck('followable_id');
             }
         }
 

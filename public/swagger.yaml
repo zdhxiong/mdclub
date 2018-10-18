@@ -1724,7 +1724,7 @@ paths:
     post:
       tags:
         - Topic
-      summary: todo -  🔐发布话题
+      summary: 🔐发布话题
       description: 🔐发布话题，需要管理员权限
       parameters:
         - $ref: '#/parameters/token'
@@ -2207,7 +2207,7 @@ definitions:
         enum:
           - local
           - ftp
-          - aliyun-oss
+          - aliyun_oss
           - upyun
           - qiniu
         description: 🔐存储类型

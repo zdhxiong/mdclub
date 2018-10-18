@@ -307,6 +307,8 @@ class QuestionService extends Service implements FollowableInterface
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
         }
 
+        $questionInfo = $this->handle($questionInfo);
+
         if ($withRelationship) {
             $questionInfo = $this->addRelationship($questionInfo);
         }

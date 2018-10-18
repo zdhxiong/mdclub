@@ -69,9 +69,10 @@ class TopicController extends Controller
         $name = $request->getParsedBodyParam('name');
         $description = $request->getParsedBodyParam('description');
 
-        $this->topicService->create($name, $description, $cover);
+        $topicId = $this->topicService->create($name, $description, $cover);
+        $topicInfo = $this->topicService->get($topicId, true);
 
-        return $response;
+        return $this->success($response, $topicInfo);
     }
 
     /**

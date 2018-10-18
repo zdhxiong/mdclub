@@ -217,7 +217,7 @@ $container[\League\Flysystem\FilesystemInterface::class] = function (ContainerIn
             ]);
             break;
 
-        case 'aliyun-oss':
+        case 'aliyun_oss':
             $adapter = new \Xxtime\Flysystem\Aliyun\OssAdapter([
                 'access_id'      => $option['storage_aliyun_oss_access_id'],
                 'access_secret'  => $option['storage_aliyun_oss_access_secret'],

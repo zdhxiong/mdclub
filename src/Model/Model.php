@@ -334,15 +334,23 @@ class Model
         $columns = $this->column;
         $isColumnExclude = $this->isColumnExclude;
 
-        if (!$columns) {
-            $columns = $this->columns;
+        if (is_string($columns)) {
+            $columns = trim($columns);
         }
 
-        if (is_string($columns)) {
+        if ($columns && is_string($columns)) {
             $columns = explode(',', $columns);
             $columns = array_map(function ($item) {
                 return trim($item);
             }, $columns);
+        }
+
+        if (!$columns) {
+            $columns = $this->columns;
+
+            if ($isColumnExclude) {
+                $isColumnExclude = false;
+            }
         }
 
         if ($isColumnExclude) {
