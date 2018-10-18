@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
-use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 用户封面管理

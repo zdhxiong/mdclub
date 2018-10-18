@@ -128,7 +128,12 @@ class UserController extends Controller
      */
     public function deleteAvatar(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $filename = $this->userAvatarService->delete($user_id);
+        $newAvatars = $this->userAvatarService->getImageUrls($user_id, $filename);
+
+        return $this->success($response, $newAvatars);
     }
 
     /**
@@ -141,7 +146,15 @@ class UserController extends Controller
      */
     public function uploadMyAvatar(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        /** @var UploadedFileInterface $avatar */
+        $avatar = $request->getUploadedFiles()['avatar'] ?? null;
+
+        $filename = $this->userAvatarService->upload($userId, $avatar);
+        $newAvatars = $this->userAvatarService->getImageUrls($userId, $filename);
+
+        return $this->success($response, $newAvatars);
     }
 
     /**
@@ -154,7 +167,12 @@ class UserController extends Controller
      */
     public function deleteMyAvatar(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        $filename = $this->userAvatarService->delete($userId);
+        $newAvatars = $this->userAvatarService->getImageUrls($userId, $filename);
+
+        return $this->success($response, $newAvatars);
     }
 
     /**
