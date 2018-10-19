@@ -120,19 +120,6 @@ class TopicController extends Controller
     }
 
     /**
-     * 获取指定话题的关注者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $topic_id
-     * @return Response
-     */
-    public function getFollowers(Request $request, Response $response, int $topic_id): Response
-    {
-        return $response;
-    }
-
-    /**
      * 获取指定用户关注的话题
      *
      * @param  Request  $request
@@ -142,7 +129,9 @@ class TopicController extends Controller
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $following= $this->topicFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -156,7 +145,9 @@ class TopicController extends Controller
      */
     public function isFollowing(Request $request, Response $response, int $user_id, int $topic_id): Response
     {
-        return $response;
+        $isFollowing = $this->topicFollowService->isFollowing($user_id, $topic_id);
+
+        return $this->success($response, $isFollowing);
     }
 
     /**
@@ -168,33 +159,10 @@ class TopicController extends Controller
      */
     public function getMyFollowing(Request $request, Response $response): Response
     {
-        return $response;
-    }
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->topicFollowService->getFollowing($userId, true);
 
-    /**
-     * 关注指定话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $topic_id
-     * @return Response
-     */
-    public function addFollow(Request $request, Response $response, int $topic_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 取消关注指定话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $topic_id
-     * @return Response
-     */
-    public function deleteFollow(Request $request, Response $response, int $topic_id): Response
-    {
-        return $response;
+        return $this->success($response, $following);
     }
 
     /**
@@ -207,6 +175,56 @@ class TopicController extends Controller
      */
     public function isMyFollowing(Request $request, Response $response, int $topic_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $isFollowing = $this->topicFollowService->isFollowing($userId, $topic_id);
+
+        return $this->success($response, $isFollowing);
+    }
+
+    /**
+     * 关注指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function addFollow(Request $request, Response $response, int $topic_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->topicFollowService->addFollow($userId, $topic_id);
+
+        return $this->success($response);
+    }
+
+    /**
+     * 取消关注指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function deleteFollow(Request $request, Response $response, int $topic_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->topicFollowService->deleteFollow($userId, $topic_id);
+
+        return $this->success($response);
+    }
+
+    /**
+     * 获取指定话题的关注者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function getFollowers(Request $request, Response $response, int $topic_id): Response
+    {
+        $followers = $this->topicFollowService->getFollowers($topic_id, true);
+
+        return $this->success($response, $followers);
     }
 }

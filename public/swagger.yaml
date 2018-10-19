@@ -507,7 +507,7 @@ paths:
     get:
       tags:
         - TopicFollow
-      summary: todo -  获取指定用户关注的话题列表
+      summary: 获取指定用户关注的话题列表
       description: 获取指定用户关注的话题列表
       parameters:
         - $ref: '#/parameters/token'
@@ -594,7 +594,7 @@ paths:
     get:
       tags:
         - TopicFollow
-      summary: todo -  检查指定用户是否关注了指定话题
+      summary: 检查指定用户是否关注了指定话题
       description: 检查指定用户是否关注了指定话题
       parameters:
         - $ref: '#/parameters/token'
@@ -1022,7 +1022,7 @@ paths:
     get:
       tags:
         - TopicFollow
-      summary: todo -  获取当前用户关注的话题列表
+      summary: 获取当前用户关注的话题列表
       description: 获取当前用户关注的话题列表
       parameters:
         - $ref: '#/parameters/token'
@@ -1280,7 +1280,7 @@ paths:
     get:
       tags:
         - TopicFollow
-      summary: todo -  当前用户是否关注了指定话题
+      summary: 当前用户是否关注了指定话题
       description: 当前用户是否关注了指定话题
       parameters:
         - $ref: '#/parameters/token'
@@ -1303,7 +1303,7 @@ paths:
     put:
       tags:
         - TopicFollow
-      summary: todo -  当前用户关注指定话题
+      summary: 当前用户关注指定话题
       description: 当前用户关注指定话题
       parameters:
         - $ref: '#/parameters/token'
@@ -1326,7 +1326,7 @@ paths:
     delete:
       tags:
         - TopicFollow
-      summary: todo -  当前用户取消关注指定话题
+      summary: 当前用户取消关注指定话题
       description: 当前用户取消关注指定话题
       parameters:
         - $ref: '#/parameters/token'
@@ -1784,7 +1784,7 @@ paths:
     get:
       tags:
         - TopicFollow
-      summary: todo -  获取指定话题的关注者
+      summary: 获取指定话题的关注者
       description: 获取指定话题的关注者
       parameters:
         - $ref: '#/parameters/token'

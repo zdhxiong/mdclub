@@ -34,6 +34,7 @@ $app->get(   '/users/{user_id:\d+}',          UserController::class .         ':
 $app->get(   '/notifications',                NotificationController::class . ':pageIndex');
 $app->get(   '/inbox',                        InboxController::class .        ':pageIndex');
 
+// 共 72 个 api 接口
 $app->group('/api', function () {
     $this->get(   '',                             ApiController::class . ':pageIndex');
 
