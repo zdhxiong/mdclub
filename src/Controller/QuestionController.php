@@ -41,34 +41,6 @@ class QuestionController extends Controller
     }
 
     /**
-     * 获取最近更新的问答列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getRecentList(Request $request, Response $response): Response
-    {
-        $list = $this->questionService->getRecent(true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
-     * 获取最受欢迎的问答列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getPopularList(Request $request, Response $response): Response
-    {
-        $list = $this->questionService->getPopular(true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
      * 获取问答列表
      *
      * @param  Request  $request
@@ -285,6 +257,32 @@ class QuestionController extends Controller
      * @return Response
      */
     public function createComment(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function updateComment(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

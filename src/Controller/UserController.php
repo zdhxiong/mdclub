@@ -71,6 +71,21 @@ class UserController extends Controller
     }
 
     /**
+     * 更新指定用户信息
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function updateOne(Request $request, Response $response, int $user_id): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        return $response;
+    }
+
+    /**
      * 禁用指定用户，实质上是软删除用户，用户不能物理删除
      *
      * @param  Request  $request

@@ -78,6 +78,19 @@ class TopicController extends Controller
     }
 
     /**
+     * 获取指定话题信息
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function getOne(Request $request, Response $response, int $topic_id): Response
+    {
+        return $response;
+    }
+
+    /**
      * 更新话题
      *
      * @param  Request  $request

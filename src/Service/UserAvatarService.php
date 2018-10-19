@@ -7,6 +7,7 @@ namespace App\Service;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\UploadedFile;
 use Md\MDAvatars;
+use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
 use App\Helper\StringHelper;
 use App\Exception\ApiException;
@@ -17,7 +18,7 @@ use App\Exception\ApiException;
  * Class UserAvatarService
  * @package App\Service
  */
-class UserAvatarService extends BrandImageService
+class UserAvatarService extends BrandImageAbstracts
 {
     /**
      * @var string 图片类型

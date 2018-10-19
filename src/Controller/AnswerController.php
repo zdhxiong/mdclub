@@ -18,10 +18,9 @@ class AnswerController extends Controller
     /**
      * 获取指定问题下的回答列表
      *
-     * @param Request $request
-     * @param Response $response
-     * @param int $question_id
-     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
      * @return Response
      */
     public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
@@ -32,10 +31,9 @@ class AnswerController extends Controller
     /**
      * 在指定问题下创建回答
      *
-     * @param Request $request
-     * @param Response $response
-     * @param int $question_id
-     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
      * @return Response
      */
     public function create(Request $request, Response $response, int $question_id): Response
@@ -44,28 +42,52 @@ class AnswerController extends Controller
     }
 
     /**
-     * 获取指定回答的详情
+     * 获取回答列表
      *
-     * @param Request $request
-     * @param Response $response
-     * @param int $answer_id
-     *
+     * @param  Request  $request
+     * @param  Response $response
      * @return Response
      */
-    public function getDetail(Request $request, Response $response, int $answer_id): Response
+    public function getList(Request $request, Response $response): Response
     {
         return $response;
     }
 
     /**
-     * 获取回答列表
+     * 获取指定回答的详情
      *
-     * @param Request $request
-     * @param Response $response
-     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
      * @return Response
      */
-    public function getList(Request $request, Response $response): Response
+    public function getOne(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新指定回答信息
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function updateOne(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function deleteOne(Request $request, Response $response, int $answer_id): Response
     {
         return $response;
     }
@@ -92,6 +114,32 @@ class AnswerController extends Controller
      * @return Response
      */
     public function createComment(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function updateComment(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Psr\Http\Message\UploadedFileInterface;
+use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
@@ -14,7 +15,7 @@ use App\Exception\ApiException;
  * Class UserCoverService
  * @package App\Service
  */
-class UserCoverService extends BrandImageService
+class UserCoverService extends BrandImageAbstracts
 {
     /**
      * @var string 图片类型

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Psr\Http\Message\UploadedFileInterface;
+use App\Abstracts\BrandImageAbstracts;
+use App\Interfaces\FollowableInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
-use App\Interfaces\FollowableInterface;
 
 /**
  * 话题
@@ -17,7 +18,7 @@ use App\Interfaces\FollowableInterface;
  * Class TopicService
  * @package App\Service
  */
-class TopicService extends BrandImageService implements FollowableInterface
+class TopicService extends BrandImageAbstracts implements FollowableInterface
 {
     /**
      * @var string 图片类型

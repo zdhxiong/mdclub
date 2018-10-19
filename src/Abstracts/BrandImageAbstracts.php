@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Abstracts;
 
 use Psr\Http\Message\UploadedFileInterface;
+use PHPImageWorkshop\ImageWorkshop;
+use App\Service\Service;
 use App\Constant\UploadErrorConstant;
 use App\Helper\StringHelper;
-use PHPImageWorkshop\ImageWorkshop;
 
 /**
  * 头像、封面图片抽象类
  *
- * Class BrandImageService
- * @package App\Service
+ * Class BrandImageAbstracts
+ * @package App\Abstracts
  */
-abstract class BrandImageService extends Service
+abstract class BrandImageAbstracts extends Service
 {
     /**
      * @var string 图片类型，包括 user-avatar、user-cover、topic-cover

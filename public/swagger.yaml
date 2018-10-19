@@ -284,6 +284,47 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+    patch:
+      tags:
+        - UserInfo
+      summary: todo - 🔐更新指定用户信息
+      description: 更新指定用户信息，仅管理员可以使用该接口
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: user_id
+          type: integer
+          in: path
+          description: 用户ID
+        - name: body
+          in: body
+          type: object
+          schema:
+            properties:
+              headline:
+                type: string
+                description: 一句话介绍
+              bio:
+                type: string
+                description: 个人简介
+              blog:
+                type: string
+                description: 个人主页
+              company:
+                type: string
+                description: 所属企业
+              location:
+                type: string
+                description: 所属地区
+      responses:
+        200:
+          description: 用户信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/responses/Error'
+
     delete:
       tags:
         - UserInfo
@@ -1184,6 +1225,200 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+  /user/topics/{topic_id}/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 当前用户是否关注了指定话题
+      description: 当前用户是否关注了指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+
+    put:
+      tags:
+        - TopicFollow
+      summary: 当前用户关注指定话题
+      description: 当前用户关注指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - TopicFollow
+      summary: 当前用户取消关注指定话题
+      description: 当前用户取消关注指定话题
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /articles:
+
+    get:
+      tags:
+        - Article
+      summary: todo - 获取文章列表
+      description: |
+        管理员可排序的字段包括：
+        管理员可筛选的字段包括：
+        普通用户可排序的字段包括：
+        普通用户可筛选的字段包括：
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - Article
+      summary: todo - 发表文章
+      description: 发表问题。若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - title
+            properties:
+              title:
+                type: string
+                description: 标题
+              topic_ids:
+                type: string
+                description: 话题ID，多个ID用“，”分隔
+              content_markdown:
+                type: string
+                description: Markdown 格式的正文
+              content_rendered:
+                type: string
+                description: HTML 格式的正文
+      responses:
+        200:
+          description: 文章详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Article'
+        default:
+          $ref: '#/responses/Error'
+
+  /articles/{article_id}:
+
+    get:
+      tags:
+        - Article
+      summary: todo - 获取指定文章信息
+      description: 获取指定文章信息
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 文章信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Article'
+        default:
+          $ref: '#/responses/Error'
+
+    patch:
+      tags:
+        - Article
+      summary: todo - 更新文章信息
+      description: 更新文章信息
+
+    delete:
+      tags:
+        - Article
+      summary: todo - 删除指定文章
+      description: 删除指定文章
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: article_id
+          type: integer
+          in: path
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态吗区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
   /articles/{article_id}/followers:
 
     get:
@@ -1275,65 +1510,52 @@ paths:
         default:
           $ref: '#/responses/Error'
 
-  /user/topics/{topic_id}/following:
+  /articles/comments/{comment_id}:
 
-    get:
+    patch:
       tags:
-        - TopicFollow
-      summary: 当前用户是否关注了指定话题
-      description: 当前用户是否关注了指定话题
+        - ArticleComment
+      summary: todo - 修改文章下指定的评论
+      description: 修改文章下指定的评论
       parameters:
         - $ref: '#/parameters/token'
-        - name: topic_id
+        - name: comment_id
           in: path
           type: integer
-          description: 话题ID
+          description: 评论ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
       responses:
         200:
-          description: 返回 data 为布尔值
+          description: 评论详情
           schema:
             properties:
               code:
                 type: integer
               data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-
-    put:
-      tags:
-        - TopicFollow
-      summary: 当前用户关注指定话题
-      description: 当前用户关注指定话题
-      parameters:
-        - $ref: '#/parameters/token'
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
+                $ref: '#/definitions/ArticleComment'
         default:
           $ref: '#/responses/Error'
 
     delete:
       tags:
-        - TopicFollow
-      summary: 当前用户取消关注指定话题
-      description: 当前用户取消关注指定话题
+        - ArticleComment
+      summary: todo - 删除文章下指定的评论
+      description: 删除文章下指定的评论
       parameters:
         - $ref: '#/parameters/token'
-        - name: topic_id
+        - name: comment_id
           in: path
           type: integer
-          description: 话题ID
+          description: 评论ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1343,91 +1565,6 @@ paths:
                 type: integer
               data:
                 type: object
-        default:
-          $ref: '#/responses/Error'
-
-  /images:
-
-    post:
-      tags:
-        - Image
-      summary: todo -  上传图片
-      description: 上传图片
-      consumes:
-        - multipart/form-data
-      parameters:
-        - $ref: '#/parameters/token'
-        - name: image
-          type: file
-          in: formData
-          description: 图片
-      responses:
-        200:
-          description: 图片信息
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Image'
-        default:
-          $ref: '#/responses/Error'
-
-  /images/{image_id}:
-    patch:
-      tags:
-        - Image
-      summary: todo -  更新图片信息
-      description: 更新图片信息
-
-  /questions/recent:
-
-    get:
-      tags:
-        - Question
-      summary: 获取最近更新的问题列表
-      description: 获取最近更新的问题列表
-      parameters:
-        - $ref: '#/parameters/token'
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 问题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Questions'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-
-
-  /questions/popular:
-
-    get:
-      tags:
-        - Question
-      summary: 获取最近热门的问题列表
-      description: 获取最近热门的问题列表
-      parameters:
-        - $ref: '#/parameters/token'
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 问题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Questions'
-              pagination:
-                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
 
@@ -1466,7 +1603,7 @@ paths:
       tags:
         - Question
       summary: todo(含 topic_ids 时未测试) -  发表问题
-      description: 发表问题。content_markdown 和 content_rendered 两个参数只需传入一个即可。若都传入，则以 content_markdown 为准。
+      description: 发表问题。若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
       parameters:
         - $ref: '#/parameters/token'
         - name: body
@@ -1651,6 +1788,128 @@ paths:
         default:
           $ref: '#/responses/Error'
 
+  /questions/comments/{comment_id}:
+
+    patch:
+      tags:
+        - QuestionComment
+      summary: todo - 修改问题下指定的评论
+      description: 修改问题下指定的评论
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/QuestionComment'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - QuestionComment
+      summary: todo - 删除问题下指定的评论
+      description: 删除问题下指定的评论
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /questions/{question_id}/answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo -  获取指定问题下的回答
+      description: 获取指定问题下的回答，可排序字段为 `create_time`
+      parameters:
+        - $ref: '#/parameters/token'
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+
+    post:
+      tags:
+        - Answer
+      summary: todo -  在指定问题下创建一个回答
+      description: 在指定问题下创建一个回答
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              content_markdown:
+                type: string
+                description: markdown 格式的内容
+              content_rendered:
+                type: string
+                description: html 格式的内容
+      responses:
+        200:
+          description: 回答信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
   /topics:
 
     get:
@@ -1714,11 +1973,34 @@ paths:
 
   /topics/{topic_id}:
 
+    get:
+      tags:
+        - Topic
+      summary: 获取指定话题信息
+      description: 获取指定话题信息
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 话题信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topic'
+        default:
+          $ref: '#/responses/Error'
+
     post:
       tags:
         - Topic
       summary: 🔐更新话题信息
-      description: 🔐更新话题信息，需要管理员权限
+      description: 🔐更新话题信息，需要管理员权限（formData 数据只能通过 post 请求提交，所以这里不用 patch 请求）
       parameters:
         - $ref: '#/parameters/token'
         - name: topic_id
@@ -1808,77 +2090,13 @@ paths:
         default:
           $ref: '#/responses/Error'
 
-  /questions/{question_id}/answers:
-
-    get:
-      tags:
-        - Answer
-      summary: todo -  获取指定问题下的回答
-      description: 获取指定问题下的回答，可排序字段为 `create_time`
-      parameters:
-        - $ref: '#/parameters/token'
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 回答列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Answers'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-
-    post:
-      tags:
-        - Answer
-      summary: todo -  在指定问题下创建一个回答
-      description: 在指定问题下创建一个回答
-      parameters:
-        - $ref: '#/parameters/token'
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-        - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              content_markdown:
-                type: string
-                description: markdown 格式的内容
-              content_rendered:
-                type: string
-                description: html 格式的内容
-      responses:
-        200:
-          description: 回答信息
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Answer'
-        default:
-          $ref: '#/responses/Error'
-
   /answers:
 
     get:
       tags:
         - Answer
-      summary: todo -  获取所有回答列表
-      description: 获取所有回答列表
+      summary: todo - 🔐获取所有回答列表
+      description: 获取所有回答列表，仅管理员可使用该接口
       parameters:
         - $ref: '#/parameters/token'
         - $ref: '#/parameters/page'
@@ -1919,6 +2137,63 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
+    patch:
+      tags:
+        - Answer
+      summary: todo - 🔐修改回答信息
+      description: 修改回答信息，仅管理员可使用该接口
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              content_markdown:
+                type: string
+                description: markdown 格式的内容
+              content_rendered:
+                type: string
+                description: html 格式的内容
+      responses:
+        200:
+          description: 回答信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answer'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - Answer
+      summary: todo - 🔐删除指定回答
+      description: 删除指定回答，仅管理员可使用该接口
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: answer_id
+          type: integer
+          in: path
+          description: 回答ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
 
@@ -1983,6 +2258,98 @@ paths:
                 $ref: '#/definitions/AnswerComment'
         default:
           $ref: '#/responses/Error'
+
+  /answers/comments/{comment_id}:
+
+    patch:
+      tags:
+        - AnswerComment
+      summary: todo - 修改回答下指定的评论
+      description: 修改回答下指定的评论
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
+      responses:
+        200:
+          description: 评论内容
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/AnswerComment'
+        default:
+          $ref: '#/responses/Error'
+
+    delete:
+      tags:
+        - AnswerComment
+      summary: todo - 删除回答下指定的评论
+      description: 删除回答下指定的评论
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+
+  /images:
+
+    post:
+      tags:
+        - Image
+      summary: todo -  上传图片
+      description: 上传图片
+      consumes:
+        - multipart/form-data
+      parameters:
+        - $ref: '#/parameters/token'
+        - name: image
+          type: file
+          in: formData
+          description: 图片
+      responses:
+        200:
+          description: 图片信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Image'
+        default:
+          $ref: '#/responses/Error'
+
+  /images/{image_id}:
+    patch:
+      tags:
+        - Image
+      summary: todo -  更新图片信息
+      description: 更新图片信息
 
   /emails:
 
@@ -2349,7 +2716,7 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/UserInRelationship'
-      topic:
+      topics:
         $ref: '#/definitions/TopicsInRelationship'
       is_following:
         type: boolean
@@ -2572,7 +2939,7 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/UserInRelationship'
-      topic:
+      topics:
         $ref: '#/definitions/TopicsInRelationship'
       is_following:
         type: boolean

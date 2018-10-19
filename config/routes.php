@@ -34,7 +34,7 @@ $app->get(   '/users/{user_id:\d+}',          UserController::class .         ':
 $app->get(   '/notifications',                NotificationController::class . ':pageIndex');
 $app->get(   '/inbox',                        InboxController::class .        ':pageIndex');
 
-// 共 72 个 api 接口
+// 共 85 个 api 接口
 $app->group('/api', function () {
     $this->get(   '',                             ApiController::class . ':pageIndex');
 
@@ -56,6 +56,7 @@ $app->group('/api', function () {
     // 用户信息
     $this->get(   '/users',                       UserController::class . ':getList');
     $this->get(   '/users/{user_id:\d+}',         UserController::class . ':getOne');
+    $this->patch( '/users/{user_id:\d+}',         UserController::class . ':updateOne');
     $this->delete('/users/{user_id:\d+}',         UserController::class . ':disableOne');
     $this->get(   '/user',                        UserController::class . ':getMe');
     $this->patch( '/user',                        UserController::class . ':updateMe');
@@ -83,6 +84,7 @@ $app->group('/api', function () {
     // 话题信息
     $this->get(   '/topics',                                               TopicController::class . ':getList');
     $this->post(  '/topics',                                               TopicController::class . ':create');
+    $this->get(   '/topics/{topic_id:\d+}',                                TopicController::class . ':getOne');
     $this->post(  '/topics/{topic_id:\d+}',                                TopicController::class . ':update'); // formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
     $this->delete('/topics/{topic_id:\d+}',                                TopicController::class . ':delete');
 
@@ -96,8 +98,6 @@ $app->group('/api', function () {
     $this->get(   '/topics/{topic_id:\d+}/followers',                      TopicController::class . ':getFollowers');
 
     // 问题信息
-    $this->get(   '/questions/recent',                                     QuestionController::class . ':getRecentList');
-    $this->get(   '/questions/popular',                                    QuestionController::class . ':getPopularList');
     $this->get(   '/questions',                                            QuestionController::class . ':getList');
     $this->post(  '/questions',                                            QuestionController::class . ':create');
     $this->get(   '/questions/{question_id:\d+}',                          QuestionController::class . ':getOne');
@@ -116,18 +116,29 @@ $app->group('/api', function () {
     // 问题的评论
     $this->get(   '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':getComments');
     $this->post(  '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':createComment');
+    $this->patch( '/questions/comments/{comment_id:\d+}',                  QuestionController::class . ':updateComment');
+    $this->delete('/questions/comments/{comment_id:\d+}',                  QuestionController::class . ':deleteComment');
 
     // 回答
     $this->get(   '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':getListByQuestionId');
     $this->post(  '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':create');
     $this->get(   '/answers',                                              AnswerController::class . ':getList');
-    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getDetail');
+    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getOne');
+    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':updateOne');
+    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':deleteOne');
 
     // 回答的评论
     $this->get(   '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':createComment');
+    $this->patch( '/answers/comments/{comment_id:\d+}',                    AnswerController::class . ':updateComment');
+    $this->delete('/answers/comments/{comment_id:\d+}',                    AnswerController::class . ':deleteComment');
 
     // 文章
+    $this->get(   '/articles',                                             ArticleController::class . ':getList');
+    $this->post(  '/articles',                                             ArticleController::class . ':create');
+    $this->get(   '/articles/{article_id:\d+}',                            ArticleController::class . ':getOne');
+    $this->patch( '/articles/{article_id:\d+}',                            ArticleController::class . ':update');
+    $this->delete('/articles/{article_id:\d+}',                            ArticleController::class . ':delete');
 
     // 文章关注
     $this->get(   '/users/{user_id:\d+}/articles/following',                     ArticleController::class . ':getFollowing');
@@ -141,6 +152,8 @@ $app->group('/api', function () {
     // 文章的评论
     $this->get(   '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':getComments');
     $this->post(  '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':createComment');
+    $this->patch( '/articles/comments/{comment_id:\d+}',                   ArticleController::class . ':updateComment');
+    $this->delete('/articles/comments/{comment_id:\d+}',                   ArticleController::class . ':deleteComment');
 
     // 私信
 

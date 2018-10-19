@@ -43,6 +43,69 @@ class ArticleController extends Controller
     }
 
     /**
+     * 获取文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getList(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 发表文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function create(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 获取指定文章详情
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function getOne(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function update(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function delete(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取指定用户关注的文章列表
      *
      * @param  Request  $request
@@ -155,6 +218,32 @@ class ArticleController extends Controller
      * @return Response
      */
     public function createComment(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function updateComment(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

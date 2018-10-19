@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Abstracts;
 
+use Psr\Container\ContainerInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
-use Psr\Container\ContainerInterface;
+use App\Service\Service;
 
 /**
  * 关注关系抽象类
  *
- * Class FollowableService
- * @package App\Service
+ * Class FollowableAbstracts
+ * @package App\Abstracts
  */
-abstract class FollowableService extends Service
+abstract class FollowableAbstracts extends Service
 {
     /**
      * 关注类型（article、question、topic、user）
@@ -35,7 +36,7 @@ abstract class FollowableService extends Service
     protected $followableTargetService;
 
     /**
-     * FollowableService constructor.
+     * FollowableAbstracts constructor.
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)

@@ -99,55 +99,6 @@ class QuestionService extends Service implements FollowableInterface
     }
 
     /**
-     * 获取最近更新的问题列表
-     *
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getRecent($withRelationship = false): array
-    {
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
-
-        $list = $this->questionModel
-            ->field($excludeFields, true)
-            ->order(['update_time' => 'DESC'])
-            ->paginate();
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
-        }
-
-        return $list;
-    }
-
-    /**
-     * 获取最近热门问题列表
-     *
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getPopular($withRelationship = false): array
-    {
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
-
-        $list = $this->questionModel
-            ->field($excludeFields, true)
-            ->order([
-                'follower_count' => 'DESC',
-                'update_time' => 'DESC',
-            ])
-            ->paginate();
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
-        }
-
-        return $list;
-    }
-
-    /**
      * 发表问题
      *
      * @param  int    $userId          用户ID
@@ -307,8 +258,6 @@ class QuestionService extends Service implements FollowableInterface
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
         }
 
-        $questionInfo = $this->handle($questionInfo);
-
         if ($withRelationship) {
             $questionInfo = $this->addRelationship($questionInfo);
         }
@@ -335,10 +284,6 @@ class QuestionService extends Service implements FollowableInterface
             ->where(['question_id' => $questionIds])
             ->field($excludeFields, true)
             ->select();
-
-        foreach ($questions as &$question) {
-            $question = $this->handle($question);
-        }
 
         if ($withRelationship) {
             $questions = $this->addRelationship($questions);
@@ -407,25 +352,6 @@ class QuestionService extends Service implements FollowableInterface
         return true;
     }
 
-
-
-    /**
-     * 对数据库中读取的数据进行处理
-     *
-     * @param  array $questionInfo
-     * @return array
-     */
-    public function handle(array $questionInfo): array
-    {
-        if (!$questionInfo) {
-            return $questionInfo;
-        }
-
-        // todo
-
-        return $questionInfo;
-    }
-
     /**
      * 为问题添加 relationship 字段
      * {
@@ -439,7 +365,7 @@ class QuestionService extends Service implements FollowableInterface
      *             l: ''
      *         }
      *     }
-     *     topic: [
+     *     topics: [
      *         {
      *             name: '',
      *             cover: {
@@ -501,7 +427,7 @@ class QuestionService extends Service implements FollowableInterface
             ];
         }
 
-        // topic
+        // topics
         $topicsTmp = $this->topicModel
             ->join([
                 '[><]topicable' => ['topic_id' => 'topic_id']
@@ -519,15 +445,15 @@ class QuestionService extends Service implements FollowableInterface
         foreach ($topicsTmp as $item) {
             $topics[$item['question_id']][] = $this->topicService->handle([
                 'topic_id' => $item['topic_id'],
-                'name' => $item['name'],
-                'cover' => $item['cover'],
+                'name'     => $item['name'],
+                'cover'    => $item['cover'],
             ]);
         }
 
         foreach ($questions as &$question) {
             $question['relationship'] = [
                 'user'         => $users[$question['user_id']],
-                'topic'        => $topics[$question['question_id']],
+                'topics'       => $topics[$question['question_id']],
                 'is_following' => in_array($question['question_id'], $followingQuestionIds),
             ];
         }
