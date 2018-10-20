@@ -36,4 +36,13 @@ class TopicModel extends Model
             'follower_count' => 0,
         ]);
     }
+
+    protected function afterSelect(array $data, bool $nest = true): array
+    {
+        if (!$nest) {
+            $data = [$data];
+        }
+
+        return $data;
+    }
 }

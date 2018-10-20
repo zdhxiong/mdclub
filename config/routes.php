@@ -124,8 +124,8 @@ $app->group('/api', function () {
     $this->post(  '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':create');
     $this->get(   '/answers',                                              AnswerController::class . ':getList');
     $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getOne');
-    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':updateOne');
-    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':deleteOne');
+    $this->patch( '/answers/{answer_id:\d+}',                              AnswerController::class . ':updateOne');
+    $this->delete('/answers/{answer_id:\d+}',                              AnswerController::class . ':deleteOne');
 
     // 回答的评论
     $this->get(   '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':getComments');

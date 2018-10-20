@@ -302,8 +302,6 @@ class UserService extends Service implements FollowableInterface
 
         isset($userInfo['avatar']) && $userInfo['avatar'] = '';
         isset($userInfo['cover']) && $userInfo['cover'] = '';
-        isset($userInfo['create_ip']) && $userInfo['create_ip'] = long2ip((int)$userInfo['create_ip']);
-        isset($userInfo['last_login_ip']) && $userInfo['last_login_ip'] = long2ip((int)$userInfo['last_login_ip']);
 
         return $userInfo;
     }

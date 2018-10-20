@@ -64,9 +64,9 @@ class UserModel extends Model
         $data = ArrayHelper::fill($data, [
             'avatar' => '',
             'cover' => '',
-            'create_ip' => ip2long(IpHelper::get()),
+            'create_ip' => IpHelper::get(),
             'last_login_time' => $this->request->getServerParams()['REQUEST_TIME'],
-            'last_login_ip' => ip2long(IpHelper::get()),
+            'last_login_ip' => IpHelper::get(),
             'follower_count' => 0,
             'following_article_count' => 0,
             'following_question_count' => 0,
@@ -94,6 +94,15 @@ class UserModel extends Model
     {
         if (isset($data['password'])) {
             $data['password'] = $this->passwordHash($data['password']);
+        }
+
+        return $data;
+    }
+
+    protected function afterSelect(array $data, bool $nest = true): array
+    {
+        if (!$nest) {
+            $data = [$data];
         }
 
         return $data;

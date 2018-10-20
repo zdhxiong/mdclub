@@ -85,7 +85,8 @@ class IndexController extends Controller
             unset($user['mobile']);
             $user['last_login_time'] = $user['login_time'];
             unset($user['login_time']);
-            $user['last_login_ip'] = $user['login_ip'];
+            $user['create_ip'] = long2ip($user['create_ip']);
+            $user['last_login_ip'] = long2ip($user['login_ip']);
             unset($user['login_ip']);
             unset($user['active_time']);
             $user['following_user_count'] = $user['following_count'];

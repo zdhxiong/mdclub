@@ -43,4 +43,13 @@ class QuestionModel extends Model
             'last_answer_time' => 0,
         ]);
     }
+
+    protected function afterSelect(array $data, bool $nest = true): array
+    {
+        if (!$nest) {
+            $data = [$data];
+        }
+
+        return $data;
+    }
 }
