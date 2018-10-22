@@ -114,46 +114,46 @@ $app->group('/api', function () {
     $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
 
     // 问题的评论
-    $this->get(   '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':getComments');
-    $this->post(  '/questions/{question_id:\d+}/comments',                 QuestionController::class . ':createComment');
-    $this->patch( '/questions/comments/{comment_id:\d+}',                  QuestionController::class . ':updateComment');
-    $this->delete('/questions/comments/{comment_id:\d+}',                  QuestionController::class . ':deleteComment');
+    $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
+    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
+    $this->patch( '/questions/comments/{comment_id:\d+}',                       QuestionController::class . ':updateComment');
+    $this->delete('/questions/comments/{comment_id:\d+}',                       QuestionController::class . ':deleteComment');
 
     // 回答
-    $this->get(   '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':getListByQuestionId');
-    $this->post(  '/questions/{question_id:\d+}/answers',                  AnswerController::class . ':create');
-    $this->get(   '/answers',                                              AnswerController::class . ':getList');
-    $this->get(   '/answers/{answer_id:\d+}',                              AnswerController::class . ':getOne');
-    $this->patch( '/answers/{answer_id:\d+}',                              AnswerController::class . ':updateOne');
-    $this->delete('/answers/{answer_id:\d+}',                              AnswerController::class . ':deleteOne');
+    $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
+    $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
+    $this->get(   '/answers',                                                   AnswerController::class . ':getList');
+    $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':getOne');
+    $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':updateOne');
+    $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':deleteOne');
 
     // 回答的评论
-    $this->get(   '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':getComments');
-    $this->post(  '/answers/{answer_id:\d+}/comments',                     AnswerController::class . ':createComment');
-    $this->patch( '/answers/comments/{comment_id:\d+}',                    AnswerController::class . ':updateComment');
-    $this->delete('/answers/comments/{comment_id:\d+}',                    AnswerController::class . ':deleteComment');
+    $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
+    $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
+    $this->patch( '/answers/comments/{comment_id:\d+}',                         AnswerController::class . ':updateComment');
+    $this->delete('/answers/comments/{comment_id:\d+}',                         AnswerController::class . ':deleteComment');
 
     // 文章
-    $this->get(   '/articles',                                             ArticleController::class . ':getList');
-    $this->post(  '/articles',                                             ArticleController::class . ':create');
-    $this->get(   '/articles/{article_id:\d+}',                            ArticleController::class . ':getOne');
-    $this->patch( '/articles/{article_id:\d+}',                            ArticleController::class . ':update');
-    $this->delete('/articles/{article_id:\d+}',                            ArticleController::class . ':delete');
+    $this->get(   '/articles',                                                  ArticleController::class . ':getList');
+    $this->post(  '/articles',                                                  ArticleController::class . ':create');
+    $this->get(   '/articles/{article_id:\d+}',                                 ArticleController::class . ':getOne');
+    $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
+    $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
 
     // 文章关注
-    $this->get(   '/users/{user_id:\d+}/articles/following',                     ArticleController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/articles/{article_id:\d+}/following',    ArticleController::class . ':isFollowing');
-    $this->get(   '/user/articles/following',                                    ArticleController::class . ':getMyFollowing');
-    $this->get(   '/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':isMyFollowing');
-    $this->put(   '/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':addFollow');
-    $this->delete('/user/articles/{article_id:\d+}/following',                   ArticleController::class . ':deleteFollow');
-    $this->get(   '/articles/{article_id:\d+}/followers',                        ArticleController::class . ':getFollowers');
+    $this->get(   '/users/{user_id:\d+}/articles/following',                    ArticleController::class . ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/articles/{article_id:\d+}/following',   ArticleController::class . ':isFollowing');
+    $this->get(   '/user/articles/following',                                   ArticleController::class . ':getMyFollowing');
+    $this->get(   '/user/articles/{article_id:\d+}/following',                  ArticleController::class . ':isMyFollowing');
+    $this->put(   '/user/articles/{article_id:\d+}/following',                  ArticleController::class . ':addFollow');
+    $this->delete('/user/articles/{article_id:\d+}/following',                  ArticleController::class . ':deleteFollow');
+    $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
 
     // 文章的评论
-    $this->get(   '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':getComments');
-    $this->post(  '/articles/{article_id:\d+}/comments',                   ArticleController::class . ':createComment');
-    $this->patch( '/articles/comments/{comment_id:\d+}',                   ArticleController::class . ':updateComment');
-    $this->delete('/articles/comments/{comment_id:\d+}',                   ArticleController::class . ':deleteComment');
+    $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
+    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
+    $this->patch( '/articles/comments/{comment_id:\d+}',                        ArticleController::class . ':updateComment');
+    $this->delete('/articles/comments/{comment_id:\d+}',                        ArticleController::class . ':deleteComment');
 
     // 私信
 

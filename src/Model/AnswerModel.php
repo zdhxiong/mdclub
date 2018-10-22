@@ -43,6 +43,6 @@ class AnswerModel extends Model
             $data = [$data];
         }
 
-        return $data;
+        return $nest ? $data : $data[0];
     }
 }

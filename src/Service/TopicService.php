@@ -394,13 +394,26 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
 
         $this->topicModel->delete($topicId);
 
-        // 删除话题后，删除话题封面图片
-        if (!$softDelete) {
-            $this->deleteImage($topicId, $topicInfo['cover']);
+        // 软删除后
+        if ($softDelete) {
+            // todo 更新话题数量
+            // 查询关注了该话题的用户ID，把这些用户的 following_topic_count 置为 null
         }
 
-        // todo 删除话题后，更新关联数据
+        // 硬删除后
+        else {
+            // 删除封面图片
+            $this->deleteImage($topicId, $topicInfo['cover']);
 
+            // 删除话题关系
+            $this->topicableModel->where(['topic_id' => $topicId])->delete();
+
+            // 删除关注的话题
+            $this->followableModel->where([
+                'followable_id'   => $topicId,
+                'followable_type' => 'topic',
+            ])->delete();
+        }
 
         return true;
     }

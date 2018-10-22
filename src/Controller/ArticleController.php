@@ -115,7 +115,9 @@ class ArticleController extends Controller
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $following = $this->articleFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -129,7 +131,9 @@ class ArticleController extends Controller
      */
     public function isFollowing(Request $request, Response $response, int $user_id, int $article_id): Response
     {
-        return $response;
+        $isFollowing = $this->articleFollowService->isFollowing($user_id, $article_id);
+
+        return $this->success($response, $isFollowing);
     }
 
     /**
@@ -141,7 +145,10 @@ class ArticleController extends Controller
      */
     public function getMyFollowing(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->articleFollowService->getFollowing($userId, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -154,7 +161,10 @@ class ArticleController extends Controller
      */
     public function isMyFollowing(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $isFollowing = $this->articleFollowService->isFollowing($userId, $article_id);
+
+        return $this->success($response, $isFollowing);
     }
 
     /**
@@ -167,7 +177,10 @@ class ArticleController extends Controller
      */
     public function addFollow(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleFollowService->addFollow($userId, $article_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -180,7 +193,10 @@ class ArticleController extends Controller
      */
     public function deleteFollow(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleFollowService->deleteFollow($userId, $article_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -193,7 +209,9 @@ class ArticleController extends Controller
      */
     public function getFollowers(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $followers = $this->articleFollowService->getFollowers($article_id, true);
+
+        return $this->success($response, $followers);
     }
 
     /**

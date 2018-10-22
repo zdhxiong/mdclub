@@ -5,6 +5,11 @@ declare(strict_types=1);
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Simple\PdoCache;
+use Symfony\Component\Cache\Simple\MemcachedCache;
+use Symfony\Component\Cache\Simple\RedisCache;
+use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 use App\Interfaces\FilesystemCacheInterface;
 use App\Interfaces\DistributedCacheInterface;
 
@@ -112,7 +117,7 @@ $container[CacheInterface::class] = function (ContainerInterface $container) {
             $databaseConfig = $container->get('settings')['database'];
             $pdo = $container->get(\Medoo\Medoo::class)->pdo;
 
-            return new \Symfony\Component\Cache\Simple\PdoCache($pdo, '', 0, [
+            return new PdoCache($pdo, '', 0, [
                 'db_table'        => $databaseConfig['prefix'] . 'cache',
                 'db_id_col'       => 'name',
                 'db_data_col'     => 'value',
@@ -121,10 +126,28 @@ $container[CacheInterface::class] = function (ContainerInterface $container) {
             ]);
 
         case 'memcached':
-            return new \Symfony\Component\Cache\Simple\MemcachedCache();
+            $config = [
+                'username' => $option['cache_memcached_username'],
+                'password' => $option['cache_memcached_password'],
+                'host'     => $option['cache_memcached_host'],
+                'port'     => $option['cache_memcached_port'],
+            ];
+
+            return new MemcachedCache(MemcachedAdapter::createConnection(
+                "memcached://{$config['username']}:{$config['password']}@{$config['host']}:{$config['port']}"
+            ));
 
         case 'redis':
-            return new \Symfony\Component\Cache\Simple\RedisCache();
+            $config = [
+                'username' => $option['cache_redis_username'],
+                'password' => $option['cache_redis_password'],
+                'host'     => $option['cache_redis_host'],
+                'port'     => $option['cache_redis_port'],
+            ];
+
+            return new RedisCache(RedisAdapter::createConnection(
+                "redis://{$config['username']}:{$config['password']}@{$config['host']}:{$config['port']}"
+            ));
 
         default:
             throw new Exception('不存在指定的缓存类型: ' . $option['cache_type']);
@@ -146,10 +169,8 @@ $container[DistributedCacheInterface::class] = function (ContainerInterface $con
 
     switch ($option['cache_type']) {
         case 'memcached':
-            return new \Symfony\Component\Cache\Simple\MemcachedCache();
-
         case 'redis':
-            return new \Symfony\Component\Cache\Simple\RedisCache();
+            return $container[CacheInterface::class]();
 
         default:
             throw new Exception('不存在指定的缓存类型：' . $option['cache_type']);
@@ -229,11 +250,22 @@ $container[\League\Flysystem\FilesystemInterface::class] = function (ContainerIn
             break;
 
         case 'upyun':
+            $adapter = new \JellyBool\Flysystem\Upyun\UpyunAdapter(
+                $option['storage_upyun_bucket'],
+                $option['storage_upyun_operator'],
+                $option['storage_upyun_password'],
+                $option['storage_upyun_endpoint']
+            );
 
             break;
 
         case 'qiniu':
-
+            $adapter = new \Overtrue\Flysystem\Qiniu\QiniuAdapter(
+                $option['storage_qiniu_access_id'],
+                $option['storage_qiniu_access_secret'],
+                $option['storage_qiniu_bucket'],
+                $option['storage_qiniu_endpoint']
+            );
             break;
 
         default:

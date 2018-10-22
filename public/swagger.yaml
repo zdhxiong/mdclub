@@ -519,7 +519,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo -  获取指定用户关注的文章列表
+      summary: 获取指定用户关注的文章列表
       description: 获取指定用户关注的文章列表
       parameters:
         - $ref: '#/parameters/token'
@@ -606,7 +606,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo -  判断指定用户是否关注了指定文章
+      summary: 判断指定用户是否关注了指定文章
       description: 判断指定用户是否关注了指定文章
       parameters:
         - $ref: '#/parameters/token'
@@ -1038,7 +1038,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo -  获取登录用户关注的文章
+      summary: 获取登录用户关注的文章
       description: 获取登录用户关注的文章
       parameters:
         - $ref: '#/parameters/token'
@@ -1159,7 +1159,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo -  判断登录用户是否关注了指定文章
+      summary: 判断登录用户是否关注了指定文章
       description: 判断登录用户是否关注了指定文章
       parameters:
         - $ref: '#/parameters/token'
@@ -1182,7 +1182,7 @@ paths:
     put:
       tags:
         - ArticleFollow
-      summary: todo -  添加关注
+      summary: 添加关注
       description: 取消关注
       parameters:
         - $ref: '#/parameters/token'
@@ -1205,7 +1205,7 @@ paths:
     delete:
       tags:
         - ArticleFollow
-      summary: todo -  取消关注
+      summary: 取消关注
       description: 取消关注
       parameters:
         - $ref: '#/parameters/token'
@@ -1424,7 +1424,7 @@ paths:
     get:
       tags:
       - ArticleFollow
-      summary: todo - 获取指定文章的关注者
+      summary: 获取指定文章的关注者
       description: 获取指定文章的关注者
       parameters:
       - $ref: '#/parameters/token'
