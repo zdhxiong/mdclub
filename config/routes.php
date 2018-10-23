@@ -19,6 +19,7 @@ use App\Controller\QuestionController;
 use App\Controller\TopicController;
 use App\Controller\UserController;
 use App\Controller\TokenController;
+use App\Controller\TrashController;
 
 // 页面
 $app->get(   '/',                             IndexController::class .        ':pageIndex');
@@ -160,14 +161,46 @@ $app->group('/api', function () {
     // 通知
 
     // 验证码
-    $this->post(  '/captcha',                     CaptchaController::class . ':create');
+    $this->post(  '/captcha',                                   CaptchaController::class . ':create');
 
     // 邮件
-    $this->post(  '/email',                       EmailController::class . ':send');
+    $this->post(  '/email',                                     EmailController::class . ':send');
 
     // 图片
-    $this->post(  '/images',                      ImageController::class . ':upload');
-    $this->patch( '/images/{image_id:\d+}',       ImageController::class . ':update');
+    $this->post(  '/images',                                    ImageController::class . ':upload');
+    $this->patch( '/images/{image_id:\d+}',                     ImageController::class . ':update');
+
+    // 回收站
+    $this->get(   '/trash/users',                               TrashController::class . ':getUsers');
+    $this->put(   '/trash/users/{user_id:\d+}',                 TrashController::class . ':restoreUser');
+
+    $this->get(   '/trash/topics',                              TrashController::class . ':getTopics');
+    $this->put(   '/trash/topics/{topic_id:\d+}',               TrashController::class . ':restoreTopic');
+    $this->delete('/trash/topics/{topic_id:\d+}',               TrashController::class . ':deleteTopic');
+
+    $this->get(   '/trash/questions',                           TrashController::class . ':getQuestions');
+    $this->put(   '/trash/questions/{question_id:\d+}',         TrashController::class . ':restoreQuestion');
+    $this->delete('/trash/questions/{question_id:\d+}',         TrashController::class . ':deleteQuestion');
+
+    $this->get(   '/trash/questions/comments',                  TrashController::class . ':getQuestionComments');
+    $this->put(   '/trash/questions/comments/{comment_id:\d+}', TrashController::class . ':restoreQuestionComment');
+    $this->delete('/trash/questions/comments/{comment_id:\d+}', TrashController::class . ':deleteQuestionComment');
+
+    $this->get(   '/trash/answers',                             TrashController::class . ':getAnswers');
+    $this->put(   '/trash/answers/{answer_id:\d+}',             TrashController::class . ':restoreAnswer');
+    $this->delete('/trash/answers/{answer_id:\d+}',             TrashController::class . ':deleteAnswer');
+
+    $this->get(   '/trash/answers/comments',                    TrashController::class . ':getAnswerComments');
+    $this->put(   '/trash/answers/comments/{comment_id:\d+}',   TrashController::class . ':restoreAnswerComment');
+    $this->delete('/trash/answers/comments/{comment_id:\d+}',   TrashController::class . ':deleteAnswerComment');
+
+    $this->get(   '/trash/articles',                            TrashController::class . ':getArticles');
+    $this->put(   '/trash/articles/{article_id:\d+}',           TrashController::class . ':restoreArticle');
+    $this->delete('/trash/articles/{article_id:\d+}',           TrashController::class . ':deleteArticle');
+
+    $this->get(   '/trash/articles/comments',                   TrashController::class . ':getArticleComments');
+    $this->put(   '/trash/articles/comments/{comment_id:\d+}',  TrashController::class . ':restoreArticleComment');
+    $this->delete('/trash/articles/comments/{comment_id:\d+}',  TrashController::class . ':deleteArticleComment');
 })
     ->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         /** @var ResponseInterface $response */

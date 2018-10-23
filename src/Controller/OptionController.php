@@ -29,7 +29,7 @@ class OptionController extends Controller
         $data = $this->optionService->getAll();
 
         if (!$this->roleService->managerId()) {
-            $data = ArrayHelper::exclude($data, $this->optionService->privacyNames);
+            $data = ArrayHelper::filter($data, $this->optionService->publicNames);
         }
 
         return $this->success($response, $data);

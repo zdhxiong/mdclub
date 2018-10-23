@@ -37,7 +37,9 @@ paths:
       tags:
         - Option
       summary: 获取站点全局设置参数
-      description: 用于后台管理中的全局设置，需要管理员权限
+      description: |
+        普通用户调用该接口，仅返回字段 `language`、`site_description`、`site_gongan_beian`、`site_icp_beian`、`site_keywords`、`site_name`
+        管理员调用该接口，返回所有字段
       parameters:
         - $ref: '#/parameters/token'
       responses:
@@ -2430,6 +2432,30 @@ definitions:
   Option:
     type: object
     properties:
+      cache_memcached_host:
+        type: string
+        description: Memcached 缓存服务器地址
+      cache_memcached_password:
+        type: string
+        description: Memcached 密码
+      cache_memcached_port:
+        type: string
+        description: Memcached 端口号
+      cache_memcached_username:
+        type: string
+        description: Memcached 用户名
+      cache_redis_host:
+        type: string
+        description: Redis 缓存服务器地址
+      cache_redis_password:
+        type: string
+        description: Redis 密码
+      cache_redis_port:
+        type: string
+        description: Redis 端口号
+      cache_redis_username:
+        type: string
+        description: Redis 用户名
       cache_type:
         type: string
         enum:
@@ -2482,6 +2508,18 @@ definitions:
       smtp_username:
         type: string
         description: 🔐SMTP 账户
+      storage_aliyun_oss_access_id:
+        type: string
+        description:
+      storage_aliyun_oss_access_secret:
+        type: string
+        description:
+      storage_aliyun_oss_bucket:
+        type: string
+        description:
+      storage_aliyun_oss_endpoint:
+        type: string
+        description:
       storage_ftp_host:
         type: string
         description: FTP 服务器地址
@@ -2515,9 +2553,18 @@ definitions:
       storage_local_dir:
         type: string
         description: 🔐本地文件存储目录
-      storage_url:
+      storage_qiniu_access_id:
         type: string
-        description: 🔐本地文件访问链接
+        description:
+      storage_qiniu_access_secret:
+        type: string
+        description:
+      storage_qiniu_bucket:
+        type: string
+        description:
+      storage_qiniu_endpoint:
+        type: string
+        description:
       storage_type:
         type: string
         enum:
@@ -2527,6 +2574,21 @@ definitions:
           - upyun
           - qiniu
         description: 🔐存储类型
+      storage_upyun_bucket:
+        type: string
+        description:
+      storage_upyun_endpoint:
+        type: string
+        description:
+      storage_upyun_operator:
+        type: string
+        description:
+      storage_upyun_password:
+        type: string
+        description:
+      storage_url:
+        type: string
+        description: 🔐本地文件访问链接
       theme:
         type: string
         description: 🔐主题名称
