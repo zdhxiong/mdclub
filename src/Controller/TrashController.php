@@ -118,44 +118,6 @@ class TrashController extends Controller
     }
 
     /**
-     * 获取问题评论列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getQuestionComments(Request $request, Response $response): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 恢复指定问题评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function restoreQuestionComment(Request $request, Response $response, int $comment_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 删除指定问题评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function deleteQuestionComment(Request $request, Response $response, int $comment_id): Response
-    {
-        return $response;
-    }
-
-    /**
      * 获取回答列表
      *
      * @param  Request  $request
@@ -189,44 +151,6 @@ class TrashController extends Controller
      * @return Response
      */
     public function deleteAnswer(Request $request, Response $response, int $answer_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 获取回答评论列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getAnswerComments(Request $request, Response $response): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 恢复指定回答评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function restoreAnswerComment(Request $request, Response $response, int $comment_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 删除指定回答评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function deleteAnswerComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }
@@ -270,39 +194,39 @@ class TrashController extends Controller
     }
 
     /**
-     * 获取文章评论列表
+     * 获取评论列表
      *
      * @param  Request  $request
      * @param  Response $response
      * @return Response
      */
-    public function getArticleComments(Request $request, Response $response): Response
+    public function getComments(Request $request, Response $response): Response
     {
         return $response;
     }
 
     /**
-     * 恢复指定文章评论
+     * 恢复指定评论
      *
      * @param  Request  $request
      * @param  Response $response
      * @param  int      $comment_id
      * @return Response
      */
-    public function restoreArticleComment(Request $request, Response $response, int $comment_id): Response
+    public function restoreComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }
 
     /**
-     * 删除指定文章评论
+     * 删除指定评论
      *
      * @param  Request  $request
      * @param  Response $response
      * @param  int      $comment_id
      * @return Response
      */
-    public function deleteArticleComment(Request $request, Response $response, int $comment_id): Response
+    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }
