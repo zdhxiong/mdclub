@@ -1049,306 +1049,6 @@ paths:
       security:
         - token: []
 
-  /user/questions/following:
-
-    get:
-      tags:
-        - QuestionFollow
-      summary: 获取登录用户关注的问题
-      description: 获取登录用户关注的问题
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 问题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Questions'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/articles/following:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 获取登录用户关注的文章
-      description: 获取登录用户关注的文章
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 文章列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Articles'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/topics/following:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 获取当前用户关注的话题列表
-      description: 获取当前用户关注的话题列表
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 话题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Topics'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/questions/{question_id}/following:
-
-    get:
-      tags:
-        - QuestionFollow
-      summary: 判断登录用户是否关注了指定问题
-      description: 判断登录用户是否关注了指定问题
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - QuestionFollow
-      summary: 添加关注
-      description: 取消关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - QuestionFollow
-      summary: 取消关注
-      description: 取消关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/articles/{article_id}/following:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 判断登录用户是否关注了指定文章
-      description: 判断登录用户是否关注了指定文章
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - ArticleFollow
-      summary: 添加关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - ArticleFollow
-      summary: 取消关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/topics/{topic_id}/following:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 当前用户是否关注了指定话题
-      description: 当前用户是否关注了指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - TopicFollow
-      summary: 当前用户关注指定话题
-      description: 当前用户关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - TopicFollow
-      summary: 当前用户取消关注指定话题
-      description: 当前用户取消关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /articles:
 
     get:
@@ -1415,6 +1115,32 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Article'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /articles/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: 获取登录用户关注的文章
+      description: 获取登录用户关注的文章
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1508,6 +1234,80 @@ paths:
       security:
         - token: []
 
+  /articles/{article_id}/following:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: 判断登录用户是否关注了指定文章
+      description: 判断登录用户是否关注了指定文章
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - ArticleFollow
+      summary: 添加关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - ArticleFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/{article_id}/comments:
 
     get:
@@ -1572,7 +1372,57 @@ paths:
       security:
         - token: []
 
+  /articles/comments:
+
+    get:
+      tags:
+        - ArticleComment
+      summary: todo - 获取所有文章下的所有评论
+      description: 获取所有文章下的所有评论
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/ArticleComments'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/comments/{comment_id}:
+
+    get:
+      tags:
+        - ArticleComment
+      summary: todo - 获取指定评论
+      description: 获取指定评论
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/ArticleComment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
     patch:
       tags:
@@ -1717,6 +1567,32 @@ paths:
       security:
         - token: []
 
+  /questions/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: 获取登录用户关注的问题
+      description: 获取登录用户关注的问题
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /questions/{question_id}:
 
     get:
@@ -1811,6 +1687,80 @@ paths:
       security:
         - token: []
 
+  /questions/{question_id}/following:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: 判断登录用户是否关注了指定问题
+      description: 判断登录用户是否关注了指定问题
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - QuestionFollow
+      summary: 添加关注
+      description: 取消关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - QuestionFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /questions/{question_id}/comments:
 
     get:
@@ -1875,7 +1825,57 @@ paths:
       security:
         - token: []
 
+  /questions/comments:
+
+    get:
+      tags:
+        - QuestionComment
+      summary: todo - 获取所有问题下的所有评论
+      description: 获取所有问题下的所有评论
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/QuestionComments'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /questions/comments/{comment_id}:
+
+    get:
+      tags:
+        - QuestionComment
+      summary: todo - 获取指定评论
+      description: 获取指定评论
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/QuestionComment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
     patch:
       tags:
@@ -2074,6 +2074,32 @@ paths:
       security:
         - token: []
 
+  /topics/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 获取当前用户关注的话题列表
+      description: 获取当前用户关注的话题列表
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /topics/{topic_id}:
 
     get:
@@ -2192,6 +2218,80 @@ paths:
                 $ref: '#/definitions/Users'
               pagination:
                 $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /topics/{topic_id}/following:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 当前用户是否关注了指定话题
+      description: 当前用户是否关注了指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - TopicFollow
+      summary: 当前用户关注指定话题
+      description: 当前用户关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - TopicFollow
+      summary: 当前用户取消关注指定话题
+      description: 当前用户取消关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -2372,7 +2472,57 @@ paths:
       security:
         - token: []
 
+  /answers/comments:
+
+    get:
+      tags:
+        - AnswerComment
+      summary: todo - 获取所有回答下的所有评论
+      description: 获取所有回答下的所有评论
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/AnswerComments'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /answers/comments/{comment_id}:
+
+    get:
+      tags:
+        - AnswerComment
+      summary: todo - 获取指定评论
+      description: 获取指定评论
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 评论内容
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/AnswerComment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
     patch:
       tags:
@@ -2427,6 +2577,32 @@ paths:
                 type: integer
               data:
                 type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /comments:
+
+    get:
+      tags:
+        - Comment
+      summary: todo - 获取所有评论
+      description: 获取所有评论
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comments'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2928,7 +3104,6 @@ paths:
       description:
       security:
         - token: []
-
 
 securityDefinitions:
 
@@ -3797,6 +3972,8 @@ tags:
     description: 文章关注
   - name: ArticleComment
     description: 文章评论
+  - name: Comment
+    description: 评论
   - name: Inbox
     description: 私信
   - name: Notification
