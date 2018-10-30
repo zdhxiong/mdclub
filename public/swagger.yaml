@@ -42,9 +42,6 @@ paths:
       tags:
         - Option
       summary: 获取站点全局设置参数
-      description: |
-        普通用户调用该接口，仅返回字段 `language`、`site_description`、`site_gongan_beian`、`site_icp_beian`、`site_keywords`、`site_name`
-        管理员调用该接口，返回所有字段
       responses:
         200:
           description: 全局设置参数列表
@@ -63,7 +60,8 @@ paths:
       tags:
         - Option
       summary: 🔐更新站点全局设置
-      description:
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: body
           in: body
@@ -91,7 +89,7 @@ paths:
       summary: 生成 Token
       description: |
         通过账号密码登陆，返回带 Token 的用户信息
-        若登录失败，且返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+        若登录失败，且返回信息中含参数 `captcha_token` 和 `captcha_image`，表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
       parameters:
         - name: body
           in: body
@@ -137,8 +135,7 @@ paths:
         - UserRegister
       summary: 发送注册邮箱验证码
       description: |
-        发送注册邮箱验证码
-        返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+        若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
       parameters:
         - name: body
           in: body
@@ -177,13 +174,25 @@ paths:
         - UserInfo
       summary: 获取用户列表
       description: |
-        🔐仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效
+        **order 参数**
+        | 参数名 | 一个普通标题 | 一个普通标题 |
+        | ------ | ------ | ------ |
+        | user_id |  |  |
+        | last_login_time |  |  |
+        | follower_count |  |  |
+        | following_article_count |  |  |
+        |  |  |  |
+        |  |  |  |
+        |  |  |  |
+        |  |  |  |
+        <br/>
+        **filter 参数**
+        | 一个普通标题 | 一个普通标题 | 一个普通标题 |
+        | ------ | ------ | ------ |
+        | 短文本 | 中等文本 | 稍微长一点的文本 |
+        | 稍微长一点的文本 | 短文本 | 中等文本 |
 
         **可排序的字段包括**：
-        `user_id`
-        `last_login_time`
-        `follower_count`
-        `following_article_count`
         `following_question_count`
         `following_topic_count`
         `following_user_count`
@@ -194,16 +203,14 @@ paths:
         `inbox_unread`
         `create_time`
         `update_time`
-        `disable_time`
         若未指定排序字段，则默认按 `follower_count` 倒序排列
-
+        <br/>
         **可筛选的字段包括**：
         `user_id`
         `username`
         `email`
         `create_ip`
         `last_login_ip`
-        `disable_time`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -277,8 +284,28 @@ paths:
         - UserInfo
       summary: 获取指定用户信息
       description: |
-        若是管理员调用该接口，将返回用户的所有信息；
-        若是普通用户调用该接口，仅返回开放信息。
+        **若是管理员调用该接口，将返回用户的所有信息**
+        <br/>
+        **若是普通用户调用该接口，则仅返回字段：**
+        `user_id`
+        `username`
+        `avatar`
+        `cover`
+        `follower_count`
+        `following_article_count`
+        `following_question_count`
+        `following_topic_count`
+        `following_user_count`
+        `article_count`
+        `question_count`
+        `answer_count`
+        `headline`
+        `bio`
+        `blog`
+        `company`
+        `location`
+        `create_time`
+        `relationship`
       parameters:
         - name: user_id
           type: integer
@@ -302,7 +329,8 @@ paths:
       tags:
         - UserInfo
       summary: todo - 🔐更新指定用户信息
-      description: 更新指定用户信息，仅管理员可以使用该接口
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: user_id
           type: integer
@@ -346,7 +374,8 @@ paths:
       tags:
         - UserInfo
       summary: 🔐禁用指定用户
-      description: 🔐 仅管理员可调用该接口
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: user_id
           type: integer
@@ -371,8 +400,9 @@ paths:
     delete:
       tags:
         - UserAvatar
-      summary: 🔐删除指定用户的头像，并重置为默认头像；仅管理员可操作
-      description: 删除指定用户的头像，并重置为默认头像；仅管理员可操作
+      summary: 🔐删除指定用户的头像，并重置为默认头像
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: user_id
           in: path
@@ -397,8 +427,9 @@ paths:
     delete:
       tags:
         - UserCover
-      summary: 🔐删除指定用户的封面，并重置为默认封面；仅管理员可操作
-      description: 删除指定用户的封面，并重置为默认封面；仅管理员可操作
+      summary: 🔐删除指定用户的封面，并重置为默认封面
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: user_id
           in: path
@@ -448,7 +479,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following:
+  /users/{user_id}/followees:
 
     get:
       tags:
@@ -508,7 +539,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/questions/following:
+  /users/{user_id}/following/questions:
 
     get:
       tags:
@@ -538,67 +569,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/articles/following:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 获取指定用户关注的文章列表
-      description: 获取指定用户关注的文章列表
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 文章列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Articles'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /users/{user_id}/topics/following:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 获取指定用户关注的话题列表
-      description: 获取指定用户关注的话题列表
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 话题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Topics'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /users/{user_id}/questions/{question_id}/following:
+  /users/{user_id}/following/questions/{question_id}:
 
     get:
       tags:
@@ -628,7 +599,37 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/articles/{article_id}/following:
+  /users/{user_id}/following/articles:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: 获取指定用户关注的文章列表
+      description: 获取指定用户关注的文章列表
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /users/{user_id}/following/articles/{article_id}:
 
     get:
       tags:
@@ -658,7 +659,37 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/topics/{topic_id}/following:
+  /users/{user_id}/following/topics:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 获取指定用户关注的话题列表
+      description: 获取指定用户关注的话题列表
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+      responses:
+        200:
+          description: 话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /users/{user_id}/following/topics/{topic_id}:
 
     get:
       tags:
@@ -850,8 +881,7 @@ paths:
         - UserPasswordReset
       summary: 发送重置密码邮箱验证码
       description: |
-        发送重置密码邮箱验证码
-        返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码
+        若返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
       parameters:
         - name: body
           in: body
@@ -889,7 +919,6 @@ paths:
       tags:
         - UserPasswordReset
       summary: 验证邮箱并更新密码
-      description: 验证邮箱并更新密码
       parameters:
         - name: body
           in: body
@@ -949,7 +978,7 @@ paths:
       security:
         - token: []
 
-  /user/following:
+  /user/followees:
 
     get:
       tags:
@@ -976,6 +1005,30 @@ paths:
         - token: []
 
   /user/following/{user_id}:
+
+    get:
+      tags:
+        - UserFollow
+      summary: 检查当前用户是否关注了另一用户
+      description: 检查当前用户是否关注了另一用户
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
     put:
       tags:
@@ -1025,16 +1078,44 @@ paths:
       security:
         - token: []
 
+  /user/following/questions:
+
     get:
       tags:
-        - UserFollow
-      summary: 检查当前用户是否关注了另一用户
-      description: 检查当前用户是否关注了另一用户
+        - QuestionFollow
+      summary: 获取登录用户关注的问题
+      description: 获取登录用户关注的问题
       parameters:
-        - name: user_id
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/following/questions/{question_id}:
+
+    get:
+      tags:
+        - QuestionFollow
+      summary: 判断登录用户是否关注了指定问题
+      description: 判断登录用户是否关注了指定问题
+      parameters:
+        - name: question_id
           in: path
           type: integer
-          description: 用户ID
+          description: 问题ID
       responses:
         200:
           description: 返回 data 为布尔值
@@ -1044,6 +1125,254 @@ paths:
                 type: integer
               data:
                 type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - QuestionFollow
+      summary: 添加关注
+      description: 取消关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - QuestionFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/following/articles:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: 获取登录用户关注的文章
+      description: 获取登录用户关注的文章
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/following/articles/{article_id}:
+
+    get:
+      tags:
+        - ArticleFollow
+      summary: 判断登录用户是否关注了指定文章
+      description: 判断登录用户是否关注了指定文章
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - ArticleFollow
+      summary: 添加关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - ArticleFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/following/topics:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 获取当前用户关注的话题列表
+      description: 获取当前用户关注的话题列表
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 话题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Topics'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/following/topics/{topic_id}:
+
+    get:
+      tags:
+        - TopicFollow
+      summary: 当前用户是否关注了指定话题
+      description: 当前用户是否关注了指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 返回 data 为布尔值
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: boolean
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - TopicFollow
+      summary: 当前用户关注指定话题
+      description: 当前用户关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - TopicFollow
+      summary: 当前用户取消关注指定话题
+      description: 当前用户取消关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -1115,32 +1444,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Article'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /articles/following:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 获取登录用户关注的文章
-      description: 获取登录用户关注的文章
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 文章列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Articles'
-              pagination:
-                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1234,90 +1537,21 @@ paths:
       security:
         - token: []
 
-  /articles/{article_id}/following:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 判断登录用户是否关注了指定文章
-      description: 判断登录用户是否关注了指定文章
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - ArticleFollow
-      summary: 添加关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - ArticleFollow
-      summary: 取消关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /articles/{article_id}/comments:
 
     get:
       tags:
-        - ArticleComment
+        - Article
       summary: todo - 获取指定文章的评论列表
-      description: 获取指定文章的评论列表
+      description: |
+        默认排序方式为 `create_time ASC`
+        <br/>
+        **可添加的排序参数为：**
+        `create_time`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
         - name: article_id
           in: path
           type: integer
@@ -1340,7 +1574,7 @@ paths:
 
     post:
       tags:
-        - ArticleComment
+        - Article
       summary: todo - 在指定文章下发表评论
       description: 在指定文章下发表评论
       parameters:
@@ -1372,116 +1606,6 @@ paths:
       security:
         - token: []
 
-  /articles/comments:
-
-    get:
-      tags:
-        - ArticleComment
-      summary: todo - 获取所有文章下的所有评论
-      description: 获取所有文章下的所有评论
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
-      responses:
-        200:
-          description: 评论列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/ArticleComments'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /articles/comments/{comment_id}:
-
-    get:
-      tags:
-        - ArticleComment
-      summary: todo - 获取指定评论
-      description: 获取指定评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 评论详情
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/ArticleComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    patch:
-      tags:
-        - ArticleComment
-      summary: todo - 修改文章下指定的评论
-      description: 修改文章下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - content
-            properties:
-              content:
-                type: string
-                description: 评论内容
-      responses:
-        200:
-          description: 评论详情
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/ArticleComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - ArticleComment
-      summary: todo - 删除文章下指定的评论
-      description: 删除文章下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /questions:
 
     get:
@@ -1489,6 +1613,8 @@ paths:
         - Question
       summary: 获取问题列表
       description: |
+        默认排序方式为 `update_time DESC`
+        <br/>
         **管理员可排序的字段包括**：
         `question_id`
         `user_id`
@@ -1499,13 +1625,15 @@ paths:
         `last_answer_time`
         `create_time`
         `update_time`
-        `delete_time
-
+        <br/>
         **管理员可筛选的字段包括**：
         `question_id`
         `user_id`
-
-        **普通用户可排序的字段包括**：无
+        <br/>
+        **普通用户可排序的字段包括**：
+        `answer_count`
+        `update_time`
+        <br/>
         **普通用户可筛选的字段包括**：无
       parameters:
         - $ref: '#/parameters/page'
@@ -1532,7 +1660,8 @@ paths:
       tags:
         - Question
       summary: todo(含 topic_ids 时未测试) -  发表问题
-      description: 发表问题。若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
+      description: |
+        若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
       parameters:
         - name: body
           in: body
@@ -1562,32 +1691,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Question'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /questions/following:
-
-    get:
-      tags:
-        - QuestionFollow
-      summary: 获取登录用户关注的问题
-      description: 获取登录用户关注的问题
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 问题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Questions'
-              pagination:
-                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1631,18 +1734,13 @@ paths:
       tags:
         - Question
       summary: todo - 删除指定问题
-      description: 🔒 删除指定问题。仅管理员可以删除问题
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: question_id
           type: integer
           in: path
           description: 问题ID
-        - name: soft_delete
-          in: query
-          enum:
-            - 1
-            - 0
-          description: 是否软删除，默认为 1
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -1687,90 +1785,21 @@ paths:
       security:
         - token: []
 
-  /questions/{question_id}/following:
-
-    get:
-      tags:
-        - QuestionFollow
-      summary: 判断登录用户是否关注了指定问题
-      description: 判断登录用户是否关注了指定问题
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - QuestionFollow
-      summary: 添加关注
-      description: 取消关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - QuestionFollow
-      summary: 取消关注
-      description: 取消关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /questions/{question_id}/comments:
 
     get:
       tags:
-        - QuestionComment
+        - Question
       summary: todo - 获取指定问题的评论列表
-      description: 获取指定问题的评论列表
+      description: |
+        默认排序方式为 `create_time ASC`
+        <br/>
+        **可添加的排序参数为：**
+        `create_time`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
         - name: question_id
           in: path
           type: integer
@@ -1793,7 +1822,7 @@ paths:
 
     post:
       tags:
-        - QuestionComment
+        - Question
       summary: todo - 在指定问题下发表评论
       description: 在指定问题下发表评论
       parameters:
@@ -1820,116 +1849,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/QuestionComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /questions/comments:
-
-    get:
-      tags:
-        - QuestionComment
-      summary: todo - 获取所有问题下的所有评论
-      description: 获取所有问题下的所有评论
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
-      responses:
-        200:
-          description: 评论列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/QuestionComments'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /questions/comments/{comment_id}:
-
-    get:
-      tags:
-        - QuestionComment
-      summary: todo - 获取指定评论
-      description: 获取指定评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 评论详情
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/QuestionComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    patch:
-      tags:
-        - QuestionComment
-      summary: todo - 修改问题下指定的评论
-      description: 修改问题下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - content
-            properties:
-              content:
-                type: string
-                description: 评论内容
-      responses:
-        200:
-          description: 评论详情
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/QuestionComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - QuestionComment
-      summary: todo - 删除问题下指定的评论
-      description: 删除问题下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -2008,19 +1927,18 @@ paths:
         - Topic
       summary: 获取全部话题
       description: |
-        🔒 仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效
+        **仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效**
+        <br/>
         **可排序的字段包括**：
         `topic_id`
         `article_count`
         `question_count`
         `follower_count`
-        `delete_time`
         若未指定排序字段，则按 `follower_count` 倒序排列
-
+        <br/>
         **可筛选的字段包括**：
         `topic_id`
         `name`
-        `delete_time`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -2046,7 +1964,8 @@ paths:
       tags:
         - Topic
       summary: 🔐发布话题
-      description: 🔐发布话题，需要管理员权限
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: name
           type: string
@@ -2069,32 +1988,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Topic'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /topics/following:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 获取当前用户关注的话题列表
-      description: 获取当前用户关注的话题列表
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-      responses:
-        200:
-          description: 话题列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Topics'
-              pagination:
-                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2130,7 +2023,10 @@ paths:
       tags:
         - Topic
       summary: 🔐更新话题信息
-      description: 🔐更新话题信息，需要管理员权限（formData 数据只能通过 post 请求提交，所以这里不用 patch 请求）
+      description: |
+        **仅管理员可调用该接口**
+        <br/>
+        formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
       parameters:
         - name: topic_id
           type: integer
@@ -2167,18 +2063,13 @@ paths:
       tags:
         - Topic
       summary: todo - 🔐删除话题
-      description: 🔐删除话题，需要管理员权限
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: topic_id
           type: integer
           in: path
           description: 话题ID
-        - name: soft_delete
-          in: query
-          enum:
-            - 1
-            - 0
-          description: 是否为软删除，默认为 1
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -2218,80 +2109,6 @@ paths:
                 $ref: '#/definitions/Users'
               pagination:
                 $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /topics/{topic_id}/following:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 当前用户是否关注了指定话题
-      description: 当前用户是否关注了指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    put:
-      tags:
-        - TopicFollow
-      summary: 当前用户关注指定话题
-      description: 当前用户关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - TopicFollow
-      summary: 当前用户取消关注指定话题
-      description: 当前用户取消关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -2412,12 +2229,17 @@ paths:
 
     get:
       tags:
-        - AnswerComment
+        - Answer
       summary: todo - 获取指定回答的评论列表
-      description: 获取指定回答的评论列表
+      description: |
+        默认排序方式为 `create_time ASC`
+        <br/>
+        **可添加的排序参数为：**
+        `create_time`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
         - name: answer_id
           in: path
           type: integer
@@ -2440,7 +2262,7 @@ paths:
 
     post:
       tags:
-        - AnswerComment
+        - Answer
       summary: todo - 在指定回答下发表评论
       description: 在指定回答下发表评论
       parameters:
@@ -2472,116 +2294,6 @@ paths:
       security:
         - token: []
 
-  /answers/comments:
-
-    get:
-      tags:
-        - AnswerComment
-      summary: todo - 获取所有回答下的所有评论
-      description: 获取所有回答下的所有评论
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
-      responses:
-        200:
-          description: 评论列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/AnswerComments'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /answers/comments/{comment_id}:
-
-    get:
-      tags:
-        - AnswerComment
-      summary: todo - 获取指定评论
-      description: 获取指定评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 评论内容
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/AnswerComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    patch:
-      tags:
-        - AnswerComment
-      summary: todo - 修改回答下指定的评论
-      description: 修改回答下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - content
-            properties:
-              content:
-                type: string
-                description: 评论内容
-      responses:
-        200:
-          description: 评论内容
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/AnswerComment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - AnswerComment
-      summary: todo - 删除回答下指定的评论
-      description: 删除回答下指定的评论
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /comments:
 
     get:
@@ -2603,6 +2315,90 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Comments'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /comments/{comment_id}:
+
+    get:
+      tags:
+        - Comment
+      summary: todo - 获取评论详情
+      description: 获取评论详情
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    patch:
+      tags:
+        - Comment
+      summary: todo - 修改评论
+      description: 修改评论
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - content
+            properties:
+              content:
+                type: string
+                description: 评论内容
+      responses:
+        200:
+          description: 评论详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Comment
+      summary: todo - 删除评论
+      description: 删除评论
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -3142,43 +2938,49 @@ definitions:
     properties:
       cache_memcached_host:
         type: string
-        description: Memcached 缓存服务器地址
+        description: 🔐Memcached 服务器地址
       cache_memcached_password:
         type: string
-        description: Memcached 密码
+        description: 🔐Memcached 密码
       cache_memcached_port:
         type: string
-        description: Memcached 端口号
+        description: 🔐Memcached 端口号
       cache_memcached_username:
         type: string
-        description: Memcached 用户名
+        description: 🔐Memcached 用户名
       cache_redis_host:
         type: string
-        description: Redis 缓存服务器地址
+        description: 🔐Redis 服务器地址
       cache_redis_password:
         type: string
-        description: Redis 密码
+        description: 🔐Redis 密码
       cache_redis_port:
         type: string
-        description: Redis 端口号
+        description: 🔐Redis 端口号
       cache_redis_username:
         type: string
-        description: Redis 用户名
+        description: 🔐Redis 用户名
       cache_type:
         type: string
         enum:
-        - pdo
-        - redis
-        - memcached
+          - pdo
+          - redis
+          - memcached
         description: 🔐缓存类型
       enable_markdown:
         type: integer
         enum:
-        - 0
-        - 1
+          - 0
+          - 1
         description: 🔐是否启用 markdown
       language:
         type: string
+        enum:
+          - en
+          - pl
+          - ru
+          - zh-cn
+          - zh-tw
         description: 系统语言
       site_description:
         type: string
@@ -3197,7 +2999,7 @@ definitions:
         description: 站点名称
       site_static_url:
         type: string
-        description: 🔐static 目录资源 URL 地址
+        description: 🔐静态资源 URL 地址
       smtp_host:
         type: string
         description: 🔐SMTP 服务器地址
@@ -3209,7 +3011,7 @@ definitions:
         description: 🔐SMTP 端口
       smtp_reply_to:
         type: string
-        description: 🔐回信地址
+        description: 🔐SMTP 回信地址
       smtp_secure:
         type: string
         description: 🔐SMTP 加密方式
@@ -3218,61 +3020,61 @@ definitions:
         description: 🔐SMTP 账户
       storage_aliyun_oss_access_id:
         type: string
-        description:
+        description: 🔐阿里云 AccessKey ID
       storage_aliyun_oss_access_secret:
         type: string
-        description:
+        description: 🔐阿里云 Access Key Secret
       storage_aliyun_oss_bucket:
         type: string
-        description:
+        description: 🔐阿里云 OSS 的 Bucket 名称
       storage_aliyun_oss_endpoint:
         type: string
-        description:
+        description: 🔐阿里云 OSS 的 EndPoint
       storage_ftp_host:
         type: string
-        description: FTP 服务器地址
+        description: 🔐FTP 服务器地址
       storage_ftp_passive:
         type: integer
         enum:
           - 1
           - 0
-        description: FTP 是否被动连接
+        description: 🔐FTP 是否被动连接
       storage_ftp_password:
         type: string
-        description: FTP 密码
+        description: 🔐FTP 密码
       storage_ftp_port:
         type: integer
-        description: FTP 端口号
+        description: 🔐FTP 端口号
       storage_ftp_root:
         type: string
-        description: FTP 存储目录
+        description: 🔐FTP 存储目录
       storage_ftp_ssl:
         type: integer
         enum:
           - 1
           - 0
-        description: FTP 是否启用 SSL
+        description: 🔐FTP 是否启用 SSL
       storage_ftp_timeout:
         type: integer
-        description: FTP 连接超时时间
+        description: 🔐FTP 连接超时时间
       storage_ftp_username:
         type: string
-        description: FTP 用户名
+        description: 🔐FTP 用户名
       storage_local_dir:
         type: string
         description: 🔐本地文件存储目录
       storage_qiniu_access_id:
         type: string
-        description:
+        description: 🔐七牛云 AccessKey
       storage_qiniu_access_secret:
         type: string
-        description:
+        description: 🔐七牛云 SecretKey
       storage_qiniu_bucket:
         type: string
-        description:
+        description: 🔐七牛云 Bucket
       storage_qiniu_endpoint:
         type: string
-        description:
+        description: 🔐七牛云域名
       storage_type:
         type: string
         enum:
@@ -3284,16 +3086,16 @@ definitions:
         description: 🔐存储类型
       storage_upyun_bucket:
         type: string
-        description:
+        description: 🔐又拍云 Bucket
       storage_upyun_endpoint:
         type: string
-        description:
+        description: 🔐又拍云域名
       storage_upyun_operator:
         type: string
-        description:
+        description: 🔐又拍云操作员账号
       storage_upyun_password:
         type: string
-        description:
+        description: 🔐又拍云操作员密码
       storage_url:
         type: string
         description: 🔐本地文件访问链接
@@ -3468,10 +3270,10 @@ definitions:
         description: 创建时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 更新时间（更新问题本身，或在问题下发表回答，都会更新该字段）
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/QuestionRelationship'
@@ -3512,10 +3314,10 @@ definitions:
         description: 发表时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 🔐更新时间
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/CommentRelationship'
@@ -3551,10 +3353,10 @@ definitions:
         description: 创建时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 🔐更新时间
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/AnswerRelationship'
@@ -3590,10 +3392,10 @@ definitions:
         description: 发表时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 🔐更新时间
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/CommentRelationship'
@@ -3629,7 +3431,7 @@ definitions:
         description: 关注者数量
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/TopicRelationship'
@@ -3691,10 +3493,10 @@ definitions:
         description: 创建时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 更新时间（用户可以更新自己的文章）
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/ArticleRelationship'
@@ -3735,10 +3537,10 @@ definitions:
         description: 发表时间
       update_time:
         type: integer
-        description: 更新时间
+        description: 🔐更新时间
       delete_time:
         type: integer
-        description: 删除时间
+        description: 🔐删除时间
       relationship:
         type: object
         $ref: '#/definitions/CommentRelationship'
@@ -3750,6 +3552,7 @@ definitions:
 
   Comment:
     type: object
+    description: 该资源仅管理员可获取
     properties:
       comment_id:
         type: integer
@@ -3960,18 +3763,12 @@ tags:
     description: 问题信息
   - name: QuestionFollow
     description: 问题关注
-  - name: QuestionComment
-    description: 问题评论
   - name: Answer
     description: 回答信息
-  - name: AnswerComment
-    description: 回答评论
   - name: Article
     description: 文章信息
   - name: ArticleFollow
     description: 文章关注
-  - name: ArticleComment
-    description: 文章评论
   - name: Comment
     description: 评论
   - name: Inbox

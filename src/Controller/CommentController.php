@@ -26,4 +26,43 @@ class CommentController extends Controller
     {
         return $response;
     }
+
+    /**
+     * 获取评论详情
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function get(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 更新评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function update(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function delete(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
 }

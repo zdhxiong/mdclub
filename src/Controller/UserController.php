@@ -63,7 +63,7 @@ class UserController extends Controller
      * @param  int      $user_id
      * @return Response
      */
-    public function getOne(Request $request, Response $response, int $user_id): Response
+    public function get(Request $request, Response $response, int $user_id): Response
     {
         $userInfo = $this->userService->get($user_id, true);
 
@@ -78,7 +78,7 @@ class UserController extends Controller
      * @param  int      $user_id
      * @return Response
      */
-    public function updateOne(Request $request, Response $response, int $user_id): Response
+    public function update(Request $request, Response $response, int $user_id): Response
     {
         $this->roleService->managerIdOrFail();
 
@@ -93,7 +93,7 @@ class UserController extends Controller
      * @param  int      $user_id
      * @return Response
      */
-    public function disableOne(Request $request, Response $response, int $user_id): Response
+    public function disable(Request $request, Response $response, int $user_id): Response
     {
         $this->roleService->managerIdOrFail();
         $this->userService->disable($user_id);

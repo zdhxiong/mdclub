@@ -74,7 +74,7 @@ class ArticleController extends Controller
      * @param  int      $article_id
      * @return Response
      */
-    public function getOne(Request $request, Response $response, int $article_id): Response
+    public function get(Request $request, Response $response, int $article_id): Response
     {
         return $response;
     }
@@ -236,32 +236,6 @@ class ArticleController extends Controller
      * @return Response
      */
     public function createComment(Request $request, Response $response, int $article_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 更新指定评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function updateComment(Request $request, Response $response, int $comment_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 删除指定评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

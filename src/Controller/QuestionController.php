@@ -99,7 +99,7 @@ class QuestionController extends Controller
      * @param  int      $question_id
      * @return Response
      */
-    public function getOne(Request $request, Response $response, int $question_id): Response
+    public function get(Request $request, Response $response, int $question_id): Response
     {
         $questionInfo = $this->questionService->get($question_id, true);
 
@@ -257,32 +257,6 @@ class QuestionController extends Controller
      * @return Response
      */
     public function createComment(Request $request, Response $response, int $question_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 更新指定评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function updateComment(Request $request, Response $response, int $comment_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 删除指定评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function deleteComment(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

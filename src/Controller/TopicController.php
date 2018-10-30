@@ -85,7 +85,7 @@ class TopicController extends Controller
      * @param  int      $topic_id
      * @return Response
      */
-    public function getOne(Request $request, Response $response, int $topic_id): Response
+    public function get(Request $request, Response $response, int $topic_id): Response
     {
         $topicInfo = $this->topicService->get($topic_id, true);
 

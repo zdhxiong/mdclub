@@ -34,6 +34,7 @@ class UserService extends Service implements FollowableInterface
                 'notification_unread',
                 'inbox_unread',
                 'update_time',
+                'disable_time',
             ];
     }
 
