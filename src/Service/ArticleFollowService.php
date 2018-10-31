@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\FollowableAbstracts;
+use App\Abstracts\FollowAbstracts;
 
 /**
  * 文章关注
@@ -12,7 +12,7 @@ use App\Abstracts\FollowableAbstracts;
  * Class ArticleFollowService
  * @package App\Service
  */
-class ArticleFollowService extends FollowableAbstracts
+class ArticleFollowService extends FollowAbstracts
 {
     /**
      * 关注类型

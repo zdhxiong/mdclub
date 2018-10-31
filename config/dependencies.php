@@ -353,7 +353,7 @@ $modules = [
     \App\Model\AnswerModel::class,
     \App\Model\ArticleModel::class,
     \App\Model\CommentModel::class,
-    \App\Model\FollowableModel::class,
+    \App\Model\FollowModel::class,
     \App\Model\ImageModel::class,
     \App\Model\InboxModel::class,
     \App\Model\NotificationModel::class,

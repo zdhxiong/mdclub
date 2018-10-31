@@ -409,7 +409,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             $this->topicableModel->where(['topic_id' => $topicId])->delete();
 
             // 删除关注的话题
-            $this->followableModel->where([
+            $this->followModel->where([
                 'followable_id'   => $topicId,
                 'followable_type' => 'topic',
             ])->delete();
@@ -465,7 +465,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             if (isset($relationship['is_following'])) {
                 $followingTopicIds = $relationship['is_following'] ? $topicIds : [];
             } else {
-                $followingTopicIds = $this->followableModel->where([
+                $followingTopicIds = $this->followModel->where([
                     'user_id'         => $currentUserId,
                     'followable_id'   => $topicIds,
                     'followable_type' => 'topic',

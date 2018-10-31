@@ -23,7 +23,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Model\AnswerModel                  answerModel
  * @property-read \App\Model\ArticleModel                 articleModel
  * @property-read \App\Model\CommentModel                 commentModel
- * @property-read \App\Model\FollowableModel              followableModel
+ * @property-read \App\Model\FollowModel                  followModel
  * @property-read \App\Model\ImageModel                   imageModel
  * @property-read \App\Model\InboxModel                   inboxModel
  * @property-read \App\Model\NotificationModel            notificationModel

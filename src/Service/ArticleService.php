@@ -172,7 +172,7 @@ class ArticleService extends Service implements FollowableInterface
             if (isset($relationship['is_following'])) {
                 $followingArticleIds = $relationship['is_following'] ? $articleIds : [];
             } else {
-                $followingArticleIds = $this->followableModel->where([
+                $followingArticleIds = $this->followModel->where([
                     'user_id'         => $currentUserId,
                     'followable_id'   => $articleIds,
                     'followable_type' => 'article',

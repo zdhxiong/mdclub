@@ -390,7 +390,7 @@ class UserService extends Service implements FollowableInterface
             if (isset($relationship['is_followed'])) {
                 $followedUserIds = $relationship['is_followed'] ? $userIds : [];
             } else {
-                $followedUserIds = $this->followableModel->where([
+                $followedUserIds = $this->followModel->where([
                     'user_id' => $userIds,
                     'followable_id' => $currentUserId,
                     'followable_type' => 'user',
@@ -400,7 +400,7 @@ class UserService extends Service implements FollowableInterface
             if (isset($relationship['is_following'])) {
                 $followingUserIds = $relationship['is_following'] ? $userIds : [];
             } else {
-                $followingUserIds = $this->followableModel->where([
+                $followingUserIds = $this->followModel->where([
                     'user_id' => $currentUserId,
                     'followable_id' => $userIds,
                     'followable_type' => 'user',

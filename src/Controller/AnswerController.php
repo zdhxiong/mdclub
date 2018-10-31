@@ -93,6 +93,19 @@ class AnswerController extends Controller
     }
 
     /**
+     * 投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function vote(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取指定回答下的评论列表
      *
      * @param  Request  $request

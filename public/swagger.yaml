@@ -1507,6 +1507,46 @@ paths:
       security:
         - token: []
 
+  /articles/{article_id}/votes:
+
+    post:
+      tags:
+        - Article
+      summary: todo - 为文章投票
+      description: 为文章投票
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - up
+                  - down
+                  - neutral
+                description: 投票类型
+      responses:
+        200:
+          description: 关注信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Vote'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/{article_id}/followers:
 
     get:
@@ -1750,6 +1790,46 @@ paths:
                 type: integer
               data:
                 type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /questions/{question_id}/votes:
+
+    post:
+      tags:
+        - Question
+      summary: todo - 为问题投票
+      description: 为问题投票
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - up
+                  - down
+                  - neutral
+                description: 投票类型
+      responses:
+        200:
+          description: 关注信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Vote'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2225,6 +2305,46 @@ paths:
       security:
         - token: []
 
+  /answers/{answer_id}/votes:
+
+    post:
+      tags:
+        - Answer
+      summary: todo - 为回答投票
+      description: 为回答投票
+      parameters:
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - up
+                  - down
+                  - neutral
+                description: 投票类型
+      responses:
+        200:
+          description: 关注信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Vote'
+        default:
+          $ref: '#/responses/Error'
+        security:
+          - token: []
+
   /answers/{answer_id}/comments:
 
     get:
@@ -2393,6 +2513,141 @@ paths:
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /comments/{comment_id}/votes:
+
+    post:
+      tags:
+        - Comment
+      summary: todo - 为评论投票
+      description: 为评论投票
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - up
+                  - down
+                  - neutral
+                description: 投票类型
+      responses:
+        200:
+          description: 关注信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Vote'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /reports:
+
+    get:
+      tags:
+        - Report
+      summary: todo - 获取举报列表
+      description: 获取举报列表
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - $ref: '#/parameters/order'
+        - $ref: '#/parameters/filter'
+      responses:
+        200:
+          description: 举报列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Reports'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    post:
+      tags:
+        - Report
+      summary: todo - 添加举报
+      description: 添加举报
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - reportable_id
+              - reportable_type
+              - reason
+            properties:
+              reportable_id:
+                type: integer
+                description: 举报目标ID
+              reportable_type:
+                type: string
+                description: 举报目标类型
+                enum:
+                  - question
+                  - answer
+                  - article
+                  - comment
+              reason:
+                type: string
+                description: 举报理由
+      responses:
+        200:
+          description: 举报详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Report'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /reports/{report_id}:
+
+    delete:
+      tags:
+        - Report
+      summary: todo - 处理完一个举报
+      description: 处理完一个举报
+      parameters:
+        - name: report_id
+          type: integer
+          in: path
+          description: 举报ID
+      responses:
+        200:
+          description: 空数据，通过状态吗区分成功还是失败
           schema:
             properties:
               code:
@@ -3562,7 +3817,11 @@ definitions:
         description: 评论目标的ID
       commentable_type:
         type: string
-        description: 评论目标类型：article、question、answer
+        description: 评论目标类型
+        enum:
+          - article
+          - question
+          - answer
       user_id:
         type: integer
         description: 用户ID
@@ -3583,6 +3842,74 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Comment'
+
+  Vote:
+    type: object
+    description: 投票
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      voteable_id:
+        type: integer
+        description: 投票目标的ID
+      voteable_type:
+        type: string
+        description: 投票目标类型
+        enum:
+          - question
+          - answer
+          - article
+          - comment
+      type:
+        type: string
+        description: 投票类型
+        enum:
+          - up
+          - down
+          - neutral
+      create_time:
+        type: integer
+        description: 投票时间
+      vote_count:
+        type: integer
+        description: 投票目标获得的总投票量
+
+  Report:
+    type: object
+    description: 举报
+    properties:
+      report_id:
+        type: integer
+        description: 举报ID
+      reportable_id:
+        type: integer
+        description: 举报目标的ID
+      reportable_type:
+        type: string
+        description: 举报目标类型
+        enum:
+          - question
+          - answer
+          - article
+          - comment
+      reportable_object:
+        type: object
+        description: 举报目标详情
+      user_id:
+        type: integer
+        description: 用户ID
+      reason:
+        type: string
+        description: 举报理由
+      create_time:
+        type: string
+        description: 举报时间
+
+  Reports:
+    type: array
+    items:
+      $ref: '#/definitions/Report'
 
   Image:
     type: object
@@ -3771,6 +4098,8 @@ tags:
     description: 文章关注
   - name: Comment
     description: 评论
+  - name: Report
+    description: 举报
   - name: Inbox
     description: 私信
   - name: Notification

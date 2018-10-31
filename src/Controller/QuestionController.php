@@ -79,19 +79,6 @@ class QuestionController extends Controller
     }
 
     /**
-     * 更新问题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function update(Request $request, Response $response, int $question_id): Response
-    {
-        return $response;
-    }
-
-    /**
      * 获取一个问题信息
      *
      * @param  Request  $request
@@ -104,6 +91,19 @@ class QuestionController extends Controller
         $questionInfo = $this->questionService->get($question_id, true);
 
         return $this->success($response, $questionInfo);
+    }
+
+    /**
+     * 更新问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function update(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
     }
 
     /**
@@ -124,6 +124,19 @@ class QuestionController extends Controller
         $this->questionService->delete($question_id, $softDelete);
 
         return $this->success($response);
+    }
+
+    /**
+     * 投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function vote(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
     }
 
     /**

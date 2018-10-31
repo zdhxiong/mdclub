@@ -17,6 +17,7 @@ use App\Controller\IndexController;
 use App\Controller\NotificationController;
 use App\Controller\OptionController;
 use App\Controller\QuestionController;
+use App\Controller\ReportController;
 use App\Controller\TopicController;
 use App\Controller\UserController;
 use App\Controller\TokenController;
@@ -104,6 +105,9 @@ $app->group('/api', function () {
     $this->get(   '/questions/{question_id:\d+}',                               QuestionController::class . ':get');
     $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
+    $this->post(  '/questions/{question_id:\d+}/votes',                         QuestionController::class . ':vote');
+    $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
+    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
 
     // 问题关注
     $this->get(   '/users/{user_id:\d+}/following/questions',                   QuestionController::class . ':getFollowing');
@@ -114,10 +118,6 @@ $app->group('/api', function () {
     $this->delete('/user/following/questions/{question_id:\d+}',                QuestionController::class . ':deleteFollow');
     $this->get(   '/user/following/questions/{question_id:\d+}',                QuestionController::class . ':getFollowers');
 
-    // 问题评论
-    $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
-    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
-
     // 回答
     $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
     $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
@@ -125,8 +125,7 @@ $app->group('/api', function () {
     $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':get');
     $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');
     $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':delete');
-
-    // 回答评论
+    $this->post(  '/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':vote');
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
 
@@ -138,6 +137,9 @@ $app->group('/api', function () {
     $this->get(   '/articles/{article_id:\d+}',                                 ArticleController::class . ':get');
     $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
     $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
+    $this->post(  '/articles/{article_id:\d+}/vote',                            ArticleController::class . ':vote');
+    $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
+    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
 
     // 文章关注
     $this->get(   '/users/{user_id:\d+}/following/articles',                    ArticleController::class . ':getFollowing');
@@ -148,15 +150,17 @@ $app->group('/api', function () {
     $this->delete('/user/following/articles/{article_id:\d+}',                  ArticleController::class . ':deleteFollow');
     $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
 
-    // 文章评论
-    $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
-    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
-
     // 评论
     $this->get(   '/comments',                                                  CommentController::class . ':getList');
     $this->get(   '/comments/{comment_id:\d+}',                                 CommentController::class . ':get');
     $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':update');
     $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':delete');
+    $this->post(  '/comments/{comment_id:\d+}/vote',                            CommentController::class . ':vote');
+
+    // 举报
+    $this->get(   '/reports',                                                   ReportController::class . ':getList');
+    $this->get(   '/reports',                                                   ReportController::class . ':create');
+    $this->delete('/reports/{report_id:\d+}',                                   ReportController::class . ':delete');
 
     // 私信
 

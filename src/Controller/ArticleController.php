@@ -106,6 +106,19 @@ class ArticleController extends Controller
     }
 
     /**
+     * 投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function vote(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取指定用户关注的文章列表
      *
      * @param  Request  $request

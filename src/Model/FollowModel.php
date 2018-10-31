@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Class FollowableModel
+ * Class FollowModel
  *
  * @package App\Model
  */
-class FollowableModel extends Model
+class FollowModel extends Model
 {
-    protected $table = 'followable';
+    protected $table = 'follow';
     protected $primaryKey = null;
     protected $timestamps = true;
 

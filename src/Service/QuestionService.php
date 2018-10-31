@@ -404,7 +404,7 @@ class QuestionService extends Service implements FollowableInterface
             if (isset($relationship['is_following'])) {
                 $followingQuestionIds = $relationship['is_following'] ? $questionIds : [];
             } else {
-                $followingQuestionIds = $this->followableModel->where([
+                $followingQuestionIds = $this->followModel->where([
                     'user_id'         => $currentUserId,
                     'followable_id'   => $questionIds,
                     'followable_type' => 'question',

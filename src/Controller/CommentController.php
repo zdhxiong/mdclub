@@ -65,4 +65,17 @@ class CommentController extends Controller
     {
         return $response;
     }
+
+    /**
+     * 投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function vote(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
 }

@@ -13,10 +13,10 @@ use App\Service\Service;
 /**
  * 关注关系抽象类
  *
- * Class FollowableAbstracts
+ * Class FollowAbstracts
  * @package App\Abstracts
  */
-abstract class FollowableAbstracts extends Service
+abstract class FollowAbstracts extends Service
 {
     /**
      * 关注类型（article、question、topic、user）
@@ -36,7 +36,7 @@ abstract class FollowableAbstracts extends Service
     protected $followableTargetService;
 
     /**
-     * FollowableAbstracts constructor.
+     * FollowAbstracts constructor.
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -58,7 +58,7 @@ abstract class FollowableAbstracts extends Service
     {
         $this->followableIdOrFail($followableId);
 
-        $list = $this->followableModel
+        $list = $this->followModel
             ->where([
                 'followable_id' => $followableId,
                 'followable_type' => $this->followableType,
@@ -95,7 +95,7 @@ abstract class FollowableAbstracts extends Service
     {
         $this->userIdOrFail($userId);
 
-        $list = $this->followableModel
+        $list = $this->followModel
             ->where([
                 'user_id' => $userId,
                 'followable_type' => $this->followableType,
@@ -128,7 +128,7 @@ abstract class FollowableAbstracts extends Service
         $this->userIdOrFail($userId);
         $this->followableIdOrFail($followableId);
 
-        return $this->followableModel->where([
+        return $this->followModel->where([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
             'followable_type' => $this->followableType,
@@ -152,7 +152,7 @@ abstract class FollowableAbstracts extends Service
             throw new ApiException(ErrorConstant::USER_CANT_FOLLOW_YOURSELF);
         }
 
-        $this->followableModel->insert([
+        $this->followModel->insert([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
             'followable_type' => $this->followableType,
@@ -182,7 +182,7 @@ abstract class FollowableAbstracts extends Service
             $this->throwNotFollowingException();
         }
 
-        $this->followableModel->where([
+        $this->followModel->where([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
             'followable_type' => $this->followableType,
