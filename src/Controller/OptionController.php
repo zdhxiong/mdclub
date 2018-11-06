@@ -19,7 +19,7 @@ class OptionController extends Controller
     /**
      * 获取所有设置项
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
      *
      * @return Response
@@ -38,12 +38,12 @@ class OptionController extends Controller
     /**
      * 更新设置
      *
-     * @param Request $request
+     * @param Request  $request
      * @param Response $response
      *
      * @return Response
      */
-    public function setMultiple(Request $request, Response $response): Response
+    public function updateAll(Request $request, Response $response): Response
     {
         $this->roleService->managerIdOrFail();
 

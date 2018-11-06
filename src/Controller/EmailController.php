@@ -18,13 +18,25 @@ class EmailController extends Controller
     /**
      * 发送邮件
      *
-     * @param Request $request
-     * @param Response $response
-     *
+     * @param  Request  $request
+     * @param  Response $response
      * @return Response
      */
     public function send(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $email = $request->getParsedBodyParam('email', '');
+        $subject = $request->getParsedBodyParam('subject', '');
+        $content = $request->getParsedBodyParam('content', '');
+
+        $emailArray = array_filter(array_slice(explode(',', $email), 0, 100));
+        $this->emailService->send($emailArray, $subject, $content);
+
+        return $this->success($response, [
+            'email'   => implode(',', $emailArray),
+            'subject' => $subject,
+            'content' => $content,
+        ]);
     }
 }

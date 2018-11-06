@@ -56,6 +56,27 @@ class UserController extends Controller
     }
 
     /**
+     * 注册账号
+     *
+     * @param Request $request
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function create(Request $request, Response $response): Response
+    {
+        $userInfo = $this->userRegisterService->doRegister(
+            $request->getParsedBodyParam('email'),
+            $request->getParsedBodyParam('email_code'),
+            $request->getParsedBodyParam('username'),
+            $request->getParsedBodyParam('password'),
+            $request->getParsedBodyParam('device')
+        );
+
+        return $this->success($response, $userInfo);
+    }
+
+    /**
      * 获取指定用户的信息
      *
      * @param  Request  $request
@@ -81,8 +102,11 @@ class UserController extends Controller
     public function update(Request $request, Response $response, int $user_id): Response
     {
         $this->roleService->managerIdOrFail();
+        $this->userService->hasOrFail($user_id);
+        $this->userService->update($user_id, $request->getParsedBody());
+        $userInfo = $this->userService->get($user_id, true);
 
-        return $response;
+        return $this->success($response, $userInfo);
     }
 
     /**
@@ -99,6 +123,98 @@ class UserController extends Controller
         $this->userService->disable($user_id);
 
         return $this->success($response);
+    }
+
+    /**
+     * 批量禁用用户
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDisable(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $userIds = $request->getQueryParam('user_id');
+
+        if ($userIds) {
+            $userIds = array_filter(array_slice(explode(',', $userIds), 0, 100));
+        }
+
+        if ($userIds) {
+            $this->userService->batchDisable($userIds);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
+     * 删除指定用户的头像
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param int $user_id
+     *
+     * @return Response
+     */
+    public function deleteAvatar(Request $request, Response $response, int $user_id): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $filename = $this->userAvatarService->delete($user_id);
+        $newAvatars = $this->userAvatarService->getImageUrls($user_id, $filename);
+
+        return $this->success($response, $newAvatars);
+    }
+
+    /**
+     * 删除指定用户的封面
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param int $user_id
+     *
+     * @return Response
+     */
+    public function deleteCover(Request $request, Response $response, int $user_id): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $this->userCoverService->delete($user_id);
+        $newCovers = $this->userCoverService->getImageUrls($user_id);
+
+        return $this->success($response, $newCovers);
+    }
+
+    /**
+     * 获取指定用户的关注者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getFollowers(Request $request, Response $response, int $user_id): Response
+    {
+        $followers = $this->userFollowService->getFollowers($user_id, true);
+
+        return $this->success($response, $followers);
+    }
+
+    /**
+     * 获取指定用户关注的人
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getFollowees(Request $request, Response $response, int $user_id): Response
+    {
+        $following = $this->userFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
     }
 
     /**
@@ -130,25 +246,6 @@ class UserController extends Controller
         $userInfo = $this->userService->get($userId, true);
 
         return $this->success($response, $userInfo);
-    }
-
-    /**
-     * 删除指定用户的头像
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param int $user_id
-     *
-     * @return Response
-     */
-    public function deleteAvatar(Request $request, Response $response, int $user_id): Response
-    {
-        $this->roleService->managerIdOrFail();
-
-        $filename = $this->userAvatarService->delete($user_id);
-        $newAvatars = $this->userAvatarService->getImageUrls($user_id, $filename);
-
-        return $this->success($response, $newAvatars);
     }
 
     /**
@@ -191,25 +288,6 @@ class UserController extends Controller
     }
 
     /**
-     * 删除指定用户的封面
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param int $user_id
-     *
-     * @return Response
-     */
-    public function deleteCover(Request $request, Response $response, int $user_id): Response
-    {
-        $this->roleService->managerIdOrFail();
-
-        $this->userCoverService->delete($user_id);
-        $newCovers = $this->userCoverService->getImageUrls($user_id);
-
-        return $this->success($response, $newCovers);
-    }
-
-    /**
      * 上传我的封面
      *
      * @param Request $request
@@ -249,49 +327,52 @@ class UserController extends Controller
     }
 
     /**
-     * 获取指定用户的关注者
+     * 发送注册验证邮件
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
+     * @param Request  $request
+     * @param Response $response
+     *
      * @return Response
      */
-    public function getFollowers(Request $request, Response $response, int $user_id): Response
+    public function sendRegisterEmail(Request $request, Response $response): Response
     {
-        $followers = $this->userFollowService->getFollowers($user_id, true);
+        $this->userRegisterService->sendEmail($request->getParsedBodyParam('email'));
 
-        return $this->success($response, $followers);
+        return $this->success($response);
     }
 
     /**
-     * 获取指定用户关注的人
+     * 发送重置密码验证邮件
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
+     * @param Request  $request
+     * @param Response $response
+     *
      * @return Response
      */
-    public function getFollowing(Request $request, Response $response, int $user_id): Response
+    public function sendResetEmail(Request $request, Response $response): Response
     {
-        $following = $this->userFollowService->getFollowing($user_id, true);
+        $this->userPasswordResetService->sendEmail($request->getParsedBodyParam('email'));
 
-        return $this->success($response, $following);
+        return $this->success($response);
     }
 
     /**
-     * 获取指定用户是否已关注另一用户
+     * 重置密码
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @param  int      $target_user_id
+     * @param Request $request
+     * @param Response $response
+     *
      * @return Response
      */
-    public function isFollowing(Request $request, Response $response, int $user_id, int $target_user_id): Response
+    public function updatePasswordByEmail(Request $request, Response $response): Response
     {
-        $isFollowing = $this->userFollowService->isFollowing($user_id, $target_user_id);
+        $this->userPasswordResetService->doReset(
+            $request->getParsedBodyParam('email'),
+            $request->getParsedBodyParam('email_code'),
+            $request->getParsedBodyParam('password')
+        );
 
-        return $this->success($response, $isFollowing);
+        return $this->success($response);
     }
 
     /**
@@ -316,7 +397,7 @@ class UserController extends Controller
      * @param  Response $response
      * @return Response
      */
-    public function getMyFollowing(Request $request, Response $response): Response
+    public function getMyFollowees(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
         $following = $this->userFollowService->getFollowing($userId, true);
@@ -352,92 +433,6 @@ class UserController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->userFollowService->deleteFollow($userId, $target_user_id);
-
-        return $this->success($response);
-    }
-
-    /**
-     * 获取我是否关注了某一用户
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $target_user_id
-     * @return Response
-     */
-    public function isMyFollowing(Request $request, Response $response, int $target_user_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $isFollowing = $this->userFollowService->isFollowing($userId, $target_user_id);
-
-        return $this->success($response, $isFollowing);
-    }
-
-    /**
-     * 发送注册验证邮件
-     *
-     * @param Request  $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function sendRegisterEmail(Request $request, Response $response): Response
-    {
-        $this->userRegisterService->sendEmail($request->getParsedBodyParam('email'));
-
-        return $this->success($response);
-    }
-
-    /**
-     * 注册账号
-     *
-     * @param Request $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function create(Request $request, Response $response): Response
-    {
-        $userInfo = $this->userRegisterService->doRegister(
-            $request->getParsedBodyParam('email'),
-            $request->getParsedBodyParam('email_code'),
-            $request->getParsedBodyParam('username'),
-            $request->getParsedBodyParam('password'),
-            $request->getParsedBodyParam('device')
-        );
-
-        return $this->success($response, $userInfo);
-    }
-
-    /**
-     * 发送重置密码验证邮件
-     *
-     * @param Request  $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function sendResetEmail(Request $request, Response $response): Response
-    {
-        $this->userPasswordResetService->sendEmail($request->getParsedBodyParam('email'));
-
-        return $this->success($response);
-    }
-
-    /**
-     * 重置密码
-     *
-     * @param Request $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    public function updatePasswordByEmail(Request $request, Response $response): Response
-    {
-        $this->userPasswordResetService->doReset(
-            $request->getParsedBodyParam('email'),
-            $request->getParsedBodyParam('email_code'),
-            $request->getParsedBodyParam('password')
-        );
 
         return $this->success($response);
     }

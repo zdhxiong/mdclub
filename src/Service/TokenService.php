@@ -86,6 +86,17 @@ class TokenService extends Service
     }
 
     /**
+     * 设置当前请求的 token
+     *
+     * @param string $token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
+        $this->tokenInfo = null;
+    }
+
+    /**
      * 获取当前请求的 token 信息数组，不存在时返回 false
      *
      * @return array|false

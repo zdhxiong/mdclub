@@ -28,6 +28,7 @@ class QuestionModel extends Model
         'answer_count',
         'view_count',
         'follower_count',
+        'vote_count',
         'create_time',
         'update_time',
         'delete_time',
@@ -42,14 +43,5 @@ class QuestionModel extends Model
             'follower_count'   => 0,
             'last_answer_time' => 0,
         ]);
-    }
-
-    protected function afterSelect(array $data, bool $nest = true): array
-    {
-        if (!$nest) {
-            $data = [$data];
-        }
-
-        return $nest ? $data : $data[0];
     }
 }

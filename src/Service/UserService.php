@@ -25,8 +25,11 @@ class UserService extends Service implements FollowableInterface
     protected function getPrivacyFields(): array
     {
         return $this->roleService->managerId()
-            ? []
+            ? [
+                'password',
+            ]
             : [
+                'password',
                 'email',
                 'create_ip',
                 'last_login_time',
@@ -45,25 +48,7 @@ class UserService extends Service implements FollowableInterface
      */
     protected function getAllowOrderFields(): array
     {
-        return $this->roleService->managerId()
-            ? [
-                'user_id',
-                'last_login_time',
-                'follower_count',
-                'following_article_count',
-                'following_question_count',
-                'following_topic_count',
-                'following_user_count',
-                'article_count',
-                'question_count',
-                'answer_count',
-                'notification_unread',
-                'inbox_unread',
-                'create_time',
-                'update_time',
-                'disable_time',
-            ]
-            : [];
+        return ['follower_count', 'create_time'];
     }
 
     /**
@@ -78,11 +63,11 @@ class UserService extends Service implements FollowableInterface
                 'user_id',
                 'username',
                 'email',
-                'create_ip',
-                'last_login_ip',
-                'disable_time',
             ]
-            : [];
+            : [
+                'user_id',
+                'username',
+            ];
     }
 
     /**
@@ -93,12 +78,10 @@ class UserService extends Service implements FollowableInterface
      */
     public function getList($withRelationship = false): array
     {
-        $excludeFields = ArrayHelper::push(['password'], $this->getPrivacyFields());
-
         $list = $this->userModel
-            ->where($this->getWhere(['disable_time' => 0]))        // 默认获取未禁用的用户
-            ->order($this->getOrder(['follower_count' => 'DESC']))
-            ->field($excludeFields, true)
+            ->where($this->getWhere(['disable_time' => 0]))      // 获取用户列表时，不包括已禁用用户
+            ->order($this->getOrder(['create_time' => 'ASC']))
+            ->field($this->getPrivacyFields(), true)
             ->paginate();
 
         foreach ($list['data'] as &$item) {
@@ -193,7 +176,12 @@ class UserService extends Service implements FollowableInterface
      */
     public function get(int $userId, bool $withRelationship = false): array
     {
-        $excludeFields = ArrayHelper::push(['password'], $this->getPrivacyFields());
+        $excludeFields = ['password'];
+
+        if ($this->roleService->userId() != $userId) {
+            $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
+        }
+
         $userInfo = $this->userModel->field($excludeFields, true)->get($userId);
 
         if (!$userInfo) {
@@ -290,6 +278,29 @@ class UserService extends Service implements FollowableInterface
     }
 
     /**
+     * 批量禁用用户
+     *
+     * @param  array $userIds
+     * @return bool
+     */
+    public function batchDisable(array $userIds): bool
+    {
+        $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
+
+        $rowCount = $this->userModel
+            ->where(['user_id' => $userIds])
+            ->update(['disable_time' => $requestTime]);
+
+        if (!$rowCount) {
+            return true;
+        }
+
+        $this->tokenModel->where(['user_id' => $userIds])->delete();
+
+        return true;
+    }
+
+    /**
      * 对数据库中读取的用户信息进行处理
      *
      * @param  array $userInfo
@@ -301,8 +312,13 @@ class UserService extends Service implements FollowableInterface
             return $userInfo;
         }
 
-        isset($userInfo['avatar']) && $userInfo['avatar'] = '';
-        isset($userInfo['cover']) && $userInfo['cover'] = '';
+        if (isset($userInfo['avatar'])) {
+            $userInfo['avatar'] = $this->userAvatarService->getImageUrls($userInfo['user_id'], $userInfo['avatar']);
+        }
+
+        if (isset($userInfo['cover'])) {
+            $userInfo['cover'] = $this->userCoverService->getImageUrls($userInfo['user_id']);
+        }
 
         return $userInfo;
     }

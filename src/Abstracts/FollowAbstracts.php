@@ -117,25 +117,6 @@ abstract class FollowAbstracts extends Service
     }
 
     /**
-     * 检查 userId 是否关注了指定对象
-     *
-     * @param  int    $userId
-     * @param  int    $followableId
-     * @return bool
-     */
-    public function isFollowing(int $userId, int $followableId): bool
-    {
-        $this->userIdOrFail($userId);
-        $this->followableIdOrFail($followableId);
-
-        return $this->followModel->where([
-            'user_id'         => $userId,
-            'followable_id'   => $followableId,
-            'followable_type' => $this->followableType,
-        ])->has();
-    }
-
-    /**
      * 添加关注
      *
      * @param  int    $userId
@@ -197,6 +178,25 @@ abstract class FollowAbstracts extends Service
             ->update(['follower_count[-]' => 1]);
 
         return true;
+    }
+
+    /**
+     * 检查 userId 是否关注了指定对象
+     *
+     * @param  int    $userId
+     * @param  int    $followableId
+     * @return bool
+     */
+    protected function isFollowing(int $userId, int $followableId): bool
+    {
+        $this->userIdOrFail($userId);
+        $this->followableIdOrFail($followableId);
+
+        return $this->followModel->where([
+            'user_id'         => $userId,
+            'followable_id'   => $followableId,
+            'followable_type' => $this->followableType,
+        ])->has();
     }
 
     /**

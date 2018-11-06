@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Medoo\Medoo;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Abstracts\BrandImageAbstracts;
 use App\Interfaces\FollowableInterface;
@@ -61,15 +62,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      */
     protected function getAllowOrderFields(): array
     {
-        return $this->roleService->managerId()
-            ? [
-                'topic_id',
-                'article_count',
-                'question_count',
-                'follower_count',
-                'delete_time',
-            ]
-            : [];
+        return ['topic_id', 'follower_count'];
     }
 
     /**
@@ -79,13 +72,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      */
     protected function getAllowFilterFields(): array
     {
-        return $this->roleService->managerId()
-            ? [
-                'topic_id',
-                'name',
-                'delete_time',
-            ]
-            : [];
+        return ['topic_id', 'name'];
     }
 
     /**
@@ -208,7 +195,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
     {
         $list = $this->topicModel
             ->where($this->getWhere())
-            ->order($this->getOrder(['follower_count' => 'DESC']))
+            ->order($this->getOrder(['topic_id' => 'ASC']))
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -286,6 +273,10 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             $errors['cover'] = '请选择要上传的封面图片';
         } elseif ($coverError = $this->validateImage($cover)) {
             $errors['cover'] = $coverError;
+        }
+
+        if (!$errors && $this->topicModel->where(['name' => $name])->has()) {
+            $errors['name'] = '该名称已存在';
         }
 
         if ($errors) {
@@ -367,6 +358,14 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             $errors['cover'] = $coverError;
         }
 
+        if (
+               !$errors
+            && !is_null($name)
+            && $this->topicModel->where(['name' => $name, 'topic_id[!]' => $topicId])->has()
+        ) {
+            $errors['name'] = '该名称已存在';
+        }
+
         if ($errors) {
             throw new ValidationException($errors);
         }
@@ -375,45 +374,75 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
     }
 
     /**
-     * 删除话题
+     * 软删除话题
      *
      * @param  int  $topicId
-     * @param  bool $softDelete
      * @return bool
      */
-    public function delete(int $topicId, bool $softDelete): bool
+    public function delete(int $topicId): bool
     {
-        $topicInfo = $this->topicModel->force()->get($topicId);
-        if (!$topicInfo) {
+        $rowCount = $this->topicModel->delete($topicId);
+
+        if (!$rowCount) {
             throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
         }
 
-        if (!$softDelete) {
-            $this->topicModel->force();
-        }
+        /** @var Medoo $database */
+        $database = $this->container->get(Medoo::class);
+        $prefix = $this->container->get('settings')['database']['prefix'];
 
-        $this->topicModel->delete($topicId);
+        // 删除话题关系
+        $this->topicableModel->where(['topic_id' => $topicId])->delete();
 
-        // 软删除后
-        if ($softDelete) {
-            // todo 更新话题数量
-            // 查询关注了该话题的用户ID，把这些用户的 following_topic_count 置为 null
-        }
+        // 查询关注了该话题的用户ID，把这些用户的 following_topic_count - 1
+        $database->query("UPDATE `{$prefix}user` SET `following_topic_count` = `following_topic_count`-1 WHERE `user_id` IN (SELECT `user_id` FROM `{$prefix}follow` WHERE `followable_id` = {$topicId} AND `followable_type` = 'topic')");
+
+        // 删除关注的话题
+        $this->followModel->where([
+            'followable_id'   => $topicId,
+            'followable_type' => 'topic',
+        ])->delete();
 
         // 硬删除后
-        else {
+        /*else {
             // 删除封面图片
             $this->deleteImage($topicId, $topicInfo['cover']);
+        }*/
 
-            // 删除话题关系
-            $this->topicableModel->where(['topic_id' => $topicId])->delete();
+        return true;
+    }
 
-            // 删除关注的话题
-            $this->followModel->where([
-                'followable_id'   => $topicId,
-                'followable_type' => 'topic',
-            ])->delete();
+    /**
+     * 批量软删除话题
+     *
+     * @param  array $topicIds
+     * @return bool
+     */
+    public function batchDelete(array $topicIds): bool
+    {
+        $rowCount = $this->topicModel->where(['topic_id' => $topicIds])->delete();
+
+        if (!$rowCount) {
+            return true;
         }
+
+        /** @var Medoo $database */
+        $database = $this->container->get(Medoo::class);
+        $prefix = $this->container->get('settings')['database']['prefix'];
+
+        // 删除话题关系
+        $this->topicableModel->where(['topic_id' => $topicIds])->delete();
+
+        // 查询关注了这些话题的用户ID，把这些用户的 following_topic_count - 1
+        foreach ($topicIds as $topicId) {
+            $database->query("UPDATE `{$prefix}user` SET `following_topic_count` = `following_topic_count`-1 WHERE `user_id` IN (SELECT `user_id` FROM `{$prefix}follow` WHERE `followable_id` = {$topicId} AND `followable_type` = 'topic')");
+        }
+
+        // 删除关注的话题
+        $this->followModel->where([
+            'followable_id' => $topicIds,
+            'followable_type' => 'topic',
+        ])->delete();
 
         return true;
     }

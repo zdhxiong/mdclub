@@ -479,14 +479,14 @@ class Model
             'pagination' => [
                 'page' => $page,
                 'per_page' => $perPage,
-                'from' => $perPage * ($page - 1) + 1,
-                'to' => $perPage * $page,
             ],
         ];
 
         if (isset($total)) {
-            $result['pagination']['total'] = $total;
-            $result['pagination']['total_page'] = ceil($total / $perPage);
+            $result['pagination']['total']    = $total;
+            $result['pagination']['pages']    = ceil($total / $perPage);
+            $result['pagination']['previous'] = $page > 1 ? $page - 1 : null;
+            $result['pagination']['next']     = $result['pagination']['pages'] > $page ? $page + 1 : null;
         }
 
         return $result;

@@ -95,7 +95,9 @@ class UserAvatarService extends BrandImageAbstracts
         }
 
         // 删除旧头像
-        $this->deleteImage($userId, $userInfo['avatar']);
+        if ($userInfo['avatar']) {
+            $this->deleteImage($userId, $userInfo['avatar']);
+        }
 
         // 生成新头像
         $Avatar = new MDAvatars(mb_substr($userInfo['username'], 0, 1));

@@ -18,6 +18,8 @@ class UserModel extends Model
     protected $primaryKey = 'user_id';
     protected $timestamps = true;
 
+    // 被禁用的用户也是真实用户，不作为软删除字段处理
+
     protected $columns = [
         'user_id',
         'username',
@@ -97,14 +99,5 @@ class UserModel extends Model
         }
 
         return $data;
-    }
-
-    protected function afterSelect(array $data, bool $nest = true): array
-    {
-        if (!$nest) {
-            $data = [$data];
-        }
-
-        return $nest ? $data : $data[0];
     }
 }

@@ -27,18 +27,4 @@ class ImageController extends Controller
     {
         return $response;
     }
-
-    /**
-     * 更新图片信息
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param int $image_id
-     *
-     * @return Response
-     */
-    public function update(Request $request, Response $response, int $image_id): Response
-    {
-        return $response;
-    }
 }

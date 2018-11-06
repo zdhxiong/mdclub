@@ -359,10 +359,12 @@ $modules = [
     \App\Model\NotificationModel::class,
     \App\Model\OptionModel::class,
     \App\Model\QuestionModel::class,
+    \App\Model\ReportModel::class,
     \App\Model\TokenModel::class,
     \App\Model\TopicableModel::class,
     \App\Model\TopicModel::class,
     \App\Model\UserModel::class,
+    \App\Model\VoteModel::class,
 
     \App\Service\AnswerCommentService::class,
     \App\Service\AnswerService::class,

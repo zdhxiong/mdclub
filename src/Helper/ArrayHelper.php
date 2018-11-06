@@ -97,7 +97,9 @@ class ArrayHelper
         }
 
         foreach ($value as $item) {
-            array_push($array, $item);
+            if (!in_array($item, $array)) {
+                array_push($array, $item);
+            }
         }
 
         return $array;

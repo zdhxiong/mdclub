@@ -5,17 +5,12 @@ info:
   description: |
     MDClub 是一个 Material Design 风格的社区应用。
 
-    **排序参数 order**：
+    **接口文档说明**
 
-    需要排序的字段，用 , 分隔，在字段前加 - 表示倒序排列
+    * 接口描述中，若含 🔐 图标，表示该接口仅管理员有权限调用。
+    * 接口返回值的字段描述中，若含 🔐 图标，表示只有管理员调用接口时，返回值中才会包含该字段。
+    * 接口参数的描述中，若含 🔐 图标，表示只有管理员才能添加该参数。
 
-    order=field1,-field2 表示 field1 ASC, field2 DESC
-
-    **筛选参数 filter**：
-
-    需要筛选的字段，用 , 分隔，支持 =，>，>=，<，<=
-
-    filter=field1=value1,field2>value2,field3<=value3 表示 field1=value1 AND field2>value2 AND field3<=value3
   termsOfService:
   contact:
     name: zdhxiong
@@ -128,94 +123,32 @@ paths:
       security:
         - token: []
 
-  /user/register/email:
-
-    post:
-      tags:
-        - UserRegister
-      summary: 发送注册邮箱验证码
-      description: |
-        若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
-      parameters:
-        - name: body
-          in: body
-          schema:
-            type: object
-            required:
-              - email
-            properties:
-              email:
-                type: string
-                description: 邮箱
-              captcha_token:
-                type: string
-                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
-              captcha_code:
-                type: string
-                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /users:
 
     get:
       tags:
         - UserInfo
       summary: 获取用户列表
-      description: |
-        **order 参数**
-        | 参数名 | 一个普通标题 | 一个普通标题 |
-        | ------ | ------ | ------ |
-        | user_id |  |  |
-        | last_login_time |  |  |
-        | follower_count |  |  |
-        | following_article_count |  |  |
-        |  |  |  |
-        |  |  |  |
-        |  |  |  |
-        |  |  |  |
-        <br/>
-        **filter 参数**
-        | 一个普通标题 | 一个普通标题 | 一个普通标题 |
-        | ------ | ------ | ------ |
-        | 短文本 | 中等文本 | 稍微长一点的文本 |
-        | 稍微长一点的文本 | 短文本 | 中等文本 |
-
-        **可排序的字段包括**：
-        `following_question_count`
-        `following_topic_count`
-        `following_user_count`
-        `article_count`
-        `question_count`
-        `answer_count`
-        `notification_unread`
-        `inbox_unread`
-        `create_time`
-        `update_time`
-        若未指定排序字段，则默认按 `follower_count` 倒序排列
-        <br/>
-        **可筛选的字段包括**：
-        `user_id`
-        `username`
-        `email`
-        `create_ip`
-        `last_login_ip`
+      description: 不包含已禁用的用户
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          type: string
+          in: query
+          description: 排序方式，可以为 `create_time`、`follower_count`，默认为 `create_time`。在字段前加 `-` 表示倒序排列
+        - name: user_id
+          type: integer
+          in: query
+          description: 按用户ID过滤
+        - name: username
+          type: string
+          in: query
+          description: 按用户名过滤
+        - name: email
+          type: string
+          in: query
+          description: 🔐按邮箱过滤
       responses:
         200:
           description: 用户列表
@@ -277,6 +210,32 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - UserInfo
+      summary: 🔐批量禁用用户
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: user_id
+          type: string
+          in: query
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /users/{user_id}:
 
     get:
@@ -284,9 +243,8 @@ paths:
         - UserInfo
       summary: 获取指定用户信息
       description: |
-        **若是管理员调用该接口，将返回用户的所有信息**
-        <br/>
-        **若是普通用户调用该接口，则仅返回字段：**
+        **若是管理员调用该接口、或登录用户读取自己的个人信息，将返回用户的所有信息**
+        **其他情况仅返回以下字段（去掉了部分隐私信息）：**
         `user_id`
         `username`
         `avatar`
@@ -328,7 +286,7 @@ paths:
     patch:
       tags:
         - UserInfo
-      summary: todo - 🔐更新指定用户信息
+      summary: 🔐更新指定用户信息
       description: |
         **仅管理员可调用该接口**
       parameters:
@@ -364,7 +322,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/responses/Error'
+                $ref: '#/definitions/User'
         default:
           $ref: '#/responses/Error'
       security:
@@ -509,42 +467,12 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/{target_user_id}:
-
-    get:
-      tags:
-        - UserFollow
-      summary: 检查用户是否关注了另一用户
-      description: 检查用户是否关注了另一用户
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-        - name: target_user_id
-          in: path
-          type: integer
-          description: 目标用户ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /users/{user_id}/following/questions:
 
     get:
       tags:
         - QuestionFollow
-      summary: 获取指定用户关注的问题列表
+      summary: todo - 获取指定用户关注的问题列表
       description: 获取指定用户关注的问题列表
       parameters:
         - $ref: '#/parameters/page'
@@ -569,42 +497,12 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/questions/{question_id}:
-
-    get:
-      tags:
-        - QuestionFollow
-      summary: 判断指定用户是否关注了指定问题
-      description: 判断指定用户是否关注了指定问题
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /users/{user_id}/following/articles:
 
     get:
       tags:
         - ArticleFollow
-      summary: 获取指定用户关注的文章列表
+      summary: todo - 获取指定用户关注的文章列表
       description: 获取指定用户关注的文章列表
       parameters:
         - $ref: '#/parameters/page'
@@ -624,36 +522,6 @@ paths:
                 $ref: '#/definitions/Articles'
               pagination:
                 $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /users/{user_id}/following/articles/{article_id}:
-
-    get:
-      tags:
-        - ArticleFollow
-      summary: 判断指定用户是否关注了指定文章
-      description: 判断指定用户是否关注了指定文章
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
         default:
           $ref: '#/responses/Error'
       security:
@@ -689,43 +557,12 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/topics/{topic_id}:
-
-    get:
-      tags:
-        - TopicFollow
-      summary: 检查指定用户是否关注了指定话题
-      description: 检查指定用户是否关注了指定话题
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-        - name: topic_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
   /user:
 
     get:
       tags:
         - UserInfo
       summary: 获取当前登录用户的信息
-      description: 获取当前登录用户的信息
       responses:
         200:
           description: 用户信息
@@ -744,7 +581,6 @@ paths:
       tags:
         - UserInfo
       summary: 更新当前登录用户信息
-      description: 更新当前登录用户信息
       parameters:
         - name: body
           in: body
@@ -786,7 +622,6 @@ paths:
       tags:
         - UserAvatar
       summary: 上传当前登录用户的头像
-      description: 上传当前登录用户的头像
       consumes:
         - multipart/form-data
       parameters:
@@ -812,7 +647,6 @@ paths:
       tags:
         - UserAvatar
       summary: 删除当前登录用户的头像，并重置为默认头像
-      description: 删除当前登录用户的头像，并重置为默认头像
       responses:
         200:
           description: 新头像地址
@@ -833,7 +667,6 @@ paths:
       tags:
         - UserCover
       summary: 上传当前登录用户的封面
-      description: 上传当前登录用户的封面
       consumes:
         - multipart/form-data
       parameters:
@@ -859,7 +692,6 @@ paths:
       tags:
         - UserCover
       summary: 删除当前登录用户的封面，并重置为默认封面
-      description: 删除当前登录用户的封面，并重置为默认封面
       responses:
         200:
           description: 新封面地址
@@ -869,6 +701,45 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/UserCover'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/register/email:
+
+    post:
+      tags:
+        - UserRegister
+      summary: 发送注册邮箱验证码
+      description: |
+        若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: 邮箱
+              captcha_token:
+                type: string
+                description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+              captcha_code:
+                type: string
+                description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -1006,30 +877,6 @@ paths:
 
   /user/following/{user_id}:
 
-    get:
-      tags:
-        - UserFollow
-      summary: 检查当前用户是否关注了另一用户
-      description: 检查当前用户是否关注了另一用户
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
     put:
       tags:
         - UserFollow
@@ -1083,7 +930,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: 获取登录用户关注的问题
+      summary: todo - 获取登录用户关注的问题
       description: 获取登录用户关注的问题
       parameters:
         - $ref: '#/parameters/page'
@@ -1106,34 +953,10 @@ paths:
 
   /user/following/questions/{question_id}:
 
-    get:
-      tags:
-        - QuestionFollow
-      summary: 判断登录用户是否关注了指定问题
-      description: 判断登录用户是否关注了指定问题
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
     put:
       tags:
         - QuestionFollow
-      summary: 添加关注
+      summary: todo - 添加关注
       description: 取消关注
       parameters:
         - name: question_id
@@ -1157,7 +980,7 @@ paths:
     delete:
       tags:
         - QuestionFollow
-      summary: 取消关注
+      summary: todo - 取消关注
       description: 取消关注
       parameters:
         - name: question_id
@@ -1183,7 +1006,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: 获取登录用户关注的文章
+      summary: todo - 获取登录用户关注的文章
       description: 获取登录用户关注的文章
       parameters:
         - $ref: '#/parameters/page'
@@ -1206,34 +1029,10 @@ paths:
 
   /user/following/articles/{article_id}:
 
-    get:
-      tags:
-        - ArticleFollow
-      summary: 判断登录用户是否关注了指定文章
-      description: 判断登录用户是否关注了指定文章
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
     put:
       tags:
         - ArticleFollow
-      summary: 添加关注
+      summary: todo - 添加关注
       description: 取消关注
       parameters:
         - name: article_id
@@ -1257,7 +1056,7 @@ paths:
     delete:
       tags:
         - ArticleFollow
-      summary: 取消关注
+      summary: todo - 取消关注
       description: 取消关注
       parameters:
         - name: article_id
@@ -1306,35 +1105,10 @@ paths:
 
   /user/following/topics/{topic_id}:
 
-    get:
-      tags:
-        - TopicFollow
-      summary: 当前用户是否关注了指定话题
-      description: 当前用户是否关注了指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 返回 data 为布尔值
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: boolean
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
     put:
       tags:
         - TopicFollow
-      summary: 当前用户关注指定话题
-      description: 当前用户关注指定话题
+      summary: 关注指定话题
       parameters:
         - name: topic_id
           in: path
@@ -1357,8 +1131,7 @@ paths:
     delete:
       tags:
         - TopicFollow
-      summary: 当前用户取消关注指定话题
-      description: 当前用户取消关注指定话题
+      summary: 取消关注指定话题
       parameters:
         - name: topic_id
           in: path
@@ -1552,7 +1325,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: 获取指定文章的关注者
+      summary: todo - 获取指定文章的关注者
       description: 获取指定文章的关注者
       parameters:
         - $ref: '#/parameters/page'
@@ -1604,7 +1377,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/ArticleComments'
+                $ref: '#/definitions/Comments'
               pagination:
                 $ref: '#/definitions/Pagination'
         default:
@@ -1640,7 +1413,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/ArticleComment'
+                $ref: '#/definitions/Comment'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1651,7 +1424,7 @@ paths:
     get:
       tags:
         - Question
-      summary: 获取问题列表
+      summary: todo - 获取问题列表
       description: |
         默认排序方式为 `update_time DESC`
         <br/>
@@ -1736,12 +1509,38 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - Question
+      summary: todo - 🔐批量删除问题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
+      parameters:
+        - name: question_id
+          in: query
+          type: string
+          description: 用“,”分隔的问题ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /questions/{question_id}:
 
     get:
       tags:
         - Question
-      summary: 获取指定问题信息
+      summary: todo - 获取指定问题信息
       description: 获取指定问题信息
       parameters:
         - name: question_id
@@ -1840,7 +1639,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: 获取指定问题的关注者
+      summary: todo - 获取指定问题的关注者
       description: 获取指定问题的关注者
       parameters:
         - $ref: '#/parameters/page'
@@ -1892,7 +1691,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/QuestionComments'
+                $ref: '#/definitions/Comments'
               pagination:
                 $ref: '#/definitions/Pagination'
         default:
@@ -1928,7 +1727,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/QuestionComment'
+                $ref: '#/definitions/Comment'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2006,24 +1805,21 @@ paths:
       tags:
         - Topic
       summary: 获取全部话题
-      description: |
-        **仅管理员可添加排序和筛选条件，普通用户添加排序和筛选参数无效**
-        <br/>
-        **可排序的字段包括**：
-        `topic_id`
-        `article_count`
-        `question_count`
-        `follower_count`
-        若未指定排序字段，则按 `follower_count` 倒序排列
-        <br/>
-        **可筛选的字段包括**：
-        `topic_id`
-        `name`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          type: string
+          in: query
+          description: 排序方式，可以为 `topic_id`、`follower_count` 默认为 `topic_id`。在字段前加 `-` 表示倒序排列。
+        - name: topic_id
+          type: integer
+          in: query
+          description: 话题ID
+        - name: name
+          type: string
+          in: query
+          description: 话题名称
       responses:
         200:
           description: 话题列表
@@ -2068,6 +1864,32 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Topic'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Topic
+      summary: 🔐批量删除话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+      parameters:
+        - name: topic_id
+          in: query
+          type: string
+          description: 用“,”分隔的话题ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -2124,7 +1946,6 @@ paths:
           type: file
           in: formData
           description: 封面图片
-
       responses:
         200:
           description: 更新后的话题信息
@@ -2142,7 +1963,7 @@ paths:
     delete:
       tags:
         - Topic
-      summary: todo - 🔐删除话题
+      summary: 🔐删除话题
       description: |
         **仅管理员可调用该接口**
       parameters:
@@ -2372,7 +2193,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/AnswerComments'
+                $ref: '#/definitions/Comments'
               pagination:
                 $ref: '#/definitions/Pagination'
         default:
@@ -2408,7 +2229,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/AnswerComment'
+                $ref: '#/definitions/Comment'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2692,8 +2513,9 @@ paths:
     post:
       tags:
         - Email
-      summary: todo -  发送邮件
-      description: 用于后台管理员发送邮件，需要管理员权限
+      summary: 🔐发送邮件
+      description: |
+        **用于后台管理员发送邮件，需要管理员权限**
       parameters:
         - name: body
           in: body
@@ -2718,8 +2540,7 @@ paths:
     post:
       tags:
         - Captcha
-      summary: todo -  生成新的图形验证码
-      description: 调用该接口，会返回新的图形验证码
+      summary: 生成新的图形验证码
       responses:
         200:
           description: 图形验证码信息
@@ -2740,6 +2561,18 @@ paths:
           $ref: '#/responses/Error'
       security:
         - token: []
+
+  /trash:
+
+    delete:
+      tags:
+        - Trash
+      summary: todo - 🔐清空回收站
+      parameters:
+        - name: type
+          in: query
+          type: string
+          description: 资源类型，包括 `topic`、`question`、`answer`、`article`、`comment`。默认为空，即清空所有资源。
 
   /trash/users:
 
@@ -3175,16 +3008,16 @@ definitions:
       per_page:
         type: integer
         description: 每页条数
-      from:
+      previous:
         type: integer
-        description: 起始条数
-      to:
+        description: 上一页页码，为 `null` 表示没有上一页
+      next:
         type: integer
-        description: 结束条数
+        description: 下一页页码，为 `null` 表示没有下一页
       total:
         type: integer
         description: 数据总数
-      total_page:
+      pages:
         type: integer
         description: 总页数
 
@@ -3474,19 +3307,6 @@ definitions:
         type: string
         description: 大型封面地址
 
-  UserRelationship:
-    type: object
-    properties:
-      is_me:
-        type: boolean
-        description: 该用户是否是当前登录用户
-      is_following:
-        type: boolean
-        description: 登录用户是否已关注该用户
-      is_followed:
-        type: boolean
-        description: 该用户是否已关注登录用户
-
   Question:
     type: object
     properties:
@@ -3538,50 +3358,6 @@ definitions:
     items:
       $ref: '#/definitions/Question'
 
-  QuestionRelationship:
-    type: object
-    properties:
-      user:
-        $ref: '#/definitions/UserInRelationship'
-      topics:
-        $ref: '#/definitions/TopicsInRelationship'
-      is_following:
-        type: boolean
-        description: 当前登录用户是否已关注该问题
-
-  QuestionComment:
-    type: object
-    properties:
-      comment_id:
-        type: integer
-        description: 评论ID
-      question_id:
-        type: integer
-        description: 问题ID
-      user_id:
-        type: integer
-        description: 用户ID
-      content:
-        type: string
-        description: 评论内容
-      create_time:
-        type: integer
-        description: 发表时间
-      update_time:
-        type: integer
-        description: 🔐更新时间
-      delete_time:
-        type: integer
-        description: 🔐删除时间
-      relationship:
-        type: object
-        $ref: '#/definitions/CommentRelationship'
-
-  QuestionComments:
-    type: array
-    items:
-      $ref: '#/definitions/QuestionComment'
-
   Answer:
     type: object
     properties:
@@ -3620,45 +3396,6 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Answer'
-
-  AnswerRelationship:
-    type: object
-    properties:
-      user:
-        $ref: '#/definitions/UserInRelationship'
-
-  AnswerComment:
-    type: object
-    properties:
-      comment_id:
-        type: integer
-        description: 评论ID
-      answer_id:
-        type: integer
-        description: 回答ID
-      user_id:
-        type: integer
-        description: 用户ID
-      content:
-        type: string
-        description: 评论内容
-      create_time:
-        type: integer
-        description: 发表时间
-      update_time:
-        type: integer
-        description: 🔐更新时间
-      delete_time:
-        type: integer
-        description: 🔐删除时间
-      relationship:
-        type: object
-        $ref: '#/definitions/CommentRelationship'
-
-  AnswerComments:
-    type: array
-    items:
-      $ref: '#/definitions/AnswerComment'
 
   Topic:
     type: object
@@ -3709,13 +3446,6 @@ definitions:
         type: string
         description: 大型封面地址
 
-  TopicRelationship:
-    type: object
-    properties:
-      is_following:
-        type: boolean
-        description: 当前登录用户是否已关注该话题
-
   Article:
     type: object
     properties:
@@ -3761,53 +3491,8 @@ definitions:
     items:
       $ref: '#/definitions/Article'
 
-  ArticleRelationship:
-    type: object
-    properties:
-      user:
-        $ref: '#/definitions/UserInRelationship'
-      topics:
-        $ref: '#/definitions/TopicsInRelationship'
-      is_following:
-        type: boolean
-        description: 当前登录用户是否已关注该文章
-
-  ArticleComment:
-    type: object
-    properties:
-      comment_id:
-        type: integer
-        description: 评论ID
-      article_id:
-        type: integer
-        description: 文章ID
-      user_id:
-        type: integer
-        description: 用户ID
-      content:
-        type: string
-        description: 评论内容
-      create_time:
-        type: integer
-        description: 发表时间
-      update_time:
-        type: integer
-        description: 🔐更新时间
-      delete_time:
-        type: integer
-        description: 🔐删除时间
-      relationship:
-        type: object
-        $ref: '#/definitions/CommentRelationship'
-
-  ArticleComments:
-    type: array
-    items:
-      $ref: '#/definitions/AnswerComment'
-
   Comment:
     type: object
-    description: 该资源仅管理员可获取
     properties:
       comment_id:
         type: integer
@@ -3837,6 +3522,9 @@ definitions:
       delete_time:
         type: integer
         description: 删除时间
+      relationship:
+        type: object
+        $ref: '#/definitions/CommentRelationship'
 
   Comments:
     type: array
@@ -3948,13 +3636,61 @@ definitions:
     properties:
       email:
         type: string
-        description: 邮箱地址
+        description: 邮箱地址，多个地址间用“,”分隔，最多支持100个
       subject:
         type: string
         description: 邮件标题
       content:
         type: string
         description: 邮件内容
+
+  UserRelationship:
+    type: object
+    properties:
+      is_me:
+        type: boolean
+        description: 该用户是否是当前登录用户
+      is_following:
+        type: boolean
+        description: 登录用户是否已关注该用户
+      is_followed:
+        type: boolean
+        description: 该用户是否已关注登录用户
+
+  QuestionRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      topics:
+        $ref: '#/definitions/TopicsInRelationship'
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该问题
+
+  AnswerRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+
+  TopicRelationship:
+    type: object
+    properties:
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该话题
+
+  ArticleRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      topics:
+        $ref: '#/definitions/TopicsInRelationship'
+      is_following:
+        type: boolean
+        description: 当前登录用户是否已关注该文章
 
   CommentRelationship:
     type: object

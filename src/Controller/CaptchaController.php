@@ -25,6 +25,11 @@ class CaptchaController extends Controller
      */
     public function create(Request $request, Response $response): Response
     {
-        return $response;
+        $captcha = $this->captchaService->build();
+
+        return $this->success($response, [
+            'captcha_token' => $captcha['token'],
+            'captcha_image' => $captcha['image'],
+        ]);
     }
 }

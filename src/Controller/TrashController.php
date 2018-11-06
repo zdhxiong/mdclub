@@ -17,6 +17,18 @@ use Slim\Http\Response;
 class TrashController extends Controller
 {
     /**
+     * 清空回收站
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteAll(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取用户列表
      *
      * @param  Request  $request

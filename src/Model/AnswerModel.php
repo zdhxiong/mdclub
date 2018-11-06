@@ -25,6 +25,7 @@ class AnswerModel extends Model
         'content_markdown',
         'content_rendered',
         'comment_count',
+        'vote_count',
         'create_time',
         'update_time',
         'delete_time',
@@ -35,14 +36,5 @@ class AnswerModel extends Model
         return ArrayHelper::fill($data, [
             'comment_count' => 0,
         ]);
-    }
-
-    protected function afterSelect(array $data, bool $nest = true): array
-    {
-        if (!$nest) {
-            $data = [$data];
-        }
-
-        return $nest ? $data : $data[0];
     }
 }

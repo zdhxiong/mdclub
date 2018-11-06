@@ -25,21 +25,21 @@ class OptionService extends Service
         'cache_redis_password',
         'cache_redis_port',
         'cache_redis_username',
-        'cache_type',          // 缓存类型
-        'enable_markdown',     // 是否启用 markdown 支持
-        'language',            // 系统语言
-        'site_description',    // 站点简介
-        'site_gongan_beian',   // 站点公安备案号
-        'site_icp_beian',      // 站点 ICP 备案号
-        'site_keywords',       // 站点关键词
-        'site_name',           // 站点名称
-        'site_static_url',     // static 目录资源 URL 地址（以 / 结尾）
-        'smtp_host',           // SMTP 服务器地址
-        'smtp_password',       // SMTP 密码
-        'smtp_port',           // SMTP 端口
-        'smtp_reply_to',       // SMTP 邮件回复邮箱
-        'smtp_secure',         // SMTP 是否使用 ssl 连接
-        'smtp_username',       // SMTP 账户
+        'cache_type',
+        'enable_markdown',
+        'language',
+        'site_description',
+        'site_gongan_beian',
+        'site_icp_beian',
+        'site_keywords',
+        'site_name',
+        'site_static_url',
+        'smtp_host',
+        'smtp_password',
+        'smtp_port',
+        'smtp_reply_to',
+        'smtp_secure',
+        'smtp_username',
         'storage_aliyun_oss_access_id',
         'storage_aliyun_oss_access_secret',
         'storage_aliyun_oss_bucket',
@@ -52,18 +52,18 @@ class OptionService extends Service
         'storage_ftp_ssl',
         'storage_ftp_timeout',
         'storage_ftp_username',
-        'storage_local_dir',   // 本地文件存储目录（以 / 结尾）
+        'storage_local_dir',
         'storage_qiniu_access_id',
         'storage_qiniu_access_secret',
         'storage_qiniu_bucket',
         'storage_qiniu_endpoint',
-        'storage_type',        // 存储类型
+        'storage_type',
         'storage_upyun_bucket',
         'storage_upyun_endpoint',
         'storage_upyun_operator',
         'storage_upyun_password',
-        'storage_url',         // 本地文件存储的访问链接（以 / 结尾）
-        'theme',               // 主题名称
+        'storage_url',
+        'theme',
     ];
 
     /**

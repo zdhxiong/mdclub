@@ -155,77 +155,47 @@ class Service
     /**
      * 获取查询列表时的排序
      *
-     * order=field1,-field2 表示 field1 ASC, field2 DESC
+     * order=field 表示 field ASC
+     * order=-field 表示 field DESC
      *
      * @param  array $defaultOrder 默认排序；query 参数不存在时，该参数才生效
      * @return array
      */
     protected function getOrder(array $defaultOrder = []): array
     {
-        $order = [];
-        $orderQueryParam = $this->request->getQueryParam('order');
+        $result = [];
+        $order = $this->request->getQueryParam('order');
 
-        if ($orderQueryParam) {
-            $conditions = explode(',', $orderQueryParam);
-
-            foreach ($conditions as $condition) {
-                if (substr($condition, 0, 1) == '-') {
-                    $order[strtolower(substr($condition, 1))] = 'DESC';
-                } else {
-                    $order[strtolower($condition)] = 'ASC';
-                }
+        if ($order) {
+            if (strpos($order, '-') === 0) {
+                $result[substr($order, 1)] = 'DESC';
+            } else {
+                $result[$order] = 'ASC';
             }
+
+            $result = ArrayHelper::filter($result, $this->getAllowOrderFields());
         }
 
-        if (!$order) {
-            $order = $defaultOrder;
+        if (!$result) {
+            $result = $defaultOrder;
         }
 
-        $order = ArrayHelper::filter($order, $this->getAllowOrderFields());
-
-        return $order;
+        return $result;
     }
 
     /**
      * 查询列表时的条件
-     *
-     * filter=field1=value1,field2>value2,field3<=value3 表示 field1=value1 AND field2>value2 AND field3<=value3
      *
      * @param  array $defaultFilter 默认条件。query 中存在相同键名的参数时，将覆盖默认条件
      * @return array
      */
     protected function getWhere(array $defaultFilter = []): array
     {
-        $filter = [];
-        $filterQueryParam = $this->request->getQueryParam('filter');
+        $result = $this->request->getQueryParams();
+        $result = ArrayHelper::filter($result, $this->getAllowFilterFields());
+        $result = array_merge($defaultFilter, $result);
 
-        if ($filterQueryParam) {
-            $conditions = explode(',', $filterQueryParam);
-            $separators = ['>=', '<=', '>', '<', '='];
-
-            foreach ($conditions as $condition) {
-                foreach ($separators as $separator) {
-                    if (strpos($condition, $separator) > 0) {
-                        [$field, $value] = explode($separator, $condition);
-                        $filter[$field] = [$separator, $value];
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        $filter = ArrayHelper::filter($filter, $this->getAllowFilterFields());
-        $filter = array_merge($defaultFilter, $filter);
-
-        foreach ($filter as $key => $value) {
-            if (is_array($value)) {
-                unset($filter[$key]);
-                $filter[$key . '[' . $value[0] . ']'] = $value[1];
-            }
-        }
-
-        return $filter;
+        return $result;
     }
 
     /**

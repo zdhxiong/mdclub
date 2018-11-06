@@ -12,5 +12,18 @@ namespace App\Model;
 class ImageModel extends Model
 {
     protected $table = 'image';
-    protected $primaryKey = 'image_id';
+    protected $primaryKey = 'hash';
+    protected $timestamps = true;
+
+    const UPDATE_TIME = false;
+
+    protected $columns = [
+        'hash',
+        'filename',
+        'width',
+        'height',
+        'create_time',
+        'item_type',
+        'item_id',
+    ];
 }

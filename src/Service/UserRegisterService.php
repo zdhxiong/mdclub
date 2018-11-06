@@ -60,24 +60,30 @@ class UserRegisterService extends Service
 
         $this->doRegisterValidator($email, $emailCode, $username, $password, $device);
 
+        // 创建用户
         $userId = (int)$this->userModel->insert([
             'username' => htmlentities($username),
-            'email' => $email,
+            'email'    => $email,
             'password' => $password,
         ]);
 
-        // todo 生成默认头像
+        // 生成默认头像
+        $this->userAvatarService->delete($userId);
 
-        $userInfo = $this->userService->get($userId);
-
-        $token = $userInfo['token'] = StringHelper::guid();
+        // 生成 token
+        $token = StringHelper::guid();
         $requestTime = $this->request->getServerParam('REQUEST_TIME');
         $this->tokenModel->insert([
-            'user_id' => $userId,
-            'token' => $token,
+            'user_id'     => $userId,
+            'token'       => $token,
             'expire_time' => $requestTime + $this->tokenService->lifeTime,
-            'device' => $device,
+            'device'      => $device,
         ]);
+        $this->tokenService->setToken($token);
+
+        // 获取用户信息
+        $userInfo = $this->userService->get($userId, true);
+        $userInfo['token'] = $token;
 
         return $userInfo;
     }

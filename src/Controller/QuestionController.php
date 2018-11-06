@@ -41,6 +41,68 @@ class QuestionController extends Controller
     }
 
     /**
+     * 获取指定用户关注的问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getFollowing(Request $request, Response $response, int $user_id): Response
+    {
+        $following = $this->questionFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
+     * 获取我关注的问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getMyFollowing(Request $request, Response $response): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->questionFollowService->getFollowing($userId, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
+     * 添加关注
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function addFollow(Request $request, Response $response, int $question_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->questionFollowService->addFollow($userId, $question_id);
+
+        return $this->success($response);
+    }
+
+    /**
+     * 取消关注
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function deleteFollow(Request $request, Response $response, int $question_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->questionFollowService->deleteFollow($userId, $question_id);
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取问答列表
      *
      * @param  Request  $request
@@ -152,100 +214,6 @@ class QuestionController extends Controller
         $followers = $this->questionFollowService->getFollowers($question_id, true);
 
         return $this->success($response, $followers);
-    }
-
-    /**
-     * 获取指定用户关注的问题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @return Response
-     */
-    public function getFollowing(Request $request, Response $response, int $user_id): Response
-    {
-        $following = $this->questionFollowService->getFollowing($user_id, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 检查指定用户是否关注了指定问题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function isFollowing(Request $request, Response $response, int $user_id, int $question_id): Response
-    {
-        $isFollowing = $this->questionFollowService->isFollowing($user_id, $question_id);
-
-        return $this->success($response, $isFollowing);
-    }
-
-    /**
-     * 获取我关注的问题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getMyFollowing(Request $request, Response $response): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $following = $this->questionFollowService->getFollowing($userId, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 检查我是否关注了指定问题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function isMyFollowing(Request $request, Response $response, int $question_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $isFollowing = $this->questionFollowService->isFollowing($userId, $question_id);
-
-        return $this->success($response, $isFollowing);
-    }
-
-    /**
-     * 添加关注
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function addFollow(Request $request, Response $response, int $question_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->questionFollowService->addFollow($userId, $question_id);
-
-        return $this->success($response);
-    }
-
-    /**
-     * 取消关注
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function deleteFollow(Request $request, Response $response, int $question_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->questionFollowService->deleteFollow($userId, $question_id);
-
-        return $this->success($response);
     }
 
     /**

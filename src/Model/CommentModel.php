@@ -22,6 +22,7 @@ class CommentModel extends Model
         'commentable_type',
         'user_id',
         'content',
+        'vote_count',
         'create_time',
         'update_time',
         'delete_time',
