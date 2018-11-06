@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -25,6 +26,12 @@ class ImageController extends Controller
      */
     public function upload(Request $request, Response $response): Response
     {
-        return $response;
+        /** @var UploadedFileInterface $avatar */
+        $file = $request->getUploadedFiles()['image'] ?? null;
+
+        $hash = $this->imageService->upload($file);
+        $info = $this->imageService->getInfo($hash);
+
+        return $this->success($response, $info);
     }
 }

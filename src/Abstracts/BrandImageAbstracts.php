@@ -235,12 +235,10 @@ abstract class BrandImageAbstracts extends Service
                 // 裁剪成长方形
                 if ($imageHeight / $imageWidth > $this->imageScale) {
                     $height = round($imageWidth * $this->imageScale);
-                    $positionY = ($imageHeight - $height) / 2;
-                    $image->cropInPixel($imageWidth, $height, 0, $positionY);
+                    $image->cropInPixel($imageWidth, $height, 0, 0, 'MM');
                 } elseif ($imageHeight / $imageWidth < $this->imageScale) {
                     $width = round($imageHeight / $this->imageScale);
-                    $positionX = ($imageWidth - $width) / 2;
-                    $image->cropInPixel($width, $imageHeight, $positionX, 0);
+                    $image->cropInPixel($width, $imageHeight, 0, 0, 'MM');
                 }
             }
 
@@ -253,7 +251,6 @@ abstract class BrandImageAbstracts extends Service
                 }
 
                 $newImage->save(sys_get_temp_dir(), $filename);
-
                 $this->filesystem->write(
                     $this->getFullImageFilename($id, $filename, $size),
                     file_get_contents(sys_get_temp_dir() . '/' . $filename)

@@ -3605,9 +3605,6 @@ definitions:
       hash:
         type: string
         description: 图片的 hash 值
-      extension:
-        type: string
-        description: 图片扩展名
       filename:
         type: string
         description: 图片原始文件名
@@ -3620,12 +3617,24 @@ definitions:
       create_time:
         type: integer
         description: 图片上传时间
-      image_id:
+      item_type:
+        type: string
+        description: 图片关联对象类型
+      item_id:
         type: integer
-        description: 图片ID
-      url:
+        description: 图片管理对象ID
+      urls:
         type: object
-        description: 图片访问地址
+        properties:
+          o:
+            type: string
+            description: 原图地址
+          r:
+            type: string
+            description: 宽度固定，高度自适应的图片地址
+          t:
+            type: string
+            description: 固定宽高的缩略图地址
 
   Email:
     type: object

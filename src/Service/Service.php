@@ -41,6 +41,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read ArticleService                          articleService
  * @property-read CaptchaService                          captchaService
  * @property-read EmailService                            emailService
+ * @property-read ImageService                            imageService
  * @property-read InboxService                            inboxService
  * @property-read NotificationService                     notificationService
  * @property-read OptionService                           optionService

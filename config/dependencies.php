@@ -373,6 +373,7 @@ $modules = [
     \App\Service\ArticleService::class,
     \App\Service\CaptchaService::class,
     \App\Service\EmailService::class,
+    \App\Service\ImageService::class,
     \App\Service\InboxService::class,
     \App\Service\NotificationService::class,
     \App\Service\OptionService::class,

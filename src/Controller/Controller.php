@@ -20,6 +20,7 @@ use Slim\Http\Response;
  * @property-read \App\Service\ArticleService           articleService
  * @property-read \App\Service\CaptchaService           captchaService
  * @property-read \App\Service\EmailService             emailService
+ * @property-read \App\Service\ImageService             imageService
  * @property-read \App\Service\InboxService             inboxService
  * @property-read \App\Service\NotificationService      notificationService
  * @property-read \App\Service\OptionService            optionService
