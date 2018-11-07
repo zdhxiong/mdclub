@@ -1320,6 +1320,38 @@ paths:
       security:
         - token: []
 
+  /articles/{article_id}/voters:
+
+    get:
+      tags:
+        - Article
+      summary: todo - 获取文章的投票者
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+        - name: type
+          in: query
+          type: string
+          description: 投票类型
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/{article_id}/followers:
 
     get:
@@ -1424,35 +1456,22 @@ paths:
     get:
       tags:
         - Question
-      summary: todo - 获取问题列表
-      description: |
-        默认排序方式为 `update_time DESC`
-        <br/>
-        **管理员可排序的字段包括**：
-        `question_id`
-        `user_id`
-        `comment_count`
-        `answer_count`
-        `view_count`
-        `follower_count`
-        `last_answer_time`
-        `create_time`
-        `update_time`
-        <br/>
-        **管理员可筛选的字段包括**：
-        `question_id`
-        `user_id`
-        <br/>
-        **普通用户可排序的字段包括**：
-        `answer_count`
-        `update_time`
-        <br/>
-        **普通用户可筛选的字段包括**：无
+      summary: 获取问题列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          type: string
+          in: query
+          description: 排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`。在字段前加 `-` 表示倒序排列。
+        - name: question_id
+          type: integer
+          in: query
+          description: 按问题ID过滤
+        - name: user_id
+          type: integer
+          in: query
+          description: 按用户ID过滤
       responses:
         200:
           description: 问题列表
@@ -1472,9 +1491,9 @@ paths:
     post:
       tags:
         - Question
-      summary: todo(含 topic_ids 时未测试) -  发表问题
+      summary: 发表问题
       description: |
-        若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - name: body
           in: body
@@ -1540,8 +1559,7 @@ paths:
     get:
       tags:
         - Question
-      summary: todo - 获取指定问题信息
-      description: 获取指定问题信息
+      summary: 获取指定问题信息
       parameters:
         - name: question_id
           in: path
@@ -1564,17 +1582,54 @@ paths:
     patch:
       tags:
         - Question
-      summary: todo -  更新问题信息
-      description: 更新问题信息
+      summary: 更新问题信息
+      description: |
+        仅问题的作者和管理员可以修改问题信息。
+        <br/>
+        content_markdown 和 content_rendered 两个参数仅传入其中一个即可，若两个参数都传入，则以 content_markdown 为准。
+      parameters:
+        - name: question_id
+          type: integer
+          in: path
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: 标题
+              topic_ids:
+                type: string
+                description: 话题ID，多个ID用“,”分隔
+              content_markdown:
+                type: string
+                description: Markdown 格式的正文
+              content_rendered:
+                type: string
+                description: HTML 格式的正文
+      responses:
+        200:
+          description: 问题详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Question'
+        default:
+          $ref: '#/responses/Error'
       security:
         - token: []
 
     delete:
       tags:
         - Question
-      summary: todo - 删除指定问题
+      summary: 删除指定问题
       description: |
-        **仅管理员可调用该接口**
+        若问题还没有人回答，问题作者可以删除问题；若已有人回答，则不允许删除。
+        管理员始终可以删除问题。
       parameters:
         - name: question_id
           type: integer
@@ -1600,7 +1655,6 @@ paths:
       tags:
         - Question
       summary: todo - 为问题投票
-      description: 为问题投票
       parameters:
         - name: question_id
           in: path
@@ -1629,6 +1683,38 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Vote'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /questions/{question_id}/voters:
+
+    get:
+      tags:
+        - Question
+      summary: todo - 获取问题的投票者
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: type
+          in: query
+          type: string
+          description: 投票类型
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2166,6 +2252,38 @@ paths:
         security:
           - token: []
 
+  /answers/{answer_id}/voters:
+
+    get:
+      tags:
+        - Answer
+      summary: todo - 获取回答的投票者
+      parameters:
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+        - name: type
+          in: query
+          type: string
+          description: 投票类型
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /answers/{answer_id}/comments:
 
     get:
@@ -2385,12 +2503,44 @@ paths:
       security:
         - token: []
 
+  /comments/{comment_id}/voters:
+
+    get:
+      tags:
+        - Comment
+      summary: todo - 获取评论的投票者
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: type
+          in: query
+          type: string
+          description: 投票类型
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /reports:
 
     get:
       tags:
         - Report
-      summary: todo - 获取举报列表
+      summary: todo - 🔐获取举报列表
       description: 获取举报列表
       parameters:
         - $ref: '#/parameters/page'
@@ -2454,12 +2604,38 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - Report
+      summary: todo - 🔐处理完多个举报
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
+      parameters:
+        - name: report_id
+          in: query
+          type: string
+          description: 用“,”分隔的举报ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /reports/{report_id}:
 
     delete:
       tags:
         - Report
-      summary: todo - 处理完一个举报
+      summary: todo - 🔐处理完一个举报
       description: 处理完一个举报
       parameters:
         - name: report_id
@@ -2485,8 +2661,7 @@ paths:
     post:
       tags:
         - Image
-      summary: todo -  上传图片
-      description: 上传图片
+      summary: 上传图片
       consumes:
         - multipart/form-data
       parameters:
@@ -3055,12 +3230,6 @@ definitions:
           - redis
           - memcached
         description: 🔐缓存类型
-      enable_markdown:
-        type: integer
-        enum:
-          - 0
-          - 1
-        description: 🔐是否启用 markdown
       language:
         type: string
         enum:

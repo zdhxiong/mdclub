@@ -78,4 +78,17 @@ class CommentController extends Controller
     {
         return $response;
     }
+
+    /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
 }

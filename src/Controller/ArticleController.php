@@ -181,6 +181,19 @@ class ArticleController extends Controller
     }
 
     /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取指定文章的关注者
      *
      * @param  Request  $request

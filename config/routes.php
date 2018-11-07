@@ -87,7 +87,8 @@ $app->group('/api', function () {
     $this->get(   '/articles/{article_id:\d+}',                                 ArticleController::class . ':get');
     $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
     $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
-    $this->post(  '/articles/{article_id:\d+}/vote',                            ArticleController::class . ':vote');
+    $this->post(  '/articles/{article_id:\d+}/votes',                           ArticleController::class . ':vote');
+    $this->get(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':getVoters');
     $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
     $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
     $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
@@ -98,6 +99,7 @@ $app->group('/api', function () {
     $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
     $this->post(  '/questions/{question_id:\d+}/votes',                         QuestionController::class . ':vote');
+    $this->get(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':getVoters');
     $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
     $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
     $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
@@ -117,6 +119,7 @@ $app->group('/api', function () {
     $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');
     $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':delete');
     $this->post(  '/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':vote');
+    $this->get(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':getVoters');
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
 
@@ -125,9 +128,11 @@ $app->group('/api', function () {
     $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':update');
     $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':delete');
     $this->post(  '/comments/{comment_id:\d+}/vote',                            CommentController::class . ':vote');
+    $this->get(   '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':getVoters');
 
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
     $this->post(  '/reports',                                                   ReportController::class . ':create');
+    $this->delete('/reports',                                                   ReportController::class . ':batchDelete');
     $this->delete('/reports/{report_id:\d+}',                                   ReportController::class . ':delete');
 
     $this->post(  '/images',                                                    ImageController::class . ':upload');

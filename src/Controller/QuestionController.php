@@ -132,7 +132,7 @@ class QuestionController extends Controller
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            explode(',', $request->getParsedBodyParam('topic_ids'))
+            array_filter(explode(',', $request->getParsedBodyParam('topic_ids')))
         );
 
         $questionInfo = $this->questionService->get($questionId, true);
@@ -165,7 +165,21 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $this->roleService->userIdOrFail();
+
+        $title = $request->getParsedBodyParam('title');
+        $contentMarkdown = $request->getParsedBodyParam('content_markdown');
+        $contentRendered = $request->getParsedBodyParam('content_rendered');
+        $topicIds = $request->getParsedBodyParam('topic_ids');
+
+        if ($topicIds) {
+            $topicIds = array_filter(explode(',', $topicIds));
+        }
+
+        $this->questionService->update($question_id, $title, $contentMarkdown, $contentRendered, $topicIds);
+        $questionInfo = $this->questionService->get($question_id, true);
+
+        return $this->success($response, $questionInfo);
     }
 
     /**
@@ -197,6 +211,19 @@ class QuestionController extends Controller
      * @return Response
      */
     public function vote(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

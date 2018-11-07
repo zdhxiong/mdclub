@@ -152,6 +152,21 @@ class ErrorConstant
      */
     const QUESTION_NOT_FOLLOWING      = [300003, '尚未关注该问题'];
 
+    /**
+     * 仅问题作者可以编辑问题
+     */
+    const QUESTION_ONLY_AUTHOR_CAN_EDIT = [300004, '仅问题作者可以编辑问题'];
+
+    /**
+     * 仅问题作者可以删除问题
+     */
+    const QUESTION_ONLY_AUTHOR_CAN_DELETE = [300005, '仅问题作者可以删除问题'];
+
+    /**
+     * 仅在问题还没有回答时，才能删除问题
+     */
+    const QUESTION_ONLY_NO_ANSWER_CAN_DELETE = [300005, '仅在问题还没有回答时，才能删除问题'];
+
 
     // ====================================
     // ==================================== 回答相关错误

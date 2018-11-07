@@ -52,4 +52,16 @@ class ReportController extends Controller
     {
         return $response;
     }
+
+    /**
+     * 批量删除举报
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDelete(Request $request, Response $response): Response
+    {
+        return $response;
+    }
 }

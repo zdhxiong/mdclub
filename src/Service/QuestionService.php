@@ -42,20 +42,7 @@ class QuestionService extends Service implements FollowableInterface
      */
     protected function getAllowOrderFields(): array
     {
-        return $this->roleService->managerId()
-            ? [
-                'question_id',
-                'user_id',
-                'comment_count',
-                'answer_count',
-                'view_count',
-                'follower_count',
-                'last_answer_time',
-                'create_time',
-                'update_time',
-                'delete_time',
-            ]
-            : [];
+        return ['vote_count', 'create_time', 'update_time'];
     }
 
     /**
@@ -65,31 +52,26 @@ class QuestionService extends Service implements FollowableInterface
      */
     protected function getAllowFilterFields(): array
     {
-        return $this->roleService->managerId()
-            ? [
-                'question_id',
-                'user_id',
-                'delete_time',
-            ]
-            : [];
+        return ['question_id', 'user_id'];
     }
 
     /**
-     * 获取用户列表
+     * 获取问题列表
      *
      * @param  bool $withRelationship
      * @return array
      */
     public function getList(bool $withRelationship = false): array
     {
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
-
         $list = $this->questionModel
             ->where($this->getWhere())
-            ->order($this->getOrder(['question_id' => 'DESC']))
-            ->field($excludeFields, true)
+            ->order($this->getOrder(['update_time' => 'DESC']))
+            ->field($this->getPrivacyFields(), true)
             ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -185,33 +167,23 @@ class QuestionService extends Service implements FollowableInterface
         // 验证正文不能为空
         $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
         $contentRendered = HtmlHelper::removeXss($contentRendered);
-        $isEnableMarkdown = $this->optionService->get('enable_markdown');
 
-        if ($isEnableMarkdown) {
-            // 启用 markdown 时，content_markdown 和 content_rendered 至少需传入一个；都传入时，以 content_markdown 为准
-            if (!$contentMarkdown && !$contentRendered) {
-                $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
-            } elseif (!$contentMarkdown) {
-                $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
-            } else {
-                $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
-            }
+        // content_markdown 和 content_rendered 至少需传入一个；都传入时，以 content_markdown 为准
+        if (!$contentMarkdown && !$contentRendered) {
+            $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
+        } elseif (!$contentMarkdown) {
+            $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
         } else {
-            // 禁用 markdown 时，必须传入 content_rendered
-            if (!$contentRendered) {
-                $errors['content_rendered'] = '正文不能为空';
-            } else {
-                $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
-            }
+            $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
         }
 
         // 验证正文长度
-        if (!$errors && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)) {
+        if (
+               !isset($errors['content_markdown'])
+            && !isset($errors['content_rendered'])
+            && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)
+        ) {
             $errors['content_markdown'] = $errors['content_rendered'] = '正文不能超过 100000 个字';
-
-            if (!$isEnableMarkdown) {
-                unset($errors['content_markdown']);
-            }
         }
 
         if ($errors) {
@@ -250,9 +222,9 @@ class QuestionService extends Service implements FollowableInterface
      */
     public function get(int $questionId, bool $withRelationship = false): array
     {
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
-        $questionInfo = $this->questionModel->field($excludeFields, true)->get($questionId);
+        $questionInfo = $this->questionModel
+            ->field($this->getPrivacyFields(), true)
+            ->get($questionId);
 
         if (!$questionInfo) {
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
@@ -278,11 +250,9 @@ class QuestionService extends Service implements FollowableInterface
             return [];
         }
 
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
         $questions = $this->questionModel
             ->where(['question_id' => $questionIds])
-            ->field($excludeFields, true)
+            ->field($this->getPrivacyFields(), true)
             ->select();
 
         if ($withRelationship) {
@@ -290,6 +260,156 @@ class QuestionService extends Service implements FollowableInterface
         }
 
         return $questions;
+    }
+
+    /**
+     * 更新问题
+     *
+     * @param  int    $questionId
+     * @param  string $title
+     * @param  string $contentMarkdown
+     * @param  string $contentRendered
+     * @param  array  $topicIds
+     * @return bool
+     */
+    public function update(
+        int    $questionId,
+        string $title = null,
+        string $contentMarkdown = null,
+        string $contentRendered = null,
+        array  $topicIds = null
+    ): bool {
+        [
+            $data,
+            $topicIds
+        ] = $this->updateValidator(
+            $questionId,
+            $title,
+            $contentMarkdown,
+            $contentRendered,
+            $topicIds
+        );
+
+        // 更新问题信息
+        if ($data) {
+            $this->questionModel
+                ->where(['question_id' => $questionId])
+                ->update($data);
+        }
+
+        // 更新话题关系
+        if (!is_null($topicIds)) {
+            $this->topicableModel
+                ->where(['topicable_id' => $questionId, 'topicable_type' => 'question'])
+                ->delete();
+
+            $topicable = [];
+            foreach ($topicIds as $topicId) {
+                $topicable[] = [
+                    'topic_id'       => $topicId,
+                    'topicable_id'   => $questionId,
+                    'topicable_type' => 'question',
+                ];
+            }
+
+            if ($topicable) {
+                $this->topicableModel->insert($topicable);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 更新问题前的字段验证
+     *
+     * @param  int    $questionId
+     * @param  string $title
+     * @param  string $contentMarkdown
+     * @param  string $contentRendered
+     * @param  array $topicIds
+     * @return array
+     */
+    public function updateValidator(
+        int    $questionId,
+        string $title = null,
+        string $contentMarkdown = null,
+        string $contentRendered = null,
+        array  $topicIds = null
+    ): array {
+        $data = [];
+
+        $questionInfo = $this->questionModel->get($questionId);
+        if (!$questionInfo) {
+            throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
+        }
+
+        $userId = $this->roleService->userIdOrFail();
+        if ($questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {
+            throw new ApiException(ErrorConstant::QUESTION_ONLY_AUTHOR_CAN_EDIT);
+        }
+
+        $errors = [];
+
+        // 验证标题
+        if (!is_null($title)) {
+            if (!ValidatorHelper::isMin($title, 2)) {
+                $errors['title'] = '标题长度不能小于 2 个字符';
+            } elseif (!ValidatorHelper::isMax($title, 80)) {
+                $errors['title'] = '标题长度不能超过 80 个字符';
+            } else {
+                $data['title'] = $title;
+            }
+        }
+
+        // 验证正文
+        if (!is_null($contentMarkdown) || !is_null($contentRendered)) {
+            if (!is_null($contentMarkdown)) {
+                $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
+            }
+
+            if (!is_null($contentRendered)) {
+                $contentRendered = HtmlHelper::removeXss($contentRendered);
+            }
+
+            if (!$contentMarkdown && !$contentRendered) {
+                $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
+            } elseif (!$contentMarkdown) {
+                $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
+            } else {
+                $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
+            }
+
+            // 验证正文长度
+            if (
+                   !isset($errors['content_markdown'])
+                && !isset($errors['content_rendered'])
+                && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)
+            ) {
+                $errors['content_markdown'] = $errors['content_rendered'] = '正文不能超过 100000 个字';
+            }
+
+            if (!isset($errors['content_markdown']) && !isset($errors['content_rendered'])) {
+                $data['content_markdown'] = $contentMarkdown;
+                $data['content_rendered'] = $contentRendered;
+            }
+        }
+
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        if (!is_null($topicIds)) {
+            $isTopicIdsExist = $this->topicService->hasMultiple($topicIds);
+            $topicIds = [];
+            foreach ($isTopicIdsExist as $topicId => $isExist) {
+                if ($isExist) {
+                    $topicIds[] = $topicId;
+                }
+            }
+        }
+
+        return [$data, $topicIds];
     }
 
     /**
@@ -350,6 +470,17 @@ class QuestionService extends Service implements FollowableInterface
         }
 
         return true;
+    }
+
+    /**
+     * 对数据库中取出的问题信息进行处理
+     *
+     * @param  array $questionInfo
+     * @return array
+     */
+    public function handle(array $questionInfo): array
+    {
+        return $questionInfo;
     }
 
     /**

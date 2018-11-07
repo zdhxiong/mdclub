@@ -26,7 +26,6 @@ class OptionService extends Service
         'cache_redis_port',
         'cache_redis_username',
         'cache_type',
-        'enable_markdown',
         'language',
         'site_description',
         'site_gongan_beian',

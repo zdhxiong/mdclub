@@ -67,9 +67,9 @@ class ArticleService extends Service implements FollowableInterface
      */
     public function get(int $articleId, bool $withRelationship = false): array
     {
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
-        $articleInfo = $this->articleModel->field($excludeFields, true)->get($articleId);
+        $articleInfo = $this->articleModel
+            ->field($this->getPrivacyFields(), true)
+            ->get($articleId);
 
         if (!$articleInfo) {
             throw new ApiException(ErrorConstant::ARTICLE_NOT_FOUND);
@@ -95,11 +95,9 @@ class ArticleService extends Service implements FollowableInterface
             return [];
         }
 
-        $excludeFields = $this->optionService->get('enable_markdown') ? [] : ['content_markdown'];
-        $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
         $articles = $this->articleModel
             ->where(['article_id' => $articleIds])
-            ->field($excludeFields, true)
+            ->field($this->getPrivacyFields(), true)
             ->select();
 
         if ($withRelationship) {
