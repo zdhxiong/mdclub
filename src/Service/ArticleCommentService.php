@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\CommentAbstracts;
+use App\Abstracts\CommentableAbstracts;
 use App\Interfaces\CommentableInterface;
 
 /**
@@ -13,7 +13,7 @@ use App\Interfaces\CommentableInterface;
  * Class ArticleCommentService
  * @package App\Service
  */
-class ArticleCommentService extends CommentAbstracts implements CommentableInterface
+class ArticleCommentService extends CommentableAbstracts implements CommentableInterface
 {
 
 }

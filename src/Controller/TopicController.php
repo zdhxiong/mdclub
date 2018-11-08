@@ -207,7 +207,7 @@ class TopicController extends Controller
         $topicIds = $request->getQueryParam('topic_id');
 
         if ($topicIds) {
-            $topicIds = array_filter(array_slice(explode(',', $topicIds), 0, 100));
+            $topicIds = array_unique(array_filter(array_slice(explode(',', $topicIds), 0, 100)));
         }
 
         if ($topicIds) {

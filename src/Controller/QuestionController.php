@@ -132,7 +132,7 @@ class QuestionController extends Controller
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            array_filter(explode(',', $request->getParsedBodyParam('topic_ids')))
+            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_ids'))))
         );
 
         $questionInfo = $this->questionService->get($questionId, true);
@@ -165,15 +165,13 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Response $response, int $question_id): Response
     {
-        $this->roleService->userIdOrFail();
-
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
         $contentRendered = $request->getParsedBodyParam('content_rendered');
         $topicIds = $request->getParsedBodyParam('topic_ids');
 
         if ($topicIds) {
-            $topicIds = array_filter(explode(',', $topicIds));
+            $topicIds = array_unique(array_filter(explode(',', $topicIds)));
         }
 
         $this->questionService->update($question_id, $title, $contentMarkdown, $contentRendered, $topicIds);
@@ -192,12 +190,31 @@ class QuestionController extends Controller
      */
     public function delete(Request $request, Response $response, int $question_id): Response
     {
-        // 暂定只有管理员能删除问题
+        $this->questionService->delete($question_id);
+
+        return $this->success($response);
+    }
+
+    /**
+     * 批量删除问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDelete(Request $request, Response $response): Response
+    {
         $this->roleService->managerIdOrFail();
 
-        $softDelete = !!$request->getQueryParam('soft_delete', 1);
+        $questionIds = $request->getQueryParam('question_id');
 
-        $this->questionService->delete($question_id, $softDelete);
+        if ($questionIds) {
+            $questionIds = array_unique(array_filter(array_slice(explode(',', $questionIds), 0, 100)));
+        }
+
+        if ($questionIds) {
+            $this->questionService->batchDelete($questionIds);
+        }
 
         return $this->success($response);
     }

@@ -16,7 +16,7 @@ use App\Service\Service;
  * Class FollowAbstracts
  * @package App\Abstracts
  */
-abstract class FollowAbstracts extends Service
+abstract class FollowableAbstracts extends Service
 {
     /**
      * 关注类型（article、question、topic、user）

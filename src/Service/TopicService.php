@@ -347,9 +347,8 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      * 软删除话题
      *
      * @param  int  $topicId
-     * @return bool
      */
-    public function delete(int $topicId): bool
+    public function delete(int $topicId): void
     {
         $rowCount = $this->topicModel->delete($topicId);
 
@@ -357,7 +356,15 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
         }
 
-        /** @var Medoo $database */
+        // 关注了该话题的用户的 following_topic_count - 1
+        $followerIds = $this->followModel
+            ->where(['followable_id' => $topicId, 'followable_type' => 'topic'])
+            ->pluck('user_id');
+
+        $this->userModel
+            ->where(['user_id' => $followerIds])
+            ->update(['following_topic_count[-]' => 1]);
+
         /*$database = $this->container->get(Medoo::class);
         $prefix = $this->container->get('settings')['database']['prefix'];
 
@@ -378,8 +385,6 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
             // 删除封面图片
             $this->deleteImage($topicId, $topicInfo['cover']);
         }*/
-
-        return true;
     }
 
     /**
@@ -391,7 +396,24 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
     {
         $this->topicModel->where(['topic_id' => $topicIds])->delete();
 
-        /** @var Medoo $database */
+        // 关注了这些话题的用户的 following_topic_count - 1
+        $followerIds = $this->followModel
+            ->where(['followable_id' => $topicIds, 'followable_type' => 'topic'])
+            ->pluck('user_id');
+
+        $userTopicCount = [];
+        foreach ($followerIds as $followerId) {
+            isset($userTopicCount[$followerId])
+                ? $userTopicCount[$followerId] += 1
+                : $userTopicCount[$followerId] = 1;
+        }
+
+        foreach ($userTopicCount as $followerId => $count) {
+            $this->userModel
+                ->where(['user_id' => $followerId])
+                ->update(['following_topic_count[-]' => $count]);
+        }
+
         /*$database = $this->container->get(Medoo::class);
         $prefix = $this->container->get('settings')['database']['prefix'];
 

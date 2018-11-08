@@ -139,7 +139,7 @@ class UserController extends Controller
         $userIds = $request->getQueryParam('user_id');
 
         if ($userIds) {
-            $userIds = array_filter(array_slice(explode(',', $userIds), 0, 100));
+            $userIds = array_unique(array_filter(array_slice(explode(',', $userIds), 0, 100)));
         }
 
         if ($userIds) {

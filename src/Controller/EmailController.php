@@ -30,7 +30,7 @@ class EmailController extends Controller
         $subject = $request->getParsedBodyParam('subject', '');
         $content = $request->getParsedBodyParam('content', '');
 
-        $emailArray = array_filter(array_slice(explode(',', $email), 0, 100));
+        $emailArray = array_unique(array_filter(array_slice(explode(',', $email), 0, 100)));
         $this->emailService->send($emailArray, $subject, $content);
 
         return $this->success($response, [

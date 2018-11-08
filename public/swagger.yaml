@@ -472,8 +472,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo - 获取指定用户关注的问题列表
-      description: 获取指定用户关注的问题列表
+      summary: 获取指定用户关注的问题列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -533,7 +532,6 @@ paths:
       tags:
         - TopicFollow
       summary: 获取指定用户关注的话题列表
-      description: 获取指定用户关注的话题列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -930,8 +928,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo - 获取登录用户关注的问题
-      description: 获取登录用户关注的问题
+      summary: 获取登录用户关注的问题
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -956,8 +953,7 @@ paths:
     put:
       tags:
         - QuestionFollow
-      summary: todo - 添加关注
-      description: 取消关注
+      summary: 添加关注
       parameters:
         - name: question_id
           in: path
@@ -980,8 +976,7 @@ paths:
     delete:
       tags:
         - QuestionFollow
-      summary: todo - 取消关注
-      description: 取消关注
+      summary: 取消关注
       parameters:
         - name: question_id
           in: path
@@ -1083,7 +1078,6 @@ paths:
       tags:
         - TopicFollow
       summary: 获取当前用户关注的话题列表
-      description: 获取当前用户关注的话题列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -1531,7 +1525,7 @@ paths:
     delete:
       tags:
         - Question
-      summary: todo - 🔐批量删除问题
+      summary: 🔐批量删除问题
       description: |
         **仅管理员可调用该接口**
         只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
@@ -1628,8 +1622,7 @@ paths:
         - Question
       summary: 删除指定问题
       description: |
-        若问题还没有人回答，问题作者可以删除问题；若已有人回答，则不允许删除。
-        管理员始终可以删除问题。
+        仅问题作者和管理员可以删除问题
       parameters:
         - name: question_id
           type: integer
@@ -1725,8 +1718,7 @@ paths:
     get:
       tags:
         - QuestionFollow
-      summary: todo - 获取指定问题的关注者
-      description: 获取指定问题的关注者
+      summary: 获取指定问题的关注者
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'

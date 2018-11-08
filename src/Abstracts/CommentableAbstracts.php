@@ -12,7 +12,7 @@ use App\Service\Service;
  * Class CommentAbstracts
  * @package App\Abstracts
  */
-abstract class CommentAbstracts extends Service
+abstract class CommentableAbstracts extends Service
 {
 
 }

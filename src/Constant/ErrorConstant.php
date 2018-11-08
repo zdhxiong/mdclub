@@ -162,11 +162,6 @@ class ErrorConstant
      */
     const QUESTION_ONLY_AUTHOR_CAN_DELETE = [300005, '仅问题作者可以删除问题'];
 
-    /**
-     * 仅在问题还没有回答时，才能删除问题
-     */
-    const QUESTION_ONLY_NO_ANSWER_CAN_DELETE = [300005, '仅在问题还没有回答时，才能删除问题'];
-
 
     // ====================================
     // ==================================== 回答相关错误

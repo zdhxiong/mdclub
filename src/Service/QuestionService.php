@@ -7,7 +7,6 @@ namespace App\Service;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
-use App\Helper\ArrayHelper;
 use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
@@ -133,6 +132,11 @@ class QuestionService extends Service implements FollowableInterface
 
         // 自动关注该问题
         $this->questionFollowService->addFollow($userId, $questionId);
+
+        // 用户的 question_count + 1
+        $this->userModel
+            ->where(['user_id' => $userId])
+            ->update(['question_count[+]' => 1]);
 
         return $questionId;
     }
@@ -314,12 +318,13 @@ class QuestionService extends Service implements FollowableInterface
     ): array {
         $data = [];
 
+        $userId = $this->roleService->userIdOrFail();
         $questionInfo = $this->questionModel->get($questionId);
+
         if (!$questionInfo) {
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
         }
 
-        $userId = $this->roleService->userIdOrFail();
         if ($questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {
             throw new ApiException(ErrorConstant::QUESTION_ONLY_AUTHOR_CAN_EDIT);
         }
@@ -391,60 +396,91 @@ class QuestionService extends Service implements FollowableInterface
      * 删除问题
      *
      * @param  int  $questionId
-     * @param  bool $softDelete
-     * @return bool
      */
-    public function delete(int $questionId, bool $softDelete): bool
+    public function delete(int $questionId): void
     {
-        // 删除问题
-        if (!$softDelete) {
-            $this->questionModel->force();
-        }
+        $userId = $this->roleService->userIdOrFail();
+        $questionInfo = $this->questionModel->field('user_id')->get($questionId);
 
-        $rowCount = $this->questionModel->delete($questionId);
-        if (!$rowCount) {
+        if (!$questionInfo) {
             throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
         }
 
-        // TODO 删除问题后更新关联数据
-
-        if (!$softDelete) {
-            // 删除关联的话题
-            $this->topicableModel
-                ->where([
-                    'topicable_id'   => $questionId,
-                    'topicable_type' => 'question',
-                ])
-                ->delete();
-
-            // 删除问题下的评论
-            $this->commentModel
-                ->where([
-                    'commentable_id' => $questionId,
-                    'commentable_type' => 'question',
-                ])
-                ->force()
-                ->delete();
-
-            // 删除问题下的回答
-            $answers = $this->answerModel
-                ->where([
-                    'question_id' => $questionId,
-                ])->select();
-            $this->answerModel
-                ->where([
-                    ''
-                ]);
-
-            // 删除回答下的所有评论
-
-
-
-            // 删除问题关注记录
-
+        if (!$questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {
+            throw new ApiException(ErrorConstant::QUESTION_ONLY_AUTHOR_CAN_DELETE);
         }
 
-        return true;
+        $this->questionModel->delete($questionId);
+
+        // 该问题的作者的 question_count - 1
+        $this->userModel
+            ->where(['user_id' => $questionInfo['user_id']])
+            ->update(['question_count[-]' => 1]);
+
+        // 关注该问题的用户的 following_question_count - 1
+        $followerIds = $this->followModel
+            ->where(['followable_id' => $questionId, 'followable_type' => 'question'])
+            ->pluck('user_id');
+
+        $this->userModel
+            ->where(['user_id' => $followerIds])
+            ->update(['following_question_count[-]' => 1]);
+    }
+
+    /**
+     * 批量软删除问题
+     *
+     * @param array $questionIds
+     */
+    public function batchDelete(array $questionIds): void
+    {
+        $questions = $this->questionModel
+            ->field(['question_id', 'user_id'])
+            ->where(['question_id' => $questionIds])
+            ->select();
+
+        if (!$questions) {
+            return;
+        }
+
+        $questionIds = array_column($questions, 'question_id');
+        $this->questionModel->where(['question_id' => $questionIds])->delete();
+
+        $users = [];
+
+        // 这些问题的作者的 question_count - 1
+        foreach ($questions as $question) {
+            isset($users[$question['user_id']]['question_count'])
+                ? $users[$question['user_id']]['question_count'] += 1
+                : $users[$question['user_id']]['question_count'] = 1;
+        }
+
+        // 关注这些问题的用户的 following_question_count - 1
+        $followerIds = $this->followModel
+            ->where(['followable_id' => $questionIds, 'followable_type' => 'question'])
+            ->pluck('user_id');
+
+        foreach ($followerIds as $followerId) {
+            isset($users[$followerId]['following_question_count'])
+                ? $users[$followerId]['following_question_count'] += 1
+                : $users[$followerId]['following_question_count'] = 1;
+        }
+
+        foreach ($users as $userId => $user) {
+            $update = [];
+
+            if (isset($user['question_count'])) {
+                $update['question_count[-]'] = $user['question_count'];
+            }
+
+            if (isset($user['following_question_count'])) {
+                $update['following_question_count[-]'] = $user['following_question_count'];
+            }
+
+            $this->userModel
+                ->where(['user_id' => $userId])
+                ->update($update);
+        }
     }
 
     /**

@@ -95,6 +95,7 @@ $app->group('/api', function () {
 
     $this->get(   '/questions',                                                 QuestionController::class . ':getList');
     $this->post(  '/questions',                                                 QuestionController::class . ':create');
+    $this->delete('/questions',                                                 QuestionController::class . ':batchDelete');
     $this->get(   '/questions/{question_id:\d+}',                               QuestionController::class . ':get');
     $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
