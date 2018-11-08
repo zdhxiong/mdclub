@@ -16,7 +16,7 @@ class VoteModel extends Model
 
     const UPDATE_TIME = false;
 
-    protected $columns = [
+    public $columns = [
         'user_id',
         'voteable_id',
         'voteable_type',

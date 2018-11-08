@@ -58,24 +58,35 @@ abstract class FollowAbstracts extends Service
     {
         $this->followableIdOrFail($followableId);
 
-        $list = $this->followModel
-            ->where([
-                'followable_id' => $followableId,
-                'followable_type' => $this->followableType,
+        // 需要查询的字段
+        $fields = ArrayHelper::remove(
+            $this->userModel->columns,
+            $this->userService->getPrivacyFields()
+        );
+        foreach ($fields as &$field) {
+            $field = 'user.' . $field;
+        }
+
+        $list = $this->userModel
+            ->join([
+                '[><]follow' => ['user_id' => 'user_id'],
             ])
-            ->field('user_id')
-            ->order(['create_time' => 'DESC'])
+            ->where([
+                'follow.followable_id' => $followableId,
+                'follow.followable_type' => $this->followableType,
+                'user.disable_time' => 0,
+            ])
+            ->order([
+                'follow.create_time' => 'DESC'
+            ])
+            ->field($fields)
             ->paginate();
 
-        $followerIds = array_column($list['data'], 'user_id');
-        $followers = $this->userService->getMultiple($followerIds);
-        $list['data'] = ArrayHelper::merge($list['data'], $followers, 'user_id', 'user_id');
-
         if ($withRelationship) {
-            if ($this->followableType == 'user') {
-                $relationship = $followableId == $this->roleService->userId() ? ['is_followed' => true] : [];
-            } else {
-                $relationship = [];
+            $relationship = [];
+
+            if ($this->followableType == 'user' && $followableId == $this->roleService->userId()) {
+                $relationship = ['is_followed' => true];
             }
 
             $list['data'] = $this->userService->addRelationship($list['data'], $relationship);
@@ -95,21 +106,34 @@ abstract class FollowAbstracts extends Service
     {
         $this->userIdOrFail($userId);
 
-        $list = $this->followModel
-            ->where([
-                'user_id' => $userId,
-                'followable_type' => $this->followableType,
+        // 需要查询的字段
+        $fields = ArrayHelper::remove(
+            $this->followableTargetModel->columns,
+            $this->followableTargetService->getPrivacyFields()
+        );
+        foreach ($fields as &$field) {
+            $field = $this->followableType . '.' . $field;
+        }
+
+        $list = $this->followableTargetModel
+            ->join([
+                '[><]follow' => [$this->followableType . '_id' => 'followable_id'],
             ])
-            ->field('followable_id')
-            ->order(['create_time' => 'DESC'])
+            ->where([
+                'follow.user_id' => $userId,
+                'follow.followable_type' => $this->followableType,
+            ])
+            ->order([
+                'follow.create_time' => 'DESC'
+            ])
+            ->field($fields)
             ->paginate();
 
-        $followingIds = array_column($list['data'], 'followable_id');
-        $following = $this->followableTargetService->getMultiple($followingIds);
-        $list['data'] = ArrayHelper::merge($list['data'], $following, 'followable_id', $this->followableType . '_id');
-
         if ($withRelationship) {
-            $relationship = $userId == $this->roleService->userId() ? ['is_following' => true] : [];
+            $relationship = $userId == $this->roleService->userId()
+                ? ['is_following' => true]
+                : [];
+
             $list['data'] = $this->followableTargetService->addRelationship($list['data'], $relationship);
         }
 

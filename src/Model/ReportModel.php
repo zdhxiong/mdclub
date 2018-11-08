@@ -16,7 +16,7 @@ class ReportModel extends Model
 
     const UPDATE_TIME = false;
 
-    protected $columns = [
+    public $columns = [
         'report_id',
         'reportable_id',
         'reportable_type',

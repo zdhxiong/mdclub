@@ -14,7 +14,7 @@ class OptionModel extends Model
     protected $table = 'option';
     protected $primaryKey = 'name';
 
-    protected $columns = [
+    public $columns = [
         'name',
         'value',
     ];

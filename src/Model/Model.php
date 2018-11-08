@@ -76,7 +76,7 @@ class Model
      *
      * @var array
      */
-    protected $columns;
+    public $columns;
 
     /**
      * 是否启用软删除
@@ -633,7 +633,6 @@ class Model
     public function count($reset = true): int
     {
         $join = $this->join;
-        $columns = $this->getColumns();
         $where = $this->getWhere();
 
         unset($where['ORDER'], $where['LIMIT']);
@@ -643,7 +642,7 @@ class Model
         }
 
         if ($join) {
-            return $this->database->count($this->table, $join, $columns, $where);
+            return $this->database->count($this->table, $join, '*', $where);
         } else {
             return $this->database->count($this->table, $where);
         }

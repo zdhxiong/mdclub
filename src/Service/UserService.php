@@ -198,36 +198,6 @@ class UserService extends Service implements FollowableInterface
     }
 
     /**
-     * 获取多个用户信息
-     *
-     * @param  array $userIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $userIds, bool $withRelationship = false): array
-    {
-        if (!$userIds) {
-            return [];
-        }
-
-        $excludeFields = ArrayHelper::push(['password'], $this->getPrivacyFields());
-        $users = $this->userModel
-            ->where(['user_id' => $userIds])
-            ->field($excludeFields, true)
-            ->select();
-
-        foreach ($users as &$user) {
-            $user = $this->handle($user);
-        }
-
-        if ($withRelationship) {
-            $users = $this->userService->addRelationship($users);
-        }
-
-        return $users;
-    }
-
-    /**
      * 根据用户ID更新用户信息
      *
      * @param  int   $userId

@@ -18,7 +18,7 @@ class ArticleModel extends Model
     protected $timestamps = true;
     protected $softDelete = true;
 
-    protected $columns = [
+    public $columns = [
         'article_id',
         'user_id',
         'title',

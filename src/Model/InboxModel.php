@@ -17,7 +17,7 @@ class InboxModel extends Model
 
     const UPDATE_TIME = false;
 
-    protected $columns = [
+    public $columns = [
         'inbox_id',
         'receiver_id',
         'sender_id',

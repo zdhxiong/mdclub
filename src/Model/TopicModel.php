@@ -17,7 +17,7 @@ class TopicModel extends Model
     protected $primaryKey = 'topic_id';
     protected $softDelete = true;
 
-    protected $columns = [
+    public $columns = [
         'topic_id',
         'name',
         'cover',

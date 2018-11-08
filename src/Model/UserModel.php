@@ -20,7 +20,7 @@ class UserModel extends Model
 
     // 被禁用的用户也是真实用户，不作为软删除字段处理
 
-    protected $columns = [
+    public $columns = [
         'user_id',
         'username',
         'email',

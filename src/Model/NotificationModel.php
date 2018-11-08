@@ -17,7 +17,7 @@ class NotificationModel extends Model
 
     const UPDATE_TIME = false;
 
-    protected $columns = [
+    public $columns = [
         'notification_id',
         'user_id',
         'content',

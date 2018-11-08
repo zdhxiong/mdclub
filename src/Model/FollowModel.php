@@ -17,7 +17,7 @@ class FollowModel extends Model
 
     const UPDATE_TIME = false; // 不维护 update_time 字段
 
-    protected $columns = [
+    public $columns = [
         'user_id',
         'followable_id',
         'followable_type',

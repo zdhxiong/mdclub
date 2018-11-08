@@ -16,7 +16,7 @@ class CommentModel extends Model
     protected $timestamps = true;
     protected $softDelete = true;
 
-    protected $columns = [
+    public $columns = [
         'comment_id',
         'commentable_id',
         'commentable_type',

@@ -2077,7 +2077,7 @@ paths:
       tags:
         - TopicFollow
       summary: 获取指定话题的关注者
-      description: 获取指定话题的关注者
+      description: 获取指定话题的关注者（不含已禁用的用户）
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'

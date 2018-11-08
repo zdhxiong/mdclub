@@ -156,36 +156,6 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
     }
 
     /**
-     * 获取多个话题信息
-     *
-     * @param  array $topicIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $topicIds, bool $withRelationship = false): array
-    {
-        if (!$topicIds) {
-            return [];
-        }
-
-        $excludeFields = $this->getPrivacyFields();
-        $topics = $this->topicModel
-            ->where(['topic_id' => $topicIds])
-            ->field($excludeFields, true)
-            ->select();
-
-        foreach ($topics as &$topic) {
-            $topic = $this->handle($topic);
-        }
-
-        if ($withRelationship) {
-            $topics = $this->addRelationship($topics);
-        }
-
-        return $topics;
-    }
-
-    /**
      * 获取话题列表
      *
      * @param  bool  $withRelationship
@@ -388,7 +358,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
         }
 
         /** @var Medoo $database */
-        $database = $this->container->get(Medoo::class);
+        /*$database = $this->container->get(Medoo::class);
         $prefix = $this->container->get('settings')['database']['prefix'];
 
         // 删除话题关系
@@ -401,7 +371,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
         $this->followModel->where([
             'followable_id'   => $topicId,
             'followable_type' => 'topic',
-        ])->delete();
+        ])->delete();*/
 
         // 硬删除后
         /*else {
@@ -416,18 +386,13 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      * 批量软删除话题
      *
      * @param  array $topicIds
-     * @return bool
      */
-    public function batchDelete(array $topicIds): bool
+    public function batchDelete(array $topicIds): void
     {
-        $rowCount = $this->topicModel->where(['topic_id' => $topicIds])->delete();
-
-        if (!$rowCount) {
-            return true;
-        }
+        $this->topicModel->where(['topic_id' => $topicIds])->delete();
 
         /** @var Medoo $database */
-        $database = $this->container->get(Medoo::class);
+        /*$database = $this->container->get(Medoo::class);
         $prefix = $this->container->get('settings')['database']['prefix'];
 
         // 删除话题关系
@@ -442,9 +407,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
         $this->followModel->where([
             'followable_id' => $topicIds,
             'followable_type' => 'topic',
-        ])->delete();
-
-        return true;
+        ])->delete();*/
     }
 
     /**

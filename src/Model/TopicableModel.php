@@ -12,7 +12,7 @@ class TopicableModel extends Model
 
     const UPDATE_TIME = false; // 不维护 update_time 字段
 
-    protected $columns = [
+    public $columns = [
         'topic_id',
         'topicable_id',
         'topicable_type',

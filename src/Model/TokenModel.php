@@ -17,7 +17,7 @@ class TokenModel extends Model
 
     const UPDATE_TIME = false;
 
-    protected $columns = [
+    public $columns = [
         'token',
         'user_id',
         'device',

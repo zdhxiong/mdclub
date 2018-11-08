@@ -18,7 +18,7 @@ class AnswerModel extends Model
     protected $timestamps = true;
     protected $softDelete = true;
 
-    protected $columns = [
+    public $columns = [
         'answer_id',
         'question_id',
         'user_id',

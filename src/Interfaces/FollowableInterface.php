@@ -14,7 +14,5 @@ interface FollowableInterface
 {
     public function has(int $primaryKey): bool;
 
-    public function getMultiple(array $primaryKeys, bool $withRelationship = false): array;
-
     public function addRelationship(array $items, array $relationship = []): array;
 }

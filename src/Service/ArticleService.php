@@ -83,31 +83,6 @@ class ArticleService extends Service implements FollowableInterface
     }
 
     /**
-     * 获取多个文章信息
-     *
-     * @param  array $articleIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $articleIds, bool $withRelationship = false): array
-    {
-        if (!$articleIds) {
-            return [];
-        }
-
-        $articles = $this->articleModel
-            ->where(['article_id' => $articleIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        if ($withRelationship) {
-            $articles = $this->addRelationship($articles);
-        }
-
-        return $articles;
-    }
-
-    /**
      * 删除文章
      *
      * @param  int  $articleId
