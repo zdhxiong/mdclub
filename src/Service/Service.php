@@ -29,10 +29,12 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Model\NotificationModel            notificationModel
  * @property-read \App\Model\OptionModel                  optionModel
  * @property-read \App\Model\QuestionModel                questionModel
+ * @property-read \App\Model\ReportModel                  reportModel
  * @property-read \App\Model\TokenModel                   tokenModel
  * @property-read \App\Model\TopicableModel               topicableModel
  * @property-read \App\Model\TopicModel                   topicModel
  * @property-read \App\Model\UserModel                    userModel
+ * @property-read \App\Model\VoteModel                    voteModel
  *
  * @property-read AnswerCommentService                    answerCommentService
  * @property-read AnswerService                           answerService
@@ -40,6 +42,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read ArticleFollowService                    articleFollowService
  * @property-read ArticleService                          articleService
  * @property-read CaptchaService                          captchaService
+ * @property-read CommentService                          commentService
  * @property-read EmailService                            emailService
  * @property-read ImageService                            imageService
  * @property-read InboxService                            inboxService
@@ -48,6 +51,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read QuestionCommentService                  questionCommentService
  * @property-read QuestionFollowService                   questionFollowService
  * @property-read QuestionService                         questionService
+ * @property-read ReportService                           reportService
  * @property-read RoleService                             roleService
  * @property-read ThrottleService                         throttleService
  * @property-read TokenService                            tokenService
@@ -60,6 +64,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read UserPasswordResetService                userPasswordResetService
  * @property-read UserRegisterService                     userRegisterService
  * @property-read UserService                             userService
+ * @property-read VoteService                             voteService
  *
  * @package App\Service
  */

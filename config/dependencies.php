@@ -372,6 +372,7 @@ $modules = [
     \App\Service\ArticleFollowService::class,
     \App\Service\ArticleService::class,
     \App\Service\CaptchaService::class,
+    \App\Service\CommentService::class,
     \App\Service\EmailService::class,
     \App\Service\ImageService::class,
     \App\Service\InboxService::class,
@@ -380,6 +381,7 @@ $modules = [
     \App\Service\QuestionCommentService::class,
     \App\Service\QuestionFollowService::class,
     \App\Service\QuestionService::class,
+    \App\Service\ReportService::class,
     \App\Service\RoleService::class,
     \App\Service\ThrottleService::class,
     \App\Service\TokenService::class,
@@ -392,6 +394,7 @@ $modules = [
     \App\Service\UserPasswordResetService::class,
     \App\Service\UserRegisterService::class,
     \App\Service\UserService::class,
+    \App\Service\VoteService::class,
 ];
 
 foreach ($modules as $class) {

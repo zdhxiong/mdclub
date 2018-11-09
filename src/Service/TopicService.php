@@ -139,8 +139,9 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      */
     public function get(int $topicId, bool $withRelationship = false): array
     {
-        $excludeFields = $this->getPrivacyFields();
-        $topicInfo = $this->topicModel->field($excludeFields, true)->get($topicId);
+        $topicInfo = $this->topicModel
+            ->field($this->getPrivacyFields(), true)
+            ->get($topicId);
 
         if (!$topicInfo) {
             throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
@@ -153,6 +154,35 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
         }
 
         return $topicInfo;
+    }
+
+    /**
+     * 获取多个话题信息
+     *
+     * @param  array $topicIds
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getMultiple(array $topicIds, bool $withRelationship = false): array
+    {
+        if (!$topicIds) {
+            return [];
+        }
+
+        $topics = $this->topicModel
+            ->where(['topic_id' => $topicIds])
+            ->field($this->getPrivacyFields(), true)
+            ->select();
+
+        foreach ($topics as &$topic) {
+            $topic = $this->handle($topic);
+        }
+
+        if ($withRelationship) {
+            $topics = $this->addRelationship($topics);
+        }
+
+        return $topics;
     }
 
     /**

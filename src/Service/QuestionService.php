@@ -242,6 +242,31 @@ class QuestionService extends Service implements FollowableInterface
     }
 
     /**
+     * 获取多个问题信息
+     *
+     * @param  array $questionIds
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getMultiple(array $questionIds, bool $withRelationship = false): array
+    {
+        if (!$questionIds) {
+            return [];
+        }
+
+        $questions = $this->questionModel
+            ->where(['question_id' => $questionIds])
+            ->field($this->getPrivacyFields(), true)
+            ->select();
+
+        if ($withRelationship) {
+            $questions = $this->addRelationship($questions);
+        }
+
+        return $questions;
+    }
+
+    /**
      * 更新问题
      *
      * @param  int    $questionId

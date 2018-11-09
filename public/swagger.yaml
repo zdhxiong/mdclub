@@ -2532,13 +2532,14 @@ paths:
     get:
       tags:
         - Report
-      summary: todo - 🔐获取举报列表
-      description: 获取举报列表
+      summary: 🔐获取举报列表
+      description: |
+        **仅管理员可调用该接口**
+        <br/>
+        返回值中的 `question`、`answer`、`article`、`comment` 字段值均不包含 `relationship`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
       responses:
         200:
           description: 举报列表
@@ -2556,8 +2557,9 @@ paths:
     post:
       tags:
         - Report
-      summary: todo - 添加举报
-      description: 添加举报
+      summary: 添加举报
+      description: |
+        返回值中的 `question`、`answer`、`article`、`comment` 字段值均不包含 `relationship`
       parameters:
         - name: body
           in: body
@@ -2599,7 +2601,7 @@ paths:
     delete:
       tags:
         - Report
-      summary: todo - 🔐处理完多个举报
+      summary: 🔐处理完多个举报
       description: |
         **仅管理员可调用该接口**
         只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
@@ -2627,8 +2629,9 @@ paths:
     delete:
       tags:
         - Report
-      summary: todo - 🔐处理完一个举报
-      description: 处理完一个举报
+      summary: 🔐处理完一个举报
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - name: report_id
           type: integer
@@ -3742,9 +3745,6 @@ definitions:
           - answer
           - article
           - comment
-      reportable_object:
-        type: object
-        description: 举报目标详情
       user_id:
         type: integer
         description: 用户ID
@@ -3754,6 +3754,9 @@ definitions:
       create_time:
         type: string
         description: 举报时间
+      relationship:
+        type: object
+        $ref: '#/definitions/ReportRelationship'
 
   Reports:
     type: array
@@ -3867,6 +3870,20 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/UserInRelationship'
+
+  ReportRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      question:
+        $ref: '#/definitions/Question'
+      answer:
+        $ref: '#/definitions/Answer'
+      article:
+        $ref: '#/definitions/Article'
+      comment:
+        $ref: '#/definitions/Comment'
 
   UserInRelationship:
     type: object

@@ -19,6 +19,7 @@ use Slim\Http\Response;
  * @property-read \App\Service\ArticleFollowService     articleFollowService
  * @property-read \App\Service\ArticleService           articleService
  * @property-read \App\Service\CaptchaService           captchaService
+ * @property-read \App\Service\CommentService           commentService
  * @property-read \App\Service\EmailService             emailService
  * @property-read \App\Service\ImageService             imageService
  * @property-read \App\Service\InboxService             inboxService
@@ -27,6 +28,7 @@ use Slim\Http\Response;
  * @property-read \App\Service\QuestionCommentService   questionCommentService
  * @property-read \App\Service\QuestionFollowService    questionFollowService
  * @property-read \App\Service\QuestionService          questionService
+ * @property-read \App\Service\ReportService            reportService
  * @property-read \App\Service\RoleService              roleService
  * @property-read \App\Service\ThrottleService          throttleService
  * @property-read \App\Service\TokenService             tokenService
@@ -39,6 +41,7 @@ use Slim\Http\Response;
  * @property-read \App\Service\UserPasswordResetService userPasswordResetService
  * @property-read \App\Service\UserRegisterService      userRegisterService
  * @property-read \App\Service\UserService              userService
+ * @property-read \App\Service\VoteService              voteService
  *
  * @package App\Controller
  */

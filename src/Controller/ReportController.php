@@ -25,7 +25,11 @@ class ReportController extends Controller
      */
     public function getList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $list = $this->reportService->getList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -37,7 +41,15 @@ class ReportController extends Controller
      */
     public function create(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $reportableId = $request->getParsedBodyParam('reportable_id');
+        $reportableType = $request->getParsedBodyParam('reportable_type');
+        $reason = $request->getParsedBodyParam('reason');
+
+        $reportId = $this->reportService->create($userId, $reportableId, $reportableType, $reason);
+        $report = $this->reportService->get($reportId, true);
+
+        return $this->success($response, $report);
     }
 
     /**
@@ -50,7 +62,10 @@ class ReportController extends Controller
      */
     public function delete(Request $request, Response $response, int $report_id): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+        $this->reportService->delete($report_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -62,6 +77,18 @@ class ReportController extends Controller
      */
     public function batchDelete(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $reportIds = $request->getQueryParam('report_id');
+
+        if ($reportIds) {
+            $reportIds = array_unique(array_filter(array_slice(explode(',', $reportIds), 0, 100)));
+        }
+
+        if ($reportIds) {
+            $this->reportService->batchDelete($reportIds);
+        }
+
+        return $this->success($response);
     }
 }
