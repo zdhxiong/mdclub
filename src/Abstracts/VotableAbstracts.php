@@ -53,9 +53,8 @@ abstract class VotableAbstracts extends Service
      * @param  int    $userId
      * @param  int    $votableId
      * @param  string $type
-     * @return int               投票总数
      */
-    public function addVote(int $userId, int $votableId, string $type): int
+    public function addVote(int $userId, int $votableId, string $type): void
     {
         if (!in_array($type, ['up', 'down', 'neutral'])) {
             throw new ApiException(ErrorConstant::SYSTEM_VOTE_TYPE_ERROR);
@@ -106,8 +105,16 @@ abstract class VotableAbstracts extends Service
                     'vote_count[' . $voteCount[0] . ']' => $voteCount[1],
                 ]);
         }
+    }
 
-        // 获取新的投票数量
+    /**
+     * 获取投票总数（赞同票 - 反对票）
+     *
+     * @param int $votableId
+     * @return int
+     */
+    public function getVoteCount(int $votableId): int
+    {
         $votableTarget = $this->votableTargetModel->field(['vote_count'])->get($votableId);
 
         return $votableTarget['vote_count'];

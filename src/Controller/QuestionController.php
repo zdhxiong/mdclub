@@ -82,8 +82,9 @@ class QuestionController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->questionFollowService->addFollow($userId, $question_id);
+        $followerCount = $this->questionFollowService->getFollowerCount($question_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -98,8 +99,9 @@ class QuestionController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->questionFollowService->deleteFollow($userId, $question_id);
+        $followerCount = $this->questionFollowService->getFollowerCount($question_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -232,7 +234,8 @@ class QuestionController extends Controller
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $voteCount = $this->questionVoteService->addVote($userId, $question_id, $type);
+        $this->questionVoteService->addVote($userId, $question_id, $type);
+        $voteCount = $this->questionVoteService->getVoteCount($question_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }

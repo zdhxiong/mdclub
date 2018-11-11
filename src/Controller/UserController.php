@@ -417,8 +417,9 @@ class UserController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->userFollowService->addFollow($userId, $target_user_id);
+        $followerCount = $this->userFollowService->getFollowerCount($target_user_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -433,7 +434,8 @@ class UserController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->userFollowService->deleteFollow($userId, $target_user_id);
+        $followerCount = $this->userFollowService->getFollowerCount($target_user_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 }

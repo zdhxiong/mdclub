@@ -91,7 +91,8 @@ class CommentController extends Controller
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $voteCount = $this->commentVoteService->addVote($userId, $comment_id, $type);
+        $this->commentVoteService->addVote($userId, $comment_id, $type);
+        $voteCount = $this->commentVoteService->getVoteCount($comment_id);
 
         return $this->success($response, ['vote_count', $voteCount]);
     }

@@ -123,16 +123,6 @@ class ErrorConstant
     const USER_COVER_UPLOAD_FAILED        = [200009, '封面上传失败'];
 
     /**
-     * 已经关注该用户
-     */
-    const USER_ALREADY_FOLLOWING          = [200010, '已经关注该用户'];
-
-    /**
-     * 尚未关注该用户
-     */
-    const USER_NOT_FOLLOWING              = [200011, '尚未关注该用户'];
-
-    /**
      * 不能关注你自己
      */
     const USER_CANT_FOLLOW_YOURSELF       = [200012, '不能关注你自己'];
@@ -146,16 +136,6 @@ class ErrorConstant
      * 指定的问题不存在
      */
     const QUESTION_NOT_FOUND              = [300001, '指定问题不存在'];
-
-    /**
-     * 已经关注了该问题
-     */
-    const QUESTION_ALREADY_FOLLOWING      = [300002, '已经关注该问题'];
-
-    /**
-     * 尚未关注该问题
-     */
-    const QUESTION_NOT_FOLLOWING          = [300003, '尚未关注该问题'];
 
     /**
      * 仅问题作者可以编辑问题
@@ -202,16 +182,6 @@ class ErrorConstant
      */
     const TOPIC_COVER_UPLOAD_FAILED       = [400002, '话题封面上传失败'];
 
-    /**
-     * 已经关注了该话题
-     */
-    const TOPIC_ALREADY_FOLLOWING         = [400003, '已关注该话题'];
-
-    /**
-     * 尚未关注该话题
-     */
-    const TOPIC_NOT_FOLLOWING             = [400004, '尚未关注该话题'];
-
 
     // ====================================
     // ===================================== 文章相关错误
@@ -221,16 +191,6 @@ class ErrorConstant
      * 指定的文章不存在
      */
     const ARTICLE_NOT_FOUND               = [500001, '指定文章不存在'];
-
-    /**
-     * 已关注该文章
-     */
-    const ARTICLE_ALREADY_FOLLOWING       = [500002, '已关注该文章'];
-
-    /**
-     * 未关注该文章
-     */
-    const ARTICLE_NOT_FOLLOWING           = [500003, '尚未关注该文章'];
 
 
     // ====================================

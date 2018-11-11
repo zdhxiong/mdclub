@@ -83,8 +83,9 @@ class TopicController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->topicFollowService->addFollow($userId, $topic_id);
+        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -99,8 +100,9 @@ class TopicController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->topicFollowService->deleteFollow($userId, $topic_id);
+        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**

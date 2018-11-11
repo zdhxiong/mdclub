@@ -895,7 +895,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -919,7 +919,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -969,7 +969,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -992,7 +992,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1044,7 +1044,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1068,7 +1068,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1118,7 +1118,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1141,7 +1141,7 @@ paths:
               code:
                 type: integer
               data:
-                type: object
+                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -3786,6 +3786,14 @@ definitions:
       vote_count:
         type: integer
         description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
+
+  FollowerCount:
+    type: object
+    description: 关注者数量
+    properties:
+      follower_count:
+        type: integer
+        description: 关注者数量
 
   Report:
     type: object

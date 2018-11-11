@@ -148,12 +148,12 @@ abstract class FollowableAbstracts extends Service
      */
     public function addFollow(int $userId, int $followableId): void
     {
-        if ($this->isFollowing($userId, $followableId)) {
-            $this->throwAlreadyFollowingException();
-        }
-
         if ($this->followableType == 'user' && $userId == $followableId) {
             throw new ApiException(ErrorConstant::USER_CANT_FOLLOW_YOURSELF);
+        }
+
+        if ($this->isFollowing($userId, $followableId)) {
+            return;
         }
 
         $this->followModel->insert([
@@ -180,7 +180,7 @@ abstract class FollowableAbstracts extends Service
     public function deleteFollow(int $userId, int $followableId): void
     {
         if (!$this->isFollowing($userId, $followableId)) {
-            $this->throwNotFollowingException();
+            return;
         }
 
         $this->followModel->where([
@@ -196,6 +196,19 @@ abstract class FollowableAbstracts extends Service
         $this->followableTargetModel
             ->where(["{$this->followableType}_id" => $followableId])
             ->update(['follower_count[-]' => 1]);
+    }
+
+    /**
+     * 获取指定对象的关注者数量
+     *
+     * @param  int $followableId
+     * @return int
+     */
+    public function getFollowerCount(int $followableId): int
+    {
+        $followableTarget = $this->followableTargetModel->field(['follower_count'])->get($followableId);
+
+        return $followableTarget['follower_count'];
     }
 
     /**
@@ -251,36 +264,6 @@ abstract class FollowableAbstracts extends Service
             'question' => ErrorConstant::QUESTION_NOT_FOUND,
             'topic'    => ErrorConstant::TOPIC_NOT_FOUND,
             'user'     => ErrorConstant::USER_TARGET_NOT_FOUNT,
-        ];
-
-        throw new ApiException($constants[$this->followableType]);
-    }
-
-    /**
-     * 抛出已关注异常
-     */
-    protected function throwAlreadyFollowingException(): void
-    {
-        $constants = [
-            'article'  => ErrorConstant::ARTICLE_ALREADY_FOLLOWING,
-            'question' => ErrorConstant::QUESTION_ALREADY_FOLLOWING,
-            'topic'    => ErrorConstant::TOPIC_ALREADY_FOLLOWING,
-            'user'     => ErrorConstant::USER_ALREADY_FOLLOWING,
-        ];
-
-        throw new ApiException($constants[$this->followableType]);
-    }
-
-    /**
-     * 抛出未关注异常
-     */
-    protected function throwNotFollowingException(): void
-    {
-        $constants = [
-            'article'  => ErrorConstant::ARTICLE_NOT_FOLLOWING,
-            'question' => ErrorConstant::QUESTION_NOT_FOLLOWING,
-            'topic'    => ErrorConstant::TOPIC_NOT_FOLLOWING,
-            'user'     => ErrorConstant::USER_NOT_FOLLOWING,
         ];
 
         throw new ApiException($constants[$this->followableType]);

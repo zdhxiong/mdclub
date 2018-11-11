@@ -117,7 +117,8 @@ class AnswerController extends Controller
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $voteCount = $this->answerVoteService->addVote($userId, $answer_id, $type);
+        $this->answerVoteService->addVote($userId, $answer_id, $type);
+        $voteCount = $this->answerVoteService->getVoteCount($answer_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }

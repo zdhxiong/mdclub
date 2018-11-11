@@ -84,8 +84,9 @@ class ArticleController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->articleFollowService->addFollow($userId, $article_id);
+        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -100,8 +101,9 @@ class ArticleController extends Controller
     {
         $userId = $this->roleService->userIdOrFail();
         $this->articleFollowService->deleteFollow($userId, $article_id);
+        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
 
-        return $this->success($response);
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 
     /**
@@ -192,7 +194,8 @@ class ArticleController extends Controller
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $voteCount = $this->articleVoteService->addVote($userId, $article_id, $type);
+        $this->articleVoteService->addVote($userId, $article_id, $type);
+        $voteCount = $this->articleVoteService->getVoteCount($article_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
