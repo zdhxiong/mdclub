@@ -11,6 +11,8 @@ info:
     * 接口返回值的字段描述中，若含 🔐 图标，表示只有管理员调用接口时，返回值中才会包含该字段。
     * 接口参数的描述中，若含 🔐 图标，表示只有管理员才能添加该参数。
 
+    `GET`、`PUT`、`DELETE` 请求均符合幂等性。
+
   termsOfService:
   contact:
     name: zdhxiong
@@ -1216,6 +1218,32 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - Article
+      summary: todo - 🔐批量删除文章
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+      parameters:
+        - name: article_id
+          in: query
+          type: string
+          description: 用“,”分隔的文章ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/{article_id}:
 
     get:
@@ -1274,12 +1302,45 @@ paths:
       security:
         - token: []
 
-  /articles/{article_id}/votes:
+  /articles/{article_id}/voters:
 
-    post:
+    get:
       tags:
         - Article
-      summary: todo - 为文章投票
+      summary: 获取文章的投票者
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+        - name: type
+          in: query
+          type: string
+          description: |
+            默认获取全部投票类型的用户
+            `up` 表示仅获取投赞成票的用户
+            `down` 表示仅获取投反对票的用户
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - Article
+      summary: 为文章投票
       description: 为文章投票
       parameters:
         - name: article_id
@@ -1308,39 +1369,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/Vote'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /articles/{article_id}/voters:
-
-    get:
-      tags:
-        - Article
-      summary: todo - 获取文章的投票者
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-        - name: type
-          in: query
-          type: string
-          description: 投票类型
-          enum:
-            - up
-            - down
-      responses:
-        200:
-          description: 用户列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Users'
+                $ref: '#/definitions/VoteCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1642,12 +1671,45 @@ paths:
       security:
         - token: []
 
-  /questions/{question_id}/votes:
+  /questions/{question_id}/voters:
 
-    post:
+    get:
       tags:
         - Question
-      summary: todo - 为问题投票
+      summary: 获取问题的投票者
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: type
+          in: query
+          type: string
+          description: |
+            默认获取全部投票类型的用户
+            `up` 表示仅获取投赞成票的用户
+            `down` 表示仅获取投反对票的用户
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - Question
+      summary: 为问题投票
       parameters:
         - name: question_id
           in: path
@@ -1675,39 +1737,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/Vote'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /questions/{question_id}/voters:
-
-    get:
-      tags:
-        - Question
-      summary: todo - 获取问题的投票者
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-        - name: type
-          in: query
-          type: string
-          description: 投票类型
-          enum:
-            - up
-            - down
-      responses:
-        200:
-          description: 用户列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Users'
+                $ref: '#/definitions/VoteCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2119,6 +2149,32 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - Answer
+      summary: todo - 🔐批量删除多个回答
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+      parameters:
+        - name: answer_id
+          in: query
+          type: string
+          description: 用“,”分隔的回答ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /answers/{answer_id}:
 
     get:
@@ -2204,12 +2260,45 @@ paths:
       security:
         - token: []
 
-  /answers/{answer_id}/votes:
+  /answers/{answer_id}/voters:
 
-    post:
+    get:
       tags:
         - Answer
-      summary: todo - 为回答投票
+      summary: 获取回答的投票者
+      parameters:
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+        - name: type
+          in: query
+          type: string
+          description: |
+            默认获取全部投票类型的用户
+            `up` 表示仅获取投赞成票的用户
+            `down` 表示仅获取投反对票的用户
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - Answer
+      summary: 为回答投票
       description: 为回答投票
       parameters:
         - name: answer_id
@@ -2238,43 +2327,11 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/Vote'
+                $ref: '#/definitions/VoteCount'
         default:
           $ref: '#/responses/Error'
         security:
           - token: []
-
-  /answers/{answer_id}/voters:
-
-    get:
-      tags:
-        - Answer
-      summary: todo - 获取回答的投票者
-      parameters:
-        - name: answer_id
-          in: path
-          type: integer
-          description: 回答ID
-        - name: type
-          in: query
-          type: string
-          description: 投票类型
-          enum:
-            - up
-            - down
-      responses:
-        200:
-          description: 用户列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Users'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
 
   /answers/{answer_id}/comments:
 
@@ -2371,6 +2428,32 @@ paths:
       security:
         - token: []
 
+    delete:
+      tags:
+        - Comment
+      summary: todo - 🔐批量删除评论
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+      parameters:
+        - name: comment_id
+          in: query
+          type: string
+          description: 用“,”分隔的问题ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /comments/{comment_id}:
 
     get:
@@ -2455,12 +2538,45 @@ paths:
       security:
         - token: []
 
-  /comments/{comment_id}/votes:
+  /comments/{comment_id}/voters:
 
-    post:
+    get:
       tags:
         - Comment
-      summary: todo - 为评论投票
+      summary: 获取评论的投票者
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+        - name: type
+          in: query
+          type: string
+          description: |
+            默认获取全部投票类型的用户
+            `up` 表示仅获取投赞成票的用户
+            `down` 表示仅获取投反对票的用户
+          enum:
+            - up
+            - down
+      responses:
+        200:
+          description: 用户列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Users'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    put:
+      tags:
+        - Comment
+      summary: 为评论投票
       description: 为评论投票
       parameters:
         - name: comment_id
@@ -2489,39 +2605,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/Vote'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /comments/{comment_id}/voters:
-
-    get:
-      tags:
-        - Comment
-      summary: todo - 获取评论的投票者
-      parameters:
-        - name: comment_id
-          in: path
-          type: integer
-          description: 评论ID
-        - name: type
-          in: query
-          type: string
-          description: 投票类型
-          enum:
-            - up
-            - down
-      responses:
-        200:
-          description: 用户列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Users'
+                $ref: '#/definitions/VoteCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -3695,37 +3779,13 @@ definitions:
     items:
       $ref: '#/definitions/Comment'
 
-  Vote:
+  VoteCount:
     type: object
-    description: 投票
+    description: 投票数量
     properties:
-      user_id:
-        type: integer
-        description: 用户ID
-      voteable_id:
-        type: integer
-        description: 投票目标的ID
-      voteable_type:
-        type: string
-        description: 投票目标类型
-        enum:
-          - question
-          - answer
-          - article
-          - comment
-      type:
-        type: string
-        description: 投票类型
-        enum:
-          - up
-          - down
-          - neutral
-      create_time:
-        type: integer
-        description: 投票时间
       vote_count:
         type: integer
-        description: 投票目标获得的总投票量
+        description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
 
   Report:
     type: object

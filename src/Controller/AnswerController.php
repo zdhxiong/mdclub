@@ -93,16 +93,33 @@ class AnswerController extends Controller
     }
 
     /**
-     * 投票
+     * 批量删除回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDelete(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 添加投票
      *
      * @param  Request  $request
      * @param  Response $response
      * @param  int      $answer_id
      * @return Response
      */
-    public function vote(Request $request, Response $response, int $answer_id): Response
+    public function addVote(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $type = $request->getParsedBodyParam('type');
+
+        $voteCount = $this->answerVoteService->addVote($userId, $answer_id, $type);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**
@@ -110,12 +127,15 @@ class AnswerController extends Controller
      *
      * @param  Request  $request
      * @param  Response $response
-     * @param  int      $comment_id
+     * @param  int      $answer_id
      * @return Response
      */
-    public function getVoters(Request $request, Response $response, int $comment_id): Response
+    public function getVoters(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $type = $request->getQueryParam('type');
+        $voters = $this->answerVoteService->getVoters($answer_id, $type, true);
+
+        return $this->success($response, $voters);
     }
 
     /**

@@ -72,12 +72,12 @@ abstract class FollowableAbstracts extends Service
                 '[><]follow' => ['user_id' => 'user_id'],
             ])
             ->where([
-                'follow.followable_id' => $followableId,
+                'follow.followable_id'   => $followableId,
                 'follow.followable_type' => $this->followableType,
-                'user.disable_time' => 0,
+                'user.disable_time'      => 0,
             ])
             ->order([
-                'follow.create_time' => 'DESC'
+                'follow.create_time' => 'DESC',
             ])
             ->field($fields)
             ->paginate();
@@ -145,9 +145,8 @@ abstract class FollowableAbstracts extends Service
      *
      * @param  int    $userId
      * @param  int    $followableId
-     * @return bool
      */
-    public function addFollow(int $userId, int $followableId): bool
+    public function addFollow(int $userId, int $followableId): void
     {
         if ($this->isFollowing($userId, $followableId)) {
             $this->throwAlreadyFollowingException();
@@ -170,8 +169,6 @@ abstract class FollowableAbstracts extends Service
         $this->followableTargetModel
             ->where(["{$this->followableType}_id" => $followableId])
             ->update(['follower_count[+]' => 1]);
-
-        return true;
     }
 
     /**
@@ -179,9 +176,8 @@ abstract class FollowableAbstracts extends Service
      *
      * @param  int    $userId
      * @param  int    $followableId
-     * @return bool
      */
-    public function deleteFollow(int $userId, int $followableId): bool
+    public function deleteFollow(int $userId, int $followableId): void
     {
         if (!$this->isFollowing($userId, $followableId)) {
             $this->throwNotFollowingException();
@@ -200,8 +196,6 @@ abstract class FollowableAbstracts extends Service
         $this->followableTargetModel
             ->where(["{$this->followableType}_id" => $followableId])
             ->update(['follower_count[-]' => 1]);
-
-        return true;
     }
 
     /**

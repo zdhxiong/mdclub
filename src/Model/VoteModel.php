@@ -18,8 +18,8 @@ class VoteModel extends Model
 
     public $columns = [
         'user_id',
-        'voteable_id',
-        'voteable_type',
+        'votable_id',
+        'votable_type',
         'type',
         'create_time',
     ];

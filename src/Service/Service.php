@@ -38,11 +38,14 @@ use Slim\Exception\ContainerValueNotFoundException;
  *
  * @property-read AnswerCommentService                    answerCommentService
  * @property-read AnswerService                           answerService
+ * @property-read AnswerVoteService                       answerVoteService
  * @property-read ArticleCommentService                   articleCommentService
  * @property-read ArticleFollowService                    articleFollowService
  * @property-read ArticleService                          articleService
+ * @property-read ArticleVoteService                      articleVoteService
  * @property-read CaptchaService                          captchaService
  * @property-read CommentService                          commentService
+ * @property-read CommentVoteService                      commentVoteService
  * @property-read EmailService                            emailService
  * @property-read ImageService                            imageService
  * @property-read InboxService                            inboxService
@@ -51,6 +54,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read QuestionCommentService                  questionCommentService
  * @property-read QuestionFollowService                   questionFollowService
  * @property-read QuestionService                         questionService
+ * @property-read QuestionVoteService                     questionVoteService
  * @property-read ReportService                           reportService
  * @property-read RoleService                             roleService
  * @property-read ThrottleService                         throttleService

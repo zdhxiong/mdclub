@@ -168,16 +168,33 @@ class ArticleController extends Controller
     }
 
     /**
-     * 投票
+     * 批量删除文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDelete(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 添加投票
      *
      * @param  Request  $request
      * @param  Response $response
      * @param  int      $article_id
      * @return Response
      */
-    public function vote(Request $request, Response $response, int $article_id): Response
+    public function addVote(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $type = $request->getParsedBodyParam('type');
+
+        $voteCount = $this->articleVoteService->addVote($userId, $article_id, $type);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**
@@ -185,12 +202,15 @@ class ArticleController extends Controller
      *
      * @param  Request  $request
      * @param  Response $response
-     * @param  int      $comment_id
+     * @param  int      $article_id
      * @return Response
      */
-    public function getVoters(Request $request, Response $response, int $comment_id): Response
+    public function getVoters(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $type = $request->getQueryParam('type');
+        $voters = $this->articleVoteService->getVoters($article_id, $type, true);
+
+        return $this->success($response, $voters);
     }
 
     /**

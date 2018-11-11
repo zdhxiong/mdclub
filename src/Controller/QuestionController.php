@@ -220,16 +220,21 @@ class QuestionController extends Controller
     }
 
     /**
-     * 投票
+     * 添加投票
      *
      * @param  Request  $request
      * @param  Response $response
      * @param  int      $question_id
      * @return Response
      */
-    public function vote(Request $request, Response $response, int $question_id): Response
+    public function addVote(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $type = $request->getParsedBodyParam('type');
+
+        $voteCount = $this->questionVoteService->addVote($userId, $question_id, $type);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**
@@ -237,12 +242,15 @@ class QuestionController extends Controller
      *
      * @param  Request  $request
      * @param  Response $response
-     * @param  int      $comment_id
+     * @param  int      $question_id
      * @return Response
      */
-    public function getVoters(Request $request, Response $response, int $comment_id): Response
+    public function getVoters(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $type = $request->getQueryParam('type');
+        $voters = $this->questionVoteService->getVoters($question_id, $type, true);
+
+        return $this->success($response, $voters);
     }
 
     /**
