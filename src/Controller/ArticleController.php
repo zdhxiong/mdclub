@@ -201,6 +201,23 @@ class ArticleController extends Controller
     }
 
     /**
+     * 删除投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function deleteVote(Request $request, Response $response, int $article_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleVoteService->deleteVote($userId, $article_id);
+        $voteCount = $this->articleVoteService->getVoteCount($article_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
+    }
+
+    /**
      * 获取投票者
      *
      * @param  Request  $request

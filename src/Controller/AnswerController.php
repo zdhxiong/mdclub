@@ -124,6 +124,23 @@ class AnswerController extends Controller
     }
 
     /**
+     * 删除投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function deleteVote(Request $request, Response $response, int $answer_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->answerVoteService->deleteVote($userId, $answer_id);
+        $voteCount = $this->answerVoteService->getVoteCount($answer_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
+    }
+
+    /**
      * 获取投票者
      *
      * @param  Request  $request

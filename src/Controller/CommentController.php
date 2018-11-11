@@ -98,6 +98,23 @@ class CommentController extends Controller
     }
 
     /**
+     * 删除投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function deleteVote(Request $request, Response $response, int $comment_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->commentVoteService->deleteVote($userId, $comment_id);
+        $voteCount = $this->commentVoteService->getVoteCount($comment_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
+    }
+
+    /**
      * 获取投票者
      *
      * @param  Request  $request

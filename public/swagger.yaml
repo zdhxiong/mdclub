@@ -1306,7 +1306,7 @@ paths:
 
     get:
       tags:
-        - Article
+        - ArticleVote
       summary: 获取文章的投票者
       parameters:
         - name: article_id
@@ -1337,11 +1337,12 @@ paths:
       security:
         - token: []
 
+  /articles/{article_id}/votes:
+
     put:
       tags:
-        - Article
+        - ArticleVote
       summary: 为文章投票
-      description: 为文章投票
       parameters:
         - name: article_id
           in: path
@@ -1359,11 +1360,33 @@ paths:
                 enum:
                   - up
                   - down
-                  - neutral
                 description: 投票类型
       responses:
         200:
-          description: 关注信息
+          description: 投票数量
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/VoteCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - ArticleVote
+      summary: 取消为文章的投票
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 投票数量
           schema:
             properties:
               code:
@@ -1675,7 +1698,7 @@ paths:
 
     get:
       tags:
-        - Question
+        - QuestionVote
       summary: 获取问题的投票者
       parameters:
         - name: question_id
@@ -1706,9 +1729,11 @@ paths:
       security:
         - token: []
 
+  /questions/{question_id}/votes:
+
     put:
       tags:
-        - Question
+        - QuestionVote
       summary: 为问题投票
       parameters:
         - name: question_id
@@ -1727,11 +1752,33 @@ paths:
                 enum:
                   - up
                   - down
-                  - neutral
                 description: 投票类型
       responses:
         200:
-          description: 关注信息
+          description: 投票数量
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/VoteCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - QuestionVote
+      summary: 取消为问题的投票
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 投票数量
           schema:
             properties:
               code:
@@ -2264,7 +2311,7 @@ paths:
 
     get:
       tags:
-        - Answer
+        - AnswerVote
       summary: 获取回答的投票者
       parameters:
         - name: answer_id
@@ -2295,11 +2342,12 @@ paths:
       security:
         - token: []
 
+  /answers/{answer_id}/votes:
+
     put:
       tags:
-        - Answer
+        - AnswerVote
       summary: 为回答投票
-      description: 为回答投票
       parameters:
         - name: answer_id
           in: path
@@ -2317,11 +2365,10 @@ paths:
                 enum:
                   - up
                   - down
-                  - neutral
                 description: 投票类型
       responses:
         200:
-          description: 关注信息
+          description: 投票数量
           schema:
             properties:
               code:
@@ -2332,6 +2379,29 @@ paths:
           $ref: '#/responses/Error'
         security:
           - token: []
+
+    delete:
+      tags:
+        - AnswerVote
+      summary: 取消为回答的投票
+      parameters:
+        - name: answer_id
+          in: path
+          type: integer
+          description: 回答ID
+      responses:
+        200:
+          description: 投票数量
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/VoteCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /answers/{answer_id}/comments:
 
@@ -2542,7 +2612,7 @@ paths:
 
     get:
       tags:
-        - Comment
+        - CommentVote
       summary: 获取评论的投票者
       parameters:
         - name: comment_id
@@ -2573,11 +2643,12 @@ paths:
       security:
         - token: []
 
+  /comments/{comment_id}/votes:
+
     put:
       tags:
-        - Comment
+        - CommentVote
       summary: 为评论投票
-      description: 为评论投票
       parameters:
         - name: comment_id
           in: path
@@ -2595,11 +2666,33 @@ paths:
                 enum:
                   - up
                   - down
-                  - neutral
                 description: 投票类型
       responses:
         200:
-          description: 关注信息
+          description: 投票数量
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/VoteCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - CommentVote
+      summary: 取消为评论的投票
+      parameters:
+        - name: comment_id
+          in: path
+          type: integer
+          description: 评论ID
+      responses:
+        200:
+          description: 投票数量
           schema:
             properties:
               code:
@@ -4079,16 +4172,24 @@ tags:
     description: 话题关注
   - name: Question
     description: 问题信息
+  - name: QuestionVote
+    description: 问题投票
   - name: QuestionFollow
     description: 问题关注
   - name: Answer
     description: 回答信息
+  - name: AnswerVote
+    description: 回答投票
   - name: Article
     description: 文章信息
+  - name: ArticleVote
+    description: 文章投票
   - name: ArticleFollow
     description: 文章关注
   - name: Comment
     description: 评论
+  - name: CommentVote
+    description: 评论投票
   - name: Report
     description: 举报
   - name: Inbox

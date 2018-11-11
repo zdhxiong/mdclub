@@ -56,7 +56,7 @@ abstract class VotableAbstracts extends Service
      */
     public function addVote(int $userId, int $votableId, string $type): void
     {
-        if (!in_array($type, ['up', 'down', 'neutral'])) {
+        if (!in_array($type, ['up', 'down'])) {
             throw new ApiException(ErrorConstant::SYSTEM_VOTE_TYPE_ERROR);
         }
 
@@ -69,41 +69,56 @@ abstract class VotableAbstracts extends Service
             'votable_type' => $this->votableType,
         ];
 
-        // 获取投票记录
         $vote = $this->voteModel->where($voteWhere)->get();
 
-        // 更新或新增投票记录
-        if ($vote) {
-            if ($type == 'neutral') {
-                // 已投过票时，再投中立票，即删除旧投票记录
-                $this->voteModel->where($voteWhere)->delete();
-
-                $voteCount = $vote['type'] == 'up' ? ['-', 1] : ['+', 1];
-            } elseif ($type != $vote['type']) {
-                // 新的投票与旧的投票不同时，修改原始投票
-                $this->voteModel->where($voteWhere)->update([
-                    'type' => $type,
-                    'create_time' => $this->request->getServerParam('REQUEST_TIME'),
-                ]);
-
-                $voteCount = [$type == 'up' ? '+' : '-' , 2];
-            }
-            // else 新的投票和旧的投票相同，则不做处理
-        } elseif ($type != 'neutral') {
-            // 没有投过票时，且投的不是中立票时，添加投票
+        if (!$vote) {
+            // 没有投过票时，添加投票
             $this->voteModel->insert(array_merge($voteWhere, ['type' => $type]));
 
             $voteCount = [$type == 'up' ? '+' : '-', 1];
+        } elseif ($type != $vote['type']) {
+            // 新的投票与旧的投票不同时，修改原始投票
+            $this->voteModel->where($voteWhere)->update([
+                'type' => $type,
+                'create_time' => $this->request->getServerParam('REQUEST_TIME'),
+            ]);
+
+            $voteCount = [$type == 'up' ? '+' : '-' , 2];
         }
 
         // 更新投票数量
         if (isset($voteCount)) {
             $this->votableTargetModel
-                ->where([
-                    $this->votableType . '_id' => $votableId,
-                ])->update([
-                    'vote_count[' . $voteCount[0] . ']' => $voteCount[1],
-                ]);
+                ->where([ $this->votableType . '_id' => $votableId ])
+                ->update([ 'vote_count[' . $voteCount[0] . ']' => $voteCount[1] ]);
+        }
+    }
+
+    /**
+     * 删除投票
+     *
+     * @param  int $userId
+     * @param  int $votableId
+     */
+    public function deleteVote(int $userId, int $votableId): void
+    {
+        $this->userIdOrFail($userId);
+        $this->votableIdOrFail($votableId);
+
+        $voteWhere = [
+            'user_id'      => $userId,
+            'votable_id'   => $votableId,
+            'votable_type' => $this->votableType,
+        ];
+
+        $vote = $this->voteModel->where($voteWhere)->get();
+
+        if ($vote) {
+            $this->voteModel->where($voteWhere)->delete();
+
+            $this->votableTargetModel
+                ->where([ $this->votableType . '_id' => $votableId ])
+                ->update([ 'vote_count[' . ($vote['type'] == 'up' ? '-' : '+') . ']' => 1 ]);
         }
     }
 

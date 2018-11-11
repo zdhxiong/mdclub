@@ -65,7 +65,7 @@ class ErrorConstant
     /**
      * 投票类型错误
      */
-    const SYSTEM_VOTE_TYPE_ERROR          = [100006, '投票类型只能是 up、down、neutral 中的一个'];
+    const SYSTEM_VOTE_TYPE_ERROR          = [100006, '投票类型只能是 up、down 中的一个'];
 
 
     // ====================================

@@ -89,7 +89,8 @@ $app->group('/api', function () {
     $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
     $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
     $this->get(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':getVoters');
-    $this->put(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':addVote');
+    $this->put(   '/articles/{article_id:\d+}/votes',                           ArticleController::class . ':addVote');
+    $this->delete('/articles/{article_id:\d+}/votes',                           ArticleController::class . ':deleteVote');
     $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
     $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
     $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
@@ -101,7 +102,8 @@ $app->group('/api', function () {
     $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
     $this->get(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':getVoters');
-    $this->put(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':addVote');
+    $this->put(   '/questions/{question_id:\d+}/votes',                         QuestionController::class . ':addVote');
+    $this->delete('/questions/{question_id:\d+}/votes',                         QuestionController::class . ':deleteVote');
     $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
     $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
     $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
@@ -122,7 +124,8 @@ $app->group('/api', function () {
     $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');
     $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':delete');
     $this->get(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':getVoters');
-    $this->put(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':addVote');
+    $this->put(   '/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':addVote');
+    $this->delete('/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':deleteVote');
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
 
@@ -132,7 +135,8 @@ $app->group('/api', function () {
     $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':update');
     $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':delete');
     $this->get(   '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':getVoters');
-    $this->put(   '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':addVote');
+    $this->put(   '/comments/{comment_id:\d+}/votes',                           CommentController::class . ':addVote');
+    $this->delete('/comments/{comment_id:\d+}/votes',                           CommentController::class . ':deleteVote');
 
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
     $this->post(  '/reports',                                                   ReportController::class . ':create');
