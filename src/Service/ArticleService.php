@@ -6,8 +6,6 @@ namespace App\Service;
 
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
-use App\Helper\ArrayHelper;
-use App\Interfaces\FollowableInterface;
 
 /**
  * 文章
@@ -15,7 +13,7 @@ use App\Interfaces\FollowableInterface;
  * Class ArticleService
  * @package App\Service
  */
-class ArticleService extends Service implements FollowableInterface
+class ArticleService extends Service
 {
 
     /**

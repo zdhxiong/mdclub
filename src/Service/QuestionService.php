@@ -10,7 +10,6 @@ use App\Exception\ValidationException;
 use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
-use App\Interfaces\FollowableInterface;
 
 /**
  * 问题
@@ -18,7 +17,7 @@ use App\Interfaces\FollowableInterface;
  * Class QuestionService
  * @package App\Service
  */
-class QuestionService extends Service implements FollowableInterface
+class QuestionService extends Service
 {
     /**
      * 获取隐私字段
@@ -428,7 +427,7 @@ class QuestionService extends Service implements FollowableInterface
         $questionInfo = $this->questionModel->field('user_id')->get($questionId);
 
         if (!$questionInfo) {
-            throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
+            return;
         }
 
         if (!$questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {

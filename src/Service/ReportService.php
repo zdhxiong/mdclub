@@ -126,11 +126,7 @@ class ReportService extends Service
      */
     public function delete(int $reportId): void
     {
-        $rowCount = $this->reportModel->delete($reportId);
-
-        if (!$rowCount) {
-            throw new ApiException(ErrorConstant::REPORT_NOT_FOUND);
-        }
+        $this->reportModel->delete($reportId);
     }
 
     /**

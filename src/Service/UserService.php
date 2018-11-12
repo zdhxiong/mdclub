@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Constant\ErrorConstant;
-use App\Interfaces\FollowableInterface;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
 
@@ -15,7 +14,7 @@ use App\Helper\ArrayHelper;
  * Class UserService
  * @package App\Service
  */
-class UserService extends Service implements FollowableInterface
+class UserService extends Service
 {
     /**
      * 获取隐私字段

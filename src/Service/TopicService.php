@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Medoo\Medoo;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Abstracts\BrandImageAbstracts;
-use App\Interfaces\FollowableInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
@@ -19,7 +17,7 @@ use App\Helper\ValidatorHelper;
  * Class TopicService
  * @package App\Service
  */
-class TopicService extends BrandImageAbstracts implements FollowableInterface
+class TopicService extends BrandImageAbstracts
 {
     /**
      * @var string 图片类型
@@ -382,8 +380,9 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
     {
         $rowCount = $this->topicModel->delete($topicId);
 
+        // 话题已被删除
         if (!$rowCount) {
-            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+            return;
         }
 
         // 关注了该话题的用户的 following_topic_count - 1
@@ -424,6 +423,7 @@ class TopicService extends BrandImageAbstracts implements FollowableInterface
      */
     public function batchDelete(array $topicIds): void
     {
+        // todo 仅未删除的话题才可以删除
         $this->topicModel->where(['topic_id' => $topicIds])->delete();
 
         // 关注了这些话题的用户的 following_topic_count - 1

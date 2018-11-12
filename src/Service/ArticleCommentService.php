@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\CommentableAbstracts;
-use App\Interfaces\CommentableInterface;
 
 /**
  * 对文章的评论
@@ -13,7 +12,7 @@ use App\Interfaces\CommentableInterface;
  * Class ArticleCommentService
  * @package App\Service
  */
-class ArticleCommentService extends CommentableAbstracts implements CommentableInterface
+class ArticleCommentService extends CommentableAbstracts
 {
 
 }

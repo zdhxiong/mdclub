@@ -439,6 +439,54 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - UserFollow
+      summary: 添加关注
+      description: 添加关注
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+        tags:
+          - UserFollow
+        summary: 取消关注
+        description: 取消关注
+        parameters:
+          - name: user_id
+            in: path
+            type: integer
+            description: 用户ID
+        responses:
+          200:
+            description: 空数据，通过状态码区分成功还是失败
+            schema:
+              properties:
+                code:
+                  type: integer
+                data:
+                  $ref: '#/definitions/FollowerCount'
+          default:
+            $ref: '#/responses/Error'
+        security:
+          - token: []
+
   /users/{user_id}/followees:
 
     get:
@@ -469,7 +517,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/questions:
+  /users/{user_id}/following_questions:
 
     get:
       tags:
@@ -498,7 +546,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/articles:
+  /users/{user_id}/following_articles:
 
     get:
       tags:
@@ -528,7 +576,7 @@ paths:
       security:
         - token: []
 
-  /users/{user_id}/following/topics:
+  /users/{user_id}/following_topics:
 
     get:
       tags:
@@ -875,57 +923,7 @@ paths:
       security:
         - token: []
 
-  /user/following/{user_id}:
-
-    put:
-      tags:
-        - UserFollow
-      summary: 添加关注
-      description: 添加关注
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - UserFollow
-      summary: 取消关注
-      description: 取消关注
-      parameters:
-        - name: user_id
-          in: path
-          type: integer
-          description: 用户ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/following/questions:
+  /user/following_questions:
 
     get:
       tags:
@@ -950,55 +948,7 @@ paths:
       security:
         - token: []
 
-  /user/following/questions/{question_id}:
-
-    put:
-      tags:
-        - QuestionFollow
-      summary: 添加关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - QuestionFollow
-      summary: 取消关注
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/following/articles:
+  /user/following_articles:
 
     get:
       tags:
@@ -1024,57 +974,7 @@ paths:
       security:
         - token: []
 
-  /user/following/articles/{article_id}:
-
-    put:
-      tags:
-        - ArticleFollow
-      summary: todo - 添加关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - ArticleFollow
-      summary: todo - 取消关注
-      description: 取消关注
-      parameters:
-        - name: article_id
-          in: path
-          type: integer
-          description: 文章ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/following/topics:
+  /user/following_topics:
 
     get:
       tags:
@@ -1094,54 +994,6 @@ paths:
                 $ref: '#/definitions/Topics'
               pagination:
                 $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /user/following/topics/{topic_id}:
-
-    put:
-      tags:
-        - TopicFollow
-      summary: 关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - TopicFollow
-      summary: 取消关注指定话题
-      parameters:
-        - name: topic_id
-          in: path
-          type: integer
-          description: 话题ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/FollowerCount'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1337,9 +1189,7 @@ paths:
       security:
         - token: []
 
-  /articles/{article_id}/votes:
-
-    put:
+    post:
       tags:
         - ArticleVote
       summary: 为文章投票
@@ -1428,11 +1278,59 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - ArticleFollow
+      summary: todo - 添加关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - ArticleFollow
+      summary: todo - 取消关注
+      description: 取消关注
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /articles/{article_id}/comments:
 
     get:
       tags:
-        - Article
+        - ArticleComment
       summary: todo - 获取指定文章的评论列表
       description: |
         默认排序方式为 `create_time ASC`
@@ -1465,7 +1363,7 @@ paths:
 
     post:
       tags:
-        - Article
+        - ArticleComment
       summary: todo - 在指定文章下发表评论
       description: 在指定文章下发表评论
       parameters:
@@ -1729,9 +1627,7 @@ paths:
       security:
         - token: []
 
-  /questions/{question_id}/votes:
-
-    put:
+    post:
       tags:
         - QuestionVote
       summary: 为问题投票
@@ -1819,11 +1715,57 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - QuestionFollow
+      summary: 添加关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - QuestionFollow
+      summary: 取消关注
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /questions/{question_id}/comments:
 
     get:
       tags:
-        - Question
+        - QuestionComment
       summary: todo - 获取指定问题的评论列表
       description: |
         默认排序方式为 `create_time ASC`
@@ -1856,7 +1798,7 @@ paths:
 
     post:
       tags:
-        - Question
+        - QuestionComment
       summary: todo - 在指定问题下发表评论
       description: 在指定问题下发表评论
       parameters:
@@ -1883,72 +1825,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Comment'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /questions/{question_id}/answers:
-
-    get:
-      tags:
-        - Answer
-      summary: todo -  获取指定问题下的回答
-      description: 获取指定问题下的回答，可排序字段为 `create_time`
-      parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-      responses:
-        200:
-          description: 回答列表
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Answers'
-              pagination:
-                $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    post:
-      tags:
-        - Answer
-      summary: todo -  在指定问题下创建一个回答
-      description: 在指定问题下创建一个回答
-      parameters:
-        - name: question_id
-          in: path
-          type: integer
-          description: 问题ID
-        - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              content_markdown:
-                type: string
-                description: markdown 格式的内容
-              content_rendered:
-                type: string
-                description: html 格式的内容
-      responses:
-        200:
-          description: 回答信息
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Answer'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2170,6 +2046,52 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - TopicFollow
+      summary: 关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - TopicFollow
+      summary: 取消关注指定话题
+      parameters:
+        - name: topic_id
+          in: path
+          type: integer
+          description: 话题ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/FollowerCount'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /answers:
 
     get:
@@ -2191,6 +2113,42 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    post:
+      tags:
+        - Answer
+      summary: todo - 创建回答
+      description:
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              question_id:
+                type: integer
+                description: 问题ID
+              content_markdown:
+                type: string
+                description: markdown 格式的内容
+              content_rendered:
+                type: string
+                description: html 格式的内容
+      responses:
+        200:
+          description: 回答信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answer'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2342,9 +2300,7 @@ paths:
       security:
         - token: []
 
-  /answers/{answer_id}/votes:
-
-    put:
+    post:
       tags:
         - AnswerVote
       summary: 为回答投票
@@ -2407,7 +2363,7 @@ paths:
 
     get:
       tags:
-        - Answer
+        - AnswerComment
       summary: todo - 获取指定回答的评论列表
       description: |
         默认排序方式为 `create_time ASC`
@@ -2440,7 +2396,7 @@ paths:
 
     post:
       tags:
-        - Answer
+        - AnswerComment
       summary: todo - 在指定回答下发表评论
       description: 在指定回答下发表评论
       parameters:
@@ -2643,9 +2599,7 @@ paths:
       security:
         - token: []
 
-  /comments/{comment_id}/votes:
-
-    put:
+    post:
       tags:
         - CommentVote
       summary: 为评论投票
@@ -4172,16 +4126,22 @@ tags:
     description: 话题关注
   - name: Question
     description: 问题信息
+  - name: QuestionComment
+    description: 问题评论
   - name: QuestionVote
     description: 问题投票
   - name: QuestionFollow
     description: 问题关注
   - name: Answer
     description: 回答信息
+  - name: AnswerComment
+    description: 回答评论
   - name: AnswerVote
     description: 回答投票
   - name: Article
     description: 文章信息
+  - name: ArticleComment
+    description: 文章评论
   - name: ArticleVote
     description: 文章投票
   - name: ArticleFollow

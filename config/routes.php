@@ -54,10 +54,12 @@ $app->group('/api', function () {
     $this->delete('/users/{user_id:\d+}/avatar',                                UserController::class . ':deleteAvatar');
     $this->delete('/users/{user_id:\d+}/cover',                                 UserController::class . ':deleteCover');
     $this->get(   '/users/{user_id:\d+}/followers',                             UserController::class . ':getFollowers');
+    $this->post(  '/users/{user_id:\d+}/followers',                             UserController::class . ':addFollow');
+    $this->delete('/users/{user_id:\d+}/followers',                             UserController::class . ':deleteFollow');
     $this->get(   '/users/{user_id:\d+}/followees',                             UserController::class . ':getFollowees');
-    $this->get(   '/users/{user_id:\d+}/following/questions',                   QuestionController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/following/articles',                    ArticleController::class .  ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/following/topics',                      TopicController::class .    ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/following_questions',                   QuestionController::class . ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/following_articles',                    ArticleController::class . ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/following_topics',                      TopicController::class . ':getFollowing');
 
     $this->get(   '/user',                                                      UserController::class . ':getMe');
     $this->patch( '/user',                                                      UserController::class . ':updateMe');
@@ -70,17 +72,9 @@ $app->group('/api', function () {
     $this->put(   '/user/password',                                             UserController::class . ':updatePasswordByEmail');
     $this->get(   '/user/followers',                                            UserController::class . ':getMyFollowers');
     $this->get(   '/user/followees',                                            UserController::class . ':getMyFollowees');
-    $this->put(   '/user/following/{target_user_id:\d+}',                       UserController::class . ':addFollow');
-    $this->delete('/user/following/{target_user_id:\d+}',                       UserController::class . ':deleteFollow');
-    $this->get(   '/user/following/questions',                                  QuestionController::class . ':getMyFollowing');
-    $this->put(   '/user/following/questions/{question_id:\d+}',                QuestionController::class . ':addFollow');
-    $this->delete('/user/following/questions/{question_id:\d+}',                QuestionController::class . ':deleteFollow');
-    $this->get(   '/user/following/articles',                                   ArticleController::class .  ':getMyFollowing');
-    $this->put(   '/user/following/articles/{article_id:\d+}',                  ArticleController::class .  ':addFollow');
-    $this->delete('/user/following/articles/{article_id:\d+}',                  ArticleController::class .  ':deleteFollow');
-    $this->get(   '/user/following/topics',                                     TopicController::class .    ':getMyFollowing');
-    $this->put(   '/user/following/topics/{topic_id:\d+}',                      TopicController::class .    ':addFollow');
-    $this->delete('/user/following/topics/{topic_id:\d+}',                      TopicController::class .    ':deleteFollow');
+    $this->get(   '/user/following_questions',                                  QuestionController::class . ':getMyFollowing');
+    $this->get(   '/user/following_articles',                                   ArticleController::class .  ':getMyFollowing');
+    $this->get(   '/user/following_topics',                                     TopicController::class .  ':getMyFollowing');
 
     $this->get(   '/articles',                                                  ArticleController::class . ':getList');
     $this->post(  '/articles',                                                  ArticleController::class . ':create');
@@ -89,9 +83,11 @@ $app->group('/api', function () {
     $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
     $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
     $this->get(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':getVoters');
-    $this->put(   '/articles/{article_id:\d+}/votes',                           ArticleController::class . ':addVote');
-    $this->delete('/articles/{article_id:\d+}/votes',                           ArticleController::class . ':deleteVote');
+    $this->post(  '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':addVote');
+    $this->delete('/articles/{article_id:\d+}/voters',                          ArticleController::class . ':deleteVote');
     $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
+    $this->post(  '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':addFollow');
+    $this->delete('/articles/{article_id:\d+}/followers',                       ArticleController::class . ':deleteFollow');
     $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
     $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
 
@@ -102,13 +98,13 @@ $app->group('/api', function () {
     $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
     $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
     $this->get(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':getVoters');
-    $this->put(   '/questions/{question_id:\d+}/votes',                         QuestionController::class . ':addVote');
-    $this->delete('/questions/{question_id:\d+}/votes',                         QuestionController::class . ':deleteVote');
+    $this->post(  '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':addVote');
+    $this->delete('/questions/{question_id:\d+}/voters',                        QuestionController::class . ':deleteVote');
     $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
+    $this->post(  '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':addFollow');
+    $this->delete('/questions/{question_id:\d+}/followers',                     QuestionController::class . ':deleteFollow');
     $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
     $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
-    $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class .   ':getListByQuestionId');
-    $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class .   ':create');
 
     $this->get(   '/topics',                                                    TopicController::class . ':getList');
     $this->post(  '/topics',                                                    TopicController::class . ':create');
@@ -117,15 +113,18 @@ $app->group('/api', function () {
     $this->post(  '/topics/{topic_id:\d+}',                                     TopicController::class . ':update'); // formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
     $this->delete('/topics/{topic_id:\d+}',                                     TopicController::class . ':delete');
     $this->get(   '/topics/{topic_id:\d+}/followers',                           TopicController::class . ':getFollowers');
+    $this->post(  '/topics/{topic_id:\d+}/followers',                           TopicController::class . ':addFollow');
+    $this->delete('/topics/{topic_id:\d+}/followers',                           TopicController::class . ':deleteFollow');
 
     $this->get(   '/answers',                                                   AnswerController::class . ':getList');
+    $this->post(  '/answers',                                                   AnswerController::class . ':create');
     $this->delete('/answers',                                                   AnswerController::class . ':batchDelete');
     $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':get');
     $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');
     $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':delete');
     $this->get(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':getVoters');
-    $this->put(   '/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':addVote');
-    $this->delete('/answers/{answer_id:\d+}/votes',                             AnswerController::class . ':deleteVote');
+    $this->post(  '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':addVote');
+    $this->delete('/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':deleteVote');
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
 
@@ -135,8 +134,8 @@ $app->group('/api', function () {
     $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':update');
     $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':delete');
     $this->get(   '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':getVoters');
-    $this->put(   '/comments/{comment_id:\d+}/votes',                           CommentController::class . ':addVote');
-    $this->delete('/comments/{comment_id:\d+}/votes',                           CommentController::class . ':deleteVote');
+    $this->post(  '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':addVote');
+    $this->delete('/comments/{comment_id:\d+}/voters',                          CommentController::class . ':deleteVote');
 
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
     $this->post(  '/reports',                                                   ReportController::class . ':create');
