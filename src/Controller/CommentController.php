@@ -16,6 +16,31 @@ use Slim\Http\Response;
 class CommentController extends Controller
 {
     /**
+     * 获取指定用户发表的评论列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getListByUserId(Request $request, Response $response, int $user_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 获取当前用户发表的评论列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getMyList(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取所有评论
      *
      * @param  Request  $request

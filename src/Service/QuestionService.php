@@ -79,6 +79,34 @@ class QuestionService extends Service
     }
 
     /**
+     * 根据用户ID获取问题列表
+     *
+     * @param  int   $userId
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getListByUserId(int $userId, bool $withRelationship = false): array
+    {
+        $this->userService->hasOrFail($userId);
+
+        $list = $this->questionModel
+            ->where(['user_id' => $userId])
+            ->order($this->getOrder(['update_time' => 'DESC']))
+            ->field($this->getPrivacyFields(), true)
+            ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
+
+        if ($withRelationship) {
+            $list['data'] = $this->addRelationship($list['data']);
+        }
+
+        return $list;
+    }
+
+    /**
      * 发表问题
      *
      * @param  int    $userId          用户ID

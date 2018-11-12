@@ -43,6 +43,31 @@ class ArticleController extends Controller
     }
 
     /**
+     * 获取指定用户发表的文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getListByUserId(Request $request, Response $response, int $user_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 获取当前用户发表的文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getMyList(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
      * 获取指定用户关注的文章列表
      *
      * @param  Request  $request

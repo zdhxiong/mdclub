@@ -60,6 +60,10 @@ $app->group('/api', function () {
     $this->get(   '/users/{user_id:\d+}/following_questions',                   QuestionController::class . ':getFollowing');
     $this->get(   '/users/{user_id:\d+}/following_articles',                    ArticleController::class . ':getFollowing');
     $this->get(   '/users/{user_id:\d+}/following_topics',                      TopicController::class . ':getFollowing');
+    $this->get(   '/users/{user_id:\d+}/questions',                             QuestionController::class . ':getListByUserId');
+    $this->get(   '/users/{user_id:\d+}/answers',                               AnswerController::class . ':getListByUserId');
+    $this->get(   '/users/{user_id:\d+}/articles',                              ArticleController::class . ':getListByUserId');
+    $this->get(   '/users/{user_id:\d+}/comments',                              CommentController::class . ':getListByUserId');
 
     $this->get(   '/user',                                                      UserController::class . ':getMe');
     $this->patch( '/user',                                                      UserController::class . ':updateMe');
@@ -73,8 +77,12 @@ $app->group('/api', function () {
     $this->get(   '/user/followers',                                            UserController::class . ':getMyFollowers');
     $this->get(   '/user/followees',                                            UserController::class . ':getMyFollowees');
     $this->get(   '/user/following_questions',                                  QuestionController::class . ':getMyFollowing');
-    $this->get(   '/user/following_articles',                                   ArticleController::class .  ':getMyFollowing');
-    $this->get(   '/user/following_topics',                                     TopicController::class .  ':getMyFollowing');
+    $this->get(   '/user/following_articles',                                   ArticleController::class . ':getMyFollowing');
+    $this->get(   '/user/following_topics',                                     TopicController::class . ':getMyFollowing');
+    $this->get(   '/user/questions',                                            QuestionController::class . ':getMyList');
+    $this->get(   '/user/answers',                                              AnswerController::class . ':getMyList');
+    $this->get(   '/user/articles',                                             ArticleController::class . ':getMyList');
+    $this->get(   '/user/comments',                                             CommentController::class . ':getMyList');
 
     $this->get(   '/articles',                                                  ArticleController::class . ':getList');
     $this->post(  '/articles',                                                  ArticleController::class . ':create');
@@ -105,6 +113,8 @@ $app->group('/api', function () {
     $this->delete('/questions/{question_id:\d+}/followers',                     QuestionController::class . ':deleteFollow');
     $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
     $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
+    $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
+    $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
 
     $this->get(   '/topics',                                                    TopicController::class . ':getList');
     $this->post(  '/topics',                                                    TopicController::class . ':create');
@@ -117,7 +127,6 @@ $app->group('/api', function () {
     $this->delete('/topics/{topic_id:\d+}/followers',                           TopicController::class . ':deleteFollow');
 
     $this->get(   '/answers',                                                   AnswerController::class . ':getList');
-    $this->post(  '/answers',                                                   AnswerController::class . ':create');
     $this->delete('/answers',                                                   AnswerController::class . ':batchDelete');
     $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':get');
     $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');

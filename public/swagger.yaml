@@ -605,6 +605,61 @@ paths:
       security:
         - token: []
 
+  /users/{user_id}/questions:
+
+    get:
+      tags:
+        - Question
+      summary: 获取指定用户发表的问题
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /users/{user_id}/answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo - 获取指定用户发表的回答
+
+  /users/{user_id}/articles:
+
+    get:
+      tags:
+        - Article
+      summary: todo - 获取指定用户发表的文章
+
+  /users/{user_id}/comments:
+
+    get:
+      tags:
+        - Comment
+      summary: todo - 获取指定用户发表的评论
+
   /user:
 
     get:
@@ -998,6 +1053,57 @@ paths:
           $ref: '#/responses/Error'
       security:
         - token: []
+
+  /user/questions:
+
+    get:
+      tags:
+        - Question
+      summary: 获取当前用户发表的问题
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 问题列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Questions'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /user/answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo - 获取当前用户发表的回答
+
+  /user/articles:
+
+    get:
+      tags:
+        - Article
+      summary: todo - 获取当前用户发表的文章
+
+  /user/comments:
+
+    get:
+      tags:
+        - Comment
+      summary: todo - 获取当前用户发表的评论
 
   /articles:
 
@@ -1830,6 +1936,18 @@ paths:
       security:
         - token: []
 
+  /questions/{question_id}/answers:
+
+    get:
+      tags:
+        - Answer
+      summary: todo - 获取指定问题下的回答列表
+
+    post:
+      tags:
+        - Answer
+      summary: todo - 在指定问题下发表回答
+
   /topics:
 
     get:
@@ -2115,40 +2233,6 @@ paths:
                 $ref: '#/definitions/Answers'
               pagination:
                 $ref: '#/definitions/Pagination'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    post:
-      tags:
-        - Answer
-      summary: todo - 创建回答
-      description:
-      parameters:
-        - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              question_id:
-                type: integer
-                description: 问题ID
-              content_markdown:
-                type: string
-                description: markdown 格式的内容
-              content_rendered:
-                type: string
-                description: html 格式的内容
-      responses:
-        200:
-          description: 回答信息
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                $ref: '#/definitions/Answer'
         default:
           $ref: '#/responses/Error'
       security:

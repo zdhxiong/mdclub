@@ -14,5 +14,10 @@ use App\Abstracts\CommentableAbstracts;
  */
 class QuestionCommentService extends CommentableAbstracts
 {
-
+    /**
+     * 评论类型
+     *
+     * @var string
+     */
+    protected $commentableType = 'question';
 }
