@@ -99,7 +99,8 @@ class CommentService extends Service
      *     },
      *     question: {},
      *     answer: {},
-     *     article: {}
+     *     article: {},
+     *     voting: up、down、false
      * }
      *
      * @param  array $comments

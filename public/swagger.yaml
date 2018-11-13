@@ -4033,6 +4033,9 @@ definitions:
       is_following:
         type: boolean
         description: 当前登录用户是否已关注该问题
+      voting:
+        type: string|bool
+        description: 当前登录用户的投票类型（up、down），未投过票则为 false
 
   AnswerRelationship:
     type: object
@@ -4046,6 +4049,9 @@ definitions:
       is_following:
         type: boolean
         description: 当前登录用户是否已关注该话题
+      voting:
+        type: string|bool
+        description: 当前登录用户的投票类型（up、down），未投过票则为 false
 
   ArticleRelationship:
     type: object
@@ -4057,12 +4063,18 @@ definitions:
       is_following:
         type: boolean
         description: 当前登录用户是否已关注该文章
+      voting:
+        type: string|bool
+        description: 当前登录用户的投票类型（up、down），未投过票则为 false
 
   CommentRelationship:
     type: object
     properties:
       user:
         $ref: '#/definitions/UserInRelationship'
+      voting:
+        type: string|bool
+        description: 当前登录用户的投票类型（up、down），未投过票则为 false
 
   ReportRelationship:
     type: object

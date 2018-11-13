@@ -140,10 +140,11 @@ class ArticleService extends Service
      *         }
      *     ]
      *     is_following: false
+     *     voting: up、down、false
      * }
      *
      * @param  array $articles
-     * @param  array $relationship
+     * @param  array $relationship ['is_following': bool]
      * @return array
      */
     public function addRelationship(array $articles, array $relationship = []): array
@@ -160,8 +161,9 @@ class ArticleService extends Service
         $articleIds = array_unique(array_column($articles, 'article_id'));
         $userIds = array_unique(array_column($articles, 'user_id'));
         $followingArticleIds = [];
-        $users = [];
-        $topics = [];
+        $votings = []; // article_id 为键，投票类型为值
+        $users = []; // user_id 为键，用户信息为值
+        $topics = []; // article_id 为键，topic 信息组成的二维数组为值
 
         // is_following
         if ($currentUserId) {
@@ -173,6 +175,22 @@ class ArticleService extends Service
                     'followable_id'   => $articleIds,
                     'followable_type' => 'article',
                 ])->pluck('followable_id');
+            }
+        }
+
+        // voting
+        if ($currentUserId) {
+            $votes = $this->voteModel
+                ->where([
+                    'user_id'      => $currentUserId,
+                    'votable_id'   => $articleIds,
+                    'votable_type' => 'article',
+                ])
+                ->field(['votable_id', 'type'])
+                ->select();
+
+            foreach ($votes as $vote) {
+                $votings[$vote['votable_id']] = $vote['type'];
             }
         }
 
@@ -214,11 +232,13 @@ class ArticleService extends Service
             ]);
         }
 
+        // 合并数据
         foreach ($articles as &$article) {
             $article['relationship'] = [
                 'user'         => $users[$article['user_id']],
                 'topics'       => $topics[$article['article_id']],
                 'is_following' => in_array($article['article_id'], $followingArticleIds),
+                'voting'       => $votings[$article['article_id']] ?? false,
             ];
         }
 

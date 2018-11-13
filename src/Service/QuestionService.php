@@ -566,10 +566,11 @@ class QuestionService extends Service
      *         }
      *     ]
      *     is_following: false
+     *     voting: up、down、false
      * }
      *
      * @param  array $questions
-     * @param  array $relationship
+     * @param  array $relationship ['is_following': bool]
      * @return array
      */
     public function addRelationship(array $questions, array $relationship = []): array
@@ -586,8 +587,9 @@ class QuestionService extends Service
         $questionIds = array_unique(array_column($questions, 'question_id'));
         $userIds = array_unique(array_column($questions, 'user_id'));
         $followingQuestionIds = [];
-        $users = [];
-        $topics = [];
+        $votings = []; // question_id 为键，投票类型为值
+        $users = []; // user_id 为键，用户信息为值
+        $topics = []; // question_id 为键，topic 信息组成的二维数组为值
 
         // is_following
         if ($currentUserId) {
@@ -599,6 +601,22 @@ class QuestionService extends Service
                     'followable_id'   => $questionIds,
                     'followable_type' => 'question',
                 ])->pluck('followable_id');
+            }
+        }
+
+        // voting
+        if ($currentUserId) {
+            $votes = $this->voteModel
+                ->where([
+                    'user_id'      => $currentUserId,
+                    'votable_id'   => $questionIds,
+                    'votable_type' => 'question',
+                ])
+                ->field(['votable_id', 'type'])
+                ->select();
+
+            foreach ($votes as $vote) {
+                $votings[$vote['votable_id']] = $vote['type'];
             }
         }
 
@@ -640,11 +658,13 @@ class QuestionService extends Service
             ]);
         }
 
+        // 合并数据
         foreach ($questions as &$question) {
             $question['relationship'] = [
                 'user'         => $users[$question['user_id']],
                 'topics'       => $topics[$question['question_id']],
                 'is_following' => in_array($question['question_id'], $followingQuestionIds),
+                'voting'       => $votings[$question['question_id']] ?? false,
             ];
         }
 
