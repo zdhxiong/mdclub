@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Helper\ArrayHelper;
+
 /**
  * Class ImageModel
  *
@@ -26,4 +28,12 @@ class ImageModel extends Model
         'item_type',
         'item_id',
     ];
+
+    protected function beforeInsert(array $data): array
+    {
+        return ArrayHelper::fill($data, [
+            'item_type' => null,
+            'item_id'   => 0,
+        ]);
+    }
 }

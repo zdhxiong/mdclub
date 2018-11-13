@@ -1437,20 +1437,19 @@ paths:
     get:
       tags:
         - ArticleComment
-      summary: todo - 获取指定文章的评论列表
-      description: |
-        默认排序方式为 `create_time ASC`
-        <br/>
-        **可添加的排序参数为：**
-        `create_time`
+      summary: 获取指定文章的评论列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
         - name: article_id
           in: path
           type: integer
           description: 文章ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -1470,8 +1469,7 @@ paths:
     post:
       tags:
         - ArticleComment
-      summary: todo - 在指定文章下发表评论
-      description: 在指定文章下发表评论
+      summary: 在指定文章下发表评论
       parameters:
         - name: article_id
           in: path
@@ -1872,20 +1870,19 @@ paths:
     get:
       tags:
         - QuestionComment
-      summary: todo - 获取指定问题的评论列表
-      description: |
-        默认排序方式为 `create_time ASC`
-        <br/>
-        **可添加的排序参数为：**
-        `create_time`
+      summary: 获取指定问题的评论列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
         - name: question_id
           in: path
           type: integer
           description: 问题ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -1905,8 +1902,7 @@ paths:
     post:
       tags:
         - QuestionComment
-      summary: todo - 在指定问题下发表评论
-      description: 在指定问题下发表评论
+      summary: 在指定问题下发表评论
       parameters:
         - name: question_id
           in: path
@@ -2448,20 +2444,19 @@ paths:
     get:
       tags:
         - AnswerComment
-      summary: todo - 获取指定回答的评论列表
-      description: |
-        默认排序方式为 `create_time ASC`
-        <br/>
-        **可添加的排序参数为：**
-        `create_time`
+      summary: 获取指定回答的评论列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
         - name: answer_id
           in: path
           type: integer
           description: 回答ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -2481,8 +2476,7 @@ paths:
     post:
       tags:
         - AnswerComment
-      summary: todo - 在指定回答下发表评论
-      description: 在指定回答下发表评论
+      summary: 在指定回答下发表评论
       parameters:
         - name: answer_id
           in: path

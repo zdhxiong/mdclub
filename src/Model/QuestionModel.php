@@ -41,6 +41,7 @@ class QuestionModel extends Model
             'answer_count'     => 0,
             'view_count'       => 0,
             'follower_count'   => 0,
+            'vote_count'       => 0,
             'last_answer_time' => 0,
         ]);
     }

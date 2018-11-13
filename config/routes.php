@@ -97,7 +97,7 @@ $app->group('/api', function () {
     $this->post(  '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':addFollow');
     $this->delete('/articles/{article_id:\d+}/followers',                       ArticleController::class . ':deleteFollow');
     $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
-    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':createComment');
+    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':addComment');
 
     $this->get(   '/questions',                                                 QuestionController::class . ':getList');
     $this->post(  '/questions',                                                 QuestionController::class . ':create');
@@ -112,7 +112,7 @@ $app->group('/api', function () {
     $this->post(  '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':addFollow');
     $this->delete('/questions/{question_id:\d+}/followers',                     QuestionController::class . ':deleteFollow');
     $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
-    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':createComment');
+    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':addComment');
     $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
     $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
 
@@ -135,7 +135,7 @@ $app->group('/api', function () {
     $this->post(  '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':addVote');
     $this->delete('/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':deleteVote');
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
-    $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':createComment');
+    $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':addComment');
 
     $this->get(   '/comments',                                                  CommentController::class . ':getList');
     $this->delete('/comments',                                                  CommentController::class . ':batchDelete');

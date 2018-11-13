@@ -45,7 +45,6 @@ use Slim\Http\Response;
  * @property-read \App\Service\UserPasswordResetService userPasswordResetService
  * @property-read \App\Service\UserRegisterService      userRegisterService
  * @property-read \App\Service\UserService              userService
- * @property-read \App\Service\VoteService              voteService
  *
  * @package App\Controller
  */

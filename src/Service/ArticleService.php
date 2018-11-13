@@ -21,7 +21,7 @@ class ArticleService extends Service
      *
      * @return array
      */
-    protected function getAllowFilterFields(): array
+    public function getAllowFilterFields(): array
     {
         return $this->roleService->managerId()
             ? [

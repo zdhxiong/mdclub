@@ -36,9 +36,10 @@ class ArticleModel extends Model
     protected function beforeInsert(array $data): array
     {
         return ArrayHelper::fill($data, [
-            'comment_count' => 0,
-            'view_count' => 0,
+            'comment_count'  => 0,
+            'view_count'     => 0,
             'follower_count' => 0,
+            'vote_count'     => 0,
         ]);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Helper\ArrayHelper;
+
 /**
  * Class CommentModel
  *
@@ -27,4 +29,11 @@ class CommentModel extends Model
         'update_time',
         'delete_time',
     ];
+
+    protected function beforeInsert(array $data): array
+    {
+        return ArrayHelper::fill($data, [
+            'vote_count' => 0,
+        ]);
+    }
 }

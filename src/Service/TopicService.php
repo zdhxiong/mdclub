@@ -44,13 +44,9 @@ class TopicService extends BrandImageAbstracts
      *
      * @return array
      */
-    protected function getPrivacyFields(): array
+    public function getPrivacyFields(): array
     {
-        return $this->roleService->managerId()
-            ? []
-            : [
-                'delete_time',
-            ];
+        return ['delete_time'];
     }
 
     /**
@@ -58,7 +54,7 @@ class TopicService extends BrandImageAbstracts
      *
      * @return array
      */
-    protected function getAllowOrderFields(): array
+    public function getAllowOrderFields(): array
     {
         return ['topic_id', 'follower_count'];
     }
@@ -68,7 +64,7 @@ class TopicService extends BrandImageAbstracts
      *
      * @return array
      */
-    protected function getAllowFilterFields(): array
+    public function getAllowFilterFields(): array
     {
         return ['topic_id', 'name'];
     }

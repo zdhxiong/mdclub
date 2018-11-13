@@ -26,6 +26,8 @@ class ImageController extends Controller
      */
     public function upload(Request $request, Response $response): Response
     {
+        $this->roleService->userIdOrFail();
+
         /** @var UploadedFileInterface $avatar */
         $file = $request->getUploadedFiles()['image'] ?? null;
 

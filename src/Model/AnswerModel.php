@@ -35,6 +35,7 @@ class AnswerModel extends Model
     {
         return ArrayHelper::fill($data, [
             'comment_count' => 0,
+            'vote_count'    => 0,
         ]);
     }
 }

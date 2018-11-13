@@ -21,7 +21,7 @@ class UserService extends Service
      *
      * @return array
      */
-    protected function getPrivacyFields(): array
+    public function getPrivacyFields(): array
     {
         return $this->roleService->managerId()
             ? [
@@ -45,7 +45,7 @@ class UserService extends Service
      *
      * @return array
      */
-    protected function getAllowOrderFields(): array
+    public function getAllowOrderFields(): array
     {
         return ['follower_count', 'create_time'];
     }
@@ -55,7 +55,7 @@ class UserService extends Service
      *
      * @return array
      */
-    protected function getAllowFilterFields(): array
+    public function getAllowFilterFields(): array
     {
         return $this->roleService->managerId()
             ? [

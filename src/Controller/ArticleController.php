@@ -283,7 +283,9 @@ class ArticleController extends Controller
      */
     public function getComments(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $list = $this->articleCommentService->getComments($article_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -294,8 +296,12 @@ class ArticleController extends Controller
      * @param  int      $article_id
      * @return Response
      */
-    public function createComment(Request $request, Response $response, int $article_id): Response
+    public function addComment(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $content = $request->getParsedBodyParam('content');
+        $commentId = $this->articleCommentService->addComment($article_id, $content);
+        $comment = $this->commentService->get($commentId, true);
+
+        return $this->success($response, $comment);
     }
 }

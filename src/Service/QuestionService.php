@@ -24,13 +24,9 @@ class QuestionService extends Service
      *
      * @return array
      */
-    protected function getPrivacyFields(): array
+    public function getPrivacyFields(): array
     {
-        return $this->roleService->managerId()
-            ? []
-            : [
-                'delete_time',
-            ];
+        return ['delete_time'];
     }
 
     /**
@@ -38,7 +34,7 @@ class QuestionService extends Service
      *
      * @return array
      */
-    protected function getAllowOrderFields(): array
+    public function getAllowOrderFields(): array
     {
         return ['vote_count', 'create_time', 'update_time'];
     }
@@ -48,7 +44,7 @@ class QuestionService extends Service
      *
      * @return array
      */
-    protected function getAllowFilterFields(): array
+    public function getAllowFilterFields(): array
     {
         return ['question_id', 'user_id'];
     }

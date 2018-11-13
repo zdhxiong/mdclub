@@ -68,7 +68,6 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read UserPasswordResetService                userPasswordResetService
  * @property-read UserRegisterService                     userRegisterService
  * @property-read UserService                             userService
- * @property-read VoteService                             voteService
  *
  * @package App\Service
  */
@@ -86,7 +85,7 @@ class Service
      *
      * @return array
      */
-    protected function getPrivacyFields(): array
+    public function getPrivacyFields(): array
     {
         return [];
     }
@@ -96,7 +95,7 @@ class Service
      *
      * @return array
      */
-    protected function getAllowOrderFields(): array
+    public function getAllowOrderFields(): array
     {
         return [];
     }
@@ -106,7 +105,7 @@ class Service
      *
      * @return array
      */
-    protected function getAllowFilterFields(): array
+    public function getAllowFilterFields(): array
     {
         return [];
     }

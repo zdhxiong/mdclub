@@ -41,6 +41,20 @@ class QuestionController extends Controller
     }
 
     /**
+     * 获取问答列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getList(Request $request, Response $response): Response
+    {
+        $list = $this->questionService->getList(true);
+
+        return $this->success($response, $list);
+    }
+
+    /**
      * 获取指定用户发表的问题列表
      *
      * @param  Request  $request
@@ -101,6 +115,21 @@ class QuestionController extends Controller
     }
 
     /**
+     * 获取指定问题的关注者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function getFollowers(Request $request, Response $response, int $question_id): Response
+    {
+        $followers = $this->questionFollowService->getFollowers($question_id, true);
+
+        return $this->success($response, $followers);
+    }
+
+    /**
      * 添加关注
      *
      * @param  Request  $request
@@ -132,20 +161,6 @@ class QuestionController extends Controller
         $followerCount = $this->questionFollowService->getFollowerCount($question_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
-    }
-
-    /**
-     * 获取问答列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getList(Request $request, Response $response): Response
-    {
-        $list = $this->questionService->getList(true);
-
-        return $this->success($response, $list);
     }
 
     /**
@@ -304,21 +319,6 @@ class QuestionController extends Controller
     }
 
     /**
-     * 获取指定问题的关注者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function getFollowers(Request $request, Response $response, int $question_id): Response
-    {
-        $followers = $this->questionFollowService->getFollowers($question_id, true);
-
-        return $this->success($response, $followers);
-    }
-
-    /**
      * 获取指定问题下的评论列表
      *
      * @param  Request  $request
@@ -328,7 +328,9 @@ class QuestionController extends Controller
      */
     public function getComments(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $list = $this->questionCommentService->getComments($question_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -339,8 +341,12 @@ class QuestionController extends Controller
      * @param  int      $question_id
      * @return Response
      */
-    public function createComment(Request $request, Response $response, int $question_id): Response
+    public function addComment(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $content = $request->getParsedBodyParam('content');
+        $commentId = $this->questionCommentService->addComment($question_id, $content);
+        $comment = $this->commentService->get($commentId, true);
+
+        return $this->success($response, $comment);
     }
 }
