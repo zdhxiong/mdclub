@@ -42,70 +42,6 @@ class TopicController extends Controller
     }
 
     /**
-     * 获取指定用户关注的话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @return Response
-     */
-    public function getFollowing(Request $request, Response $response, int $user_id): Response
-    {
-        $following= $this->topicFollowService->getFollowing($user_id, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 获取我关注的话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getMyFollowing(Request $request, Response $response): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $following = $this->topicFollowService->getFollowing($userId, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 关注指定话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $topic_id
-     * @return Response
-     */
-    public function addFollow(Request $request, Response $response, int $topic_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->topicFollowService->addFollow($userId, $topic_id);
-        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
-
-        return $this->success($response, ['follower_count' => $followerCount]);
-    }
-
-    /**
-     * 取消关注指定话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $topic_id
-     * @return Response
-     */
-    public function deleteFollow(Request $request, Response $response, int $topic_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->topicFollowService->deleteFollow($userId, $topic_id);
-        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
-
-        return $this->success($response, ['follower_count' => $followerCount]);
-    }
-
-    /**
      * 获取话题列表
      *
      * @param  Request  $request
@@ -220,6 +156,36 @@ class TopicController extends Controller
     }
 
     /**
+     * 获取指定用户关注的话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getFollowing(Request $request, Response $response, int $user_id): Response
+    {
+        $following= $this->topicFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
+     * 获取我关注的话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getMyFollowing(Request $request, Response $response): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->topicFollowService->getFollowing($userId, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
      * 获取指定话题的关注者
      *
      * @param  Request  $request
@@ -232,5 +198,39 @@ class TopicController extends Controller
         $followers = $this->topicFollowService->getFollowers($topic_id, true);
 
         return $this->success($response, $followers);
+    }
+
+    /**
+     * 关注指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function addFollow(Request $request, Response $response, int $topic_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->topicFollowService->addFollow($userId, $topic_id);
+        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
+
+        return $this->success($response, ['follower_count' => $followerCount]);
+    }
+
+    /**
+     * 取消关注指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function deleteFollow(Request $request, Response $response, int $topic_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->topicFollowService->deleteFollow($userId, $topic_id);
+        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
+
+        return $this->success($response, ['follower_count' => $followerCount]);
     }
 }

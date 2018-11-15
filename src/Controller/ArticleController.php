@@ -68,70 +68,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * 获取指定用户关注的文章列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @return Response
-     */
-    public function getFollowing(Request $request, Response $response, int $user_id): Response
-    {
-        $following = $this->articleFollowService->getFollowing($user_id, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 获取当前用户关注的文章列表
-     *
-     * @param  Request $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getMyFollowing(Request $request, Response $response): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $following = $this->articleFollowService->getFollowing($userId, true);
-
-        return $this->success($response, $following);
-    }
-
-    /**
-     * 当前用户关注指定文章
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function addFollow(Request $request, Response $response, int $article_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->articleFollowService->addFollow($userId, $article_id);
-        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
-
-        return $this->success($response, ['follower_count' => $followerCount]);
-    }
-
-    /**
-     * 当前用户取消关注指定文章
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function deleteFollow(Request $request, Response $response, int $article_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->articleFollowService->deleteFollow($userId, $article_id);
-        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
-
-        return $this->success($response, ['follower_count' => $followerCount]);
-    }
-
-    /**
      * 获取文章列表
      *
      * @param  Request  $request
@@ -207,6 +143,85 @@ class ArticleController extends Controller
     }
 
     /**
+     * 获取指定用户关注的文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function getFollowing(Request $request, Response $response, int $user_id): Response
+    {
+        $following = $this->articleFollowService->getFollowing($user_id, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
+     * 获取当前用户关注的文章列表
+     *
+     * @param  Request $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getMyFollowing(Request $request, Response $response): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $following = $this->articleFollowService->getFollowing($userId, true);
+
+        return $this->success($response, $following);
+    }
+
+    /**
+     * 获取指定文章的关注者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function getFollowers(Request $request, Response $response, int $article_id): Response
+    {
+        $followers = $this->articleFollowService->getFollowers($article_id, true);
+
+        return $this->success($response, $followers);
+    }
+
+    /**
+     * 当前用户关注指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function addFollow(Request $request, Response $response, int $article_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleFollowService->addFollow($userId, $article_id);
+        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
+
+        return $this->success($response, ['follower_count' => $followerCount]);
+    }
+
+    /**
+     * 当前用户取消关注指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function deleteFollow(Request $request, Response $response, int $article_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleFollowService->deleteFollow($userId, $article_id);
+        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
+
+        return $this->success($response, ['follower_count' => $followerCount]);
+    }
+
+    /**
      * 添加投票
      *
      * @param  Request  $request
@@ -256,21 +271,6 @@ class ArticleController extends Controller
         $voters = $this->articleVoteService->getVoters($article_id, $type, true);
 
         return $this->success($response, $voters);
-    }
-
-    /**
-     * 获取指定文章的关注者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function getFollowers(Request $request, Response $response, int $article_id): Response
-    {
-        $followers = $this->articleFollowService->getFollowers($article_id, true);
-
-        return $this->success($response, $followers);
     }
 
     /**

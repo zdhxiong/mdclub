@@ -54,6 +54,18 @@ class AnswerController extends Controller
     }
 
     /**
+     * 获取回答列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getList(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
      * 在指定问题下创建回答
      *
      * @param  Request  $request
@@ -62,18 +74,6 @@ class AnswerController extends Controller
      * @return Response
      */
     public function create(Request $request, Response $response, int $question_id): Response
-    {
-        return $response;
-    }
-
-    /**
-     * 获取回答列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function getList(Request $request, Response $response): Response
     {
         return $response;
     }
