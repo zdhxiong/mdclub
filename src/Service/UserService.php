@@ -8,18 +8,20 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
+use App\Traits\FollowableTraits;
 
 /**
  * 用户，已禁用用户也要当普通用户处理
  *
  * @property-read \App\Model\UserModel      currentModel
- * @property-read \App\Service\UserService  currentService
  *
  * Class UserService
  * @package App\Service
  */
 class UserService extends ServiceAbstracts
 {
+    use FollowableTraits;
+
     /**
      * 获取隐私字段
      *

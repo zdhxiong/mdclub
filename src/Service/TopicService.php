@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\FollowableTraits;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
@@ -15,13 +16,14 @@ use App\Helper\ValidatorHelper;
  * 话题
  *
  * @property-read \App\Model\TopicModel      currentModel
- * @property-read \App\Service\TopicService  currentService
  *
  * Class TopicService
  * @package App\Service
  */
 class TopicService extends BrandImageAbstracts
 {
+    use FollowableTraits;
+
     /**
      * @var string 图片类型
      */

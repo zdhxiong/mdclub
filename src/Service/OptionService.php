@@ -8,7 +8,6 @@ use App\Abstracts\ServiceAbstracts;
 
 /**
  * @property-read \App\Model\OptionModel      currentModel
- * @property-read \App\Service\OptionService  currentService
  *
  * Class OptionService
  * @package App\Service

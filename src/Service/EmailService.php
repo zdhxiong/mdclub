@@ -16,8 +16,6 @@ use App\Exception\ValidationException;
 /**
  * Class EmailService
  *
- * @property-read \App\Service\EmailService  currentService
- *
  * @package App\Service
  */
 class EmailService extends ServiceAbstracts

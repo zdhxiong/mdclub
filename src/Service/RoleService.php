@@ -11,8 +11,6 @@ use App\Exception\ApiException;
 /**
  * 用户角色
  *
- * @property-read \App\Service\RoleService  currentService
- *
  * Class RoleService
  * @package App\Service
  */

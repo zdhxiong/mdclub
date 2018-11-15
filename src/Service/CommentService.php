@@ -13,7 +13,6 @@ use App\Traits\VotableTraits;
  * 评论
  *
  * @property-read \App\Model\CommentModel      currentModel
- * @property-read \App\Service\CommentService  currentService
  *
  * Class CommentService
  * @package App\Service

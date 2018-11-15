@@ -79,11 +79,6 @@ abstract class ServiceAbstracts
     protected $currentModel;
 
     /**
-     * 当前 Service 实例
-     */
-    protected $currentService;
-
-    /**
      * 隐私字段
      *
      * @return array
@@ -121,7 +116,6 @@ abstract class ServiceAbstracts
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->currentService = $this;
 
         $serviceName = get_class($this);
         $modelName = str_replace('\\Service\\', '\\Model\\', substr($serviceName, 0, -7) . 'Model');

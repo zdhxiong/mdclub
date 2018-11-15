@@ -14,7 +14,6 @@ use App\Traits\VotableTraits;
  * 对问题的回答
  *
  * @property-read \App\Model\AnswerModel      currentModel
- * @property-read \App\Service\AnswerService  currentService
  *
  * Class AnswerService
  * @package App\Service

@@ -22,7 +22,6 @@ use App\Helper\StringHelper;
  * 3. 宽度为 132px，高度为 88px，居中裁剪的缩略图（存储为本地图片时，以 _t 为后缀）
  *
  * @property-read \App\Model\ImageModel      currentModel
- * @property-read \App\Service\ImageService  currentService
  *
  * Class ImageService
  * @package App\Service

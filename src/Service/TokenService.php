@@ -10,7 +10,6 @@ use App\Exception\ApiException;
 
 /**
  * @property-read \App\Model\TokenModel      currentModel
- * @property-read \App\Service\TokenService  currentService
  *
  * Class TokenService
  * @package App\Service

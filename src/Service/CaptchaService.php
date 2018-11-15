@@ -16,8 +16,6 @@ use App\Helper\StringHelper;
  * 2. 前端提交用户输入的验证码 code 和 token，服务端调用 check() 检查 code 和 token 是否匹配
  * 3. 无论是否匹配，每个验证码都只能验证一次，验证后即删除
  *
- * @property-read \App\Service\CaptchaService  currentService
- *
  * Class CaptchaService
  * @package App\Service
  */

@@ -10,7 +10,6 @@ use App\Abstracts\ServiceAbstracts;
  * 通知
  *
  * @property-read \App\Model\NotificationModel      currentModel
- * @property-read \App\Service\NotificationService  currentService
  *
  * Class NotificationService
  * @package App\Service

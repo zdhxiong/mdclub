@@ -8,20 +8,20 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Traits\CommentableTraits;
+use App\Traits\FollowableTraits;
 use App\Traits\VotableTraits;
 
 /**
  * 文章
  *
  * @property-read \App\Model\ArticleModel      currentModel
- * @property-read \App\Service\ArticleService  currentService
  *
  * Class ArticleService
  * @package App\Service
  */
 class ArticleService extends ServiceAbstracts
 {
-    use CommentableTraits, VotableTraits;
+    use CommentableTraits, FollowableTraits, VotableTraits;
 
     /**
      * 获取允许搜索的字段

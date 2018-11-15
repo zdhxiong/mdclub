@@ -12,20 +12,20 @@ use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\CommentableTraits;
+use App\Traits\FollowableTraits;
 use App\Traits\VotableTraits;
 
 /**
  * 问题
  *
  * @property-read \App\Model\QuestionModel      currentModel
- * @property-read \App\Service\QuestionService  currentService
  *
  * Class QuestionService
  * @package App\Service
  */
 class QuestionService extends ServiceAbstracts
 {
-    use CommentableTraits, VotableTraits;
+    use CommentableTraits, FollowableTraits, VotableTraits;
 
     /**
      * 获取隐私字段
