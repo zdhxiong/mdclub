@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+
 /**
  * Class OptionService
  *
  * @package App\Service
  */
-class OptionService extends Service
+class OptionService extends ServiceAbstracts
 {
     /**
      * 所有字段

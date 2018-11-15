@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Abstracts;
 
 use Psr\Container\ContainerInterface;
 use Slim\Exception\ContainerValueNotFoundException;
@@ -48,7 +48,7 @@ use Slim\Http\Response;
  *
  * @package App\Controller
  */
-class Controller
+abstract class ControllerAbstracts
 {
     /**
      * 容器实例

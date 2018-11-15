@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-class TopicableModel extends Model
+use App\Abstracts\ModelAbstracts;
+
+class TopicableModel extends ModelAbstracts
 {
     protected $table = 'topicable';
     protected $primaryKey = null;

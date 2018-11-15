@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class IndexController
  * @package App\Controller
  */
-class IndexController extends Controller
+class IndexController extends ControllerAbstracts
 {
     /**
      * @param Request $request

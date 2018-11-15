@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
@@ -13,7 +14,7 @@ use App\Exception\ApiException;
  * Class ArticleService
  * @package App\Service
  */
-class ArticleService extends Service
+class ArticleService extends ServiceAbstracts
 {
 
     /**

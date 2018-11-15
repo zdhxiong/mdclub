@@ -6,7 +6,6 @@ namespace App\Abstracts;
 
 use Psr\Http\Message\UploadedFileInterface;
 use PHPImageWorkshop\ImageWorkshop;
-use App\Service\Service;
 use App\Constant\UploadErrorConstant;
 use App\Helper\StringHelper;
 
@@ -16,7 +15,7 @@ use App\Helper\StringHelper;
  * Class BrandImageAbstracts
  * @package App\Abstracts
  */
-abstract class BrandImageAbstracts extends Service
+abstract class BrandImageAbstracts extends ServiceAbstracts
 {
     /**
      * @var string 图片类型，包括 user-avatar、user-cover、topic-cover

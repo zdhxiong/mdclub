@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class ApiController
  * @package App\Controller
  */
-class ApiController extends Controller
+class ApiController extends ControllerAbstracts
 {
     /**
      * API 接口页面

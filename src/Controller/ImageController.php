@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class ImageController
  * @package App\Controller
  */
-class ImageController extends Controller
+class ImageController extends ControllerAbstracts
 {
     /**
      * 上传图片

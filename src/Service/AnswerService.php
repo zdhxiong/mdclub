@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+
 /**
  * 对问题的回答
  *
  * Class AnswerService
  * @package App\Service
  */
-class AnswerService extends Service
+class AnswerService extends ServiceAbstracts
 {
 
     /**

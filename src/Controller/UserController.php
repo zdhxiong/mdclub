@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class UserController
  * @package App\Controller
  */
-class UserController extends Controller
+class UserController extends ControllerAbstracts
 {
     /**
      * 用户列表页

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class AnswerController
  * @package App\Controller
  */
-class AnswerController extends Controller
+class AnswerController extends ControllerAbstracts
 {
     /**
      * 获取指定问题下的回答列表

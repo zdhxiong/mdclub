@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Exception\ValidationException;
 use App\Helper\IpHelper;
 use App\Helper\ValidatorHelper;
@@ -14,7 +15,7 @@ use App\Helper\ValidatorHelper;
  * Class UserPasswordResetService
  * @package App\Service
  */
-class UserPasswordResetService extends Service
+class UserPasswordResetService extends ServiceAbstracts
 {
     /**
      * 密码重置时，发送邮箱验证邮件

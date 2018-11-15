@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class NotificationController
  * @package App\Controller
  */
-class NotificationController extends Controller
+class NotificationController extends ControllerAbstracts
 {
     /**
      * 通知列表页

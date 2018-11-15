@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class ReportController
  * @package App\Controller
  */
-class ReportController extends Controller
+class ReportController extends ControllerAbstracts
 {
     /**
      * 获取举报列表

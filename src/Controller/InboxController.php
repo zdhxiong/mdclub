@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class InboxController
  * @package App\Controller
  */
-class InboxController extends Controller
+class InboxController extends ControllerAbstracts
 {
     /**
      * 私信列表页

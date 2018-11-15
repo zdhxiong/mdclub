@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Abstracts;
 
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,7 +19,7 @@ use Medoo\Medoo;
  *
  * @package App\Model
  */
-class Model
+abstract class ModelAbstracts
 {
     /**
      * 自动维护的 create_time 字段名
@@ -178,7 +178,7 @@ class Model
      *
      * @param  array|string  $columns    字段数组
      * @param  bool          $exclude  是否为排除字段
-     * @return Model
+     * @return ModelAbstracts
      */
     public function field($columns, bool $exclude = false): self
     {
@@ -192,7 +192,7 @@ class Model
      * limit
      *
      * @param  int|array $limit
-     * @return Model
+     * @return ModelAbstracts
      */
     public function limit($limit): self
     {
@@ -205,7 +205,7 @@ class Model
      * order
      *
      * @param  string|array  $order
-     * @return Model
+     * @return ModelAbstracts
      */
     public function order($order): self
     {
@@ -218,7 +218,7 @@ class Model
      * match
      *
      * @param  array $match
-     * @return Model
+     * @return ModelAbstracts
      */
     public function match(array $match): self
     {
@@ -231,7 +231,7 @@ class Model
      * group
      *
      * @param  string  $group
-     * @return Model
+     * @return ModelAbstracts
      */
     public function group(string $group): self
     {
@@ -244,7 +244,7 @@ class Model
      * having
      *
      * @param  array  $having
-     * @return Model
+     * @return ModelAbstracts
      */
     public function having(array $having): self
     {
@@ -257,7 +257,7 @@ class Model
      * join
      *
      * @param $join
-     * @return Model
+     * @return ModelAbstracts
      */
     public function join($join): self
     {
@@ -270,7 +270,7 @@ class Model
      * where
      *
      * @param array $where
-     * @return Model
+     * @return ModelAbstracts
      */
     public function where(array $where): self
     {

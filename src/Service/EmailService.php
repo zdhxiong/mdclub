@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use Psr\Container\ContainerInterface;
 use PHPMailer\PHPMailer\PHPMailer;
 use App\Helper\ValidatorHelper;
@@ -17,7 +18,7 @@ use App\Exception\ValidationException;
  *
  * @package App\Service
  */
-class EmailService extends Service
+class EmailService extends ServiceAbstracts
 {
     /**
      * 邮件验证码有效期：3小时

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class EmailController
  * @package App\Controller
  */
-class EmailController extends Controller
+class EmailController extends ControllerAbstracts
 {
     /**
      * 发送邮件

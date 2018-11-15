@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Exception\ValidationException;
 use App\Helper\IpHelper;
 use App\Helper\StringHelper;
@@ -15,7 +16,7 @@ use App\Helper\ValidatorHelper;
  * Class UserLoginService
  * @package App\Service
  */
-class UserLoginService extends Service
+class UserLoginService extends ServiceAbstracts
 {
     /**
      * 登录

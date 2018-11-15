@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+
 /**
  * 操作频率限制
  *
@@ -11,7 +13,7 @@ namespace App\Service;
  *
  * @package App\Service
  */
-class ThrottleService extends Service
+class ThrottleService extends ServiceAbstracts
 {
     /**
      * 获取剩余可执行的次数

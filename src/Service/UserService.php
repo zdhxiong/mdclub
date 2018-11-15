@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
@@ -14,7 +15,7 @@ use App\Helper\ArrayHelper;
  * Class UserService
  * @package App\Service
  */
-class UserService extends Service
+class UserService extends ServiceAbstracts
 {
     /**
      * 获取隐私字段

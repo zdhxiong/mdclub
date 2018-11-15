@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Helper\ArrayHelper;
 use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\UploadedFileInterface;
@@ -23,7 +24,7 @@ use App\Helper\StringHelper;
  * Class ImageService
  * @package App\Service
  */
-class ImageService extends Service
+class ImageService extends ServiceAbstracts
 {
     const RELEASE_WIDTH = 650;
     const THUMB_WIDTH = 132;

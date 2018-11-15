@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
-class TokenService extends Service
+class TokenService extends ServiceAbstracts
 {
     /**
      * token 的有效期

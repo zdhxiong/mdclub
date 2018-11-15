@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
+
 /**
  * Class TokenModel
  *
  * @package App\Model
  */
-class TokenModel extends Model
+class TokenModel extends ModelAbstracts
 {
     protected $table = 'token';
     protected $primaryKey = 'token';

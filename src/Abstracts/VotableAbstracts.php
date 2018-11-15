@@ -8,7 +8,6 @@ use App\Helper\ArrayHelper;
 use Psr\Container\ContainerInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
-use App\Service\Service;
 
 /**
  * 投票抽象类
@@ -16,7 +15,7 @@ use App\Service\Service;
  * Class VotableAbstracts
  * @package App\Abstracts
  */
-abstract class VotableAbstracts extends Service
+abstract class VotableAbstracts extends ServiceAbstracts
 {
     /**
      * 投票类型（question、answer、article、comment）

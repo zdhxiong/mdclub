@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Exception\ValidationException;
 use App\Helper\IpHelper;
 use App\Helper\StringHelper;
@@ -15,7 +16,7 @@ use App\Helper\ValidatorHelper;
  * Class UserRegisterService
  * @package App\Service
  */
-class UserRegisterService extends Service
+class UserRegisterService extends ServiceAbstracts
 {
     /**
      * 注册时，发送邮箱验证邮件

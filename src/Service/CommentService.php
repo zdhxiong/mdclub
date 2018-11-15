@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
@@ -13,7 +14,7 @@ use App\Exception\ApiException;
  * Class CommentService
  * @package App\Service
  */
-class CommentService extends Service
+class CommentService extends ServiceAbstracts
 {
     /**
      * 获取隐私字段

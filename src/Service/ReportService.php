@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
@@ -15,7 +16,7 @@ use App\Helper\ValidatorHelper;
  * Class ReportService
  * @package App\Service
  */
-class ReportService extends Service
+class ReportService extends ServiceAbstracts
 {
 
     /**

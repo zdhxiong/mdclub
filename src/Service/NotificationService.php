@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-class NotificationService extends Service
+use App\Abstracts\ServiceAbstracts;
+
+class NotificationService extends ServiceAbstracts
 {
 
 }

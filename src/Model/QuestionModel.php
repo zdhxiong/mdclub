@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
 use App\Helper\ArrayHelper;
 
 /**
@@ -11,7 +12,7 @@ use App\Helper\ArrayHelper;
  *
  * @package App\Model
  */
-class QuestionModel extends Model
+class QuestionModel extends ModelAbstracts
 {
     protected $table = 'question';
     protected $primaryKey = 'question_id';

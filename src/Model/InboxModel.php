@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
+
 /**
  * Class InboxModel
  *
  * @package App\Model
  */
-class InboxModel extends Model
+class InboxModel extends ModelAbstracts
 {
     protected $table = 'inbox';
     protected $primaryKey = 'inbox_id';

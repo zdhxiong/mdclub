@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
 use App\Helper\ArrayHelper;
 use App\Helper\IpHelper;
 
@@ -12,7 +13,7 @@ use App\Helper\IpHelper;
  *
  * @package App\Model
  */
-class UserModel extends Model
+class UserModel extends ModelAbstracts
 {
     protected $table = 'user';
     protected $primaryKey = 'user_id';

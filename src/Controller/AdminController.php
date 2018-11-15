@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class AdminController
  * @package App\Controller
  */
-class AdminController extends Controller
+class AdminController extends ControllerAbstracts
 {
     /**
      * 后台管理控制台页面

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
+
 /**
  * Class FollowModel
  *
  * @package App\Model
  */
-class FollowModel extends Model
+class FollowModel extends ModelAbstracts
 {
     protected $table = 'follow';
     protected $primaryKey = null;

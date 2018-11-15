@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
-use App\Service\Service;
 
 /**
  * 关注关系抽象类
@@ -16,7 +15,7 @@ use App\Service\Service;
  * Class FollowAbstracts
  * @package App\Abstracts
  */
-abstract class FollowableAbstracts extends Service
+abstract class FollowableAbstracts extends ServiceAbstracts
 {
     /**
      * 关注类型（article、question、topic、user）

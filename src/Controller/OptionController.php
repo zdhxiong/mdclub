@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class OptionController
  * @package App\Controller
  */
-class OptionController extends Controller
+class OptionController extends ControllerAbstracts
 {
     /**
      * 获取所有设置项

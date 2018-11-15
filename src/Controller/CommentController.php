@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class CommentController
  * @package App\Controller
  */
-class CommentController extends Controller
+class CommentController extends ControllerAbstracts
 {
     /**
      * 获取指定用户发表的评论列表

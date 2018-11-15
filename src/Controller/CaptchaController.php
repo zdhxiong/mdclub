@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +14,7 @@ use Slim\Http\Response;
  * Class CaptchaController
  * @package App\Controller
  */
-class CaptchaController extends Controller
+class CaptchaController extends ControllerAbstracts
 {
     /**
      * 生成图形验证码

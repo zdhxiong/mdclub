@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
@@ -13,7 +14,7 @@ use App\Exception\ApiException;
  * Class RoleService
  * @package App\Service
  */
-class RoleService extends Service
+class RoleService extends ServiceAbstracts
 {
     /**
      * 获取当前登录用户的 user_id，未登录则返回 false

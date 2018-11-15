@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
+
 /**
  * Class ReportModel
  * @package App\Model
  */
-class ReportModel extends Model
+class ReportModel extends ModelAbstracts
 {
     protected $table = 'report';
     protected $primaryKey = 'report_id';

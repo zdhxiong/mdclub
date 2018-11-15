@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
+
 /**
  * Class VoteModel
  * @package App\Model
  */
-class VoteModel extends Model
+class VoteModel extends ModelAbstracts
 {
     protected $table = 'vote';
     protected $primaryKey = null;

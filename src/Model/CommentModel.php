@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Abstracts\ModelAbstracts;
 use App\Helper\ArrayHelper;
 
 /**
@@ -11,7 +12,7 @@ use App\Helper\ArrayHelper;
  *
  * @package App\Model
  */
-class CommentModel extends Model
+class CommentModel extends ModelAbstracts
 {
     protected $table = 'comment';
     protected $primaryKey = 'comment_id';

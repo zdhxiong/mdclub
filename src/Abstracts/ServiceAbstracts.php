@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Abstracts;
 
 use Psr\Container\ContainerInterface;
 use App\Helper\ArrayHelper;
@@ -36,42 +36,42 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Model\UserModel                    userModel
  * @property-read \App\Model\VoteModel                    voteModel
  *
- * @property-read AnswerCommentService                    answerCommentService
- * @property-read AnswerService                           answerService
- * @property-read AnswerVoteService                       answerVoteService
- * @property-read ArticleCommentService                   articleCommentService
- * @property-read ArticleFollowService                    articleFollowService
- * @property-read ArticleService                          articleService
- * @property-read ArticleVoteService                      articleVoteService
- * @property-read CaptchaService                          captchaService
- * @property-read CommentService                          commentService
- * @property-read CommentVoteService                      commentVoteService
- * @property-read EmailService                            emailService
- * @property-read ImageService                            imageService
- * @property-read InboxService                            inboxService
- * @property-read NotificationService                     notificationService
- * @property-read OptionService                           optionService
- * @property-read QuestionCommentService                  questionCommentService
- * @property-read QuestionFollowService                   questionFollowService
- * @property-read QuestionService                         questionService
- * @property-read QuestionVoteService                     questionVoteService
- * @property-read ReportService                           reportService
- * @property-read RoleService                             roleService
- * @property-read ThrottleService                         throttleService
- * @property-read TokenService                            tokenService
- * @property-read TopicFollowService                      topicFollowService
- * @property-read TopicService                            topicService
- * @property-read UserAvatarService                       userAvatarService
- * @property-read UserCoverService                        userCoverService
- * @property-read UserFollowService                       userFollowService
- * @property-read UserLoginService                        userLoginService
- * @property-read UserPasswordResetService                userPasswordResetService
- * @property-read UserRegisterService                     userRegisterService
- * @property-read UserService                             userService
+ * @property-read \App\Service\AnswerCommentService       answerCommentService
+ * @property-read \App\Service\AnswerService              answerService
+ * @property-read \App\Service\AnswerVoteService          answerVoteService
+ * @property-read \App\Service\ArticleCommentService      articleCommentService
+ * @property-read \App\Service\ArticleFollowService       articleFollowService
+ * @property-read \App\Service\ArticleService             articleService
+ * @property-read \App\Service\ArticleVoteService         articleVoteService
+ * @property-read \App\Service\CaptchaService             captchaService
+ * @property-read \App\Service\CommentService             commentService
+ * @property-read \App\Service\CommentVoteService         commentVoteService
+ * @property-read \App\Service\EmailService               emailService
+ * @property-read \App\Service\ImageService               imageService
+ * @property-read \App\Service\InboxService               inboxService
+ * @property-read \App\Service\NotificationService        notificationService
+ * @property-read \App\Service\OptionService              optionService
+ * @property-read \App\Service\QuestionCommentService     questionCommentService
+ * @property-read \App\Service\QuestionFollowService      questionFollowService
+ * @property-read \App\Service\QuestionService            questionService
+ * @property-read \App\Service\QuestionVoteService        questionVoteService
+ * @property-read \App\Service\ReportService              reportService
+ * @property-read \App\Service\RoleService                roleService
+ * @property-read \App\Service\ThrottleService            throttleService
+ * @property-read \App\Service\TokenService               tokenService
+ * @property-read \App\Service\TopicFollowService         topicFollowService
+ * @property-read \App\Service\TopicService               topicService
+ * @property-read \App\Service\UserAvatarService          userAvatarService
+ * @property-read \App\Service\UserCoverService           userCoverService
+ * @property-read \App\Service\UserFollowService          userFollowService
+ * @property-read \App\Service\UserLoginService           userLoginService
+ * @property-read \App\Service\UserPasswordResetService   userPasswordResetService
+ * @property-read \App\Service\UserRegisterService        userRegisterService
+ * @property-read \App\Service\UserService                userService
  *
  * @package App\Service
  */
-class Service
+abstract class ServiceAbstracts
 {
     /**
      * 容器实例

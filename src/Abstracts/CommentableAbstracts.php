@@ -9,7 +9,6 @@ use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
-use App\Service\Service;
 
 /**
  * 评论抽象类
@@ -17,7 +16,7 @@ use App\Service\Service;
  * Class CommentAbstracts
  * @package App\Abstracts
  */
-abstract class CommentableAbstracts extends Service
+abstract class CommentableAbstracts extends ServiceAbstracts
 {
     /**
      * 评论类型（question、answer、article）

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 
+use App\Abstracts\ControllerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -14,7 +15,7 @@ use Slim\Http\Response;
  * Class TrashController
  * @package App\Controller
  */
-class TrashController extends Controller
+class TrashController extends ControllerAbstracts
 {
     /**
      * 清空回收站
