@@ -8,6 +8,13 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
+/**
+ * @property-read \App\Model\TokenModel      currentModel
+ * @property-read \App\Service\TokenService  currentService
+ *
+ * Class TokenService
+ * @package App\Service
+ */
 class TokenService extends ServiceAbstracts
 {
     /**

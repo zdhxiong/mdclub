@@ -12,8 +12,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class ReportModel extends ModelAbstracts
 {
-    protected $table = 'report';
-    protected $primaryKey = 'report_id';
+    public $table = 'report';
+    public $primaryKey = 'report_id';
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

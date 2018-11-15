@@ -13,8 +13,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class OptionModel extends ModelAbstracts
 {
-    protected $table = 'option';
-    protected $primaryKey = 'name';
+    public $table = 'option';
+    public $primaryKey = 'name';
 
     public $columns = [
         'name',

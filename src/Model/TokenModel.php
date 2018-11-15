@@ -13,8 +13,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class TokenModel extends ModelAbstracts
 {
-    protected $table = 'token';
-    protected $primaryKey = 'token';
+    public $table = 'token';
+    public $primaryKey = 'token';
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

@@ -14,8 +14,8 @@ use App\Helper\ArrayHelper;
  */
 class CommentModel extends ModelAbstracts
 {
-    protected $table = 'comment';
-    protected $primaryKey = 'comment_id';
+    public $table = 'comment';
+    public $primaryKey = 'comment_id';
     protected $timestamps = true;
     protected $softDelete = true;
 

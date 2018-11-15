@@ -9,8 +9,9 @@ use App\Abstracts\ServiceAbstracts;
 /**
  * 操作频率限制
  *
- * Class ThrottleService
+ * @property-read \App\Service\ThrottleService  currentService
  *
+ * Class ThrottleService
  * @package App\Service
  */
 class ThrottleService extends ServiceAbstracts

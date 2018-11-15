@@ -12,6 +12,9 @@ use App\Helper\ArrayHelper;
 /**
  * 用户，已禁用用户也要当普通用户处理
  *
+ * @property-read \App\Model\UserModel      currentModel
+ * @property-read \App\Service\UserService  currentService
+ *
  * Class UserService
  * @package App\Service
  */

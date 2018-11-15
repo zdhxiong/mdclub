@@ -284,7 +284,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function getComments(Request $request, Response $response, int $article_id): Response
     {
-        $list = $this->articleCommentService->getComments($article_id, true);
+        $list = $this->articleService->getComments($article_id, true);
 
         return $this->success($response, $list);
     }
@@ -300,7 +300,7 @@ class ArticleController extends ControllerAbstracts
     public function addComment(Request $request, Response $response, int $article_id): Response
     {
         $content = $request->getParsedBodyParam('content');
-        $commentId = $this->articleCommentService->addComment($article_id, $content);
+        $commentId = $this->articleService->addComment($article_id, $content);
         $comment = $this->commentService->get($commentId, true);
 
         return $this->success($response, $comment);

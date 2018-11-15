@@ -7,8 +7,10 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 
 /**
- * Class OptionService
+ * @property-read \App\Model\OptionModel      currentModel
+ * @property-read \App\Service\OptionService  currentService
  *
+ * Class OptionService
  * @package App\Service
  */
 class OptionService extends ServiceAbstracts

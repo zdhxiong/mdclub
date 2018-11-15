@@ -7,15 +7,20 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Traits\CommentableTraits;
 
 /**
  * 文章
+ *
+ * @property-read \App\Model\ArticleModel      currentModel
+ * @property-read \App\Service\ArticleService  currentService
  *
  * Class ArticleService
  * @package App\Service
  */
 class ArticleService extends ServiceAbstracts
 {
+    use CommentableTraits;
 
     /**
      * 获取允许搜索的字段
@@ -55,6 +60,21 @@ class ArticleService extends ServiceAbstracts
     public function has(int $articleId): bool
     {
         return $this->articleModel->has($articleId);
+    }
+
+    /**
+     * 若问题不存在，则抛出异常
+     *
+     * @param  int  $articleId
+     * @return bool
+     */
+    public function hasOrFail(int $articleId): bool
+    {
+        if (!$isHas = $this->has($articleId)) {
+            throw new ApiException(ErrorConstant::ARTICLE_NOT_FOUND);
+        }
+
+        return $isHas;
     }
 
     /**

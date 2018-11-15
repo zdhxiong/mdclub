@@ -62,14 +62,14 @@ abstract class ModelAbstracts
      *
      * @var string
      */
-    protected $table;
+    public $table;
 
     /**
      * 主键列名
      *
      * @var string
      */
-    protected $primaryKey;
+    public $primaryKey;
 
     /**
      * 表的所有字段名

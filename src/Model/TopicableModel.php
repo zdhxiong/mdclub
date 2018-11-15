@@ -8,8 +8,8 @@ use App\Abstracts\ModelAbstracts;
 
 class TopicableModel extends ModelAbstracts
 {
-    protected $table = 'topicable';
-    protected $primaryKey = null;
+    public $table = 'topicable';
+    public $primaryKey = null;
     protected $timestamps = true;
 
     const UPDATE_TIME = false; // 不维护 update_time 字段

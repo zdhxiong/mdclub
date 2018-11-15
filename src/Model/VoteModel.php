@@ -12,8 +12,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class VoteModel extends ModelAbstracts
 {
-    protected $table = 'vote';
-    protected $primaryKey = null;
+    public $table = 'vote';
+    public $primaryKey = null;
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

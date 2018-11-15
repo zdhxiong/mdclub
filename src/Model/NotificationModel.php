@@ -13,8 +13,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class NotificationModel extends ModelAbstracts
 {
-    protected $table = 'notification';
-    protected $primaryKey = 'notification_id';
+    public $table = 'notification';
+    public $primaryKey = 'notification_id';
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

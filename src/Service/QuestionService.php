@@ -11,15 +11,20 @@ use App\Exception\ValidationException;
 use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
+use App\Traits\CommentableTraits;
 
 /**
  * 问题
+ *
+ * @property-read \App\Model\QuestionModel      currentModel
+ * @property-read \App\Service\QuestionService  currentService
  *
  * Class QuestionService
  * @package App\Service
  */
 class QuestionService extends ServiceAbstracts
 {
+    use CommentableTraits;
 
     /**
      * 获取隐私字段
@@ -240,6 +245,21 @@ class QuestionService extends ServiceAbstracts
     public function has(int $questionId): bool
     {
         return $this->questionModel->has($questionId);
+    }
+
+    /**
+     * 若问题不存在，则抛出异常
+     *
+     * @param int $questionId
+     * @return bool
+     */
+    public function hasOrFail(int $questionId): bool
+    {
+        if (!$isHas = $this->has($questionId)) {
+            throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
+        }
+
+        return $isHas;
     }
 
     /**

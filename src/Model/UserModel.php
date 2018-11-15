@@ -15,8 +15,8 @@ use App\Helper\IpHelper;
  */
 class UserModel extends ModelAbstracts
 {
-    protected $table = 'user';
-    protected $primaryKey = 'user_id';
+    public $table = 'user';
+    public $primaryKey = 'user_id';
     protected $timestamps = true;
 
     // 被禁用的用户也是真实用户，不作为软删除字段处理

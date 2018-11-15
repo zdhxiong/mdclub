@@ -14,8 +14,8 @@ use App\Helper\ArrayHelper;
  */
 class TopicModel extends ModelAbstracts
 {
-    protected $table = 'topic';
-    protected $primaryKey = 'topic_id';
+    public $table = 'topic';
+    public $primaryKey = 'topic_id';
     protected $softDelete = true;
 
     public $columns = [

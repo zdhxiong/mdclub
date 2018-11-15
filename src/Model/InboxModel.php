@@ -13,8 +13,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class InboxModel extends ModelAbstracts
 {
-    protected $table = 'inbox';
-    protected $primaryKey = 'inbox_id';
+    public $table = 'inbox';
+    public $primaryKey = 'inbox_id';
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

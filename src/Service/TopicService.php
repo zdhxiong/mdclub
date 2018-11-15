@@ -14,6 +14,9 @@ use App\Helper\ValidatorHelper;
 /**
  * 话题
  *
+ * @property-read \App\Model\TopicModel      currentModel
+ * @property-read \App\Service\TopicService  currentService
+ *
  * Class TopicService
  * @package App\Service
  */
@@ -96,6 +99,21 @@ class TopicService extends BrandImageAbstracts
     public function has(int $topicId): bool
     {
         return $this->topicModel->has($topicId);
+    }
+
+    /**
+     * 若话题不存在，则抛出异常
+     *
+     * @param  int  $topicId
+     * @return bool
+     */
+    public function hasOrFail(int $topicId): bool
+    {
+        if (!$isHas = $this->has($topicId)) {
+            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
+        }
+
+        return $isHas;
     }
 
     /**

@@ -14,8 +14,8 @@ use App\Helper\ArrayHelper;
  */
 class ImageModel extends ModelAbstracts
 {
-    protected $table = 'image';
-    protected $primaryKey = 'hash';
+    public $table = 'image';
+    public $primaryKey = 'hash';
     protected $timestamps = true;
 
     const UPDATE_TIME = false;

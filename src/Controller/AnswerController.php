@@ -192,7 +192,7 @@ class AnswerController extends ControllerAbstracts
      */
     public function getComments(Request $request, Response $response, int $answer_id): Response
     {
-        $list = $this->answerCommentService->getComments($answer_id, true);
+        $list = $this->answerService->getComments($answer_id, true);
 
         return $this->success($response, $list);
     }
@@ -208,7 +208,7 @@ class AnswerController extends ControllerAbstracts
     public function addComment(Request $request, Response $response, int $answer_id): Response
     {
         $content = $request->getParsedBodyParam('content');
-        $commentId = $this->answerCommentService->addComment($answer_id, $content);
+        $commentId = $this->answerService->addComment($answer_id, $content);
         $comment = $this->commentService->get($commentId, true);
 
         return $this->success($response, $comment);

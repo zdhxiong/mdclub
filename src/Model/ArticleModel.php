@@ -14,8 +14,8 @@ use App\Helper\ArrayHelper;
  */
 class ArticleModel extends ModelAbstracts
 {
-    protected $table = 'article';
-    protected $primaryKey = 'article_id';
+    public $table = 'article';
+    public $primaryKey = 'article_id';
     protected $timestamps = true;
     protected $softDelete = true;
 

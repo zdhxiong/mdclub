@@ -5,15 +5,48 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
+use App\Constant\ErrorConstant;
+use App\Exception\ApiException;
+use App\Traits\CommentableTraits;
 
 /**
  * 对问题的回答
+ *
+ * @property-read \App\Model\AnswerModel      currentModel
+ * @property-read \App\Service\AnswerService  currentService
  *
  * Class AnswerService
  * @package App\Service
  */
 class AnswerService extends ServiceAbstracts
 {
+    use CommentableTraits;
+
+    /**
+     * 判断指定回答是否存在
+     *
+     * @param  int  $answerId
+     * @return bool
+     */
+    public function has(int $answerId): bool
+    {
+        return $this->answerModel->has($answerId);
+    }
+
+    /**
+     * 若回答不存在，则抛出异常
+     *
+     * @param  int  $answerId
+     * @return bool
+     */
+    public function hasOrFail(int $answerId): bool
+    {
+        if (!$isHas = $this->has($answerId)) {
+            throw new ApiException(ErrorConstant::ANSWER_NOT_FOUNT);
+        }
+
+        return $isHas;
+    }
 
     /**
      * 获取回答详情

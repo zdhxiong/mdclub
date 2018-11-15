@@ -13,6 +13,9 @@ use App\Helper\ValidatorHelper;
 /**
  * 举报
  *
+ * @property-read \App\Model\ReportModel      currentModel
+ * @property-read \App\Service\ReportService  currentService
+ *
  * Class ReportService
  * @package App\Service
  */

@@ -13,8 +13,8 @@ use App\Abstracts\ModelAbstracts;
  */
 class FollowModel extends ModelAbstracts
 {
-    protected $table = 'follow';
-    protected $primaryKey = null;
+    public $table = 'follow';
+    public $primaryKey = null;
     protected $timestamps = true;
 
     const UPDATE_TIME = false; // 不维护 update_time 字段
