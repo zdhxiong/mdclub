@@ -235,8 +235,8 @@ class ArticleController extends ControllerAbstracts
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->articleVoteService->addVote($userId, $article_id, $type);
-        $voteCount = $this->articleVoteService->getVoteCount($article_id);
+        $this->articleService->addVote($userId, $article_id, $type);
+        $voteCount = $this->articleService->getVoteCount($article_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
@@ -252,8 +252,8 @@ class ArticleController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->articleVoteService->deleteVote($userId, $article_id);
-        $voteCount = $this->articleVoteService->getVoteCount($article_id);
+        $this->articleService->deleteVote($userId, $article_id);
+        $voteCount = $this->articleService->getVoteCount($article_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
@@ -269,7 +269,7 @@ class ArticleController extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $article_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->articleVoteService->getVoters($article_id, $type, true);
+        $voters = $this->articleService->getVoters($article_id, $type, true);
 
         return $this->success($response, $voters);
     }

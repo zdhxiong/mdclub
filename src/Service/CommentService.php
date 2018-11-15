@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Traits\VotableTraits;
 
 /**
  * 评论
@@ -19,6 +20,8 @@ use App\Exception\ApiException;
  */
 class CommentService extends ServiceAbstracts
 {
+    use VotableTraits;
+
     /**
      * 获取隐私字段
      *
@@ -37,6 +40,32 @@ class CommentService extends ServiceAbstracts
     public function getAllowOrderFields(): array
     {
         return ['vote_count', 'create_time', 'update_time'];
+    }
+
+    /**
+     * 判断指定评论是否存在
+     *
+     * @param  int  $commentId
+     * @return bool
+     */
+    public function has(int $commentId): bool
+    {
+        return $this->commentModel->has($commentId);
+    }
+
+    /**
+     * 若评论不存在，则抛出异常
+     *
+     * @param  int  $commentId
+     * @return bool
+     */
+    public function hasOrFail(int $commentId): bool
+    {
+        if (!$isHas = $this->has($commentId)) {
+            throw new ApiException(ErrorConstant::COMMENT_NOT_FOUNT);
+        }
+
+        return $isHas;
     }
 
     /**

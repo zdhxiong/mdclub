@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Traits\CommentableTraits;
+use App\Traits\VotableTraits;
 
 /**
  * 文章
@@ -20,7 +21,7 @@ use App\Traits\CommentableTraits;
  */
 class ArticleService extends ServiceAbstracts
 {
-    use CommentableTraits;
+    use CommentableTraits, VotableTraits;
 
     /**
      * 获取允许搜索的字段

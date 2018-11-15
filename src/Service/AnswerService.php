@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Traits\CommentableTraits;
+use App\Traits\VotableTraits;
 
 /**
  * 对问题的回答
@@ -20,7 +21,7 @@ use App\Traits\CommentableTraits;
  */
 class AnswerService extends ServiceAbstracts
 {
-    use CommentableTraits;
+    use CommentableTraits, VotableTraits;
 
     /**
      * 判断指定回答是否存在

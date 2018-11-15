@@ -117,8 +117,8 @@ class CommentController extends ControllerAbstracts
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->commentVoteService->addVote($userId, $comment_id, $type);
-        $voteCount = $this->commentVoteService->getVoteCount($comment_id);
+        $this->commentService->addVote($userId, $comment_id, $type);
+        $voteCount = $this->commentService->getVoteCount($comment_id);
 
         return $this->success($response, ['vote_count', $voteCount]);
     }
@@ -134,8 +134,8 @@ class CommentController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $comment_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->commentVoteService->deleteVote($userId, $comment_id);
-        $voteCount = $this->commentVoteService->getVoteCount($comment_id);
+        $this->commentService->deleteVote($userId, $comment_id);
+        $voteCount = $this->commentService->getVoteCount($comment_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
@@ -151,7 +151,7 @@ class CommentController extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $comment_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->commentVoteService->getVoters($comment_id, $type, true);
+        $voters = $this->commentService->getVoters($comment_id, $type, true);
 
         return $this->success($response, $voters);
     }

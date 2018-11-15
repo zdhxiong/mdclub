@@ -143,8 +143,8 @@ class AnswerController extends ControllerAbstracts
         $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->answerVoteService->addVote($userId, $answer_id, $type);
-        $voteCount = $this->answerVoteService->getVoteCount($answer_id);
+        $this->answerService->addVote($userId, $answer_id, $type);
+        $voteCount = $this->answerService->getVoteCount($answer_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
@@ -160,8 +160,8 @@ class AnswerController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $answer_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->answerVoteService->deleteVote($userId, $answer_id);
-        $voteCount = $this->answerVoteService->getVoteCount($answer_id);
+        $this->answerService->deleteVote($userId, $answer_id);
+        $voteCount = $this->answerService->getVoteCount($answer_id);
 
         return $this->success($response, ['vote_count' => $voteCount]);
     }
@@ -177,7 +177,7 @@ class AnswerController extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $answer_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->answerVoteService->getVoters($answer_id, $type, true);
+        $voters = $this->answerService->getVoters($answer_id, $type, true);
 
         return $this->success($response, $voters);
     }

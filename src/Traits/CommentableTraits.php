@@ -8,7 +8,7 @@ use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
 
 /**
- * 可评论对象 Trait （question、answer、article）
+ * 可评论对象 （question、answer、article）
  *
  * Trait CommentableTraits
  * @package App\Traits

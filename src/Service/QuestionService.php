@@ -12,6 +12,7 @@ use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\CommentableTraits;
+use App\Traits\VotableTraits;
 
 /**
  * 问题
@@ -24,7 +25,7 @@ use App\Traits\CommentableTraits;
  */
 class QuestionService extends ServiceAbstracts
 {
-    use CommentableTraits;
+    use CommentableTraits, VotableTraits;
 
     /**
      * 获取隐私字段
