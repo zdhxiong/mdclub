@@ -198,7 +198,7 @@ class QuestionController extends ControllerAbstracts
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        $following = $this->questionFollowService->getFollowing($user_id, true);
+        $following = $this->questionService->getFollowing($user_id, true);
 
         return $this->success($response, $following);
     }
@@ -213,7 +213,7 @@ class QuestionController extends ControllerAbstracts
     public function getMyFollowing(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $following = $this->questionFollowService->getFollowing($userId, true);
+        $following = $this->questionService->getFollowing($userId, true);
 
         return $this->success($response, $following);
     }
@@ -228,7 +228,7 @@ class QuestionController extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $question_id): Response
     {
-        $followers = $this->questionFollowService->getFollowers($question_id, true);
+        $followers = $this->questionService->getFollowers($question_id, true);
 
         return $this->success($response, $followers);
     }
@@ -244,8 +244,8 @@ class QuestionController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $question_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->questionFollowService->addFollow($userId, $question_id);
-        $followerCount = $this->questionFollowService->getFollowerCount($question_id);
+        $this->questionService->addFollow($userId, $question_id);
+        $followerCount = $this->questionService->getFollowerCount($question_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
@@ -261,8 +261,8 @@ class QuestionController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $question_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->questionFollowService->deleteFollow($userId, $question_id);
-        $followerCount = $this->questionFollowService->getFollowerCount($question_id);
+        $this->questionService->deleteFollow($userId, $question_id);
+        $followerCount = $this->questionService->getFollowerCount($question_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }

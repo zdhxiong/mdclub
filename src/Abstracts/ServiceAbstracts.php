@@ -37,7 +37,6 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Model\VoteModel                    voteModel
  *
  * @property-read \App\Service\AnswerService              answerService
- * @property-read \App\Service\ArticleFollowService       articleFollowService
  * @property-read \App\Service\ArticleService             articleService
  * @property-read \App\Service\CaptchaService             captchaService
  * @property-read \App\Service\CommentService             commentService
@@ -46,17 +45,14 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Service\InboxService               inboxService
  * @property-read \App\Service\NotificationService        notificationService
  * @property-read \App\Service\OptionService              optionService
- * @property-read \App\Service\QuestionFollowService      questionFollowService
  * @property-read \App\Service\QuestionService            questionService
  * @property-read \App\Service\ReportService              reportService
  * @property-read \App\Service\RoleService                roleService
  * @property-read \App\Service\ThrottleService            throttleService
  * @property-read \App\Service\TokenService               tokenService
- * @property-read \App\Service\TopicFollowService         topicFollowService
  * @property-read \App\Service\TopicService               topicService
  * @property-read \App\Service\UserAvatarService          userAvatarService
  * @property-read \App\Service\UserCoverService           userCoverService
- * @property-read \App\Service\UserFollowService          userFollowService
  * @property-read \App\Service\UserLoginService           userLoginService
  * @property-read \App\Service\UserPasswordResetService   userPasswordResetService
  * @property-read \App\Service\UserRegisterService        userRegisterService

@@ -153,7 +153,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        $following = $this->articleFollowService->getFollowing($user_id, true);
+        $following = $this->articleService->getFollowing($user_id, true);
 
         return $this->success($response, $following);
     }
@@ -168,7 +168,7 @@ class ArticleController extends ControllerAbstracts
     public function getMyFollowing(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $following = $this->articleFollowService->getFollowing($userId, true);
+        $following = $this->articleService->getFollowing($userId, true);
 
         return $this->success($response, $following);
     }
@@ -183,7 +183,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $article_id): Response
     {
-        $followers = $this->articleFollowService->getFollowers($article_id, true);
+        $followers = $this->articleService->getFollowers($article_id, true);
 
         return $this->success($response, $followers);
     }
@@ -199,8 +199,8 @@ class ArticleController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->articleFollowService->addFollow($userId, $article_id);
-        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
+        $this->articleService->addFollow($userId, $article_id);
+        $followerCount = $this->articleService->getFollowerCount($article_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
@@ -216,8 +216,8 @@ class ArticleController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->articleFollowService->deleteFollow($userId, $article_id);
-        $followerCount = $this->articleFollowService->getFollowerCount($article_id);
+        $this->articleService->deleteFollow($userId, $article_id);
+        $followerCount = $this->articleService->getFollowerCount($article_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }

@@ -307,7 +307,7 @@ class UserController extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $user_id): Response
     {
-        $followers = $this->userFollowService->getFollowers($user_id, true);
+        $followers = $this->userService->getFollowers($user_id, true);
 
         return $this->success($response, $followers);
     }
@@ -322,7 +322,7 @@ class UserController extends ControllerAbstracts
     public function getMyFollowers(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $followers = $this->userFollowService->getFollowers($userId, true);
+        $followers = $this->userService->getFollowers($userId, true);
 
         return $this->success($response, $followers);
     }
@@ -337,7 +337,7 @@ class UserController extends ControllerAbstracts
      */
     public function getFollowees(Request $request, Response $response, int $user_id): Response
     {
-        $following = $this->userFollowService->getFollowing($user_id, true);
+        $following = $this->userService->getFollowing($user_id, true);
 
         return $this->success($response, $following);
     }
@@ -352,7 +352,7 @@ class UserController extends ControllerAbstracts
     public function getMyFollowees(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $following = $this->userFollowService->getFollowing($userId, true);
+        $following = $this->userService->getFollowing($userId, true);
 
         return $this->success($response, $following);
     }
@@ -368,8 +368,8 @@ class UserController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $user_id): Response
     {
         $currentUserId = $this->roleService->userIdOrFail();
-        $this->userFollowService->addFollow($currentUserId, $user_id);
-        $followerCount = $this->userFollowService->getFollowerCount($user_id);
+        $this->userService->addFollow($currentUserId, $user_id);
+        $followerCount = $this->userService->getFollowerCount($user_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
@@ -385,8 +385,8 @@ class UserController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $user_id): Response
     {
         $currentUserId = $this->roleService->userIdOrFail();
-        $this->userFollowService->deleteFollow($currentUserId, $user_id);
-        $followerCount = $this->userFollowService->getFollowerCount($user_id);
+        $this->userService->deleteFollow($currentUserId, $user_id);
+        $followerCount = $this->userService->getFollowerCount($user_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }

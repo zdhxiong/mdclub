@@ -166,7 +166,7 @@ class TopicController extends ControllerAbstracts
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        $following= $this->topicFollowService->getFollowing($user_id, true);
+        $following= $this->topicService->getFollowing($user_id, true);
 
         return $this->success($response, $following);
     }
@@ -181,7 +181,7 @@ class TopicController extends ControllerAbstracts
     public function getMyFollowing(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $following = $this->topicFollowService->getFollowing($userId, true);
+        $following = $this->topicService->getFollowing($userId, true);
 
         return $this->success($response, $following);
     }
@@ -196,7 +196,7 @@ class TopicController extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $topic_id): Response
     {
-        $followers = $this->topicFollowService->getFollowers($topic_id, true);
+        $followers = $this->topicService->getFollowers($topic_id, true);
 
         return $this->success($response, $followers);
     }
@@ -212,8 +212,8 @@ class TopicController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $topic_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->topicFollowService->addFollow($userId, $topic_id);
-        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
+        $this->topicService->addFollow($userId, $topic_id);
+        $followerCount = $this->topicService->getFollowerCount($topic_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
@@ -229,8 +229,8 @@ class TopicController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $topic_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $this->topicFollowService->deleteFollow($userId, $topic_id);
-        $followerCount = $this->topicFollowService->getFollowerCount($topic_id);
+        $this->topicService->deleteFollow($userId, $topic_id);
+        $followerCount = $this->topicService->getFollowerCount($topic_id);
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
