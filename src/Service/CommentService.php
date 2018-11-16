@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
+use App\Traits\hasTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -19,7 +18,7 @@ use App\Traits\VotableTraits;
  */
 class CommentService extends ServiceAbstracts
 {
-    use VotableTraits;
+    use hasTraits, VotableTraits;
 
     /**
      * 获取隐私字段
@@ -41,79 +40,9 @@ class CommentService extends ServiceAbstracts
         return ['vote_count', 'create_time', 'update_time'];
     }
 
-    /**
-     * 判断指定评论是否存在
-     *
-     * @param  int  $commentId
-     * @return bool
-     */
-    public function has(int $commentId): bool
+    public function handle($data): array
     {
-        return $this->commentModel->has($commentId);
-    }
-
-    /**
-     * 若评论不存在，则抛出异常
-     *
-     * @param  int  $commentId
-     * @return bool
-     */
-    public function hasOrFail(int $commentId): bool
-    {
-        if (!$isHas = $this->has($commentId)) {
-            throw new ApiException(ErrorConstant::COMMENT_NOT_FOUNT);
-        }
-
-        return $isHas;
-    }
-
-    /**
-     * 获取评论详情
-     *
-     * @param  int   $commentId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function get(int $commentId, bool $withRelationship): array
-    {
-        $comment = $this->commentModel
-            ->field($this->getPrivacyFields(), true)
-            ->get($commentId);
-
-        if (!$comment) {
-            throw new ApiException(ErrorConstant::COMMENT_NOT_FOUNT);
-        }
-
-        if ($withRelationship) {
-            $comment = $this->addRelationship($comment);
-        }
-
-        return $comment;
-    }
-
-    /**
-     * 获取多个评论信息
-     *
-     * @param  array $commentIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $commentIds, bool $withRelationship = false): array
-    {
-        if (!$commentIds) {
-            return [];
-        }
-
-        $comments = $this->commentModel
-            ->where(['comment_id' => $commentIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        if ($withRelationship) {
-            $comments = $this->addRelationship($comments);
-        }
-
-        return $comments;
+        return $data;
     }
 
     /**

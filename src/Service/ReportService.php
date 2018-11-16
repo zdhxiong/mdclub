@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
+use App\Traits\hasTraits;
 
 /**
  * 举报
@@ -20,28 +19,7 @@ use App\Helper\ValidatorHelper;
  */
 class ReportService extends ServiceAbstracts
 {
-
-    /**
-     * 获取举报
-     *
-     * @param  int   $reportId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function get(int $reportId, bool $withRelationship = false): array
-    {
-        $report = $this->reportModel->get($reportId);
-
-        if (!$report) {
-            throw new ApiException(ErrorConstant::REPORT_NOT_FOUND);
-        }
-
-        if ($withRelationship) {
-            $report = $this->addRelationship($report);
-        }
-
-        return $report;
-    }
+    use hasTraits;
 
     /**
      * 获取举报列表
@@ -140,6 +118,11 @@ class ReportService extends ServiceAbstracts
     public function batchDelete(array $reportIds): void
     {
         $this->reportModel->delete($reportIds);
+    }
+
+    public function handle($data): array
+    {
+        return $data;
     }
 
     /**

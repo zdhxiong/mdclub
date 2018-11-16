@@ -87,8 +87,8 @@ class NotFound extends AbstractHandler
     protected function renderJsonNotFoundOutput(): string
     {
         $json = [
-            'code' => ErrorConstant::SYSTEM_API_NOT_FOUNT[0],
-            'message' => ErrorConstant::SYSTEM_API_NOT_FOUNT[1],
+            'code' => ErrorConstant::SYSTEM_API_NOT_FOUND[0],
+            'message' => ErrorConstant::SYSTEM_API_NOT_FOUND[1],
         ];
 
         return json_encode($json);

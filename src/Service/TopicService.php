@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Traits\BrandableTraits;
 use App\Traits\FollowableTraits;
+use App\Traits\hasTraits;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
@@ -23,7 +24,7 @@ use App\Helper\ValidatorHelper;
  */
 class TopicService extends ServiceAbstracts
 {
-    use FollowableTraits, BrandableTraits;
+    use hasTraits, FollowableTraits, BrandableTraits;
 
     /**
      * 图片类型
@@ -105,113 +106,6 @@ class TopicService extends ServiceAbstracts
         }
 
         return $data;
-    }
-
-    /**
-     * 判断指定话题是否存在
-     *
-     * @param  int  $topicId
-     * @return bool
-     */
-    public function has(int $topicId): bool
-    {
-        return $this->topicModel->has($topicId);
-    }
-
-    /**
-     * 若话题不存在，则抛出异常
-     *
-     * @param  int  $topicId
-     * @return bool
-     */
-    public function hasOrFail(int $topicId): bool
-    {
-        if (!$isHas = $this->has($topicId)) {
-            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
-        }
-
-        return $isHas;
-    }
-
-    /**
-     * 根据话题ID的数组判断这些话题是否存在
-     *
-     * @param  array $topicIds 话题ID数组
-     * @return array           键名为话题ID，键值为bool值
-     */
-    public function hasMultiple(array $topicIds): array
-    {
-        $topicIds = array_unique($topicIds);
-        $result = [];
-
-        if (!$topicIds) {
-            return $result;
-        }
-
-        $existTopicIds = $this->topicModel
-            ->where(['topic_id' => $topicIds])
-            ->pluck('topic_id');
-
-        foreach ($topicIds as $topicId) {
-            $result[$topicId] = in_array($topicId, $existTopicIds);
-        }
-
-        return $result;
-    }
-
-    /**
-     * 获取话题信息
-     *
-     * @param  int   $topicId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function get(int $topicId, bool $withRelationship = false): array
-    {
-        $topicInfo = $this->topicModel
-            ->field($this->getPrivacyFields(), true)
-            ->get($topicId);
-
-        if (!$topicInfo) {
-            throw new ApiException(ErrorConstant::TOPIC_NOT_FOUND);
-        }
-
-        $topicInfo = $this->handle($topicInfo);
-
-        if ($withRelationship) {
-            $topicInfo = $this->addRelationship($topicInfo);
-        }
-
-        return $topicInfo;
-    }
-
-    /**
-     * 获取多个话题信息
-     *
-     * @param  array $topicIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $topicIds, bool $withRelationship = false): array
-    {
-        if (!$topicIds) {
-            return [];
-        }
-
-        $topics = $this->topicModel
-            ->where(['topic_id' => $topicIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        foreach ($topics as &$topic) {
-            $topic = $this->handle($topic);
-        }
-
-        if ($withRelationship) {
-            $topics = $this->addRelationship($topics);
-        }
-
-        return $topics;
     }
 
     /**

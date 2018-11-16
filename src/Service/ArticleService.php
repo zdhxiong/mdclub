@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
 use App\Traits\CommentableTraits;
 use App\Traits\FollowableTraits;
+use App\Traits\hasTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -21,7 +20,7 @@ use App\Traits\VotableTraits;
  */
 class ArticleService extends ServiceAbstracts
 {
-    use CommentableTraits, FollowableTraits, VotableTraits;
+    use hasTraits, CommentableTraits, FollowableTraits, VotableTraits;
 
     /**
      * 获取允许搜索的字段
@@ -53,81 +52,6 @@ class ArticleService extends ServiceAbstracts
     }
 
     /**
-     * 判断指定文章是否存在
-     *
-     * @param  int  $articleId
-     * @return bool
-     */
-    public function has(int $articleId): bool
-    {
-        return $this->articleModel->has($articleId);
-    }
-
-    /**
-     * 若问题不存在，则抛出异常
-     *
-     * @param  int  $articleId
-     * @return bool
-     */
-    public function hasOrFail(int $articleId): bool
-    {
-        if (!$isHas = $this->has($articleId)) {
-            throw new ApiException(ErrorConstant::ARTICLE_NOT_FOUND);
-        }
-
-        return $isHas;
-    }
-
-    /**
-     * 获取文章信息
-     *
-     * @param  int   $articleId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function get(int $articleId, bool $withRelationship = false): array
-    {
-        $articleInfo = $this->articleModel
-            ->field($this->getPrivacyFields(), true)
-            ->get($articleId);
-
-        if (!$articleInfo) {
-            throw new ApiException(ErrorConstant::ARTICLE_NOT_FOUND);
-        }
-
-        if ($withRelationship) {
-            $articleInfo = $this->addRelationship($articleInfo);
-        }
-
-        return $articleInfo;
-    }
-
-    /**
-     * 获取多个文章信息
-     *
-     * @param  array $articleIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $articleIds, bool $withRelationship = false): array
-    {
-        if (!$articleIds) {
-            return [];
-        }
-
-        $articles = $this->articleModel
-            ->where(['article_id' => $articleIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        if ($withRelationship) {
-            $articles = $this->addRelationship($articles);
-        }
-
-        return $articles;
-    }
-
-    /**
      * 删除文章
      *
      * @param  int  $articleId
@@ -136,6 +60,11 @@ class ArticleService extends ServiceAbstracts
     public function delete(int $articleId): bool
     {
         return true;
+    }
+
+    public function handle($data): array
+    {
+        return $data;
     }
 
     /**

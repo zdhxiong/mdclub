@@ -35,7 +35,7 @@ class ErrorConstant
     /**
      * 接口不存在
      */
-    const SYSTEM_API_NOT_FOUNT            = [100001, '接口不存在'];
+    const SYSTEM_API_NOT_FOUND            = [100001, '接口不存在'];
 
     /**
      * 请求的 HTTP METHOD 不支持
@@ -100,7 +100,7 @@ class ErrorConstant
     /**
      * 目标用户不存在
      */
-    const USER_TARGET_NOT_FOUNT           = [200007, '目标用户不存在'];
+    const USER_TARGET_NOT_FOUND           = [200007, '目标用户不存在'];
 
     /**
      * 指定用户已被禁用
@@ -155,7 +155,7 @@ class ErrorConstant
     /**
      * 指定的回答不存在
      */
-    const ANSWER_NOT_FOUNT                = [310001, '指定回答不存在'];
+    const ANSWER_NOT_FOUND                = [310001, '指定回答不存在'];
 
 
     // ====================================
@@ -165,7 +165,7 @@ class ErrorConstant
     /**
      * 指定评论不存在
      */
-    const COMMENT_NOT_FOUNT               = [320001, '指定的评论不存在'];
+    const COMMENT_NOT_FOUND               = [320001, '指定的评论不存在'];
 
 
     // ====================================

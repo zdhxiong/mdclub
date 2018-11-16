@@ -13,6 +13,7 @@ use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\CommentableTraits;
 use App\Traits\FollowableTraits;
+use App\Traits\hasTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -25,7 +26,7 @@ use App\Traits\VotableTraits;
  */
 class QuestionService extends ServiceAbstracts
 {
-    use CommentableTraits, FollowableTraits, VotableTraits;
+    use hasTraits, CommentableTraits, FollowableTraits, VotableTraits;
 
     /**
      * 获取隐私字段
@@ -162,7 +163,7 @@ class QuestionService extends ServiceAbstracts
         }
 
         // 自动关注该问题
-        $this->questionFollowService->addFollow($userId, $questionId);
+        $this->questionService->addFollow($userId, $questionId);
 
         // 用户的 question_count + 1
         $this->userModel
@@ -235,81 +236,6 @@ class QuestionService extends ServiceAbstracts
         }
 
         return [$title, $contentMarkdown, $contentRendered, $topicIds];
-    }
-
-    /**
-     * 判断指定问题是否存在
-     *
-     * @param  int  $questionId
-     * @return bool
-     */
-    public function has(int $questionId): bool
-    {
-        return $this->questionModel->has($questionId);
-    }
-
-    /**
-     * 若问题不存在，则抛出异常
-     *
-     * @param int $questionId
-     * @return bool
-     */
-    public function hasOrFail(int $questionId): bool
-    {
-        if (!$isHas = $this->has($questionId)) {
-            throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
-        }
-
-        return $isHas;
-    }
-
-    /**
-     * 获取问题信息
-     *
-     * @param  int  $questionId
-     * @param  bool $withRelationship
-     * @return array
-     */
-    public function get(int $questionId, bool $withRelationship = false): array
-    {
-        $questionInfo = $this->questionModel
-            ->field($this->getPrivacyFields(), true)
-            ->get($questionId);
-
-        if (!$questionInfo) {
-            throw new ApiException(ErrorConstant::QUESTION_NOT_FOUND);
-        }
-
-        if ($withRelationship) {
-            $questionInfo = $this->addRelationship($questionInfo);
-        }
-
-        return $questionInfo;
-    }
-
-    /**
-     * 获取多个问题信息
-     *
-     * @param  array $questionIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $questionIds, bool $withRelationship = false): array
-    {
-        if (!$questionIds) {
-            return [];
-        }
-
-        $questions = $this->questionModel
-            ->where(['question_id' => $questionIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        if ($withRelationship) {
-            $questions = $this->addRelationship($questions);
-        }
-
-        return $questions;
     }
 
     /**

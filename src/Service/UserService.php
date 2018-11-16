@@ -9,6 +9,7 @@ use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
 use App\Traits\FollowableTraits;
+use App\Traits\hasTraits;
 
 /**
  * 用户，已禁用用户也要当普通用户处理
@@ -20,7 +21,7 @@ use App\Traits\FollowableTraits;
  */
 class UserService extends ServiceAbstracts
 {
-    use FollowableTraits;
+    use hasTraits, FollowableTraits;
 
     /**
      * 获取隐私字段
@@ -117,21 +118,6 @@ class UserService extends ServiceAbstracts
     }
 
     /**
-     * 若用户不存在，则抛出异常
-     *
-     * @param  int  $userId
-     * @return bool
-     */
-    public function hasOrFail(int $userId): bool
-    {
-        if (!$isHas = $this->has($userId)) {
-            throw new ApiException(ErrorConstant::USER_NOT_FOUND);
-        }
-
-        return $isHas;
-    }
-
-    /**
      * 根据用户ID的数组判断这些用户是否存在
      *
      * @param  array $userIds 用户ID数组
@@ -187,7 +173,9 @@ class UserService extends ServiceAbstracts
             $excludeFields = ArrayHelper::push($excludeFields, $this->getPrivacyFields());
         }
 
-        $userInfo = $this->userModel->field($excludeFields, true)->get($userId);
+        $userInfo = $this->userModel
+            ->field($excludeFields, true)
+            ->get($userId);
 
         if (!$userInfo) {
             throw new ApiException(ErrorConstant::USER_NOT_FOUND);
@@ -200,35 +188,6 @@ class UserService extends ServiceAbstracts
         }
 
         return $userInfo;
-    }
-
-    /**
-     * 获取多个用户信息
-     *
-     * @param  array $userIds
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getMultiple(array $userIds, bool $withRelationship = false): array
-    {
-        if (!$userIds) {
-            return [];
-        }
-
-        $users = $this->userModel
-            ->where(['user_id' => $userIds])
-            ->field($this->getPrivacyFields(), true)
-            ->select();
-
-        foreach ($users as &$user) {
-            $user = $this->handle($user);
-        }
-
-        if ($withRelationship) {
-            $users = $this->userService->addRelationship($users);
-        }
-
-        return $users;
     }
 
     /**
