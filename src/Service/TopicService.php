@@ -7,7 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Traits\BrandableTraits;
 use App\Traits\FollowableTraits;
-use App\Traits\hasTraits;
+use App\Traits\baseTraits;
 use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
@@ -24,7 +24,7 @@ use App\Helper\ValidatorHelper;
  */
 class TopicService extends ServiceAbstracts
 {
-    use hasTraits, FollowableTraits, BrandableTraits;
+    use baseTraits, FollowableTraits, BrandableTraits;
 
     /**
      * 图片类型

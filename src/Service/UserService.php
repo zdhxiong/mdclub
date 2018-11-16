@@ -9,7 +9,7 @@ use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
 use App\Traits\FollowableTraits;
-use App\Traits\hasTraits;
+use App\Traits\baseTraits;
 
 /**
  * 用户，已禁用用户也要当普通用户处理
@@ -21,7 +21,7 @@ use App\Traits\hasTraits;
  */
 class UserService extends ServiceAbstracts
 {
-    use hasTraits, FollowableTraits;
+    use baseTraits, FollowableTraits;
 
     /**
      * 获取隐私字段

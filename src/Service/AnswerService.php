@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
 use App\Traits\CommentableTraits;
-use App\Traits\hasTraits;
+use App\Traits\baseTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -19,7 +19,7 @@ use App\Traits\VotableTraits;
  */
 class AnswerService extends ServiceAbstracts
 {
-    use hasTraits, CommentableTraits, VotableTraits;
+    use baseTraits, CommentableTraits, VotableTraits;
 
     public function handle($data): array
     {
