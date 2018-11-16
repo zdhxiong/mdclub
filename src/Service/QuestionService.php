@@ -515,7 +515,7 @@ class QuestionService extends ServiceAbstracts
      *         }
      *     ]
      *     is_following: false
-     *     voting: up、down、false
+     *     voting: up、down、''
      * }
      *
      * @param  array $questions
@@ -613,7 +613,7 @@ class QuestionService extends ServiceAbstracts
                 'user'         => $users[$question['user_id']],
                 'topics'       => $topics[$question['question_id']],
                 'is_following' => in_array($question['question_id'], $followingQuestionIds),
-                'voting'       => $votings[$question['question_id']] ?? false,
+                'voting'       => $votings[$question['question_id']] ?? '',
             ];
         }
 

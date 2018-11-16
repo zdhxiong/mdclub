@@ -26,7 +26,9 @@ class CommentController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $list = $this->commentService->getListByUserId($user_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -38,7 +40,10 @@ class CommentController extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $list = $this->commentService->getListByUserId($userId, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -50,7 +55,9 @@ class CommentController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        return $response;
+        $list = $this->commentService->getList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -120,7 +127,7 @@ class CommentController extends ControllerAbstracts
         $this->commentService->addVote($userId, $comment_id, $type);
         $voteCount = $this->commentService->getVoteCount($comment_id);
 
-        return $this->success($response, ['vote_count', $voteCount]);
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**

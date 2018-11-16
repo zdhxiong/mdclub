@@ -91,7 +91,7 @@ class ArticleService extends ServiceAbstracts
      *         }
      *     ]
      *     is_following: false
-     *     voting: up、down、false
+     *     voting: up、down、''
      * }
      *
      * @param  array $articles
@@ -189,7 +189,7 @@ class ArticleService extends ServiceAbstracts
                 'user'         => $users[$article['user_id']],
                 'topics'       => $topics[$article['article_id']],
                 'is_following' => in_array($article['article_id'], $followingArticleIds),
-                'voting'       => $votings[$article['article_id']] ?? false,
+                'voting'       => $votings[$article['article_id']] ?? '',
             ];
         }
 

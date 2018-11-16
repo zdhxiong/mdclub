@@ -612,12 +612,12 @@ paths:
         - Question
       summary: 获取指定用户发表的问题
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
         - name: order
           in: query
           type: string
@@ -658,7 +658,34 @@ paths:
     get:
       tags:
         - Comment
-      summary: todo - 获取指定用户发表的评论
+      summary: 获取指定用户发表的评论
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `-create_time`。在字段前 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comments'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /user:
 
@@ -1103,7 +1130,30 @@ paths:
     get:
       tags:
         - Comment
-      summary: todo - 获取当前用户发表的评论
+      summary: 获取当前用户发表的评论
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 评论列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comments'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /articles:
 
@@ -2511,13 +2561,36 @@ paths:
     get:
       tags:
         - Comment
-      summary: todo - 获取所有评论
+      summary: 获取所有评论
       description: 获取所有评论
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+        - name: comment_id
+          in: query
+          type: integer
+          description: 按评论ID过滤
+        - name: commentable_id
+          in: query
+          type: integer
+          description: 按评论目标的ID过滤
+        - name: commentable_type
+          in: query
+          type: string
+          description: 按评论目标类型过滤
+          enum:
+            - article
+            - question
+            - answer
+        - name: user_id
+          in: query
+          type: integer
+          description: 按评论者ID过滤
       responses:
         200:
           description: 评论列表
@@ -4034,8 +4107,8 @@ definitions:
         type: boolean
         description: 当前登录用户是否已关注该问题
       voting:
-        type: string|bool
-        description: 当前登录用户的投票类型（up、down），未投过票则为 false
+        type: string
+        description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
 
   AnswerRelationship:
     type: object
@@ -4050,8 +4123,8 @@ definitions:
         type: boolean
         description: 当前登录用户是否已关注该话题
       voting:
-        type: string|bool
-        description: 当前登录用户的投票类型（up、down），未投过票则为 false
+        type: string
+        description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
 
   ArticleRelationship:
     type: object
@@ -4064,8 +4137,8 @@ definitions:
         type: boolean
         description: 当前登录用户是否已关注该文章
       voting:
-        type: string|bool
-        description: 当前登录用户的投票类型（up、down），未投过票则为 false
+        type: string
+        description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
 
   CommentRelationship:
     type: object
@@ -4073,8 +4146,8 @@ definitions:
       user:
         $ref: '#/definitions/UserInRelationship'
       voting:
-        type: string|bool
-        description: 当前登录用户的投票类型（up、down），未投过票则为 false
+        type: string
+        description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
 
   ReportRelationship:
     type: object
@@ -4082,13 +4155,13 @@ definitions:
       user:
         $ref: '#/definitions/UserInRelationship'
       question:
-        $ref: '#/definitions/Question'
+        $ref: '#/definitions/QuestionInRelationship'
       answer:
-        $ref: '#/definitions/Answer'
+        $ref: '#/definitions/AnswerInRelationship'
       article:
-        $ref: '#/definitions/Article'
+        $ref: '#/definitions/ArticleInRelationship'
       comment:
-        $ref: '#/definitions/Comment'
+        $ref: '#/definitions/CommentInRelationship'
 
   UserInRelationship:
     type: object
@@ -4105,6 +4178,70 @@ definitions:
       avatar:
         type: object
         $ref: '#/definitions/UserAvatar'
+
+  QuestionInRelationship:
+    type: object
+    properties:
+      question_id:
+        type: integer
+        description: 问题ID
+      title:
+        type: string
+        description: 问题标题
+      create_time:
+        type: integer
+        description: 发布时间
+      update_time:
+        type: integer
+        description: 更新时间
+
+  AnswerInRelationship:
+    type: object
+    properties:
+      answer_id:
+        type: integer
+        description: 回答ID
+      content_summary:
+        type: string
+        description: 内容摘要
+      create_time:
+        type: integer
+        description: 发布时间
+      update_time:
+        type: integer
+        description: 更新时间
+
+  ArticleInRelationship:
+    type: object
+    properties:
+      article_id:
+        type: integer
+        description: 文章ID
+      title:
+        type: string
+        description: 文章标题
+      create_time:
+        type: integer
+        description: 发布时间
+      update_time:
+        type: integer
+        description: 更新时间
+
+  CommentInRelationship:
+    type: object
+    properties:
+      comment_id:
+        type: integer
+        description: 评论ID
+      content_summary:
+        type: string
+        description: 内容摘要
+      create_time:
+        type: integer
+        description: 发布时间
+      update_time:
+        type: integer
+        description: 更新时间
 
   TopicsInRelationship:
     type: array
