@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+use App\Traits\BrandableTraits;
 use Psr\Http\Message\UploadedFileInterface;
-use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
@@ -15,39 +16,56 @@ use App\Exception\ApiException;
  * Class UserCoverService
  * @package App\Service
  */
-class UserCoverService extends BrandImageAbstracts
+class UserCoverService extends ServiceAbstracts
 {
-    /**
-     * @var string 图片类型
-     */
-    protected $imageType = 'user-cover';
+    use BrandableTraits;
 
     /**
-     * @var array 图片尺寸
+     * 图片类型
+     *
+     * @return string
      */
-    protected $imageWidths = [
-        's' => 600,
-        'm' => 1024,
-        'l' => 1440,
-    ];
+    protected function getBrandType(): string
+    {
+        return 'user-cover';
+    }
 
     /**
-     * @var float 图片高宽比
+     * 图片尺寸
+     *
+     * @return array
      */
-    protected $imageScale = 0.56;
+    protected function getBrandWidths(): array
+    {
+        return [
+            's' => 600,
+            'm' => 1024,
+            'l' => 1440,
+        ];
+    }
+
+    /**
+     * 图片高宽比
+     *
+     * @return float
+     */
+    protected function getBrandScale(): float
+    {
+        return 0.56;
+    }
 
     /**
      * 获取默认的用户封面图片地址
      *
      * @return array
      */
-    protected function getDefaultImageUrls(): array
+    protected function getDefaultBrandUrls(): array
     {
         $suffix = $this->isSupportWebp() ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
         $data = [];
 
-        foreach (array_keys($this->imageWidths) as $size) {
+        foreach (array_keys($this->getBrandWidths()) as $size) {
             $data[$size] = "{$staticUrl}user-cover/default_{$size}.{$suffix}";
         }
 

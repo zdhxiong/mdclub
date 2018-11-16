@@ -195,7 +195,7 @@ class UserController extends ControllerAbstracts
         $this->roleService->managerIdOrFail();
 
         $filename = $this->userAvatarService->delete($user_id);
-        $newAvatars = $this->userAvatarService->getImageUrls($user_id, $filename);
+        $newAvatars = $this->userAvatarService->getBrandUrls($user_id, $filename);
 
         return $this->success($response, $newAvatars);
     }
@@ -213,7 +213,7 @@ class UserController extends ControllerAbstracts
         $userId = $this->roleService->userIdOrFail();
 
         $filename = $this->userAvatarService->delete($userId);
-        $newAvatars = $this->userAvatarService->getImageUrls($userId, $filename);
+        $newAvatars = $this->userAvatarService->getBrandUrls($userId, $filename);
 
         return $this->success($response, $newAvatars);
     }
@@ -234,7 +234,7 @@ class UserController extends ControllerAbstracts
         $avatar = $request->getUploadedFiles()['avatar'] ?? null;
 
         $filename = $this->userAvatarService->upload($userId, $avatar);
-        $newAvatars = $this->userAvatarService->getImageUrls($userId, $filename);
+        $newAvatars = $this->userAvatarService->getBrandUrls($userId, $filename);
 
         return $this->success($response, $newAvatars);
     }
@@ -253,7 +253,7 @@ class UserController extends ControllerAbstracts
         $this->roleService->managerIdOrFail();
 
         $this->userCoverService->delete($user_id);
-        $newCovers = $this->userCoverService->getImageUrls($user_id);
+        $newCovers = $this->userCoverService->getBrandUrls($user_id);
 
         return $this->success($response, $newCovers);
     }
@@ -271,7 +271,7 @@ class UserController extends ControllerAbstracts
         $userId = $this->roleService->userIdOrFail();
 
         $this->userCoverService->delete($userId);
-        $newCovers = $this->userCoverService->getImageUrls($userId);
+        $newCovers = $this->userCoverService->getBrandUrls($userId);
 
         return $this->success($response, $newCovers);
     }
@@ -292,7 +292,7 @@ class UserController extends ControllerAbstracts
         $cover = $request->getUploadedFiles()['cover'] ?? null;
 
         $filename = $this->userCoverService->upload($userId, $cover);
-        $newCovers = $this->userCoverService->getImageUrls($userId, $filename);
+        $newCovers = $this->userCoverService->getBrandUrls($userId, $filename);
 
         return $this->success($response, $newCovers);
     }

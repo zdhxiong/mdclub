@@ -2,42 +2,48 @@
 
 declare(strict_types=1);
 
-namespace App\Abstracts;
+namespace App\Traits;
 
-use Psr\Http\Message\UploadedFileInterface;
-use PHPImageWorkshop\ImageWorkshop;
 use App\Constant\UploadErrorConstant;
 use App\Helper\StringHelper;
+use PHPImageWorkshop\ImageWorkshop;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
- * 头像、封面图片抽象类
+ * 对象的标识图 （user-avatar、user-cover、topic-cover）
  *
- * Class BrandImageAbstracts
- * @package App\Abstracts
+ * Trait BrandableTraits
+ * @package App\Traits
  */
-abstract class BrandImageAbstracts extends ServiceAbstracts
+trait BrandableTraits
 {
     /**
-     * @var string 图片类型，包括 user-avatar、user-cover、topic-cover
+     * 图片类型，包括 user-avatar、user-cover、topic-cover
+     *
+     * @return string
      */
-    protected $imageType;
+    abstract protected function getBrandType(): string;
 
     /**
-     * @var array 生成的图片尺寸数组
+     * 生成的图片尺寸数组
+     *
+     * @return array
      */
-    protected $imageWidths;
+    abstract protected function getBrandWidths(): array;
 
     /**
-     * @var float 图片的高度/宽度的比例，为 0 则不裁剪图片
+     * 图片的高度/宽度的比例，为 0 则不裁剪图片
+     *
+     * @return float
      */
-    protected $imageScale;
+    abstract protected function getBrandScale(): float;
 
     /**
      * 获取默认图片地址
      *
      * @return array
      */
-    abstract protected function getDefaultImageUrls(): array;
+    abstract protected function getDefaultBrandUrls(): array;
 
     /**
      * 获取文件存储的相对路径
@@ -45,12 +51,12 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      * @param  int    $id
      * @return string
      */
-    protected function getImagePath(int $id): string
+    protected function getBrandPath(int $id): string
     {
         $hash = md5((string)$id);
 
         return implode('/', [
-            $this->imageType,
+            $this->getBrandType(),
             substr($hash, 0, 2),
             substr($hash, 2, 2),
         ]);
@@ -76,9 +82,9 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      * @param  string $size      默认为原图
      * @return string
      */
-    protected function getImageFilename(string $filename, string $size = ''): string
+    protected function getBrandFilename(string $filename, string $size = ''): string
     {
-        if (!in_array($size, array_keys($this->imageWidths))) {
+        if (!in_array($size, array_keys($this->getBrandWidths()))) {
             $size = '';
         }
 
@@ -89,8 +95,8 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
         $storageType = $this->optionService->get('storage_type');
         $isSupportWebp = $this->isSupportWebp();
 
-        $width = $this->imageWidths[$size];
-        $height = round($width * $this->imageScale);
+        $width = $this->getBrandWidths()[$size];
+        $height = round($width * $this->getBrandScale());
 
         switch ($storageType) {
             // local 和 ftp，返回已裁剪好的图片
@@ -132,9 +138,9 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      * @param  string $size     默认为原图
      * @return string
      */
-    protected function getFullImageFilename(int $id, string $filename, string $size = ''): string
+    protected function getFullBrandFilename(int $id, string $filename, string $size = ''): string
     {
-        return $this->getImagePath($id) . '/' . $this->getImageFilename($filename, $size);
+        return $this->getBrandPath($id) . '/' . $this->getBrandFilename($filename, $size);
     }
 
     /**
@@ -145,13 +151,13 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      * @param  string $size     默认为原图
      * @return string
      */
-    public function getImageUrl(int $id, string $filename = null, string $size = ''): string
+    public function getBrandUrl(int $id, string $filename = null, string $size = ''): string
     {
         if (!$filename) {
             return '';
         }
 
-        return $this->getStorageUrl() . $this->getFullImageFilename($id, $filename, $size);
+        return $this->getStorageUrl() . $this->getFullBrandFilename($id, $filename, $size);
     }
 
     /**
@@ -161,13 +167,13 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      * @param  string $filename
      * @return array
      */
-    public function getImageUrls(int $id, string $filename = null): array
+    public function getBrandUrls(int $id, string $filename = null): array
     {
         $array = [];
-        $default = $this->getDefaultImageUrls();
+        $default = $this->getDefaultBrandUrls();
 
-        foreach (array_keys($this->imageWidths) as $size) {
-            $array[$size] = $this->getImageUrl($id, $filename, $size) ?: ($default[$size] ?? '');
+        foreach (array_keys($this->getBrandWidths()) as $size) {
+            $array[$size] = $this->getBrandUrl($id, $filename, $size) ?: ($default[$size] ?? '');
         }
 
         return $array;
@@ -181,7 +187,7 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
      */
     public function deleteImage(int $id, string $filename): void
     {
-        $fullFilename= $this->getFullImageFilename($id, $filename);
+        $fullFilename= $this->getFullBrandFilename($id, $filename);
 
         // 删除原图
         try {
@@ -190,8 +196,8 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
 
         // 仅 local 和 ftp 需要删除裁剪后的图片
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
-            foreach (array_keys($this->imageWidths) as $size) {
-                $fullFilename = $this->getFullImageFilename($id, $filename, $size);
+            foreach (array_keys($this->getBrandWidths()) as $size) {
+                $fullFilename = $this->getFullBrandFilename($id, $filename, $size);
                 try {
                     $this->filesystem->delete($fullFilename);
                 } catch (\Exception $e) {}
@@ -211,7 +217,7 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
         $token = StringHelper::guid();
         $suffix = $file->getClientMediaType() === 'image/png' ? 'png' : 'jpg';
         $filename = "{$token}.{$suffix}";
-        $fullFilename = $this->getFullImageFilename($id, $filename);
+        $fullFilename = $this->getFullBrandFilename($id, $filename);
 
         // 写入原始文件
         $this->filesystem->write($fullFilename, $file->getStream()->getContents());
@@ -232,17 +238,17 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
                 }
             } else {
                 // 裁剪成长方形
-                if ($imageHeight / $imageWidth > $this->imageScale) {
-                    $height = round($imageWidth * $this->imageScale);
+                if ($imageHeight / $imageWidth > $this->getBrandScale()) {
+                    $height = round($imageWidth * $this->getBrandScale());
                     $image->cropInPixel($imageWidth, $height, 0, 0, 'MM');
-                } elseif ($imageHeight / $imageWidth < $this->imageScale) {
-                    $width = round($imageHeight / $this->imageScale);
+                } elseif ($imageHeight / $imageWidth < $this->getBrandScale()) {
+                    $width = round($imageHeight / $this->getBrandScale());
                     $image->cropInPixel($width, $imageHeight, 0, 0, 'MM');
                 }
             }
 
             // 生成缩略图
-            foreach ($this->imageWidths as $size => $width) {
+            foreach ($this->getBrandWidths() as $size => $width) {
                 $newImage = clone $image;
 
                 if ($width < $newImage->getWidth()) {
@@ -251,7 +257,7 @@ abstract class BrandImageAbstracts extends ServiceAbstracts
 
                 $newImage->save(sys_get_temp_dir(), $filename);
                 $this->filesystem->write(
-                    $this->getFullImageFilename($id, $filename, $size),
+                    $this->getFullBrandFilename($id, $filename, $size),
                     file_get_contents(sys_get_temp_dir() . '/' . $filename)
                 );
             }

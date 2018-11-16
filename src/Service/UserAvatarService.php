@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+use App\Traits\BrandableTraits;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\UploadedFile;
 use Md\MDAvatars;
-use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
 use App\Helper\StringHelper;
 use App\Exception\ApiException;
@@ -18,33 +19,50 @@ use App\Exception\ApiException;
  * Class UserAvatarService
  * @package App\Service
  */
-class UserAvatarService extends BrandImageAbstracts
+class UserAvatarService extends ServiceAbstracts
 {
-    /**
-     * @var string 图片类型
-     */
-    protected $imageType = 'user-avatar';
+    use BrandableTraits;
 
     /**
-     * @var array 图片尺寸数组
+     * 图片类型
+     *
+     * @return string
      */
-    protected $imageWidths = [
-        's' => 32,
-        'm' => 64,
-        'l' => 96,
-    ];
+    protected function getBrandType(): string
+    {
+        return 'user-avatar';
+    }
 
     /**
-     * @var int 图片高度/宽度的比例
+     * 图片尺寸数组
+     *
+     * @return array
      */
-    protected $imageScale = 1;
+    protected function getBrandWidths(): array
+    {
+        return [
+            's' => 32,
+            'm' => 64,
+            'l' => 96,
+        ];
+    }
+
+    /**
+     * 图片高度/宽度的比例
+     *
+     * @return float
+     */
+    protected function getBrandScale(): float
+    {
+        return 1;
+    }
 
     /**
      * 默认头像地址，每个用户都有独一无二的头像，因此这里无需返回默认头像
      *
      * @return array
      */
-    protected function getDefaultImageUrls(): array
+    protected function getDefaultBrandUrls(): array
     {
         return [];
     }

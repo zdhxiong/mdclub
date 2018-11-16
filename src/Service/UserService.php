@@ -317,11 +317,11 @@ class UserService extends ServiceAbstracts
         }
 
         if (isset($userInfo['avatar'])) {
-            $userInfo['avatar'] = $this->userAvatarService->getImageUrls($userInfo['user_id'], $userInfo['avatar']);
+            $userInfo['avatar'] = $this->userAvatarService->getBrandUrls($userInfo['user_id'], $userInfo['avatar']);
         }
 
         if (isset($userInfo['cover'])) {
-            $userInfo['cover'] = $this->userCoverService->getImageUrls($userInfo['user_id']);
+            $userInfo['cover'] = $this->userCoverService->getBrandUrls($userInfo['user_id']);
         }
 
         return $userInfo;

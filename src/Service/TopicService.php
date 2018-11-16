@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Abstracts\ServiceAbstracts;
+use App\Traits\BrandableTraits;
 use App\Traits\FollowableTraits;
 use Psr\Http\Message\UploadedFileInterface;
-use App\Abstracts\BrandImageAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
@@ -20,29 +21,43 @@ use App\Helper\ValidatorHelper;
  * Class TopicService
  * @package App\Service
  */
-class TopicService extends BrandImageAbstracts
+class TopicService extends ServiceAbstracts
 {
-    use FollowableTraits;
+    use FollowableTraits, BrandableTraits;
 
     /**
-     * @var string 图片类型
+     * 图片类型
+     *
+     * @return string
      */
-    protected $imageType = 'topic-cover';
+    protected function getBrandType(): string
+    {
+        return 'topic-cover';
+    }
 
     /**
-     * @var array 图片尺寸
+     * 图片尺寸
+     *
+     * @return array
      */
-    protected $imageWidths = [
-        's' => 360,
-        'm' => 720,
-        'l' => 1084,
-    ];
+    protected function getBrandWidths(): array
+    {
+        return [
+            's' => 360,
+            'm' => 720,
+            'l' => 1084,
+        ];
+    }
 
     /**
-     * @var float 图片高宽比
+     * 图片高宽比
+     *
+     * @return float
      */
-    protected $imageScale = 0.56;
-
+    protected function getBrandScale(): float
+    {
+        return 0.56;
+    }
 
     /**
      * 获取隐私字段
@@ -79,13 +94,13 @@ class TopicService extends BrandImageAbstracts
      *
      * @return array
      */
-    protected function getDefaultImageUrls(): array
+    protected function getDefaultBrandUrls(): array
     {
         $suffix = $this->isSupportWebp() ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
         $data = [];
 
-        foreach (array_keys($this->imageWidths) as $size) {
+        foreach (array_keys($this->getBrandWidths()) as $size) {
             $data[$size] = "{$staticUrl}topic-cover/default_{$size}.{$suffix}";
         }
 
@@ -491,7 +506,7 @@ class TopicService extends BrandImageAbstracts
         }
 
         if (isset($topicInfo['cover'])) {
-            $topicInfo['cover'] = $this->getImageUrls($topicInfo['topic_id'], $topicInfo['cover']);
+            $topicInfo['cover'] = $this->getBrandUrls($topicInfo['topic_id'], $topicInfo['cover']);
         }
 
         return $topicInfo;

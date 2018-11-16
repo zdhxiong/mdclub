@@ -551,7 +551,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo - 获取指定用户关注的文章列表
+      summary: 获取指定用户关注的文章列表
       description: 获取指定用户关注的文章列表
       parameters:
         - $ref: '#/parameters/page'
@@ -1008,7 +1008,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo - 获取登录用户关注的文章
+      summary: 获取登录用户关注的文章
       description: 获取登录用户关注的文章
       parameters:
         - $ref: '#/parameters/page'
@@ -1359,7 +1359,7 @@ paths:
     get:
       tags:
         - ArticleFollow
-      summary: todo - 获取指定文章的关注者
+      summary: 获取指定文章的关注者
       description: 获取指定文章的关注者
       parameters:
         - $ref: '#/parameters/page'
@@ -1387,7 +1387,7 @@ paths:
     post:
       tags:
         - ArticleFollow
-      summary: todo - 添加关注
+      summary: 添加关注
       description: 取消关注
       parameters:
         - name: article_id
@@ -1411,7 +1411,7 @@ paths:
     delete:
       tags:
         - ArticleFollow
-      summary: todo - 取消关注
+      summary: 取消关注
       description: 取消关注
       parameters:
         - name: article_id
