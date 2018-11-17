@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Traits\baseTraits;
+use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -18,7 +18,7 @@ use App\Traits\VotableTraits;
  */
 class CommentService extends ServiceAbstracts
 {
-    use baseTraits, VotableTraits;
+    use BaseTraits, VotableTraits;
 
     /**
      * 获取隐私字段

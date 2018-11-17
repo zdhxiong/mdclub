@@ -7,7 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
-use App\Traits\baseTraits;
+use App\Traits\BaseTraits;
 
 /**
  * 举报
@@ -19,7 +19,7 @@ use App\Traits\baseTraits;
  */
 class ReportService extends ServiceAbstracts
 {
-    use baseTraits;
+    use BaseTraits;
 
     /**
      * 获取举报列表

@@ -7,7 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Traits\CommentableTraits;
 use App\Traits\FollowableTraits;
-use App\Traits\baseTraits;
+use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
 
 /**
@@ -20,7 +20,7 @@ use App\Traits\VotableTraits;
  */
 class ArticleService extends ServiceAbstracts
 {
-    use baseTraits, CommentableTraits, FollowableTraits, VotableTraits;
+    use BaseTraits, CommentableTraits, FollowableTraits, VotableTraits;
 
     /**
      * 获取允许搜索的字段

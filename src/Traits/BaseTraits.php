@@ -13,7 +13,7 @@ use App\Exception\ApiException;
  * Trait hasTraits
  * @package App\Traits
  */
-trait baseTraits
+trait BaseTraits
 {
     abstract public function getPrivacyFields(): array;
     abstract public function handle($data): array;
