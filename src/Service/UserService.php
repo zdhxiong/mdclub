@@ -339,6 +339,34 @@ class UserService extends ServiceAbstracts
     }
 
     /**
+     * 获取在 relationship 中使用的 user
+     *
+     * @param  array $userIds
+     * @return array          键名为用户ID，键值为用户信息
+     */
+    public function getUsersInRelationship(array $userIds): array
+    {
+        $users = array_combine($userIds, array_fill(0, count($userIds), []));
+
+        $usersTmp = $this->userModel
+            ->where(['user_id' => $userIds])
+            ->field(['user_id', 'avatar', 'username', 'headline'])
+            ->select();
+
+        foreach ($usersTmp as $item) {
+            $item = $this->userService->handle($item);
+            $users[$item['user_id']] = [
+                'user_id'  => $item['user_id'],
+                'username' => $item['username'],
+                'headline' => $item['headline'],
+                'avatar'   => $item['avatar'],
+            ];
+        }
+
+        return $users;
+    }
+
+    /**
      * 为用户信息添加 relationship 字段
      * {
      *     is_following: false, 登录用户是否已关注该用户
@@ -379,11 +407,7 @@ class UserService extends ServiceAbstracts
             if (isset($relationship['is_following'])) {
                 $followingUserIds = $relationship['is_following'] ? $userIds : [];
             } else {
-                $followingUserIds = $this->followModel->where([
-                    'user_id' => $currentUserId,
-                    'followable_id' => $userIds,
-                    'followable_type' => 'user',
-                ])->pluck('followable_id');
+                $followingUserIds = $this->followService->getIsFollowingInRelationship($userIds, 'user');
             }
         }
 

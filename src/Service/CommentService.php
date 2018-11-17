@@ -117,16 +117,7 @@ class CommentService extends ServiceAbstracts
     /**
      * 为评论添加 relationship 字段
      * {
-     *     user: {
-     *         user_id: '',
-     *         username: '',
-     *         headline: '',
-     *         avatar: {
-     *             s: '',
-     *             m: '',
-     *             l: ''
-     *         }
-     *     },
+     *     user: {},
      *     voting: up、down、''
      * }
      *
@@ -143,48 +134,17 @@ class CommentService extends ServiceAbstracts
             $comments = [$comments];
         }
 
-        $currentUserId = $this->roleService->userId();
         $commentIds = array_unique(array_column($comments, 'comment_id'));
         $userIds = array_unique(array_column($comments, 'user_id'));
-        $votings = []; // comment_id 为键，投票类型为值
-        $users = []; // user_id 为键，用户信息为值
 
-        // voting
-        if ($currentUserId) {
-            $votes = $this->voteModel
-                ->where([
-                    'user_id'      => $currentUserId,
-                    'votable_id'   => $commentIds,
-                    'votable_type' => 'comment',
-                ])
-                ->field(['votable_id', 'type'])
-                ->select();
-
-            foreach ($votes as $vote) {
-                $votings[$vote['votable_id']] = $vote['type'];
-            }
-        }
-
-        // user
-        $usersTmp = $this->userModel
-            ->where(['user_id' => $userIds])
-            ->field(['user_id', 'avatar', 'username', 'headline'])
-            ->select();
-        foreach ($usersTmp as $item) {
-            $item = $this->userService->handle($item);
-            $users[$item['user_id']] = [
-                'user_id'  => $item['user_id'],
-                'username' => $item['username'],
-                'headline' => $item['headline'],
-                'avatar'   => $item['avatar'],
-            ];
-        }
+        $votings = $this->voteService->getVotingInRelationship($commentIds, 'comment');
+        $users = $this->userService->getUsersInRelationship($userIds);
 
         // 合并数据
         foreach ($comments as &$comment) {
             $comment['relationship'] = [
                 'user'   => $users[$comment['user_id']],
-                'voting' => $votings[$comment['comment_id']] ?? '',
+                'voting' => $votings[$comment['comment_id']],
             ];
         }
 

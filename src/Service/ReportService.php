@@ -128,16 +128,7 @@ class ReportService extends ServiceAbstracts
     /**
      * 为举报添加 relationship 字段
      * {
-     *     user: {
-     *         user_id: '',
-     *         username: '',
-     *         headline: '',
-     *         avatar: {
-     *             s: '',
-     *             m: '',
-     *             l: ''
-     *         }
-     *     },
+     *     user: {},
      *     question: {},
      *     answer: {},
      *     article: {},
@@ -162,7 +153,7 @@ class ReportService extends ServiceAbstracts
         // id的数组 {question: [], answer: [], article: [], comment: []}
         $targetIds = [];
 
-        // 对象的id为键名 {question: [], answer: [], article: [], comment: [], user: []}
+        // 对象的id为键名 {question: [], answer: [], article: [], comment: []}
         $targets = [];
 
         foreach ($reports as $report) {
@@ -170,20 +161,7 @@ class ReportService extends ServiceAbstracts
         }
 
         // user
-        $usersTmp = $this->userModel
-            ->where(['user_id' => $userIds])
-            ->field(['user_id', 'avatar', 'username', 'headline'])
-            ->select();
-
-        foreach ($usersTmp as $item) {
-            $item = $this->userService->handle($item);
-            $targets['user'][$item['user_id']] = [
-                'user_id'  => $item['user_id'],
-                'username' => $item['username'],
-                'headline' => $item['headline'],
-                'avatar'   => $item['avatar'],
-            ];
-        }
+        $users = $this->userService->getUsersInRelationship($userIds);
 
         // question、answer、article、comment
         $targetsTmp = [];
@@ -201,7 +179,7 @@ class ReportService extends ServiceAbstracts
             $type = $report['reportable_type'];
 
             $report['relationship'] = [
-                'user' => $targets['user'][$report['user_id']] ?? [],
+                'user' => $users[$report['user_id']] ?? [],
                 $type  => $targets[$type][$report['reportable_id']] ?? [],
             ];
         }

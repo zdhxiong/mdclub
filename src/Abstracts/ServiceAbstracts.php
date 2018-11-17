@@ -41,6 +41,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Service\CaptchaService             captchaService
  * @property-read \App\Service\CommentService             commentService
  * @property-read \App\Service\EmailService               emailService
+ * @property-read \App\Service\FollowService              followService
  * @property-read \App\Service\ImageService               imageService
  * @property-read \App\Service\InboxService               inboxService
  * @property-read \App\Service\NotificationService        notificationService
@@ -57,6 +58,7 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Service\UserPasswordResetService   userPasswordResetService
  * @property-read \App\Service\UserRegisterService        userRegisterService
  * @property-read \App\Service\UserService                userService
+ * @property-read \App\Service\VoteService                voteService
  *
  * @package App\Service
  */

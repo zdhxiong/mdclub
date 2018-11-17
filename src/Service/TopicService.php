@@ -407,6 +407,40 @@ class TopicService extends ServiceAbstracts
     }
 
     /**
+     * 获取在 relationship 中使用的 topics
+     *
+     * @param  array  $targetIds  对象ID数组
+     * @param  string $targetType 对象类型
+     * @return array              键名为对象ID，键值为话题信息组成的二维数组
+     */
+    public function getTopicsInRelationship(array $targetIds, string $targetType): array
+    {
+        $topics = array_combine($targetIds, array_fill(0, count($targetIds), []));
+
+        $topicsTmp = $this->topicModel
+            ->join([
+                '[><]topicable' => ['topic_id' => 'topic_id']
+            ])
+            ->where([
+                'topicable.topicable_id' => $targetIds,
+                'topicable.topicable_type' => $targetType,
+            ])
+            ->order(['topicable.create_time' => 'ASC'])
+            ->field(['topic.topic_id', 'topic.name', 'topic.cover', 'topicable.topicable_id'])
+            ->select();
+
+        foreach ($topicsTmp as $item) {
+            $topics[$item['topicable_id']][] = $this->topicService->handle([
+                'topic_id' => $item['topic_id'],
+                'name'     => $item['name'],
+                'cover'    => $item['cover'],
+            ]);
+        }
+
+        return $topics;
+    }
+
+    /**
      * 为话题信息添加 relationship 字段
      * {
      *     is_following: false  登录用户是否已关注该话题
@@ -426,20 +460,12 @@ class TopicService extends ServiceAbstracts
             $topics = [$topics];
         }
 
-        $currentUserId = $this->roleService->userId();
         $topicIds = array_unique(array_column($topics, 'topic_id'));
-        $followingTopicIds = [];
 
-        if ($currentUserId) {
-            if (isset($relationship['is_following'])) {
-                $followingTopicIds = $relationship['is_following'] ? $topicIds : [];
-            } else {
-                $followingTopicIds = $this->followModel->where([
-                    'user_id'         => $currentUserId,
-                    'followable_id'   => $topicIds,
-                    'followable_type' => 'topic',
-                ])->pluck('followable_id');
-            }
+        if (isset($relationship['is_following'])) {
+            $followingTopicIds = $relationship['is_following'] ? $topicIds : [];
+        } else {
+            $followingTopicIds = $this->followService->getIsFollowingInRelationship($topicIds, 'topic');
         }
 
         foreach ($topics as &$topic) {

@@ -70,26 +70,8 @@ class ArticleService extends ServiceAbstracts
     /**
      * 为文章添加 relationship 字段
      * {
-     *     user: {
-     *         user_id: '',
-     *         username: '',
-     *         headline: '',
-     *         avatar: {
-     *             s: '',
-     *             m: '',
-     *             l: ''
-     *         }
-     *     }
-     *     topics: [
-     *         {
-     *             name: '',
-     *             cover: {
-     *                 s: '',
-     *                 m: '',
-     *                 l: ''
-     *             }
-     *         }
-     *     ]
+     *     user: {}
+     *     topics: [ {}, {}, {} ]
      *     is_following: false
      *     voting: up、down、''
      * }
@@ -108,80 +90,19 @@ class ArticleService extends ServiceAbstracts
             $articles = [$articles];
         }
 
-        $currentUserId = $this->roleService->userId();
         $articleIds = array_unique(array_column($articles, 'article_id'));
         $userIds = array_unique(array_column($articles, 'user_id'));
-        $followingArticleIds = [];
-        $votings = []; // article_id 为键，投票类型为值
-        $users = []; // user_id 为键，用户信息为值
-        $topics = []; // article_id 为键，topic 信息组成的二维数组为值
 
         // is_following
-        if ($currentUserId) {
-            if (isset($relationship['is_following'])) {
-                $followingArticleIds = $relationship['is_following'] ? $articleIds : [];
-            } else {
-                $followingArticleIds = $this->followModel->where([
-                    'user_id'         => $currentUserId,
-                    'followable_id'   => $articleIds,
-                    'followable_type' => 'article',
-                ])->pluck('followable_id');
-            }
+        if (isset($relationship['is_following'])) {
+            $followingArticleIds = $relationship['is_following'] ? $articleIds : [];
+        } else {
+            $followingArticleIds = $this->followService->getIsFollowingInRelationship($articleIds, 'article');
         }
 
-        // voting
-        if ($currentUserId) {
-            $votes = $this->voteModel
-                ->where([
-                    'user_id'      => $currentUserId,
-                    'votable_id'   => $articleIds,
-                    'votable_type' => 'article',
-                ])
-                ->field(['votable_id', 'type'])
-                ->select();
-
-            foreach ($votes as $vote) {
-                $votings[$vote['votable_id']] = $vote['type'];
-            }
-        }
-
-        // user
-        $usersTmp = $this->userModel
-            ->where(['user_id' => $userIds])
-            ->field(['user_id', 'avatar', 'username', 'headline'])
-            ->select();
-        foreach ($usersTmp as $item) {
-            $item = $this->userService->handle($item);
-            $users[$item['user_id']] = [
-                'user_id'  => $item['user_id'],
-                'username' => $item['username'],
-                'headline' => $item['headline'],
-                'avatar'   => $item['avatar'],
-            ];
-        }
-
-        // topics
-        $topicsTmp = $this->topicModel
-            ->join([
-                '[><]topicable' => ['topic_id' => 'topic_id']
-            ])
-            ->where([
-                'topicable.topicable_id' => $articleIds,
-                'topicable.topicable_type' => 'article',
-            ])
-            ->order(['topicable.create_time' => 'ASC'])
-            ->field(['topic.topic_id', 'topic.name', 'topic.cover', 'topicable.topicable_id(article_id)'])
-            ->select();
-        foreach ($articleIds as $articleIdTmp) {
-            $topics[$articleIdTmp] = [];
-        }
-        foreach ($topicsTmp as $item) {
-            $topics[$item['article_id']][] = $this->topicService->handle([
-                'topic_id' => $item['topic_id'],
-                'name'     => $item['name'],
-                'cover'    => $item['cover'],
-            ]);
-        }
+        $votings = $this->voteService->getVotingInRelationship($articleIds, 'article');
+        $users = $this->userService->getUsersInRelationship($userIds);
+        $topics = $this->topicService->getTopicsInRelationship($articleIds, 'article');
 
         // 合并数据
         foreach ($articles as &$article) {
@@ -189,7 +110,7 @@ class ArticleService extends ServiceAbstracts
                 'user'         => $users[$article['user_id']],
                 'topics'       => $topics[$article['article_id']],
                 'is_following' => in_array($article['article_id'], $followingArticleIds),
-                'voting'       => $votings[$article['article_id']] ?? '',
+                'voting'       => $votings[$article['article_id']],
             ];
         }
 
