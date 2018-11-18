@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
+use App\Constant\ErrorConstant;
+use App\Exception\ApiException;
+use App\Exception\ValidationException;
+use App\Helper\ValidatorHelper;
 use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
 
@@ -101,6 +105,116 @@ class CommentService extends ServiceAbstracts
         }
 
         return $list;
+    }
+
+    /**
+     * @param  int    $commentId 评论ID
+     * @param  string $content   评论内容
+     */
+    public function update(int $commentId, string $content = null): void
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $commentInfo = $this->commentModel->get($commentId);
+
+        if (!$commentInfo) {
+            throw new ApiException(ErrorConstant::COMMENT_NOT_FOUND);
+        }
+
+        if ($commentInfo['user_id'] != $userId && !$this->roleService->managerId()) {
+            throw new ApiException(ErrorConstant::COMMENT_ONLY_AUTHOR_CAN_EDIT);
+        }
+
+        $errors = [];
+
+        if ($content) {
+            $content = strip_tags($content);
+        }
+
+        // 验证内容
+        if (!is_null($content)) {
+            if (!$content) {
+                $errors['content'] = '评论内容不能为空';
+            } elseif (!ValidatorHelper::isMax($content, 1000)) {
+                $errors['content'] = '评论内容不能超过 1000 个字符';
+            }
+
+            if ($errors) {
+                throw new ValidationException($errors);
+            } else {
+                $this->commentModel
+                    ->where(['comment_id' => $commentId])
+                    ->update(['content' => $content]);
+            }
+        }
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param int $commentId
+     */
+    public function delete(int $commentId): void
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $commentInfo = $this->commentModel
+            ->field(['user_id', 'commentable_id', 'commentable_type'])
+            ->get($commentId);
+
+        if (!$commentInfo) {
+            return;
+        }
+
+        if ($commentInfo['user_id'] != $userId && !$this->roleService->managerId()) {
+            throw new ApiException(ErrorConstant::COMMENT_ONLY_AUTHOR_CAN_DELETE);
+        }
+
+        $this->commentModel->delete($commentId);
+
+        // 该评论目标对象的 comment_count - 1
+        $this->{$commentInfo['commentable_type'] . 'Model'}
+            ->where([$commentInfo['commentable_type'] . '_id' => $commentInfo['commentable_id']])
+            ->update(['comment_count[-]' => 1]);
+    }
+
+    /**
+     * 批量删除评论
+     *
+     * @param array $commentIds
+     */
+    public function batchDelete(array $commentIds): void
+    {
+        $comments = $this->commentModel
+            ->field(['comment_id', 'user_id', 'commentable_id', 'commentable_type'])
+            ->where(['comment_id' => $commentIds])
+            ->select();
+
+        if (!$comments) {
+            return;
+        }
+
+        $commentIds = array_column($comments, 'comment_id');
+        $this->commentModel->where(['comment_id' => $commentIds])->delete();
+
+        $targets = [];
+
+        // 这些评论的目标对象的 comment_count - 1
+        foreach ($comments as $comment) {
+            if (!isset($targets[$comment['commentable_type']])) {
+                $targets[$comment['commentable_type']] = [];
+            }
+
+            isset($targets[$comment['commentable_type']][$comment['commentable_id']])
+                ? $targets[$comment['commentable_type']][$comment['commentable_id']] += 1
+                : $targets[$comment['commentable_type']][$comment['commentable_id']] = 1;
+        }
+
+        foreach ($targets as $type => $target) {
+            foreach ($target as $targetId => $count) {
+                $this->{$type . 'Model'}
+                    ->where([$type . '_id' => $targetId])
+                    ->update(['comment_count[-]' => $count]);
+            }
+        }
     }
 
     /**

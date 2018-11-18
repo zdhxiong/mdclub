@@ -246,7 +246,6 @@ class QuestionService extends ServiceAbstracts
      * @param  string $contentMarkdown
      * @param  string $contentRendered
      * @param  array  $topicIds
-     * @return bool
      */
     public function update(
         int    $questionId,
@@ -254,7 +253,7 @@ class QuestionService extends ServiceAbstracts
         string $contentMarkdown = null,
         string $contentRendered = null,
         array  $topicIds = null
-    ): bool {
+    ): void {
         [
             $data,
             $topicIds
@@ -292,8 +291,6 @@ class QuestionService extends ServiceAbstracts
                 $this->topicableModel->insert($topicable);
             }
         }
-
-        return true;
     }
 
     /**
@@ -303,8 +300,8 @@ class QuestionService extends ServiceAbstracts
      * @param  string $title
      * @param  string $contentMarkdown
      * @param  string $contentRendered
-     * @param  array $topicIds
-     * @return array
+     * @param  array  $topicIds
+     * @return array                   经过处理后的数据
      */
     public function updateValidator(
         int    $questionId,
@@ -403,7 +400,7 @@ class QuestionService extends ServiceAbstracts
             return;
         }
 
-        if (!$questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {
+        if ($questionInfo['user_id'] != $userId && !$this->roleService->managerId()) {
             throw new ApiException(ErrorConstant::QUESTION_ONLY_AUTHOR_CAN_DELETE);
         }
 

@@ -2636,7 +2636,7 @@ paths:
     get:
       tags:
         - Comment
-      summary: todo - 获取评论详情
+      summary: 获取评论详情
       description: 获取评论详情
       parameters:
         - name: comment_id
@@ -2660,8 +2660,9 @@ paths:
     patch:
       tags:
         - Comment
-      summary: todo - 修改评论
-      description: 修改评论
+      summary: 修改评论
+      description: |
+        仅评论的作者和管理员可以修改评论。
       parameters:
         - name: comment_id
           in: path
@@ -2695,7 +2696,8 @@ paths:
       tags:
         - Comment
       summary: todo - 删除评论
-      description: 删除评论
+      description: |
+        仅评论作者和管理员可删除评论
       parameters:
         - name: comment_id
           in: path

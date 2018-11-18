@@ -70,7 +70,9 @@ class CommentController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $comment_id): Response
     {
-        return $response;
+        $comment = $this->commentService->get($comment_id, true);
+
+        return $this->success($response, $comment);
     }
 
     /**
@@ -83,7 +85,12 @@ class CommentController extends ControllerAbstracts
      */
     public function update(Request $request, Response $response, int $comment_id): Response
     {
-        return $response;
+        $content = $request->getParsedBodyParam('content');
+
+        $this->commentService->update($comment_id, $content);
+        $commentInfo = $this->commentService->get($comment_id, true);
+
+        return $this->success($response, $commentInfo);
     }
 
     /**
@@ -96,7 +103,9 @@ class CommentController extends ControllerAbstracts
      */
     public function delete(Request $request, Response $response, int $comment_id): Response
     {
-        return $response;
+        $this->commentService->delete($comment_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -108,7 +117,19 @@ class CommentController extends ControllerAbstracts
      */
     public function batchDelete(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $commentIds = $request->getQueryParam('comment_id');
+
+        if ($commentIds) {
+            $commentIds = array_unique(array_filter(array_slice(explode(',', $commentIds), 0, 100)));
+        }
+
+        if ($commentIds) {
+            $this->commentService->batchDelete($commentIds);
+        }
+
+        return $this->success($response);
     }
 
     /**

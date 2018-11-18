@@ -167,6 +167,16 @@ class ErrorConstant
      */
     const COMMENT_NOT_FOUND               = [320001, '指定的评论不存在'];
 
+    /**
+     * 仅评论作者可以编辑评论
+     */
+    const COMMENT_ONLY_AUTHOR_CAN_EDIT    = [320002, '仅评论的作者可以编辑评论'];
+
+    /**
+     * 仅评论作者可以删除评论
+     */
+    const COMMENT_ONLY_AUTHOR_CAN_DELETE  = [320003, '仅评论的作者可以删除评论'];
+
 
     // ====================================
     // ==================================== 话题相关错误
