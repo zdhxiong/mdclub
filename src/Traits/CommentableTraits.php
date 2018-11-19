@@ -72,11 +72,17 @@ trait CommentableTraits
             throw new ValidationException($errors);
         }
 
-        return (int)$this->commentModel->insert([
+        $commentId = (int)$this->commentModel->insert([
             'commentable_id'   => $commentableId,
             'commentable_type' => $this->currentModel->table,
             'user_id'          => $userId,
             'content'          => $content,
         ]);
+
+        $this->currentModel
+            ->where([$this->currentModel->table . '_id' => $commentableId])
+            ->update(['comment_count[+]' => 1]);
+
+        return $commentId;
     }
 }

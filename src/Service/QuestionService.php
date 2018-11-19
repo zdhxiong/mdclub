@@ -61,7 +61,7 @@ class QuestionService extends ServiceAbstracts
     /**
      * 获取问题列表
      *
-     * @param  bool $withRelationship
+     * @param  bool  $withRelationship
      * @return array
      */
     public function getList(bool $withRelationship = false): array
@@ -275,7 +275,10 @@ class QuestionService extends ServiceAbstracts
         // 更新话题关系
         if (!is_null($topicIds)) {
             $this->topicableModel
-                ->where(['topicable_id' => $questionId, 'topicable_type' => 'question'])
+                ->where([
+                    'topicable_id'   => $questionId,
+                    'topicable_type' => 'question',
+                ])
                 ->delete();
 
             $topicable = [];
@@ -438,7 +441,7 @@ class QuestionService extends ServiceAbstracts
         }
 
         $questionIds = array_column($questions, 'question_id');
-        $this->questionModel->where(['question_id' => $questionIds])->delete();
+        $this->questionModel->delete($questionIds);
 
         $users = [];
 

@@ -136,20 +136,20 @@ paths:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
         - name: order
-          type: string
           in: query
+          type: string
           description: 排序方式，可以为 `create_time`、`follower_count`，默认为 `create_time`。在字段前加 `-` 表示倒序排列
         - name: user_id
-          type: integer
           in: query
+          type: integer
           description: 按用户ID过滤
         - name: username
-          type: string
           in: query
+          type: string
           description: 按用户名过滤
         - name: email
-          type: string
           in: query
+          type: string
           description: 🔐按邮箱过滤
       responses:
         200:
@@ -221,8 +221,8 @@ paths:
         只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - name: user_id
-          type: string
           in: query
+          type: string
           description: 用“,”分隔的用户ID，最多可提供100个ID
       responses:
         200:
@@ -268,8 +268,8 @@ paths:
         `relationship`
       parameters:
         - name: user_id
-          type: integer
           in: path
+          type: integer
           description: 用户ID
       responses:
         200:
@@ -293,8 +293,8 @@ paths:
         **仅管理员可调用该接口**
       parameters:
         - name: user_id
-          type: integer
           in: path
+          type: integer
           description: 用户ID
         - name: body
           in: body
@@ -338,8 +338,8 @@ paths:
         **仅管理员可调用该接口**
       parameters:
         - name: user_id
-          type: integer
           in: path
+          type: integer
           description: 用户ID
       responses:
         200:
@@ -651,7 +651,34 @@ paths:
     get:
       tags:
         - Article
-      summary: todo - 获取指定用户发表的文章
+      summary: 获取指定用户发表的文章
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /users/{user_id}/comments:
 
@@ -756,8 +783,8 @@ paths:
         - multipart/form-data
       parameters:
         - name: avatar
-          type: file
           in: formData
+          type: file
           description: 用户头像
       responses:
         200:
@@ -801,8 +828,8 @@ paths:
         - multipart/form-data
       parameters:
         - name: cover
-          type: file
           in: formData
+          type: file
           description: 用户封面
       responses:
         200:
@@ -1123,7 +1150,30 @@ paths:
     get:
       tags:
         - Article
-      summary: todo - 获取当前用户发表的文章
+      summary: 获取当前用户发表的文章
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 文章列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /user/comments:
 
@@ -1160,17 +1210,23 @@ paths:
     get:
       tags:
         - Article
-      summary: todo - 获取文章列表
-      description: |
-        管理员可排序的字段包括：
-        管理员可筛选的字段包括：
-        普通用户可排序的字段包括：
-        普通用户可筛选的字段包括：
+      summary: 获取文章列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+        - name: article_id
+          in: query
+          type: integer
+          description: 按文章ID过滤
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
       responses:
         200:
           description: 文章列表
@@ -1190,8 +1246,9 @@ paths:
     post:
       tags:
         - Article
-      summary: todo - 发表文章
-      description: 发表问题。若启用了 markdown 功能，则需要传入 content_markdown，否则需要传入 content_rendered。
+      summary: 发表文章
+      description: |
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - name: body
           in: body
@@ -1203,9 +1260,9 @@ paths:
               title:
                 type: string
                 description: 标题
-              topic_ids:
+              topic_id:
                 type: string
-                description: 话题ID，多个ID用“，”分隔
+                description: 话题ID，多个ID用“,”分隔
               content_markdown:
                 type: string
                 description: Markdown 格式的正文
@@ -1229,7 +1286,7 @@ paths:
     delete:
       tags:
         - Article
-      summary: todo - 🔐批量删除文章
+      summary: 🔐批量删除文章
       description: |
         **仅管理员可调用该接口**
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
@@ -1257,8 +1314,7 @@ paths:
     get:
       tags:
         - Article
-      summary: todo - 获取指定文章信息
-      description: 获取指定文章信息
+      summary: 获取指定文章信息
       parameters:
         - name: article_id
           in: path
@@ -1281,20 +1337,57 @@ paths:
     patch:
       tags:
         - Article
-      summary: todo - 更新文章信息
-      description: 更新文章信息
+      summary: 更新文章信息
+      description: |
+        仅文章的作者和管理员可以修改文章信息。
+        <br/>
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - name: article_id
+          in: path
+          type: integer
+          description: 文章ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: 标题
+              topic_id:
+                type: string
+                description: 话题ID，多个ID用“,”分隔
+              content_markdown:
+                type: string
+                description: Markdown 格式的正文
+              content_rendered:
+                type: string
+                description: HTML 格式的正文
+      responses:
+        200:
+          description: 问题详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Articles'
+        default:
+          $ref: '#/responses/Error'
       security:
-      - token: []
+        - token: []
 
     delete:
       tags:
         - Article
-      summary: todo - 删除指定文章
-      description: 删除指定文章
+      summary: 删除指定文章
+      description: |
+        仅文章作者和管理员可以删除文章
       parameters:
         - name: article_id
-          type: integer
           in: path
+          type: integer
           description: 文章ID
       responses:
         200:
@@ -1499,7 +1592,7 @@ paths:
           in: query
           type: string
           description: |
-            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -1559,16 +1652,17 @@ paths:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
         - name: order
+          in: query
           type: string
-          in: query
-          description: 排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`。在字段前加 `-` 表示倒序排列。
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`。在字段前加 `-` 表示倒序排列。
         - name: question_id
-          type: integer
           in: query
+          type: integer
           description: 按问题ID过滤
         - name: user_id
-          type: integer
           in: query
+          type: integer
           description: 按用户ID过滤
       responses:
         200:
@@ -1603,7 +1697,7 @@ paths:
               title:
                 type: string
                 description: 标题
-              topic_ids:
+              topic_id:
                 type: string
                 description: 话题ID，多个ID用“,”分隔
               content_markdown:
@@ -1684,11 +1778,11 @@ paths:
       description: |
         仅问题的作者和管理员可以修改问题信息。
         <br/>
-        content_markdown 和 content_rendered 两个参数仅传入其中一个即可，若两个参数都传入，则以 content_markdown 为准。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - name: question_id
-          type: integer
           in: path
+          type: integer
           description: 问题ID
         - name: body
           in: body
@@ -1698,7 +1792,7 @@ paths:
               title:
                 type: string
                 description: 标题
-              topic_ids:
+              topic_id:
                 type: string
                 description: 话题ID，多个ID用“,”分隔
               content_markdown:
@@ -1729,8 +1823,8 @@ paths:
         仅问题作者和管理员可以删除问题
       parameters:
         - name: question_id
-          type: integer
           in: path
+          type: integer
           description: 问题ID
       responses:
         200:
@@ -1932,7 +2026,7 @@ paths:
           in: query
           type: string
           description: |
-            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -2004,16 +2098,16 @@ paths:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
         - name: order
-          type: string
           in: query
+          type: string
           description: 排序方式，可以为 `topic_id`、`follower_count` 默认为 `topic_id`。在字段前加 `-` 表示倒序排列。
         - name: topic_id
-          type: integer
           in: query
+          type: integer
           description: 话题ID
         - name: name
-          type: string
           in: query
+          type: string
           description: 话题名称
       responses:
         200:
@@ -2039,16 +2133,16 @@ paths:
         **仅管理员可调用该接口**
       parameters:
         - name: name
-          type: string
           in: formData
+          type: string
           description: 话题名称
         - name: description
-          type: string
           in: formData
+          type: string
           description: 话题描述
         - name: cover
-          type: file
           in: formData
+          type: file
           description: 封面图片
       responses:
         200:
@@ -2126,20 +2220,20 @@ paths:
         formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
       parameters:
         - name: topic_id
-          type: integer
           in: path
+          type: integer
           description: 话题ID
         - name: name
-          type: string
           in: formData
+          type: string
           description: 话题名称
         - name: description
-          type: string
           in: formData
+          type: string
           description: 话题描述
         - name: cover
-          type: file
           in: formData
+          type: file
           description: 封面图片
       responses:
         200:
@@ -2163,8 +2257,8 @@ paths:
         **仅管理员可调用该接口**
       parameters:
         - name: topic_id
-          type: integer
           in: path
+          type: integer
           description: 话题ID
       responses:
         200:
@@ -2378,8 +2472,8 @@ paths:
       description: 删除指定回答，仅管理员可使用该接口
       parameters:
         - name: answer_id
-          type: integer
           in: path
+          type: integer
           description: 回答ID
       responses:
         200:
@@ -2506,7 +2600,7 @@ paths:
           in: query
           type: string
           description: |
-            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
+            排序方式，可以为 `vote_count`、`create_time`，默认为 `create_time`。在字段前加 `-` 表示倒序排列。
       responses:
         200:
           description: 评论列表
@@ -2608,7 +2702,7 @@ paths:
     delete:
       tags:
         - Comment
-      summary: todo - 🔐批量删除评论
+      summary: 🔐批量删除评论
       description: |
         **仅管理员可调用该接口**
         只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
@@ -2695,7 +2789,7 @@ paths:
     delete:
       tags:
         - Comment
-      summary: todo - 删除评论
+      summary: 删除评论
       description: |
         仅评论作者和管理员可删除评论
       parameters:
@@ -2918,8 +3012,8 @@ paths:
         **仅管理员可调用该接口**
       parameters:
         - name: report_id
-          type: integer
           in: path
+          type: integer
           description: 举报ID
       responses:
         200:
@@ -2945,8 +3039,8 @@ paths:
         - multipart/form-data
       parameters:
         - name: image
-          type: file
           in: formData
+          type: file
           description: 图片
       responses:
         200:

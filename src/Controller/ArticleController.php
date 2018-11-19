@@ -53,7 +53,9 @@ class ArticleController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $list = $this->articleService->getListByUserId($user_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -65,7 +67,10 @@ class ArticleController extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $list = $this->articleService->getListByUserId($userId, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -77,7 +82,9 @@ class ArticleController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        return $response;
+        $list = $this->articleService->getList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -89,7 +96,19 @@ class ArticleController extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        $articleId = $this->articleService->create(
+            $userId,
+            $request->getParsedBodyParam('title'),
+            $request->getParsedBodyParam('content_markdown'),
+            $request->getParsedBodyParam('content_rendered'),
+            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_id'))))
+        );
+
+        $articleInfo = $this->articleService->get($articleId, true);
+
+        return $this->success($response, $articleInfo);
     }
 
     /**
@@ -102,7 +121,9 @@ class ArticleController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $articleInfo = $this->articleService->get($article_id, true);
+
+        return $this->success($response, $articleInfo);
     }
 
     /**
@@ -115,7 +136,19 @@ class ArticleController extends ControllerAbstracts
      */
     public function update(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $title = $request->getParsedBodyParam('title');
+        $contentMarkdown = $request->getParsedBodyParam('content_markdown');
+        $contentRendered = $request->getParsedBodyParam('content_rendered');
+        $topicIds = $request->getParsedBodyParam('topic_id');
+
+        if ($topicIds) {
+            $topicIds = array_unique(array_filter(explode(',', $topicIds)));
+        }
+
+        $this->articleService->update($article_id, $title, $contentMarkdown, $contentRendered, $topicIds);
+        $articleInfo = $this->articleService->get($article_id, true);
+
+        return $this->success($response, $articleInfo);
     }
 
     /**
@@ -128,7 +161,9 @@ class ArticleController extends ControllerAbstracts
      */
     public function delete(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        $this->articleService->delete($article_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -140,7 +175,19 @@ class ArticleController extends ControllerAbstracts
      */
     public function batchDelete(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $articleIds = $request->getQueryParam('article_id');
+
+        if ($articleIds) {
+            $articleIds = array_unique(array_filter(array_slice(explode(',', $articleIds), 0, 100)));
+        }
+
+        if ($articleIds) {
+            $this->articleService->batchDelete($articleIds);
+        }
+
+        return $this->success($response);
     }
 
     /**

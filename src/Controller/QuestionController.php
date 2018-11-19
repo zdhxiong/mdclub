@@ -101,7 +101,7 @@ class QuestionController extends ControllerAbstracts
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_ids'))))
+            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_id'))))
         );
 
         $questionInfo = $this->questionService->get($questionId, true);
@@ -137,7 +137,7 @@ class QuestionController extends ControllerAbstracts
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
         $contentRendered = $request->getParsedBodyParam('content_rendered');
-        $topicIds = $request->getParsedBodyParam('topic_ids');
+        $topicIds = $request->getParsedBodyParam('topic_id');
 
         if ($topicIds) {
             $topicIds = array_unique(array_filter(explode(',', $topicIds)));
