@@ -1,7 +1,6 @@
 import {
   get,
   post,
-  patch,
   put,
   del,
 } from './util/requestAlias';
@@ -9,6 +8,8 @@ import {
 export default {
   /**
    * 获取话题列表
+   *
+   * GET /topics
    */
   getList(data, success) {
     get('/topics', data, success);
@@ -16,84 +17,110 @@ export default {
 
   /**
    * 发布话题
+   *
+   * POST /topics
    */
-  create(name, description, success) {
-    get('/topics', {
-      name,
-      description,
-    }, success);
+  create(name, description, file, success) {
+    const data = new FormData();
+    data.append('name', name);
+    data.append('description', description);
+    data.append('file', file);
+
+    post('/topics', data, success);
+  },
+
+  /**
+   * 删除多个话题
+   *
+   * DELETE /topics
+   */
+  deleteMultiple(topic_id, success) {
+    del('/topics', { topic_id }, success);
+  },
+
+  /**
+   * 获取指定话题信息
+   *
+   * GET /topics/{topic_id}
+   */
+  getOne(topic_id, success) {
+    get(`/topics/${topic_id}`, success);
   },
 
   /**
    * 更新话题信息
+   *
+   * POST /topics/{topic_id}
    */
-  update(topic_id, data, success) {
-    patch(`/topics/${topic_id}`, data, success);
-  },
-
-  /**
-   * 上传话题封面
-   */
-  uploadCover(topic_id, file, success) {
+  updateOne(topic_id, params, success) {
     const data = new FormData();
-    data.append('cover', file);
 
-    post(`/topics/${topic_id}/cover`, data, success);
+    if (typeof params.name !== 'undefined') {
+      data.append('name', params.name);
+    }
+
+    if (typeof params.description !== 'undefined') {
+      data.append('description', params.description);
+    }
+
+    if (typeof params.file !== 'undefined') {
+      data.append('file', params.file);
+    }
+
+    post(`/topics/${topic_id}`, data, success);
   },
 
   /**
-   * 获取当前用户关注的话题列表
+   * 删除指定话题
+   *
+   * DELETE /topics/{topic_id}
    */
-  getMyFollowing(data, success) {
-    get('/user/topics/following', data, success);
-  },
-
-  /**
-   * 获取当前用户未关注的话题列表
-   */
-  getMyNotFollowing(data, success) {
-    get('/user/topics/not_following', data, success);
+  deleteOne(topic_id, success) {
+    del(`/topics/${topic_id}`, success);
   },
 
   /**
    * 获取指定用户关注的话题列表
+   *
+   * GET /users/{user_id}/following_topics
    */
   getFollowing(user_id, data, success) {
-    get(`/users/${user_id}/topics/following`, data, success);
+    get(`/users/${user_id}/following_topics`, data, success);
   },
 
   /**
-   * 获取指定用户未关注的话题列表
+   * 获取当前用户关注的话题列表
+   *
+   * GET /user/following_topics
    */
-  getNotFollowing(user_id, data, success) {
-    get(`/users/${user_id}/topics/not_following`, data, success);
+  getMyFollowing(data, success) {
+    get('/user/following_topics', data, success);
   },
 
   /**
-   * 检查指定用户是否关注了指定话题
+   * 获取指定话题的关注者
+   *
+   * GET /topics/{topic_id}/followers
    */
-  isFollowing(user_id, topic_id, success) {
-    get(`/users/${user_id}/topics/${topic_id}/following`, success);
-  },
-
-  /**
-   * 检查当前用户是否关注了指定话题
-   */
-  isMyFollowing(topic_id, success) {
-    get(`/user/topics/${topic_id}/following`, success);
+  getFollowers(topic_id, data, success) {
+    get(`/topics/${topic_id}/followers`, data, success);
   },
 
   /**
    * 添加关注
+   *
+   * POST /topics/{topic_id}/followers
    */
   addFollow(topic_id, success) {
-    put(`/user/topics/${topic_id}/following`, success);
+    put(`/topics/${topic_id}/followers`, success);
   },
 
   /**
    * 取消关注
+   *
+   * DELETE /topics/{topic_id}/followers
    */
   deleteFollow(topic_id, success) {
-    del(`/user/topics/${topic_id}/following`, success);
+    del(`/topics/${topic_id}/followers`, success);
   },
 };

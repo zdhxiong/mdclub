@@ -6,6 +6,8 @@ import {
 export default {
   /**
    * 生成 token
+   *
+   * POST /tokens
    */
   create(_data, success) {
     const data = _data;
