@@ -245,27 +245,7 @@ paths:
         - UserInfo
       summary: 获取指定用户信息
       description: |
-        **若是管理员调用该接口、或登录用户读取自己的个人信息，将返回用户的所有信息**
-        **其他情况仅返回以下字段（去掉了部分隐私信息）：**
-        `user_id`
-        `username`
-        `avatar`
-        `cover`
-        `follower_count`
-        `following_article_count`
-        `following_question_count`
-        `following_topic_count`
-        `following_user_count`
-        `article_count`
-        `question_count`
-        `answer_count`
-        `headline`
-        `bio`
-        `blog`
-        `company`
-        `location`
-        `create_time`
-        `relationship`
+        **若是管理员调用该接口、或登录用户读取自己的个人信息，将返回用户的所有信息。其他情况仅返回部分字段（去掉了隐私信息）**
       parameters:
         - name: user_id
           in: path
