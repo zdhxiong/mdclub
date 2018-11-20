@@ -52,6 +52,8 @@ class ErrorConstant
      * 回答相关错误
      */
     const ANSWER_NOT_FOUND                = [310001, '指定回答不存在'];
+    const ANSWER_ONLY_AUTHOR_CAN_EDIT     = [310002, '仅回答的作者可以编辑回答'];
+    const ANSWER_ONLY_AUTHOR_CAN_DELETE   = [310003, '仅回答的作者可以删除回答'];
 
     /**
      * 评论相关错误

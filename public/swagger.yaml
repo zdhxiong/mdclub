@@ -644,7 +644,34 @@ paths:
     get:
       tags:
         - Answer
-      summary: todo - 获取指定用户发表的回答
+      summary: 获取指定用户发表的回答
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /users/{user_id}/articles:
 
@@ -1143,7 +1170,30 @@ paths:
     get:
       tags:
         - Answer
-      summary: todo - 获取当前用户发表的回答
+      summary: 获取当前用户发表的回答
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /user/articles:
 
@@ -1372,7 +1422,7 @@ paths:
               code:
                 type: integer
               data:
-                $ref: '#/definitions/Articles'
+                $ref: '#/definitions/Article'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2081,12 +2131,70 @@ paths:
     get:
       tags:
         - Answer
-      summary: todo - 获取指定问题下的回答列表
+      summary: 获取指定问题下的回答列表
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+      responses:
+        200:
+          description: 回答列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
     post:
       tags:
         - Answer
-      summary: todo - 在指定问题下发表回答
+      summary: 在指定问题下发表回答
+      description: |
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - name: question_id
+          in: path
+          type: integer
+          description: 问题ID
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              content_markdown:
+                type: string
+                description: Markdown 格式的正文
+              content_rendered:
+                type: string
+                description: HTML 格式的正文
+      responses:
+        200:
+          description: 回答详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Answers'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
 
   /topics:
 
@@ -2355,13 +2463,27 @@ paths:
     get:
       tags:
         - Answer
-      summary: todo - 🔐获取所有回答列表
-      description: 获取所有回答列表，仅管理员可使用该接口
+      summary: 获取回答列表
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`。在字段前加 `-` 表示倒序排列。
+        - name: answer_id
+          in: query
+          type: integer
+          description: 按回答ID过滤
+        - name: question_id
+          in: query
+          type: integer
+          description: 按问题ID过滤
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
       responses:
         200:
           description: 回答列表
@@ -2381,7 +2503,7 @@ paths:
     delete:
       tags:
         - Answer
-      summary: todo - 🔐批量删除多个回答
+      summary: 🔐批量删除回答
       description: |
         **仅管理员可调用该接口**
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
@@ -2409,8 +2531,7 @@ paths:
     get:
       tags:
         - Answer
-      summary: todo -  获取回答详情
-      description: 获取回答详情
+      summary: 获取回答详情
       parameters:
         - name: answer_id
           in: path
@@ -2433,8 +2554,11 @@ paths:
     patch:
       tags:
         - Answer
-      summary: todo - 🔐修改回答信息
-      description: 修改回答信息，仅管理员可使用该接口
+      summary: 修改回答信息
+      description: |
+        仅回答的作者和管理员可以修改文章信息。
+        <br/>
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - name: answer_id
           in: path
@@ -2468,8 +2592,9 @@ paths:
     delete:
       tags:
         - Answer
-      summary: todo - 🔐删除指定回答
-      description: 删除指定回答，仅管理员可使用该接口
+      summary: 删除指定回答
+      description: |
+        仅回答作者和管理员可以删除文章
       parameters:
         - name: answer_id
           in: path
@@ -3879,6 +4004,9 @@ definitions:
       follower_count:
         type: integer
         description: 关注者数量
+      vote_count:
+        type: integer
+        description: 投票数（赞成票 - 反对票，可能为负数）
       last_answer_time:
         type: integer
         description: 最后回答时间
@@ -3921,6 +4049,9 @@ definitions:
       comment_count:
         type: integer
         description: 评论数量
+      vote_count:
+        type: integer
+        description: 投票数（赞成票 - 反对票，可能为负数）
       create_time:
         type: integer
         description: 创建时间
@@ -4015,6 +4146,9 @@ definitions:
       follower_count:
         type: integer
         description: 关注者数量
+      vote_count:
+        type: integer
+        description: 投票数（赞成票 - 反对票，可能为负数）
       create_time:
         type: integer
         description: 创建时间
@@ -4055,6 +4189,9 @@ definitions:
       content:
         type: string
         description: 评论内容
+      vote_count:
+        type: integer
+        description: 投票数（赞成票 - 反对票，可能为负数）
       create_time:
         type: integer
         description: 发表时间
@@ -4211,6 +4348,11 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/UserInRelationship'
+      question:
+        $ref: '#/definitions/QuestionInRelationship'
+      voting:
+        type: string
+        description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
 
   TopicRelationship:
     type: object

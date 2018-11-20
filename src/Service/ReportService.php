@@ -29,7 +29,15 @@ class ReportService extends ServiceAbstracts
      */
     public function getList(bool $withRelationship = false): array
     {
-        $list = $this->reportModel->paginate();
+        $list = $this->reportModel
+            ->where($this->getWhere())
+            ->order($this->getOrder())
+            ->field($this->getPrivacyFields(), true)
+            ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);

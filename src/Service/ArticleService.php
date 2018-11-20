@@ -127,21 +127,18 @@ class ArticleService extends ServiceAbstracts
         string $contentMarkdown,
         string $contentRendered,
         array  $topicIds
-    ): int
-    {
+    ): int {
         [
             $title,
             $contentMarkdown,
             $contentRendered,
-            $topicIds
+            $topicIds,
         ] = $this->createValidator(
             $title,
             $contentMarkdown,
             $contentRendered,
             $topicIds
         );
-
-
 
         // 添加文章
         $articleId = (int)$this->articleModel->insert([
@@ -167,7 +164,7 @@ class ArticleService extends ServiceAbstracts
         // 自动关注该文章
         $this->articleService->addFollow($userId, $articleId);
 
-        // 用户的 article_id + 1
+        // 用户的 article_count + 1
         $this->userModel
             ->where(['user_id' => $userId])
             ->update(['article_count[+]' => 1]);
@@ -189,8 +186,7 @@ class ArticleService extends ServiceAbstracts
         string $contentMarkdown,
         string $contentRendered,
         array $topicIds
-    ): array
-    {
+    ): array {
         $errors = [];
 
         // 验证标题
@@ -308,7 +304,7 @@ class ArticleService extends ServiceAbstracts
      * @param  array  $topicIds
      * @return array                   经过处理后的数据
      */
-    public function updateValidator(
+    private function updateValidator(
         int    $articleId,
         string $title = null,
         string $contentMarkdown = null,
@@ -435,8 +431,7 @@ class ArticleService extends ServiceAbstracts
     {
         $articles = $this->articleModel
             ->field(['article_id', 'user_id'])
-            ->where(['article_id' => $articleIds])
-            ->select();
+            ->select($articleIds);
 
         if (!$articles) {
             return;
@@ -491,6 +486,27 @@ class ArticleService extends ServiceAbstracts
     public function handle(array $articleInfo): array
     {
         return $articleInfo;
+    }
+
+    /**
+     * 获取在 relationship 中使用的 article
+     *
+     * @param  array $articleIds
+     * @return array
+     */
+    public function getArticlesInRelationship(array $articleIds): array
+    {
+        $articles = array_combine($articleIds, array_fill(0, count($articleIds), []));
+
+        $articlesTmp = $this->articleModel
+            ->field(['article_id', 'title', 'create_time', 'update_time'])
+            ->select($articleIds);
+
+        foreach ($articlesTmp as $item) {
+            $articles[$item['article_id']] = $item;
+        }
+
+        return $articles;
     }
 
     /**

@@ -306,7 +306,7 @@ class QuestionService extends ServiceAbstracts
      * @param  array  $topicIds
      * @return array                   经过处理后的数据
      */
-    public function updateValidator(
+    private function updateValidator(
         int    $questionId,
         string $title = null,
         string $contentMarkdown = null,
@@ -489,6 +489,27 @@ class QuestionService extends ServiceAbstracts
     public function handle(array $questionInfo): array
     {
         return $questionInfo;
+    }
+
+    /**
+     * 获取在 relationship 中使用的 question
+     *
+     * @param  array $questionIds
+     * @return array
+     */
+    public function getQuestionsInRelationship(array $questionIds): array
+    {
+        $questions = array_combine($questionIds, array_fill(0, count($questionIds), []));
+
+        $questionsTmp = $this->questionModel
+            ->field(['question_id', 'title', 'create_time', 'update_time'])
+            ->select($questionIds);
+
+        foreach ($questionsTmp as $item) {
+            $questions[$item['question_id']] = $item;
+        }
+
+        return $questions;
     }
 
     /**

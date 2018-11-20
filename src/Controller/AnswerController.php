@@ -26,7 +26,9 @@ class AnswerController extends ControllerAbstracts
      */
     public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $list = $this->answerService->getListByQuestionId($question_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -39,7 +41,9 @@ class AnswerController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        $list = $this->answerService->getListByUserId($user_id, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -51,7 +55,10 @@ class AnswerController extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+        $list = $this->answerService->getListByUserId($userId, true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -63,7 +70,9 @@ class AnswerController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        return $response;
+        $list = $this->answerService->getList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -76,7 +85,18 @@ class AnswerController extends ControllerAbstracts
      */
     public function create(Request $request, Response $response, int $question_id): Response
     {
-        return $response;
+        $userId = $this->roleService->userIdOrFail();
+
+        $answerId = $this->answerService->create(
+            $userId,
+            $question_id,
+            $request->getParsedBodyParam('content_markdown'),
+            $request->getParsedBodyParam('content_rendered')
+        );
+
+        $answerInfo = $this->answerService->get($answerId, true);
+
+        return $this->success($response, $answerInfo);
     }
 
     /**
@@ -89,7 +109,9 @@ class AnswerController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $answerInfo = $this->answerService->get($answer_id, true);
+
+        return $this->success($response, $answerInfo);
     }
 
     /**
@@ -102,7 +124,14 @@ class AnswerController extends ControllerAbstracts
      */
     public function update(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $this->answerService->update(
+            $answer_id,
+            $request->getParsedBodyParam('content_markdown'),
+            $request->getParsedBodyParam('content_rendered')
+        );
+        $answerInfo = $this->answerService->get($answer_id, true);
+
+        return $this->success($response, $answerInfo);
     }
 
     /**
@@ -115,7 +144,9 @@ class AnswerController extends ControllerAbstracts
      */
     public function delete(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $this->answerService->delete($answer_id);
+
+        return $this->success($response);
     }
 
     /**
@@ -127,7 +158,19 @@ class AnswerController extends ControllerAbstracts
      */
     public function batchDelete(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $answerIds = $request->getQueryParam('answer_id');
+
+        if ($answerIds) {
+            $answerIds = array_unique(array_filter(array_slice(explode(',', $answerIds), 0, 100)));
+        }
+
+        if ($answerIds) {
+            $this->answerService->batchDelete($answerIds);
+        }
+
+        return $this->success($response);
     }
 
     /**

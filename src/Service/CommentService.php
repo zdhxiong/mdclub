@@ -229,6 +229,32 @@ class CommentService extends ServiceAbstracts
     }
 
     /**
+     * 获取 relationship 中使用的 comment
+     *
+     * @param  array $commentIds
+     * @return array
+     */
+    public function getCommentsInRelationship(array $commentIds): array
+    {
+        $comments = array_combine($commentIds, array_fill(0, count($commentIds), []));
+
+        $commentsTmp = $this->commentModel
+            ->field(['comment_id', 'content', 'create_time', 'update_time'])
+            ->select($commentIds);
+
+        foreach ($commentsTmp as $item) {
+            $comments[$item['comment_id']] = [
+                'comment_id'      => $item['comment_id'],
+                'content_summary' => mb_substr($item['content'], 0, 80),
+                'create_time'     => $item['create_time'],
+                'update_time'     => $item['update_time'],
+            ];
+        }
+
+        return $comments;
+    }
+
+    /**
      * 为评论添加 relationship 字段
      * {
      *     user: {},
