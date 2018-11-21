@@ -27,22 +27,20 @@ $ cd mdclub-admin
 $ npm install
 ```
 
-### 运行开发环境
+### 修改配置
 
-首先修改配置，打开 `index.html`，将其中的 `window.G_API` 修改为服务器的 API 地址。然后执行：
+打开 `build/config.js` 文件，将 `targetFolder` 修改为 `mdclub` 项目的 `public/static/admin` 目录的绝对路径。
+
+### 运行
+
+要允许开发环境，执行：
 
 ```
 $ npm run dev
 ```
 
-在浏览器中访问 `http://localhost:8080` 即可。
-
-### 打包生产环境
+要打包生产环境，执行：
 
 ```
 $ npm run build
 ```
-
-打包后的文件位于 `dist` 目录中，将该目录中的文件全部复制到 `mdclub` 的 `public/static/admin` 目录中即可。
-
-

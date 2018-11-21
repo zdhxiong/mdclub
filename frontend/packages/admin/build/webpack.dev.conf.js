@@ -3,10 +3,11 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.base.conf');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
+const AssetsPlugin = require('assets-webpack-plugin');
 const packageConfig = require('../package.json');
+const buildConfig = require('./config');
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
@@ -37,11 +38,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true,
+
+    // 生成包含文件信息的 json 文件到 mdclub 项目
+    new AssetsPlugin({
+      fullPath: false, // 不含文件路径
+      path: buildConfig.targetFolder, // 生成的 json 文件存储路径
+      prettyPrint: true, // 格式化生成的 json
+      includeAllFileTypes: false,
+      fileTypes: ['js', 'css'], // 仅包含 js 和 css 文件
     }),
   ],
 });

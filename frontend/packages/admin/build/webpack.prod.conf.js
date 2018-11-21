@@ -89,6 +89,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       fullPath: false, // 不含文件路径
       path: path.resolve(__dirname, '../dist'), // 生成的 json 文件存储路径
       prettyPrint: true, // 格式化生成的 json
+      manifestFirst: true,
+      includeAllFileTypes: false,
+      fileTypes: ['js', 'css'], // 仅包含 js 和 css 文件
     }),
   ],
 });
