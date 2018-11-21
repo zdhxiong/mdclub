@@ -13,7 +13,7 @@ const buffer = require('vinyl-buffer');
 const pkg = require('./package.json');
 
 const banner = `
-/**
+/*!
  * mdclub-sdk-js ${pkg.version} (${pkg.homepage})
  * Copyright 2018-${new Date().getFullYear()} ${pkg.author}
  * Licensed under ${pkg.license}
