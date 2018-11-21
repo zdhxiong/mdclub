@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
+use App\Traits\UrlTraits;
 use Psr\Container\ContainerInterface;
 use App\Helper\ArrayHelper;
 use Slim\Exception\ContainerValueNotFoundException;
@@ -64,6 +65,8 @@ use Slim\Exception\ContainerValueNotFoundException;
  */
 abstract class ServiceAbstracts
 {
+    use UrlTraits;
+
     /**
      * 容器实例
      *
@@ -207,45 +210,5 @@ abstract class ServiceAbstracts
         $result = array_merge($defaultFilter, $result);
 
         return $result;
-    }
-
-    /**
-     * 获取上传文件的访问路径
-     *
-     * @return string
-     */
-    protected function getStorageUrl(): string
-    {
-        $storageUrl = $this->optionService->get('storage_url');
-        if ($storageUrl && substr($storageUrl, -1) !== '/') {
-            $storageUrl .= '/';
-        }
-
-        if (!$storageUrl) {
-            $uri = $this->request->getUri();
-            $storageUrl = $uri->getScheme() . '://' . $uri->getHost() . '/upload/';
-        }
-
-        return $storageUrl;
-    }
-
-    /**
-     * 获取静态资源的访问路径
-     *
-     * @return string
-     */
-    protected function getStaticUrl(): string
-    {
-        $staticUrl = $this->optionService->get('site_static_url');
-        if ($staticUrl && substr($staticUrl, -1) !== '/') {
-            $staticUrl .= '/';
-        }
-
-        if (!$staticUrl) {
-            $uri = $this->request->getUri();
-            $staticUrl = $uri->getScheme() . '://' . $uri->getHost() . '/static/';
-        }
-
-        return $staticUrl;
     }
 }

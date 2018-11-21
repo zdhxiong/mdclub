@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
+use App\Traits\UrlTraits;
 use Psr\Container\ContainerInterface;
 use Slim\Exception\ContainerValueNotFoundException;
 use Slim\Http\Response;
@@ -11,6 +12,7 @@ use Slim\Http\Response;
 /**
  * Class Controller
  *
+ * @property-read \Slim\Http\Request                    request
  * @property-read \Slim\Views\PhpRenderer               view
  *
  * @property-read \App\Service\AnswerService            answerService
@@ -41,6 +43,8 @@ use Slim\Http\Response;
  */
 abstract class ControllerAbstracts
 {
+    use UrlTraits;
+
     /**
      * 容器实例
      *
@@ -79,7 +83,8 @@ abstract class ControllerAbstracts
         }
 
         $libs = [
-            'view' => \Slim\Views\PhpRenderer::class,
+            'request'   => 'request',
+            'view'      => \Slim\Views\PhpRenderer::class,
         ];
 
         if (isset($libs[$name]) && $this->container->has($libs[$name])) {

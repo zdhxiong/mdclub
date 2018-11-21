@@ -90,7 +90,7 @@ class ImageService extends ServiceAbstracts
      */
     protected function isSupportWebp(): bool
     {
-        return strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp');
+        return strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp') > -1;
     }
 
     /**

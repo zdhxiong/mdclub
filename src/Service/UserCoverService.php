@@ -66,7 +66,7 @@ class UserCoverService extends ServiceAbstracts
         $data = [];
 
         foreach (array_keys($this->getBrandWidths()) as $size) {
-            $data[$size] = "{$staticUrl}user-cover/default_{$size}.{$suffix}";
+            $data[$size] = "{$staticUrl}default/user_cover_{$size}.{$suffix}";
         }
 
         return $data;

@@ -102,7 +102,7 @@ class TopicService extends ServiceAbstracts
         $data = [];
 
         foreach (array_keys($this->getBrandWidths()) as $size) {
-            $data[$size] = "{$staticUrl}topic-cover/default_{$size}.{$suffix}";
+            $data[$size] = "{$staticUrl}default/topic_cover_{$size}.{$suffix}";
         }
 
         return $data;
