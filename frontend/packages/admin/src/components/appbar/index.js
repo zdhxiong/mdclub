@@ -1,5 +1,4 @@
 import { h } from 'hyperapp';
-import cc from 'classcat';
 import mdui, { JQ as $ } from 'mdui';
 import { Link } from '@hyperapp/router';
 import jump from 'jump.js';

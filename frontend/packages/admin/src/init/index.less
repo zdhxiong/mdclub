@@ -2,9 +2,14 @@
  * mdui 内置样式重写
  */
 
+// 打开抽屉栏时，内容区域需要和抽屉栏保持间距；关闭抽屉栏时，则不要间距
 .mdui-container-fluid {
   margin-left: 36px;
   padding: 0;
+}
+
+.mdui-drawer-close + .mdui-container-fluid {
+  margin-left: 0;
 }
 
 // 移除卡片和表格的阴影
@@ -100,32 +105,5 @@ body {
 
   .mdui-chip {
     margin-right: 20px;
-  }
-}
-
-// 分页
-.mc-pagination {
-  color: rgba(0, 0, 0, 0.64);
-  padding-right: 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-
-  .per-page {
-    margin-right: 2px;
-  }
-
-  .mdui-select {
-    overflow: visible;
-  }
-
-  .range {
-    margin-right: 32px;
-    margin-left: 22px;
-  }
-
-  .mdui-btn-icon {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    margin: 0 6px;
   }
 }

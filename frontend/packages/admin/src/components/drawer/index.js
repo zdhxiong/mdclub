@@ -12,7 +12,7 @@ const Item = ({ url, icon, title }) => (
       'mdui-ripple',
       {
         'mdui-list-item-active': $.isPathMatched(url, !url),
-      }
+      },
     ])}
   >
     <i class="mdui-list-item-icon mdui-icon material-icons">{icon}</i>

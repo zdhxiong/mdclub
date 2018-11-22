@@ -23,8 +23,16 @@ export default {
     actions.setState({
       data: [],
       pagination: false,
-      loading: true,
     });
+
+    actions.loadData();
+  },
+
+  /**
+   * 加载数据
+   */
+  loadData: () => (state, actions) => {
+    actions.setState({ loading: true });
 
     Question.getList({
       order: '-create_time',
@@ -43,9 +51,31 @@ export default {
     });
   },
 
-  update: props => (state, actions) => {
-    const element = props.element;
+  /**
+   * 点击上一页事件
+   */
+  onPrevPageClick: () => (state, actions) => {
 
-    mdui.updateTables(element);
+  },
+
+  /**
+   * 点击下一页事件
+   */
+  onNextPageClick: () => (state, actions) => {
+
+  },
+
+  /**
+   * 修改每页行数
+   */
+  onPerPageChange: () => (state, actions) => {
+
+  },
+
+  /**
+   * 修改当前页码
+   */
+  onPageChange: () => (state, actions) => {
+
   },
 };

@@ -27,20 +27,18 @@ export default (global_state, global_actions) => {
           </tr>
           </thead>
           <tbody>
-          {state.data.map(topic => {
-            return () => (
-              <tr>
-                <td>{topic.topic_id}</td>
-                <td>{topic.name}</td>
-                <td>{topic.cover.s}</td>
-                <td>{topic.description}</td>
-                <td>{topic.article_count}</td>
-                <td>{topic.question_count}</td>
-                <td>{topic.follower_count}</td>
-                <td></td>
-              </tr>
-            );
-          })}
+          {state.data.map(topic => (
+            <tr>
+              <td>{topic.topic_id}</td>
+              <td>{topic.name}</td>
+              <td>{topic.cover.s}</td>
+              <td>{topic.description}</td>
+              <td>{topic.article_count}</td>
+              <td>{topic.question_count}</td>
+              <td>{topic.follower_count}</td>
+              <td></td>
+            </tr>
+          ))}
           </tbody>
           <tfoot>
           <tr>
