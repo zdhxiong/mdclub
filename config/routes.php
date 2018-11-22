@@ -185,6 +185,5 @@ $app->group('/api', function () {
     });
 
 // admin
-$app->group('/admin', function () {
-    $this->get('', AdminController::class . ':pageIndex');
-});
+$app->get('/admin',        AdminController::class . ':pageIndex');
+$app->get('/admin/{name}', AdminController::class . ':pageIndex');

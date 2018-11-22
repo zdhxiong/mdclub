@@ -36,7 +36,9 @@ class AdminController extends ControllerAbstracts
 
         $staticUrl = $this->getStaticUrl();
         $rootUrl = $this->getRootUrl();
+        $siteUrl = $this->getSiteUrl();
         $assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json');
+
         if (!$assetsInfo) {
             throw new \Exception('无法访问 ' . $staticUrl . 'admin/webpack-assets.json 文件');
         }
@@ -61,6 +63,8 @@ class AdminController extends ControllerAbstracts
             }
         }
 
+        $userInfo = $this->userService->get($userId, true);
+
         $response->getBody()->write('
 <!DOCTYPE html>
 <html>
@@ -72,11 +76,13 @@ class AdminController extends ControllerAbstracts
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     ' . implode('', $css) . '
 </head>
-<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
-    <div id="app"></div>
+<body class="mdui-drawer-body-left">
     <script>
-        window.G_API = "' . $rootUrl . '/api";
-        window.G_ROOT = "' . $rootUrl . '";
+        window.G_API = "' . $rootUrl . '/api"; // api 地址
+        window.G_ROOT = "' . $rootUrl . '"; // 网站根目录相对路径
+        window.G_ADMIN_ROOT = "' . $rootUrl . '/admin"; // 网站后台根目录相对路径
+        window.G_SITE = "' . $siteUrl . '"; // 网址（含域名）
+        window.G_USER = ' . json_encode($userInfo) . ';
     </script>
     ' . implode('', $js) . '
 </body>
