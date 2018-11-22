@@ -36,7 +36,7 @@ function styleLoaders (loader) {
 
   if (isProduction) {
     return ExtractTextPlugin.extract({
-      use: loaders
+      use: loaders,
     });
   } else {
     return ['style-loader'].concat(loaders);

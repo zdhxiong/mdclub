@@ -1,6 +1,17 @@
 import { location } from '@hyperapp/router';
 import mdui, { JQ as $ } from 'mdui';
 
+import AnswersActions from '../pages/answers/actions';
+import ArticlesActions from '../pages/articles/actions';
+import CommentsActions from '../pages/comments/actions';
+import ImagesActions from '../pages/images/actions';
+import OptionsActions from '../pages/options/actions';
+import QuestionsActions from '../pages/questions/actions';
+import ReportsActions from '../pages/reports/actions';
+import TopicsActions from '../pages/topics/actions';
+import TrashActions from '../pages/trash/actions';
+import UsersActions from '../pages/users/actions';
+
 export default {
   location: location.actions,
 
@@ -18,6 +29,17 @@ export default {
       (new mdui.Drawer('.mc-drawer')).close();
     }
   },
+
+  answers: AnswersActions,
+  articles: ArticlesActions,
+  comments: CommentsActions,
+  images: ImagesActions,
+  options: OptionsActions,
+  questions: QuestionsActions,
+  reports: ReportsActions,
+  topics: TopicsActions,
+  trash: TrashActions,
+  users: UsersActions,
 
   components: {
 

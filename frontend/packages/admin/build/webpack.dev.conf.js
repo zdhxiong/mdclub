@@ -23,10 +23,17 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     overlay:  { warnings: false, errors: true },
     publicPath: '/',
     proxy: {},
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: false,
     }
+  },
+
+  output: {
+    publicPath: 'http://localhost:8080/'
   },
 
   plugins: [
