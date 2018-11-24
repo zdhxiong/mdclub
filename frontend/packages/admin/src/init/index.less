@@ -2,10 +2,15 @@
  * mdui 内置样式重写
  */
 
-// 打开抽屉栏时，内容区域需要和抽屉栏保持间距；关闭抽屉栏时，则不要间距
 .mdui-container-fluid {
-  margin-left: 36px;
   padding: 0;
+}
+
+// 打开抽屉栏时，内容区域需要和抽屉栏保持间距；关闭抽屉栏时，则不要间距
+@media (min-width: 1024px) {
+  .mdui-container-fluid {
+    margin-left: 36px;
+  }
 }
 
 .mdui-drawer-close + .mdui-container-fluid {
@@ -20,23 +25,31 @@
 
 .mdui-table-fluid {
   box-shadow: none;
-  border: none;
+  border: none !important;
   overflow: visible;
 }
 
 // 表格悬浮状态颜色
 .mdui-table-hoverable tbody tr:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.04);
+
+  .mdui-theme-layout-dark & {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
 }
 
 // 移除表格分隔线
 .mdui-table tbody td {
-  border-bottom: none;
+  border-bottom: none !important;
 }
 
 // 表格行选中状态颜色
 .mdui-table-row-selected {
   background-color: #e8f0fe !important;
+
+  .mdui-theme-layout-dark & {
+    background-color: rgba(255, 255, 255, 0.16) !important;
+  }
 }
 
 // 修改表头样式
@@ -45,6 +58,13 @@
   font-weight: normal;
   color: #5f6368;
   cursor: default;
+}
+
+// 表格内容禁止换行
+.mdui-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 // 修改纸片样式
@@ -69,6 +89,14 @@
   width: 100%;
   height: ~'calc(100vh - 180px)';
   overflow: auto;
+}
+
+.mdui-table tbody.is-loading {
+  height: ~'calc(100vh - 210px)';
+}
+
+.mdui-table tbody.is-empty {
+  height: ~'calc(100vh - 472px)';
 }
 
 .mdui-table thead,

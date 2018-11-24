@@ -1,41 +1,34 @@
 import { h } from 'hyperapp';
 import { Route } from '@hyperapp/router';
-import cc from 'classcat';
 import { JQ as $ } from 'mdui';
 
-import AnswersView from '../pages/answers/view';
-import ArticlesView from '../pages/articles/view';
-import CommentsView from '../pages/comments/view';
-import ImagesView from '../pages/images/view';
-import OptionsView from '../pages/options/view';
-import QuestionsView from '../pages/questions/view';
-import ReportsView from '../pages/reports/view';
-import TopicsView from '../pages/topics/view';
-import TrashView from '../pages/trash/view';
-import UsersView from '../pages/users/view';
+import Answers from '../pages/answers/view';
+import Articles from '../pages/articles/view';
+import Comments from '../pages/comments/view';
+import Images from '../pages/images/view';
+import Options from '../pages/options/view';
+import Questions from '../pages/questions/view';
+import Reports from '../pages/reports/view';
+import Topics from '../pages/topics/view';
+import Trash from '../pages/trash/view';
+import Users from '../pages/users/view';
 
-import Appbar from '../components/appbar';
+import Appbar from '../lazyComponents/appbar/view';
 import Drawer from '../components/drawer';
 
 export default (global_state, global_actions) => (
-  <div class={cc([
-    'mdui-appbar-with-toolbar mdui-theme-accent-blue',
-    global_state.theme === 'dark' ? 'mdui-theme-layout-dark' : false,
-  ])}>
-
+  <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
     <Appbar/>
     <Drawer/>
-
-    <Route path={$.path('/answers')} render={AnswersView(global_state, global_actions)}/>
-    <Route path={$.path('/articles')} render={ArticlesView(global_state, global_actions)}/>
-    <Route path={$.path('/comments')} render={CommentsView(global_state, global_actions)}/>
-    <Route path={$.path('/images')} render={ImagesView(global_state, global_actions)}/>
-    <Route path={$.path('/options')} render={OptionsView(global_state, global_actions)}/>
-    <Route path={$.path('/questions')} render={QuestionsView(global_state, global_actions)}/>
-    <Route path={$.path('/reports')} render={ReportsView(global_state, global_actions)}/>
-    <Route path={$.path('/topics')} render={TopicsView(global_state, global_actions)}/>
-    <Route path={$.path('/trash')} render={TrashView(global_state, global_actions)}/>
-    <Route path={$.path('/users')} render={UsersView(global_state, global_actions)}/>
-
+    <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>
+    <Route path={$.path('/articles')} render={Articles(global_state, global_actions)}/>
+    <Route path={$.path('/comments')} render={Comments(global_state, global_actions)}/>
+    <Route path={$.path('/images')} render={Images(global_state, global_actions)}/>
+    <Route path={$.path('/options')} render={Options(global_state, global_actions)}/>
+    <Route path={$.path('/questions')} render={Questions(global_state, global_actions)}/>
+    <Route path={$.path('/reports')} render={Reports(global_state, global_actions)}/>
+    <Route path={$.path('/topics')} render={Topics(global_state, global_actions)}/>
+    <Route path={$.path('/trash')} render={Trash(global_state, global_actions)}/>
+    <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
   </div>
 );

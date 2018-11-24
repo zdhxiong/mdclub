@@ -1,37 +1,35 @@
 import { location } from '@hyperapp/router';
 
-import AnswersState from '../pages/answers/state';
-import ArticlesState from '../pages/articles/state';
-import CommentsState from '../pages/comments/state';
-import ImagesState from '../pages/images/state';
-import OptionsState from '../pages/options/state';
-import QuestionsState from '../pages/questions/state';
-import ReportsState from '../pages/reports/state';
-import TopicsState from '../pages/topics/state';
-import TrashState from '../pages/trash/state';
-import UsersState from '../pages/users/state';
+import Answers from '../pages/answers/state';
+import Articles from '../pages/articles/state';
+import Comments from '../pages/comments/state';
+import Images from '../pages/images/state';
+import Options from '../pages/options/state';
+import Questions from '../pages/questions/state';
+import Reports from '../pages/reports/state';
+import Topics from '../pages/topics/state';
+import Trash from '../pages/trash/state';
+import Users from '../pages/users/state';
+
+import AppbarLazyComponent from '../lazyComponents/appbar/state';
+import PaginationLazyComponent from '../lazyComponents/pagination/state';
 
 export default {
   location: location.state,
 
-  // 主题，包括 light、dark
-  theme: 'light',
+  answers: Answers,
+  articles: Articles,
+  comments: Comments,
+  images: Images,
+  options: Options,
+  questions: Questions,
+  reports: Reports,
+  topics: Topics,
+  trash: Trash,
+  users: Users,
 
-  // 当前登录用户信息
-  user: {},
-
-  answers: AnswersState,
-  articles: ArticlesState,
-  comments: CommentsState,
-  images: ImagesState,
-  options: OptionsState,
-  questions: QuestionsState,
-  reports: ReportsState,
-  topics: TopicsState,
-  trash: TrashState,
-  users: UsersState,
-
-  components: {
-
+  lazyComponents: {
+    appbar: AppbarLazyComponent,
+    pagination: PaginationLazyComponent,
   },
 };

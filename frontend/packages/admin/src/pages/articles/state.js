@@ -1,1 +1,4 @@
-export default {};
+export default {
+  data: [],
+  order: '-create_time',
+};

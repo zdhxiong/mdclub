@@ -1,13 +1,11 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
 import { Image } from 'mdclub-sdk-js';
+import actionsAbstract from '../../abstracts/actions';
 
 let global_actions;
 
-export default {
-  setState: value => (value),
-  getState: () => state => state,
-
+export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
@@ -15,4 +13,4 @@ export default {
     global_actions = props.global_actions;
     global_actions.routeChange();
   },
-};
+});

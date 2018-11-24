@@ -72,7 +72,6 @@
     "highlight.js": "^9.13.1",
     "hyperapp": "^1.2.9",
     "js-cookie": "^2.2.0",
-    "jump.js": "^1.0.2",
     "mdclub-sdk-js": "github:zdhxiong/mdclub-sdk-js",
     "mdn-polyfills": "^5.13.0",
     "mdui": "^0.4.2",

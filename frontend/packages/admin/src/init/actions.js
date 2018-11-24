@@ -1,16 +1,18 @@
 import { location } from '@hyperapp/router';
-import mdui, { JQ as $ } from 'mdui';
 
-import AnswersActions from '../pages/answers/actions';
-import ArticlesActions from '../pages/articles/actions';
-import CommentsActions from '../pages/comments/actions';
-import ImagesActions from '../pages/images/actions';
-import OptionsActions from '../pages/options/actions';
-import QuestionsActions from '../pages/questions/actions';
-import ReportsActions from '../pages/reports/actions';
-import TopicsActions from '../pages/topics/actions';
-import TrashActions from '../pages/trash/actions';
-import UsersActions from '../pages/users/actions';
+import Answers from '../pages/answers/actions';
+import Articles from '../pages/articles/actions';
+import Comments from '../pages/comments/actions';
+import Images from '../pages/images/actions';
+import Options from '../pages/options/actions';
+import Questions from '../pages/questions/actions';
+import Reports from '../pages/reports/actions';
+import Topics from '../pages/topics/actions';
+import Trash from '../pages/trash/actions';
+import Users from '../pages/users/actions';
+
+import AppbarLazyComponent from '../lazyComponents/appbar/actions';
+import PaginationLazyComponent from '../lazyComponents/pagination/actions';
 
 export default {
   location: location.actions,
@@ -19,29 +21,19 @@ export default {
   setState: value => (value),
   getState: () => _state => _state,
 
-  // 路由切换后的回调
-  routeChange: () => {
-    // 回到页面顶部
-    window.scrollTo(0, 0);
+  answers: Answers,
+  articles: Articles,
+  comments: Comments,
+  images: Images,
+  options: Options,
+  questions: Questions,
+  reports: Reports,
+  topics: Topics,
+  trash: Trash,
+  users: Users,
 
-    // 在手机和平板时，切换路由后关闭抽屉导航
-    if (window.innerWidth < 1024) {
-      (new mdui.Drawer('.mc-drawer')).close();
-    }
-  },
-
-  answers: AnswersActions,
-  articles: ArticlesActions,
-  comments: CommentsActions,
-  images: ImagesActions,
-  options: OptionsActions,
-  questions: QuestionsActions,
-  reports: ReportsActions,
-  topics: TopicsActions,
-  trash: TrashActions,
-  users: UsersActions,
-
-  components: {
-
+  lazyComponents: {
+    appbar: AppbarLazyComponent,
+    pagination: PaginationLazyComponent,
   },
 };

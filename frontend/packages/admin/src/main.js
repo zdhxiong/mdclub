@@ -23,10 +23,3 @@ defaults.error = function () {
 
 window.main = app(state, actions, view, document.body);
 location.subscribe(window.main.location);
-
-// 读取当前登录用户
-const user = window.G_USER;
-if (user) {
-  window.main.setState({ user });
-  window.G_USER = null;
-}

@@ -20,7 +20,7 @@ const Item = ({ url, icon, title }) => (
   </Link>
 );
 
-export default () => (global_state, global_actions) => (
+export default () => (
   <div class="mc-drawer mdui-drawer">
     <div class="mdui-list">
       <Item url="" icon="home" title="首页"/>
