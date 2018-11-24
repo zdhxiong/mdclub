@@ -11,7 +11,7 @@ export default $.extend({}, actionsAbstract, {
    */
   init: props => (state, actions) => {
     global_actions = props.global_actions;
-    actions.routeChange(global_actions);
+    actions.routeChange();
     actions.loadData();
   },
 
@@ -39,6 +39,22 @@ export default $.extend({}, actionsAbstract, {
 
       actions.setState({ data: response.data });
       paginationActions.setState(response.pagination);
+    });
+  },
+
+  /**
+   * 删除指定提问
+   */
+  deleteOne: question_id => (state, actions) => {
+    mdui.confirm('删除后，你仍可以在回收站中恢复该提问', '确定删除该提问？', () => {
+      Question.deleteOne(question_id, (response) => {
+        if (response.code) {
+          mdui.snackbar(response.message);
+          return;
+        }
+
+        actions.loadData();
+      });
     });
   },
 });

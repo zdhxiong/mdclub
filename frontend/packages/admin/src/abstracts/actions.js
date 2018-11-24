@@ -7,7 +7,7 @@ export default {
   /**
    * 路由切换后的回调
    */
-  routeChange: (global_actions) => {
+  routeChange: () => {
     // 回到页面顶部
     window.scrollTo(0, 0);
 
@@ -15,8 +15,15 @@ export default {
     if (window.innerWidth < 1024) {
       (new mdui.Drawer('.mc-drawer')).close();
     }
+  },
 
-    // 重置分页参数
+  /**
+   * 销毁数据列表
+   */
+  destroyDataList: props => (state, actions) => {
+    const global_actions = props.global_actions;
+
     global_actions.lazyComponents.pagination.reset();
+    actions.setState({ data: [] });
   },
 };

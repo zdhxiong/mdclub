@@ -10,6 +10,7 @@ export default (global_state, global_actions) => {
       oncreate={() => actions.init({ global_actions })}
       key={match.url}
       id="page-users"
+      class="mdui-container-fluid"
     >
 
     </div>

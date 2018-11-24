@@ -12,27 +12,5 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     global_actions = props.global_actions;
     actions.routeChange();
-
-    actions.setState({
-      data: [],
-      pagination: false,
-      loading: true,
-    });
-
-    Topic.getList({
-      order: 'topic_id',
-    }, (response) => {
-      actions.setState({ loading: false });
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        data: response.data,
-        pagination: response.pagination,
-      });
-    });
   },
 });

@@ -83,20 +83,22 @@
   }
 }
 
+// 自己添加的激活状态的纸片
+.mdui-chip-active {
+  background-color: #e8f0fe !important;
+  border-color: rgba(26, 115, 232, 0.32) !important;
+
+  .mdui-chip-title {
+    color: rgba(26, 115, 232, 1) !important;
+  }
+}
+
 // 使表格支持 tbody 部分滚动
 .mdui-table tbody {
   display: block;
   width: 100%;
   height: ~'calc(100vh - 180px)';
   overflow: auto;
-}
-
-.mdui-table tbody.is-loading {
-  height: ~'calc(100vh - 210px)';
-}
-
-.mdui-table tbody.is-empty {
-  height: ~'calc(100vh - 472px)';
 }
 
 .mdui-table thead,
@@ -106,18 +108,59 @@
   table-layout: fixed;
 }
 
+// 加载状态的表格
+.mdui-table tbody.is-loading {
+  height: ~'calc(100vh - 210px)';
+}
+
+// 空状态表格
+.mdui-table tbody.is-empty {
+  height: ~'calc(100vh - 472px)';
+}
+
 // 表格自动生成的 checkbox 部分固定宽度
 .mdui-table-cell-checkbox {
   width: 66px;
 }
 
-// 自己添加的激活状态的纸片
-.mdui-chip-active {
-  background-color: #e8f0fe !important;
-  border-color: rgba(26, 115, 232, 0.32) !important;
+// 表格行样式
+.mdui-table tbody tr {
+  cursor: pointer;
+}
 
-  .mdui-chip-title {
-    color: rgba(26, 115, 232, 1) !important;
+.mdui-table tbody td {
+  line-height: 32px;
+}
+
+.mdui-table tbody td a {
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.24);
+}
+
+.mdui-table tbody td a:hover {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.87);
+}
+
+.mdui-table tbody .actions {
+  text-align: right;
+
+  .mdui-btn {
+    margin-left: 8px;
+    display: none;
+    border-bottom: none;
+
+    .mdui-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.mdui-table tbody tr:hover {
+  .actions {
+    .mdui-btn {
+      display: inline-block;
+    }
   }
 }
 

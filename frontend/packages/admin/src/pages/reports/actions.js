@@ -11,6 +11,6 @@ export default $.extend({}, actionsAbstract, {
    */
   init: props => (state, actions) => {
     global_actions = props.global_actions;
-    global_actions.routeChange();
+    actions.routeChange();
   },
 });
