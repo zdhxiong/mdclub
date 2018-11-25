@@ -12,7 +12,7 @@ import Trash from '../pages/trash/state';
 import Users from '../pages/users/state';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/state';
-import PaginationLazyComponent from '../lazyComponents/pagination/state';
+import DatatableLazyComponent from '../lazyComponents/datatable/state';
 
 export default {
   location: location.state,
@@ -30,6 +30,6 @@ export default {
 
   lazyComponents: {
     appbar: AppbarLazyComponent,
-    pagination: PaginationLazyComponent,
+    datatable: DatatableLazyComponent,
   },
 };

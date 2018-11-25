@@ -12,7 +12,7 @@ import Trash from '../pages/trash/actions';
 import Users from '../pages/users/actions';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/actions';
-import PaginationLazyComponent from '../lazyComponents/pagination/actions';
+import DatatableLazyComponent from '../lazyComponents/datatable/actions';
 
 export default {
   location: location.actions,
@@ -34,6 +34,6 @@ export default {
 
   lazyComponents: {
     appbar: AppbarLazyComponent,
-    pagination: PaginationLazyComponent,
+    datatable: DatatableLazyComponent,
   },
 };

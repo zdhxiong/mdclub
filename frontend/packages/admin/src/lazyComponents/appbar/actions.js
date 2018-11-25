@@ -16,6 +16,17 @@ export default $.extend({}, actionsAbstract, {
       actions.setState({ user });
       window.G_USER = null;
     }
+
+    // 从 localStorage 中读取主题
+    if (!state.theme) {
+      let theme = window.localStorage.getItem('admin_theme');
+      if (!theme) {
+        theme = 'light';
+      }
+
+      actions.setState({ theme });
+      actions.setTheme(theme);
+    }
   },
 
   /**
@@ -24,8 +35,15 @@ export default $.extend({}, actionsAbstract, {
   toggleTheme: () => (state, actions) => {
     const theme = state.theme === 'light' ? 'dark' : 'light';
 
+    window.localStorage.setItem('admin_theme', theme);
     actions.setState({ theme });
+    actions.setTheme(theme);
+  },
 
+  /**
+   * 设置主题
+   */
+  setTheme: theme => (state, actions) => {
     $body
       .removeClass('mdui-theme-layout-light mdui-theme-layout-dark')
       .addClass(`mdui-theme-layout-${theme}`);

@@ -1,0 +1,178 @@
+.mc-datatable {
+  // 移除表格边框
+  .mdui-table {
+    box-shadow: none;
+    border: none !important;
+    overflow: visible;
+  }
+
+  // 使表格 tbody 部分可以纵向滚动
+  tbody {
+    display: block;
+    width: 100%;
+    height: ~'calc(100vh - 180px)';
+    overflow: auto;
+  }
+
+  thead,
+  tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  // 加载中状态
+  tbody.is-loading {
+    height: ~'calc(100vh - 210px)';
+  }
+
+  // 空状态表格
+  tbody.is-empty {
+    height: ~'calc(100vh - 472px)';
+  }
+
+  // 表格 checkbox 部分宽度固定
+  .mdui-table-cell-checkbox {
+    width: 66px;
+  }
+
+  // 修改行悬浮状态颜色
+  .mdui-table-hoverable tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  // 移除行之间的分隔线
+  tbody td {
+    border-bottom: none !important;
+  }
+
+  // 表格行选中状态颜色
+  .mdui-table-row-selected {
+    background-color: #e8f0fe !important;
+  }
+
+  // 行悬浮状态
+  tr {
+    cursor: pointer;
+  }
+
+  // 表头样式
+  th {
+    font-size: 14px;
+    font-weight: normal;
+    color: #5f6368;
+    cursor: default;
+  }
+
+  // 表格内容禁止换行
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 34px;
+  }
+
+  // 表格内链接样式
+  td a {
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px dotted rgba(0, 0, 0, 0.24);
+
+    &:hover {
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.87);
+    }
+  }
+
+  // 操作项
+  tbody {
+    .actions {
+      text-align: right;
+
+      .mdui-btn {
+        margin-left: 8px;
+        display: none;
+        border-bottom: none;
+
+        .mdui-icon {
+          font-size: 20px;
+        }
+      }
+    }
+
+    tr:hover {
+      .actions {
+        .mdui-btn {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  // 分页
+  .pagination {
+    color: rgba(0, 0, 0, 0.64);
+    padding-right: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+    .per-page {
+      overflow: visible;
+
+      .label {
+        margin-right: 0;
+      }
+    }
+
+    .mdui-select {
+      overflow: visible;
+      margin-left: 8px;
+    }
+
+    .page {
+      margin-right: 32px;
+      margin-left: 22px;
+
+      .form {
+        display: inline;
+      }
+
+      .input {
+        display: inline;
+        text-align: center;
+        width: 46px;
+      }
+    }
+
+    .prev,
+    .next {
+      width: 36px;
+      min-width: 36px;
+      height: 36px;
+      margin: 0 6px;
+    }
+  }
+}
+
+.mdui-theme-layout-dark {
+  .mc-datatable {
+    .mdui-table-hoverable tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .mdui-table-row-selected {
+      background-color: rgba(255, 255, 255, 0.16) !important;
+    }
+
+    td a {
+      border-bottom-color: rgba(255, 255, 255, 0.24);
+
+      &:hover {
+        border-bottom-color: rgba(255, 255, 255, 0.87);
+      }
+    }
+
+    .pagination {
+      color: rgba(255, 255, 255, 0.87);
+      border-top-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+}

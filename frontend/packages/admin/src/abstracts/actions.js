@@ -16,14 +16,4 @@ export default {
       (new mdui.Drawer('.mc-drawer')).close();
     }
   },
-
-  /**
-   * 销毁数据列表
-   */
-  destroyDataList: props => (state, actions) => {
-    const global_actions = props.global_actions;
-
-    global_actions.lazyComponents.pagination.reset();
-    actions.setState({ data: [] });
-  },
 };

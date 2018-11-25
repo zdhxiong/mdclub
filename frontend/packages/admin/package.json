@@ -70,6 +70,7 @@
     "@hyperapp/router": "github:zdhxiong/router",
     "classcat": "^3.2.3",
     "highlight.js": "^9.13.1",
+    "hotkeys-js": "^3.4.1",
     "hyperapp": "^1.2.9",
     "js-cookie": "^2.2.0",
     "mdclub-sdk-js": "github:zdhxiong/mdclub-sdk-js",

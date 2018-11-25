@@ -17,54 +17,10 @@
   margin-left: 0;
 }
 
-// 移除卡片和表格的阴影
+// 修改卡片的阴影和圆角
 .mdui-card {
   box-shadow: rgba(60, 64, 67, .3) 0 1px 2px 0, rgba(60, 64, 67, .15) 0 1px 3px 1px;
   border-radius: 4px;
-}
-
-.mdui-table-fluid {
-  box-shadow: none;
-  border: none !important;
-  overflow: visible;
-}
-
-// 表格悬浮状态颜色
-.mdui-table-hoverable tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-
-  .mdui-theme-layout-dark & {
-    background-color: rgba(255, 255, 255, 0.08);
-  }
-}
-
-// 移除表格分隔线
-.mdui-table tbody td {
-  border-bottom: none !important;
-}
-
-// 表格行选中状态颜色
-.mdui-table-row-selected {
-  background-color: #e8f0fe !important;
-
-  .mdui-theme-layout-dark & {
-    background-color: rgba(255, 255, 255, 0.16) !important;
-  }
-}
-
-// 修改表头样式
-.mdui-table th {
-  font-size: 14px;
-  font-weight: normal;
-  color: #5f6368;
-  cursor: default;
-}
-
-// 表格内容禁止换行
-.mdui-table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 // 修改纸片样式
@@ -93,76 +49,6 @@
   }
 }
 
-// 使表格支持 tbody 部分滚动
-.mdui-table tbody {
-  display: block;
-  width: 100%;
-  height: ~'calc(100vh - 180px)';
-  overflow: auto;
-}
-
-.mdui-table thead,
-.mdui-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-// 加载状态的表格
-.mdui-table tbody.is-loading {
-  height: ~'calc(100vh - 210px)';
-}
-
-// 空状态表格
-.mdui-table tbody.is-empty {
-  height: ~'calc(100vh - 472px)';
-}
-
-// 表格自动生成的 checkbox 部分固定宽度
-.mdui-table-cell-checkbox {
-  width: 66px;
-}
-
-// 表格行样式
-.mdui-table tbody tr {
-  cursor: pointer;
-}
-
-.mdui-table tbody td {
-  line-height: 32px;
-}
-
-.mdui-table tbody td a {
-  text-decoration: none;
-  color: inherit;
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.24);
-}
-
-.mdui-table tbody td a:hover {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.87);
-}
-
-.mdui-table tbody .actions {
-  text-align: right;
-
-  .mdui-btn {
-    margin-left: 8px;
-    display: none;
-    border-bottom: none;
-
-    .mdui-icon {
-      font-size: 20px;
-    }
-  }
-}
-
-.mdui-table tbody tr:hover {
-  .actions {
-    .mdui-btn {
-      display: inline-block;
-    }
-  }
-}
 
 /**
  * 全局样式
