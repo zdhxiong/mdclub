@@ -1,6 +1,7 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
 import timeHelper from '../../helper/time';
+import rawHtml from '../../helper/rawHtml';
 import './index.less';
 
 import Loading from '../../components/loading';
@@ -118,7 +119,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
         <tr class={cc([
           {
             checked: state.checkedCount,
-          }
+          },
         ])}>
           <th class="mdui-table-cell-checkbox">
             <CheckAll
@@ -136,7 +137,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
                   icon={action.icon}
                   onClick={() => {
                     const items = [];
-                    state.data.map(item => {
+                    state.data.map((item) => {
                       if (state.isCheckedRows[item[state.primaryKey]]) {
                         items.push(item);
                       }
@@ -170,20 +171,22 @@ export default ({ loadData }) => (global_state, global_actions) => {
                 onChange={() => actions.checkOne(row[state.primaryKey])}
               />
             </td>
-            {state.columns.map(column => {
-              const value = eval('row.' + column.field);
+            {state.columns.map((column) => {
+              const value = eval(`row.${column.field}`);
 
               switch (column.type) {
                 case 'time':
                   return <td><Time timestamp={value}/></td>;
                 case 'relation':
                   return <td><a href="">{value}</a></td>;
+                case 'html':
+                  return <td oncreate={rawHtml(value)} onupdate={rawHtml(value)}></td>;
                 default:
                   return <td>{value}</td>;
               }
             })}
             <td class="actions">
-              {state.actions.map(action => {
+              {state.actions.map((action) => {
                 switch (action.type) {
                   case 'link':
                     return <ActionTarget link={action.getLink(row)}/>;
@@ -192,7 +195,9 @@ export default ({ loadData }) => (global_state, global_actions) => {
                       label={action.label}
                       icon={action.icon}
                       onClick={() => action.onClick(row)}
-                    />
+                    />;
+                  default:
+                    return '';
                 }
               })}
             </td>

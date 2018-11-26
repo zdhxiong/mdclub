@@ -57,9 +57,7 @@ export default $.extend({}, actionsAbstract, {
       const _actions = [
         {
           type: 'link',
-          getLink: question => {
-            return `${window.G_ROOT}/questions/${question.question_id}`;
-          },
+          getLink: question => `${window.G_ROOT}/questions/${question.question_id}`,
         },
         {
           type: 'btn',
@@ -122,6 +120,5 @@ export default $.extend({}, actionsAbstract, {
    * 批量删除提问
    */
   batchDelete: questions => (state, actions) => {
-    console.log(questions);
   },
 });

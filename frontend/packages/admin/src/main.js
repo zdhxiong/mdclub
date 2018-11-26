@@ -1,6 +1,6 @@
 import { app } from 'hyperapp';
 import { location } from '@hyperapp/router';
-import { withLogger } from "@hyperapp/logger"
+import { withLogger } from '@hyperapp/logger';
 import 'mdn-polyfills/CustomEvent';
 import Cookies from 'js-cookie';
 import mdui from 'mdui';

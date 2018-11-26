@@ -28,5 +28,7 @@ module.exports = {
     'camelcase': 0,
     'no-unused-vars': 0,
     'no-underscore-dangle': 0,
+    'no-eval': 0,
+    'array-callback-return': 0,
   },
 };

@@ -5,7 +5,7 @@ export default {
    *   {
    *     title: '列头标题',
    *     data: '字段名称',
-   *     type: '字段类型：relation、string、time'
+   *     type: '字段类型：relation、time、string、html'
    *     relation: '关联类型：user'
    *     relation_id: '关联ID',
    *   }

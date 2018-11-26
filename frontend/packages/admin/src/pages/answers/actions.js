@@ -12,5 +12,101 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     global_actions = props.global_actions;
     actions.routeChange();
+    actions.loadData();
+  },
+
+  /**
+   * 加载数据
+   */
+  loadData: () => (state, actions) => {
+    const datatableActions = global_actions.lazyComponents.datatable;
+    const datatableState = datatableActions.getState();
+
+    datatableActions.loadStart();
+
+    Answer.getList({
+      page: datatableState.pagination.page,
+      per_page: datatableState.pagination.per_page,
+      order: datatableState.order,
+    }, (response) => {
+      const columns = [
+        {
+          title: 'ID',
+          field: 'answer_id',
+          type: 'string',
+        },
+        {
+          title: '作者',
+          field: 'relationship.user.username',
+          type: 'relation',
+          relation: 'user',
+          relation_id: 'relationship.user.user_id',
+        },
+        {
+          title: '回答',
+          field: 'content_rendered',
+          type: 'html',
+        },
+        {
+          title: '发表时间',
+          field: 'create_time',
+          type: 'time',
+        },
+      ];
+
+      const _actions = [
+        {
+          type: 'link',
+          getLink: answer => `${window.G_ROOT}/questions/${answer.relationship.question.question_id}`,
+        },
+        {
+          type: 'btn',
+          onClick: actions.editOne,
+          label: '编辑',
+          icon: 'edit',
+        },
+        {
+          type: 'btn',
+          onClick: actions.deleteOne,
+          label: '删除',
+          icon: 'delete',
+        },
+      ];
+
+      const batchActions = [
+        {
+          label: '批量删除',
+          icon: 'delete',
+          onClick: actions.batchDelete,
+        },
+      ];
+
+      response.primaryKey = 'answer_id';
+      response.columns = columns;
+      response.actions = _actions;
+      response.batchActions = batchActions;
+      datatableActions.loadEnd(response);
+    });
+  },
+
+  /**
+   * 编辑指定回答
+   */
+  editOne: answer => (state, actions) => {
+
+  },
+
+  /**
+   * 删除指定回答
+   */
+  deleteOne: answer => (state, actions) => {
+
+  },
+
+  /**
+   * 批量删除回答
+   */
+  batchDelete: answer => (state, actions) => {
+
   },
 });

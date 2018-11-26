@@ -79,7 +79,7 @@ export default $.extend({}, actionsAbstract, {
     }
 
     const isCheckedRows = {};
-    response.data.map(item => {
+    response.data.map((item) => {
       isCheckedRows[item[response.primaryKey]] = false;
     });
 
@@ -156,13 +156,13 @@ export default $.extend({}, actionsAbstract, {
     let checkedCount = 0;
     let isCheckedAll = true;
 
-    for (const rowId in isCheckedRows) {
-      if (!isCheckedRows[rowId]) {
+    Object.keys(isCheckedRows).map((_rowId) => {
+      if (!isCheckedRows[_rowId]) {
         isCheckedAll = false;
       } else {
-        checkedCount++;
+        checkedCount += 1;
       }
-    }
+    });
 
     actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
   },
@@ -175,10 +175,13 @@ export default $.extend({}, actionsAbstract, {
     const isCheckedAll = e.target.checked;
     const isCheckedRows = state.isCheckedRows;
 
-    for (const rowId in isCheckedRows) {
-      isCheckedRows[rowId] = isCheckedAll;
-      isCheckedAll && checkedCount++;
-    }
+    Object.keys(isCheckedRows).map((_rowId) => {
+      isCheckedRows[_rowId] = isCheckedAll;
+
+      if (isCheckedAll) {
+        checkedCount += 1;
+      }
+    });
 
     actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
   },
