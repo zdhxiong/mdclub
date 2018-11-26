@@ -13,7 +13,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
+  init: () => (state, actions) => {
     if (!state.pagination.per_page) {
       const per_page = window.localStorage.getItem('admin_per_page');
 
@@ -27,8 +27,21 @@ export default $.extend({}, actionsAbstract, {
    * 销毁前执行
    */
   destroy: () => (state, actions) => {
-    // 重置状态
+    actions.reset();
+  },
+
+  /**
+   * 重置状态
+   */
+  reset: () => (state, actions) => {
     actions.setState({
+      columns: [],
+      actions: [],
+      batchActions: [],
+      primaryKey: '',
+      isCheckedRows: {},
+      isCheckedAll: false,
+      checkedCount: 0,
       data: [],
       order: '',
       loading: false,
@@ -65,7 +78,19 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
+    const isCheckedRows = {};
+    response.data.map(item => {
+      isCheckedRows[item[response.primaryKey]] = false;
+    });
+
     actions.setState({
+      columns: response.columns,
+      actions: response.actions,
+      batchActions: response.batchActions,
+      primaryKey: response.primaryKey,
+      isCheckedRows,
+      isCheckedAll: false,
+      checkedCount: 0,
       data: response.data,
       pagination: response.pagination,
     });
@@ -119,5 +144,42 @@ export default $.extend({}, actionsAbstract, {
     });
 
     loadData();
+  },
+
+  /**
+   * 切换某一行的选中状态
+   */
+  checkOne: rowId => (state, actions) => {
+    const isCheckedRows = state.isCheckedRows;
+    isCheckedRows[rowId] = !isCheckedRows[rowId];
+
+    let checkedCount = 0;
+    let isCheckedAll = true;
+
+    for (const rowId in isCheckedRows) {
+      if (!isCheckedRows[rowId]) {
+        isCheckedAll = false;
+      } else {
+        checkedCount++;
+      }
+    }
+
+    actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
+  },
+
+  /**
+   * 切换全部行的选中状态
+   */
+  checkAll: e => (state, actions) => {
+    let checkedCount = 0;
+    const isCheckedAll = e.target.checked;
+    const isCheckedRows = state.isCheckedRows;
+
+    for (const rowId in isCheckedRows) {
+      isCheckedRows[rowId] = isCheckedAll;
+      isCheckedAll && checkedCount++;
+    }
+
+    actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
   },
 });

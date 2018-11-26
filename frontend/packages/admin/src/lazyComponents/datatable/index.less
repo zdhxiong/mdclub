@@ -36,6 +36,25 @@
     width: 66px;
   }
 
+  // 表头含 colspan 时，不限制宽度
+  th[colspan] {
+    width: auto !important;
+  }
+
+  // 有选择的行时，修改表头样式
+  thead tr.checked {
+    background-color: #e8f0fe;
+
+    th {
+      color: #1a73e8 !important;
+      font-size: 15px;
+    }
+
+    .mdui-btn {
+      margin-left: 8px;
+    }
+  }
+
   // 修改行悬浮状态颜色
   .mdui-table-hoverable tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.04);
@@ -156,6 +175,14 @@
   .mc-datatable {
     .mdui-table-hoverable tbody tr:hover {
       background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    thead tr.checked {
+      background-color: rgba(255, 255, 255, 0.16);
+
+      th {
+        color: #e8f0fe !important;
+      }
     }
 
     .mdui-table-row-selected {

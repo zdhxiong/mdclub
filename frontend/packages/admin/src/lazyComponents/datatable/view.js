@@ -1,5 +1,4 @@
 import { h } from 'hyperapp';
-import mdui, { JQ as $ } from 'mdui';
 import cc from 'classcat';
 import timeHelper from '../../helper/time';
 import './index.less';
@@ -62,9 +61,16 @@ const NextPage = ({ state, onClick }) => (
   </button>
 );
 
-const Checkbox = () => (
+const CheckAll = ({ isChecked, onChange }) => (
   <label class="mdui-checkbox">
-    <input type="checkbox"/>
+    <input type="checkbox" checked={isChecked} onchange={onChange}/>
+    <i class="mdui-checkbox-icon"></i>
+  </label>
+);
+
+const CheckOne = ({ isChecked, onChange }) => (
+  <label class="mdui-checkbox">
+    <input type="checkbox" checked={isChecked} onchange={onChange}/>
     <i class="mdui-checkbox-icon"></i>
   </label>
 );
@@ -104,20 +110,48 @@ export default ({ loadData }) => (global_state, global_actions) => {
   return () => (
     <div
       class="mc-datatable"
-      oncreate={element => actions.init({ element })}
+      oncreate={actions.init}
       ondestroy={actions.destroy}
     >
       <table class="mdui-table mdui-table-hoverable">
         <thead>
-        <tr>
+        <tr class={cc([
+          {
+            checked: state.checkedCount,
+          }
+        ])}>
           <th class="mdui-table-cell-checkbox">
-            <Checkbox/>
+            <CheckAll
+              isChecked={state.isCheckedAll}
+              onChange={e => actions.checkAll(e)}
+            />
           </th>
-          <th>ID</th>
-          <th>作者</th>
-          <th>标题</th>
-          <th>发表时间</th>
-          <th></th>
+          {state.checkedCount ?
+            <th colspan={state.columns.length}>
+              <span>已选择 {state.checkedCount} 个项目</span>
+              <span class="mdui-float-right">
+              {state.batchActions.map(action => (
+                <ActionBtn
+                  label={action.label}
+                  icon={action.icon}
+                  onClick={() => {
+                    const items = [];
+                    state.data.map(item => {
+                      if (state.isCheckedRows[item[state.primaryKey]]) {
+                        items.push(item);
+                      }
+                    });
+                    action.onClick(items);
+                  }}
+                />
+              ))}
+              </span>
+            </th> :
+            state.columns.map(column => (
+              <th>{column.title}</th>
+            ))
+          }
+          {state.checkedCount ? '' : <th></th>}
         </tr>
         </thead>
         {isLoading ? <Loading/> : ''}
@@ -128,29 +162,39 @@ export default ({ loadData }) => (global_state, global_actions) => {
             'is-empty': isEmpty,
           },
         ])}>
-        {state.data.map(item => (
-          <tr key={item.question_id}>
+        {state.data.map(row => (
+          <tr key={row[state.primaryKey]}>
             <td class="mdui-table-cell-checkbox">
-              <Checkbox/>
+              <CheckOne
+                isChecked={state.isCheckedRows[row[state.primaryKey]]}
+                onChange={() => actions.checkOne(row[state.primaryKey])}
+              />
             </td>
-            <td>{item.question_id}</td>
-            <td><a href="">{item.relationship.user.username}</a></td>
-            <td>{item.title}</td>
-            <td>
-              <Time timestamp={item.create_time}/>
-            </td>
+            {state.columns.map(column => {
+              const value = eval('row.' + column.field);
+
+              switch (column.type) {
+                case 'time':
+                  return <td><Time timestamp={value}/></td>;
+                case 'relation':
+                  return <td><a href="">{value}</a></td>;
+                default:
+                  return <td>{value}</td>;
+              }
+            })}
             <td class="actions">
-              <ActionTarget
-                link={`${window.G_ROOT}/questions/${item.question_id}`}
-              />
-              <ActionBtn
-                label="编辑"
-                icon="edit"
-              />
-              <ActionBtn
-                label="删除"
-                icon="delete"
-              />
+              {state.actions.map(action => {
+                switch (action.type) {
+                  case 'link':
+                    return <ActionTarget link={action.getLink(row)}/>;
+                  case 'btn':
+                    return <ActionBtn
+                      label={action.label}
+                      icon={action.icon}
+                      onClick={() => action.onClick(row)}
+                    />
+                }
+              })}
             </td>
           </tr>
         ))}
@@ -160,19 +204,19 @@ export default ({ loadData }) => (global_state, global_actions) => {
         <Spacer/>
         <PerPage
           state={state}
-          onChange={e => actions.onPerPageChange({e, loadData})}
+          onChange={ e => actions.onPerPageChange({ e, loadData }) }
         />
         <Page
           state={state}
-          onSubmit={e => actions.onPageChange({e, loadData})}
+          onSubmit={ e => actions.onPageChange({ e, loadData }) }
         />
         <PrevPage
           state={state}
-          onClick={() => actions.toPrevPage(loadData)}
+          onClick={ () => actions.toPrevPage(loadData) }
         />
         <NextPage
           state={state}
-          onClick={() => actions.toNextPage(loadData)}
+          onClick={ () => actions.toNextPage(loadData) }
         />
       </div>
     </div>

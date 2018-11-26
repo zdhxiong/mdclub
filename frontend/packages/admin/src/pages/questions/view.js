@@ -1,7 +1,4 @@
 import { h } from 'hyperapp';
-import mdui from 'mdui';
-import cc from 'classcat';
-import timeHelper from '../../helper/time';
 import './index.less';
 
 import Datatable from '../../lazyComponents/datatable/view';

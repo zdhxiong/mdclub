@@ -1,5 +1,6 @@
 import { app } from 'hyperapp';
 import { location } from '@hyperapp/router';
+import { withLogger } from "@hyperapp/logger"
 import 'mdn-polyfills/CustomEvent';
 import Cookies from 'js-cookie';
 import mdui from 'mdui';
@@ -21,5 +22,5 @@ defaults.error = function () {
   mdui.snackbar('网络连接失败');
 };
 
-window.main = app(state, actions, view, document.body);
+window.main = withLogger(app)(state, actions, view, document.body);
 location.subscribe(window.main.location);

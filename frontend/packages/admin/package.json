@@ -67,6 +67,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@hyperapp/logger": "^0.5.0",
     "@hyperapp/router": "github:zdhxiong/router",
     "classcat": "^3.2.3",
     "highlight.js": "^9.13.1",
