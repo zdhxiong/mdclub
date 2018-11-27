@@ -234,7 +234,7 @@ class CommentService extends ServiceAbstracts
      * @param  array $commentIds
      * @return array
      */
-    public function getCommentsInRelationship(array $commentIds): array
+    public function getInRelationship(array $commentIds): array
     {
         $comments = array_combine($commentIds, array_fill(0, count($commentIds), []));
 
@@ -278,7 +278,7 @@ class CommentService extends ServiceAbstracts
         $userIds = array_unique(array_column($comments, 'user_id'));
 
         $votings = $this->voteService->getVotingInRelationship($commentIds, 'comment');
-        $users = $this->userService->getUsersInRelationship($userIds);
+        $users = $this->userService->getInRelationship($userIds);
 
         // 合并数据
         foreach ($comments as &$comment) {

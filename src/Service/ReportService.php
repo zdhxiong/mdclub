@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
+use App\Constant\ErrorConstant;
+use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
 use App\Traits\BaseTraits;
@@ -57,7 +59,7 @@ class ReportService extends ServiceAbstracts
      */
     public function create(int $userId, int $reportableId, string $reportableType, string $reason): int
     {
-        $this->createValidator($reportableId, $reportableType, $reason);
+        $this->createValidator($userId, $reportableId, $reportableType, $reason);
 
         return (int)$this->reportModel->insert([
             'reportable_id'   => $reportableId,
@@ -70,18 +72,19 @@ class ReportService extends ServiceAbstracts
     /**
      * 创建举报前的验证
      *
+     * @param int    $userId
      * @param int    $reportableId
      * @param string $reportableType
      * @param string $reason
      */
-    private function createValidator(int $reportableId, string $reportableType, string $reason): void
+    private function createValidator(int $userId, int $reportableId, string $reportableType, string $reason): void
     {
         $errors = [];
 
         // 验证 reportableType
         if (!$reportableType) {
             $errors['reportable_type'] = '举报类型不能为空';
-        } elseif (!in_array($reportableType, ['question', 'answer', 'article', 'comment'])) {
+        } elseif (!in_array($reportableType, ['question', 'answer', 'article', 'comment', 'user'])) {
             $errors['reportable_type'] = '举报类型错误';
         }
 
@@ -105,6 +108,19 @@ class ReportService extends ServiceAbstracts
 
         if ($errors) {
             throw new ValidationException($errors);
+        }
+
+        // 验证是否已举报过
+        $isExist = $this->reportModel
+            ->where([
+                'reportable_id' => $reportableId,
+                'reportable_type' => $reportableType,
+                'user_id' => $userId,
+            ])
+            ->has();
+
+        if ($isExist) {
+            throw new ApiException(ErrorConstant::REPORT_ALREADY_SUBMITTED);
         }
     }
 
@@ -136,11 +152,12 @@ class ReportService extends ServiceAbstracts
     /**
      * 为举报添加 relationship 字段
      * {
-     *     user: {},
+     *     reporter: {},
      *     question: {},
      *     answer: {},
      *     article: {},
-     *     comment: {}
+     *     comment: {},
+     *     user: {}
      * }
      *
      * @param  array $reports
@@ -156,39 +173,26 @@ class ReportService extends ServiceAbstracts
             $reports = [$reports];
         }
 
-        $userIds = array_unique(array_column($reports, 'user_id'));
-
-        // id的数组 {question: [], answer: [], article: [], comment: []}
-        $targetIds = [];
-
-        // 对象的id为键名 {question: [], answer: [], article: [], comment: []}
-        $targets = [];
+        $targetIds = []; // 键名为对象类型，键值为对象的ID数组
+        $targets = []; // 键名为对象类型，键值为对象ID和对象信息的多维数组
+        $targetTypes = ['question', 'answer', 'article', 'comment', 'user'];
 
         foreach ($reports as $report) {
             $targetIds[$report['reportable_type']][] = $report['reportable_id'];
+            $targetIds['user'][] = $report['user_id'];
         }
 
-        // user
-        $users = $this->userService->getUsersInRelationship($userIds);
-
-        // question、answer、article、comment
-        $targetsTmp = [];
-        foreach ($targetIds as $type => $ids) {
-            $targetsTmp[$type] = $this->{$type . 'Service'}->getMultiple(array_unique($ids), false);
-        }
-
-        foreach ($targetsTmp as $type => $targetArrayTmp) {
-            foreach ($targetArrayTmp as $target) {
-                $targets[$type][$target[$type . '_id']] = $target;
+        foreach ($targetTypes as $type) {
+            if (isset($targetIds[$type])) {
+                $targetIds[$type] = array_unique($targetIds[$type]);
+                $targets[$type] = $this->{$type . 'Service'}->getInRelationship($targetIds[$type]);
             }
         }
 
         foreach ($reports as &$report) {
-            $type = $report['reportable_type'];
-
             $report['relationship'] = [
-                'user' => $users[$report['user_id']] ?? [],
-                $type  => $targets[$type][$report['reportable_id']] ?? [],
+                'reporter' => $targets['user'][$report['user_id']],
+                $report['reportable_type'] => $targets[$report['reportable_type']][$report['reportable_id']],
             ];
         }
 

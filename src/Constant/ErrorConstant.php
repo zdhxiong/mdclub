@@ -79,4 +79,5 @@ class ErrorConstant
      * 举报相关错误
      */
     const REPORT_NOT_FOUND                = [600001, '指定举报不存在'];
+    const REPORT_ALREADY_SUBMITTED        = [600002, '不能重复举报'];
 }

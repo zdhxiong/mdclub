@@ -406,7 +406,7 @@ class AnswerService extends ServiceAbstracts
      * @param  array $answerIds
      * @return array
      */
-    public function getAnswersInRelationship(array $answerIds): array
+    public function getInRelationship(array $answerIds): array
     {
         $answers = array_combine($answerIds, array_fill(0, count($answerIds), []));
 
@@ -452,8 +452,8 @@ class AnswerService extends ServiceAbstracts
         $userIds = array_unique(array_column($answers, 'user_id'));
 
         $votings = $this->voteService->getVotingInRelationship($answerIds, 'answer');
-        $users = $this->userService->getUsersInRelationship($userIds);
-        $questions = $this->questionService->getQuestionsInRelationship($questionIds);
+        $users = $this->userService->getInRelationship($userIds);
+        $questions = $this->questionService->getInRelationship($questionIds);
 
         foreach ($answers as &$answer) {
             $answer['relationship'] = [

@@ -497,7 +497,7 @@ class QuestionService extends ServiceAbstracts
      * @param  array $questionIds
      * @return array
      */
-    public function getQuestionsInRelationship(array $questionIds): array
+    public function getInRelationship(array $questionIds): array
     {
         $questions = array_combine($questionIds, array_fill(0, count($questionIds), []));
 
@@ -545,8 +545,8 @@ class QuestionService extends ServiceAbstracts
         }
 
         $votings = $this->voteService->getVotingInRelationship($questionIds, 'question');
-        $users = $this->userService->getUsersInRelationship($userIds);
-        $topics = $this->topicService->getTopicsInRelationship($questionIds, 'question');
+        $users = $this->userService->getInRelationship($userIds);
+        $topics = $this->topicService->getInRelationship($questionIds, 'question');
 
         // 合并数据
         foreach ($questions as &$question) {

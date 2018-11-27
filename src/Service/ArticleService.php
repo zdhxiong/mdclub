@@ -494,7 +494,7 @@ class ArticleService extends ServiceAbstracts
      * @param  array $articleIds
      * @return array
      */
-    public function getArticlesInRelationship(array $articleIds): array
+    public function getInRelationship(array $articleIds): array
     {
         $articles = array_combine($articleIds, array_fill(0, count($articleIds), []));
 
@@ -543,8 +543,8 @@ class ArticleService extends ServiceAbstracts
         }
 
         $votings = $this->voteService->getVotingInRelationship($articleIds, 'article');
-        $users = $this->userService->getUsersInRelationship($userIds);
-        $topics = $this->topicService->getTopicsInRelationship($articleIds, 'article');
+        $users = $this->userService->getInRelationship($userIds);
+        $topics = $this->topicService->getInRelationship($articleIds, 'article');
 
         // 合并数据
         foreach ($articles as &$article) {

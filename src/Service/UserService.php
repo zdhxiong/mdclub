@@ -344,7 +344,7 @@ class UserService extends ServiceAbstracts
      * @param  array $userIds
      * @return array          键名为用户ID，键值为用户信息
      */
-    public function getUsersInRelationship(array $userIds): array
+    public function getInRelationship(array $userIds): array
     {
         $users = array_combine($userIds, array_fill(0, count($userIds), []));
 

@@ -413,7 +413,7 @@ class TopicService extends ServiceAbstracts
      * @param  string $targetType 对象类型
      * @return array              键名为对象ID，键值为话题信息组成的二维数组
      */
-    public function getTopicsInRelationship(array $targetIds, string $targetType): array
+    public function getInRelationship(array $targetIds, string $targetType): array
     {
         $topics = array_combine($targetIds, array_fill(0, count($targetIds), []));
 

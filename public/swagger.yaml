@@ -3018,8 +3018,6 @@ paths:
       summary: 🔐获取举报列表
       description: |
         **仅管理员可调用该接口**
-        <br/>
-        返回值中的 `question`、`answer`、`article`、`comment` 字段值均不包含 `relationship`
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -3041,8 +3039,6 @@ paths:
       tags:
         - Report
       summary: 添加举报
-      description: |
-        返回值中的 `question`、`answer`、`article`、`comment` 字段值均不包含 `relationship`
       parameters:
         - name: body
           in: body
@@ -3064,6 +3060,7 @@ paths:
                   - answer
                   - article
                   - comment
+                  - user
               reason:
                 type: string
                 description: 举报理由
@@ -4224,6 +4221,7 @@ definitions:
           - answer
           - article
           - comment
+          - user
       user_id:
         type: integer
         description: 用户ID
@@ -4370,7 +4368,7 @@ definitions:
   ReportRelationship:
     type: object
     properties:
-      user:
+      reporter:
         $ref: '#/definitions/UserInRelationship'
       question:
         $ref: '#/definitions/QuestionInRelationship'
@@ -4380,6 +4378,8 @@ definitions:
         $ref: '#/definitions/ArticleInRelationship'
       comment:
         $ref: '#/definitions/CommentInRelationship'
+      user:
+        $ref: '#/definitions/UserInRelationship'
 
   UserInRelationship:
     type: object
