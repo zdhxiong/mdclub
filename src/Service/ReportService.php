@@ -124,26 +124,6 @@ class ReportService extends ServiceAbstracts
         }
     }
 
-    /**
-     * 删除一个举报
-     *
-     * @param int $reportId
-     */
-    public function delete(int $reportId): void
-    {
-        $this->reportModel->delete($reportId);
-    }
-
-    /**
-     * 批量删除举报
-     *
-     * @param array $reportIds
-     */
-    public function batchDelete(array $reportIds): void
-    {
-        $this->reportModel->delete($reportIds);
-    }
-
     public function handle($data): array
     {
         return $data;

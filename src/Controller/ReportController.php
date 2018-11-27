@@ -18,6 +18,51 @@ use Slim\Http\Response;
 class ReportController extends ControllerAbstracts
 {
     /**
+     * 获取举报分组列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getGroupList(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        return $response;
+    }
+
+    /**
+     * 批量删除举报分组
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDeleteGroup(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        return $response;
+    }
+
+    /**
+     * 删除指定举报分组
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  string   $group
+     * @return Response
+     */
+    public function deleteGroup(Request $request, Response $response, string $group): Response
+    {
+        echo $group;
+        exit;
+        $this->roleService->managerIdOrFail();
+
+        return $response;
+    }
+
+    /**
      * 获取举报列表
      *
      * @param  Request  $request
@@ -51,45 +96,5 @@ class ReportController extends ControllerAbstracts
         $report = $this->reportService->get($reportId, true);
 
         return $this->success($response, $report);
-    }
-
-    /**
-     * 删除举报
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $report_id
-     * @return Response
-     */
-    public function delete(Request $request, Response $response, int $report_id): Response
-    {
-        $this->roleService->managerIdOrFail();
-        $this->reportService->delete($report_id);
-
-        return $this->success($response);
-    }
-
-    /**
-     * 批量删除举报
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function batchDelete(Request $request, Response $response): Response
-    {
-        $this->roleService->managerIdOrFail();
-
-        $reportIds = $request->getQueryParam('report_id');
-
-        if ($reportIds) {
-            $reportIds = array_unique(array_filter(array_slice(explode(',', $reportIds), 0, 100)));
-        }
-
-        if ($reportIds) {
-            $this->reportService->batchDelete($reportIds);
-        }
-
-        return $this->success($response);
     }
 }

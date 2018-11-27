@@ -3010,6 +3010,84 @@ paths:
       security:
         - token: []
 
+  /report_groups:
+
+    get:
+      tags:
+        - Report
+      summary: 🔐获取分组后的举报
+      description: |
+        **仅管理员可调用该接口**
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+      responses:
+        200:
+          description: 举报分组列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/ReportGroups'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Report
+      summary: 🔐批量删除举报分组
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+      parameters:
+        - name: group
+          in: query
+          type: string
+          description: 用“,”分隔的分组，最多可提供100个。例如 question:12,comment:34
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /report_groups/{group}:
+
+    delete:
+      tags:
+        - Report
+      summary: 🔐删除举报分组
+      description: |
+        **仅管理员可调用该接口**
+      parameters:
+        - name: group
+          in: query
+          type: string
+          description: 类型:ID，例如 question:12
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /reports:
 
     get:
@@ -3073,59 +3151,6 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Report'
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-    delete:
-      tags:
-        - Report
-      summary: 🔐处理完多个举报
-      description: |
-        **仅管理员可调用该接口**
-        只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
-      parameters:
-        - name: report_id
-          in: query
-          type: string
-          description: 用“,”分隔的举报ID，最多可提供100个ID
-      responses:
-        200:
-          description: 空数据，通过状态码区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
-        default:
-          $ref: '#/responses/Error'
-      security:
-        - token: []
-
-  /reports/{report_id}:
-
-    delete:
-      tags:
-        - Report
-      summary: 🔐处理完一个举报
-      description: |
-        **仅管理员可调用该接口**
-      parameters:
-        - name: report_id
-          in: path
-          type: integer
-          description: 举报ID
-      responses:
-        200:
-          description: 空数据，通过状态吗区分成功还是失败
-          schema:
-            properties:
-              code:
-                type: integer
-              data:
-                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -4202,6 +4227,34 @@ definitions:
       follower_count:
         type: integer
         description: 关注者数量
+
+  ReportGroup:
+    type: object
+    description: 举报集合
+    properties:
+      reportable_id:
+        type: integer
+        description: 举报目标的ID
+      reportable_type:
+        type: string
+        description: 举报目标类型
+        enum:
+          - question
+          - answer
+          - article
+          - comment
+          - user
+      reporter_count:
+        type: integer
+        description: 指定对象的被举报数量
+      relationship:
+        type: object
+        $ref: '#/definitions/ReportRelationship'
+
+  ReportGroups:
+    type: array
+    items:
+      $ref: '#/definitions/Report'
 
   Report:
     type: object

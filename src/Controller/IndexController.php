@@ -108,4 +108,9 @@ class IndexController extends ControllerAbstracts
 
         return $response;
     }
+
+    public function statistics(Request $request, Response $response): Response
+    {
+
+    }
 }

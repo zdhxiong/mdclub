@@ -26,6 +26,7 @@ use App\Controller\TrashController;
 // 页面
 $app->get(   '/',                             IndexController::class .        ':pageIndex');
 $app->get(   '/migration',                    IndexController::class .        ':migration');
+$app->get(   '/update_statistics',            IndexController::class .        ':statistics');
 $app->get(   '/topics',                       TopicController::class .        ':pageIndex');
 $app->get(   '/topics/{topic_id:\d+}',        TopicController::class .        ':pageDetail');
 $app->get(   '/articles',                     ArticleController::class .      ':pageIndex');
@@ -146,10 +147,11 @@ $app->group('/api', function () {
     $this->post(  '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':addVote');
     $this->delete('/comments/{comment_id:\d+}/voters',                          CommentController::class . ':deleteVote');
 
+    $this->get(   '/report_groups',                                             ReportController::class . ':getGroupList');
+    $this->delete('/report_groups',                                             ReportController::class . ':batchDeleteGroup');
+    $this->delete('/report_groups/{group:\S+\:\d+}',                             ReportController::class . ':deleteGroup');
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
     $this->post(  '/reports',                                                   ReportController::class . ':create');
-    $this->delete('/reports',                                                   ReportController::class . ':batchDelete');
-    $this->delete('/reports/{report_id:\d+}',                                   ReportController::class . ':delete');
 
     $this->post(  '/images',                                                    ImageController::class . ':upload');
     $this->post(  '/emails',                                                    EmailController::class . ':send');
