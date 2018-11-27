@@ -3021,6 +3021,10 @@ paths:
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
+        - name: reportable_type
+          in: query
+          type: string
+          description: 目标类型（question、article、answer、comment、user）
       responses:
         200:
           description: 举报分组列表
@@ -3041,12 +3045,12 @@ paths:
       summary: 🔐批量删除举报分组
       description: |
         **仅管理员可调用该接口**
-        只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
       parameters:
         - name: group
           in: query
           type: string
-          description: 用“,”分隔的分组，最多可提供100个。例如 question:12,comment:34
+          description: 类型和ID之间用“:”分隔，多个记录之间用“,”分隔，最多可提供100个。例如 question:12,comment:34
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -3061,7 +3065,7 @@ paths:
       security:
         - token: []
 
-  /report_groups/{group}:
+  /report_groups/{reportable_type}/{reportable_id}:
 
     delete:
       tags:
@@ -3070,10 +3074,14 @@ paths:
       description: |
         **仅管理员可调用该接口**
       parameters:
-        - name: group
-          in: query
+        - name: reportable_type
+          in: path
           type: string
-          description: 类型:ID，例如 question:12
+          description: 目标类型（question、article、answer、comment、user）
+        - name: reportable_id
+          in: path
+          type: integer
+          description: 目标ID
       responses:
         200:
           description: 空数据，通过状态码区分成功还是失败
@@ -3099,6 +3107,14 @@ paths:
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
+        - name: reportable_id
+          in: query
+          type: integer
+          description: 目标ID
+        - name: reportable_type
+          in: query
+          type: string
+          description: 目标类型
       responses:
         200:
           description: 举报列表
@@ -4254,7 +4270,7 @@ definitions:
   ReportGroups:
     type: array
     items:
-      $ref: '#/definitions/Report'
+      $ref: '#/definitions/ReportGroup'
 
   Report:
     type: object

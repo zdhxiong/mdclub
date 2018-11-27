@@ -230,10 +230,10 @@ abstract class ModelAbstracts
     /**
      * group
      *
-     * @param  string  $group
+     * @param  array  $group
      * @return ModelAbstracts
      */
-    public function group(string $group): self
+    public function group(array $group): self
     {
         $this->group = $group;
 
@@ -471,7 +471,7 @@ abstract class ModelAbstracts
         $this->limit([$perPage * ($page - 1), $perPage]);
 
         if (!$simple && !isset($total)) {
-            $total = $this->count(false);
+            $total = (int)$this->count(false);
         }
 
         $result = [
@@ -628,9 +628,9 @@ abstract class ModelAbstracts
      * 查询总数
      *
      * @param  bool $reset 查询完是否重置
-     * @return int
+     * @return int|false
      */
-    public function count($reset = true): int
+    public function count($reset = true)
     {
         $join = $this->join;
         $where = $this->getWhere();

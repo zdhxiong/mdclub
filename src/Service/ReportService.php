@@ -10,6 +10,7 @@ use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
 use App\Traits\BaseTraits;
+use Medoo\Medoo;
 
 /**
  * 举报
@@ -24,6 +25,16 @@ class ReportService extends ServiceAbstracts
     use BaseTraits;
 
     /**
+     * 获取允许搜索的字段
+     *
+     * @return array
+     */
+    public function getAllowFilterFields(): array
+    {
+        return ['reportable_id', 'reportable_type'];
+    }
+
+    /**
      * 获取举报列表
      *
      * @param  bool  $withRelationship
@@ -33,8 +44,47 @@ class ReportService extends ServiceAbstracts
     {
         $list = $this->reportModel
             ->where($this->getWhere())
-            ->order($this->getOrder())
+            ->order($this->getOrder(['create_time' => 'DESC']))
             ->field($this->getPrivacyFields(), true)
+            ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
+
+        if ($withRelationship) {
+            $list['data'] = $this->addRelationship($list['data']);
+        }
+
+        return $list;
+    }
+
+    /**
+     *
+     * 获取分组后的举报列表
+     *
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getGroupList(bool $withRelationship = false): array
+    {
+        $where = $this->getWhere();
+        unset($where['reportable_id']);
+
+        $list = $this->reportModel
+            ->where($where)
+            ->field([
+                'reporter_count' => Medoo::raw('COUNT(<report_id>)'),
+                'reportable_id',
+                'reportable_type',
+            ])
+            ->order([
+                'reporter_count' => 'DESC',
+            ])
+            ->group([
+                'reportable_id',
+                'reportable_type',
+            ])
             ->paginate();
 
         foreach ($list['data'] as &$item) {
@@ -124,6 +174,47 @@ class ReportService extends ServiceAbstracts
         }
     }
 
+    /**
+     * 删除举报组
+     *
+     * @param string $reportableType
+     * @param int    $reportableId
+     */
+    public function deleteGroup(string $reportableType, int $reportableId): void
+    {
+        $this->reportModel
+            ->where([
+                'reportable_id' => $reportableId,
+                'reportable_type' => $reportableType,
+            ])
+            ->delete();
+    }
+
+    /**
+     * 批量删除举报组
+     *
+     * @param array $groups
+     */
+    public function batchDeleteGroup(array $groups): void
+    {
+        $where = [];
+
+        foreach ($groups as $key => $group) {
+            if (strpos($group, ':') > 0) {
+                [$reportable_type, $reportable_id] = explode(':', $group);
+
+                $where['OR']['AND #' . $key] = [
+                    'reportable_id' => $reportable_id,
+                    'reportable_type' => $reportable_type,
+                ];
+            }
+        }
+
+        if ($where) {
+            $this->reportModel->where($where)->delete();
+        }
+    }
+
     public function handle($data): array
     {
         return $data;
@@ -159,7 +250,10 @@ class ReportService extends ServiceAbstracts
 
         foreach ($reports as $report) {
             $targetIds[$report['reportable_type']][] = $report['reportable_id'];
-            $targetIds['user'][] = $report['user_id'];
+
+            if (isset($report['user_id'])) {
+                $targetIds['user'][] = $report['user_id'];
+            }
         }
 
         foreach ($targetTypes as $type) {
@@ -170,10 +264,11 @@ class ReportService extends ServiceAbstracts
         }
 
         foreach ($reports as &$report) {
-            $report['relationship'] = [
-                'reporter' => $targets['user'][$report['user_id']],
-                $report['reportable_type'] => $targets[$report['reportable_type']][$report['reportable_id']],
-            ];
+            if (isset($report['user_id'])) {
+                $report['relationship']['reporter'] = $targets['user'][$report['user_id']];
+            }
+
+            $report['relationship'][$report['reportable_type']] = $targets[$report['reportable_type']][$report['reportable_id']];
         }
 
         if ($isArray) {

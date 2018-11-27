@@ -149,7 +149,7 @@ $app->group('/api', function () {
 
     $this->get(   '/report_groups',                                             ReportController::class . ':getGroupList');
     $this->delete('/report_groups',                                             ReportController::class . ':batchDeleteGroup');
-    $this->delete('/report_groups/{group:\S+\:\d+}',                             ReportController::class . ':deleteGroup');
+    $this->delete('/report_groups/{reportable_type}/{reportable_id:\d+}',       ReportController::class . ':deleteGroup');
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
     $this->post(  '/reports',                                                   ReportController::class . ':create');
 

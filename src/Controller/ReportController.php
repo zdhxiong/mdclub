@@ -28,7 +28,9 @@ class ReportController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        return $response;
+        $list = $this->reportService->getGroupList(true);
+
+        return $this->success($response, $list);
     }
 
     /**
@@ -42,7 +44,17 @@ class ReportController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        return $response;
+        $groups = $request->getQueryParam('group');
+
+        if ($groups) {
+            $groups = array_unique(array_filter(array_slice(explode(',', $groups), 0, 100)));
+        }
+
+        if ($groups) {
+            $this->reportService->batchDeleteGroup($groups);
+        }
+
+        return $this->success($response);
     }
 
     /**
@@ -50,16 +62,17 @@ class ReportController extends ControllerAbstracts
      *
      * @param  Request  $request
      * @param  Response $response
-     * @param  string   $group
+     * @param  string   $reportable_type
+     * @param  int      $reportable_id
      * @return Response
      */
-    public function deleteGroup(Request $request, Response $response, string $group): Response
+    public function deleteGroup(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
     {
-        echo $group;
-        exit;
         $this->roleService->managerIdOrFail();
 
-        return $response;
+        $this->reportService->deleteGroup($reportable_type, $reportable_id);
+
+        return $this->success($response);
     }
 
     /**
