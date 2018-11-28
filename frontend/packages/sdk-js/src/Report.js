@@ -15,29 +15,40 @@ export default {
   },
 
   /**
-   * 添加举报
-   *
-   * POST /reports
-   */
-  create(data, success) {
-    post('/reports', data, success);
-  },
-
-  /**
    * 删除多个举报
    *
    * DELETE /reports
    */
-  deleteMultiple(report_id, success) {
+  deleteMultiple(target, success) {
     del('/reports', success);
   },
 
   /**
-   * 删除指定举报
+   * 获取举报详情列表
    *
-   * DELETE /reports/{report_id}
+   * GET /reports/{reportable_type}/{reportable_id}
    */
-  deleteOne(report_id, success) {
-    del(`/reports/${report_id}`, success);
+  getDetailList(reportable_type, reportable_id, data, success) {
+    get(`/reports/${reportable_type}/${reportable_id}`, data, success);
+  },
+
+  /**
+   * 添加举报
+   *
+   * POST /reports/{reportable_type}/{reportable_id}
+   */
+  create(reportable_type, reportable_id, reason, success) {
+    post(`/reports/${reportable_type}/${reportable_id}`, { reason }, success);
+  },
+
+
+
+  /**
+   * 删除举报
+   *
+   * DELETE /reports/{reportable_type}/{reportable_id}
+   */
+  deleteOne(reportable_type, reportable_id, success) {
+    del(`/reports/${reportable_type}/${reportable_id}`, success);
   },
 };
