@@ -147,11 +147,11 @@ $app->group('/api', function () {
     $this->post(  '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':addVote');
     $this->delete('/comments/{comment_id:\d+}/voters',                          CommentController::class . ':deleteVote');
 
-    $this->get(   '/report_groups',                                             ReportController::class . ':getGroupList');
-    $this->delete('/report_groups',                                             ReportController::class . ':batchDeleteGroup');
-    $this->delete('/report_groups/{reportable_type}/{reportable_id:\d+}',       ReportController::class . ':deleteGroup');
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
-    $this->post(  '/reports',                                                   ReportController::class . ':create');
+    $this->delete('/reports',                                                   ReportController::class . ':batchDelete');
+    $this->get(   '/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':getDetailList');
+    $this->post(  '/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':create');
+    $this->delete('/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':delete');
 
     $this->post(  '/images',                                                    ImageController::class . ':upload');
     $this->post(  '/emails',                                                    EmailController::class . ':send');

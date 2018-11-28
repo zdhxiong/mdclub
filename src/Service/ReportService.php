@@ -35,38 +35,13 @@ class ReportService extends ServiceAbstracts
     }
 
     /**
+     *
      * 获取举报列表
      *
      * @param  bool  $withRelationship
      * @return array
      */
     public function getList(bool $withRelationship = false): array
-    {
-        $list = $this->reportModel
-            ->where($this->getWhere())
-            ->order($this->getOrder(['create_time' => 'DESC']))
-            ->field($this->getPrivacyFields(), true)
-            ->paginate();
-
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
-        }
-
-        return $list;
-    }
-
-    /**
-     *
-     * 获取分组后的举报列表
-     *
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getGroupList(bool $withRelationship = false): array
     {
         $where = $this->getWhere();
         unset($where['reportable_id']);
@@ -99,21 +74,52 @@ class ReportService extends ServiceAbstracts
     }
 
     /**
+     * 获取举报列表
+     *
+     * @param  string $reportableType
+     * @param  int    $reportableId
+     * @param  bool   $withRelationship
+     * @return array
+     */
+    public function getDetailList(string $reportableType, int $reportableId, bool $withRelationship = false): array
+    {
+        $list = $this->reportModel
+            ->where([
+                'reportable_type' => $reportableType,
+                'reportable_id' => $reportableId,
+            ])
+            ->order([
+                'create_time' => 'DESC',
+            ])
+            ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
+
+        if ($withRelationship) {
+            $list['data'] = $this->addRelationship($list['data']);
+        }
+
+        return $list;
+    }
+
+    /**
      * 创建举报
      *
-     * @param  int    $userId         举报者ID
-     * @param  int    $reportableId   举报目标ID
      * @param  string $reportableType 举报目标类型
+     * @param  int    $reportableId   举报目标ID
      * @param  string $reason         举报原因
      * @return int                    report_id
      */
-    public function create(int $userId, int $reportableId, string $reportableType, string $reason): int
+    public function create(string $reportableType, int $reportableId, string $reason): int
     {
-        $this->createValidator($userId, $reportableId, $reportableType, $reason);
+        $userId = $this->roleService->userIdOrFail();
+        $this->createValidator($reportableType, $reportableId, $reason);
 
         return (int)$this->reportModel->insert([
-            'reportable_id'   => $reportableId,
             'reportable_type' => $reportableType,
+            'reportable_id'   => $reportableId,
             'user_id'         => $userId,
             'reason'          => $reason,
         ]);
@@ -122,12 +128,11 @@ class ReportService extends ServiceAbstracts
     /**
      * 创建举报前的验证
      *
-     * @param int    $userId
-     * @param int    $reportableId
      * @param string $reportableType
+     * @param int    $reportableId
      * @param string $reason
      */
-    private function createValidator(int $userId, int $reportableId, string $reportableType, string $reason): void
+    private function createValidator(string $reportableType, int $reportableId, string $reason): void
     {
         $errors = [];
 
@@ -163,9 +168,9 @@ class ReportService extends ServiceAbstracts
         // 验证是否已举报过
         $isExist = $this->reportModel
             ->where([
-                'reportable_id' => $reportableId,
                 'reportable_type' => $reportableType,
-                'user_id' => $userId,
+                'reportable_id' => $reportableId,
+                'user_id' => $this->roleService->userId(),
             ])
             ->has();
 
@@ -175,12 +180,12 @@ class ReportService extends ServiceAbstracts
     }
 
     /**
-     * 删除举报组
+     * 删除举报
      *
      * @param string $reportableType
      * @param int    $reportableId
      */
-    public function deleteGroup(string $reportableType, int $reportableId): void
+    public function delete(string $reportableType, int $reportableId): void
     {
         $this->reportModel
             ->where([
@@ -193,19 +198,19 @@ class ReportService extends ServiceAbstracts
     /**
      * 批量删除举报组
      *
-     * @param array $groups
+     * @param array $targets
      */
-    public function batchDeleteGroup(array $groups): void
+    public function batchDelete(array $targets): void
     {
         $where = [];
 
-        foreach ($groups as $key => $group) {
-            if (strpos($group, ':') > 0) {
-                [$reportable_type, $reportable_id] = explode(':', $group);
+        foreach ($targets as $key => $target) {
+            if (strpos($target, ':') > 0) {
+                [$reportableType, $reportableId] = explode(':', $target);
 
                 $where['OR']['AND #' . $key] = [
-                    'reportable_id' => $reportable_id,
-                    'reportable_type' => $reportable_type,
+                    'reportable_id' => $reportableId,
+                    'reportable_type' => $reportableType,
                 ];
             }
         }
