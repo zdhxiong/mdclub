@@ -41,17 +41,22 @@ export default $.extend({}, actionsAbstract, {
   /**
    * cover 元素创建后，绑定滚动事件，使封面随着滚动条滚动
    */
-  coverInit: element => {
-    const $cover = $(element);
-    const $dialog = $cover.parents('.mc-user-dialog');
+  headerInit: element => (state, actions) => {
+    const $header = $(element);
+    const $dialog = $header.parents('.mc-user-dialog');
+    const headerElem = $header[0];
+    const dialogElem = $dialog[0];
 
     $dialog.on('scroll', () => {
       window.requestAnimationFrame(() => {
-        $cover[0].style['background-position-y'] = `${$dialog[0].scrollTop / 2}px`;
+        headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
+
+        const headerFixed = headerElem.offsetHeight - dialogElem.scrollTop <= 56;
+        actions.setState({ headerFixed });
       });
     });
 
     // 向下滚动一段距离
-    $dialog[0].scrollTo(0, $dialog.width() * 0.56 * 0.58);
+    dialogElem.scrollTo(0, $dialog.width() * 0.56 * 0.58);
   },
 });

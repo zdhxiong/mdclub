@@ -1,4 +1,5 @@
 import { h } from 'hyperapp';
+import cc from 'classcat';
 import { location } from '@hyperapp/router';
 import timeHelper from '../../helper/time';
 import './index.less';
@@ -18,20 +19,28 @@ export default () => (global_state, global_actions) => {
 
   return (
     <div class="mdui-dialog mc-user-dialog">
-      <div class="header">
-        {!state.loading && state.user ? <div
-          class="cover"
-          oncreate={element => actions.coverInit(element)}
-          style={{
-            backgroundImage: `url(${state.user.cover.m})`,
-          }}
-        >
-
-        </div> : ''}
+      {!state.loading && state.user ?
+      <div
+        class={cc([
+          'header',
+          {
+            'fixed': state.headerFixed,
+          },
+        ])}
+        oncreate={element => actions.headerInit(element)}
+        style={{
+          backgroundImage: `url(${state.user.cover.m})`,
+        }}
+      >
+        <div class="gradient mdui-card-media-covered mdui-card-media-covered-gradient"></div>
+        <div class="avatar">
+          <img src={state.user.avatar.l}/>
+        </div>
+        <div class="username">{state.user.username}</div>
         <button class="mdui-btn mdui-btn-icon mdui-ripple close" mdui-dialog-close>
           <i class="mdui-icon material-icons">close</i>
         </button>
-      </div>
+      </div> : ''}
       {!state.loading && state.user ? <div class="body">
         <div class="mdui-row">
           <div class="label">联系方式</div>

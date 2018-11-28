@@ -15,17 +15,45 @@
   }
 
   .header {
-    .cover {
-      height: 0;
-      padding-bottom: 56%;
-      background-repeat: no-repeat;
-      background-size: contain;
-      overflow: visible;
+    position: relative;
+    height: 0;
+    padding-bottom: 56%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    overflow: visible;
+
+    .gradient {
+      height: 100px;
+    }
+
+    .avatar {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      height: 60px;
+
+      img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        user-select: none;
+      }
+    }
+
+    .username {
+      position: absolute;
+      bottom: 16px;
+      left: 92px;
+      line-height: 60px;
+      font-size: 30px;
+      color: #fff;
     }
   }
 
   .body {
     padding: 24px 22px 18px 22px;
+    box-sizing: border-box;
 
     @media (min-width: @screen-sm-min) {
       padding: 40px 38px 30px 40px;
@@ -55,7 +83,6 @@
     }
 
     .card {
-
       margin-bottom: 20px;
       padding: 16px 22px;
 
@@ -85,6 +112,40 @@
         margin-top: 8px;
         line-height: 24px;
       }
+    }
+  }
+
+  .header.fixed {
+    background-image: none !important;
+    background-color: #1a73e8;
+    padding-bottom: 56px;
+
+    .gradient {
+      display: none;
+    }
+
+    .avatar {
+      bottom: 8px;
+      left: 16px;
+      height: 40px;
+
+      img {
+        width: 39px;
+        height: 39px;
+        border-width: 1px;
+      }
+    }
+
+    .username {
+      bottom: 8px;
+      left: 72px;
+      line-height: 40px;
+      font-size: 18px;
+    }
+
+    & + .body {
+      height: ~'calc(100% - 56px)';
+      overflow: auto;
     }
   }
 }
