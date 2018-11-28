@@ -3076,7 +3076,7 @@ paths:
     get:
       tags:
         - Report
-      summary: 🔐获取举报列表
+      summary: 🔐获取举报详情列表
       description: |
         **仅管理员可调用该接口**
       parameters:
@@ -3156,7 +3156,7 @@ paths:
     delete:
       tags:
         - Report
-      summary: 🔐删除举报分组
+      summary: 🔐删除举报
       description: |
         **仅管理员可调用该接口**
       parameters:
