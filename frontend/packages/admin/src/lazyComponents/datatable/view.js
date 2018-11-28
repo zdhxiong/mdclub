@@ -90,9 +90,9 @@ const ActionBtn = ({ label, icon, onClick }) => (
   </button>
 );
 
-const ActionTarget = ({ link }) => (
+const ActionTarget = ({ target }) => (
   <a
-    href={link}
+    href={target}
     target="_blank"
     class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
     mdui-tooltip="{content: '新窗口打开', delay: 300}"
@@ -178,7 +178,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
                 case 'time':
                   return <td><Time timestamp={value}/></td>;
                 case 'relation':
-                  return <td><a href="">{value}</a></td>;
+                  return <td><a href="" onclick={() => column.onClick(row)}>{value}</a></td>;
                 case 'html':
                   return <td oncreate={rawHtml(value)} onupdate={rawHtml(value)}></td>;
                 default:
@@ -188,8 +188,8 @@ export default ({ loadData }) => (global_state, global_actions) => {
             <td class="actions">
               {state.actions.map((action) => {
                 switch (action.type) {
-                  case 'link':
-                    return <ActionTarget link={action.getLink(row)}/>;
+                  case 'target':
+                    return <ActionTarget target={action.getTargetLink(row)}/>;
                   case 'btn':
                     return <ActionBtn
                       label={action.label}

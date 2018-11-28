@@ -56,8 +56,8 @@ export default $.extend({}, actionsAbstract, {
 
       const _actions = [
         {
-          type: 'link',
-          getLink: article => `${window.G_ROOT}/articles/${article.article_id}`,
+          type: 'target',
+          getTargetLink: article => `${window.G_ROOT}/articles/${article.article_id}`,
         },
         {
           type: 'btn',

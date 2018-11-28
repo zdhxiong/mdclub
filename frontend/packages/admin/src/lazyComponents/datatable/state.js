@@ -4,10 +4,9 @@ export default {
    * [
    *   {
    *     title: '列头标题',
-   *     data: '字段名称',
-   *     type: '字段类型：relation、time、string、html'
-   *     relation: '关联类型：user'
-   *     relation_id: '关联ID',
+   *     field: '字段名称',
+   *     type: '字段类型：time、string、html、relation'
+   *     onClick: function // type 为 relation 时需要
    *   }
    * ]
    */
@@ -16,11 +15,11 @@ export default {
    * 操作项定义
    * [
    *   {
-   *     type: '类型: link、btn',
-   *     getLink: function, // type 为 link 时，需要该函数返回链接
-   *     label: '提示文本'   // type 为 btn 时需要
-   *     icon: '图标'       // type 为 btn 时需要
-   *     onClick: function // type 为 btn 时需要
+   *     type: '类型: target、btn',
+   *     getTargetLink: function, // type 为 target 时，需要该函数返回链接
+   *     label: '提示文本'   // type 为 target 时需要
+   *     icon: '图标'       // type 为 target 时需要
+   *     onClick: function // type 为 target 时需要
    *   }
    * ]
    */

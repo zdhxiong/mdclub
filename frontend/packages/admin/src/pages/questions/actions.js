@@ -39,8 +39,7 @@ export default $.extend({}, actionsAbstract, {
           title: '作者',
           field: 'relationship.user.username',
           type: 'relation',
-          relation: 'user',
-          relation_id: 'relationship.user.user_id',
+          onClick: actions.openDetail,
         },
         {
           title: '标题',
@@ -56,8 +55,8 @@ export default $.extend({}, actionsAbstract, {
 
       const _actions = [
         {
-          type: 'link',
-          getLink: question => `${window.G_ROOT}/questions/${question.question_id}`,
+          type: 'target',
+          getTargetLink: question => `${window.G_ROOT}/questions/${question.question_id}`,
         },
         {
           type: 'btn',
@@ -87,6 +86,13 @@ export default $.extend({}, actionsAbstract, {
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
     });
+  },
+
+  /**
+   * 打开提问详情窗口
+   */
+  openDetail: question => (state, actions) => {
+
   },
 
   /**

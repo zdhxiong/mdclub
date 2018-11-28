@@ -44,8 +44,8 @@ export default $.extend({}, actionsAbstract, {
 
       const _actions = [
         {
-          type: 'link',
-          getLink: user => `${window.G_ROOT}/users/${user.user_id}`,
+          type: 'target',
+          getTargetLink: user => `${window.G_ROOT}/users/${user.user_id}`,
         },
         {
           type: 'btn',
