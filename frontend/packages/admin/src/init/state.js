@@ -13,6 +13,7 @@ import Users from '../pages/users/state';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/state';
 import DatatableLazyComponent from '../lazyComponents/datatable/state';
+import UserDialogLazyComponent from '../lazyComponents/user-dialog/state';
 
 export default {
   location: location.state,
@@ -31,5 +32,6 @@ export default {
   lazyComponents: {
     appbar: AppbarLazyComponent,
     datatable: DatatableLazyComponent,
+    userDialog: UserDialogLazyComponent,
   },
 };

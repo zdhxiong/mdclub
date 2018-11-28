@@ -1,5 +1,5 @@
 import mdui, { JQ as $ } from 'mdui';
-import actionsAbstract from '../../abstracts/actions';
+import actionsAbstract from '../../abstracts/lazyComponentActions';
 
 export default $.extend({}, actionsAbstract, {
   /**

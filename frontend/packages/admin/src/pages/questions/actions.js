@@ -1,7 +1,7 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
 import { Question } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/actions';
+import actionsAbstract from '../../abstracts/pageActions';
 
 let global_actions;
 
@@ -39,7 +39,10 @@ export default $.extend({}, actionsAbstract, {
           title: '作者',
           field: 'relationship.user.username',
           type: 'relation',
-          onClick: actions.openDetail,
+          onClick: ({ e, row }) => {
+            e.preventDefault();
+            global_actions.lazyComponents.userDialog.open(row.user_id);
+          },
         },
         {
           title: '标题',
@@ -86,13 +89,6 @@ export default $.extend({}, actionsAbstract, {
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
     });
-  },
-
-  /**
-   * 打开提问详情窗口
-   */
-  openDetail: question => (state, actions) => {
-
   },
 
   /**

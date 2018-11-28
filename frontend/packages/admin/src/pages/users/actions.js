@@ -1,7 +1,7 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
 import { User } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/actions';
+import actionsAbstract from '../../abstracts/pageActions';
 
 let global_actions;
 
@@ -37,8 +37,8 @@ export default $.extend({}, actionsAbstract, {
         },
         {
           title: '用户名',
-          field: 'username',
-          type: 'string',
+          field: 'avatar_username',
+          type: 'html',
         },
       ];
 
@@ -68,6 +68,10 @@ export default $.extend({}, actionsAbstract, {
           onClick: actions.batchDisable,
         },
       ];
+
+      response.data.map((item, index) => {
+        response.data[index].avatar_username = `<img src="${item.avatar.s}" class="mdui-float-left mdui-m-r-2"/>${item.username}`;
+      });
 
       response.primaryKey = 'user_id';
       response.columns = columns;

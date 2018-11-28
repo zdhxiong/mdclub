@@ -178,7 +178,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
                 case 'time':
                   return <td><Time timestamp={value}/></td>;
                 case 'relation':
-                  return <td><a href="" onclick={() => column.onClick(row)}>{value}</a></td>;
+                  return <td><a href="" onclick={e => column.onClick({ e, row })}>{value}</a></td>;
                 case 'html':
                   return <td oncreate={rawHtml(value)} onupdate={rawHtml(value)}></td>;
                 default:

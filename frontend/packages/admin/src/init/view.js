@@ -13,13 +13,14 @@ import Topics from '../pages/topics/view';
 import Trash from '../pages/trash/view';
 import Users from '../pages/users/view';
 
-import Appbar from '../lazyComponents/appbar/view';
-import Drawer from '../components/drawer';
+import AppbarLazyComponent from '../lazyComponents/appbar/view';
+import DrawerComponent from '../components/drawer';
+import UserDialogLazyComponent from '../lazyComponents/user-dialog/view';
 
 export default (global_state, global_actions) => (
   <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
-    <Appbar/>
-    <Drawer/>
+    <AppbarLazyComponent/>
+    <DrawerComponent/>
     <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>
     <Route path={$.path('/articles')} render={Articles(global_state, global_actions)}/>
     <Route path={$.path('/comments')} render={Comments(global_state, global_actions)}/>
@@ -30,5 +31,7 @@ export default (global_state, global_actions) => (
     <Route path={$.path('/topics')} render={Topics(global_state, global_actions)}/>
     <Route path={$.path('/trash')} render={Trash(global_state, global_actions)}/>
     <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
+
+    <UserDialogLazyComponent/>
   </div>
 );
