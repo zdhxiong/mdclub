@@ -18,7 +18,9 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 打开对话框
    */
-  open: ({ reportable_type, reportable_id }) => (state, actions) => {
+  open: key => (state, actions) => {
+    const [reportable_type, reportable_id] = key.split(':');
+
     if (!Dialog) {
       Dialog = new mdui.Dialog('.mc-reporters-dialog');
     }

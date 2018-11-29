@@ -9,7 +9,7 @@ let global_actions;
  * 为举报信息添加额外字段
  */
 const getExtraFields = (report) => {
-  report.key = `${report.reportable_type}.${report.reportable_id}`;
+  report.key = `${report.reportable_type}:${report.reportable_id}`;
 
   switch (report.reportable_type) {
     case 'question':
@@ -114,7 +114,7 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
-
+      response.onRowClick = global_actions.lazyComponents.reportersDialog.open;
       datatableActions.loadEnd(response);
     });
   },

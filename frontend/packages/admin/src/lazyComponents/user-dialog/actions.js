@@ -12,6 +12,13 @@ export default $.extend({}, actionsAbstract, {
   open: user_id => (state, actions) => {
     if (!Dialog) {
       Dialog = new mdui.Dialog('.mc-user-dialog');
+
+      Dialog.$dialog.on('closed.mdui.dialog', () => {
+        actions.setState({
+          user: false,
+          loading: false,
+        });
+      });
     }
 
     actions.setState({ loading: true });

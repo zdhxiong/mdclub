@@ -75,7 +75,7 @@
     "hyperapp": "^1.2.9",
     "js-cookie": "^2.2.0",
     "mdclub-sdk-js": "github:zdhxiong/mdclub-sdk-js",
-    "mdn-polyfills": "^5.13.0",
+    "mdn-polyfills": "^5.14.0",
     "mdui": "^0.4.2",
     "time-stamp": "^2.1.0"
   },
