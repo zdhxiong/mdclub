@@ -33,7 +33,7 @@ export default $.extend({}, actionsAbstract, {
         {
           title: 'ID',
           field: 'user_id',
-          type: 'string',
+          type: 'number',
         },
         {
           title: '用户名',
@@ -77,6 +77,7 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
+      response.onRowClick = global_actions.lazyComponents.userDialog.open;
       datatableActions.loadEnd(response);
     });
   },

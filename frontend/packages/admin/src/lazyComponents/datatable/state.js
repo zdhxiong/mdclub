@@ -5,7 +5,7 @@ export default {
    *   {
    *     title: '列头标题',
    *     field: '字段名称',
-   *     type: '字段类型：time、string、html、relation'
+   *     type: '字段类型：time、string、number、html、relation'
    *     onClick: function // type 为 relation 时需要
    *   }
    * ]
@@ -36,6 +36,7 @@ export default {
    */
   batchActions: [],
   primaryKey: '', // 主键字段名
+  onRowClick: false, // 点击行执行的函数
 
   isCheckedRows: {}, // 键名为对象ID，键值为 bool 值
   isCheckedAll: false, // 是否已全部选中

@@ -33,7 +33,7 @@ export default $.extend({}, actionsAbstract, {
         {
           title: 'ID',
           field: 'topic_id',
-          type: 'string',
+          type: 'number',
         },
         {
           title: '名称',

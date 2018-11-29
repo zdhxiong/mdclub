@@ -33,14 +33,16 @@ export default $.extend({}, actionsAbstract, {
         {
           title: 'ID',
           field: 'article_id',
-          type: 'string',
+          type: 'number',
         },
         {
           title: '作者',
           field: 'relationship.user.username',
           type: 'relation',
-          relation: 'user',
-          relation_id: 'relationship.user.user_id',
+          onClick: ({ e, row }) => {
+            e.preventDefault();
+            global_actions.lazyComponents.userDialog.open(row.user_id);
+          },
         },
         {
           title: '标题',

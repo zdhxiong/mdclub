@@ -49,9 +49,9 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
-    const datatableState = datatableActions.getState();
-
     datatableActions.loadStart();
+
+    const datatableState = datatableActions.getState();
 
     Report.getList({
       page: datatableState.pagination.page,
@@ -61,12 +61,31 @@ export default $.extend({}, actionsAbstract, {
         {
           title: '内容',
           field: 'reportable_title',
-          type: 'string',
+          type: 'relation',
+          onClick: ({ e, row }) => {
+            e.preventDefault();
+
+            switch (row.reportable_type) {
+              case 'question':
+                break;
+              case 'article':
+                break;
+              case 'answer':
+                break;
+              case 'comment':
+                break;
+              case 'user':
+                global_actions.lazyComponents.userDialog.open(row.relationship.user.user_id);
+                break;
+              default:
+                break;
+            }
+          }
         },
         {
           title: '举报人数',
           field: 'reporter_count',
-          type: 'string',
+          type: 'number',
         },
       ];
 
@@ -84,7 +103,7 @@ export default $.extend({}, actionsAbstract, {
           label: '批量处理完成',
           icon: 'done_all',
           onClick: actions.batchDelete,
-        }
+        },
       ];
 
       response.data.map((item, index) => {

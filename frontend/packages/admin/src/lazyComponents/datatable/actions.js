@@ -88,6 +88,7 @@ export default $.extend({}, actionsAbstract, {
       actions: response.actions,
       batchActions: response.batchActions,
       primaryKey: response.primaryKey,
+      onRowClick: typeof response.onRowClick !== 'undefined' ? response.onRowClick : false,
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,

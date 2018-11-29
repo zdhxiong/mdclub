@@ -30,5 +30,6 @@ module.exports = {
     'no-underscore-dangle': 0,
     'no-eval': 0,
     'array-callback-return': 0,
+    'no-param-reassign': 0,
   },
 };

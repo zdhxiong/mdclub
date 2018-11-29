@@ -19,7 +19,7 @@ import view from './init/view';
 defaults.token = Cookies.get('token');
 defaults.baseURL = window.G_API;
 defaults.error = function () {
-  mdui.snackbar('网络连接失败');
+  mdui.snackbar('系统发生未知错误');
 };
 
 window.main = withLogger(app)(state, actions, view, document.body);

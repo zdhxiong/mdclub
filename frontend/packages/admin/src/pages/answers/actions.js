@@ -33,19 +33,21 @@ export default $.extend({}, actionsAbstract, {
         {
           title: 'ID',
           field: 'answer_id',
-          type: 'string',
+          type: 'number',
         },
         {
           title: '作者',
           field: 'relationship.user.username',
           type: 'relation',
-          relation: 'user',
-          relation_id: 'relationship.user.user_id',
+          onClick: ({ e, row }) => {
+            e.preventDefault();
+            global_actions.lazyComponents.userDialog.open(row.user_id);
+          },
         },
         {
           title: '回答',
-          field: 'content_rendered',
-          type: 'html',
+          field: 'content_markdown',
+          type: 'string',
         },
         {
           title: '发表时间',

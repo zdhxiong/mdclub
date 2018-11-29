@@ -2,6 +2,49 @@ import mdui, { JQ as $ } from 'mdui';
 
 $.extend({
   /**
+   * 开始全屏 loading 状态
+   */
+  loadStart: () => {
+    if ($('.mc-loading-overlay').length) {
+      return;
+    }
+
+    const $overlay = $(
+      `<div class="mc-loading-overlay">
+        <div class="mdui-spinner mdui-spinner-colorful"></div>
+      </div>`);
+
+    $overlay
+      .appendTo(document.body)
+      .reflow()
+      .addClass('mc-loading-overlay-show');
+
+    setTimeout(() => {
+      $overlay.mutation();
+    }, 0);
+
+    $.lockScreen();
+  },
+
+  /**
+   * 结束全屏 loading 状态
+   */
+  loadEnd: () => {
+    const $overlay = $('.mc-loading-overlay');
+
+    if (!$overlay.length) {
+      return;
+    }
+
+    $overlay
+      .removeClass('mc-loading-overlay-show')
+      .transitionEnd(() => {
+        $overlay.remove();
+        $.unlockScreen();
+      });
+  },
+
+  /**
    * 为链接补充前缀
    * @param url
    * @returns {string}

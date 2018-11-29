@@ -149,7 +149,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
               </span>
             </th> :
             state.columns.map(column => (
-              <th>{column.title}</th>
+              <th class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{column.title}</th>
             ))
           }
           {state.checkedCount ? '' : <th></th>}
@@ -164,7 +164,20 @@ export default ({ loadData }) => (global_state, global_actions) => {
           },
         ])}>
         {state.data.map(row => (
-          <tr key={row[state.primaryKey]}>
+          <tr
+            key={row[state.primaryKey]}
+            onclick={(e) => {
+              if (typeof state.onRowClick !== 'function') {
+                return;
+              }
+
+              if (e.target.nodeName !== 'TD') {
+                return;
+              }
+
+              state.onRowClick(row[state.primaryKey]);
+            }}
+          >
             <td class="mdui-table-cell-checkbox">
               <CheckOne
                 isChecked={state.isCheckedRows[row[state.primaryKey]]}
@@ -175,6 +188,8 @@ export default ({ loadData }) => (global_state, global_actions) => {
               const value = eval(`row.${column.field}`);
 
               switch (column.type) {
+                case 'number':
+                  return <td class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{value}</td>;
                 case 'time':
                   return <td><Time timestamp={value}/></td>;
                 case 'relation':

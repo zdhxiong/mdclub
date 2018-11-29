@@ -39,9 +39,30 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
+   * 禁用该账号
+   */
+  disable: () => {
+
+  },
+
+  /**
+   * 启用该账号
+   */
+  enable: () => {
+
+  },
+
+  /**
+   * 到编辑界面
+   */
+  toEdit: () => {
+
+  },
+
+  /**
    * cover 元素创建后，绑定滚动事件，使封面随着滚动条滚动
    */
-  headerInit: element => (state, actions) => {
+  headerInit: (element) => {
     const $header = $(element);
     const $dialog = $header.parents('.mc-user-dialog');
     const headerElem = $header[0];
@@ -50,9 +71,6 @@ export default $.extend({}, actionsAbstract, {
     $dialog.on('scroll', () => {
       window.requestAnimationFrame(() => {
         headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
-
-        const headerFixed = headerElem.offsetHeight - dialogElem.scrollTop <= 56;
-        actions.setState({ headerFixed });
       });
     });
 

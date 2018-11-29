@@ -20,9 +20,10 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
-    const datatableState = datatableActions.getState();
-
+    datatableActions.setState({ order: '-create_time' });
     datatableActions.loadStart();
+
+    const datatableState = datatableActions.getState();
 
     Question.getList({
       page: datatableState.pagination.page,
@@ -33,7 +34,7 @@ export default $.extend({}, actionsAbstract, {
         {
           title: 'ID',
           field: 'question_id',
-          type: 'string',
+          type: 'number',
         },
         {
           title: '作者',
@@ -103,8 +104,11 @@ export default $.extend({}, actionsAbstract, {
    */
   deleteOne: question => (state, actions) => {
     mdui.confirm('删除后，你仍可以在回收站中恢复该提问', '确定删除该提问？', () => {
-      // todo 添加删除加载动画
+      $.loadStart();
+
       Question.deleteOne(question.question_id, (response) => {
+        $.loadEnd();
+
         if (response.code) {
           mdui.snackbar(response.message);
           return;
@@ -122,5 +126,27 @@ export default $.extend({}, actionsAbstract, {
    * 批量删除提问
    */
   batchDelete: questions => (state, actions) => {
+    mdui.confirm('删除后，你仍可以在回收站中恢复这些提问', `确认删除这 ${questions.length} 个提问？`, () => {
+      $.loadStart();
+
+      let question_ids = [];
+      questions.map((question) => {
+        question_ids.push(question.question_id);
+      });
+
+      Question.deleteMultiple(question_ids.join(','), (response) => {
+        $.loadEnd();
+
+        if (response.code) {
+          mdui.snackbar(response.message);
+          return;
+        }
+
+        actions.loadData();
+      });
+    }, () => {}, {
+      confirmText: '确认',
+      cancelText: '取消',
+    });
   },
 });

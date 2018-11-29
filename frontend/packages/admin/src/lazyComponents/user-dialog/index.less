@@ -7,6 +7,10 @@
   background-color: #f9f9f9;
   overflow: auto;
 
+  .mdui-theme-layout-dark & {
+    background-color: #303030;
+  }
+
   @media (min-width: @screen-sm-min) {
     width: 85%;
     max-width: 800px;
@@ -62,7 +66,6 @@
     .label {
       width: 100%;
       margin-bottom: 14px;
-      color: rgba(0, 0, 0, 0.87);
       padding-left: 14px;
 
       @media (min-width: @screen-sm-min) {
@@ -78,6 +81,10 @@
           height: 2px;
           margin-bottom: 10px;
           width: 34px;
+
+          .mdui-theme-layout-dark & {
+            background-color: #fff;
+          }
         }
       }
     }
@@ -86,66 +93,64 @@
       margin-bottom: 20px;
       padding: 16px 22px;
 
+      &.card-with-count {
+        padding-bottom: 8px;
+      }
+
       @media (min-width: @screen-sm-min) {
         margin-left: 138px;
       }
 
       a {
-        color: rgba(0, 0, 0, 0.87);
         text-decoration: none;
 
         &:hover {
-          color: #4285f4;
+          color: #4285f4 !important;
         }
       }
 
-      .item + .item {
+      .text-item + .text-item {
         margin-top: 20px;
       }
 
-      .subheader {
-        color: rgba(0,0,0,.54);
+      .text-subheader {
         font-size: 13px;
       }
 
-      .content {
+      .text-content {
         margin-top: 8px;
         line-height: 24px;
       }
-    }
-  }
 
-  .header.fixed {
-    background-image: none !important;
-    background-color: #1a73e8;
-    padding-bottom: 56px;
+      .count-item {
+        width: 64px;
+        height: 52px;
+        border-radius: 4px;
+        padding: 4px 0;
+        cursor: pointer;
+        float: left;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition: background-color .24s;
+        box-sizing: border-box;
 
-    .gradient {
-      display: none;
-    }
-
-    .avatar {
-      bottom: 8px;
-      left: 16px;
-      height: 40px;
-
-      img {
-        width: 39px;
-        height: 39px;
-        border-width: 1px;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.04);
+        }
       }
-    }
 
-    .username {
-      bottom: 8px;
-      left: 72px;
-      line-height: 40px;
-      font-size: 18px;
-    }
+      .count-label {
+        text-align: center;
+        font-size: 13px;
+        line-height: 18px;
+      }
 
-    & + .body {
-      height: ~'calc(100% - 56px)';
-      overflow: auto;
+      .count-number {
+        text-align: center;
+        margin-top: 4px;
+        line-height: 22px;
+      }
     }
   }
 }
