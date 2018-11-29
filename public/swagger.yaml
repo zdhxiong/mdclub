@@ -397,12 +397,12 @@ paths:
       summary: 获取指定用户的关注者
       description: 获取指定用户的关注者
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 用户列表
@@ -475,12 +475,12 @@ paths:
       summary: 获取指定用户关注的用户列表
       description: 获取指定用户关注的用户列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 用户列表
@@ -504,12 +504,12 @@ paths:
         - QuestionFollow
       summary: 获取指定用户关注的问题列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 问题列表
@@ -534,12 +534,12 @@ paths:
       summary: 获取指定用户关注的文章列表
       description: 获取指定用户关注的文章列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 文章列表
@@ -563,12 +563,12 @@ paths:
         - TopicFollow
       summary: 获取指定用户关注的话题列表
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: user_id
           in: path
           type: integer
           description: 用户ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 话题列表
@@ -1444,6 +1444,8 @@ paths:
           in: path
           type: integer
           description: 文章ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
         - name: type
           in: query
           type: string
@@ -1463,6 +1465,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1535,12 +1539,12 @@ paths:
       summary: 获取指定文章的关注者
       description: 获取指定文章的关注者
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: article_id
           in: path
           type: integer
           description: 文章ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 关注者列表
@@ -1881,6 +1885,8 @@ paths:
           in: path
           type: integer
           description: 问题ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
         - name: type
           in: query
           type: string
@@ -1900,6 +1906,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -1971,12 +1979,12 @@ paths:
         - QuestionFollow
       summary: 获取指定问题的关注者
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: question_id
           in: path
           type: integer
           description: 问题ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 关注者列表
@@ -2370,12 +2378,12 @@ paths:
       summary: 获取指定话题的关注者
       description: 获取指定话题的关注者（不含已禁用的用户）
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: topic_id
           in: path
           type: integer
           description: 话题ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 关注者列表
@@ -2605,6 +2613,8 @@ paths:
           in: path
           type: integer
           description: 回答ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
         - name: type
           in: query
           type: string
@@ -2624,6 +2634,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2799,6 +2811,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Comments'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -2927,6 +2941,8 @@ paths:
           in: path
           type: integer
           description: 评论ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
         - name: type
           in: query
           type: string
@@ -2946,6 +2962,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Users'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -3040,6 +3058,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/ReportGroups'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -3080,8 +3100,6 @@ paths:
       description: |
         **仅管理员可调用该接口**
       parameters:
-        - $ref: '#/parameters/page'
-        - $ref: '#/parameters/per_page'
         - name: reportable_type
           in: path
           type: string
@@ -3096,6 +3114,8 @@ paths:
           in: path
           type: integer
           description: 目标ID
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: 举报列表
@@ -3105,6 +3125,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Reports'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
@@ -3537,6 +3559,8 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Answers'
+              pagination:
+                $ref: '#/definitions/Pagination'
         default:
           $ref: '#/responses/Error'
       security:
