@@ -14,6 +14,7 @@ import Users from '../pages/users/actions';
 import AppbarLazyComponent from '../lazyComponents/appbar/actions';
 import DatatableLazyComponent from '../lazyComponents/datatable/actions';
 import UserDialogLazyComponent from '../lazyComponents/user-dialog/actions';
+import ReportersDialogLazyComponent from '../lazyComponents/reporters-dialog/actions';
 
 export default {
   location: location.actions,
@@ -37,5 +38,6 @@ export default {
     appbar: AppbarLazyComponent,
     datatable: DatatableLazyComponent,
     userDialog: UserDialogLazyComponent,
+    reportersDialog: ReportersDialogLazyComponent,
   },
 };

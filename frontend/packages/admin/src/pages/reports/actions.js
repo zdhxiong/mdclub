@@ -114,6 +114,7 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
+
       datatableActions.loadEnd(response);
     });
   },
