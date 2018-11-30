@@ -20,7 +20,7 @@ export default {
    * DELETE /reports
    */
   deleteMultiple(target, success) {
-    del('/reports', success);
+    del('/reports', { target }, success);
   },
 
   /**
