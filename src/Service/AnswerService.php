@@ -352,7 +352,7 @@ class AnswerService extends ServiceAbstracts
     public function batchDelete(array $answerIds): void
     {
         $answers = $this->answerModel
-            ->field(['question_id', 'user_id'])
+            ->field(['question_id', 'user_id', 'answer_id'])
             ->select($answerIds);
 
         if (!$answers) {
