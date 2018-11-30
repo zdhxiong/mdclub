@@ -13,8 +13,9 @@ import Users from '../pages/users/state';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/state';
 import DatatableLazyComponent from '../lazyComponents/datatable/state';
-import UserDialogLazyComponent from '../lazyComponents/user-dialog/state';
 import ReportersDialogLazyComponent from '../lazyComponents/reporters-dialog/state';
+import UserDialogLazyComponent from '../lazyComponents/user-dialog/state';
+import TopicDialogLazyComponent from '../lazyComponents/topic-dialog/state';
 
 export default {
   location: location.state,
@@ -33,7 +34,8 @@ export default {
   lazyComponents: {
     appbar: AppbarLazyComponent,
     datatable: DatatableLazyComponent,
-    userDialog: UserDialogLazyComponent,
     reportersDialog: ReportersDialogLazyComponent,
+    userDialog: UserDialogLazyComponent,
+    topicDialog: TopicDialogLazyComponent,
   },
 };

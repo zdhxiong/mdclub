@@ -37,9 +37,10 @@ export default () => (global_state, global_actions) => {
         <div class="avatar">
           <img src={state.user.avatar.l}/>
         </div>
-        <div class="username">{state.user.username}</div>
+        <div class="username">{state.user.username} <small>(ID: {state.user.user_id})</small></div>
       </div> : ''}
-      {!state.loading && state.user ? <div class="body">
+      {!state.loading && state.user ?
+      <div class="body">
         <div class="mdui-row">
           <div class="label mdui-text-color-theme-text">个人信息</div>
           <div class="card mdui-card">

@@ -5,7 +5,6 @@ import actionsAbstract from '../../abstracts/lazyComponentActions';
 let Dialog; // 对话框实例
 
 export default $.extend({}, actionsAbstract, {
-
   /**
    * 打开对话框
    */
@@ -67,7 +66,7 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * cover 元素创建后，绑定滚动事件，使封面随着滚动条滚动
+   * header 元素创建后，绑定滚动事件，使封面随着滚动条滚动
    */
   headerInit: (element) => {
     const $header = $(element);
