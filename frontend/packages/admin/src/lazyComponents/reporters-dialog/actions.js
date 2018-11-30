@@ -88,5 +88,5 @@ export default $.extend({}, actionsAbstract, {
    */
   close: () => {
     Dialog.close();
-  }
+  },
 });

@@ -1,4 +1,4 @@
-import mdui from 'mdui';
+import mdui, { JQ as $ } from 'mdui';
 
 export default {
   setState: value => (value),
@@ -14,6 +14,19 @@ export default {
     // 在手机和平板时，切换路由后关闭抽屉导航
     if (window.innerWidth < 1024) {
       (new mdui.Drawer('.mc-drawer')).close();
+    }
+  },
+
+  /**
+   * 删除后的回调
+   */
+  deleteSuccess: ({ code, message }) => (state, actions) => {
+    $.loadEnd();
+
+    if (code) {
+      mdui.snackbar(message);
+    } else {
+      actions.loadData();
     }
   },
 };

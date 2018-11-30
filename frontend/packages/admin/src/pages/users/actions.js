@@ -24,11 +24,13 @@ export default $.extend({}, actionsAbstract, {
 
     datatableActions.loadStart();
 
-    User.getList({
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
       order: datatableState.order,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: 'ID',
@@ -55,7 +57,7 @@ export default $.extend({}, actionsAbstract, {
         },
         {
           type: 'btn',
-          onClick: actions.deleteOne,
+          onClick: actions.disableOne,
           label: '禁用',
           icon: 'lock',
         },
@@ -79,7 +81,9 @@ export default $.extend({}, actionsAbstract, {
       response.batchActions = batchActions;
       response.onRowClick = global_actions.lazyComponents.userDialog.open;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    User.getList(data, success);
   },
 
   /**
@@ -93,13 +97,39 @@ export default $.extend({}, actionsAbstract, {
    * 禁用指定用户
    */
   disableOne: user => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
+      User.disableOne(user.user_id, actions.deleteSuccess);
+    };
 
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('确认禁用该账号？', confirm, false, options);
   },
 
   /**
    * 批量禁用用户
    */
-  batchDisable: user => (state, actions) => {
+  batchDisable: users => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
 
+      const user_ids = [];
+      users.map((user) => {
+        user_ids.push(user.user_id);
+      });
+
+      User.disableMultiple(user_ids.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm(`确认禁用这 ${users.length} 个账号`, confirm, false, options);
   },
 });

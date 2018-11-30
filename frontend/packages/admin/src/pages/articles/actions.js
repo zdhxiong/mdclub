@@ -20,15 +20,18 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
-    const datatableState = datatableActions.getState();
-
+    datatableActions.setState({ order: '-create_time' });
     datatableActions.loadStart();
 
-    Article.getList({
+    const datatableState = datatableActions.getState();
+
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
       order: datatableState.order,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: 'ID',
@@ -78,7 +81,7 @@ export default $.extend({}, actionsAbstract, {
       const batchActions = [
         {
           label: '批量删除',
-          icon: 'delete',
+          icon: 'delete_sweep',
           onClick: actions.batchDelete,
         },
       ];
@@ -88,7 +91,9 @@ export default $.extend({}, actionsAbstract, {
       response.actions = _actions;
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    Article.getList(data, success);
   },
 
   /**
@@ -101,14 +106,40 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 删除指定文章
    */
-  deleteOne: article => (state, actions) => {
+  deleteOne: ({ article_id }) => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
+      Article.deleteOne(article_id, actions.deleteSuccess);
+    };
 
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复该文章', '确认删除该文章', confirm, false, options);
   },
 
   /**
    * 批量删除文章
    */
   batchDelete: articles => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
 
+      const article_ids = [];
+      articles.map((article) => {
+        article_ids.push(article.article_id);
+      });
+
+      Article.deleteMultiple(article_ids.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复这些文章', `确认删除这 ${articles.length} 篇文章`, confirm, false, options);
   },
 });

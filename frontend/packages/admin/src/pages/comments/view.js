@@ -1,6 +1,8 @@
 import { h } from 'hyperapp';
 import './index.less';
 
+import Datatable from '../../lazyComponents/datatable/view';
+
 export default (global_state, global_actions) => {
   const actions = global_actions.comments;
   const state = global_state.comments;
@@ -12,7 +14,7 @@ export default (global_state, global_actions) => {
       id="page-comments"
       class="mdui-container-fluid"
     >
-
+      <Datatable loadData={actions.loadData}/>
     </div>
   );
 };

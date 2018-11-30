@@ -24,11 +24,13 @@ export default $.extend({}, actionsAbstract, {
 
     datatableActions.loadStart();
 
-    Topic.getList({
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
       order: datatableState.order,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: 'ID',
@@ -64,7 +66,7 @@ export default $.extend({}, actionsAbstract, {
       const batchActions = [
         {
           label: '批量删除',
-          icon: 'delete',
+          icon: 'delete_sweep',
           onClick: actions.batchDelete,
         },
       ];
@@ -74,7 +76,9 @@ export default $.extend({}, actionsAbstract, {
       response.actions = _actions;
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    Topic.getList(data, success);
   },
 
   /**
@@ -87,14 +91,40 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 删除指定话题
    */
-  deleteOne: topic => (state, actions) => {
+  deleteOne: ({ topic_id }) => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
+      Topic.deleteOne(topic_id, actions.deleteSuccess);
+    };
 
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复该话题', '确认删除该话题', confirm, false, options);
   },
 
   /**
    * 批量删除话题
    */
   batchDelete: topics => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
 
+      const topic_ids = [];
+      topics.map((topic) => {
+        topic_ids.push(topic.topic_id);
+      });
+
+      Topic.deleteMultiple(topic_ids.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复这些话题', `确认删除这 ${topics.length} 个话题`, confirm, false, options);
   },
 });

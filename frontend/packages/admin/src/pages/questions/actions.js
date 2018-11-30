@@ -25,11 +25,13 @@ export default $.extend({}, actionsAbstract, {
 
     const datatableState = datatableActions.getState();
 
-    Question.getList({
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
       order: datatableState.order,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: 'ID',
@@ -79,7 +81,7 @@ export default $.extend({}, actionsAbstract, {
       const batchActions = [
         {
           label: '批量删除',
-          icon: 'delete',
+          icon: 'delete_sweep',
           onClick: actions.batchDelete,
         },
       ];
@@ -89,7 +91,9 @@ export default $.extend({}, actionsAbstract, {
       response.actions = _actions;
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    Question.getList(data, success);
   },
 
   /**
@@ -102,51 +106,40 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 删除指定提问
    */
-  deleteOne: question => (state, actions) => {
-    mdui.confirm('删除后，你仍可以在回收站中恢复该提问', '确定删除该提问？', () => {
+  deleteOne: ({ question_id }) => (state, actions) => {
+    const confirm = () => {
       $.loadStart();
+      Question.deleteOne(question_id, actions.deleteSuccess);
+    };
 
-      Question.deleteOne(question.question_id, (response) => {
-        $.loadEnd();
-
-        if (response.code) {
-          mdui.snackbar(response.message);
-          return;
-        }
-
-        actions.loadData();
-      });
-    }, () => {}, {
+    const options = {
       confirmText: '确认',
       cancelText: '取消',
-    });
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复该提问', '确认删除该提问？', confirm, false, options);
   },
 
   /**
    * 批量删除提问
    */
   batchDelete: questions => (state, actions) => {
-    mdui.confirm('删除后，你仍可以在回收站中恢复这些提问', `确认删除这 ${questions.length} 个提问？`, () => {
+    const confirm = () => {
       $.loadStart();
 
-      let question_ids = [];
+      const question_ids = [];
       questions.map((question) => {
         question_ids.push(question.question_id);
       });
 
-      Question.deleteMultiple(question_ids.join(','), (response) => {
-        $.loadEnd();
+      Question.deleteMultiple(question_ids.join(','), actions.deleteSuccess);
+    };
 
-        if (response.code) {
-          mdui.snackbar(response.message);
-          return;
-        }
-
-        actions.loadData();
-      });
-    }, () => {}, {
+    const options = {
       confirmText: '确认',
       cancelText: '取消',
-    });
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复这些提问', `确认删除这 ${questions.length} 个提问？`, confirm, false, options);
   },
 });

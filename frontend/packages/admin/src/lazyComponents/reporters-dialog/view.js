@@ -10,8 +10,16 @@ export default () => (global_state, global_actions) => {
   const actions = global_actions.lazyComponents.reportersDialog;
   const state = global_state.lazyComponents.reportersDialog;
 
-  const isEmpty = !state.loading && !state.data.length && state.pagination;
-  const isLoaded = !state.loading && state.pagination && state.pagination.page === state.pagination.pages;
+  const isEmpty =
+    !state.loading &&
+    !state.data.length &&
+    state.pagination;
+
+  const isLoaded =
+    !state.loading &&
+    state.pagination &&
+    state.pagination.page === state.pagination.pages;
+
   const isLoading = state.loading;
 
   return (
@@ -40,7 +48,7 @@ export default () => (global_state, global_actions) => {
           ))}
         </ul>
         {isEmpty ? <Empty/> : ''}
-        {isLoading ? <Loading/>: ''}
+        {isLoading ? <Loading/> : ''}
         {isLoaded ? <Loaded/> : ''}
       </div>
     </div>

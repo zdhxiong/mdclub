@@ -20,15 +20,18 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
-    const datatableState = datatableActions.getState();
-
+    datatableActions.setState({ order: '-create_time' });
     datatableActions.loadStart();
 
-    Answer.getList({
+    const datatableState = datatableActions.getState();
+
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
       order: datatableState.order,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: 'ID',
@@ -78,7 +81,7 @@ export default $.extend({}, actionsAbstract, {
       const batchActions = [
         {
           label: '批量删除',
-          icon: 'delete',
+          icon: 'delete_sweep',
           onClick: actions.batchDelete,
         },
       ];
@@ -88,7 +91,9 @@ export default $.extend({}, actionsAbstract, {
       response.actions = _actions;
       response.batchActions = batchActions;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    Answer.getList(data, success);
   },
 
   /**
@@ -101,14 +106,40 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 删除指定回答
    */
-  deleteOne: answer => (state, actions) => {
+  deleteOne: ({ answer_id }) => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
+      Answer.deleteOne(answer_id, actions.deleteSuccess);
+    };
 
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复该回答', '确认删除该回答', confirm, false, options);
   },
 
   /**
    * 批量删除回答
    */
-  batchDelete: answer => (state, actions) => {
+  batchDelete: answers => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
 
+      const answer_ids = [];
+      answers.map((answer) => {
+        answer_ids.push(answer.answer_id);
+      });
+
+      Answer.deleteMultiple(answer_ids.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，你仍可以在回收站中恢复这些回答', `确认删除这 ${answers.length} 个回答`, confirm, false, options);
   },
 });

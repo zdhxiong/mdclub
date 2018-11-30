@@ -53,10 +53,12 @@ export default $.extend({}, actionsAbstract, {
 
     const datatableState = datatableActions.getState();
 
-    Report.getList({
+    const data = {
       page: datatableState.pagination.page,
       per_page: datatableState.pagination.per_page,
-    }, (response) => {
+    };
+
+    const success = (response) => {
       const columns = [
         {
           title: '内容',
@@ -80,7 +82,7 @@ export default $.extend({}, actionsAbstract, {
               default:
                 break;
             }
-          }
+          },
         },
         {
           title: '举报人数',
@@ -116,20 +118,48 @@ export default $.extend({}, actionsAbstract, {
       response.batchActions = batchActions;
       response.onRowClick = global_actions.lazyComponents.reportersDialog.open;
       datatableActions.loadEnd(response);
-    });
+    };
+
+    Report.getList(data, success);
   },
 
   /**
    * 删除一个举报
    */
-  deleteOne: report => (state, actions) => {
+  deleteOne: ({ reportable_type, reportable_id }) => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
+      Report.deleteOne(reportable_type, reportable_id, actions.deleteSuccess);
+    };
 
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('确认已处理完该举报？', confirm , false, options);
   },
 
   /**
    * 批量删除举报
    */
   batchDelete: reports => (state, actions) => {
+    const confirm = () => {
+      $.loadStart();
 
+      const targets = [];
+      reports.map(({ reportable_type, reportable_id }) => {
+        targets.push(`${reportable_type}:${reportable_id}`);
+      });
+
+      Report.deleteMultiple(targets.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm(`确认已处理完这 ${reports.length} 个举报？`, confirm, false, options);
   },
 });
