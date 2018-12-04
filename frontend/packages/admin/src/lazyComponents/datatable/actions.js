@@ -14,13 +14,6 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: () => (state, actions) => {
-    if (!state.pagination.per_page) {
-      const per_page = window.localStorage.getItem('admin_per_page');
-
-      actions.pagination.setState({
-        per_page: per_page ? parseInt(per_page, 10) : 10,
-      });
-    }
   },
 
   /**

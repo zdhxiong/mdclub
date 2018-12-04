@@ -1,5 +1,6 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
+import { JQ as $ } from 'mdui';
 import timeHelper from '../../helper/time';
 import rawHtml from '../../helper/rawHtml';
 import './index.less';
@@ -14,7 +15,13 @@ const Spacer = () => (
 const PerPage = ({ state, onChange }) => (
   <div class="per-page">
     <span class="label mdui-typo-caption">每页行数：</span>
-    <select class="mdui-select" onchange={onChange} disabled={state.loading}>
+    <select
+      mdui-select
+      class="mdui-select"
+      disabled={state.loading}
+      onchange={onChange}
+      oncreate={element => $(element).mutation()}
+    >
       <option value="10" selected={state.pagination.per_page === 10}>10</option>
       <option value="25" selected={state.pagination.per_page === 25}>25</option>
       <option value="50" selected={state.pagination.per_page === 50}>50</option>

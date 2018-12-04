@@ -137,7 +137,7 @@ export default $.extend({}, actionsAbstract, {
       cancelText: '取消',
     };
 
-    mdui.confirm('确认已处理完该举报？', confirm , false, options);
+    mdui.confirm('确认已处理完该举报？', confirm, false, options);
   },
 
   /**
