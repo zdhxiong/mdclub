@@ -1,5 +1,5 @@
 import { JQ as $ } from 'mdui';
-import actionsAbstract from '../../abstracts/lazyComponentActions';
+import actionsAbstract from '../../abstracts/actions/lazyComponent';
 
 const $body = $('body');
 

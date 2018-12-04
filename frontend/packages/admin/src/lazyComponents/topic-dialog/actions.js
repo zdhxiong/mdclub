@@ -1,6 +1,6 @@
 import mdui, { JQ as $ } from 'mdui';
 import { Topic } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/lazyComponentActions';
+import actionsAbstract from '../../abstracts/actions/lazyComponent';
 
 let Dialog;
 
@@ -45,9 +45,42 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
+   * 删除该话题
+   */
+  delete: () => {
+
+  },
+
+  /**
+   * 恢复该话题
+   */
+  restore: () => {
+
+  },
+
+  /**
+   * 到编辑界面
+   */
+  toEdit: () => {
+
+  },
+
+  /**
    * header 元素创建后，绑定滚动事件，使封面随着滚动条滚动
    */
   headerInit: (element) => {
+    const $header = $(element);
+    const $dialog = $header.parents('.mc-topic-dialog');
+    const headerElem = $header[0];
+    const dialogElem = $dialog[0];
 
+    $dialog.on('scroll', () => {
+      window.requestAnimationFrame(() => {
+        headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
+      });
+    });
+
+    // 向下滚动一段距离
+    dialogElem.scrollTo(0, $dialog.width() * 0.56 * 0.58);
   },
 });

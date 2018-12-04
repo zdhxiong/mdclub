@@ -1,6 +1,6 @@
 import mdui, { JQ as $ } from 'mdui';
 import { Report } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/lazyComponentActions';
+import actionsAbstract from '../../abstracts/actions/lazyComponent';
 
 let Dialog; // 对话框实例
 let $dialog;

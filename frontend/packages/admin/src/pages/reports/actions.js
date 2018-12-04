@@ -1,7 +1,7 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
 import { Report } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/pageActions';
+import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
