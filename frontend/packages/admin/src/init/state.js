@@ -8,7 +8,11 @@ import Options from '../pages/options/state';
 import Questions from '../pages/questions/state';
 import Reports from '../pages/reports/state';
 import Topics from '../pages/topics/state';
-import Trash from '../pages/trash/state';
+import TrashAnswers from '../pages/trash/answers/state';
+import TrashArticles from '../pages/trash/articles/state';
+import TrashComments from '../pages/trash/comments/state';
+import TrashQuestions from '../pages/trash/questions/state';
+import TrashTopics from '../pages/trash/topics/state';
 import Users from '../pages/users/state';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/state';
@@ -28,7 +32,11 @@ export default {
   questions: Questions,
   reports: Reports,
   topics: Topics,
-  trash: Trash,
+  trash_answers: TrashAnswers,
+  trash_articles: TrashArticles,
+  trash_comments: TrashComments,
+  trash_questions: TrashQuestions,
+  trash_topics: TrashTopics,
   users: Users,
 
   lazyComponents: {

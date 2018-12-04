@@ -3,9 +3,9 @@
 .mc-user-dialog,
 .mc-topic-dialog {
   width: 85%;
-  max-width: 620px;
+  max-width: 800px;
   height: 94%;
-  max-height: 720px;
+  max-height: 94% !important;
   background-color: #f9f9f9;
   overflow: auto;
 
@@ -60,6 +60,7 @@
   }
 
   .body {
+    position: relative;
     padding: 40px 38px 30px 40px;
     box-sizing: border-box;
 
@@ -166,6 +167,25 @@
         text-align: center;
         margin-top: 4px;
         line-height: 22px;
+      }
+    }
+
+    .actions {
+      text-align: right;
+      position: absolute;
+      right: 30px;
+      top: -28px;
+
+      .mdui-fab {
+        margin-left: 24px;
+      }
+
+      @media (max-width: @screen-xs-max) {
+        right: 14px;
+
+        .mdui-fab {
+          margin-left: 16px;
+        }
       }
     }
   }

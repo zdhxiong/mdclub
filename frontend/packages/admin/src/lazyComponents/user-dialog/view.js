@@ -42,11 +42,25 @@ export default () => (global_state, global_actions) => {
       {!state.loading && state.user ?
       <div class="body">
         <div class="mdui-row">
+          <div class="actions">
+            <button class="mdui-fab mdui-color-blue-accent" mdui-tooltip="{content: '编辑账户信息'}">
+              <i class="mdui-icon material-icons">edit</i>
+            </button>
+            <button class="mdui-fab mdui-color-pink-accent" mdui-tooltip="{content: '禁用账户'}">
+              <i class="mdui-icon material-icons">lock</i>
+            </button>
+          </div>
+        </div>
+        <div class="mdui-row">
           <div class="label mdui-text-color-theme-text">个人信息</div>
           <div class="card mdui-card">
             <TextItem subheader="账号ID" content={state.user.user_id}/>
             <TextItem subheader="邮箱" content={state.user.email}/>
             <TextItem subheader="一句话介绍" content={state.user.headline || '未填写'}/>
+          </div>
+        </div>
+        <div class="mdui-row">
+          <div class="card mdui-card">
             <TextItem subheader="企业名称" content={state.user.company || '未填写'}/>
             <TextItem subheader="居住地" content={state.user.location || '未填写'}/>
             <TextItem subheader="个人主页" content={state.user.blog || '未填写'}/>
@@ -86,8 +100,12 @@ export default () => (global_state, global_actions) => {
             />
             <TextItem
               subheader="注册IP"
-              content={state.user.create_ip}
+              content={`${state.user.create_ip} (中国)`}
             />
+          </div>
+        </div>
+        <div class="mdui-row">
+          <div class="card mdui-card">
             <TextItem
               subheader="最近登录时间"
               content={timeHelper.friendly(state.user.last_login_time)}
@@ -95,12 +113,7 @@ export default () => (global_state, global_actions) => {
             />
             <TextItem
               subheader="最近登录IP"
-              content={state.user.last_login_ip}
-            />
-            <TextItem
-              subheader="账号信息更新时间"
-              content={timeHelper.friendly(state.user.update_time)}
-              title={timeHelper.format(state.user.update_time)}
+              content={`${state.user.last_login_ip} (中国)`}
             />
           </div>
         </div>
