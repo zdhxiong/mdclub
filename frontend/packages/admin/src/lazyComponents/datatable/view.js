@@ -173,6 +173,11 @@ export default ({ loadData }) => (global_state, global_actions) => {
         {state.data.map(row => (
           <tr
             key={row[state.primaryKey]}
+            class={cc([
+              {
+                'mdui-table-row-selected': state.isCheckedRows[row[state.primaryKey]],
+              }
+            ])}
             onclick={(e) => {
               if (typeof state.onRowClick !== 'function') {
                 return;
