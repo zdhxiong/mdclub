@@ -3212,6 +3212,51 @@ paths:
 
   /images:
 
+    get:
+      tags:
+        - Image
+      summary: 🔐获取图片列表
+      description: |
+        **仅管理员可调用该接口**
+      parameters:
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
+        - name: hash
+          in: query
+          type: string
+          description: 图片hash
+        - name: item_type
+          in: query
+          type: string
+          description: 图片关联对象的类型
+          enum:
+            - question
+            - answer
+            - article
+        - name: item_id
+          in: query
+          type: string
+          description: 图片关联对象的ID
+        - name: user_id
+          in: query
+          type: integer
+          description: 上传者ID
+      responses:
+        200:
+          description: 图片列表
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Images'
+              pagination:
+                $ref: '#/definitions/Pagination'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
     post:
       tags:
         - Image
@@ -3232,6 +3277,115 @@ paths:
                 type: integer
               data:
                 $ref: '#/definitions/Image'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Image
+      summary: 🔐批量删除图片
+      description: |
+        **仅管理员可调用该接口**
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+      parameters:
+        - name: hash
+          in: query
+          type: string
+          description: 用“,”分隔的图片hash，最多可提供 40 个 hash（IE 的 query 参数最长为 2k，为了不超过这个数值，限制最多可以提交 40 个 hash）
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /images/{hash}:
+
+    get:
+      tags:
+        - Image
+      summary: 获取指定图片信息
+      parameters:
+        - name: hash
+          in: path
+          type: string
+          description: 图片hash
+      responses:
+        200:
+          description: 图片详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Image'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    patch:
+      tags:
+        - Image
+      summary: 🔐更新指定图片信息
+      description: |
+        **仅管理员可调用该接口**
+      parameters:
+        - name: hash
+          in: path
+          type: string
+          description: 图片hash
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+                description: 图片文件名
+      responses:
+        200:
+          description: 图片详情
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Image'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Image
+      summary: 🔐删除指定图片
+      description: |
+        **仅管理员可调用该接口**
+      parameters:
+        - name: hash
+          in: path
+          type: string
+          description: 图片hash
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
         default:
           $ref: '#/responses/Error'
       security:
@@ -4379,6 +4533,9 @@ definitions:
       item_id:
         type: integer
         description: 图片管理对象ID
+      user_id:
+        type: integer
+        description: 图片上传者ID
       urls:
         type: object
         properties:
@@ -4391,6 +4548,14 @@ definitions:
           t:
             type: string
             description: 固定宽高的缩略图地址
+      relationship:
+        type: object
+        $ref: '#/definitions/ImageRelationship'
+
+  Images:
+    type: array
+    items:
+      $ref: '#/definitions/Image'
 
   Email:
     type: object
@@ -4495,6 +4660,18 @@ definitions:
         $ref: '#/definitions/CommentInRelationship'
       user:
         $ref: '#/definitions/UserInRelationship'
+
+  ImageRelationship:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/UserInRelationship'
+      question:
+        $ref: '#/definitions/QuestionInRelationship'
+      article:
+        $ref: '#/definitions/ArticleInRelationship'
+      answer:
+        $ref: '#/definitions/AnswerInRelationship'
 
   UserInRelationship:
     type: object

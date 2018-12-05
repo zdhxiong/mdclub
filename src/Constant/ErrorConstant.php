@@ -80,4 +80,9 @@ class ErrorConstant
      */
     const REPORT_NOT_FOUND                = [600001, '指定举报不存在'];
     const REPORT_ALREADY_SUBMITTED        = [600002, '不能重复举报'];
+
+    /**
+     * 图片相关错误
+     */
+    const IMAGE_NOT_FOUND                 = [700001, '指定图片不存在'];
 }

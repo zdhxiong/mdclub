@@ -33,16 +33,59 @@ class ImageService extends ServiceAbstracts
     const THUMB_HEIGHT = 88;
 
     /**
-     * 根据图片 hash 获取图片信息
+     * 获取允许搜索的字段
      *
-     * @param string $hash
      * @return array
      */
-    public function getInfo(string $hash): array
+    public function getAllowFilterFields(): array
+    {
+        return ['hash', 'item_type', 'item_id', 'user_id'];
+    }
+
+    /**
+     * 获取图片列表
+     *
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getList(bool $withRelationship = false): array
+    {
+        $list = $this->imageModel
+            ->where($this->getWhere())
+            ->order(['create_time' => 'DESC'])
+            ->paginate();
+
+        foreach ($list['data'] as &$item) {
+            $item = $this->handle($item);
+        }
+
+        if ($withRelationship) {
+            $list['data'] = $this->addRelationship($list['data']);
+        }
+
+        return $list;
+    }
+
+    /**
+     * 根据图片 hash 获取图片信息
+     *
+     * @param  string $hash
+     * @param  bool   $withRelationship
+     * @return array
+     */
+    public function getInfo(string $hash, bool $withRelationship = false): array
     {
         $info = $this->imageModel->get($hash);
-        $urls = $this->getUrls($hash, $info['create_time']);
-        $info['urls'] = $urls;
+
+        if (!$info) {
+            throw new ApiException(ErrorConstant::IMAGE_NOT_FOUND);
+        }
+
+        $info = $this->handle($info);
+
+        if ($withRelationship) {
+            $info = $this->addRelationship($info);
+        }
 
         return $info;
     }
@@ -56,7 +99,7 @@ class ImageService extends ServiceAbstracts
      */
     public function updateInfo(string $hash, array $data): bool
     {
-        $canUpdateFields = ['item_type', 'item_id'];
+        $canUpdateFields = ['filename', 'item_type', 'item_id'];
         $data = ArrayHelper::filter($data, $canUpdateFields);
 
         if (!$data) {
@@ -223,10 +266,11 @@ class ImageService extends ServiceAbstracts
     /**
      * 上传图片
      *
-     * @param  UploadedFileInterface $file UploadedFile对象
-     * @return string                      文件名（不含路径）
+     * @param  int                   $userId 用户ID
+     * @param  UploadedFileInterface $file   UploadedFile对象
+     * @return string                        文件名（不含路径）
      */
-    public function upload(UploadedFileInterface $file = null): string
+    public function upload(int $userId, UploadedFileInterface $file = null): string
     {
         $uploadErr = '';
 
@@ -301,6 +345,7 @@ class ImageService extends ServiceAbstracts
             'filename' => $file->getClientFilename(),
             'width'    => $imageWidth,
             'height'   => $imageHeight,
+            'user_id'  => $userId,
         ]);
 
         return $hash;
@@ -321,5 +366,115 @@ class ImageService extends ServiceAbstracts
         }
 
         return false;
+    }
+
+    /**
+     * 删除图片
+     *
+     * @param string $hash
+     */
+    public function delete(string $hash): void
+    {
+        $image = $this->imageModel->field(['hash', 'create_time'])->get($hash);
+
+        if ($image) {
+            $this->imageModel->delete($hash);
+
+            foreach (['', 'r', 't'] as $size) {
+                $path = $this->getFullFilename($hash, $image['create_time'], $size);
+                $this->filesystem->delete($path);
+            }
+        }
+    }
+
+    /**
+     * 批量删除图片
+     *
+     * @param array $hashs
+     */
+    public function batchDelete(array $hashs): void
+    {
+        $images = $this->imageModel->field(['hash', 'create_time'])->select($hashs);
+
+        if (!$images) {
+            return;
+        }
+
+        $this->imageModel->delete(array_column($images, 'hash'));
+
+        foreach ($images as $image) {
+            foreach (['', 'r', 't'] as $size) {
+                $path = $this->getFullFilename($image['hash'], $image['create_time'], $size);
+                $this->filesystem->delete($path);
+            }
+        }
+    }
+
+    /**
+     * 处理图片信息
+     *
+     * @param array $image
+     * @return array
+     */
+    public function handle(array $image): array
+    {
+        $image['urls'] = $this->getUrls($image['hash'], $image['create_time']);
+
+        return $image;
+    }
+
+    /**
+     * 为图片信息添加 relationship 字段
+     * {
+     *     user: {},
+     *     question: {},
+     *     answer: {},
+     *     article: {}
+     * }
+     *
+     * @param array $images
+     * @return array
+     */
+    public function addRelationship(array $images): array
+    {
+        if (!$images) {
+            return $images;
+        }
+
+        if (!$isArray = is_array(current($images))) {
+            $images = [$images];
+        }
+
+        $targetIds = []; // 键名为对象类型，键值为对象的ID数组
+        $targets = []; // 键名为对象类型，键值为对象ID和对象信息的多维数组
+        $targetTypes = ['user', 'question', 'answer', 'article'];
+
+        foreach ($images as $image) {
+            $targetIds['user'][] = $image['user_id'];
+
+            if ($image['item_type']) {
+                $targetIds[$image['item_type']][] = $image['item_id'];
+            }
+        }
+
+        foreach ($targetTypes as $type) {
+            if (isset($targetIds[$type])) {
+                $targetIds[$type] = array_unique($targetIds[$type]);
+                $targets[$type] = $this->{$type . 'Service'}->getInRelationship($targetIds[$type]);
+            }
+        }
+
+        foreach ($images as &$image) {
+            $image['relationship']['user'] = $targets['user'][$image['user_id']];
+            if ($image['item_type']) {
+                $image['relationship'][$image['item_type']] = $targets[$image['item_type']][$image['item_id']];
+            }
+        }
+
+        if ($isArray) {
+            return $images;
+        }
+
+        return $images[0];
     }
 }

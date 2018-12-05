@@ -28,6 +28,7 @@ class ImageModel extends ModelAbstracts
         'create_time',
         'item_type',
         'item_id',
+        'user_id',
     ];
 
     protected function beforeInsert(array $data): array

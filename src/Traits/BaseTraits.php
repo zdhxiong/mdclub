@@ -8,8 +8,6 @@ use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
 /**
- * has 和 hasOrFail 方法
- *
  * Trait hasTraits
  * @package App\Traits
  */

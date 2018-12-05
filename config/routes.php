@@ -153,7 +153,13 @@ $app->group('/api', function () {
     $this->post(  '/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':create');
     $this->delete('/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':delete');
 
+    $this->get(   '/images',                                                    ImageController::class . ':getList');
     $this->post(  '/images',                                                    ImageController::class . ':upload');
+    $this->delete('/images',                                                    ImageController::class . ':batchDelete');
+    $this->get(   '/images/{hash}',                                             ImageController::class . ':get');
+    $this->patch( '/images/{hash}',                                             ImageController::class . ':update');
+    $this->delete('/images/{hash}',                                             ImageController::class . ':delete');
+
     $this->post(  '/emails',                                                    EmailController::class . ':send');
     $this->post(  '/captchas',                                                  CaptchaController::class . ':create');
 
