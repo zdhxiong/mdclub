@@ -136,8 +136,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
           </th>
           {state.checkedCount ?
             <th colspan={state.columns.length}>
-              <span>已选择 {state.checkedCount} 个项目</span>
-              <span class="mdui-float-right">
+              <span>
               {state.batchActions.map(action => (
                 <ActionBtn
                   label={action.label}
@@ -154,6 +153,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
                 />
               ))}
               </span>
+              <span class="mdui-float-right">已选择 {state.checkedCount} 个项目</span>
             </th> :
             state.columns.map(column => (
               <th class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{column.title}</th>
