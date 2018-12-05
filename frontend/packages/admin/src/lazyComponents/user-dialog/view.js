@@ -1,14 +1,23 @@
 import { h } from 'hyperapp';
 import { location } from '@hyperapp/router';
 import timeHelper from '../../helper/time';
+import rawHtml from '../../helper/rawHtml';
 import './index.less';
 
 import Loading from '../../components/loading';
 
-const TextItem = ({ subheader, content, title }) => (
+const TextItem = ({ subheader, title, content, type = 'string' }) => (
   <div class="text-item">
     <div class="text-subheader mdui-text-color-theme-secondary">{subheader}</div>
-    <div class="text-content" title={title}>{content}</div>
+    {type === 'html' ?
+      <div
+        class="text-content"
+        title={title}
+        oncreate={rawHtml(content)}
+        onupdate={rawHtml(content)}
+      ></div> :
+      <div class="text-content" title={title}>{content}</div>
+    }
   </div>
 );
 
@@ -100,7 +109,8 @@ export default () => (global_state, global_actions) => {
             />
             <TextItem
               subheader="注册IP"
-              content={`${state.user.create_ip} (中国)`}
+              content={`${state.user.create_ip} <small class="mdui-text-color-theme-secondary">( ${state.user.create_location} )</small>`}
+              type="html"
             />
           </div>
         </div>
@@ -113,7 +123,8 @@ export default () => (global_state, global_actions) => {
             />
             <TextItem
               subheader="最近登录IP"
-              content={`${state.user.last_login_ip} (中国)`}
+              content={`${state.user.last_login_ip} <small class="mdui-text-color-theme-secondary">( ${state.user.last_login_location} )</small>`}
+              type="html"
             />
           </div>
         </div>
