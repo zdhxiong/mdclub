@@ -39,7 +39,8 @@
         "algolia/algoliasearch-client-php": "^1.27",
         "sybio/image-workshop": "^2.1",
         "overtrue/flysystem-qiniu": "^1.0",
-        "jellybool/flysystem-upyun": "^1.0"
+        "jellybool/flysystem-upyun": "^1.0",
+        "zhuzhichao/ip-location-zh": "^2.4"
     },
     "repositories": [
         {

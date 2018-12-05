@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
+use Zhuzhichao\IpLocationZh\Ip;
+
 /**
  * IP 相关方法
  *
@@ -17,7 +19,7 @@ class IpHelper
      *
      * @return string
      */
-    public static function get(): string
+    public static function getIp(): string
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -27,6 +29,28 @@ class IpHelper
             return $_SERVER['REMOTE_ADDR'];
         } else {
             return '0.0.0.0';
+        }
+    }
+
+    /**
+     * 获取 IP 对应的地区
+     *
+     * @param  string $ip 若未传入 ip 参数，则自动获取当前IP
+     * @return string
+     */
+    public static function getLocation($ip = null): string
+    {
+        if (!$ip) {
+            $ip = self::getIp();
+        }
+
+        $arr = Ip::find($ip);
+
+        if (is_array($arr)) {
+            array_pop($arr);
+            return trim(implode(' ', $arr));
+        } else {
+            return '';
         }
     }
 }

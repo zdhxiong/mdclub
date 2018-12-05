@@ -3937,12 +3937,18 @@ definitions:
       create_ip:
         type: string
         description: 🔐注册 IP
+      create_location:
+        type: string
+        description: 🔐注册地
       last_login_time:
         type: integer
         description: 🔐最后登陆时间
       last_login_ip:
         type: string
         description: 🔐最后登陆 IP
+      last_login_location:
+        type: string
+        description: 🔐最后登录地
       follower_count:
         type: integer
         description: 关注者数量

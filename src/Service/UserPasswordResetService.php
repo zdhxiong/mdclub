@@ -26,7 +26,7 @@ class UserPasswordResetService extends ServiceAbstracts
     public function sendEmail(string $email): bool
     {
         $needCaptcha = $this->captchaService->isNextTimeNeed(
-            IpHelper::get(),
+            IpHelper::getIp(),
             'send_password_reset_email',
             3,
             3600 * 24

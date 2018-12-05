@@ -30,7 +30,7 @@ class UserLoginService extends ServiceAbstracts
     {
         // 频率限制，若同一 ip 24小时内调用超过 3 次，则需要输入验证码
         $needCaptcha = $this->captchaService->isNextTimeNeed(
-            IpHelper::get(),
+            IpHelper::getIp(),
             'create_token',
             3,
             3600*24
@@ -50,6 +50,14 @@ class UserLoginService extends ServiceAbstracts
             'expire_time' => $requestTime + $this->tokenService->lifeTime,
             'device' => $device,
         ]);
+
+        $this->userModel
+            ->where(['user_id' => $userInfo['user_id']])
+            ->update([
+                'last_login_time' => $requestTime,
+                'last_login_ip' => IpHelper::getIp(),
+                'last_login_location' => IpHelper::getLocation(),
+            ]);
 
         return $userInfo;
     }
