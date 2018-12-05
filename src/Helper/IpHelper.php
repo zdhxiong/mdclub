@@ -48,7 +48,7 @@ class IpHelper
 
         if (is_array($arr)) {
             array_pop($arr);
-            return trim(implode(' ', $arr));
+            return trim(implode(' ', array_unique($arr)));
         } else {
             return '';
         }
