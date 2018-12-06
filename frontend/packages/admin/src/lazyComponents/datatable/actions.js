@@ -2,6 +2,7 @@ import mdui, { JQ as $ } from 'mdui';
 import actionsAbstract from '../../abstracts/actions/lazyComponent';
 
 let global_actions;
+let $element;
 
 export default $.extend({}, actionsAbstract, {
   /**
@@ -9,6 +10,16 @@ export default $.extend({}, actionsAbstract, {
    */
   init: props => (state, actions) => {
     global_actions = props.global_actions;
+    $element = $(props.element);
+
+    // 表格滚动时，表头阴影变化
+    $element.find('tbody').on('scroll', (e) => {
+      if (e.target.scrollTop) {
+        $element.addClass('is-top');
+      } else {
+        $element.removeClass('is-top');
+      }
+    });
   },
 
   /**

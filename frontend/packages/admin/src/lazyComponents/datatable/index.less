@@ -6,6 +6,15 @@
     overflow: visible;
   }
 
+  // 表头阴影
+  thead {
+    transition: box-shadow .15s cubic-bezier(0.4,0.0,0.2,1);
+  }
+
+  &.is-top thead {
+    box-shadow: 0 3px 2px -2px rgba(0,0,0,.1);
+  }
+
   // 使表格 tbody 部分可以纵向滚动
   tbody {
     display: block;

@@ -57,7 +57,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
   return () => (
     <div
       class="mc-datatable"
-      oncreate={() => actions.init({ global_actions })}
+      oncreate={element => actions.init({ element, global_actions })}
       ondestroy={actions.destroy}
     >
       <table class="mdui-table mdui-table-hoverable">
