@@ -1,4 +1,5 @@
 import {
+  get,
   post,
   patch,
   del,
