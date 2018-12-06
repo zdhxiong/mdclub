@@ -1,6 +1,3 @@
-let per_page = window.localStorage.getItem('admin_per_page');
-per_page = per_page ? parseInt(per_page, 10) : 10;
-
 export default {
   /**
    * 列定义
@@ -47,13 +44,5 @@ export default {
 
   data: [], // 接口返回的原始数据
   order: '', // 排序方式
-  pagination: {
-    page: 1,
-    per_page, // 每页行数
-    previous: null,
-    next: null,
-    total: 0,
-    pages: 0,
-  },
   loading: false, // 是否正在加载
 };

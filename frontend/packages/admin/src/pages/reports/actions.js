@@ -49,13 +49,14 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
+    const paginationActions = global_actions.lazyComponents.pagination;
     datatableActions.loadStart();
 
-    const datatableState = datatableActions.getState();
+    const paginationState = paginationActions.getState();
 
     const data = {
-      page: datatableState.pagination.page,
-      per_page: datatableState.pagination.per_page,
+      page: paginationState.page,
+      per_page: paginationState.per_page,
     };
 
     const success = (response) => {

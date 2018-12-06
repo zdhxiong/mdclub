@@ -16,6 +16,7 @@ import TrashTopics from '../pages/trash/topics/actions';
 import Users from '../pages/users/actions';
 
 import AppbarLazyComponent from '../lazyComponents/appbar/actions';
+import PaginationLazyComponent from '../lazyComponents/pagination/actions';
 import DatatableLazyComponent from '../lazyComponents/datatable/actions';
 import ReportersDialogLazyComponent from '../lazyComponents/reporters-dialog/actions';
 import UserDialogLazyComponent from '../lazyComponents/user-dialog/actions';
@@ -45,6 +46,7 @@ export default {
 
   lazyComponents: {
     appbar: AppbarLazyComponent,
+    pagination: PaginationLazyComponent,
     datatable: DatatableLazyComponent,
     reportersDialog: ReportersDialogLazyComponent,
     userDialog: UserDialogLazyComponent,

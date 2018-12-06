@@ -1,73 +1,12 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
-import { JQ as $ } from 'mdui';
 import timeHelper from '../../helper/time';
 import rawHtml from '../../helper/rawHtml';
 import './index.less';
 
 import Loading from '../../components/loading';
 import Empty from '../../components/empty';
-
-const Spacer = () => (
-  <div class="mdui-toolbar-spacer"></div>
-);
-
-const PerPage = ({ state, onChange }) => (
-  <div class="per-page">
-    <span class="label mdui-typo-caption">每页行数：</span>
-    <select
-      mdui-select
-      class="mdui-select"
-      disabled={state.loading}
-      onchange={onChange}
-      oncreate={element => $(element).mutation()}
-    >
-      <option value="10" selected={state.pagination.per_page === 10}>10</option>
-      <option value="25" selected={state.pagination.per_page === 25}>25</option>
-      <option value="50" selected={state.pagination.per_page === 50}>50</option>
-      <option value="100" selected={state.pagination.per_page === 100}>100</option>
-    </select>
-  </div>
-);
-
-const Page = ({ state, onSubmit }) => (
-  <div class="page mdui-typo-caption">
-    第
-    <form class="form" onsubmit={onSubmit}>
-      <input
-        class="input mdui-textfield-input"
-        type="text"
-        name="page"
-        autoComplete="off"
-        disabled={state.loading}
-        value={state.pagination.page}
-      />
-    </form>
-    页，共 {state.pagination.pages} 页
-  </div>
-);
-
-const PrevPage = ({ state, onClick }) => (
-  <button
-    class="prev mdui-btn mdui-btn-icon"
-    title="上一页"
-    disabled={!state.pagination.previous || state.loading}
-    onclick={onClick}
-  >
-    <i class="mdui-icon material-icons">chevron_left</i>
-  </button>
-);
-
-const NextPage = ({ state, onClick }) => (
-  <button
-    class="next mdui-btn mdui-btn-icon"
-    title="下一页"
-    disabled={!state.pagination.next || state.loading}
-    onclick={onClick}
-  >
-    <i class="mdui-icon material-icons">chevron_right</i>
-  </button>
-);
+import Pagination from '../../lazyComponents/pagination/view';
 
 const CheckAll = ({ isChecked, onChange }) => (
   <label class="mdui-checkbox">
@@ -118,7 +57,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
   return () => (
     <div
       class="mc-datatable"
-      oncreate={actions.init}
+      oncreate={() => actions.init({ global_actions })}
       ondestroy={actions.destroy}
     >
       <table class="mdui-table mdui-table-hoverable">
@@ -176,7 +115,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
             class={cc([
               {
                 'mdui-table-row-selected': state.isCheckedRows[row[state.primaryKey]],
-              }
+              },
             ])}
             onclick={(e) => {
               if (typeof state.onRowClick !== 'function') {
@@ -232,25 +171,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
         ))}
         </tbody>
       </table>
-      <div class="pagination mdui-toolbar">
-        <Spacer/>
-        <PerPage
-          state={state}
-          onChange={ e => actions.onPerPageChange({ e, loadData }) }
-        />
-        <Page
-          state={state}
-          onSubmit={ e => actions.onPageChange({ e, loadData }) }
-        />
-        <PrevPage
-          state={state}
-          onClick={ () => actions.toPrevPage(loadData) }
-        />
-        <NextPage
-          state={state}
-          onClick={ () => actions.toNextPage(loadData) }
-        />
-      </div>
+      <Pagination onChange={loadData} loading={state.loading}/>
     </div>
   );
 };
