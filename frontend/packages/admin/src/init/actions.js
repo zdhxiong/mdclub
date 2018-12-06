@@ -15,12 +15,14 @@ import TrashQuestions from '../pages/trash/questions/actions';
 import TrashTopics from '../pages/trash/topics/actions';
 import Users from '../pages/users/actions';
 
-import AppbarLazyComponent from '../lazyComponents/appbar/actions';
-import PaginationLazyComponent from '../lazyComponents/pagination/actions';
-import DatatableLazyComponent from '../lazyComponents/datatable/actions';
-import ReportersDialogLazyComponent from '../lazyComponents/reporters-dialog/actions';
-import UserDialogLazyComponent from '../lazyComponents/user-dialog/actions';
-import TopicDialogLazyComponent from '../lazyComponents/topic-dialog/actions';
+import AppBar from '../lazyComponents/appbar/actions';
+import SearchBar from '../lazyComponents/searchbar/actions';
+import Pagination from '../lazyComponents/pagination/actions';
+import Datatable from '../lazyComponents/datatable/actions';
+import ImageList from '../lazyComponents/imagelist/actions';
+import ReportersDialog from '../lazyComponents/reporters-dialog/actions';
+import UserDialog from '../lazyComponents/user-dialog/actions';
+import TopicDialog from '../lazyComponents/topic-dialog/actions';
 
 export default {
   location: location.actions,
@@ -45,11 +47,13 @@ export default {
   users: Users,
 
   lazyComponents: {
-    appbar: AppbarLazyComponent,
-    pagination: PaginationLazyComponent,
-    datatable: DatatableLazyComponent,
-    reportersDialog: ReportersDialogLazyComponent,
-    userDialog: UserDialogLazyComponent,
-    topicDialog: TopicDialogLazyComponent,
+    appBar: AppBar,
+    searchBar: SearchBar,
+    pagination: Pagination,
+    datatable: Datatable,
+    imageList: ImageList,
+    reportersDialog: ReportersDialog,
+    userDialog: UserDialog,
+    topicDialog: TopicDialog,
   },
 };

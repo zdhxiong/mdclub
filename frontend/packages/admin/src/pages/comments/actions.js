@@ -79,7 +79,7 @@ export default $.extend({}, actionsAbstract, {
       const batchActions = [
         {
           label: '批量删除',
-          icon: 'delete_sweep',
+          icon: 'delete',
           onClick: actions.batchDelete,
         },
       ];

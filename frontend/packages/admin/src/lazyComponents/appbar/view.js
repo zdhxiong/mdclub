@@ -3,6 +3,8 @@ import { JQ as $ } from 'mdui';
 import { Link } from '@hyperapp/router';
 import './index.less';
 
+import SearchBar from '../../lazyComponents/searchbar/view';
+
 const DrawerBtn = () => (
   <button
     class="mdui-btn mdui-btn-icon mdui-ripple"
@@ -16,10 +18,6 @@ const HomeLink = () => (
   <Link to={$.path('')} class="link mdui-typo-title-opacity">
     <i class="logo mdui-icon material-icons">dashboard</i>控制台
   </Link>
-);
-
-const Spacer = () => (
-  <div class="mdui-toolbar-spacer"></div>
 );
 
 const ThemeBtn = ({ onClick, theme }) => (
@@ -64,8 +62,8 @@ const UserMenu = ({ user }) => (
 );
 
 export default () => (global_state, global_actions) => {
-  const state = global_state.lazyComponents.appbar;
-  const actions = global_actions.lazyComponents.appbar;
+  const state = global_state.lazyComponents.appBar;
+  const actions = global_actions.lazyComponents.appBar;
 
   return () => (
     <div
@@ -75,7 +73,7 @@ export default () => (global_state, global_actions) => {
       <div class="mdui-toolbar">
         <DrawerBtn/>
         <HomeLink/>
-        <Spacer/>
+        <SearchBar/>
         <ThemeBtn
           onClick={actions.toggleTheme}
           theme={state.theme}

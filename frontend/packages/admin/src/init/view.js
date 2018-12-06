@@ -17,16 +17,16 @@ import TrashQuestions from '../pages/trash/questions/view';
 import TrashTopics from '../pages/trash/topics/view';
 import Users from '../pages/users/view';
 
-import AppbarLazyComponent from '../lazyComponents/appbar/view';
-import DrawerComponent from '../components/drawer';
-import ReportersDialogLazyComponent from '../lazyComponents/reporters-dialog/view';
-import UserDialogLazyComponent from '../lazyComponents/user-dialog/view';
-import TopicDialogLazyComponent from '../lazyComponents/topic-dialog/view';
+import AppBar from '../lazyComponents/appbar/view';
+import Drawer from '../components/drawer';
+import ReportersDialog from '../lazyComponents/reporters-dialog/view';
+import UserDialog from '../lazyComponents/user-dialog/view';
+import TopicDialog from '../lazyComponents/topic-dialog/view';
 
 export default (global_state, global_actions) => (
   <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
-    <AppbarLazyComponent/>
-    <DrawerComponent/>
+    <AppBar/>
+    <Drawer/>
     <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>
     <Route path={$.path('/articles')} render={Articles(global_state, global_actions)}/>
     <Route path={$.path('/comments')} render={Comments(global_state, global_actions)}/>
@@ -42,8 +42,8 @@ export default (global_state, global_actions) => (
     <Route path={$.path('/trash/topics')} render={TrashTopics(global_state, global_actions)}/>
     <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
 
-    <ReportersDialogLazyComponent/>
-    <UserDialogLazyComponent/>
-    <TopicDialogLazyComponent/>
+    <ReportersDialog/>
+    <UserDialog/>
+    <TopicDialog/>
   </div>
 );

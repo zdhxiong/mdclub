@@ -1,0 +1,104 @@
+@import "../../helper/mixin";
+
+.mc-searchbar {
+  flex-grow: 1;
+  height: 44px;
+
+  // 平板和桌面
+  @media (min-width: @screen-sm-min) {
+    height: 48px;
+  }
+
+  // 手机横屏
+  @media (orientation: landscape) and (max-width: @screen-xs-max-landscape) {
+    height: 38px;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    max-width: 720px;
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
+    transition: background-color 100ms ease-in;
+
+    i {
+      margin: 0 14px;
+    }
+
+    .placeholder {
+      font-size: 16px;
+      margin-right: auto;
+    }
+  }
+
+  .form {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+    border-radius: 0 0 4px 4px;
+    margin-top: -1px;
+    padding-left: 24px;
+    padding-right: 24px;
+    transform: scaleY(0);
+    overflow: visible;
+
+    .mdui-textfield-label {
+      height: 36px;
+      line-height: 36px;
+      transform: inherit;
+      width: 96px;
+      float: left;
+      font-size: 14px;
+    }
+
+    .mdui-textfield-input {
+      width: ~'calc(100% - 96px)';
+    }
+
+    .mdui-select {
+      width: 100%;
+    }
+  }
+
+  .mdui-menu-open {
+    transform: scaleY(1);
+  }
+
+  &.is-open {
+    .bar {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background-color: transparent;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+
+.mdui-theme-layout-dark {
+  .mc-searchbar {
+    .bar {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .form {
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 1px 1px rgba(255, 255, 255, 0.24);
+    }
+
+    &.is-open {
+      .bar {
+        border-color: rgba(255, 255, 255, 0.08);
+        background-color: #424242;
+        box-shadow: 0 1px 1px rgba(255, 255, 255, 0.24);
+      }
+    }
+  }
+}
