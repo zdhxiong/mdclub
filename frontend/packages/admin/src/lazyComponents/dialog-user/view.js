@@ -33,7 +33,7 @@ export default () => (global_state, global_actions) => {
   const state = global_state.lazyComponents.userDialog;
 
   return (
-    <div class="mdui-dialog mc-user-dialog">
+    <div class="mdui-dialog mc-dialog-user">
       {!state.loading && state.user ?
       <div
         class="header"

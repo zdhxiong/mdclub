@@ -13,6 +13,28 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     actions.routeChange();
     actions.loadData();
+
+    global_actions.lazyComponents.searchBar.setState({
+      fields: [
+        {
+          name: 'user_id',
+          label: '用户ID',
+        },
+        {
+          name: 'username',
+          label: '用户名',
+        },
+        {
+          name: 'email',
+          label: '邮箱',
+        },
+      ],
+      data: {
+        user_id: '',
+        username: '',
+        email: '',
+      },
+    });
   },
 
   /**

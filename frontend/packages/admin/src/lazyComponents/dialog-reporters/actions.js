@@ -22,7 +22,7 @@ export default $.extend({}, actionsAbstract, {
     const [reportable_type, reportable_id] = key.split(':');
 
     if (!Dialog) {
-      Dialog = new mdui.Dialog('.mc-reporters-dialog');
+      Dialog = new mdui.Dialog('.mc-dialog-reporters');
     }
 
     actions.setState({

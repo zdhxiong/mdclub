@@ -1,20 +1,20 @@
 import mdui, { JQ as $ } from 'mdui';
-import { Topic } from 'mdclub-sdk-js';
+import { User } from 'mdclub-sdk-js';
 import actionsAbstract from '../../abstracts/actions/lazyComponent';
 
-let Dialog;
+let Dialog; // 对话框实例
 
 export default $.extend({}, actionsAbstract, {
   /**
    * 打开对话框
    */
-  open: topic_id => (state, actions) => {
+  open: user_id => (state, actions) => {
     if (!Dialog) {
-      Dialog = new mdui.Dialog('.mc-topic-dialog');
+      Dialog = new mdui.Dialog('.mc-dialog-user');
 
       Dialog.$dialog.on('closed.mdui.dialog', () => {
         actions.setState({
-          topic: false,
+          user: false,
           loading: false,
         });
       });
@@ -24,7 +24,7 @@ export default $.extend({}, actionsAbstract, {
 
     Dialog.open();
 
-    Topic.getOne(topic_id, (response) => {
+    User.getOne(user_id, (response) => {
       actions.setState({ loading: false });
 
       if (response.code) {
@@ -33,7 +33,7 @@ export default $.extend({}, actionsAbstract, {
         return;
       }
 
-      actions.setState({ topic: response.data });
+      actions.setState({ user: response.data });
     });
   },
 
@@ -45,16 +45,16 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * 删除该话题
+   * 禁用该账号
    */
-  delete: () => {
+  disable: () => {
 
   },
 
   /**
-   * 恢复该话题
+   * 启用该账号
    */
-  restore: () => {
+  enable: () => {
 
   },
 
@@ -70,7 +70,7 @@ export default $.extend({}, actionsAbstract, {
    */
   headerInit: (element) => {
     const $header = $(element);
-    const $dialog = $header.parents('.mc-topic-dialog');
+    const $dialog = $header.parents('.mc-dialog-user');
     const headerElem = $header[0];
     const dialogElem = $dialog[0];
 

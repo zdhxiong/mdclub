@@ -19,9 +19,9 @@ import Users from '../pages/users/view';
 
 import AppBar from '../lazyComponents/appbar/view';
 import Drawer from '../components/drawer';
-import ReportersDialog from '../lazyComponents/reporters-dialog/view';
-import UserDialog from '../lazyComponents/user-dialog/view';
-import TopicDialog from '../lazyComponents/topic-dialog/view';
+import ReportersDialog from '../lazyComponents/dialog-reporters/view';
+import UserDialog from '../lazyComponents/dialog-user/view';
+import TopicDialog from '../lazyComponents/dialog-topic/view';
 
 export default (global_state, global_actions) => (
   <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">

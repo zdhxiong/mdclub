@@ -42,6 +42,40 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     actions.routeChange();
     actions.loadData();
+
+    global_actions.lazyComponents.searchBar.setState({
+      fields: [
+        {
+          name: 'reportable_type',
+          label: '类型',
+          enum: [
+            {
+              name: '文章',
+              value: 'article',
+            },
+            {
+              name: '提问',
+              value: 'question',
+            },
+            {
+              name: '回答',
+              value: 'answer',
+            },
+            {
+              name: '评论',
+              value: 'comment',
+            },
+            {
+              name: '用户',
+              value: 'user',
+            },
+          ],
+        },
+      ],
+      data: {
+        reportable_type: '',
+      },
+    });
   },
 
   /**

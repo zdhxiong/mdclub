@@ -13,6 +13,47 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     actions.routeChange();
     actions.loadData();
+
+    global_actions.lazyComponents.searchBar.setState({
+      fields: [
+        {
+          name: 'comment_id',
+          label: '评论ID',
+        },
+        {
+          name: 'commentable_id',
+          label: '评论目标ID'
+        },
+        {
+          name: 'commentable_type',
+          label: '评论目标类型',
+          enum: [
+            {
+              name: '文章',
+              value: 'article',
+            },
+            {
+              name: '提问',
+              value: 'question',
+            },
+            {
+              name: '回答',
+              value: 'answer',
+            },
+          ],
+        },
+        {
+          name: 'user_id',
+          label: '用户ID',
+        },
+      ],
+      data: {
+        comment_id: '',
+        commentable_id: '',
+        commentable_type: '',
+        user_id: '',
+      },
+    });
   },
 
   /**

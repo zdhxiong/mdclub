@@ -22,17 +22,17 @@ export default $.extend({}, actionsAbstract, {
       covered: false,
     });
 
-    $form.on('open.mdui.menu', () => {
-      $form.width($bar.width());
-      $searchbar.addClass('is-open');
-    });
-
-    $form.on('close.mdui.menu', () => {
-      $searchbar.removeClass('is-open');
-    });
+    $form
+      .on('open.mdui.menu', () => {
+        $form.width($bar.width());
+        $searchbar.addClass('is-open');
+      })
+      .on('opened.mdui.menu', () => {
+        // 打开后，聚焦到第一个输入框
+        $form.find('input').get(0).focus();
+      })
+      .on('close.mdui.menu', () => {
+        $searchbar.removeClass('is-open');
+      });
   },
-
-
-
-
 });

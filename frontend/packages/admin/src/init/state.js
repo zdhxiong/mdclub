@@ -20,9 +20,9 @@ import SearchBar from '../lazyComponents/searchbar/state';
 import Pagination from '../lazyComponents/pagination/state';
 import Datatable from '../lazyComponents/datatable/state';
 import ImageList from '../lazyComponents/imagelist/state';
-import ReportersDialog from '../lazyComponents/reporters-dialog/state';
-import UserDialog from '../lazyComponents/user-dialog/state';
-import TopicDialog from '../lazyComponents/topic-dialog/state';
+import ReportersDialog from '../lazyComponents/dialog-reporters/state';
+import UserDialog from '../lazyComponents/dialog-user/state';
+import TopicDialog from '../lazyComponents/dialog-topic/state';
 
 export default {
   location: location.state,

@@ -44,10 +44,25 @@
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
     border-radius: 0 0 4px 4px;
     margin-top: -1px;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding: 16px 24px;
     transform: scaleY(0);
     overflow: visible;
+
+    .mdui-textfield {
+      padding-top: 4px;
+      padding-bottom: 4px;
+      overflow: visible;
+
+      &:before,
+      &:after {
+        content: " ";
+        display: table;
+      }
+
+      &:after {
+        clear: both;
+      }
+    }
 
     .mdui-textfield-label {
       height: 36px;
@@ -58,12 +73,30 @@
       font-size: 14px;
     }
 
-    .mdui-textfield-input {
+    .mdui-textfield-input,
+    .mdui-select {
       width: ~'calc(100% - 96px)';
+      font-size: 14px;
     }
 
     .mdui-select {
-      width: 100%;
+      float: left;
+      border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
+    }
+
+    .mdui-select-selected {
+      height: 36px;
+      line-height: 36px;
+    }
+
+    .mdui-select-menu {
+      width: 136px !important;
+    }
+
+    .submit {
+      color: #fff !important;
+      float: right;
+      margin-top: 12px;
     }
   }
 

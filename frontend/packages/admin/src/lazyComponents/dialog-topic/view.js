@@ -24,7 +24,7 @@ export default () => (global_state, global_actions) => {
   const state = global_state.lazyComponents.topicDialog;
 
   return (
-    <div class="mdui-dialog mc-topic-dialog">
+    <div class="mdui-dialog mc-dialog-topic">
       {!state.loading && state.topic ?
       <div
         class="header"

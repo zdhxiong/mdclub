@@ -24,7 +24,7 @@ export default () => (global_state, global_actions) => {
 
   return (
     <div
-      class="mdui-dialog mc-reporters-dialog"
+      class="mdui-dialog mc-dialog-reporters"
       oncreate={ element => actions.init(element) }
     >
       <div class="mdui-dialog-title">

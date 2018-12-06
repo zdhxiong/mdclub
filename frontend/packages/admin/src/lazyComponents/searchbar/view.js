@@ -24,14 +24,15 @@ export default () => (global_state, global_actions) => {
           <label class="mdui-textfield-label">用户ID</label>
           <input class="mdui-textfield-input" type="text"/>
         </div>
-        <select class="mdui-select" mdui-select>
-          <option value="1">State 1</option>
-          <option value="2">State 2</option>
-          <option value="3" disabled>State 3</option>
-          <option value="4">State 4</option>
-          <option value="5">State 5</option>
-          <option value="6">State 6</option>
-        </select>
+        <div class="mdui-textfield">
+          <label class="mdui-textfield-label">类型</label>
+          <select class="mdui-select" mdui-select>
+            <option value="article">文章</option>
+            <option value="question">提问</option>
+            <option value="answer">回答</option>
+          </select>
+        </div>
+        <button class="submit mdui-btn mdui-btn-raised mdui-color-theme">搜索</button>
       </form>
     </div>
   );
