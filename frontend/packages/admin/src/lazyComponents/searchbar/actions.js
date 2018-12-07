@@ -40,7 +40,6 @@ export default $.extend({}, actionsAbstract, {
    * 点击纸片事件
    */
   onChipClick: ({ e, name }) => (state, actions) => {
-
   },
 
   /**
@@ -63,5 +62,7 @@ export default $.extend({}, actionsAbstract, {
     actions.setState({ data, isDataEmpty });
 
     Menu.close();
+
+    $(document).trigger('search-submit');
   },
 });

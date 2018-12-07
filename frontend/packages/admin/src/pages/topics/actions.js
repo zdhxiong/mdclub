@@ -1,36 +1,50 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
 import { Topic } from 'mdclub-sdk-js';
+import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
+
+const searchState = {
+  fields: [
+    {
+      name: 'topic_id',
+      label: '话题ID',
+    },
+    {
+      name: 'name',
+      label: '话题名称',
+    },
+  ],
+  data: {
+    topic_id: '',
+    name: '',
+  },
+  isDataEmpty: true,
+};
 
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
   init: props => (state, actions) => {
-    global_actions = props.global_actions;
     actions.routeChange();
-    actions.loadData();
+    global_actions = props.global_actions;
+    global_actions.lazyComponents.searchBar.setState(searchState);
 
-    global_actions.lazyComponents.searchBar.setState({
-      fields: [
-        {
-          name: 'topic_id',
-          label: '话题ID',
-        },
-        {
-          name: 'name',
-          label: '话题名称',
-        },
-      ],
-      data: {
-        topic_id: '',
-        name: '',
-      },
-      isDataEmpty: true,
+    $(document).on('search-submit', () => {
+      actions.loadData();
     });
+
+    actions.loadData();
+  },
+
+  /**
+   * 销毁前
+   */
+  destroy: () => {
+    $(document).off('search-submit');
   },
 
   /**
@@ -38,17 +52,17 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => (state, actions) => {
     const datatableActions = global_actions.lazyComponents.datatable;
-    const paginationActions = global_actions.lazyComponents.pagination;
     datatableActions.loadStart();
 
     const datatableState = datatableActions.getState();
-    const paginationState = paginationActions.getState();
+    const paginationState = global_actions.lazyComponents.pagination.getState();
+    const searchBarData = global_actions.lazyComponents.searchBar.getState().data;
 
-    const data = {
+    const data = $.extend({}, ObjectHelper.filter(searchBarData), {
       page: paginationState.page,
       per_page: paginationState.per_page,
       order: datatableState.order,
-    };
+    });
 
     const success = (response) => {
       const columns = [

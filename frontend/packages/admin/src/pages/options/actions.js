@@ -13,4 +13,10 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     actions.routeChange();
   },
+
+  /**
+   * 销毁前
+   */
+  destroy: () => {
+  },
 });
