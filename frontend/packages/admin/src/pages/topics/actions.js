@@ -94,7 +94,7 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
-      response.onRowClick = global_actions.lazyComponents.topicDialog.open;
+      response.onRowClick = global_actions.lazyComponents.dialogTopic.open;
       datatableActions.loadEnd(response);
     };
 

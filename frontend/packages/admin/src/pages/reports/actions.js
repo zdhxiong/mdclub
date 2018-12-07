@@ -112,7 +112,7 @@ export default $.extend({}, actionsAbstract, {
               case 'comment':
                 break;
               case 'user':
-                global_actions.lazyComponents.userDialog.open(row.relationship.user.user_id);
+                global_actions.lazyComponents.dialogUser.open(row.relationship.user.user_id);
                 break;
               default:
                 break;
@@ -151,7 +151,7 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
-      response.onRowClick = global_actions.lazyComponents.reportersDialog.open;
+      response.onRowClick = global_actions.lazyComponents.dialogReporters.open;
       datatableActions.loadEnd(response);
     };
 

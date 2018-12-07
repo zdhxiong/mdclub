@@ -29,8 +29,8 @@ const CountItem = ({ label, count }) => (
 );
 
 export default () => (global_state, global_actions) => {
-  const actions = global_actions.lazyComponents.userDialog;
-  const state = global_state.lazyComponents.userDialog;
+  const actions = global_actions.lazyComponents.dialogUser;
+  const state = global_state.lazyComponents.dialogUser;
 
   return (
     <div class="mdui-dialog mc-dialog-user">

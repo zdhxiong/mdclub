@@ -63,7 +63,7 @@ export default $.extend({}, actionsAbstract, {
           type: 'relation',
           onClick: ({ e, row }) => {
             e.preventDefault();
-            global_actions.lazyComponents.userDialog.open(row.user_id);
+            global_actions.lazyComponents.dialogUser.open(row.user_id);
           },
         },
         {

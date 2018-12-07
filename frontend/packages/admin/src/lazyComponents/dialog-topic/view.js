@@ -20,8 +20,8 @@ const CountItem = ({ label, count }) => (
 );
 
 export default () => (global_state, global_actions) => {
-  const actions = global_actions.lazyComponents.topicDialog;
-  const state = global_state.lazyComponents.topicDialog;
+  const actions = global_actions.lazyComponents.dialogTopic;
+  const state = global_state.lazyComponents.dialogTopic;
 
   return (
     <div class="mdui-dialog mc-dialog-topic">

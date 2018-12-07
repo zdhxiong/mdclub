@@ -22,7 +22,7 @@ export default $.extend({}, actionsAbstract, {
         },
         {
           name: 'commentable_id',
-          label: '评论目标ID'
+          label: '评论目标ID',
         },
         {
           name: 'commentable_type',
@@ -87,7 +87,7 @@ export default $.extend({}, actionsAbstract, {
           type: 'relation',
           onClick: ({ e, row }) => {
             e.preventDefault();
-            global_actions.lazyComponents.userDialog.open(row.user_id);
+            global_actions.lazyComponents.dialogUser.open(row.user_id);
           },
         },
         {

@@ -19,9 +19,9 @@ import Users from '../pages/users/view';
 
 import AppBar from '../lazyComponents/appbar/view';
 import Drawer from '../components/drawer';
-import ReportersDialog from '../lazyComponents/dialog-reporters/view';
-import UserDialog from '../lazyComponents/dialog-user/view';
-import TopicDialog from '../lazyComponents/dialog-topic/view';
+import DialogReporters from '../lazyComponents/dialog-reporters/view';
+import DialogUser from '../lazyComponents/dialog-user/view';
+import DialogTopic from '../lazyComponents/dialog-topic/view';
 
 export default (global_state, global_actions) => (
   <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
@@ -42,8 +42,8 @@ export default (global_state, global_actions) => (
     <Route path={$.path('/trash/topics')} render={TrashTopics(global_state, global_actions)}/>
     <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
 
-    <ReportersDialog/>
-    <UserDialog/>
-    <TopicDialog/>
+    <DialogReporters/>
+    <DialogUser/>
+    <DialogTopic/>
   </div>
 );

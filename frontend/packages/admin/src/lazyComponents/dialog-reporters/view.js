@@ -7,8 +7,8 @@ import Loaded from '../../components/loaded';
 import Empty from '../../components/empty';
 
 export default () => (global_state, global_actions) => {
-  const actions = global_actions.lazyComponents.reportersDialog;
-  const state = global_state.lazyComponents.reportersDialog;
+  const actions = global_actions.lazyComponents.dialogReporters;
+  const state = global_state.lazyComponents.dialogReporters;
 
   const isEmpty =
     !state.loading &&
