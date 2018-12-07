@@ -76,7 +76,7 @@ class AdminController extends ControllerAbstracts
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     ' . implode('', $css) . '
 </head>
-<body class="mdui-drawer-body-left">
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
     <script>
         window.G_API = "' . $rootUrl . '/api"; // api 地址
         window.G_ROOT = "' . $rootUrl . '"; // 网站根目录相对路径
