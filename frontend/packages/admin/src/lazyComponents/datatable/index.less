@@ -8,11 +8,17 @@
 
   // 表头阴影
   thead {
-    transition: box-shadow .15s cubic-bezier(0.4,0.0,0.2,1);
+    transition: box-shadow .15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &.is-top thead {
-    box-shadow: 0 3px 2px -2px rgba(0,0,0,.1);
+    box-shadow: 0 3px 2px -2px rgba(0, 0, 0, .1);
+  }
+
+  .mdui-theme-layout-dark & {
+    &.is-top thead {
+      box-shadow: 0 3px 2px -2px rgba(255, 255, 255, .1);
+    }
   }
 
   // 使表格 tbody 部分可以纵向滚动
@@ -63,9 +69,23 @@
     }
   }
 
+  .mdui-theme-layout-dark & {
+    thead tr.checked {
+      th {
+        color: #e8f0fe !important;
+      }
+    }
+  }
+
   // 修改行悬浮状态颜色
   .mdui-table-hoverable tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  .mdui-theme-layout-dark & {
+    .mdui-table-hoverable tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
   }
 
   // 移除行之间的分隔线
@@ -76,6 +96,12 @@
   // 表格行选中状态颜色
   .mdui-table-row-selected {
     background-color: rgba(0, 0, 0, 0.06) !important;
+  }
+
+  .mdui-theme-layout-dark & {
+    .mdui-table-row-selected {
+      background-color: rgba(255, 255, 255, 0.16) !important;
+    }
   }
 
   // 行悬浮状态
@@ -111,6 +137,16 @@
     }
   }
 
+  .mdui-theme-layout-dark & {
+    td a {
+      border-bottom-color: rgba(255, 255, 255, 0.24);
+
+      &:hover {
+        border-bottom-color: rgba(255, 255, 255, 0.87);
+      }
+    }
+  }
+
   // 操作项
   tbody {
     .actions {
@@ -132,32 +168,6 @@
         .mdui-btn {
           display: inline-block;
         }
-      }
-    }
-  }
-}
-
-.mdui-theme-layout-dark {
-  .mc-datatable {
-    .mdui-table-hoverable tbody tr:hover {
-      background-color: rgba(255, 255, 255, 0.08);
-    }
-
-    thead tr.checked {
-      th {
-        color: #e8f0fe !important;
-      }
-    }
-
-    .mdui-table-row-selected {
-      background-color: rgba(255, 255, 255, 0.16) !important;
-    }
-
-    td a {
-      border-bottom-color: rgba(255, 255, 255, 0.24);
-
-      &:hover {
-        border-bottom-color: rgba(255, 255, 255, 0.87);
       }
     }
   }

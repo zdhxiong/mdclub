@@ -24,7 +24,7 @@ import DialogUser from '../lazyComponents/dialog-user/view';
 import DialogTopic from '../lazyComponents/dialog-topic/view';
 
 export default (global_state, global_actions) => (
-  <div class="mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
+  <div>
     <AppBar/>
     <Drawer/>
     <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>

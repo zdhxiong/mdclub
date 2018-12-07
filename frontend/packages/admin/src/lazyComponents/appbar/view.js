@@ -21,7 +21,7 @@ const HomeLink = () => (
 );
 
 const ThemeBtn = ({ onClick, theme }) => (
-  <div class="theme">
+  <div class="theme mdui-text-color-theme-icon">
     <button
       class="mdui-btn mdui-btn-icon"
       mdui-tooltip={theme === 'light' ? "{content: '夜间模式'}" : "{content: '日间模式'}"}
@@ -44,17 +44,17 @@ const UserMenu = ({ user }) => (
     <ul class="mdui-menu" id="appbar-user-popover">
       <li class="mdui-menu-item">
         <a href={`${window.G_ROOT}/`} class="mdui-ripple" target="_blank">
-          <i class="mdui-menu-item-icon mdui-icon material-icons">home</i>查看站点
+          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">home</i>查看站点
         </a>
       </li>
       <li class="mdui-menu-item">
         <a href={`${window.G_ROOT}/users/${user.user_id}`} class="mdui-ripple" target="_blank">
-          <i class="mdui-menu-item-icon mdui-icon material-icons">person</i>我的主页
+          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">person</i>我的主页
         </a>
       </li>
       <li class="mdui-menu-item">
         <a href="" class="mdui-ripple">
-          <i class="mdui-menu-item-icon mdui-icon material-icons">exit_to_app</i>退出登录
+          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">exit_to_app</i>退出登录
         </a>
       </li>
     </ul>
