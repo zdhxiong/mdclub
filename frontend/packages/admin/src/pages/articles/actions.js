@@ -29,6 +29,7 @@ export default $.extend({}, actionsAbstract, {
         article_id: '',
         user_id: '',
       },
+      isDataEmpty: true,
     });
   },
 

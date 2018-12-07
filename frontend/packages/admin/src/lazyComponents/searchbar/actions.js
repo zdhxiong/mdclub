@@ -14,7 +14,7 @@ export default $.extend({}, actionsAbstract, {
     $searchbar = $(props.element);
 
     const $bar = $searchbar.find('.bar');
-    const $form = $searchbar.find('form');
+    const $form = $searchbar.find('.form');
 
     Menu = new mdui.Menu($bar, $form, {
       position: 'bottom',
@@ -34,5 +34,34 @@ export default $.extend({}, actionsAbstract, {
       .on('close.mdui.menu', () => {
         $searchbar.removeClass('is-open');
       });
+  },
+
+  /**
+   * 点击纸片事件
+   */
+  onChipClick: ({ e, name }) => (state, actions) => {
+
+  },
+
+  /**
+   * 提交搜索
+   */
+  onSubmit: e => (state, actions) => {
+    e.preventDefault();
+
+    const formArr = $(e.target).serializeArray();
+    const data = {};
+    let isDataEmpty = true;
+
+    formArr.map((field) => {
+      if (field.value !== '') {
+        data[field.name] = field.value;
+        isDataEmpty = false;
+      }
+    });
+
+    actions.setState({ data, isDataEmpty });
+
+    Menu.close();
   },
 });

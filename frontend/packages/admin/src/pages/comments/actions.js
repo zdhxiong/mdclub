@@ -21,13 +21,17 @@ export default $.extend({}, actionsAbstract, {
           label: '评论ID',
         },
         {
-          name: 'commentable_id',
-          label: '评论目标ID',
+          name: 'user_id',
+          label: '用户ID',
         },
         {
           name: 'commentable_type',
-          label: '评论目标类型',
+          label: '类型',
           enum: [
+            {
+              name: '全部',
+              value: '',
+            },
             {
               name: '文章',
               value: 'article',
@@ -43,8 +47,8 @@ export default $.extend({}, actionsAbstract, {
           ],
         },
         {
-          name: 'user_id',
-          label: '用户ID',
+          name: 'commentable_id',
+          label: '评论目标ID',
         },
       ],
       data: {
@@ -53,6 +57,7 @@ export default $.extend({}, actionsAbstract, {
         commentable_type: '',
         user_id: '',
       },
+      isDataEmpty: true,
     });
   },
 

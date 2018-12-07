@@ -29,6 +29,7 @@ export default $.extend({}, actionsAbstract, {
         topic_id: '',
         name: '',
       },
+      isDataEmpty: true,
     });
   },
 

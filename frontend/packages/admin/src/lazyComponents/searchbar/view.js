@@ -1,4 +1,5 @@
 import { h } from 'hyperapp';
+import { JQ as $ } from 'mdui';
 import './index.less';
 
 export default () => (global_state, global_actions) => {
@@ -12,27 +13,81 @@ export default () => (global_state, global_actions) => {
     >
       <div class="bar">
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">search</i>
-        <span class="placeholder mdui-text-color-theme-icon">筛选条件</span>
+        {state.isDataEmpty
+          ? <span class="placeholder mdui-text-color-theme-icon">筛选条件</span>
+          : <span class="chips">
+            {state.fields.map((field) => {
+              if (typeof state.data[field.name] !== 'undefined' && state.data[field.name] !== '') {
+                let value;
+                if (typeof field.enum !== 'undefined') {
+                  field.enum.map((item) => {
+                    if (state.data[field.name] === item.value) {
+                      value = item.name;
+                    }
+                  });
+                } else {
+                  value = state.data[field.name];
+                }
+
+                return (
+                  <div
+                    class="mdui-chip"
+                    key={field.name}
+                    onclick={e => actions.onChipClick({ e, name: field.name })}
+                  >
+                    <span class="mdui-chip-title">{field.label}: {value}</span>
+                    <span class="mdui-chip-delete" title="删除该条件">
+                      <i class="mdui-icon material-icons">cancel</i>
+                    </span>
+                  </div>);
+              }
+
+              return '';
+            })}
+          </span>}
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i>
       </div>
-      <form class="form mdui-menu">
-        <div class="mdui-textfield">
-          <label class="mdui-textfield-label">提问ID</label>
-          <input class="mdui-textfield-input" type="text"/>
-        </div>
-        <div class="mdui-textfield">
-          <label class="mdui-textfield-label">用户ID</label>
-          <input class="mdui-textfield-input" type="text"/>
-        </div>
-        <div class="mdui-textfield">
-          <label class="mdui-textfield-label">类型</label>
-          <select class="mdui-select" mdui-select>
-            <option value="article">文章</option>
-            <option value="question">提问</option>
-            <option value="answer">回答</option>
-          </select>
-        </div>
-        <button class="submit mdui-btn mdui-btn-raised mdui-color-theme">搜索</button>
+      <form
+        class="form mdui-menu"
+        onsubmit={actions.onSubmit}
+      >
+        {state.fields.map((field) => {
+          if (typeof field.enum === 'undefined') {
+            return (
+              <div class="mdui-textfield" key={field.name}>
+                <label class="mdui-textfield-label">{field.label}</label>
+                <input
+                  class="mdui-textfield-input"
+                  type="text"
+                  name={field.name}
+                  value={state.data[field.name]}
+                />
+              </div>);
+          }
+
+          return (
+            <div class="mdui-textfield" key={field.name}>
+              <label class="mdui-textfield-label">{field.label}</label>
+              <select
+                class="mdui-select"
+                name={field.name}
+                mdui-select
+                oncreate={element => $(element).mutation()}
+              >
+                {field.enum.map(option => (
+                  <option
+                    value={option.value}
+                    selected={option.value === state.data[field.name]}
+                  >{option.name}</option>
+                ))}
+              </select>
+            </div>
+          );
+        })}
+        <button
+          class="submit mdui-btn mdui-btn-raised mdui-color-theme"
+          type="submit"
+        >搜索</button>
       </form>
     </div>
   );

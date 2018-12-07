@@ -34,6 +34,7 @@ export default $.extend({}, actionsAbstract, {
         question_id: '',
         user_id: '',
       },
+      isDataEmpty: true,
     });
   },
 

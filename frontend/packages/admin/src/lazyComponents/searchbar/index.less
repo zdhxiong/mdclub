@@ -3,15 +3,18 @@
 .mc-searchbar {
   flex-grow: 1;
   height: 44px;
+  line-height: 44px;
 
   // 平板和桌面
   @media (min-width: @screen-sm-min) {
     height: 48px;
+    line-height: 48px;
   }
 
   // 手机横屏
   @media (orientation: landscape) and (max-width: @screen-xs-max-landscape) {
     height: 38px;
+    line-height: 38px;
   }
 
   .bar {
@@ -29,13 +32,33 @@
     box-sizing: border-box;
     transition: background-color 100ms ease-in;
 
-    i {
+    &>i {
       margin: 0 14px;
     }
 
     .placeholder {
       font-size: 16px;
       margin-right: auto;
+    }
+
+    .chips {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin-right: auto;
+    }
+
+    .mdui-chip-title {
+      float: left;
+    }
+
+    .mdui-chip-delete {
+      float: right;
+      margin-top: 4px;
+
+      i {
+        float: right;
+      }
     }
   }
 
@@ -44,12 +67,12 @@
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
     border-radius: 0 0 4px 4px;
     margin-top: -1px;
-    padding: 16px 24px;
+    padding: 16px 24px 24px 24px;
     transform: scaleY(0);
     overflow: visible;
 
     .mdui-textfield {
-      padding-top: 4px;
+      padding-top: 16px;
       padding-bottom: 4px;
       overflow: visible;
 
@@ -81,7 +104,6 @@
 
     .mdui-select {
       float: left;
-      border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
     }
 
     .mdui-select-selected {
@@ -96,7 +118,7 @@
     .submit {
       color: #fff !important;
       float: right;
-      margin-top: 12px;
+      margin-top: 20px;
     }
   }
 

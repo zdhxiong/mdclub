@@ -21,6 +21,10 @@ export default $.extend({}, actionsAbstract, {
           label: 'hash',
         },
         {
+          name: 'user_id',
+          label: '用户ID',
+        },
+        {
           name: 'item_type',
           label: '类型',
           enum: [
@@ -42,10 +46,6 @@ export default $.extend({}, actionsAbstract, {
           name: 'item_id',
           label: '类型ID',
         },
-        {
-          name: 'user_id',
-          label: '用户ID',
-        },
       ],
       data: {
         hash: '',
@@ -53,6 +53,7 @@ export default $.extend({}, actionsAbstract, {
         item_id: '',
         user_id: '',
       },
+      isDataEmpty: true,
     });
   },
 

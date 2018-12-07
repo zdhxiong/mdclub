@@ -34,6 +34,7 @@ export default $.extend({}, actionsAbstract, {
         username: '',
         email: '',
       },
+      isDataEmpty: true,
     });
   },
 

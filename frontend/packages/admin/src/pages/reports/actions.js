@@ -50,6 +50,10 @@ export default $.extend({}, actionsAbstract, {
           label: '类型',
           enum: [
             {
+              name: '全部',
+              value: '',
+            },
+            {
               name: '文章',
               value: 'article',
             },
@@ -75,6 +79,7 @@ export default $.extend({}, actionsAbstract, {
       data: {
         reportable_type: '',
       },
+      isDataEmpty: true,
     });
   },
 

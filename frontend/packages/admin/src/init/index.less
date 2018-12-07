@@ -26,9 +26,10 @@
 
 // 修改纸片样式
 .mdui-chip {
-  background-color: transparent;
+  background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.12);
   transition: background-color .25s cubic-bezier(.4,0,.2,1);
+  margin: 0 12px 0 0;
 
   &:hover {
     box-shadow: none;
@@ -37,6 +38,35 @@
 
   &:active {
     background-color: rgba(0, 0, 0, 0.10);
+  }
+
+  .mdui-theme-layout-dark & {
+    border-color: rgba(255, 255, 255, 0.10);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.24);
+    }
+  }
+}
+
+// 修改下拉选择下边框
+.mdui-select {
+  border-bottom: 1px solid rgba(0, 0, 0, .42) !important;
+
+  &:hover {
+    box-shadow: 0 1px 0 0 rgba(0,0,0,.87);
+  }
+
+  .mdui-theme-layout-dark & {
+    border-bottom-color: rgba(255, 255, 255, .7) !important;
+
+    &:hover {
+      box-shadow: 0 1px 0 0 #fff !important;
+    }
   }
 }
 
