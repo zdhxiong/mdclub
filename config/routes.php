@@ -163,24 +163,39 @@ $app->group('/api', function () {
     $this->post(  '/emails',                                                    EmailController::class . ':send');
     $this->post(  '/captchas',                                                  CaptchaController::class . ':create');
 
-    $this->delete('/trash',                                                     TrashController::class . ':deleteAll');
-    $this->get(   '/trash/users',                                               TrashController::class . ':getUsers');
-    $this->post(  '/trash/users/{user_id:\d+}',                                 TrashController::class . ':restoreUser');
-    $this->get(   '/trash/topics',                                              TrashController::class . ':getTopics');
-    $this->post(  '/trash/topics/{topic_id:\d+}',                               TrashController::class . ':restoreTopic');
-    $this->delete('/trash/topics/{topic_id:\d+}',                               TrashController::class . ':deleteTopic');
-    $this->get(   '/trash/questions',                                           TrashController::class . ':getQuestions');
-    $this->post(  '/trash/questions/{question_id:\d+}',                         TrashController::class . ':restoreQuestion');
-    $this->delete('/trash/questions/{question_id:\d+}',                         TrashController::class . ':deleteQuestion');
-    $this->get(   '/trash/answers',                                             TrashController::class . ':getAnswers');
-    $this->post(  '/trash/answers/{answer_id:\d+}',                             TrashController::class . ':restoreAnswer');
-    $this->delete('/trash/answers/{answer_id:\d+}',                             TrashController::class . ':deleteAnswer');
-    $this->get(   '/trash/articles',                                            TrashController::class . ':getArticles');
-    $this->post(  '/trash/articles/{article_id:\d+}',                           TrashController::class . ':restoreArticle');
-    $this->delete('/trash/articles/{article_id:\d+}',                           TrashController::class . ':deleteArticle');
-    $this->get(   '/trash/comments',                                            TrashController::class . ':getComments');
-    $this->post(  '/trash/comments/{comment_id:\d+}',                           TrashController::class . ':restoreComment');
-    $this->delete('/trash/comments/{comment_id:\d+}',                           TrashController::class . ':deleteComment');
+    $this->get(   '/trash/users',                                               UserController::class . ':getDisabled');
+    $this->post(  '/trash/users',                                               UserController::class . ':batchEnable');
+    $this->post(  '/trash/users/{user_id:\d+}',                                 UserController::class . ':enable');
+
+    $this->get(   '/trash/topics',                                              TopicController::class . ':getDeleted');
+    $this->post(  '/trash/topics',                                              TopicController::class . ':batchRestore');
+    $this->delete('/trash/topics',                                              TopicController::class . ':batchDestroy');
+    $this->post(  '/trash/topics/{topic_id:\d+}',                               TopicController::class . ':restore');
+    $this->delete('/trash/topics/{topic_id:\d+}',                               TopicController::class . ':destroy');
+
+    $this->get(   '/trash/questions',                                           QuestionController::class . ':getDeleted');
+    $this->post(  '/trash/questions',                                           QuestionController::class . ':batchRestore');
+    $this->delete('/trash/questions',                                           QuestionController::class . ':batchDestroy');
+    $this->post(  '/trash/questions/{question_id:\d+}',                         QuestionController::class . ':restore');
+    $this->delete('/trash/questions/{question_id:\d+}',                         QuestionController::class . ':destroy');
+
+    $this->get(   '/trash/answers',                                             AnswerController::class . ':getDeleted');
+    $this->post(  '/trash/answers',                                             AnswerController::class . ':batchRestore');
+    $this->delete('/trash/answers',                                             AnswerController::class . ':batchDestroy');
+    $this->post(  '/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':restore');
+    $this->delete('/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':destroy');
+
+    $this->get(   '/trash/articles',                                            ArticleController::class . ':getDeleted');
+    $this->post(  '/trash/articles',                                            ArticleController::class . ':batchRestore');
+    $this->delete('/trash/articles',                                            ArticleController::class . ':batchDestroy');
+    $this->post(  '/trash/articles/{article_id:\d+}',                           ArticleController::class . ':restore');
+    $this->delete('/trash/articles/{article_id:\d+}',                           ArticleController::class . ':destroy');
+
+    $this->get(   '/trash/comments',                                            CommentController::class . ':getDeleted');
+    $this->post(  '/trash/comments',                                            CommentController::class . ':batchRestore');
+    $this->delete('/trash/comments',                                            CommentController::class . ':batchDestroy');
+    $this->post(  '/trash/comments/{comment_id:\d+}',                           CommentController::class . ':restore');
+    $this->delete('/trash/comments/{comment_id:\d+}',                           CommentController::class . ':destroy');
 })
     ->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         /** @var ResponseInterface $response */

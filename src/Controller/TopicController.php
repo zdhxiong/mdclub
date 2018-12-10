@@ -234,4 +234,66 @@ class TopicController extends ControllerAbstracts
 
         return $this->success($response, ['follower_count' => $followerCount]);
     }
+
+    /**
+     * 获取回收站中的话题列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDeleted(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchRestore(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量从回收站中删除话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDestroy(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function restore(Request $request, Response $response, int $topic_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 从回收站中删除指定话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, int $topic_id): Response
+    {
+        return $response;
+    }
 }

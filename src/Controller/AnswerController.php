@@ -256,4 +256,66 @@ class AnswerController extends ControllerAbstracts
 
         return $this->success($response, $comment);
     }
+
+    /**
+     * 获取回收站中的回答列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDeleted(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchRestore(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量删除回收站中的回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDestroy(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function restore(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, int $answer_id): Response
+    {
+        return $response;
+    }
 }

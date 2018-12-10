@@ -439,4 +439,41 @@ class UserController extends ControllerAbstracts
 
         return $this->success($response);
     }
+
+    /**
+     * 获取已禁用用户列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDisabled(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复用户
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchEnable(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定用户
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $user_id
+     * @return Response
+     */
+    public function enable(Request $request, Response $response, int $user_id): Response
+    {
+        return $response;
+    }
 }

@@ -100,7 +100,7 @@ abstract class ServiceAbstracts
     }
 
     /**
-     * 允许搜素的字段
+     * 允许搜索的字段
      *
      * @return array
      */

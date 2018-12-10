@@ -3445,54 +3445,33 @@ paths:
       security:
         - token: []
 
-  /trash:
-
-    delete:
-      tags:
-        - Trash
-      summary: todo - 🔐清空回收站
-      parameters:
-        - name: type
-          in: query
-          type: string
-          description: 资源类型，包括 `topic`、`question`、`answer`、`article`、`comment`。默认为空，即清空所有资源。
-
   /trash/users:
 
     get:
       tags:
-        - Trash
-      summary: todo - 🔐获取用户列表
+        - UserInfo
+      summary: todo - 🔐获取已禁用用户列表
       description: |
-        **可排序的字段包括**：
-        `user_id`
-        `last_login_time`
-        `follower_count`
-        `following_article_count`
-        `following_question_count`
-        `following_topic_count`
-        `following_user_count`
-        `article_count`
-        `question_count`
-        `answer_count`
-        `notification_unread`
-        `inbox_unread`
-        `create_time`
-        `update_time`
-        `disable_time`
-        若未指定排序字段，则默认按 `disable_time` 倒序排列
-
-        **可筛选的字段包括**：
-        `user_id`
-        `username`
-        `email`
-        `create_ip`
-        `last_login_ip`
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: 排序方式，可以为 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`。在字段前加 `-` 表示倒序排列
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
+        - name: username
+          in: query
+          type: string
+          description: 按用户名过滤
+        - name: email
+          in: query
+          type: string
+          description: 按邮箱过滤
       responses:
         200:
           description: 用户列表
@@ -3509,11 +3488,37 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - UserInfo
+      summary: todo - 🔐批量恢复用户
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: user_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /trash/users/{user_id}:
 
     post:
       tags:
-        - Trash
+        - UserInfo
       summary: todo - 🔐恢复指定用户
       description:
       responses:
@@ -3534,25 +3539,25 @@ paths:
 
     get:
       tags:
-        - Trash
-      summary: todo - 🔐获取话题列表
+        - Topic
+      summary: todo - 🔐获取回收站中的话题列表
       description: |
-        **可排序的字段包括**：
-        `topic_id`
-        `article_count`
-        `question_count`
-        `follower_count`
-        `delete_time`
-        若未指定排序字段，则按 `delete_time` 倒序排列
-
-        **可筛选的字段包括**：
-        `topic_id`
-        `name`
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: 排序方式，可以为 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`。在字段前加 `-` 表示倒序排列。
+        - name: topic_id
+          in: query
+          type: integer
+          description: 话题ID
+        - name: name
+          in: query
+          type: string
+          description: 话题名称
       responses:
         200:
           description: 话题列表
@@ -3569,11 +3574,63 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - Topic
+      summary: todo - 🔐批量恢复话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: topic_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Topic
+      summary: todo - 🔐批量删除回收站中的话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: topic_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID。若没有提供该参数，则将清空回收站中的所有话题。
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /trash/topics/{topic_id}:
 
     post:
       tags:
-        - Trash
+        - Topic
       summary: todo - 🔐恢复指定话题
       description:
       responses:
@@ -3592,7 +3649,7 @@ paths:
 
     delete:
       tags:
-        - Trash
+        - Topic
       summary: todo - 🔐删除指定话题
       description:
       responses:
@@ -3613,29 +3670,26 @@ paths:
 
     get:
       tags:
-        - Trash
-      summary: todo - 🔐获取问题列表
+        - Question
+      summary: todo - 🔐获取回收站中的问题列表
       description: |
-        **可排序的字段包括**：
-        `question_id`
-        `user_id`
-        `comment_count`
-        `answer_count`
-        `view_count`
-        `follower_count`
-        `last_answer_time`
-        `create_time`
-        `update_time`
-        `delete_time
-
-        **可筛选的字段包括**：
-        `question_id`
-        `user_id`
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`。在字段前加 `-` 表示倒序排列。
+        - name: question_id
+          in: query
+          type: integer
+          description: 按问题ID过滤
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
       responses:
         200:
           description: 问题列表
@@ -3652,11 +3706,63 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - Question
+      summary: todo - 🔐批量恢复问题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: question_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Question
+      summary: todo - 🔐批量删除回收站中的问题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: question_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID。若没有提供该参数，则将清空回收站中的所有问题。
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /trash/questions/{question_id}:
 
     post:
       tags:
-        - Trash
+        - Question
       summary: todo - 🔐恢复指定问题
       description:
       responses:
@@ -3675,7 +3781,7 @@ paths:
 
     delete:
       tags:
-        - Trash
+        - Question
       summary: todo - 🔐删除指定问题
       description:
       responses:
@@ -3696,14 +3802,30 @@ paths:
 
     get:
       tags:
-        - Trash
-      summary: todo - 🔐获取回答列表
-      description:
+        - Answer
+      summary: todo - 🔐获取回收站中的回答列表
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`。在字段前加 `-` 表示倒序排列。
+        - name: answer_id
+          in: query
+          type: integer
+          description: 按回答ID过滤
+        - name: question_id
+          in: query
+          type: integer
+          description: 按问题ID过滤
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
       responses:
         200:
           description: 回答列表
@@ -3720,11 +3842,63 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - Answer
+      summary: todo - 🔐批量恢复回答
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: answer_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Answer
+      summary: todo - 🔐批量删除回收站中的回答
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: answer_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID。若没有提供该参数，则将清空回收站中的所有回答。
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /trash/answers/{answer_id}:
 
     post:
       tags:
-        - Trash
+        - Answer
       summary: todo - 🔐恢复指定回答
       description:
       responses:
@@ -3743,7 +3917,7 @@ paths:
 
     delete:
       tags:
-        - Trash
+        - Answer
       summary: todo - 🔐删除指定回答
       description:
       responses:
@@ -3766,12 +3940,24 @@ paths:
       tags:
         - Trash
       summary: todo - 🔐获取文章列表
-      description:
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`。在字段前加 `-` 表示倒序排列。
+        - name: article_id
+          in: query
+          type: integer
+          description: 按文章ID过滤
+        - name: user_id
+          in: query
+          type: integer
+          description: 按用户ID过滤
       responses:
         200:
           description: 文章列表
@@ -3788,11 +3974,63 @@ paths:
       security:
         - token: []
 
+    post:
+      tags:
+        - Article
+      summary: todo - 🔐批量恢复文章
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: article_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Article
+      summary: todo - 🔐批量删除回收站中的话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: topic_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID。若没有提供该参数，则将清空回收站中的所有文章。
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
   /trash/articles/{article_id}:
 
     post:
       tags:
-        - Trash
+        - Article
       summary: todo - 🔐恢复指定文章
       description:
       responses:
@@ -3811,7 +4049,7 @@ paths:
 
     delete:
       tags:
-        - Trash
+        - Article
       summary: todo - 🔐删除指定文章
       description:
       responses:
@@ -3833,13 +4071,37 @@ paths:
     get:
       tags:
         - Trash
-      summary: todo - 🔐获取评论列表
-      description:
+      summary: todo - 🔐获取回收站中的评论列表
+      description: |
+        **仅管理员可调用该接口**
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
-        - $ref: '#/parameters/order'
-        - $ref: '#/parameters/filter'
+        - name: order
+          in: query
+          type: string
+          description: |
+            排序方式，可以为 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`。在字段前加 `-` 表示倒序排列。
+        - name: comment_id
+          in: query
+          type: integer
+          description: 按评论ID过滤
+        - name: commentable_id
+          in: query
+          type: integer
+          description: 按评论目标的ID过滤
+        - name: commentable_type
+          in: query
+          type: string
+          description: 按评论目标类型过滤
+          enum:
+            - article
+            - question
+            - answer
+        - name: user_id
+          in: query
+          type: integer
+          description: 按评论者ID过滤
       responses:
         200:
           description: 评论列表
@@ -3856,21 +4118,95 @@ paths:
       security:
         - token: []
 
-  /trash/comments/{comment_id}:
-
     post:
       tags:
-        - Trash
-      summary: todo - 🔐恢复指定回答
-      description:
+        - Comment
+      summary: todo - 🔐批量恢复话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: comment_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
       security:
         - token: []
 
     delete:
       tags:
-        - Trash
+        - Comment
+      summary: todo - 🔐批量删除回收站中的话题
+      description: |
+        **仅管理员可调用该接口**
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      parameters:
+        - name: comment_id
+          in: query
+          type: string
+          description: 用“,”分隔的用户ID，最多可提供100个ID。若没有提供该参数，则将清空回收站中的所有评论。
+      responses:
+        200:
+          description: 空数据，通过状态码区分成功还是失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+  /trash/comments/{comment_id}:
+
+    post:
+      tags:
+        - Comment
+      summary: todo - 🔐恢复指定回答
+      description:
+      responses:
+        200:
+          description: 评论信息
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                $ref: '#/definitions/Comment'
+        default:
+          $ref: '#/responses/Error'
+      security:
+        - token: []
+
+    delete:
+      tags:
+        - Comment
       summary: todo - 🔐删除指定回答
       description:
+      responses:
+        200:
+          description: 空数据，根据状态码判断成功或失败
+          schema:
+            properties:
+              code:
+                type: integer
+              data:
+                type: object
+        default:
+          $ref: '#/responses/Error'
       security:
         - token: []
 

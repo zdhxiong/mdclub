@@ -350,4 +350,66 @@ class QuestionController extends ControllerAbstracts
 
         return $this->success($response, $comment);
     }
+
+    /**
+     * 获取回收站中的问题列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDeleted(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchRestore(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量删除回收站中的问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDestroy(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function restore(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除回收站中的指定问题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, int $question_id): Response
+    {
+        return $response;
+    }
 }

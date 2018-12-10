@@ -352,4 +352,66 @@ class ArticleController extends ControllerAbstracts
 
         return $this->success($response, $comment);
     }
+
+    /**
+     * 获取回收站中的文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDeleted(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchRestore(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量删除回收站中的文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDestroy(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function restore(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, int $article_id): Response
+    {
+        return $response;
+    }
 }

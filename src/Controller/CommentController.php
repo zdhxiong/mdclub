@@ -183,4 +183,66 @@ class CommentController extends ControllerAbstracts
 
         return $this->success($response, $voters);
     }
+
+    /**
+     * 获取回收站中的评论列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getDeleted(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量恢复评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchRestore(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 批量删除回收站中的评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function batchDestroy(Request $request, Response $response): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 恢复指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function restore(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
+
+    /**
+     * 删除指定评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $comment_id
+     * @return Response
+     */
+    public function destroy(Request $request, Response $response, int $comment_id): Response
+    {
+        return $response;
+    }
 }
