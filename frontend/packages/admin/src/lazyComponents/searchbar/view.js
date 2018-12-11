@@ -33,10 +33,14 @@ export default () => (global_state, global_actions) => {
                   <div
                     class="mdui-chip"
                     key={field.name}
-                    onclick={e => actions.onChipClick({ e, name: field.name })}
+                    onclick={actions.onChipClick}
                   >
                     <span class="mdui-chip-title">{field.label}: {value}</span>
-                    <span class="mdui-chip-delete" title="删除该条件">
+                    <span
+                      class="mdui-chip-delete"
+                      title="删除该条件"
+                      onclick={() => actions.onChipDelete({ name: field.name })}
+                    >
                       <i class="mdui-icon material-icons">cancel</i>
                     </span>
                   </div>);

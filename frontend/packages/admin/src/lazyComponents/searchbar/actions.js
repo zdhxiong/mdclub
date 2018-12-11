@@ -39,7 +39,21 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 点击纸片事件
    */
-  onChipClick: ({ e, name }) => (state, actions) => {
+  onChipClick: () => {
+    setTimeout(() => {
+      Menu.close();
+    });
+  },
+
+  /**
+   * 点击纸片的删除按钮事件
+   */
+  onChipDelete: ({ name }) => (state, actions) => {
+    const data = state.data;
+    data[name] = '';
+
+    actions.setState(data);
+    $(document).trigger('search-submit');
   },
 
   /**
