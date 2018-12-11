@@ -4,6 +4,17 @@ import { Link } from '@hyperapp/router';
 import { JQ as $ } from 'mdui';
 import './index.less';
 
+const $body = $('body');
+
+// 切换抽屉栏缩小状态
+const toggle = () => {
+  if ($body.hasClass('mdui-drawer-body-left-mini')) {
+    $body.removeClass('mdui-drawer-body-left-mini');
+  } else {
+    $body.addClass('mdui-drawer-body-left-mini');
+  }
+};
+
 const Item = ({ url, icon, title }) => (
   <Link
     to={$.path(url)}
@@ -39,6 +50,11 @@ export default () => (
       <div class="mdui-divider"></div>
       <Item url="/reports" icon="report" title="举报"/>
       <Item url="/options" icon="settings" title="设置"/>
+    </div>
+    <div class="toggle" onclick={toggle}>
+      <button class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">
+        <i class="mdui-icon material-icons">keyboard_capslock</i>
+      </button>
     </div>
   </div>
 );

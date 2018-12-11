@@ -7,7 +7,7 @@ import SearchBar from '../../lazyComponents/searchbar/view';
 
 const DrawerBtn = () => (
   <button
-    class="mdui-btn mdui-btn-icon mdui-ripple"
+    class="drawer mdui-btn mdui-btn-icon mdui-ripple"
     mdui-drawer="{target: '.mc-drawer', swipe: true}"
   >
     <i class="mdui-icon material-icons">menu</i>
