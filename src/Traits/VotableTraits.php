@@ -16,7 +16,7 @@ use App\Helper\ArrayHelper;
  */
 trait VotableTraits
 {
-    abstract public function hasOrFail(int $id): bool;
+    abstract public function hasOrFail(int $id);
 
     /**
      * 添加投票

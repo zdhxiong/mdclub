@@ -70,7 +70,7 @@ class CommentController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $comment_id): Response
     {
-        $comment = $this->commentService->get($comment_id, true);
+        $comment = $this->commentService->getOrFail($comment_id, true);
 
         return $this->success($response, $comment);
     }

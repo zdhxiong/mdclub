@@ -71,7 +71,7 @@ trait BaseTraits
      *
      * @param  int   $id
      * @param  bool  $withRelationship
-     * @return array
+     * @return array                   若不存在，返回空数组
      */
     public function get(int $id, bool $withRelationship = false): array
     {
@@ -80,13 +80,31 @@ trait BaseTraits
             ->get($id);
 
         if (!$data) {
-            $this->throwNotFoundException();
+            return [];
         }
 
         $data = $this->handle($data);
 
         if ($withRelationship) {
             $data = $this->addRelationship($data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取对象信息，不存在则抛出异常
+     *
+     * @param  int   $id
+     * @param  bool  $withRelationship
+     * @return array
+     */
+    public function getOrFail(int $id, bool $withRelationship = false): array
+    {
+        $data = $this->get($id, $withRelationship);
+
+        if (!$data) {
+            $this->throwNotFoundException();
         }
 
         return $data;

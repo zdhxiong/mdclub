@@ -119,7 +119,7 @@ class QuestionController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $question_id): Response
     {
-        $questionInfo = $this->questionService->get($question_id, true);
+        $questionInfo = $this->questionService->getOrFail($question_id, true);
 
         return $this->success($response, $questionInfo);
     }

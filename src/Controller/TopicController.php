@@ -88,7 +88,7 @@ class TopicController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $topic_id): Response
     {
-        $topicInfo = $this->topicService->get($topic_id, true);
+        $topicInfo = $this->topicService->getOrFail($topic_id, true);
 
         return $this->success($response, $topicInfo);
     }

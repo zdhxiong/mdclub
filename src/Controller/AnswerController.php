@@ -109,7 +109,7 @@ class AnswerController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $answer_id): Response
     {
-        $answerInfo = $this->answerService->get($answer_id, true);
+        $answerInfo = $this->answerService->getOrFail($answer_id, true);
 
         return $this->success($response, $answerInfo);
     }
@@ -129,6 +129,7 @@ class AnswerController extends ControllerAbstracts
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered')
         );
+
         $answerInfo = $this->answerService->get($answer_id, true);
 
         return $this->success($response, $answerInfo);

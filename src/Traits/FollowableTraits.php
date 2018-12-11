@@ -16,7 +16,7 @@ use App\Helper\ArrayHelper;
  */
 trait FollowableTraits
 {
-    abstract public function hasOrFail(int $id): bool;
+    abstract public function hasOrFail(int $id);
     abstract public function addRelationship(array $data, array $relationship = []): array;
     abstract public function getPrivacyFields(): array;
 

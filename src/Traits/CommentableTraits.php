@@ -15,7 +15,7 @@ use App\Helper\ValidatorHelper;
  */
 trait CommentableTraits
 {
-    abstract public function hasOrFail(int $id): bool;
+    abstract public function hasOrFail(int $id);
 
     /**
      * 获取评论列表

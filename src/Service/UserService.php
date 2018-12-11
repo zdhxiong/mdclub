@@ -199,6 +199,10 @@ class UserService extends ServiceAbstracts
      */
     public function update(int $userId, array $data): bool
     {
+        if ($userId !== $this->roleService->userId()) {
+            $this->userService->hasOrFail($userId);
+        }
+
         $canUpdateFields = [
             'headline',
             'bio',

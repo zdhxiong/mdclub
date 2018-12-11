@@ -121,7 +121,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $article_id): Response
     {
-        $articleInfo = $this->articleService->get($article_id, true);
+        $articleInfo = $this->articleService->getOrFail($article_id, true);
 
         return $this->success($response, $articleInfo);
     }

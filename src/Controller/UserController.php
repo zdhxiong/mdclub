@@ -87,7 +87,7 @@ class UserController extends ControllerAbstracts
      */
     public function get(Request $request, Response $response, int $user_id): Response
     {
-        $userInfo = $this->userService->get($user_id, true);
+        $userInfo = $this->userService->getOrFail($user_id, true);
 
         return $this->success($response, $userInfo);
     }
@@ -118,7 +118,7 @@ class UserController extends ControllerAbstracts
     public function update(Request $request, Response $response, int $user_id): Response
     {
         $this->roleService->managerIdOrFail();
-        $this->userService->hasOrFail($user_id);
+
         $this->userService->update($user_id, $request->getParsedBody());
         $userInfo = $this->userService->get($user_id, true);
 
@@ -135,6 +135,7 @@ class UserController extends ControllerAbstracts
     public function updateMe(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->userService->update($userId, $request->getParsedBody());
         $userInfo = $this->userService->get($userId, true);
 
