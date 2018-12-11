@@ -62,9 +62,7 @@ class ReportService extends ServiceAbstracts
             ])
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -93,9 +91,7 @@ class ReportService extends ServiceAbstracts
             ])
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -220,9 +216,31 @@ class ReportService extends ServiceAbstracts
         }
     }
 
-    public function handle($data): array
+    /**
+     * 对数据库中取出的举报进行处理
+     *
+     * @param  array $reports 举报信息，或多个举报组成的数组
+     * @return array
+     */
+    public function handle(array $reports): array
     {
-        return $data;
+        if (!$reports) {
+            return $reports;
+        }
+
+        if (!$isArray = is_array(current($reports))) {
+            $reports = [$reports];
+        }
+
+        foreach ($reports as &$report) {
+            // todo 处理举报
+        }
+
+        if ($isArray) {
+            return $reports;
+        }
+
+        return $reports[0];
     }
 
     /**

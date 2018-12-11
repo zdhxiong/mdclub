@@ -72,9 +72,7 @@ class ArticleService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -100,9 +98,7 @@ class ArticleService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -480,12 +476,28 @@ class ArticleService extends ServiceAbstracts
     /**
      * 对数据库中取出的文章信息进行处理
      *
-     * @param  array $articleInfo
+     * @param  array $articles 文章信息，或多个文章组成的数组
      * @return array
      */
-    public function handle(array $articleInfo): array
+    public function handle(array $articles): array
     {
-        return $articleInfo;
+        if (!$articles) {
+            return $articles;
+        }
+
+        if (!$isArray = is_array(current($articles))) {
+            $articles = [$articles];
+        }
+
+        foreach ($articles as &$article) {
+            // todo 处理文章
+        }
+
+        if ($isArray) {
+            return $articles;
+        }
+
+        return $articles[0];
     }
 
     /**

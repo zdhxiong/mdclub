@@ -72,9 +72,7 @@ class QuestionService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -100,9 +98,7 @@ class QuestionService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -483,12 +479,28 @@ class QuestionService extends ServiceAbstracts
     /**
      * 对数据库中取出的问题信息进行处理
      *
-     * @param  array $questionInfo
+     * @param  array $questions 提问信息，或多个提问组成的数组
      * @return array
      */
-    public function handle(array $questionInfo): array
+    public function handle(array $questions): array
     {
-        return $questionInfo;
+        if (!$questions) {
+            return $questions;
+        }
+
+        if (!$isArray = is_array(current($questions))) {
+            $questions = [$questions];
+        }
+
+        foreach ($questions as &$question) {
+            // todo 处理提问
+        }
+
+        if ($isArray) {
+            return $questions;
+        }
+
+        return $questions[0];
     }
 
     /**

@@ -71,9 +71,7 @@ class AnswerService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -99,9 +97,7 @@ class AnswerService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -127,9 +123,7 @@ class AnswerService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -392,12 +386,28 @@ class AnswerService extends ServiceAbstracts
     /**
      * 对数据库中取出的回答信息进行处理
      *
-     * @param  array $answerInfo
+     * @param  array $answers 回答信息，或多个回答组成的数组
      * @return array
      */
-    public function handle(array $answerInfo): array
+    public function handle(array $answers): array
     {
-        return $answerInfo;
+        if (!$answers) {
+            return $answers;
+        }
+
+        if (!$isArray = is_array(current($answers))) {
+            $answers = [$answers];
+        }
+
+        foreach ($answers as &$answer) {
+            // todo 对回答进行处理
+        }
+
+        if ($isArray) {
+            return $answers;
+        }
+
+        return $answers[0];
     }
 
     /**

@@ -92,9 +92,7 @@ class UserService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -268,24 +266,34 @@ class UserService extends ServiceAbstracts
     /**
      * 对数据库中读取的用户信息进行处理
      *
-     * @param  array $userInfo
+     * @param  array $users 用户信息，或多个用户组成的数组
      * @return array
      */
-    public function handle(array $userInfo): array
+    public function handle(array $users): array
     {
-        if (!$userInfo) {
-            return $userInfo;
+        if (!$users) {
+            return $users;
         }
 
-        if (isset($userInfo['avatar'])) {
-            $userInfo['avatar'] = $this->userAvatarService->getBrandUrls($userInfo['user_id'], $userInfo['avatar']);
+        if (!$isArray = is_array(current($users))) {
+            $users = [$users];
         }
 
-        if (isset($userInfo['cover'])) {
-            $userInfo['cover'] = $this->userCoverService->getBrandUrls($userInfo['user_id']);
+        foreach ($users as &$user) {
+            if (isset($user['avatar'])) {
+                $user['avatar'] = $this->userAvatarService->getBrandUrls($user['user_id'], $user['avatar']);
+            }
+
+            if (isset($user['cover'])) {
+                $user['cover'] = $this->userCoverService->getBrandUrls($user['user_id']);
+            }
         }
 
-        return $userInfo;
+        if ($isArray) {
+            return $users;
+        }
+
+        return $users[0];
     }
 
     /**
@@ -355,8 +363,9 @@ class UserService extends ServiceAbstracts
             ->field(['user_id', 'avatar', 'username', 'headline'])
             ->select();
 
+        $usersTmp = $this->userService->handle($usersTmp);
+
         foreach ($usersTmp as $item) {
-            $item = $this->userService->handle($item);
             $users[$item['user_id']] = [
                 'user_id'  => $item['user_id'],
                 'username' => $item['username'],

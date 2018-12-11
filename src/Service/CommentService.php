@@ -68,9 +68,7 @@ class CommentService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -96,9 +94,7 @@ class CommentService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -220,12 +216,28 @@ class CommentService extends ServiceAbstracts
     /**
      * 对数据库中取出的评论数据进行处理
      *
-     * @param  array $commentInfo
+     * @param  array $comments 评论信息，或多个评论组成的数组
      * @return array
      */
-    public function handle($commentInfo): array
+    public function handle($comments): array
     {
-        return $commentInfo;
+        if (!$comments) {
+            return $comments;
+        }
+
+        if (!$isArray = is_array(current($comments))) {
+            $comments = [$comments];
+        }
+
+        foreach ($comments as &$comment) {
+            // todo 处理评论
+        }
+
+        if ($isArray) {
+            return $comments;
+        }
+
+        return $comments[0];
     }
 
     /**

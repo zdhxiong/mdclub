@@ -3938,7 +3938,7 @@ paths:
 
     get:
       tags:
-        - Trash
+        - Article
       summary: todo - 🔐获取文章列表
       description: |
         **仅管理员可调用该接口**
@@ -4070,7 +4070,7 @@ paths:
 
     get:
       tags:
-        - Trash
+        - Comment
       summary: todo - 🔐获取回收站中的评论列表
       description: |
         **仅管理员可调用该接口**
@@ -5235,8 +5235,6 @@ tags:
     description: 邮件
   - name: Image
     description: 图片
-  - name: Trash
-    description: 回收站
 
 externalDocs:
   description: 更多文档参见

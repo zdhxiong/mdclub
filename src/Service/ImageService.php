@@ -55,9 +55,7 @@ class ImageService extends ServiceAbstracts
             ->order(['create_time' => 'DESC'])
             ->paginate();
 
-        foreach ($list['data'] as &$item) {
-            $item = $this->handle($item);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -413,14 +411,28 @@ class ImageService extends ServiceAbstracts
     /**
      * 处理图片信息
      *
-     * @param array $image
+     * @param array $images 图片信息，或多个图片组成的数组
      * @return array
      */
-    public function handle(array $image): array
+    public function handle(array $images): array
     {
-        $image['urls'] = $this->getUrls($image['hash'], $image['create_time']);
+        if (!$images) {
+            return $images;
+        }
 
-        return $image;
+        if (!$isArray = is_array(current($images))) {
+            $images = [$images];
+        }
+
+        foreach ($images as &$image) {
+            $image['urls'] = $this->getUrls($image['hash'], $image['create_time']);
+        }
+
+        if ($isArray) {
+            return $images;
+        }
+
+        return $images[0];
     }
 
     /**

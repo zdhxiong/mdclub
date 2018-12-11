@@ -14,7 +14,7 @@ use App\Exception\ApiException;
 trait BaseTraits
 {
     abstract public function getPrivacyFields(): array;
-    abstract public function handle($data): array;
+    abstract public function handle(array $reports): array;
     abstract public function addRelationship(array $items, array $relationship = []): array;
 
     /**
@@ -32,15 +32,12 @@ trait BaseTraits
      * 若对象不存在，则抛出异常
      *
      * @param  int  $id
-     * @return bool
      */
-    public function hasOrFail(int $id): bool
+    public function hasOrFail(int $id)
     {
-        if (!$isHas = $this->has($id)) {
+        if (!$this->has($id)) {
             $this->throwNotFoundException();
         }
-
-        return $isHas;
     }
 
     /**
@@ -113,9 +110,7 @@ trait BaseTraits
             ->field($this->getPrivacyFields(), true)
             ->select();
 
-        foreach ($items as &$item) {
-            $item = $this->handle($item);
-        }
+        $items = $this->handle($items);
 
         if ($withRelationship) {
             $items = $this->addRelationship($items);

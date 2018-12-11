@@ -122,9 +122,7 @@ class TopicService extends ServiceAbstracts
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
-        foreach ($list['data'] as &$topic) {
-            $topic = $this->handle($topic);
-        }
+        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -390,20 +388,30 @@ class TopicService extends ServiceAbstracts
     /**
      * 对数据库中读取的话题数据进行处理
      *
-     * @param  array $topicInfo
+     * @param  array $topics 话题信息，或多个话题组成的数组
      * @return array
      */
-    public function handle(array $topicInfo): array
+    public function handle(array $topics): array
     {
-        if (!$topicInfo) {
-            return $topicInfo;
+        if (!$topics) {
+            return $topics;
         }
 
-        if (isset($topicInfo['cover'])) {
-            $topicInfo['cover'] = $this->getBrandUrls($topicInfo['topic_id'], $topicInfo['cover']);
+        if (!$isArray = is_array(current($topics))) {
+            $topics = [$topics];
         }
 
-        return $topicInfo;
+        foreach ($topics as &$topic) {
+            if (isset($topic['cover'])) {
+                $topic['cover'] = $this->getBrandUrls($topic['topic_id'], $topic['cover']);
+            }
+        }
+
+        if ($isArray) {
+            return $topics;
+        }
+
+        return $topics[0];
     }
 
     /**
