@@ -3449,7 +3449,7 @@ paths:
 
     get:
       tags:
-        - UserInfo
+        - UserDisabled
       summary: todo - 🔐获取已禁用用户列表
       description: |
         **仅管理员可调用该接口**
@@ -3490,7 +3490,7 @@ paths:
 
     post:
       tags:
-        - UserInfo
+        - UserDisabled
       summary: todo - 🔐批量恢复用户
       description: |
         **仅管理员可调用该接口**
@@ -3518,7 +3518,7 @@ paths:
 
     post:
       tags:
-        - UserInfo
+        - UserDisabled
       summary: todo - 🔐恢复指定用户
       description:
       responses:
@@ -3539,7 +3539,7 @@ paths:
 
     get:
       tags:
-        - Topic
+        - TopicTrash
       summary: todo - 🔐获取回收站中的话题列表
       description: |
         **仅管理员可调用该接口**
@@ -3576,7 +3576,7 @@ paths:
 
     post:
       tags:
-        - Topic
+        - TopicTrash
       summary: todo - 🔐批量恢复话题
       description: |
         **仅管理员可调用该接口**
@@ -3602,7 +3602,7 @@ paths:
 
     delete:
       tags:
-        - Topic
+        - TopicTrash
       summary: todo - 🔐批量删除回收站中的话题
       description: |
         **仅管理员可调用该接口**
@@ -3630,7 +3630,7 @@ paths:
 
     post:
       tags:
-        - Topic
+        - TopicTrash
       summary: todo - 🔐恢复指定话题
       description:
       responses:
@@ -3649,7 +3649,7 @@ paths:
 
     delete:
       tags:
-        - Topic
+        - TopicTrash
       summary: todo - 🔐删除指定话题
       description:
       responses:
@@ -3670,7 +3670,7 @@ paths:
 
     get:
       tags:
-        - Question
+        - QuestionTrash
       summary: todo - 🔐获取回收站中的问题列表
       description: |
         **仅管理员可调用该接口**
@@ -3708,7 +3708,7 @@ paths:
 
     post:
       tags:
-        - Question
+        - QuestionTrash
       summary: todo - 🔐批量恢复问题
       description: |
         **仅管理员可调用该接口**
@@ -3734,7 +3734,7 @@ paths:
 
     delete:
       tags:
-        - Question
+        - QuestionTrash
       summary: todo - 🔐批量删除回收站中的问题
       description: |
         **仅管理员可调用该接口**
@@ -3762,7 +3762,7 @@ paths:
 
     post:
       tags:
-        - Question
+        - QuestionTrash
       summary: todo - 🔐恢复指定问题
       description:
       responses:
@@ -3781,7 +3781,7 @@ paths:
 
     delete:
       tags:
-        - Question
+        - QuestionTrash
       summary: todo - 🔐删除指定问题
       description:
       responses:
@@ -3802,7 +3802,7 @@ paths:
 
     get:
       tags:
-        - Answer
+        - AnswerTrash
       summary: todo - 🔐获取回收站中的回答列表
       description: |
         **仅管理员可调用该接口**
@@ -3844,7 +3844,7 @@ paths:
 
     post:
       tags:
-        - Answer
+        - AnswerTrash
       summary: todo - 🔐批量恢复回答
       description: |
         **仅管理员可调用该接口**
@@ -3870,7 +3870,7 @@ paths:
 
     delete:
       tags:
-        - Answer
+        - AnswerTrash
       summary: todo - 🔐批量删除回收站中的回答
       description: |
         **仅管理员可调用该接口**
@@ -3898,7 +3898,7 @@ paths:
 
     post:
       tags:
-        - Answer
+        - AnswerTrash
       summary: todo - 🔐恢复指定回答
       description:
       responses:
@@ -3917,7 +3917,7 @@ paths:
 
     delete:
       tags:
-        - Answer
+        - AnswerTrash
       summary: todo - 🔐删除指定回答
       description:
       responses:
@@ -3938,7 +3938,7 @@ paths:
 
     get:
       tags:
-        - Article
+        - ArticleTrash
       summary: todo - 🔐获取文章列表
       description: |
         **仅管理员可调用该接口**
@@ -3976,7 +3976,7 @@ paths:
 
     post:
       tags:
-        - Article
+        - ArticleTrash
       summary: todo - 🔐批量恢复文章
       description: |
         **仅管理员可调用该接口**
@@ -4002,7 +4002,7 @@ paths:
 
     delete:
       tags:
-        - Article
+        - ArticleTrash
       summary: todo - 🔐批量删除回收站中的话题
       description: |
         **仅管理员可调用该接口**
@@ -4030,7 +4030,7 @@ paths:
 
     post:
       tags:
-        - Article
+        - ArticleTrash
       summary: todo - 🔐恢复指定文章
       description:
       responses:
@@ -4049,7 +4049,7 @@ paths:
 
     delete:
       tags:
-        - Article
+        - ArticleTrash
       summary: todo - 🔐删除指定文章
       description:
       responses:
@@ -4070,7 +4070,7 @@ paths:
 
     get:
       tags:
-        - Comment
+        - CommentTrash
       summary: todo - 🔐获取回收站中的评论列表
       description: |
         **仅管理员可调用该接口**
@@ -4120,7 +4120,7 @@ paths:
 
     post:
       tags:
-        - Comment
+        - CommentTrash
       summary: todo - 🔐批量恢复话题
       description: |
         **仅管理员可调用该接口**
@@ -4146,7 +4146,7 @@ paths:
 
     delete:
       tags:
-        - Comment
+        - CommentTrash
       summary: todo - 🔐批量删除回收站中的话题
       description: |
         **仅管理员可调用该接口**
@@ -4174,7 +4174,7 @@ paths:
 
     post:
       tags:
-        - Comment
+        - CommentTrash
       summary: todo - 🔐恢复指定回答
       description:
       responses:
@@ -4193,7 +4193,7 @@ paths:
 
     delete:
       tags:
-        - Comment
+        - CommentTrash
       summary: todo - 🔐删除指定回答
       description:
       responses:
@@ -5187,6 +5187,8 @@ tags:
     description: 重置密码
   - name: UserInfo
     description: 用户信息
+  - name: UserDisabled
+    description: 禁用的用户
   - name: UserAvatar
     description: 用户头像
   - name: UserCover
@@ -5195,10 +5197,14 @@ tags:
     description: 用户关注
   - name: Topic
     description: 话题信息
+  - name: TopicTrash
+    description: 话题回收站
   - name: TopicFollow
     description: 话题关注
   - name: Question
     description: 问题信息
+  - name: QuestionTrash
+    description: 问题回收站
   - name: QuestionComment
     description: 问题评论
   - name: QuestionVote
@@ -5207,12 +5213,16 @@ tags:
     description: 问题关注
   - name: Answer
     description: 回答信息
+  - name: AnswerTrash
+    description: 回答回收站
   - name: AnswerComment
     description: 回答评论
   - name: AnswerVote
     description: 回答投票
   - name: Article
     description: 文章信息
+  - name: ArticleTrash
+    description: 文章回收站
   - name: ArticleComment
     description: 文章评论
   - name: ArticleVote
@@ -5221,6 +5231,8 @@ tags:
     description: 文章关注
   - name: Comment
     description: 评论
+  - name: CommentTrash
+    description: 评论回收站
   - name: CommentVote
     description: 评论投票
   - name: Report
