@@ -27,6 +27,7 @@ const searchState = {
     user_id: '',
   },
   isDataEmpty: true,
+  isNeedRender: true,
 };
 
 export default $.extend({}, actionsAbstract, {

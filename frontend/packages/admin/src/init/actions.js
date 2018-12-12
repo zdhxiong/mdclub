@@ -1,5 +1,6 @@
 import { location } from '@hyperapp/router';
 
+import Index from '../pages/index/actions';
 import Answers from '../pages/answers/actions';
 import Articles from '../pages/articles/actions';
 import Comments from '../pages/comments/actions';
@@ -26,6 +27,7 @@ export default {
   setState: value => (value),
   getState: () => _state => _state,
 
+  index: Index,
   answers: Answers,
   articles: Articles,
   comments: Comments,

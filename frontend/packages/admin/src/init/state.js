@@ -1,5 +1,6 @@
 import { location } from '@hyperapp/router';
 
+import Index from '../pages/index/state';
 import Answers from '../pages/answers/state';
 import Articles from '../pages/articles/state';
 import Comments from '../pages/comments/state';
@@ -22,6 +23,7 @@ import DialogTopic from '../lazyComponents/dialog-topic/state';
 export default {
   location: location.state,
 
+  index: Index,
   answers: Answers,
   articles: Articles,
   comments: Comments,

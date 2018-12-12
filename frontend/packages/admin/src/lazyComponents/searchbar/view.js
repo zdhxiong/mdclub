@@ -1,4 +1,5 @@
 import { h } from 'hyperapp';
+import cc from 'classcat';
 import { JQ as $ } from 'mdui';
 import './index.less';
 
@@ -11,7 +12,12 @@ export default () => (global_state, global_actions) => {
       class="mc-searchbar"
       oncreate={element => actions.init({ element, global_actions })}
     >
-      <div class="bar">
+      <div class={cc([
+        'bar',
+        {
+          'mdui-hidden': !state.isNeedRender,
+        },
+      ])}>
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">search</i>
         {state.isDataEmpty
           ? <span class="placeholder mdui-text-color-theme-icon">筛选条件</span>
@@ -52,7 +58,13 @@ export default () => (global_state, global_actions) => {
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i>
       </div>
       <form
-        class="form mdui-menu"
+        class={cc([
+          'form',
+          'mdui-menu',
+          {
+            'mdui-hidden': !state.isNeedRender,
+          },
+        ])}
         onsubmit={actions.onSubmit}
       >
         {state.fields.map((field) => {
@@ -63,6 +75,7 @@ export default () => (global_state, global_actions) => {
                 <input
                   class="mdui-textfield-input"
                   type="text"
+                  autocomplete="off"
                   name={field.name}
                   value={state.data[field.name]}
                 />

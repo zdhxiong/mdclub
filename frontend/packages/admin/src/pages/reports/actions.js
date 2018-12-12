@@ -72,6 +72,7 @@ const searchState = {
     reportable_type: '',
   },
   isDataEmpty: true,
+  isNeedRender: true,
 };
 
 export default $.extend({}, actionsAbstract, {

@@ -22,6 +22,7 @@ const searchState = {
     name: '',
   },
   isDataEmpty: true,
+  isNeedRender: true,
 };
 
 export default $.extend({}, actionsAbstract, {

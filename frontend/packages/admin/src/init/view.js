@@ -2,6 +2,7 @@ import { h } from 'hyperapp';
 import { Route } from '@hyperapp/router';
 import { JQ as $ } from 'mdui';
 
+import Index from '../pages/index/view';
 import Answers from '../pages/answers/view';
 import Articles from '../pages/articles/view';
 import Comments from '../pages/comments/view';
@@ -22,6 +23,7 @@ export default (global_state, global_actions) => (
   <div>
     <AppBar/>
     <Drawer/>
+    <Route path={$.path('')} render={Index(global_state, global_actions)}/>
     <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>
     <Route path={$.path('/articles')} render={Articles(global_state, global_actions)}/>
     <Route path={$.path('/comments')} render={Comments(global_state, global_actions)}/>
