@@ -6,7 +6,7 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchState = {
+const searchBarState = {
   fields: [
     {
       name: 'hash',
@@ -56,7 +56,7 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchState);
+    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
     $(document).on('search-submit', () => {
       actions.loadData();

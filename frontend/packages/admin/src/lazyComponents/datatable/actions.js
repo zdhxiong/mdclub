@@ -30,6 +30,13 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
+   * 初始化表格
+   */
+  initDatatable: () => (state, actions) => {
+
+  },
+
+  /**
    * 重置状态
    */
   reset: () => (state, actions) => {
@@ -77,12 +84,14 @@ export default $.extend({}, actionsAbstract, {
       columns: response.columns,
       actions: response.actions,
       batchActions: response.batchActions,
+      orders: response.orders,
       primaryKey: response.primaryKey,
       onRowClick: typeof response.onRowClick !== 'undefined' ? response.onRowClick : false,
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,
       data: response.data,
+      order: response.order,
     });
 
     global_actions.lazyComponents.pagination.setState(response.pagination);
@@ -126,5 +135,16 @@ export default $.extend({}, actionsAbstract, {
     });
 
     actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
+  },
+
+  /**
+   * 修改排序方式
+   */
+  changeOrder: ({ e, order, onChange }) => (state, actions) => {
+    e.preventDefault();
+
+    actions.setState({ order });
+
+    onChange();
   },
 });

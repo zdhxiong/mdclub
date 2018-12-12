@@ -6,7 +6,7 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchState = {
+const searchBarState = {
   fields: [
     {
       name: 'topic_id',
@@ -32,7 +32,7 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchState);
+    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
     $(document).on('search-submit', () => {
       actions.loadData();
@@ -106,10 +106,23 @@ export default $.extend({}, actionsAbstract, {
         },
       ];
 
+      const orders = [
+        {
+          name: '话题ID',
+          value: 'topic_id',
+        },
+        {
+          name: '关注者数量',
+          value: '-follower_count',
+        },
+      ];
+
       response.primaryKey = 'topic_id';
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
+      response.orders = orders;
+      response.order = 'topic_id';
       response.onRowClick = global_actions.lazyComponents.dialogTopic.open;
       datatableActions.loadEnd(response);
     };

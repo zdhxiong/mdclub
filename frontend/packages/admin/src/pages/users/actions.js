@@ -6,7 +6,7 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchState = {
+const searchBarState = {
   fields: [
     {
       name: 'user_id',
@@ -37,7 +37,7 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchState);
+    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
     $(document).on('search-submit', () => {
       actions.loadData();
@@ -112,6 +112,17 @@ export default $.extend({}, actionsAbstract, {
         },
       ];
 
+      const orders = [
+        {
+          name: '注册时间',
+          value: '-create_time',
+        },
+        {
+          name: '关注者数量',
+          value: '-follower_count',
+        },
+      ];
+
       response.data.map((item, index) => {
         response.data[index].avatar_username = `<img src="${item.avatar.s}" class="mdui-float-left mdui-m-r-2"/>${item.username}`;
       });
@@ -120,6 +131,8 @@ export default $.extend({}, actionsAbstract, {
       response.columns = columns;
       response.actions = _actions;
       response.batchActions = batchActions;
+      response.orders = orders;
+      response.order = '-create_time';
       response.onRowClick = global_actions.lazyComponents.dialogUser.open;
       datatableActions.loadEnd(response);
     };

@@ -148,21 +148,36 @@
   }
 
   // 操作项
-  tbody {
-    .actions {
-      text-align: right;
+  .actions {
+    text-align: right;
 
-      .mdui-btn {
-        margin-left: 8px;
-        display: none;
-        border-bottom: none;
+    .mdui-btn {
+      margin-left: 8px;
+      display: none;
+      border-bottom: none;
 
-        .mdui-icon {
-          font-size: 20px;
-        }
+      .mdui-icon {
+        font-size: 20px;
       }
     }
+  }
 
+  thead {
+    .actions {
+      overflow: visible;
+
+      .mdui-btn {
+        display: inline-block;
+      }
+
+      .mdui-menu {
+        text-align: left;
+        width: 220px;
+      }
+    }
+  }
+
+  tbody {
     tr:hover {
       .actions {
         .mdui-btn {

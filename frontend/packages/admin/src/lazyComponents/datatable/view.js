@@ -98,7 +98,25 @@ export default ({ loadData }) => (global_state, global_actions) => {
               <th class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{column.title}</th>
             ))
           }
-          {state.checkedCount ? '' : <th></th>}
+          {state.checkedCount ? '' : <th class="actions">
+            {state.orders.length ? <button
+              class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
+              mdui-tooltip={`{content: '排序选项', delay: 300}`}
+              mdui-menu="{target: '#datatable-sort-menu', covered: false}"
+            >
+              <i class="mdui-icon material-icons">sort</i>
+            </button> : ''}
+            {state.orders.length ? <ul class="mdui-menu" id="datatable-sort-menu">
+              {state.orders.map(_order => (
+                <li class="mdui-menu-item">
+                  <a href="" onclick={e => actions.changeOrder({ e, order: _order.value, onChange: loadData })}>
+                    <i class="mdui-menu-item-icon mdui-icon material-icons">{_order.value === state.order ? 'check' : ''}</i>
+                    {_order.name}
+                  </a>
+                </li>
+              ))}
+            </ul> : ''}
+          </th>}
         </tr>
         </thead>
         {isLoading ? <Loading/> : ''}

@@ -35,6 +35,17 @@ export default {
    * ]
    */
   batchActions: [],
+  /**
+   * 排序方式定义
+   * [
+   *   {
+   *     name: '提示文字'
+   *     value: '排序参数值'
+   *   }
+   * ]
+   */
+  orders: [],
+  order: '', // 当前排序方式
   primaryKey: '', // 主键字段名
   onRowClick: false, // 点击行执行的函数
 
@@ -43,6 +54,5 @@ export default {
   checkedCount: 0,
 
   data: [], // 接口返回的原始数据
-  order: '', // 排序方式
   loading: false, // 是否正在加载
 };
