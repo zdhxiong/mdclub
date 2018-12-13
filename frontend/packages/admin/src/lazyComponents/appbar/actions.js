@@ -48,4 +48,11 @@ export default $.extend({}, actionsAbstract, {
       .removeClass('mdui-theme-layout-light mdui-theme-layout-dark')
       .addClass(`mdui-theme-layout-${theme}`);
   },
+
+  /**
+   * 退出登录
+   */
+  logout: () => {
+
+  },
 });

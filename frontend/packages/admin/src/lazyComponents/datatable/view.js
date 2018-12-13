@@ -9,41 +9,48 @@ import Empty from '../../components/empty';
 import Pagination from '../../lazyComponents/pagination/view';
 
 const CheckAll = ({ isChecked, onChange }) => (
-  <label class="mdui-checkbox">
-    <input type="checkbox" checked={isChecked} onchange={onChange}/>
-    <i class="mdui-checkbox-icon"></i>
-  </label>
+  <th class="mdui-table-cell-checkbox">
+    <label class="mdui-checkbox">
+      <input type="checkbox" checked={isChecked} onchange={onChange}/>
+      <i class="mdui-checkbox-icon"></i>
+    </label>
+  </th>
 );
 
 const CheckOne = ({ isChecked, onChange }) => (
-  <label class="mdui-checkbox">
-    <input type="checkbox" checked={isChecked} onchange={onChange}/>
-    <i class="mdui-checkbox-icon"></i>
-  </label>
+  <td class="mdui-table-cell-checkbox">
+    <label class="mdui-checkbox">
+      <input type="checkbox" checked={isChecked} onchange={onChange}/>
+      <i class="mdui-checkbox-icon"></i>
+    </label>
+  </td>
 );
 
-const Time = ({ timestamp }) => (
-  <span title={timeHelper.format(timestamp)}>{timeHelper.friendly(timestamp)}</span>
+const ValueNumber = ({ value }) => (
+  <td class="mdui-table-col-numeric">{value}</td>
 );
 
-const ActionBtn = ({ label, icon, onClick }) => (
-  <button
+const ValueTime = ({ value }) => (
+  <td><span title={timeHelper.format(value)}>{timeHelper.friendly(value)}</span></td>
+);
+
+const ValueHtml = ({ value }) => (
+  <td oncreate={rawHtml(value)} onupdate={rawHtml(value)}></td>
+);
+
+const ValueRelation = ({ column, row, value }) => (
+  <td><a onclick={e => column.onClick({ e, row })}>{value}</a></td>
+);
+
+const ActionBtn = ({ icon, label, href, onClick }) => (
+  <a
     class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
     mdui-tooltip={`{content: '${label}', delay: 300}`}
+    href={href}
+    target={href ? '_blank' : false}
     onclick={onClick}
   >
     <i class="mdui-icon material-icons">{icon}</i>
-  </button>
-);
-
-const ActionTarget = ({ target }) => (
-  <a
-    href={target}
-    target="_blank"
-    class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
-    mdui-tooltip="{content: '新窗口打开', delay: 300}"
-  >
-    <i class="mdui-icon material-icons">open_in_new</i>
   </a>
 );
 
@@ -62,17 +69,8 @@ export default ({ loadData }) => (global_state, global_actions) => {
     >
       <table class="mdui-table mdui-table-hoverable">
         <thead>
-        <tr class={cc([
-          {
-            checked: state.checkedCount,
-          },
-        ])}>
-          <th class="mdui-table-cell-checkbox">
-            <CheckAll
-              isChecked={state.isCheckedAll}
-              onChange={e => actions.checkAll(e)}
-            />
-          </th>
+        <tr class={cc([{ checked: state.checkedCount }])}>
+          <CheckAll isChecked={state.isCheckedAll} onChange={e => actions.checkAll(e)}/>
           {state.checkedCount ?
             <th colspan={state.columns.length}>
               <span>
@@ -98,15 +96,15 @@ export default ({ loadData }) => (global_state, global_actions) => {
               <th class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{column.title}</th>
             ))
           }
-          {state.checkedCount ? '' : <th class="actions">
-            {state.orders.length ? <button
+          {!state.checkedCount && <th class="actions">
+            {state.orders.length && <button
               class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
               mdui-tooltip={'{content: \'排序选项\', delay: 300}'}
               mdui-menu="{target: '#datatable-sort-menu', covered: false}"
             >
               <i class="mdui-icon material-icons">sort</i>
-            </button> : ''}
-            {state.orders.length ? <ul class="mdui-menu" id="datatable-sort-menu">
+            </button>}
+            {state.orders.length && <ul class="mdui-menu" id="datatable-sort-menu">
               {state.orders.map(_order => (
                 <li class="mdui-menu-item">
                   <a href="" onclick={e => actions.changeOrder({ e, order: _order.value, onChange: loadData })}>
@@ -115,12 +113,12 @@ export default ({ loadData }) => (global_state, global_actions) => {
                   </a>
                 </li>
               ))}
-            </ul> : ''}
+            </ul>}
           </th>}
         </tr>
         </thead>
-        {isLoading ? <Loading/> : ''}
-        {isEmpty ? <Empty/> : ''}
+        {isLoading && <Loading/>}
+        {isEmpty && <Empty/>}
         <tbody class={cc([
           {
             'is-loading': isLoading,
@@ -130,41 +128,29 @@ export default ({ loadData }) => (global_state, global_actions) => {
         {state.data.map(row => (
           <tr
             key={row[state.primaryKey]}
-            class={cc([
-              {
-                'mdui-table-row-selected': state.isCheckedRows[row[state.primaryKey]],
-              },
-            ])}
+            class={cc([{ 'mdui-table-row-selected': state.isCheckedRows[row[state.primaryKey]] }])}
             onclick={(e) => {
-              if (typeof state.onRowClick !== 'function') {
-                return;
+              if (typeof state.onRowClick === 'function' && e.target.nodeName === 'TD') {
+                state.onRowClick(row[state.primaryKey]);
               }
-
-              if (e.target.nodeName !== 'TD') {
-                return;
-              }
-
-              state.onRowClick(row[state.primaryKey]);
             }}
           >
-            <td class="mdui-table-cell-checkbox">
-              <CheckOne
-                isChecked={state.isCheckedRows[row[state.primaryKey]]}
-                onChange={() => actions.checkOne(row[state.primaryKey])}
-              />
-            </td>
+            <CheckOne
+              isChecked={state.isCheckedRows[row[state.primaryKey]]}
+              onChange={() => actions.checkOne(row[state.primaryKey])}
+            />
             {state.columns.map((column) => {
               const value = eval(`row.${column.field}`);
 
               switch (column.type) {
                 case 'number':
-                  return <td class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}>{value}</td>;
+                  return <ValueNumber value={value}/>;
                 case 'time':
-                  return <td><Time timestamp={value}/></td>;
+                  return <ValueTime value={value}/>;
                 case 'relation':
-                  return <td><a href="" onclick={e => column.onClick({ e, row })}>{value}</a></td>;
+                  return <ValueRelation column={column} row={row} value={value} />;
                 case 'html':
-                  return <td oncreate={rawHtml(value)} onupdate={rawHtml(value)}></td>;
+                  return <ValueHtml value={value}/>;
                 default:
                   return <td>{value}</td>;
               }
@@ -173,12 +159,19 @@ export default ({ loadData }) => (global_state, global_actions) => {
               {state.buttons.map((button) => {
                 switch (button.type) {
                   case 'target':
-                    return <ActionTarget target={button.getTargetLink(row)}/>;
+                    return <ActionBtn
+                      icon="open_in_new"
+                      label="新窗口打开"
+                      href={button.getTargetLink(row)}
+                    />;
                   case 'btn':
                     return <ActionBtn
-                      label={button.label}
                       icon={button.icon}
-                      onClick={() => button.onClick(row)}
+                      label={button.label}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        button.onClick(row);
+                      }}
                     />;
                   default:
                     return '';

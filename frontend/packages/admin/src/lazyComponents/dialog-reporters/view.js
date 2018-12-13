@@ -47,9 +47,9 @@ export default () => (global_state, global_actions) => {
             </li>
           ))}
         </ul>
-        {isEmpty ? <Empty/> : ''}
-        {isLoading ? <Loading/> : ''}
-        {isLoaded ? <Loaded/> : ''}
+        {isEmpty && <Empty/>}
+        {isLoading && <Loading/>}
+        {isLoaded && <Loaded/>}
       </div>
     </div>
   );

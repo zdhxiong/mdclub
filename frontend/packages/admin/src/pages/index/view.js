@@ -9,7 +9,7 @@ export default (global_state, global_actions) => {
     <div
       oncreate={() => actions.init({ global_actions })}
       ondestroy={actions.destroy}
-      key={match.url}
+      key="index"
       id="page-index"
       class="mdui-container-fluid"
     >index</div>

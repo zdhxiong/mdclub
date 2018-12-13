@@ -32,7 +32,20 @@ const ThemeBtn = ({ onClick, theme }) => (
   </div>
 );
 
-const UserMenu = ({ user }) => (
+const UserMenuItem = ({ icon, name, href, onClick }) => (
+  <li class="mdui-menu-item">
+    <a
+      class="mdui-ripple"
+      href={href}
+      target={href ? '_blank' : false}
+      onclick={onClick}
+    >
+      <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">{icon}</i>{name}
+    </a>
+  </li>
+);
+
+const UserMenu = ({ user, logout }) => (
   <div class="user">
     <div
       class="mdui-btn mdui-btn-icon mdui-btn-dense"
@@ -42,21 +55,9 @@ const UserMenu = ({ user }) => (
       <img src={user.avatar.s} width="32" height="32"/>
     </div>
     <ul class="mdui-menu" id="appbar-user-popover">
-      <li class="mdui-menu-item">
-        <a href={`${window.G_ROOT}/`} class="mdui-ripple" target="_blank">
-          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">home</i>查看站点
-        </a>
-      </li>
-      <li class="mdui-menu-item">
-        <a href={`${window.G_ROOT}/users/${user.user_id}`} class="mdui-ripple" target="_blank">
-          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">person</i>我的主页
-        </a>
-      </li>
-      <li class="mdui-menu-item">
-        <a href="" class="mdui-ripple">
-          <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">exit_to_app</i>退出登录
-        </a>
-      </li>
+      <UserMenuItem icon="home" name="查看站点" href={`${window.G_ROOT}/`}/>
+      <UserMenuItem icon="person" name="我的主页" href={`${window.G_ROOT}/users/${user.user_id}`}/>
+      <UserMenuItem icon="exit_to_app" name="退出登录" onClick={logout}/>
     </ul>
   </div>
 );
@@ -74,11 +75,8 @@ export default () => (global_state, global_actions) => {
         <DrawerBtn/>
         <HomeLink/>
         <SearchBar/>
-        <ThemeBtn
-          onClick={actions.toggleTheme}
-          theme={state.theme}
-        />
-        {state.user.username ? <UserMenu user={state.user}/> : ''}
+        <ThemeBtn onClick={actions.toggleTheme} theme={state.theme}/>
+        {state.user.username && <UserMenu user={state.user} logout={actions.logout}/>}
       </div>
     </div>
   );
