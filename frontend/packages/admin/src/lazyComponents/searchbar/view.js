@@ -19,12 +19,15 @@ export default () => (global_state, global_actions) => {
         },
       ])}>
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">search</i>
-        {state.isDataEmpty
-          ? <span class="placeholder mdui-text-color-theme-icon">筛选条件</span>
-          : <span class="chips">
+        <If condition={state.isDataEmpty}>
+          <span class="placeholder mdui-text-color-theme-icon">筛选条件</span>
+        </If>
+        <If condition={!state.isDataEmpty}>
+          <span class="chips">
             {state.fields.map((field) => {
               if (typeof state.data[field.name] !== 'undefined' && state.data[field.name] !== '') {
                 let value;
+
                 if (typeof field.enum !== 'undefined') {
                   field.enum.map((item) => {
                     if (state.data[field.name] === item.value) {
@@ -45,16 +48,17 @@ export default () => (global_state, global_actions) => {
                     <span
                       class="mdui-chip-delete"
                       title="删除该条件"
-                      onclick={() => actions.onChipDelete({ name: field.name })}
+                      onclick={() => actions.onChipDelete({name: field.name})}
                     >
                       <i class="mdui-icon material-icons">cancel</i>
                     </span>
                   </div>);
               }
 
-              return '';
+              return null;
             })}
-          </span>}
+          </span>
+        </If>
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i>
       </div>
       <form

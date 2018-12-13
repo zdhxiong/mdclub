@@ -76,7 +76,9 @@ export default () => (global_state, global_actions) => {
         <HomeLink/>
         <SearchBar/>
         <ThemeBtn onClick={actions.toggleTheme} theme={state.theme}/>
-        {state.user.username && <UserMenu user={state.user} logout={actions.logout}/>}
+        <If condition={state.user.username}>
+          <UserMenu user={state.user} logout={actions.logout}/>
+        </If>
       </div>
     </div>
   );

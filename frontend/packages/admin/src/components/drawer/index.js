@@ -32,7 +32,7 @@ const Item = ({ url, icon, title }) => (
 );
 
 export default () => (
-  <div class="mc-drawer mdui-drawer">
+  <div class="mc-drawer mdui-drawer" key="mc-drawer">
     <div
       class="mdui-list"
       mdui-collapse

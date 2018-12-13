@@ -31,7 +31,7 @@ export default () => (global_state, global_actions) => {
         <button class="mdui-btn mdui-btn-icon mdui-ripple close" mdui-dialog-close>
           <i class="mdui-icon material-icons">close</i>
         </button>
-        {state.pagination && `${state.pagination.total} 人举报`}
+        <If condition={state.pagination}>{`${state.pagination.total} 人举报`}</If>
       </div>
       <div class="mdui-dialog-content">
         <ul class="mdui-list">
@@ -47,9 +47,9 @@ export default () => (global_state, global_actions) => {
             </li>
           ))}
         </ul>
-        {isEmpty && <Empty/>}
-        {isLoading && <Loading/>}
-        {isLoaded && <Loaded/>}
+        <If condition={isEmpty}><Empty/></If>
+        <If condition={isLoading}><Loading/></If>
+        <If condition={isLoaded}><Loaded/></If>
       </div>
     </div>
   );
