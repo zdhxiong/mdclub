@@ -35,46 +35,6 @@ const getExtraFields = (report) => {
   return report;
 };
 
-const searchBarState = {
-  fields: [
-    {
-      name: 'reportable_type',
-      label: '类型',
-      enum: [
-        {
-          name: '全部',
-          value: '',
-        },
-        {
-          name: '文章',
-          value: 'article',
-        },
-        {
-          name: '提问',
-          value: 'question',
-        },
-        {
-          name: '回答',
-          value: 'answer',
-        },
-        {
-          name: '评论',
-          value: 'comment',
-        },
-        {
-          name: '用户',
-          value: 'user',
-        },
-      ],
-    },
-  ],
-  data: {
-    reportable_type: '',
-  },
-  isDataEmpty: true,
-  isNeedRender: true,
-};
-
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
@@ -82,12 +42,116 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
-    $(document).on('search-submit', () => {
-      actions.loadData();
+    const {
+      searchBar,
+      datatable,
+      dialogReporters,
+      dialogUser,
+    } = global_actions.lazyComponents;
+
+    const searchBarState = {
+      fields: [
+        {
+          name: 'reportable_type',
+          label: '类型',
+          enum: [
+            {
+              name: '全部',
+              value: '',
+            },
+            {
+              name: '文章',
+              value: 'article',
+            },
+            {
+              name: '提问',
+              value: 'question',
+            },
+            {
+              name: '回答',
+              value: 'answer',
+            },
+            {
+              name: '评论',
+              value: 'comment',
+            },
+            {
+              name: '用户',
+              value: 'user',
+            },
+          ],
+        },
+      ],
+      data: {
+        reportable_type: '',
+      },
+      isDataEmpty: true,
+      isNeedRender: true,
+    };
+
+    const columns = [
+      {
+        title: '内容',
+        field: 'reportable_title',
+        type: 'relation',
+        onClick: ({ e, row }) => {
+          e.preventDefault();
+
+          switch (row.reportable_type) {
+            case 'question':
+              break;
+            case 'article':
+              break;
+            case 'answer':
+              break;
+            case 'comment':
+              break;
+            case 'user':
+              dialogUser.open(row.relationship.user.user_id);
+              break;
+            default:
+              break;
+          }
+        },
+      },
+      {
+        title: '举报人数',
+        field: 'reporter_count',
+        type: 'number',
+      },
+    ];
+
+    const buttons = [
+      {
+        type: 'btn',
+        onClick: actions.deleteOne,
+        label: '处理完成',
+        icon: 'done',
+      },
+    ];
+
+    const batchButtons = [
+      {
+        label: '批量处理完成',
+        icon: 'done_all',
+        onClick: actions.batchDelete,
+      },
+    ];
+
+    const primaryKey = 'key';
+    const onRowClick = dialogReporters.open;
+
+    searchBar.setState(searchBarState);
+    datatable.setState({
+      columns,
+      buttons,
+      batchButtons,
+      primaryKey,
+      onRowClick,
     });
 
+    $(document).on('search-submit', actions.loadData);
     actions.loadData();
   },
 
@@ -101,84 +165,23 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 加载数据
    */
-  loadData: () => (state, actions) => {
-    const datatableActions = global_actions.lazyComponents.datatable;
+  loadData: () => {
+    const { datatable, pagination, searchBar } = global_actions.lazyComponents;
 
-    datatableActions.loadStart();
+    datatable.loadStart();
 
-    const paginationState = global_actions.lazyComponents.pagination.getState();
-    const searchBarData = global_actions.lazyComponents.searchBar.getState().data;
-
-    const data = $.extend({}, ObjectHelper.filter(searchBarData), {
-      page: paginationState.page,
-      per_page: paginationState.per_page,
+    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
+      page: pagination.getState().page,
+      per_page: pagination.getState().per_page,
     });
 
-    const success = (response) => {
-      const columns = [
-        {
-          title: '内容',
-          field: 'reportable_title',
-          type: 'relation',
-          onClick: ({ e, row }) => {
-            e.preventDefault();
-
-            switch (row.reportable_type) {
-              case 'question':
-                break;
-              case 'article':
-                break;
-              case 'answer':
-                break;
-              case 'comment':
-                break;
-              case 'user':
-                global_actions.lazyComponents.dialogUser.open(row.relationship.user.user_id);
-                break;
-              default:
-                break;
-            }
-          },
-        },
-        {
-          title: '举报人数',
-          field: 'reporter_count',
-          type: 'number',
-        },
-      ];
-
-      const _actions = [
-        {
-          type: 'btn',
-          onClick: actions.deleteOne,
-          label: '处理完成',
-          icon: 'done',
-        },
-      ];
-
-      const batchActions = [
-        {
-          label: '批量处理完成',
-          icon: 'done_all',
-          onClick: actions.batchDelete,
-        },
-      ];
-
+    Report.getList(data, (response) => {
       response.data.map((item, index) => {
         response.data[index] = getExtraFields(item);
       });
 
-      response.primaryKey = 'key';
-      response.columns = columns;
-      response.actions = _actions;
-      response.batchActions = batchActions;
-      response.orders = [];
-      response.order = '';
-      response.onRowClick = global_actions.lazyComponents.dialogReporters.open;
-      datatableActions.loadEnd(response);
-    };
-
-    Report.getList(data, success);
+      datatable.loadEnd(response);
+    });
   },
 
   /**

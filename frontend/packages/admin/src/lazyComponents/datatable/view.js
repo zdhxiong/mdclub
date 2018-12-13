@@ -76,10 +76,10 @@ export default ({ loadData }) => (global_state, global_actions) => {
           {state.checkedCount ?
             <th colspan={state.columns.length}>
               <span>
-              {state.batchActions.map(action => (
+              {state.batchButtons.map(button => (
                 <ActionBtn
-                  label={action.label}
-                  icon={action.icon}
+                  label={button.label}
+                  icon={button.icon}
                   onClick={() => {
                     const items = [];
                     state.data.map((item) => {
@@ -87,7 +87,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
                         items.push(item);
                       }
                     });
-                    action.onClick(items);
+                    button.onClick(items);
                   }}
                 />
               ))}
@@ -101,7 +101,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
           {state.checkedCount ? '' : <th class="actions">
             {state.orders.length ? <button
               class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
-              mdui-tooltip={`{content: '排序选项', delay: 300}`}
+              mdui-tooltip={'{content: \'排序选项\', delay: 300}'}
               mdui-menu="{target: '#datatable-sort-menu', covered: false}"
             >
               <i class="mdui-icon material-icons">sort</i>
@@ -170,15 +170,15 @@ export default ({ loadData }) => (global_state, global_actions) => {
               }
             })}
             <td class="actions">
-              {state.actions.map((action) => {
-                switch (action.type) {
+              {state.buttons.map((button) => {
+                switch (button.type) {
                   case 'target':
-                    return <ActionTarget target={action.getTargetLink(row)}/>;
+                    return <ActionTarget target={button.getTargetLink(row)}/>;
                   case 'btn':
                     return <ActionBtn
-                      label={action.label}
-                      icon={action.icon}
-                      onClick={() => action.onClick(row)}
+                      label={button.label}
+                      icon={button.icon}
+                      onClick={() => button.onClick(row)}
                     />;
                   default:
                     return '';

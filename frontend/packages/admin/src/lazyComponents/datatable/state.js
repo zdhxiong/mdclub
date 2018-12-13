@@ -23,7 +23,7 @@ export default {
    *   }
    * ]
    */
-  actions: [],
+  buttons: [],
   /**
    * 批量操作项
    * [
@@ -34,7 +34,7 @@ export default {
    *   }
    * ]
    */
-  batchActions: [],
+  batchButtons: [],
   /**
    * 排序方式定义
    * [

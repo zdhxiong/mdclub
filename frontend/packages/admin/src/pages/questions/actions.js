@@ -6,25 +6,6 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchBarState = {
-  fields: [
-    {
-      name: 'question_id',
-      label: '提问ID',
-    },
-    {
-      name: 'user_id',
-      label: '用户ID',
-    },
-  ],
-  data: {
-    question_id: '',
-    user_id: '',
-  },
-  isDataEmpty: true,
-  isNeedRender: true,
-};
-
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
@@ -32,12 +13,118 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
-    $(document).on('search-submit', () => {
-      actions.loadData();
+    const {
+      searchBar,
+      datatable,
+      dialogQuestion,
+      dialogUser,
+    } = global_actions.lazyComponents;
+
+    const searchBarState = {
+      fields: [
+        {
+          name: 'question_id',
+          label: '提问ID',
+        },
+        {
+          name: 'user_id',
+          label: '用户ID',
+        },
+      ],
+      data: {
+        question_id: '',
+        user_id: '',
+      },
+      isDataEmpty: true,
+      isNeedRender: true,
+    };
+
+    const columns = [
+      {
+        title: 'ID',
+        field: 'question_id',
+        type: 'number',
+      },
+      {
+        title: '作者',
+        field: 'relationship.user.username',
+        type: 'relation',
+        onClick: ({ e, row }) => {
+          e.preventDefault();
+          dialogUser.open(row.user_id);
+        },
+      },
+      {
+        title: '标题',
+        field: 'title',
+        type: 'string',
+      },
+      {
+        title: '发表时间',
+        field: 'create_time',
+        type: 'time',
+      },
+    ];
+
+    const buttons = [
+      {
+        type: 'target',
+        getTargetLink: question => `${window.G_ROOT}/questions/${question.question_id}`,
+      },
+      {
+        type: 'btn',
+        onClick: actions.editOne,
+        label: '编辑',
+        icon: 'edit',
+      },
+      {
+        type: 'btn',
+        onClick: actions.deleteOne,
+        label: '删除',
+        icon: 'delete',
+      },
+    ];
+
+    const batchButtons = [
+      {
+        label: '批量删除',
+        icon: 'delete',
+        onClick: actions.batchDelete,
+      },
+    ];
+
+    const orders = [
+      {
+        name: '创建时间',
+        value: '-create_time',
+      },
+      {
+        name: '上次更新时间',
+        value: '-update_time',
+      },
+      {
+        name: '投票数',
+        value: '-vote_count',
+      },
+    ];
+
+    const order = '-create_time';
+    const primaryKey = 'question_id';
+    const onRowClick = dialogQuestion.open;
+
+    searchBar.setState(searchBarState);
+    datatable.setState({
+      columns,
+      buttons,
+      batchButtons,
+      orders,
+      order,
+      primaryKey,
+      onRowClick,
     });
 
+    $(document).on('search-submit', actions.loadData);
     actions.loadData();
   },
 
@@ -51,102 +138,18 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 加载数据
    */
-  loadData: () => (state, actions) => {
-    const datatableActions = global_actions.lazyComponents.datatable;
+  loadData: () => {
+    const { datatable, pagination, searchBar } = global_actions.lazyComponents;
 
-    datatableActions.setState({ order: '-create_time' });
-    datatableActions.loadStart();
+    datatable.loadStart();
 
-    const datatableState = datatableActions.getState();
-    const paginationState = global_actions.lazyComponents.pagination.getState();
-    const searchBarData = global_actions.lazyComponents.searchBar.getState().data;
-
-    const data = $.extend({}, ObjectHelper.filter(searchBarData), {
-      page: paginationState.page,
-      per_page: paginationState.per_page,
-      order: datatableState.order,
+    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
+      page: pagination.getState().page,
+      per_page: pagination.getState().per_page,
+      order: datatable.getState().order,
     });
 
-    const success = (response) => {
-      const columns = [
-        {
-          title: 'ID',
-          field: 'question_id',
-          type: 'number',
-        },
-        {
-          title: '作者',
-          field: 'relationship.user.username',
-          type: 'relation',
-          onClick: ({ e, row }) => {
-            e.preventDefault();
-            global_actions.lazyComponents.dialogUser.open(row.user_id);
-          },
-        },
-        {
-          title: '标题',
-          field: 'title',
-          type: 'string',
-        },
-        {
-          title: '发表时间',
-          field: 'create_time',
-          type: 'time',
-        },
-      ];
-
-      const _actions = [
-        {
-          type: 'target',
-          getTargetLink: question => `${window.G_ROOT}/questions/${question.question_id}`,
-        },
-        {
-          type: 'btn',
-          onClick: actions.editOne,
-          label: '编辑',
-          icon: 'edit',
-        },
-        {
-          type: 'btn',
-          onClick: actions.deleteOne,
-          label: '删除',
-          icon: 'delete',
-        },
-      ];
-
-      const batchActions = [
-        {
-          label: '批量删除',
-          icon: 'delete',
-          onClick: actions.batchDelete,
-        },
-      ];
-
-      const orders = [
-        {
-          name: '创建时间',
-          value: '-create_time',
-        },
-        {
-          name: '上次更新时间',
-          value: '-update_time',
-        },
-        {
-          name: '投票数',
-          value: '-vote_count',
-        },
-      ];
-
-      response.primaryKey = 'question_id';
-      response.columns = columns;
-      response.actions = _actions;
-      response.batchActions = batchActions;
-      response.orders = orders;
-      response.order = '-create_time';
-      datatableActions.loadEnd(response);
-    };
-
-    Question.getList(data, success);
+    Question.getList(data, datatable.loadEnd);
   },
 
   /**

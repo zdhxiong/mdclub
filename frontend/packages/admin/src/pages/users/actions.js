@@ -6,30 +6,6 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchBarState = {
-  fields: [
-    {
-      name: 'user_id',
-      label: '用户ID',
-    },
-    {
-      name: 'username',
-      label: '用户名',
-    },
-    {
-      name: 'email',
-      label: '邮箱',
-    },
-  ],
-  data: {
-    user_id: '',
-    username: '',
-    email: '',
-  },
-  isDataEmpty: true,
-  isNeedRender: true,
-};
-
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
@@ -37,12 +13,104 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
-    $(document).on('search-submit', () => {
-      actions.loadData();
+    const {
+      searchBar,
+      datatable,
+      dialogUser,
+    } = global_actions.lazyComponents;
+
+    const searchBarState = {
+      fields: [
+        {
+          name: 'user_id',
+          label: '用户ID',
+        },
+        {
+          name: 'username',
+          label: '用户名',
+        },
+        {
+          name: 'email',
+          label: '邮箱',
+        },
+      ],
+      data: {
+        user_id: '',
+        username: '',
+        email: '',
+      },
+      isDataEmpty: true,
+      isNeedRender: true,
+    };
+
+    const columns = [
+      {
+        title: 'ID',
+        field: 'user_id',
+        type: 'number',
+      },
+      {
+        title: '用户名',
+        field: 'avatar_username',
+        type: 'html',
+      },
+    ];
+
+    const buttons = [
+      {
+        type: 'target',
+        getTargetLink: user => `${window.G_ROOT}/users/${user.user_id}`,
+      },
+      {
+        type: 'btn',
+        onClick: actions.editOne,
+        label: '编辑',
+        icon: 'edit',
+      },
+      {
+        type: 'btn',
+        onClick: actions.disableOne,
+        label: '禁用',
+        icon: 'lock',
+      },
+    ];
+
+    const batchButtons = [
+      {
+        label: '批量禁用',
+        icon: 'lock',
+        onClick: actions.batchDisable,
+      },
+    ];
+
+    const orders = [
+      {
+        name: '注册时间',
+        value: '-create_time',
+      },
+      {
+        name: '关注者数量',
+        value: '-follower_count',
+      },
+    ];
+
+    const order = '-create_time';
+    const primaryKey = 'user_id';
+    const onRowClick = dialogUser.open;
+
+    searchBar.setState(searchBarState);
+    datatable.setState({
+      columns,
+      buttons,
+      batchButtons,
+      orders,
+      order,
+      primaryKey,
+      onRowClick,
     });
 
+    $(document).on('search-submit', actions.loadData);
     actions.loadData();
   },
 
@@ -56,88 +124,24 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 加载数据
    */
-  loadData: () => (state, actions) => {
-    const datatableActions = global_actions.lazyComponents.datatable;
+  loadData: () => {
+    const { datatable, pagination, searchBar } = global_actions.lazyComponents;
 
-    datatableActions.loadStart();
+    datatable.loadStart();
 
-    const datatableState = datatableActions.getState();
-    const paginationState = global_actions.lazyComponents.pagination.getState();
-    const searchBarData = global_actions.lazyComponents.searchBar.getState().data;
-
-    const data = $.extend({}, ObjectHelper.filter(searchBarData), {
-      page: paginationState.page,
-      per_page: paginationState.per_page,
-      order: datatableState.order,
+    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
+      page: pagination.getState().page,
+      per_page: pagination.getState().per_page,
+      order: datatable.getState().order,
     });
 
-    const success = (response) => {
-      const columns = [
-        {
-          title: 'ID',
-          field: 'user_id',
-          type: 'number',
-        },
-        {
-          title: '用户名',
-          field: 'avatar_username',
-          type: 'html',
-        },
-      ];
-
-      const _actions = [
-        {
-          type: 'target',
-          getTargetLink: user => `${window.G_ROOT}/users/${user.user_id}`,
-        },
-        {
-          type: 'btn',
-          onClick: actions.editOne,
-          label: '编辑',
-          icon: 'edit',
-        },
-        {
-          type: 'btn',
-          onClick: actions.disableOne,
-          label: '禁用',
-          icon: 'lock',
-        },
-      ];
-
-      const batchActions = [
-        {
-          label: '批量禁用',
-          icon: 'lock',
-          onClick: actions.batchDisable,
-        },
-      ];
-
-      const orders = [
-        {
-          name: '注册时间',
-          value: '-create_time',
-        },
-        {
-          name: '关注者数量',
-          value: '-follower_count',
-        },
-      ];
-
+    User.getList(data, (response) => {
       response.data.map((item, index) => {
         response.data[index].avatar_username = `<img src="${item.avatar.s}" class="mdui-float-left mdui-m-r-2"/>${item.username}`;
       });
 
-      response.primaryKey = 'user_id';
-      response.columns = columns;
-      response.actions = _actions;
-      response.batchActions = batchActions;
-      response.orders = orders;
-      response.order = '-create_time';
-      response.onRowClick = global_actions.lazyComponents.dialogUser.open;
-      datatableActions.loadEnd(response);
-    };
-
-    User.getList(data, success);
+      datatable.loadEnd(response);
+    });
   },
 
   /**

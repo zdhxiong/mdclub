@@ -6,25 +6,6 @@ import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
 
-const searchBarState = {
-  fields: [
-    {
-      name: 'topic_id',
-      label: '话题ID',
-    },
-    {
-      name: 'name',
-      label: '话题名称',
-    },
-  ],
-  data: {
-    topic_id: '',
-    name: '',
-  },
-  isDataEmpty: true,
-  isNeedRender: true,
-};
-
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
@@ -32,12 +13,99 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState(searchBarState);
 
-    $(document).on('search-submit', () => {
-      actions.loadData();
+    const {
+      searchBar,
+      datatable,
+      dialogTopic,
+    } = global_actions.lazyComponents;
+
+    const searchBarState = {
+      fields: [
+        {
+          name: 'topic_id',
+          label: '话题ID',
+        },
+        {
+          name: 'name',
+          label: '话题名称',
+        },
+      ],
+      data: {
+        topic_id: '',
+        name: '',
+      },
+      isDataEmpty: true,
+      isNeedRender: true,
+    };
+
+    const columns = [
+      {
+        title: 'ID',
+        field: 'topic_id',
+        type: 'number',
+      },
+      {
+        title: '名称',
+        field: 'name',
+        type: 'string',
+      },
+    ];
+
+    const buttons = [
+      {
+        type: 'target',
+        getTargetLink: topic => `${window.G_ROOT}/topics/${topic.topic_id}`,
+      },
+      {
+        type: 'btn',
+        onClick: actions.editOne,
+        label: '编辑',
+        icon: 'edit',
+      },
+      {
+        type: 'btn',
+        onClick: actions.deleteOne,
+        label: '删除',
+        icon: 'delete',
+      },
+    ];
+
+    const batchButtons = [
+      {
+        label: '批量删除',
+        icon: 'delete',
+        onClick: actions.batchDelete,
+      },
+    ];
+
+    const orders = [
+      {
+        name: '话题ID',
+        value: 'topic_id',
+      },
+      {
+        name: '关注者数量',
+        value: '-follower_count',
+      },
+    ];
+
+    const order = 'topic_id';
+    const primaryKey = 'topic_id';
+    const onRowClick = dialogTopic.open;
+
+    searchBar.setState(searchBarState);
+    datatable.setState({
+      columns,
+      buttons,
+      batchButtons,
+      orders,
+      order,
+      primaryKey,
+      onRowClick,
     });
 
+    $(document).on('search-submit', actions.loadData);
     actions.loadData();
   },
 
@@ -51,83 +119,18 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 加载数据
    */
-  loadData: () => (state, actions) => {
-    const datatableActions = global_actions.lazyComponents.datatable;
-    datatableActions.loadStart();
+  loadData: () => {
+    const { datatable, pagination, searchBar } = global_actions.lazyComponents;
 
-    const datatableState = datatableActions.getState();
-    const paginationState = global_actions.lazyComponents.pagination.getState();
-    const searchBarData = global_actions.lazyComponents.searchBar.getState().data;
+    datatable.loadStart();
 
-    const data = $.extend({}, ObjectHelper.filter(searchBarData), {
-      page: paginationState.page,
-      per_page: paginationState.per_page,
-      order: datatableState.order,
+    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
+      page: pagination.getState().page,
+      per_page: pagination.getState().per_page,
+      order: datatable.getState().order,
     });
 
-    const success = (response) => {
-      const columns = [
-        {
-          title: 'ID',
-          field: 'topic_id',
-          type: 'number',
-        },
-        {
-          title: '名称',
-          field: 'name',
-          type: 'string',
-        },
-      ];
-
-      const _actions = [
-        {
-          type: 'target',
-          getTargetLink: topic => `${window.G_ROOT}/topics/${topic.topic_id}`,
-        },
-        {
-          type: 'btn',
-          onClick: actions.editOne,
-          label: '编辑',
-          icon: 'edit',
-        },
-        {
-          type: 'btn',
-          onClick: actions.deleteOne,
-          label: '删除',
-          icon: 'delete',
-        },
-      ];
-
-      const batchActions = [
-        {
-          label: '批量删除',
-          icon: 'delete',
-          onClick: actions.batchDelete,
-        },
-      ];
-
-      const orders = [
-        {
-          name: '话题ID',
-          value: 'topic_id',
-        },
-        {
-          name: '关注者数量',
-          value: '-follower_count',
-        },
-      ];
-
-      response.primaryKey = 'topic_id';
-      response.columns = columns;
-      response.actions = _actions;
-      response.batchActions = batchActions;
-      response.orders = orders;
-      response.order = 'topic_id';
-      response.onRowClick = global_actions.lazyComponents.dialogTopic.open;
-      datatableActions.loadEnd(response);
-    };
-
-    Topic.getList(data, success);
+    Topic.getList(data, datatable.loadEnd);
   },
 
   /**

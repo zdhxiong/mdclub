@@ -15,9 +15,13 @@ import Users from '../pages/users/view';
 
 import AppBar from '../lazyComponents/appbar/view';
 import Drawer from '../components/drawer';
+import DialogAnswer from '../lazyComponents/dialog-answer/view';
+import DialogArticle from '../lazyComponents/dialog-article/view';
+import DialogComment from '../lazyComponents/dialog-comment/view';
+import DialogQuestion from '../lazyComponents/dialog-question/view';
 import DialogReporters from '../lazyComponents/dialog-reporters/view';
-import DialogUser from '../lazyComponents/dialog-user/view';
 import DialogTopic from '../lazyComponents/dialog-topic/view';
+import DialogUser from '../lazyComponents/dialog-user/view';
 
 export default (global_state, global_actions) => (
   <div>
@@ -34,8 +38,12 @@ export default (global_state, global_actions) => (
     <Route path={$.path('/topics')} render={Topics(global_state, global_actions)}/>
     <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
 
+    <DialogAnswer/>
+    <DialogArticle/>
+    <DialogComment/>
+    <DialogQuestion/>
     <DialogReporters/>
-    <DialogUser/>
     <DialogTopic/>
+    <DialogUser/>
   </div>
 );

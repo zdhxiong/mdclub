@@ -30,26 +30,21 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * 初始化表格
-   */
-  initDatatable: () => (state, actions) => {
-
-  },
-
-  /**
    * 重置状态
    */
   reset: () => (state, actions) => {
     actions.setState({
       columns: [],
-      actions: [],
-      batchActions: [],
+      buttons: [],
+      batchButtons: [],
+      orders: [],
+      order: '',
       primaryKey: '',
+      onRowClick: false,
       isCheckedRows: {},
       isCheckedAll: false,
       checkedCount: 0,
       data: [],
-      order: '',
       loading: false,
     });
   },
@@ -77,21 +72,14 @@ export default $.extend({}, actionsAbstract, {
 
     const isCheckedRows = {};
     response.data.map((item) => {
-      isCheckedRows[item[response.primaryKey]] = false;
+      isCheckedRows[item[state.primaryKey]] = false;
     });
 
     actions.setState({
-      columns: response.columns,
-      actions: response.actions,
-      batchActions: response.batchActions,
-      orders: response.orders,
-      primaryKey: response.primaryKey,
-      onRowClick: typeof response.onRowClick !== 'undefined' ? response.onRowClick : false,
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,
       data: response.data,
-      order: response.order,
     });
 
     global_actions.lazyComponents.pagination.setState(response.pagination);
