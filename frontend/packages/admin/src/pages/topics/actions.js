@@ -44,6 +44,7 @@ export default $.extend({}, actionsAbstract, {
         title: 'ID',
         field: 'topic_id',
         type: 'number',
+        width: 100,
       },
       {
         title: '名称',

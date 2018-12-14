@@ -69,8 +69,6 @@
   }
 
   .form {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
     border-radius: 0 0 4px 4px;
     margin-top: -1px;
     padding: 16px 24px 24px 24px;
@@ -98,14 +96,15 @@
       height: 36px;
       line-height: 36px;
       transform: inherit;
-      width: 96px;
+      width: 128px;
+      margin-right: 10px;
       float: left;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .mdui-textfield-input,
     .mdui-select {
-      width: ~'calc(100% - 96px)' !important;
+      width: ~'calc(100% - 138px)' !important;
       font-size: 14px;
     }
 
@@ -122,10 +121,16 @@
       width: 136px !important;
     }
 
+    .reset,
     .submit {
-      color: #fff !important;
+      min-width: 72px;
       float: right;
       margin-top: 20px;
+    }
+
+    .submit {
+      color: #fff !important;
+      margin-left: 16px;
     }
   }
 

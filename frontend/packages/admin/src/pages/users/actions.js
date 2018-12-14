@@ -49,11 +49,18 @@ export default $.extend({}, actionsAbstract, {
         title: 'ID',
         field: 'user_id',
         type: 'number',
+        width: 100,
       },
       {
         title: '用户名',
         field: 'avatar_username',
         type: 'html',
+      },
+      {
+        title: '注册时间',
+        field: 'create_time',
+        type: 'time',
+        width: 200,
       },
     ];
 

@@ -119,6 +119,7 @@ export default $.extend({}, actionsAbstract, {
         title: '举报人数',
         field: 'reporter_count',
         type: 'number',
+        width: 120,
       },
     ];
 

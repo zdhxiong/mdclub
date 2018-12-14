@@ -48,7 +48,7 @@ export default () => (global_state, global_actions) => {
                     <span
                       class="mdui-chip-delete"
                       title="删除该条件"
-                      onclick={() => actions.onChipDelete({name: field.name})}
+                      onclick={() => actions.onChipDelete({ name: field.name })}
                     >
                       <i class="mdui-icon material-icons">cancel</i>
                     </span>
@@ -108,7 +108,12 @@ export default () => (global_state, global_actions) => {
         <button
           class="submit mdui-btn mdui-btn-raised mdui-color-theme"
           type="submit"
-        >搜索</button>
+        >搜索
+        </button>
+        <button
+          class="reset mdui-btn"
+          type="reset"
+        >重置</button>
       </form>
     </div>
   );

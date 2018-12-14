@@ -50,11 +50,13 @@ export default $.extend({}, actionsAbstract, {
         title: 'ID',
         field: 'answer_id',
         type: 'number',
+        width: 100,
       },
       {
         title: '作者',
         field: 'relationship.user.username',
         type: 'relation',
+        width: 160,
         onClick: ({ e, row }) => {
           e.preventDefault();
           dialogUser.open(row.user_id);
@@ -69,6 +71,7 @@ export default $.extend({}, actionsAbstract, {
         title: '发表时间',
         field: 'create_time',
         type: 'time',
+        width: 200,
       },
     ];
 

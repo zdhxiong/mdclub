@@ -50,7 +50,7 @@ export default () => (global_state, global_actions) => {
             <div class="text-item">
               <div class="text-content mdui-clearfix">
                 <CountItem label="文章" count={state.topic.article_count}/>
-                <CountItem label="问题" count={state.topic.question_count}/>
+                <CountItem label="提问" count={state.topic.question_count}/>
                 <CountItem label="关注者" count={state.topic.follower_count}/>
               </div>
             </div>
