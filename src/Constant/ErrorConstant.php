@@ -42,11 +42,11 @@ class ErrorConstant
     const USER_CANT_FOLLOW_YOURSELF       = [200012, '不能关注你自己'];
 
     /**
-     * 问题相关错误
+     * 提问相关错误
      */
-    const QUESTION_NOT_FOUND              = [300001, '指定问题不存在'];
-    const QUESTION_ONLY_AUTHOR_CAN_EDIT   = [300004, '仅问题作者可以编辑问题'];
-    const QUESTION_ONLY_AUTHOR_CAN_DELETE = [300005, '仅问题作者可以删除问题'];
+    const QUESTION_NOT_FOUND              = [300001, '指定提问不存在'];
+    const QUESTION_ONLY_AUTHOR_CAN_EDIT   = [300004, '仅提问作者可以编辑提问'];
+    const QUESTION_ONLY_AUTHOR_CAN_DELETE = [300005, '仅提问作者可以删除提问'];
 
     /**
      * 回答相关错误

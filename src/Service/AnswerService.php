@@ -16,7 +16,7 @@ use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
 
 /**
- * 对问题的回答
+ * 对提问的回答
  *
  * @property-read \App\Model\AnswerModel      currentModel
  *
@@ -107,7 +107,7 @@ class AnswerService extends ServiceAbstracts
     }
 
     /**
-     * 根据问题ID获取回答列表
+     * 根据提问ID获取回答列表
      *
      * @param  int   $questionId
      * @param  bool  $withRelationship
@@ -162,7 +162,7 @@ class AnswerService extends ServiceAbstracts
             ->where(['user_id' => $userId])
             ->update(['answer_count[+]' => 1]);
 
-        // 更新问题的 answer_count 和 last_answer_time 字段
+        // 更新提问的 answer_count 和 last_answer_time 字段
         $this->questionModel
             ->where(['question_id' => $questionId])
             ->update([
@@ -332,7 +332,7 @@ class AnswerService extends ServiceAbstracts
             ->where(['user_id' => $answerInfo['user_id']])
             ->update(['answer_count[-]' => 1]);
 
-        // 该问题的 answer_count - 1
+        // 该提问的 answer_count - 1
         $this->questionModel
             ->where(['question_id' => $answerInfo['question_id']])
             ->update(['answer_count[-]' => 1]);
@@ -356,7 +356,7 @@ class AnswerService extends ServiceAbstracts
         $answerIds = array_column($answers, 'answer_id');
         $this->answerModel->delete($answerIds);
 
-        // 这些回答的作者、这些回答的问题的 answer_count - 1
+        // 这些回答的作者、这些回答的提问的 answer_count - 1
         $users = [];
         $questions = [];
 

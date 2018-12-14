@@ -17,7 +17,7 @@ use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
 
 /**
- * 问题
+ * 提问
  *
  * @property-read \App\Model\QuestionModel      currentModel
  *
@@ -59,7 +59,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 获取问题列表
+     * 获取提问列表
      *
      * @param  bool  $withRelationship
      * @return array
@@ -82,7 +82,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 根据用户ID获取问题列表
+     * 根据用户ID获取提问列表
      *
      * @param  int   $userId
      * @param  bool  $withRelationship
@@ -108,10 +108,10 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 发表问题
+     * 发表提问
      *
      * @param  int    $userId          用户ID
-     * @param  string $title           问题标题
+     * @param  string $title           提问标题
      * @param  string $contentMarkdown Markdown 正文
      * @param  string $contentRendered HTML 正文
      * @param  array  $topicIds        话题ID数组
@@ -137,7 +137,7 @@ class QuestionService extends ServiceAbstracts
             $topicIds
         );
 
-        // 添加问题
+        // 添加提问
         $questionId = (int)$this->questionModel->insert([
             'user_id'          => $userId,
             'title'            => $title,
@@ -158,7 +158,7 @@ class QuestionService extends ServiceAbstracts
             $this->topicableModel->insert($topicable);
         }
 
-        // 自动关注该问题
+        // 自动关注该提问
         $this->questionService->addFollow($userId, $questionId);
 
         // 用户的 question_count + 1
@@ -170,7 +170,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 发表问题前对参数进行验证
+     * 发表提问前对参数进行验证
      *
      * @param  string $title
      * @param  string $contentMarkdown
@@ -235,7 +235,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 更新问题
+     * 更新提问
      *
      * @param  int    $questionId
      * @param  string $title
@@ -261,7 +261,7 @@ class QuestionService extends ServiceAbstracts
             $topicIds
         );
 
-        // 更新问题信息
+        // 更新提问信息
         if ($data) {
             $this->questionModel
                 ->where(['question_id' => $questionId])
@@ -293,7 +293,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 更新问题前的字段验证
+     * 更新提问前的字段验证
      *
      * @param  int    $questionId
      * @param  string $title
@@ -386,7 +386,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 删除问题
+     * 删除提问
      *
      * @param  int  $questionId
      */
@@ -405,12 +405,12 @@ class QuestionService extends ServiceAbstracts
 
         $this->questionModel->delete($questionId);
 
-        // 该问题的作者的 question_count - 1
+        // 该提问的作者的 question_count - 1
         $this->userModel
             ->where(['user_id' => $questionInfo['user_id']])
             ->update(['question_count[-]' => 1]);
 
-        // 关注该问题的用户的 following_question_count - 1
+        // 关注该提问的用户的 following_question_count - 1
         $followerIds = $this->followModel
             ->where(['followable_id' => $questionId, 'followable_type' => 'question'])
             ->pluck('user_id');
@@ -421,7 +421,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 批量软删除问题
+     * 批量软删除提问
      *
      * @param array $questionIds
      */
@@ -441,14 +441,14 @@ class QuestionService extends ServiceAbstracts
 
         $users = [];
 
-        // 这些问题的作者的 question_count - 1
+        // 这些提问的作者的 question_count - 1
         foreach ($questions as $question) {
             isset($users[$question['user_id']]['question_count'])
                 ? $users[$question['user_id']]['question_count'] += 1
                 : $users[$question['user_id']]['question_count'] = 1;
         }
 
-        // 关注这些问题的用户的 following_question_count - 1
+        // 关注这些提问的用户的 following_question_count - 1
         $followerIds = $this->followModel
             ->where(['followable_id' => $questionIds, 'followable_type' => 'question'])
             ->pluck('user_id');
@@ -477,7 +477,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 对数据库中取出的问题信息进行处理
+     * 对数据库中取出的提问信息进行处理
      *
      * @param  array $questions 提问信息，或多个提问组成的数组
      * @return array
@@ -525,7 +525,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 为问题添加 relationship 字段
+     * 为提问添加 relationship 字段
      * {
      *     user: {}
      *     topics: [ {}, {}, {} ]

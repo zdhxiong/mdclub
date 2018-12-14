@@ -231,7 +231,7 @@ trait BrandableTraits
             $imageHeight = $image->getHeight();
 
             // 裁剪图片
-            if ($this->imageScale === 1) {
+            if ($this->getBrandScale() === 1) {
                 // 按最小边裁剪成正方形
                 if ($imageWidth !== $imageHeight) {
                     $image->cropMaximumInPercent(0, 0, 'MM');

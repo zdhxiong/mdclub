@@ -78,7 +78,7 @@ class CommentService extends ServiceAbstracts
     }
 
     /**
-     * 根据用户ID获取问题列表
+     * 根据用户ID获取提问列表
      *
      * @param  int   $userId
      * @param  bool  $withRelationship

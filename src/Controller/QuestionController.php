@@ -42,7 +42,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取指定用户发表的问题列表
+     * 获取指定用户发表的提问列表
      *
      * @param  Request  $request
      * @param  Response $response
@@ -57,7 +57,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取当前用户发表的问题列表
+     * 获取当前用户发表的提问列表
      *
      * @param  Request  $request
      * @param  Response $response
@@ -86,7 +86,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 创建问题
+     * 创建提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -110,7 +110,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取一个问题信息
+     * 获取一个提问信息
      *
      * @param  Request  $request
      * @param  Response $response
@@ -125,7 +125,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 更新问题
+     * 更新提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -150,7 +150,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 删除一个问题
+     * 删除一个提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -165,7 +165,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除问题
+     * 批量删除提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -189,7 +189,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取指定用户关注的问题
+     * 获取指定用户关注的提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -204,7 +204,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取我关注的问题
+     * 获取我关注的提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -219,7 +219,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取指定问题的关注者
+     * 获取指定提问的关注者
      *
      * @param  Request  $request
      * @param  Response $response
@@ -320,7 +320,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取指定问题下的评论列表
+     * 获取指定提问下的评论列表
      *
      * @param  Request  $request
      * @param  Response $response
@@ -335,7 +335,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 在指定问题下发表评论
+     * 在指定提问下发表评论
      *
      * @param  Request  $request
      * @param  Response $response
@@ -352,7 +352,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 获取回收站中的问题列表
+     * 获取回收站中的提问列表
      *
      * @param  Request  $request
      * @param  Response $response
@@ -364,7 +364,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 批量恢复问题
+     * 批量恢复提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -376,7 +376,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除回收站中的问题
+     * 批量删除回收站中的提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -388,7 +388,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 恢复指定问题
+     * 恢复指定提问
      *
      * @param  Request  $request
      * @param  Response $response
@@ -401,7 +401,7 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 删除回收站中的指定问题
+     * 删除回收站中的指定提问
      *
      * @param  Request  $request
      * @param  Response $response

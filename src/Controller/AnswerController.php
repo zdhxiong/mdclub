@@ -17,7 +17,7 @@ use Slim\Http\Response;
 class AnswerController extends ControllerAbstracts
 {
     /**
-     * 获取指定问题下的回答列表
+     * 获取指定提问下的回答列表
      *
      * @param  Request  $request
      * @param  Response $response
@@ -76,7 +76,7 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
-     * 在指定问题下创建回答
+     * 在指定提问下创建回答
      *
      * @param  Request  $request
      * @param  Response $response

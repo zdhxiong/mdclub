@@ -217,7 +217,7 @@ $container[\League\Flysystem\FilesystemInterface::class] = function (ContainerIn
             }
 
             if (!$uploadDir) {
-                $uploadDir = __DIR__ . '/../public/upload/';
+                $uploadDir = __DIR__ . '/../public/static/upload/';
             }
 
             $adapter = new \League\Flysystem\Adapter\Local($uploadDir);
