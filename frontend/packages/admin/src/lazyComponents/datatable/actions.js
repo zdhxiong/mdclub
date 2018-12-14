@@ -89,7 +89,7 @@ export default $.extend({}, actionsAbstract, {
    * 切换某一行的选中状态
    */
   checkOne: rowId => (state, actions) => {
-    const isCheckedRows = state.isCheckedRows;
+    const { isCheckedRows } = state;
     isCheckedRows[rowId] = !isCheckedRows[rowId];
 
     let checkedCount = 0;
@@ -112,7 +112,7 @@ export default $.extend({}, actionsAbstract, {
   checkAll: e => (state, actions) => {
     let checkedCount = 0;
     const isCheckedAll = e.target.checked;
-    const isCheckedRows = state.isCheckedRows;
+    const { isCheckedRows } = state;
 
     Object.keys(isCheckedRows).map((_rowId) => {
       isCheckedRows[_rowId] = isCheckedAll;

@@ -44,7 +44,7 @@ export default () => (global_state, global_actions) => {
         <div
           class="header"
           oncreate={element => actions.headerInit(element)}
-          style={{backgroundImage: `url(${state.user.cover.m})`}}
+          style={{ backgroundImage: `url(${state.user.cover.m})` }}
         >
           <div class="gradient mdui-card-media-covered mdui-card-media-covered-gradient"></div>
           <div class="avatar">

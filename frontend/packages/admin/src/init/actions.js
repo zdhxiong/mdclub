@@ -15,7 +15,6 @@ import AppBar from '../lazyComponents/appbar/actions';
 import SearchBar from '../lazyComponents/searchbar/actions';
 import Pagination from '../lazyComponents/pagination/actions';
 import Datatable from '../lazyComponents/datatable/actions';
-import ImageList from '../lazyComponents/imagelist/actions';
 import DialogAnswer from '../lazyComponents/dialog-answer/actions';
 import DialogArticle from '../lazyComponents/dialog-article/actions';
 import DialogComment from '../lazyComponents/dialog-comment/actions';
@@ -47,7 +46,6 @@ export default {
     searchBar: SearchBar,
     pagination: Pagination,
     datatable: Datatable,
-    imageList: ImageList,
     dialogAnswer: DialogAnswer,
     dialogArticle: DialogArticle,
     dialogComment: DialogComment,

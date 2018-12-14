@@ -41,7 +41,7 @@ const ActionBtn = ({ icon, label, href, onClick }) => (
 const ColumnTH = ({ column }) => (
   <th
     key={column.field}
-    class={cc([{'mdui-table-col-numeric': column.type === 'number'}])}
+    class={cc([{ 'mdui-table-col-numeric': column.type === 'number' }])}
     style={column.width && `width: ${column.width}px;`}
   >
     {column.title}

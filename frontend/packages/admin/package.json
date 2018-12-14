@@ -78,6 +78,7 @@
     "mdclub-sdk-js": "github:zdhxiong/mdclub-sdk-js",
     "mdn-polyfills": "^5.14.0",
     "mdui": "^0.4.2",
+    "photoswipe": "^4.1.2",
     "time-stamp": "^2.1.0"
   },
   "browserslist": [
