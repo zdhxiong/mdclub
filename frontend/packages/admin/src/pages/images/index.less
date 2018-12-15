@@ -19,7 +19,7 @@
     height: 0;
     padding-bottom: 74.6%;
     background-size: cover;
-    background-color: #fff;
+    background-color: #e8eaed;
     transition: transform .135s cubic-bezier(0.0,0.0,0.2,1);
   }
 
@@ -32,6 +32,7 @@
   }
 
   .check-btn,
+  .check-placeholder-btn,
   .preview-btn {
     position: absolute;
     color: #fff;
@@ -46,14 +47,16 @@
     user-select: none;
   }
 
-  .check-btn {
+  .check-btn,
+  .check-placeholder-btn {
     left: 8px;
     top: 8px;
   }
 
   .preview-btn {
-    right: 8px;
-    bottom: 8px;
+    right: 0;
+    bottom: 0;
+    padding: 38px 8px 8px 38px;
   }
 
   .mdui-grid-tile:hover {
@@ -70,6 +73,23 @@
     }
   }
 
+  .mdui-grid-list.checked {
+    .check-placeholder-btn {
+      opacity: 0.54;
+    }
+
+    .mdui-grid-tile:hover {
+      .check-placeholder-btn {
+        opacity: 0;
+      }
+
+      .overlay-bottom,
+      .preview-btn {
+        opacity: 1;
+      }
+    }
+  }
+
   .mdui-grid-tile.checked {
     background-color: #e8f0fe;
 
@@ -77,14 +97,9 @@
       transform: translateZ(0px) scale3d(0.89, 0.86, 1);
     }
 
+    .check-placeholder-btn,
     .overlay-top {
       opacity: 0;
-    }
-
-    &:hover {
-      .overlay-bottom {
-        opacity: 1;
-      }
     }
 
     .check-btn {

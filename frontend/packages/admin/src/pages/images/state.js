@@ -1,5 +1,6 @@
 export default {
   data: [],
+  photoSwipeItems: [],
   loading: false,
 
   isCheckedRows: {}, // 键名为对象ID，键值为 bool 值

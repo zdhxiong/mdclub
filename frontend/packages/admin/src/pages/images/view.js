@@ -4,6 +4,7 @@ import './index.less';
 
 import Loading from '../../components/loading';
 import Empty from '../../components/empty';
+import PhotoSwipeDom from '../../components/photoswipe-dom';
 import Pagination from '../../lazyComponents/pagination/view';
 
 export default (global_state, global_actions) => {
@@ -34,12 +35,12 @@ export default (global_state, global_actions) => {
           'mdui-row-xl-6',
           {
             'checked-all': state.isCheckedAll,
-            'checked': state.checkedCount,
+            checked: state.checkedCount,
           },
         ])}>
           <If condition={isLoading}><Loading/></If>
           <If condition={isEmpty}><Empty/></If>
-          {state.data.map(item => (
+          {state.data.map((item, index) => (
             <div class="mdui-col">
               <div
                 class={cc([
@@ -51,10 +52,21 @@ export default (global_state, global_actions) => {
                   class="check-btn mdui-icon material-icons"
                   onclick={() => actions.checkOne(item.hash)}
                 >check_circle</i>
-                <div class="image" style={`background-image: url('${item.urls.r}')`}>
+                <i
+                  class="check-placeholder-btn mdui-icon material-icons"
+                  onclick={() => actions.checkOne(item.hash)}
+                >radio_button_unchecked</i>
+                <div
+                  class="image"
+                  style={`background-image: url('${item.urls.r}')`}
+                  onclick={e => actions.clickImage({ e, item, index })}
+                >
                   <div class="overlay-top mdui-grid-tile-actions mdui-grid-tile-actions-top mdui-grid-tile-actions-gradient"></div>
                   <div class="overlay-bottom mdui-grid-tile-actions mdui-grid-tile-actions-gradient">
-                    <i class="preview-btn mdui-icon material-icons">zoom_in</i>
+                    <i
+                      class="preview-btn mdui-icon material-icons"
+                      onclick={() => actions.openImage({ item, index })}
+                    >zoom_in</i>
                   </div>
                 </div>
               </div>
@@ -63,6 +75,7 @@ export default (global_state, global_actions) => {
         </div>
       </div>
       <Pagination onChange={actions.loadData} loading={state.loading}/>
+      <PhotoSwipeDom/>
     </div>
   );
 };

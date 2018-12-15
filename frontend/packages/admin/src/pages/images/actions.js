@@ -1,5 +1,9 @@
 import mdui, { JQ as $ } from 'mdui';
 import { location } from '@hyperapp/router';
+import 'photoswipe/dist/photoswipe.css';
+import 'photoswipe/dist/default-skin/default-skin.css';
+import PhotoSwipe from 'photoswipe';
+import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
 import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
@@ -124,8 +128,21 @@ export default $.extend({}, actionsAbstract, {
     }
 
     const isCheckedRows = {};
+    const photoSwipeItems = [];
+
     response.data.map((item) => {
+      // 取消选中所有图片
       isCheckedRows[item.hash] = false;
+
+      // 供 PhotoSwipe 插件使用的图片数据数组
+      photoSwipeItems.push({
+        src: item.urls.o,
+        w: item.width,
+        h: item.height,
+        msrc: item.urls.r,
+        title: item.filename,
+        author: item.relationship.user.username,
+      });
     });
 
     actions.setState({
@@ -133,6 +150,7 @@ export default $.extend({}, actionsAbstract, {
       isCheckedAll: false,
       checkedCount: 0,
       data: response.data,
+      photoSwipeItems,
     });
 
     global_actions.lazyComponents.pagination.setState(response.pagination);
@@ -176,5 +194,43 @@ export default $.extend({}, actionsAbstract, {
     });
 
     actions.setState({ isCheckedRows, isCheckedAll, checkedCount });
+  },
+
+  /**
+   * 打开图片
+   */
+  openImage: ({ item, index }) => (state) => {
+    const gallery = new PhotoSwipe($('.pswp')[0], PhotoSwipeUi_Default, state.photoSwipeItems, {
+      index,
+      loop: false,
+      getThumbBoundsFn: (i) => {
+        const offset = $('.mdui-grid-list .mdui-col').eq(i).find('.image').offset();
+
+        return {
+          x: offset.left,
+          y: offset.top,
+          w: offset.width,
+        };
+      },
+    });
+    gallery.init();
+  },
+
+  /**
+   * 点击一张图片
+   */
+  clickImage: ({ e, item, index }) => (state, actions) => {
+    // 点在放大图标上，不执行下面的代码
+    if (e.target.nodeName === 'I') {
+      return;
+    }
+
+    if (state.checkedCount) {
+      // 已有图片被选中，则切换图片的选中状态
+      actions.checkOne(item.hash);
+    } else {
+      // 没有图片被选中，则放大图片
+      actions.openImage({ item, index });
+    }
   },
 });
