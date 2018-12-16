@@ -5,6 +5,7 @@ import 'photoswipe/dist/default-skin/default-skin.css';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
+import { resizeImage } from './helper';
 import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
 
@@ -18,13 +19,7 @@ export default $.extend({}, actionsAbstract, {
     actions.routeChange();
     global_actions = props.global_actions;
 
-    const {
-      searchBar,
-      dialogUser,
-      dialogArticle,
-      dialogQuestion,
-      dialogAnswer,
-    } = global_actions.lazyComponents;
+    const { searchBar } = global_actions.lazyComponents;
 
     const searchBarState = {
       fields: [
@@ -129,8 +124,9 @@ export default $.extend({}, actionsAbstract, {
 
     const isCheckedRows = {};
     const photoSwipeItems = [];
+    const thumbData = resizeImage(response.data);
 
-    response.data.map((item) => {
+    response.data.map((item, index) => {
       // 取消选中所有图片
       isCheckedRows[item.hash] = false;
 
@@ -151,9 +147,21 @@ export default $.extend({}, actionsAbstract, {
       checkedCount: 0,
       data: response.data,
       photoSwipeItems,
+      thumbData,
     });
 
     global_actions.lazyComponents.pagination.setState(response.pagination);
+
+    const resize = () => {
+      window.requestAnimationFrame(() => {
+        actions.setState({
+          thumbData: resizeImage(response.data),
+        });
+      });
+    };
+
+    $(window).off('resize', resize);
+    setTimeout(() => $(window).on('resize', resize));
   },
 
   /**
@@ -204,7 +212,7 @@ export default $.extend({}, actionsAbstract, {
       index,
       loop: false,
       getThumbBoundsFn: (i) => {
-        const offset = $('.mdui-grid-list .mdui-col').eq(i).find('.image').offset();
+        const offset = $('#page-images .mdui-grid-tile').eq(i).find('.image').offset();
 
         return {
           x: offset.left,

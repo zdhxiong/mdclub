@@ -28,11 +28,7 @@ export default (global_state, global_actions) => {
       <div class="list">
         <div class={cc([
           'mdui-grid-list',
-          'mdui-row-xs-2',
-          'mdui-row-sm-3',
-          'mdui-row-md-4',
-          'mdui-row-lg-5',
-          'mdui-row-xl-6',
+          'mdui-clearfix',
           {
             'checked-all': state.isCheckedAll,
             checked: state.checkedCount,
@@ -40,13 +36,20 @@ export default (global_state, global_actions) => {
         ])}>
           <If condition={isLoading}><Loading/></If>
           <If condition={isEmpty}><Empty/></If>
-          {state.data.map((item, index) => (
-            <div class="mdui-col">
+          {state.data.map((item, index) => {
+            const isChecked = state.isCheckedRows[item.hash];
+            const thumbWidth = state.thumbData[index].width;
+            const thumbHeight = state.thumbData[index].height;
+            const thumbTransformX = 1 - (30 / state.thumbData[index].width);
+            const thumbTransformY = 1 - (30 / state.thumbData[index].height);
+            const thumbTransform = isChecked
+              ? `translateZ(0px) scale3d(${thumbTransformX}, ${thumbTransformY}, 1)`
+              : null;
+
+            return (
               <div
-                class={cc([
-                  'mdui-grid-tile',
-                  { checked: state.isCheckedRows[item.hash] },
-                ])}
+                class={cc(['mdui-grid-tile', { checked: isChecked }])}
+                style={{ height: `${thumbHeight}px`, width: `${thumbWidth}px` }}
               >
                 <i
                   class="check-btn mdui-icon material-icons"
@@ -58,10 +61,17 @@ export default (global_state, global_actions) => {
                 >radio_button_unchecked</i>
                 <div
                   class="image"
-                  style={`background-image: url('${item.urls.r}')`}
+                  style={{
+                    backgroundImage: `url(${item.urls.r})`,
+                    height: 0,
+                    paddingBottom: `${thumbHeight}px`,
+                    width: `${thumbWidth}px`,
+                    transform: thumbTransform,
+                  }}
                   onclick={e => actions.clickImage({ e, item, index })}
                 >
-                  <div class="overlay-top mdui-grid-tile-actions mdui-grid-tile-actions-top mdui-grid-tile-actions-gradient"></div>
+                  <div
+                    class="overlay-top mdui-grid-tile-actions mdui-grid-tile-actions-top mdui-grid-tile-actions-gradient"></div>
                   <div class="overlay-bottom mdui-grid-tile-actions mdui-grid-tile-actions-gradient">
                     <i
                       class="preview-btn mdui-icon material-icons"
@@ -69,9 +79,8 @@ export default (global_state, global_actions) => {
                     >zoom_in</i>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </div>);
+          })}
         </div>
       </div>
       <Pagination onChange={actions.loadData} loading={state.loading}/>

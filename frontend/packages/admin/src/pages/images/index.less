@@ -7,20 +7,22 @@
     padding: 8px;
     height: ~'calc(100vh - 180px)';
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 
   .mdui-grid-tile {
     position: relative;
     cursor: pointer;
+    float: left;
+    margin-left: 2px;
+    margin-right: 2px;
   }
 
   .image {
-    height: 0;
-    padding-bottom: 74.6%;
     background-size: cover;
     background-color: #e8eaed;
-    transition: transform .135s cubic-bezier(0.0,0.0,0.2,1);
+    transition: transform .135s cubic-bezier(0, 0, .2, 1);
   }
 
   .overlay-top,
@@ -92,10 +94,6 @@
 
   .mdui-grid-tile.checked {
     background-color: #e8f0fe;
-
-    .image {
-      transform: translateZ(0px) scale3d(0.89, 0.86, 1);
-    }
 
     .check-placeholder-btn,
     .overlay-top {
