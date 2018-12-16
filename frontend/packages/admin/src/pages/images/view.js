@@ -20,20 +20,33 @@ export default (global_state, global_actions) => {
       ondestroy={actions.destroy}
       key={match.url}
       id="page-images"
-      class="mdui-container-fluid"
+      class={cc([
+        'mdui-container-fluid',
+        {
+          'checked-all': state.isCheckedAll,
+          checked: state.checkedCount,
+        },
+      ])}
     >
       <div class="header">
-
+        <div class="toggle-all" onclick={actions.checkAll}>
+          <i class="mdui-icon material-icons">check_circle</i>全选
+        </div>
+        <If condition={state.checkedCount}>
+          <div class="actions">
+            <button
+              class="delete mdui-btn mdui-btn-icon mdui-btn-dense"
+              mdui-tooltip={`{content: '批量删除', delay: 300}`}
+              onclick={actions.batchDelete}
+            >
+              <i class="mdui-icon material-icons">delete</i>
+            </button>
+            <span class="mdui-float-right">已选择 {state.checkedCount} 张图片</span>
+          </div>
+        </If>
       </div>
       <div class="list">
-        <div class={cc([
-          'mdui-grid-list',
-          'mdui-clearfix',
-          {
-            'checked-all': state.isCheckedAll,
-            checked: state.checkedCount,
-          },
-        ])}>
+        <div class="mdui-grid-list mdui-clearfix">
           <If condition={isLoading}><Loading/></If>
           <If condition={isEmpty}><Empty/></If>
           {state.data.map((item, index) => {

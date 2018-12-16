@@ -68,7 +68,7 @@ const ColumnTHChecked = ({ state }) => (
         />
       ))}
     </span>
-    <span className="mdui-float-right">已选择 {state.checkedCount} 个项目</span>
+    <span class="mdui-float-right">已选择 {state.checkedCount} 个项目</span>
   </th>
 );
 

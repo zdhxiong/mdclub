@@ -188,9 +188,9 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 切换全部图片的选中状态
    */
-  checkAll: e => (state, actions) => {
+  checkAll: () => (state, actions) => {
     let checkedCount = 0;
-    const isCheckedAll = e.target.checked;
+    const isCheckedAll = !state.isCheckedAll;
     const { isCheckedRows } = state;
 
     Object.keys(isCheckedRows).map((_rowId) => {
@@ -240,5 +240,36 @@ export default $.extend({}, actionsAbstract, {
       // 没有图片被选中，则放大图片
       actions.openImage({ item, index });
     }
+  },
+
+  /**
+   * 批量删除图片
+   */
+  batchDelete: () => (state, actions) => {
+    const items = [];
+
+    state.data.map((item) => {
+      if (state.isCheckedRows[item.hash]) {
+        items.push(item);
+      }
+    });
+
+    const confirm = () => {
+      $.loadStart();
+
+      const hashArr = [];
+      items.map((item) => {
+        hashArr.push(item.hash);
+      });
+
+      Image.deleteMultiple(hashArr.join(','), actions.deleteSuccess);
+    };
+
+    const options = {
+      confirmText: '确认',
+      cancelText: '取消',
+    };
+
+    mdui.confirm('删除后，将无法恢复', `确认删除这 ${items.length} 张图片`, confirm, false, options);
   },
 });
