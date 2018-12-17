@@ -235,20 +235,20 @@ export default {
   },
 
   /**
-   * 恢复多个已禁用的用户
+   * 启用多个已禁用的用户
    *
    * POST /trash/users
    */
-  restoreMultiple(user_id, success) {
+  enableMultiple(user_id, success) {
     post('/trash/users', { user_id }, success);
   },
 
   /**
-   * 恢复指定用户
+   * 启用指定用户
    *
    * POST /trash/users/{user_id}
    */
-  restoreOne(user_id, success) {
+  enableOne(user_id, success) {
     post(`/trash/users/${user_id}`, success);
   },
 };
