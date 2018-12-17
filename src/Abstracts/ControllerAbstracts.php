@@ -70,16 +70,10 @@ abstract class ControllerAbstracts
      */
     public function __get($name)
     {
-        $nameUcFirst = ucfirst($name);
+        $service = 'App\\Service\\' . ucfirst($name);
 
-        $modules = [
-            'App\\Service\\' . $nameUcFirst,
-        ];
-
-        foreach ($modules as $module) {
-            if ($this->container->has($module)) {
-                return $this->container->get($module);
-            }
+        if ($this->container->has($service)) {
+            return $this->container->get($service);
         }
 
         $libs = [

@@ -120,6 +120,7 @@ abstract class ServiceAbstracts
 
         $serviceName = get_class($this);
         $modelName = str_replace('\\Service\\', '\\Model\\', substr($serviceName, 0, -7) . 'Model');
+
         if ($this->container->has($modelName)) {
             $this->currentModel = $this->container->get($modelName);
         }
@@ -133,18 +134,16 @@ abstract class ServiceAbstracts
      */
     public function __get($name)
     {
-        $nameUcFirst = ucfirst($name);
+        // Model
+        $model = 'App\\Model\\' . ucfirst($name);
+        if ($this->container->has($model)) {
+            return $this->container->get($model);
+        }
 
-        // Model 和 Service 实例
-        $modules = [
-            'App\\Model\\' . $nameUcFirst,
-            'App\\Service\\' . $nameUcFirst,
-        ];
-
-        foreach ($modules as $module) {
-            if ($this->container->has($module)) {
-                return $this->container->get($module);
-            }
+        // Service
+        $service = 'App\\Service\\' . ucfirst($name);
+        if ($this->container->has($service)) {
+            return $this->container->get($service);
         }
 
         // 其他容器中的实例
