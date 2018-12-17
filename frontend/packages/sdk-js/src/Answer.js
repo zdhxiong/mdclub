@@ -25,7 +25,7 @@ export default {
   },
 
   /**
-   * 获取指定问题下的回答列表
+   * 获取指定提问下的回答列表
    *
    * GET /questions/{question_id}/answers
    */
@@ -130,5 +130,50 @@ export default {
    */
   deleteVote(answer_id, success) {
     del(`/answers/${answer_id}/voters`, success);
+  },
+
+  /**
+   * 获取已删除的回答列表
+   *
+   * GET /trash/answers
+   */
+  getDeletedList(data, success) {
+    get('/trash/answers', data, success);
+  },
+
+  /**
+   * 恢复多个回答
+   *
+   * POST /trash/answers
+   */
+  restoreMultiple(answer_id, success) {
+    post('/trash/answers', { answer_id }, success);
+  },
+
+  /**
+   * 销毁已删除的多个回答
+   *
+   * DELETE /trash/answers
+   */
+  destroyMultiple(answer_id, success) {
+    del('/trash/answers', { answer_id }, success);
+  },
+
+  /**
+   * 恢复指定回答
+   *
+   * POST /trash/answers/{answer_id}
+   */
+  restoreOne(answer_id, success) {
+    post(`/trash/answers/${answer_id}`, success);
+  },
+
+  /**
+   * 销毁指定的已删除的回答
+   *
+   * DELETE /trash/answers/{answer_id}
+   */
+  destroyOne(answer_id, success) {
+    del(`/trash/answers/${answer_id}`, success);
   },
 };

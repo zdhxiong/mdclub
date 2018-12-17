@@ -8,7 +8,7 @@ import {
 export default {
 
   /**
-   * 获取指定用户发表的问题列表
+   * 获取指定用户发表的提问列表
    *
    * GET /users/{user_id}/questions
    */
@@ -17,7 +17,7 @@ export default {
   },
 
   /**
-   * 获取当前用户发表的问题列表
+   * 获取当前用户发表的提问列表
    *
    * GET /user/questions
    */
@@ -26,7 +26,7 @@ export default {
   },
 
   /**
-   * 获取问题列表
+   * 获取提问列表
    *
    * GET /questions
    */
@@ -35,7 +35,7 @@ export default {
   },
 
   /**
-   * 创建问题
+   * 创建提问
    *
    * POST /questions
    */
@@ -44,7 +44,7 @@ export default {
   },
 
   /**
-   * 删除多个问题
+   * 删除多个提问
    *
    * DELETE /questions
    */
@@ -53,7 +53,7 @@ export default {
   },
 
   /**
-   * 获取指定问题信息
+   * 获取指定提问信息
    *
    * GET /questions/{question_id}
    */
@@ -62,7 +62,7 @@ export default {
   },
 
   /**
-   * 更新指定问题
+   * 更新指定提问
    *
    * PATCH /questions/{question_id}
    */
@@ -71,7 +71,7 @@ export default {
   },
 
   /**
-   * 删除指定问题
+   * 删除指定提问
    *
    * DELETE /questions/{question_id}
    */
@@ -125,7 +125,7 @@ export default {
   },
 
   /**
-   * 获取指定用户关注的问题列表
+   * 获取指定用户关注的提问列表
    *
    * GET /users/{user_id}/following_questions
    */
@@ -134,7 +134,7 @@ export default {
   },
 
   /**
-   * 获取登录用户关注的问题
+   * 获取登录用户关注的提问
    *
    * GET /user/following_questions
    */
@@ -143,7 +143,7 @@ export default {
   },
 
   /**
-   * 获取指定问题的关注者
+   * 获取指定提问的关注者
    *
    * GET /questions/{question_id}/followers
    */
@@ -167,5 +167,50 @@ export default {
    */
   deleteFollow(question_id, success) {
     del(`/questions/${question_id}/followers`, success);
+  },
+
+  /**
+   * 获取已删除的提问列表
+   *
+   * GET /trash/questions
+   */
+  getDeletedList(data, success) {
+    get('/trash/questions', data, success);
+  },
+
+  /**
+   * 恢复多个提问
+   *
+   * POST /trash/questions
+   */
+  restoreMultiple(question_id, success) {
+    post('/trash/questions', { question_id }, success);
+  },
+
+  /**
+   * 销毁已删除的多个提问
+   *
+   * DELETE /trash/questions
+   */
+  destroyMultiple(question_id, success) {
+    del('/trash/questions', { question_id }, success);
+  },
+
+  /**
+   * 恢复指定提问
+   *
+   * POST /trash/questions/{question_id}
+   */
+  restoreOne(question_id, success) {
+    post(`/trash/questions/${question_id}`, success);
+  },
+
+  /**
+   * 销毁指定的已删除的提问
+   *
+   * DELETE /trash/questions/{question_id}
+   */
+  destroyOne(question_id, success) {
+    del(`/trash/questions/${question_id}`, success);
   },
 };

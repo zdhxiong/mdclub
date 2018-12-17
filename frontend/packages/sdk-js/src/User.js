@@ -146,7 +146,7 @@ export default {
    * POST /users/{user_id}/followers
    */
   addFollow(user_id, success) {
-    put(`/users/${user_id}/followers`, success);
+    post(`/users/${user_id}/followers`, success);
   },
 
   /**
@@ -223,5 +223,32 @@ export default {
    */
   sendRegisterEmail(data, success) {
     post('/user/register/email', data, success);
+  },
+
+  /**
+   * 获取已禁用的用户列表
+   *
+   * GET /trash/users
+   */
+  getDisabledList(data, success) {
+    get('/trash/users', data, success);
+  },
+
+  /**
+   * 恢复多个已禁用的用户
+   *
+   * POST /trash/users
+   */
+  restoreMultiple(user_id, success) {
+    post('/trash/users', { user_id }, success);
+  },
+
+  /**
+   * 恢复指定用户
+   *
+   * POST /trash/users/{user_id}
+   */
+  restoreOne(user_id, success) {
+    post(`/trash/users/${user_id}`, success);
   },
 };

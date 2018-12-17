@@ -112,7 +112,7 @@ export default {
    * POST /topics/{topic_id}/followers
    */
   addFollow(topic_id, success) {
-    put(`/topics/${topic_id}/followers`, success);
+    post(`/topics/${topic_id}/followers`, success);
   },
 
   /**
@@ -122,5 +122,50 @@ export default {
    */
   deleteFollow(topic_id, success) {
     del(`/topics/${topic_id}/followers`, success);
+  },
+
+  /**
+   * 获取已删除的话题列表
+   *
+   * GET /trash/topics
+   */
+  getDeletedList(data, success) {
+    get('/trash/topics', data, success);
+  },
+
+  /**
+   * 恢复多个话题
+   *
+   * POST /trash/topics
+   */
+  restoreMultiple(topic_id, success) {
+    post('/trash/topics', { topic_id }, success);
+  },
+
+  /**
+   * 销毁已删除的多个话题
+   *
+   * DELETE /trash/topics
+   */
+  destroyMultiple(topic_id, success) {
+    del('/trash/topics', { topic_id }, success);
+  },
+
+  /**
+   * 恢复指定话题
+   *
+   * POST /trash/topics/{topic_id}
+   */
+  restoreOne(topic_id, success) {
+    post(`/trash/topics/${topic_id}`, success);
+  },
+
+  /**
+   * 销毁指定的已删除的话题
+   *
+   * DELETE /trash/topics/{topic_id}
+   */
+  destroyOne(topic_id, success) {
+    del(`/trash/topics/${topic_id}`, success);
   },
 };

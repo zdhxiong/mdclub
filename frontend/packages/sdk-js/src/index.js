@@ -10,7 +10,6 @@ import Question from './Question';
 import Report from './Report';
 import Token from './Token';
 import Topic from './Topic';
-import Trash from './Trash';
 import User from './User';
 
 export {
@@ -26,7 +25,6 @@ export {
   Report,
   Token,
   Topic,
-  Trash,
   User,
 };
 

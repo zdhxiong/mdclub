@@ -95,4 +95,49 @@ export default {
   deleteVote(comment_id, success) {
     del(`/comments/${comment_id}/voters`, success);
   },
+
+  /**
+   * 获取已删除的评论列表
+   *
+   * GET /trash/comments
+   */
+  getDeletedList(data, success) {
+    get('/trash/comments', data, success);
+  },
+
+  /**
+   * 恢复多个评论
+   *
+   * POST /trash/comments
+   */
+  restoreMultiple(comment_id, success) {
+    post('/trash/comments', { comment_id }, success);
+  },
+
+  /**
+   * 销毁已删除的多个评论
+   *
+   * DELETE /trash/comments
+   */
+  destroyMultiple(comment_id, success) {
+    del('/trash/comments', { comment_id }, success);
+  },
+
+  /**
+   * 恢复指定评论
+   *
+   * POST /trash/comments/{comment_id}
+   */
+  restoreOne(comment_id, success) {
+    post(`/trash/comments/${comment_id}`, success);
+  },
+
+  /**
+   * 销毁指定的已删除的评论
+   *
+   * DELETE /trash/comments/{comment_id}
+   */
+  destroyOne(comment_id, success) {
+    del(`/trash/comments/${comment_id}`, success);
+  },
 };

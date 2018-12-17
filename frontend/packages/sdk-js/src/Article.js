@@ -167,4 +167,49 @@ export default {
   deleteFollow(article_id, success) {
     del(`/articles/${article_id}/followers`, success);
   },
+
+  /**
+   * 获取已删除的文章列表
+   *
+   * GET /trash/articles
+   */
+  getDeletedList(data, success) {
+    get('/trash/articles', data, success);
+  },
+
+  /**
+   * 恢复多个文章
+   *
+   * POST /trash/articles
+   */
+  restoreMultiple(article_id, success) {
+    post('/trash/articles', { article_id }, success);
+  },
+
+  /**
+   * 销毁已删除的多个文章
+   *
+   * DELETE /trash/articles
+   */
+  destroyMultiple(article_id, success) {
+    del('/trash/articles', { article_id }, success);
+  },
+
+  /**
+   * 恢复指定文章
+   *
+   * POST /trash/articles/{article_id}
+   */
+  restoreOne(article_id, success) {
+    post(`/trash/articles/${article_id}`, success);
+  },
+
+  /**
+   * 销毁指定的已删除的文章
+   *
+   * DELETE /trash/articles/{article_id}
+   */
+  destroyOne(article_id, success) {
+    del(`/trash/articles/${article_id}`, success);
+  },
 };
