@@ -53,6 +53,30 @@ class ImageController extends ControllerAbstracts
     }
 
     /**
+     * 批量删除图片
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $hashs = $request->getQueryParam('hash');
+
+        if ($hashs) {
+            $hashs = array_unique(array_filter(array_slice(explode(',', $hashs), 0, 40)));
+        }
+
+        if ($hashs) {
+            $this->imageService->batchDelete($hashs);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取图片信息
      *
      * @param  Request  $request
@@ -60,7 +84,7 @@ class ImageController extends ControllerAbstracts
      * @param  string   $hash
      * @return Response
      */
-    public function get(Request $request, Response $response, string $hash): Response
+    public function getOne(Request $request, Response $response, string $hash): Response
     {
         $imageInfo = $this->imageService->getInfo($hash, true);
 
@@ -75,7 +99,7 @@ class ImageController extends ControllerAbstracts
      * @param  string   $hash
      * @return Response
      */
-    public function update(Request $request, Response $response, string $hash): Response
+    public function updateOne(Request $request, Response $response, string $hash): Response
     {
         $this->roleService->managerIdOrFail();
 
@@ -95,34 +119,10 @@ class ImageController extends ControllerAbstracts
      * @param  string   $hash
      * @return Response
      */
-    public function delete(Request $request, Response $response, string $hash): Response
+    public function deleteOne(Request $request, Response $response, string $hash): Response
     {
         $this->roleService->managerIdOrFail();
         $this->imageService->delete($hash);
-
-        return $this->success($response);
-    }
-
-    /**
-     * 批量删除图片
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function batchDelete(Request $request, Response $response): Response
-    {
-        $this->roleService->managerIdOrFail();
-
-        $hashs = $request->getQueryParam('hash');
-
-        if ($hashs) {
-            $hashs = array_unique(array_filter(array_slice(explode(',', $hashs), 0, 40)));
-        }
-
-        if ($hashs) {
-            $this->imageService->batchDelete($hashs);
-        }
 
         return $this->success($response);
     }

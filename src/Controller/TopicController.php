@@ -79,6 +79,30 @@ class TopicController extends ControllerAbstracts
     }
 
     /**
+     * 批量删除话题
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $topicIds = $request->getQueryParam('topic_id');
+
+        if ($topicIds) {
+            $topicIds = array_unique(array_filter(array_slice(explode(',', $topicIds), 0, 100)));
+        }
+
+        if ($topicIds) {
+            $this->topicService->batchDelete($topicIds);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取指定话题信息
      *
      * @param  Request  $request
@@ -86,7 +110,7 @@ class TopicController extends ControllerAbstracts
      * @param  int      $topic_id
      * @return Response
      */
-    public function get(Request $request, Response $response, int $topic_id): Response
+    public function getOne(Request $request, Response $response, int $topic_id): Response
     {
         $topicInfo = $this->topicService->getOrFail($topic_id, true);
 
@@ -101,7 +125,7 @@ class TopicController extends ControllerAbstracts
      * @param  int      $topic_id
      * @return Response
      */
-    public function update(Request $request, Response $response, int $topic_id): Response
+    public function updateOne(Request $request, Response $response, int $topic_id): Response
     {
         $this->roleService->managerIdOrFail();
 
@@ -124,34 +148,10 @@ class TopicController extends ControllerAbstracts
      * @param  int      $topic_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, int $topic_id): Response
+    public function deleteOne(Request $request, Response $response, int $topic_id): Response
     {
         $this->roleService->managerIdOrFail();
         $this->topicService->delete($topic_id);
-
-        return $this->success($response);
-    }
-
-    /**
-     * 批量删除话题
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
-     */
-    public function batchDelete(Request $request, Response $response): Response
-    {
-        $this->roleService->managerIdOrFail();
-
-        $topicIds = $request->getQueryParam('topic_id');
-
-        if ($topicIds) {
-            $topicIds = array_unique(array_filter(array_slice(explode(',', $topicIds), 0, 100)));
-        }
-
-        if ($topicIds) {
-            $this->topicService->batchDelete($topicIds);
-        }
 
         return $this->success($response);
     }
@@ -242,7 +242,7 @@ class TopicController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function getDeleted(Request $request, Response $response): Response
+    public function getDeletedList(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -254,7 +254,7 @@ class TopicController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchRestore(Request $request, Response $response): Response
+    public function restoreMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -266,7 +266,7 @@ class TopicController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDestroy(Request $request, Response $response): Response
+    public function destroyMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -279,7 +279,7 @@ class TopicController extends ControllerAbstracts
      * @param  int      $topic_id
      * @return Response
      */
-    public function restore(Request $request, Response $response, int $topic_id): Response
+    public function restoreOne(Request $request, Response $response, int $topic_id): Response
     {
         return $response;
     }
@@ -292,7 +292,7 @@ class TopicController extends ControllerAbstracts
      * @param  int      $topic_id
      * @return Response
      */
-    public function destroy(Request $request, Response $response, int $topic_id): Response
+    public function destroyOne(Request $request, Response $response, int $topic_id): Response
     {
         return $response;
     }

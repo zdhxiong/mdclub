@@ -17,21 +17,6 @@ use Slim\Http\Response;
 class AnswerController extends ControllerAbstracts
 {
     /**
-     * 获取指定提问下的回答列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
-    {
-        $list = $this->answerService->getListByQuestionId($question_id, true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
      * 获取指定用户发表的回答列表
      *
      * @param  Request  $request
@@ -62,15 +47,16 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
-     * 获取回答列表
+     * 获取指定提问下的回答列表
      *
      * @param  Request  $request
      * @param  Response $response
+     * @param  int      $question_id
      * @return Response
      */
-    public function getList(Request $request, Response $response): Response
+    public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
     {
-        $list = $this->answerService->getList(true);
+        $list = $this->answerService->getListByQuestionId($question_id, true);
 
         return $this->success($response, $list);
     }
@@ -100,6 +86,45 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
+     * 获取回答列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function getList(Request $request, Response $response): Response
+    {
+        $list = $this->answerService->getList(true);
+
+        return $this->success($response, $list);
+    }
+
+    /**
+     * 批量删除回答
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $answerIds = $request->getQueryParam('answer_id');
+
+        if ($answerIds) {
+            $answerIds = array_unique(array_filter(array_slice(explode(',', $answerIds), 0, 100)));
+        }
+
+        if ($answerIds) {
+            $this->answerService->batchDelete($answerIds);
+        }
+
+        return $this->success($response);
+    }
+
+
+    /**
      * 获取指定回答的详情
      *
      * @param  Request  $request
@@ -107,7 +132,7 @@ class AnswerController extends ControllerAbstracts
      * @param  int      $answer_id
      * @return Response
      */
-    public function get(Request $request, Response $response, int $answer_id): Response
+    public function getOne(Request $request, Response $response, int $answer_id): Response
     {
         $answerInfo = $this->answerService->getOrFail($answer_id, true);
 
@@ -122,7 +147,7 @@ class AnswerController extends ControllerAbstracts
      * @param  int      $answer_id
      * @return Response
      */
-    public function update(Request $request, Response $response, int $answer_id): Response
+    public function updateOne(Request $request, Response $response, int $answer_id): Response
     {
         $this->answerService->update(
             $answer_id,
@@ -143,7 +168,7 @@ class AnswerController extends ControllerAbstracts
      * @param  int      $answer_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, int $answer_id): Response
+    public function deleteOne(Request $request, Response $response, int $answer_id): Response
     {
         $this->answerService->delete($answer_id);
 
@@ -151,27 +176,51 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除回答
+     * 获取指定回答下的评论列表
      *
      * @param  Request  $request
      * @param  Response $response
+     * @param  int      $answer_id
      * @return Response
      */
-    public function batchDelete(Request $request, Response $response): Response
+    public function getComments(Request $request, Response $response, int $answer_id): Response
     {
-        $this->roleService->managerIdOrFail();
+        $list = $this->answerService->getComments($answer_id, true);
 
-        $answerIds = $request->getQueryParam('answer_id');
+        return $this->success($response, $list);
+    }
 
-        if ($answerIds) {
-            $answerIds = array_unique(array_filter(array_slice(explode(',', $answerIds), 0, 100)));
-        }
+    /**
+     * 在指定回答下发表评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function addComment(Request $request, Response $response, int $answer_id): Response
+    {
+        $content = $request->getParsedBodyParam('content');
+        $commentId = $this->answerService->addComment($answer_id, $content);
+        $comment = $this->commentService->get($commentId, true);
 
-        if ($answerIds) {
-            $this->answerService->batchDelete($answerIds);
-        }
+        return $this->success($response, $comment);
+    }
 
-        return $this->success($response);
+    /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $answer_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $answer_id): Response
+    {
+        $type = $request->getQueryParam('type');
+        $voters = $this->answerService->getVoters($answer_id, $type, true);
+
+        return $this->success($response, $voters);
     }
 
     /**
@@ -211,61 +260,13 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
-     * 获取投票者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $answer_id
-     * @return Response
-     */
-    public function getVoters(Request $request, Response $response, int $answer_id): Response
-    {
-        $type = $request->getQueryParam('type');
-        $voters = $this->answerService->getVoters($answer_id, $type, true);
-
-        return $this->success($response, $voters);
-    }
-
-    /**
-     * 获取指定回答下的评论列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $answer_id
-     * @return Response
-     */
-    public function getComments(Request $request, Response $response, int $answer_id): Response
-    {
-        $list = $this->answerService->getComments($answer_id, true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
-     * 在指定回答下发表评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $answer_id
-     * @return Response
-     */
-    public function addComment(Request $request, Response $response, int $answer_id): Response
-    {
-        $content = $request->getParsedBodyParam('content');
-        $commentId = $this->answerService->addComment($answer_id, $content);
-        $comment = $this->commentService->get($commentId, true);
-
-        return $this->success($response, $comment);
-    }
-
-    /**
      * 获取回收站中的回答列表
      *
      * @param  Request  $request
      * @param  Response $response
      * @return Response
      */
-    public function getDeleted(Request $request, Response $response): Response
+    public function getDeletedList(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -277,7 +278,7 @@ class AnswerController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchRestore(Request $request, Response $response): Response
+    public function restoreMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -289,7 +290,7 @@ class AnswerController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDestroy(Request $request, Response $response): Response
+    public function destroyMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -302,7 +303,7 @@ class AnswerController extends ControllerAbstracts
      * @param  int      $answer_id
      * @return Response
      */
-    public function restore(Request $request, Response $response, int $answer_id): Response
+    public function restoreOne(Request $request, Response $response, int $answer_id): Response
     {
         return $response;
     }
@@ -315,7 +316,7 @@ class AnswerController extends ControllerAbstracts
      * @param  int      $answer_id
      * @return Response
      */
-    public function destroy(Request $request, Response $response, int $answer_id): Response
+    public function destroyOne(Request $request, Response $response, int $answer_id): Response
     {
         return $response;
     }

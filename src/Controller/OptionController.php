@@ -44,7 +44,7 @@ class OptionController extends ControllerAbstracts
      *
      * @return Response
      */
-    public function updateAll(Request $request, Response $response): Response
+    public function updateMultiple(Request $request, Response $response): Response
     {
         $this->roleService->managerIdOrFail();
 

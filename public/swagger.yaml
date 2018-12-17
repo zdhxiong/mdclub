@@ -5187,54 +5187,54 @@ tags:
     description: 重置密码
   - name: UserInfo
     description: 用户信息
-  - name: UserDisabled
-    description: 禁用的用户
   - name: UserAvatar
     description: 用户头像
   - name: UserCover
     description: 用户封面
   - name: UserFollow
     description: 用户关注
+  - name: UserDisabled
+    description: 禁用的用户
   - name: Topic
     description: 话题信息
-  - name: TopicTrash
-    description: 话题回收站
   - name: TopicFollow
     description: 话题关注
+  - name: TopicTrash
+    description: 话题回收站
   - name: Question
     description: 问题信息
-  - name: QuestionTrash
-    description: 问题回收站
   - name: QuestionComment
     description: 问题评论
   - name: QuestionVote
     description: 问题投票
   - name: QuestionFollow
     description: 问题关注
+  - name: QuestionTrash
+    description: 问题回收站
   - name: Answer
     description: 回答信息
-  - name: AnswerTrash
-    description: 回答回收站
   - name: AnswerComment
     description: 回答评论
   - name: AnswerVote
     description: 回答投票
+  - name: AnswerTrash
+    description: 回答回收站
   - name: Article
     description: 文章信息
-  - name: ArticleTrash
-    description: 文章回收站
   - name: ArticleComment
     description: 文章评论
   - name: ArticleVote
     description: 文章投票
   - name: ArticleFollow
     description: 文章关注
+  - name: ArticleTrash
+    description: 文章回收站
   - name: Comment
     description: 评论
-  - name: CommentTrash
-    description: 评论回收站
   - name: CommentVote
     description: 评论投票
+  - name: CommentTrash
+    description: 评论回收站
   - name: Report
     description: 举报
   - name: Inbox

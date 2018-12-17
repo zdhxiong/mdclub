@@ -40,7 +40,7 @@ class ReportController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDelete(Request $request, Response $response): Response
+    public function deleteMultiple(Request $request, Response $response): Response
     {
         $this->roleService->managerIdOrFail();
 
@@ -102,7 +102,7 @@ class ReportController extends ControllerAbstracts
      * @param  int      $reportable_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
+    public function deleteOne(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
     {
         $this->roleService->managerIdOrFail();
 

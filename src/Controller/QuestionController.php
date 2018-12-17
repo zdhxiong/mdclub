@@ -110,6 +110,30 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
+     * 批量删除提问
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $questionIds = $request->getQueryParam('question_id');
+
+        if ($questionIds) {
+            $questionIds = array_unique(array_filter(array_slice(explode(',', $questionIds), 0, 100)));
+        }
+
+        if ($questionIds) {
+            $this->questionService->batchDelete($questionIds);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取一个提问信息
      *
      * @param  Request  $request
@@ -117,7 +141,7 @@ class QuestionController extends ControllerAbstracts
      * @param  int      $question_id
      * @return Response
      */
-    public function get(Request $request, Response $response, int $question_id): Response
+    public function getOne(Request $request, Response $response, int $question_id): Response
     {
         $questionInfo = $this->questionService->getOrFail($question_id, true);
 
@@ -132,7 +156,7 @@ class QuestionController extends ControllerAbstracts
      * @param  int      $question_id
      * @return Response
      */
-    public function update(Request $request, Response $response, int $question_id): Response
+    public function updateOne(Request $request, Response $response, int $question_id): Response
     {
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
@@ -157,7 +181,7 @@ class QuestionController extends ControllerAbstracts
      * @param  int      $question_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, int $question_id): Response
+    public function deleteOne(Request $request, Response $response, int $question_id): Response
     {
         $this->questionService->delete($question_id);
 
@@ -165,27 +189,87 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除提问
+     * 获取指定提问下的评论列表
      *
      * @param  Request  $request
      * @param  Response $response
+     * @param  int      $question_id
      * @return Response
      */
-    public function batchDelete(Request $request, Response $response): Response
+    public function getComments(Request $request, Response $response, int $question_id): Response
     {
-        $this->roleService->managerIdOrFail();
+        $list = $this->questionService->getComments($question_id, true);
 
-        $questionIds = $request->getQueryParam('question_id');
+        return $this->success($response, $list);
+    }
 
-        if ($questionIds) {
-            $questionIds = array_unique(array_filter(array_slice(explode(',', $questionIds), 0, 100)));
-        }
+    /**
+     * 在指定提问下发表评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function addComment(Request $request, Response $response, int $question_id): Response
+    {
+        $content = $request->getParsedBodyParam('content');
+        $commentId = $this->questionService->addComment($question_id, $content);
+        $comment = $this->commentService->get($commentId, true);
 
-        if ($questionIds) {
-            $this->questionService->batchDelete($questionIds);
-        }
+        return $this->success($response, $comment);
+    }
 
-        return $this->success($response);
+    /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $question_id): Response
+    {
+        $type = $request->getQueryParam('type');
+        $voters = $this->questionService->getVoters($question_id, $type, true);
+
+        return $this->success($response, $voters);
+    }
+
+    /**
+     * 添加投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function addVote(Request $request, Response $response, int $question_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $type = $request->getParsedBodyParam('type');
+
+        $this->questionService->addVote($userId, $question_id, $type);
+        $voteCount = $this->questionService->getVoteCount($question_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
+    }
+
+    /**
+     * 删除投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $question_id
+     * @return Response
+     */
+    public function deleteVote(Request $request, Response $response, int $question_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->questionService->deleteVote($userId, $question_id);
+        $voteCount = $this->questionService->getVoteCount($question_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**
@@ -268,97 +352,13 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
-     * 添加投票
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function addVote(Request $request, Response $response, int $question_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $type = $request->getParsedBodyParam('type');
-
-        $this->questionService->addVote($userId, $question_id, $type);
-        $voteCount = $this->questionService->getVoteCount($question_id);
-
-        return $this->success($response, ['vote_count' => $voteCount]);
-    }
-
-    /**
-     * 删除投票
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function deleteVote(Request $request, Response $response, int $question_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->questionService->deleteVote($userId, $question_id);
-        $voteCount = $this->questionService->getVoteCount($question_id);
-
-        return $this->success($response, ['vote_count' => $voteCount]);
-    }
-
-    /**
-     * 获取投票者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function getVoters(Request $request, Response $response, int $question_id): Response
-    {
-        $type = $request->getQueryParam('type');
-        $voters = $this->questionService->getVoters($question_id, $type, true);
-
-        return $this->success($response, $voters);
-    }
-
-    /**
-     * 获取指定提问下的评论列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function getComments(Request $request, Response $response, int $question_id): Response
-    {
-        $list = $this->questionService->getComments($question_id, true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
-     * 在指定提问下发表评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
-     */
-    public function addComment(Request $request, Response $response, int $question_id): Response
-    {
-        $content = $request->getParsedBodyParam('content');
-        $commentId = $this->questionService->addComment($question_id, $content);
-        $comment = $this->commentService->get($commentId, true);
-
-        return $this->success($response, $comment);
-    }
-
-    /**
      * 获取回收站中的提问列表
      *
      * @param  Request  $request
      * @param  Response $response
      * @return Response
      */
-    public function getDeleted(Request $request, Response $response): Response
+    public function getDeletedList(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -370,7 +370,7 @@ class QuestionController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchRestore(Request $request, Response $response): Response
+    public function restoreMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -382,7 +382,7 @@ class QuestionController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDestroy(Request $request, Response $response): Response
+    public function destroyMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -395,7 +395,7 @@ class QuestionController extends ControllerAbstracts
      * @param  int      $question_id
      * @return Response
      */
-    public function restore(Request $request, Response $response, int $question_id): Response
+    public function restoreOne(Request $request, Response $response, int $question_id): Response
     {
         return $response;
     }
@@ -408,7 +408,7 @@ class QuestionController extends ControllerAbstracts
      * @param  int      $question_id
      * @return Response
      */
-    public function destroy(Request $request, Response $response, int $question_id): Response
+    public function destroyOne(Request $request, Response $response, int $question_id): Response
     {
         return $response;
     }

@@ -41,161 +41,209 @@ $app->get(   '/inbox',                        InboxController::class .        ':
 $app->group('/api', function () {
     $this->get(   '',                                                           ApiController::class . ':pageIndex');
 
+    // 系统设置
     $this->get(   '/options',                                                   OptionController::class . ':getAll');
-    $this->patch( '/options',                                                   OptionController::class . ':updateAll');
+    $this->patch( '/options',                                                   OptionController::class . ':updateMultiple');
 
+    // 登录
     $this->post(  '/tokens',                                                    TokenController::class . ':create');
 
-    $this->get(   '/users',                                                     UserController::class . ':getList');
+    // 注册
     $this->post(  '/users',                                                     UserController::class . ':create');
-    $this->delete('/users',                                                     UserController::class . ':batchDisable');
-    $this->get(   '/users/{user_id:\d+}',                                       UserController::class . ':get');
-    $this->patch( '/users/{user_id:\d+}',                                       UserController::class . ':update');
-    $this->delete('/users/{user_id:\d+}',                                       UserController::class . ':disable');
+    $this->post(  '/user/register/email',                                       UserController::class . ':sendRegisterEmail');
+
+    // 重置密码
+    $this->post(  '/user/password/email',                                       UserController::class . ':sendResetEmail');
+    $this->put(   '/user/password',                                             UserController::class . ':updatePasswordByEmail');
+
+    // 用户信息
+    $this->get(   '/users',                                                     UserController::class . ':getList');
+    $this->delete('/users',                                                     UserController::class . ':disableMultiple');
+    $this->get(   '/users/{user_id:\d+}',                                       UserController::class . ':getOne');
+    $this->patch( '/users/{user_id:\d+}',                                       UserController::class . ':updateOne');
+    $this->delete('/users/{user_id:\d+}',                                       UserController::class . ':disableOne');
+    $this->get(   '/user',                                                      UserController::class . ':getMe');
+    $this->patch( '/user',                                                      UserController::class . ':updateMe');
+
+    // 用户头像
     $this->delete('/users/{user_id:\d+}/avatar',                                UserController::class . ':deleteAvatar');
+    $this->post(  '/user/avatar',                                               UserController::class . ':uploadMyAvatar');
+    $this->delete('/user/avatar',                                               UserController::class . ':deleteMyAvatar');
+
+    // 用户封面
     $this->delete('/users/{user_id:\d+}/cover',                                 UserController::class . ':deleteCover');
+    $this->post(  '/user/cover',                                                UserController::class . ':uploadMyCover');
+    $this->delete('/user/cover',                                                UserController::class . ':deleteMyCover');
+
+    // 用户关注
     $this->get(   '/users/{user_id:\d+}/followers',                             UserController::class . ':getFollowers');
     $this->post(  '/users/{user_id:\d+}/followers',                             UserController::class . ':addFollow');
     $this->delete('/users/{user_id:\d+}/followers',                             UserController::class . ':deleteFollow');
     $this->get(   '/users/{user_id:\d+}/followees',                             UserController::class . ':getFollowees');
-    $this->get(   '/users/{user_id:\d+}/following_questions',                   QuestionController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/following_articles',                    ArticleController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/following_topics',                      TopicController::class . ':getFollowing');
-    $this->get(   '/users/{user_id:\d+}/questions',                             QuestionController::class . ':getListByUserId');
-    $this->get(   '/users/{user_id:\d+}/answers',                               AnswerController::class . ':getListByUserId');
-    $this->get(   '/users/{user_id:\d+}/articles',                              ArticleController::class . ':getListByUserId');
-    $this->get(   '/users/{user_id:\d+}/comments',                              CommentController::class . ':getListByUserId');
-
-    $this->get(   '/user',                                                      UserController::class . ':getMe');
-    $this->patch( '/user',                                                      UserController::class . ':updateMe');
-    $this->post(  '/user/avatar',                                               UserController::class . ':uploadMyAvatar');
-    $this->delete('/user/avatar',                                               UserController::class . ':deleteMyAvatar');
-    $this->post(  '/user/cover',                                                UserController::class . ':uploadMyCover');
-    $this->delete('/user/cover',                                                UserController::class . ':deleteMyCover');
-    $this->post(  '/user/register/email',                                       UserController::class . ':sendRegisterEmail');
-    $this->post(  '/user/password/email',                                       UserController::class . ':sendResetEmail');
-    $this->put(   '/user/password',                                             UserController::class . ':updatePasswordByEmail');
     $this->get(   '/user/followers',                                            UserController::class . ':getMyFollowers');
     $this->get(   '/user/followees',                                            UserController::class . ':getMyFollowees');
-    $this->get(   '/user/following_questions',                                  QuestionController::class . ':getMyFollowing');
-    $this->get(   '/user/following_articles',                                   ArticleController::class . ':getMyFollowing');
-    $this->get(   '/user/following_topics',                                     TopicController::class . ':getMyFollowing');
-    $this->get(   '/user/questions',                                            QuestionController::class . ':getMyList');
-    $this->get(   '/user/answers',                                              AnswerController::class . ':getMyList');
-    $this->get(   '/user/articles',                                             ArticleController::class . ':getMyList');
-    $this->get(   '/user/comments',                                             CommentController::class . ':getMyList');
 
-    $this->get(   '/articles',                                                  ArticleController::class . ':getList');
-    $this->post(  '/articles',                                                  ArticleController::class . ':create');
-    $this->delete('/articles',                                                  ArticleController::class . ':batchDelete');
-    $this->get(   '/articles/{article_id:\d+}',                                 ArticleController::class . ':get');
-    $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':update');
-    $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':delete');
-    $this->get(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':getVoters');
-    $this->post(  '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':addVote');
-    $this->delete('/articles/{article_id:\d+}/voters',                          ArticleController::class . ':deleteVote');
-    $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
-    $this->post(  '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':addFollow');
-    $this->delete('/articles/{article_id:\d+}/followers',                       ArticleController::class . ':deleteFollow');
-    $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
-    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':addComment');
+    // 禁用的用户
+    $this->get(   '/trash/users',                                               UserController::class . ':getDisabledList');
+    $this->post(  '/trash/users',                                               UserController::class . ':enableMultiple');
+    $this->post(  '/trash/users/{user_id:\d+}',                                 UserController::class . ':enableOne');
 
-    $this->get(   '/questions',                                                 QuestionController::class . ':getList');
-    $this->post(  '/questions',                                                 QuestionController::class . ':create');
-    $this->delete('/questions',                                                 QuestionController::class . ':batchDelete');
-    $this->get(   '/questions/{question_id:\d+}',                               QuestionController::class . ':get');
-    $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':update');
-    $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':delete');
-    $this->get(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':getVoters');
-    $this->post(  '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':addVote');
-    $this->delete('/questions/{question_id:\d+}/voters',                        QuestionController::class . ':deleteVote');
-    $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
-    $this->post(  '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':addFollow');
-    $this->delete('/questions/{question_id:\d+}/followers',                     QuestionController::class . ':deleteFollow');
-    $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
-    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':addComment');
-    $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
-    $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
-
+    // 话题信息
     $this->get(   '/topics',                                                    TopicController::class . ':getList');
     $this->post(  '/topics',                                                    TopicController::class . ':create');
-    $this->delete('/topics',                                                    TopicController::class . ':batchDelete');
-    $this->get(   '/topics/{topic_id:\d+}',                                     TopicController::class . ':get');
-    $this->post(  '/topics/{topic_id:\d+}',                                     TopicController::class . ':update'); // formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
-    $this->delete('/topics/{topic_id:\d+}',                                     TopicController::class . ':delete');
+    $this->delete('/topics',                                                    TopicController::class . ':deleteMultiple');
+    $this->get(   '/topics/{topic_id:\d+}',                                     TopicController::class . ':getOne');
+    $this->post(  '/topics/{topic_id:\d+}',                                     TopicController::class . ':updateOne'); // formData 数据只能通过 post 请求提交，所以这里不用 patch 请求
+    $this->delete('/topics/{topic_id:\d+}',                                     TopicController::class . ':deleteOne');
+
+    // 话题关注
+    $this->get(   '/users/{user_id:\d+}/following_topics',                      TopicController::class . ':getFollowing');
+    $this->get(   '/user/following_topics',                                     TopicController::class . ':getMyFollowing');
     $this->get(   '/topics/{topic_id:\d+}/followers',                           TopicController::class . ':getFollowers');
     $this->post(  '/topics/{topic_id:\d+}/followers',                           TopicController::class . ':addFollow');
     $this->delete('/topics/{topic_id:\d+}/followers',                           TopicController::class . ':deleteFollow');
 
+    // 话题回收站
+    $this->get(   '/trash/topics',                                              TopicController::class . ':getDeletedList');
+    $this->post(  '/trash/topics',                                              TopicController::class . ':restoreMultiple');
+    $this->delete('/trash/topics',                                              TopicController::class . ':destroyMultiple');
+    $this->post(  '/trash/topics/{topic_id:\d+}',                               TopicController::class . ':restoreOne');
+    $this->delete('/trash/topics/{topic_id:\d+}',                               TopicController::class . ':destroyOne');
+
+    // 问题信息
+    $this->get(   '/users/{user_id:\d+}/questions',                             QuestionController::class . ':getListByUserId');
+    $this->get(   '/user/questions',                                            QuestionController::class . ':getMyList');
+    $this->get(   '/questions',                                                 QuestionController::class . ':getList');
+    $this->post(  '/questions',                                                 QuestionController::class . ':create');
+    $this->delete('/questions',                                                 QuestionController::class . ':deleteMultiple');
+    $this->get(   '/questions/{question_id:\d+}',                               QuestionController::class . ':getOne');
+    $this->patch( '/questions/{question_id:\d+}',                               QuestionController::class . ':updateOne');
+    $this->delete('/questions/{question_id:\d+}',                               QuestionController::class . ':deleteOne');
+
+    // 问题评论
+    $this->get(   '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':getComments');
+    $this->post(  '/questions/{question_id:\d+}/comments',                      QuestionController::class . ':addComment');
+
+    // 问题投票
+    $this->get(   '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':getVoters');
+    $this->post(  '/questions/{question_id:\d+}/voters',                        QuestionController::class . ':addVote');
+    $this->delete('/questions/{question_id:\d+}/voters',                        QuestionController::class . ':deleteVote');
+
+    // 问题关注
+    $this->get(   '/users/{user_id:\d+}/following_questions',                   QuestionController::class . ':getFollowing');
+    $this->get(   '/user/following_questions',                                  QuestionController::class . ':getMyFollowing');
+    $this->get(   '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':getFollowers');
+    $this->post(  '/questions/{question_id:\d+}/followers',                     QuestionController::class . ':addFollow');
+    $this->delete('/questions/{question_id:\d+}/followers',                     QuestionController::class . ':deleteFollow');
+
+    // 问题回收站
+    $this->get(   '/trash/questions',                                           QuestionController::class . ':getDeletedList');
+    $this->post(  '/trash/questions',                                           QuestionController::class . ':restoreMultiple');
+    $this->delete('/trash/questions',                                           QuestionController::class . ':destroyMultiple');
+    $this->post(  '/trash/questions/{question_id:\d+}',                         QuestionController::class . ':restoreOne');
+    $this->delete('/trash/questions/{question_id:\d+}',                         QuestionController::class . ':destroyOne');
+
+    // 回答信息
+    $this->get(   '/users/{user_id:\d+}/answers',                               AnswerController::class . ':getListByUserId');
+    $this->get(   '/user/answers',                                              AnswerController::class . ':getMyList');
+    $this->get(   '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':getListByQuestionId');
+    $this->post(  '/questions/{question_id:\d+}/answers',                       AnswerController::class . ':create');
     $this->get(   '/answers',                                                   AnswerController::class . ':getList');
-    $this->delete('/answers',                                                   AnswerController::class . ':batchDelete');
-    $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':get');
-    $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':update');
-    $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':delete');
-    $this->get(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':getVoters');
-    $this->post(  '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':addVote');
-    $this->delete('/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':deleteVote');
+    $this->delete('/answers',                                                   AnswerController::class . ':deleteMultiple');
+    $this->get(   '/answers/{answer_id:\d+}',                                   AnswerController::class . ':getOne');
+    $this->patch( '/answers/{answer_id:\d+}',                                   AnswerController::class . ':updateOne');
+    $this->delete('/answers/{answer_id:\d+}',                                   AnswerController::class . ':deleteOne');
+
+    // 回答评论
     $this->get(   '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':getComments');
     $this->post(  '/answers/{answer_id:\d+}/comments',                          AnswerController::class . ':addComment');
 
+    // 回答投票
+    $this->get(   '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':getVoters');
+    $this->post(  '/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':addVote');
+    $this->delete('/answers/{answer_id:\d+}/voters',                            AnswerController::class . ':deleteVote');
+
+    // 回答回收站
+    $this->get(   '/trash/answers',                                             AnswerController::class . ':getDeletedList');
+    $this->post(  '/trash/answers',                                             AnswerController::class . ':restoreMultiple');
+    $this->delete('/trash/answers',                                             AnswerController::class . ':destroyMultiple');
+    $this->post(  '/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':restoreOne');
+    $this->delete('/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':destroyOne');
+
+    // 文章信息
+    $this->get(   '/users/{user_id:\d+}/articles',                              ArticleController::class . ':getListByUserId');
+    $this->get(   '/user/articles',                                             ArticleController::class . ':getMyList');
+    $this->get(   '/articles',                                                  ArticleController::class . ':getList');
+    $this->post(  '/articles',                                                  ArticleController::class . ':create');
+    $this->delete('/articles',                                                  ArticleController::class . ':deleteMultiple');
+    $this->get(   '/articles/{article_id:\d+}',                                 ArticleController::class . ':getOne');
+    $this->patch( '/articles/{article_id:\d+}',                                 ArticleController::class . ':updateOne');
+    $this->delete('/articles/{article_id:\d+}',                                 ArticleController::class . ':deleteOne');
+
+    // 文章评论
+    $this->get(   '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':getComments');
+    $this->post(  '/articles/{article_id:\d+}/comments',                        ArticleController::class . ':addComment');
+
+    // 文章投票
+    $this->get(   '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':getVoters');
+    $this->post(  '/articles/{article_id:\d+}/voters',                          ArticleController::class . ':addVote');
+    $this->delete('/articles/{article_id:\d+}/voters',                          ArticleController::class . ':deleteVote');
+
+    // 文章关注
+    $this->get(   '/users/{user_id:\d+}/following_articles',                    ArticleController::class . ':getFollowing');
+    $this->get(   '/user/following_articles',                                   ArticleController::class . ':getMyFollowing');
+    $this->get(   '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':getFollowers');
+    $this->post(  '/articles/{article_id:\d+}/followers',                       ArticleController::class . ':addFollow');
+    $this->delete('/articles/{article_id:\d+}/followers',                       ArticleController::class . ':deleteFollow');
+
+    // 文章回收站
+    $this->get(   '/trash/articles',                                            ArticleController::class . ':getDeletedList');
+    $this->post(  '/trash/articles',                                            ArticleController::class . ':restoreMultiple');
+    $this->delete('/trash/articles',                                            ArticleController::class . ':destroyMultiple');
+    $this->post(  '/trash/articles/{article_id:\d+}',                           ArticleController::class . ':restoreOne');
+    $this->delete('/trash/articles/{article_id:\d+}',                           ArticleController::class . ':destroyOne');
+
+    // 评论
+    $this->get(   '/users/{user_id:\d+}/comments',                              CommentController::class . ':getListByUserId');
+    $this->get(   '/user/comments',                                             CommentController::class . ':getMyList');
     $this->get(   '/comments',                                                  CommentController::class . ':getList');
-    $this->delete('/comments',                                                  CommentController::class . ':batchDelete');
-    $this->get(   '/comments/{comment_id:\d+}',                                 CommentController::class . ':get');
-    $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':update');
-    $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':delete');
+    $this->delete('/comments',                                                  CommentController::class . ':deleteMultiple');
+    $this->get(   '/comments/{comment_id:\d+}',                                 CommentController::class . ':getOne');
+    $this->patch( '/comments/{comment_id:\d+}',                                 CommentController::class . ':updateOne');
+    $this->delete('/comments/{comment_id:\d+}',                                 CommentController::class . ':deleteOne');
+
+    // 评论投票
     $this->get(   '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':getVoters');
     $this->post(  '/comments/{comment_id:\d+}/voters',                          CommentController::class . ':addVote');
     $this->delete('/comments/{comment_id:\d+}/voters',                          CommentController::class . ':deleteVote');
 
+    // 评论回收站
+    $this->get(   '/trash/comments',                                            CommentController::class . ':getDeletedList');
+    $this->post(  '/trash/comments',                                            CommentController::class . ':restoreMultiple');
+    $this->delete('/trash/comments',                                            CommentController::class . ':destroyMultiple');
+    $this->post(  '/trash/comments/{comment_id:\d+}',                           CommentController::class . ':restoreOne');
+    $this->delete('/trash/comments/{comment_id:\d+}',                           CommentController::class . ':destroyOne');
+
+    // 举报
     $this->get(   '/reports',                                                   ReportController::class . ':getList');
-    $this->delete('/reports',                                                   ReportController::class . ':batchDelete');
+    $this->delete('/reports',                                                   ReportController::class . ':deleteMultiple');
     $this->get(   '/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':getDetailList');
     $this->post(  '/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':create');
-    $this->delete('/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':delete');
+    $this->delete('/reports/{reportable_type}/{reportable_id:\d+}',             ReportController::class . ':deleteOne');
 
-    $this->get(   '/images',                                                    ImageController::class . ':getList');
-    $this->post(  '/images',                                                    ImageController::class . ':upload');
-    $this->delete('/images',                                                    ImageController::class . ':batchDelete');
-    $this->get(   '/images/{hash}',                                             ImageController::class . ':get');
-    $this->patch( '/images/{hash}',                                             ImageController::class . ':update');
-    $this->delete('/images/{hash}',                                             ImageController::class . ':delete');
-
-    $this->post(  '/emails',                                                    EmailController::class . ':send');
+    // 图形验证码
     $this->post(  '/captchas',                                                  CaptchaController::class . ':create');
 
-    $this->get(   '/trash/users',                                               UserController::class . ':getDisabled');
-    $this->post(  '/trash/users',                                               UserController::class . ':batchEnable');
-    $this->post(  '/trash/users/{user_id:\d+}',                                 UserController::class . ':enable');
+    // 邮件
+    $this->post(  '/emails',                                                    EmailController::class . ':send');
 
-    $this->get(   '/trash/topics',                                              TopicController::class . ':getDeleted');
-    $this->post(  '/trash/topics',                                              TopicController::class . ':batchRestore');
-    $this->delete('/trash/topics',                                              TopicController::class . ':batchDestroy');
-    $this->post(  '/trash/topics/{topic_id:\d+}',                               TopicController::class . ':restore');
-    $this->delete('/trash/topics/{topic_id:\d+}',                               TopicController::class . ':destroy');
-
-    $this->get(   '/trash/questions',                                           QuestionController::class . ':getDeleted');
-    $this->post(  '/trash/questions',                                           QuestionController::class . ':batchRestore');
-    $this->delete('/trash/questions',                                           QuestionController::class . ':batchDestroy');
-    $this->post(  '/trash/questions/{question_id:\d+}',                         QuestionController::class . ':restore');
-    $this->delete('/trash/questions/{question_id:\d+}',                         QuestionController::class . ':destroy');
-
-    $this->get(   '/trash/answers',                                             AnswerController::class . ':getDeleted');
-    $this->post(  '/trash/answers',                                             AnswerController::class . ':batchRestore');
-    $this->delete('/trash/answers',                                             AnswerController::class . ':batchDestroy');
-    $this->post(  '/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':restore');
-    $this->delete('/trash/answers/{answer_id:\d+}',                             AnswerController::class . ':destroy');
-
-    $this->get(   '/trash/articles',                                            ArticleController::class . ':getDeleted');
-    $this->post(  '/trash/articles',                                            ArticleController::class . ':batchRestore');
-    $this->delete('/trash/articles',                                            ArticleController::class . ':batchDestroy');
-    $this->post(  '/trash/articles/{article_id:\d+}',                           ArticleController::class . ':restore');
-    $this->delete('/trash/articles/{article_id:\d+}',                           ArticleController::class . ':destroy');
-
-    $this->get(   '/trash/comments',                                            CommentController::class . ':getDeleted');
-    $this->post(  '/trash/comments',                                            CommentController::class . ':batchRestore');
-    $this->delete('/trash/comments',                                            CommentController::class . ':batchDestroy');
-    $this->post(  '/trash/comments/{comment_id:\d+}',                           CommentController::class . ':restore');
-    $this->delete('/trash/comments/{comment_id:\d+}',                           CommentController::class . ':destroy');
+    // 图片
+    $this->get(   '/images',                                                    ImageController::class . ':getList');
+    $this->post(  '/images',                                                    ImageController::class . ':upload');
+    $this->delete('/images',                                                    ImageController::class . ':deleteMultiple');
+    $this->get(   '/images/{hash}',                                             ImageController::class . ':getOne');
+    $this->patch( '/images/{hash}',                                             ImageController::class . ':updateOne');
+    $this->delete('/images/{hash}',                                             ImageController::class . ':deleteOne');
 })
     ->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
         /** @var ResponseInterface $response */

@@ -61,6 +61,30 @@ class CommentController extends ControllerAbstracts
     }
 
     /**
+     * 批量删除评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $commentIds = $request->getQueryParam('comment_id');
+
+        if ($commentIds) {
+            $commentIds = array_unique(array_filter(array_slice(explode(',', $commentIds), 0, 100)));
+        }
+
+        if ($commentIds) {
+            $this->commentService->batchDelete($commentIds);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取评论详情
      *
      * @param  Request  $request
@@ -68,7 +92,7 @@ class CommentController extends ControllerAbstracts
      * @param  int      $comment_id
      * @return Response
      */
-    public function get(Request $request, Response $response, int $comment_id): Response
+    public function getOne(Request $request, Response $response, int $comment_id): Response
     {
         $comment = $this->commentService->getOrFail($comment_id, true);
 
@@ -83,7 +107,7 @@ class CommentController extends ControllerAbstracts
      * @param  int      $comment_id
      * @return Response
      */
-    public function update(Request $request, Response $response, int $comment_id): Response
+    public function updateOne(Request $request, Response $response, int $comment_id): Response
     {
         $content = $request->getParsedBodyParam('content');
 
@@ -101,7 +125,7 @@ class CommentController extends ControllerAbstracts
      * @param  int      $comment_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, int $comment_id): Response
+    public function deleteOne(Request $request, Response $response, int $comment_id): Response
     {
         $this->commentService->delete($comment_id);
 
@@ -109,27 +133,19 @@ class CommentController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除评论
+     * 获取投票者
      *
      * @param  Request  $request
      * @param  Response $response
+     * @param  int      $comment_id
      * @return Response
      */
-    public function batchDelete(Request $request, Response $response): Response
+    public function getVoters(Request $request, Response $response, int $comment_id): Response
     {
-        $this->roleService->managerIdOrFail();
+        $type = $request->getQueryParam('type');
+        $voters = $this->commentService->getVoters($comment_id, $type, true);
 
-        $commentIds = $request->getQueryParam('comment_id');
-
-        if ($commentIds) {
-            $commentIds = array_unique(array_filter(array_slice(explode(',', $commentIds), 0, 100)));
-        }
-
-        if ($commentIds) {
-            $this->commentService->batchDelete($commentIds);
-        }
-
-        return $this->success($response);
+        return $this->success($response, $voters);
     }
 
     /**
@@ -169,29 +185,13 @@ class CommentController extends ControllerAbstracts
     }
 
     /**
-     * 获取投票者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $comment_id
-     * @return Response
-     */
-    public function getVoters(Request $request, Response $response, int $comment_id): Response
-    {
-        $type = $request->getQueryParam('type');
-        $voters = $this->commentService->getVoters($comment_id, $type, true);
-
-        return $this->success($response, $voters);
-    }
-
-    /**
      * 获取回收站中的评论列表
      *
      * @param  Request  $request
      * @param  Response $response
      * @return Response
      */
-    public function getDeleted(Request $request, Response $response): Response
+    public function getDeletedList(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -203,7 +203,7 @@ class CommentController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchRestore(Request $request, Response $response): Response
+    public function restoreMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -215,7 +215,7 @@ class CommentController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDestroy(Request $request, Response $response): Response
+    public function destroyMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -228,7 +228,7 @@ class CommentController extends ControllerAbstracts
      * @param  int      $comment_id
      * @return Response
      */
-    public function restore(Request $request, Response $response, int $comment_id): Response
+    public function restoreOne(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }
@@ -241,7 +241,7 @@ class CommentController extends ControllerAbstracts
      * @param  int      $comment_id
      * @return Response
      */
-    public function destroy(Request $request, Response $response, int $comment_id): Response
+    public function destroyOne(Request $request, Response $response, int $comment_id): Response
     {
         return $response;
     }

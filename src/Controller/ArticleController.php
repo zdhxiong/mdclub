@@ -112,6 +112,30 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
+     * 批量删除文章
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @return Response
+     */
+    public function deleteMultiple(Request $request, Response $response): Response
+    {
+        $this->roleService->managerIdOrFail();
+
+        $articleIds = $request->getQueryParam('article_id');
+
+        if ($articleIds) {
+            $articleIds = array_unique(array_filter(array_slice(explode(',', $articleIds), 0, 100)));
+        }
+
+        if ($articleIds) {
+            $this->articleService->batchDelete($articleIds);
+        }
+
+        return $this->success($response);
+    }
+
+    /**
      * 获取指定文章详情
      *
      * @param  Request  $request
@@ -119,7 +143,7 @@ class ArticleController extends ControllerAbstracts
      * @param  int      $article_id
      * @return Response
      */
-    public function get(Request $request, Response $response, int $article_id): Response
+    public function getOne(Request $request, Response $response, int $article_id): Response
     {
         $articleInfo = $this->articleService->getOrFail($article_id, true);
 
@@ -134,7 +158,7 @@ class ArticleController extends ControllerAbstracts
      * @param  int      $article_id
      * @return Response
      */
-    public function update(Request $request, Response $response, int $article_id): Response
+    public function updateOne(Request $request, Response $response, int $article_id): Response
     {
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
@@ -159,7 +183,7 @@ class ArticleController extends ControllerAbstracts
      * @param  int      $article_id
      * @return Response
      */
-    public function delete(Request $request, Response $response, int $article_id): Response
+    public function deleteOne(Request $request, Response $response, int $article_id): Response
     {
         $this->articleService->delete($article_id);
 
@@ -167,27 +191,87 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
-     * 批量删除文章
+     * 获取指定文章下的评论列表
      *
      * @param  Request  $request
      * @param  Response $response
+     * @param  int      $article_id
      * @return Response
      */
-    public function batchDelete(Request $request, Response $response): Response
+    public function getComments(Request $request, Response $response, int $article_id): Response
     {
-        $this->roleService->managerIdOrFail();
+        $list = $this->articleService->getComments($article_id, true);
 
-        $articleIds = $request->getQueryParam('article_id');
+        return $this->success($response, $list);
+    }
 
-        if ($articleIds) {
-            $articleIds = array_unique(array_filter(array_slice(explode(',', $articleIds), 0, 100)));
-        }
+    /**
+     * 在指定文章下发表评论
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function addComment(Request $request, Response $response, int $article_id): Response
+    {
+        $content = $request->getParsedBodyParam('content');
+        $commentId = $this->articleService->addComment($article_id, $content);
+        $comment = $this->commentService->get($commentId, true);
 
-        if ($articleIds) {
-            $this->articleService->batchDelete($articleIds);
-        }
+        return $this->success($response, $comment);
+    }
 
-        return $this->success($response);
+    /**
+     * 获取投票者
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function getVoters(Request $request, Response $response, int $article_id): Response
+    {
+        $type = $request->getQueryParam('type');
+        $voters = $this->articleService->getVoters($article_id, $type, true);
+
+        return $this->success($response, $voters);
+    }
+
+    /**
+     * 添加投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function addVote(Request $request, Response $response, int $article_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $type = $request->getParsedBodyParam('type');
+
+        $this->articleService->addVote($userId, $article_id, $type);
+        $voteCount = $this->articleService->getVoteCount($article_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
+    }
+
+    /**
+     * 删除投票
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $article_id
+     * @return Response
+     */
+    public function deleteVote(Request $request, Response $response, int $article_id): Response
+    {
+        $userId = $this->roleService->userIdOrFail();
+        $this->articleService->deleteVote($userId, $article_id);
+        $voteCount = $this->articleService->getVoteCount($article_id);
+
+        return $this->success($response, ['vote_count' => $voteCount]);
     }
 
     /**
@@ -270,97 +354,13 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
-     * 添加投票
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function addVote(Request $request, Response $response, int $article_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $type = $request->getParsedBodyParam('type');
-
-        $this->articleService->addVote($userId, $article_id, $type);
-        $voteCount = $this->articleService->getVoteCount($article_id);
-
-        return $this->success($response, ['vote_count' => $voteCount]);
-    }
-
-    /**
-     * 删除投票
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function deleteVote(Request $request, Response $response, int $article_id): Response
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $this->articleService->deleteVote($userId, $article_id);
-        $voteCount = $this->articleService->getVoteCount($article_id);
-
-        return $this->success($response, ['vote_count' => $voteCount]);
-    }
-
-    /**
-     * 获取投票者
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function getVoters(Request $request, Response $response, int $article_id): Response
-    {
-        $type = $request->getQueryParam('type');
-        $voters = $this->articleService->getVoters($article_id, $type, true);
-
-        return $this->success($response, $voters);
-    }
-
-    /**
-     * 获取指定文章下的评论列表
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function getComments(Request $request, Response $response, int $article_id): Response
-    {
-        $list = $this->articleService->getComments($article_id, true);
-
-        return $this->success($response, $list);
-    }
-
-    /**
-     * 在指定文章下发表评论
-     *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $article_id
-     * @return Response
-     */
-    public function addComment(Request $request, Response $response, int $article_id): Response
-    {
-        $content = $request->getParsedBodyParam('content');
-        $commentId = $this->articleService->addComment($article_id, $content);
-        $comment = $this->commentService->get($commentId, true);
-
-        return $this->success($response, $comment);
-    }
-
-    /**
      * 获取回收站中的文章列表
      *
      * @param  Request  $request
      * @param  Response $response
      * @return Response
      */
-    public function getDeleted(Request $request, Response $response): Response
+    public function getDeletedList(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -372,7 +372,7 @@ class ArticleController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchRestore(Request $request, Response $response): Response
+    public function restoreMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -384,7 +384,7 @@ class ArticleController extends ControllerAbstracts
      * @param  Response $response
      * @return Response
      */
-    public function batchDestroy(Request $request, Response $response): Response
+    public function destroyMultiple(Request $request, Response $response): Response
     {
         return $response;
     }
@@ -397,7 +397,7 @@ class ArticleController extends ControllerAbstracts
      * @param  int      $article_id
      * @return Response
      */
-    public function restore(Request $request, Response $response, int $article_id): Response
+    public function restoreOne(Request $request, Response $response, int $article_id): Response
     {
         return $response;
     }
@@ -410,7 +410,7 @@ class ArticleController extends ControllerAbstracts
      * @param  int      $article_id
      * @return Response
      */
-    public function destroy(Request $request, Response $response, int $article_id): Response
+    public function destroyOne(Request $request, Response $response, int $article_id): Response
     {
         return $response;
     }
