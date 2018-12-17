@@ -5,8 +5,8 @@ import 'mdn-polyfills/CustomEvent';
 import Cookies from 'js-cookie';
 import mdui from 'mdui';
 import { defaults } from 'mdclub-sdk-js';
-import '../node_modules/mdui/dist/css/mdui.min.css';
-import '../node_modules/highlight.js/styles/github-gist.css';
+import 'mdui/dist/css/mdui.min.css';
+import 'highlight.js/styles/github-gist.css';
 
 import './init';
 import './init/index.less';

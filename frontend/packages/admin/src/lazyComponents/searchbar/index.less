@@ -32,6 +32,10 @@
     box-sizing: border-box;
     transition: background-color 100ms ease-in;
 
+    .mdui-theme-layout-dark & {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
     &>i {
       margin: 0 14px;
     }
@@ -59,12 +63,6 @@
       i {
         float: right;
       }
-    }
-  }
-
-  .mdui-theme-layout-dark & {
-    .bar {
-      background-color: rgba(255, 255, 255, 0.04);
     }
   }
 
@@ -134,13 +132,6 @@
     }
   }
 
-  .mdui-theme-layout-dark & {
-    .form {
-      border-color: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 1px 1px rgba(255, 255, 255, 0.24);
-    }
-  }
-
   .mdui-menu-open {
     transform: scaleY(1);
   }
@@ -152,12 +143,8 @@
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.24);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
-    }
-  }
 
-  .mdui-theme-layout-dark & {
-    &.is-open {
-      .bar {
+      .mdui-theme-layout-dark & {
         border-color: rgba(255, 255, 255, 0.08);
         background-color: #424242;
         box-shadow: 0 1px 1px rgba(255, 255, 255, 0.24);

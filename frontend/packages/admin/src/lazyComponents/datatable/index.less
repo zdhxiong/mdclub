@@ -13,10 +13,8 @@
 
   &.is-top thead {
     box-shadow: 0 3px 2px -2px rgba(0, 0, 0, .1);
-  }
 
-  .mdui-theme-layout-dark & {
-    &.is-top thead {
+    .mdui-theme-layout-dark & {
       box-shadow: 0 3px 2px -2px rgba(255, 255, 255, .1);
     }
   }
@@ -62,6 +60,10 @@
     th {
       color: #1a73e8 !important;
       font-size: 16px;
+
+      .mdui-theme-layout-dark & {
+        color: #e8f0fe !important;
+      }
     }
 
     .mdui-btn {
@@ -70,21 +72,11 @@
     }
   }
 
-  .mdui-theme-layout-dark & {
-    thead tr.checked {
-      th {
-        color: #e8f0fe !important;
-      }
-    }
-  }
-
   // 修改行悬浮状态颜色
   .mdui-table-hoverable tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.04);
-  }
 
-  .mdui-theme-layout-dark & {
-    .mdui-table-hoverable tbody tr:hover {
+    .mdui-theme-layout-dark & {
       background-color: rgba(255, 255, 255, 0.08);
     }
   }
@@ -97,10 +89,8 @@
   // 表格行选中状态颜色
   .mdui-table-row-selected {
     background-color: rgba(0, 0, 0, 0.06) !important;
-  }
 
-  .mdui-theme-layout-dark & {
-    .mdui-table-row-selected {
+    .mdui-theme-layout-dark & {
       background-color: rgba(255, 255, 255, 0.16) !important;
     }
   }
@@ -133,16 +123,14 @@
     color: inherit;
     border-bottom: 1px dotted rgba(0, 0, 0, 0.24);
 
+    .mdui-theme-layout-dark & {
+      border-bottom-color: rgba(255, 255, 255, 0.24);
+    }
+
     &:hover {
       border-bottom: 1px dashed rgba(0, 0, 0, 0.87);
-    }
-  }
 
-  .mdui-theme-layout-dark & {
-    td a {
-      border-bottom-color: rgba(255, 255, 255, 0.24);
-
-      &:hover {
+      .mdui-theme-layout-dark & {
         border-bottom-color: rgba(255, 255, 255, 0.87);
       }
     }

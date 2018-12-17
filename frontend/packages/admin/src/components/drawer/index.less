@@ -42,9 +42,18 @@
     background-color: #e8f0fe;
     color: #1a73e8;
 
+    .mdui-theme-layout-dark & {
+      background-color: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
     .mdui-list-item-icon,
     .mdui-list-item-content {
       color: #1a73e8;
+
+      .mdui-theme-layout-dark & {
+        color: #fff;
+      }
     }
   }
 
@@ -88,20 +97,6 @@
 
     .mdui-drawer-close {
       transform: translateX(-72px);
-    }
-  }
-}
-
-.mdui-theme-layout-dark {
-  .mc-drawer {
-    .mdui-list-item-active {
-      background-color: rgba(255, 255, 255, 0.16);
-      color: #fff;
-
-      .mdui-list-item-icon,
-      .mdui-list-item-content {
-        color: #fff;
-      }
     }
   }
 }

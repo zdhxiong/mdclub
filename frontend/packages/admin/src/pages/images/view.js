@@ -16,7 +16,7 @@ export default (global_state, global_actions) => {
 
   return ({ match }) => (
     <div
-      oncreate={() => actions.init({ global_actions })}
+      oncreate={element => actions.init({ element, global_actions })}
       ondestroy={actions.destroy}
       key={match.url}
       id="page-images"
@@ -30,7 +30,8 @@ export default (global_state, global_actions) => {
     >
       <div class="header">
         <div class="toggle-all" onclick={actions.checkAll}>
-          <i class="mdui-icon material-icons">check_circle</i>全选
+          <i class="mdui-icon material-icons">check_circle</i>
+          <span>{state.data.length} 张图片</span>
         </div>
         <If condition={state.checkedCount}>
           <div class="actions">

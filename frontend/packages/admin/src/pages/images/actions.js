@@ -5,7 +5,7 @@ import 'photoswipe/dist/default-skin/default-skin.css';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
-import { resizeImage } from './helper';
+import helper from './helper';
 import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
 
@@ -18,6 +18,7 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
+    const $element = $(props.element);
 
     const { searchBar } = global_actions.lazyComponents;
 
@@ -68,6 +69,22 @@ export default $.extend({}, actionsAbstract, {
 
     $(document).on('search-submit', actions.loadData);
     actions.loadData();
+
+    // 滚动时，头部阴影变化
+    $element.find('.list').on('scroll', (e) => {
+      if (e.target.scrollTop) {
+        $element.addClass('is-top');
+      } else {
+        $element.removeClass('is-top');
+      }
+    });
+
+    // 调整浏览器宽度时，重新计算缩略图布局
+    $(window).on('resize', actions.resize);
+    $('.mc-drawer')
+      .on('opened.mdui.drawer', actions.resize)
+      .on('closed.mdui.drawer', actions.resize);
+
   },
 
   /**
@@ -75,9 +92,35 @@ export default $.extend({}, actionsAbstract, {
    */
   destroy: () => (state, actions) => {
     $(document).off('search-submit');
+    $(window).off('resize', actions.resize);
+    $('.mc-drawer')
+      .off('opened.mdui.drawer', actions.resize)
+      .off('closed.mdui.drawer', actions.resize);
 
+    actions.reset();
+  },
+
+  /**
+   * 浏览器宽度变化时调用
+   */
+  resize: () => (state, actions) => {
+    window.requestAnimationFrame(() => {
+      if (state.data) {
+        actions.setState({
+          thumbData: helper.resizeImage(state.data),
+        });
+      }
+    });
+  },
+
+  /**
+   * 重置状态
+   */
+  reset: () => (state, actions) => {
     actions.setState({
       data: [],
+      thumbData: [],
+      photoSwipeItems: [],
       loading: false,
       isCheckedRows: {},
       isCheckedAll: false,
@@ -124,9 +167,9 @@ export default $.extend({}, actionsAbstract, {
 
     const isCheckedRows = {};
     const photoSwipeItems = [];
-    const thumbData = resizeImage(response.data);
+    const thumbData = helper.resizeImage(response.data);
 
-    response.data.map((item, index) => {
+    response.data.map((item) => {
       // 取消选中所有图片
       isCheckedRows[item.hash] = false;
 
@@ -151,17 +194,6 @@ export default $.extend({}, actionsAbstract, {
     });
 
     global_actions.lazyComponents.pagination.setState(response.pagination);
-
-    const resize = () => {
-      window.requestAnimationFrame(() => {
-        actions.setState({
-          thumbData: resizeImage(response.data),
-        });
-      });
-    };
-
-    $(window).off('resize', resize);
-    setTimeout(() => $(window).on('resize', resize));
   },
 
   /**
@@ -221,6 +253,7 @@ export default $.extend({}, actionsAbstract, {
         };
       },
     });
+
     gallery.init();
   },
 
