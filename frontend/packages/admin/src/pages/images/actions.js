@@ -84,7 +84,6 @@ export default $.extend({}, actionsAbstract, {
     $('.mc-drawer')
       .on('opened.mdui.drawer', actions.resize)
       .on('closed.mdui.drawer', actions.resize);
-
   },
 
   /**

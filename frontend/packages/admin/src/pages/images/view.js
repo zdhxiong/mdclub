@@ -37,7 +37,7 @@ export default (global_state, global_actions) => {
           <div class="actions">
             <button
               class="delete mdui-btn mdui-btn-icon mdui-btn-dense"
-              mdui-tooltip={`{content: '批量删除', delay: 300}`}
+              mdui-tooltip={'{content: \'批量删除\', delay: 300}'}
               onclick={actions.batchDelete}
             >
               <i class="mdui-icon material-icons">delete</i>

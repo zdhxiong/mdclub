@@ -15,7 +15,7 @@ const toggle = () => {
   }
 };
 
-const Item = ({ url, icon, title }) => (
+const RootItem = ({ url, icon, title }) => (
   <Link
     to={$.path(url)}
     class={cc([
@@ -31,6 +31,19 @@ const Item = ({ url, icon, title }) => (
   </Link>
 );
 
+const ChildItem = ({ url, title }) => (
+  <Link
+    to={$.path(url)}
+    class={cc([
+      'mdui-list-item',
+      'mdui-ripple',
+      {
+        'mdui-list-item-active': $.isPathMatched(url, false),
+      },
+    ])}
+  >{title}</Link>
+);
+
 export default () => (
   <div class="mc-drawer mdui-drawer" key="mc-drawer">
     <div
@@ -38,18 +51,34 @@ export default () => (
       mdui-collapse
       oncreate={element => $(element).mutation()}
     >
-      <Item url="" icon="home" title="首页"/>
+      <RootItem url="" icon="home" title="首页"/>
       <div class="mdui-divider"></div>
-      <Item url="/topics" icon="class" title="话题"/>
-      <Item url="/users" icon="people" title="用户"/>
-      <Item url="/questions" icon="question_answer" title="提问"/>
-      <Item url="/answers" icon="reply_all" title="回答"/>
-      <Item url="/articles" icon="description" title="文章"/>
-      <Item url="/comments" icon="comment" title="评论"/>
-      <Item url="/images" icon="image" title="图片"/>
+      <RootItem url="/topics" icon="class" title="话题"/>
+      <RootItem url="/users" icon="people" title="用户"/>
+      <RootItem url="/questions" icon="question_answer" title="提问"/>
+      <RootItem url="/answers" icon="reply_all" title="回答"/>
+      <RootItem url="/articles" icon="description" title="文章"/>
+      <RootItem url="/comments" icon="comment" title="评论"/>
+      <RootItem url="/images" icon="image" title="图片"/>
       <div class="mdui-divider"></div>
-      <Item url="/reports" icon="report" title="举报"/>
-      <Item url="/options" icon="settings" title="设置"/>
+      <RootItem url="/reports" icon="report" title="举报"/>
+      <div class="mdui-collapse-item">
+        <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+          <i class="mdui-list-item-icon mdui-icon material-icons">delete</i>
+          <div class="mdui-list-item-content">回收站</div>
+          <i class="mdui-collapse-item-arrow mdui-icon material-icons">arrow_drop_down</i>
+        </div>
+        <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+          <ChildItem url="/trash/users" title="用户"/>
+          <ChildItem url="/trash/topics" title="话题"/>
+          <ChildItem url="/trash/questions" title="提问"/>
+          <ChildItem url="/trash/answers" title="回答"/>
+          <ChildItem url="/trash/articles" title="文章"/>
+          <ChildItem url="/trash/comments" title="评论"/>
+        </div>
+      </div>
+      <div class="mdui-divider"></div>
+      <RootItem url="/options" icon="settings" title="设置"/>
     </div>
     <div class="toggle" onclick={toggle}>
       <button class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">
