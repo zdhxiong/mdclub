@@ -390,8 +390,12 @@ class ImageService extends ServiceAbstracts
      *
      * @param array $hashs
      */
-    public function batchDelete(array $hashs): void
+    public function deleteMultiple(array $hashs): void
     {
+        if (!$hashs) {
+            return;
+        }
+
         $images = $this->imageModel->field(['hash', 'create_time'])->select($hashs);
 
         if (!$images) {

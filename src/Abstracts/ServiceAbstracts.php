@@ -110,7 +110,7 @@ abstract class ServiceAbstracts
     }
 
     /**
-     * Service constructor.
+     * ServiceAbstracts constructor.
      *
      * @param ContainerInterface $container
      */
@@ -199,14 +199,14 @@ abstract class ServiceAbstracts
     /**
      * 查询列表时的条件
      *
-     * @param  array $defaultFilter 默认条件。query 中存在相同键名的参数时，将覆盖默认条件
+     * @param  array $defaultFilter 默认条件。该条件将覆盖 query 中的同名参数
      * @return array
      */
     protected function getWhere(array $defaultFilter = []): array
     {
         $result = $this->request->getQueryParams();
         $result = ArrayHelper::filter($result, $this->getAllowFilterFields());
-        $result = array_merge($defaultFilter, $result);
+        $result = array_merge($result, $defaultFilter);
 
         return $result;
     }

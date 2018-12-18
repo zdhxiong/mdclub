@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -51,7 +52,7 @@ class TopicController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->topicService->getList(true);
+        $list = $this->topicService->getList([], true);
 
         return $this->success($response, $list);
     }
@@ -89,15 +90,8 @@ class TopicController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $topicIds = $request->getQueryParam('topic_id');
-
-        if ($topicIds) {
-            $topicIds = array_unique(array_filter(array_slice(explode(',', $topicIds), 0, 100)));
-        }
-
-        if ($topicIds) {
-            $this->topicService->batchDelete($topicIds);
-        }
+        $topicIds = ArrayHelper::parseQuery($request, 'topic_id', 100);
+        $this->topicService->deleteMultiple($topicIds);
 
         return $this->success($response);
     }
@@ -244,7 +238,11 @@ class TopicController extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $list = $this->topicService->getList(['is_deleted' => true], true);
+
+        return $this->success($response, $list);
     }
 
     /**

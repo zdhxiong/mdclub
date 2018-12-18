@@ -81,14 +81,26 @@ class UserService extends ServiceAbstracts
     /**
      * 获取用户列表
      *
-     * @param  bool $withRelationship
+     * @param  array $condition
+     * [
+     *     'is_disabled' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
+     * ]
+     * @param  bool  $withRelationship
      * @return array
      */
-    public function getList($withRelationship = false): array
+    public function getList(array $condition = [], $withRelationship = false): array
     {
+        $defaultWhere = ['disable_time' => 0];
+        $defaultOrder = ['create_time' => 'ASC'];
+
+        if (isset($condition['is_disabled']) && $condition['is_disabled']) {
+            $defaultWhere = ['disable_time[>]' => 0];
+            $defaultOrder = ['disable_time' => 'DESC'];
+        }
+
         $list = $this->userModel
-            ->where($this->getWhere(['disable_time' => 0]))      // 获取用户列表时，不包括已禁用用户
-            ->order($this->getOrder(['create_time' => 'ASC']))
+            ->where($this->getWhere($defaultWhere))
+            ->order($this->getOrder($defaultOrder))
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -250,7 +262,7 @@ class UserService extends ServiceAbstracts
      * @param  array $userIds
      * @return bool
      */
-    public function batchDisable(array $userIds): bool
+    public function disableMultiple(array $userIds): bool
     {
         $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
 

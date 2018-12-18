@@ -61,40 +61,33 @@ class ArticleService extends ServiceAbstracts
     /**
      * 获取文章列表
      *
+     * @param  array $condition
+     * 两个参数中仅可指定一个
+     * [
+     *     'user_id'    => '',
+     *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
+     * ]
      * @param  bool  $withRelationship
      * @return array
      */
-    public function getList(bool $withRelationship = false): array
+    public function getList(array $condition = [], bool $withRelationship = false): array
     {
-        $list = $this->articleModel
-            ->where($this->getWhere())
-            ->order($this->getOrder(['create_time' => 'DESC']))
-            ->field($this->getPrivacyFields(), true)
-            ->paginate();
+        $where = $this->getWhere();
+        $defaultOrder = ['create_time' => 'DESC'];
 
-        $list['data'] = $this->handle($list['data']);
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
+        if (isset($condition['user_id'])) {
+            $this->userService->hasOrFail($condition['user_id']);
+            $where = ['user_id' => $condition['user_id']];
         }
 
-        return $list;
-    }
-
-    /**
-     * 根据用户ID获取文章列表
-     *
-     * @param  int   $userId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getListByUserId(int $userId, bool $withRelationship = false): array
-    {
-        $this->userService->hasOrFail($userId);
+        elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
+            $this->articleModel->onlyTrashed();
+            $defaultOrder = ['delete_time' => 'DESC'];
+        }
 
         $list = $this->articleModel
-            ->where(['user_id' => $userId])
-            ->order($this->getOrder(['create_time' => 'DESC']))
+            ->where($where)
+            ->order($this->getOrder($defaultOrder))
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -423,8 +416,12 @@ class ArticleService extends ServiceAbstracts
      *
      * @param array $articleIds
      */
-    public function batchDelete(array $articleIds): void
+    public function deleteMultiple(array $articleIds): void
     {
+        if (!$articleIds) {
+            return;
+        }
+
         $articles = $this->articleModel
             ->field(['article_id', 'user_id'])
             ->select($articleIds);

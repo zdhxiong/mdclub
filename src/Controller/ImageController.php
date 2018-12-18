@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -63,15 +64,8 @@ class ImageController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $hashs = $request->getQueryParam('hash');
-
-        if ($hashs) {
-            $hashs = array_unique(array_filter(array_slice(explode(',', $hashs), 0, 40)));
-        }
-
-        if ($hashs) {
-            $this->imageService->batchDelete($hashs);
-        }
+        $hashs = ArrayHelper::parseQuery($request, 'hash', 40);
+        $this->imageService->deleteMultiple($hashs);
 
         return $this->success($response);
     }

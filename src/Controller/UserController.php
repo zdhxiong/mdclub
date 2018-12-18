@@ -51,7 +51,7 @@ class UserController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->userService->getList(true);
+        $list = $this->userService->getList([], true);
 
         return $this->success($response, $list);
     }
@@ -74,7 +74,7 @@ class UserController extends ControllerAbstracts
         }
 
         if ($userIds) {
-            $this->userService->batchDisable($userIds);
+            $this->userService->disableMultiple($userIds);
         }
 
         return $this->success($response);
@@ -450,7 +450,11 @@ class UserController extends ControllerAbstracts
      */
     public function getDisabledList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $list = $this->userService->getList(['is_disabled' => true], true);
+
+        return $this->success($response, $list);
     }
 
     /**

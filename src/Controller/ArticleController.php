@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -53,7 +54,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->articleService->getListByUserId($user_id, true);
+        $list = $this->articleService->getList(['user_id' => $user_id], true);
 
         return $this->success($response, $list);
     }
@@ -68,7 +69,7 @@ class ArticleController extends ControllerAbstracts
     public function getMyList(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $list = $this->articleService->getListByUserId($userId, true);
+        $list = $this->articleService->getList(['user_id' => $userId], true);
 
         return $this->success($response, $list);
     }
@@ -82,7 +83,7 @@ class ArticleController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->articleService->getList(true);
+        $list = $this->articleService->getList([], true);
 
         return $this->success($response, $list);
     }
@@ -122,15 +123,8 @@ class ArticleController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $articleIds = $request->getQueryParam('article_id');
-
-        if ($articleIds) {
-            $articleIds = array_unique(array_filter(array_slice(explode(',', $articleIds), 0, 100)));
-        }
-
-        if ($articleIds) {
-            $this->articleService->batchDelete($articleIds);
-        }
+        $articleIds = ArrayHelper::parseQuery($request, 'article_id', 100);
+        $this->articleService->deleteMultiple($articleIds);
 
         return $this->success($response);
     }
@@ -362,7 +356,11 @@ class ArticleController extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $list = $this->articleService->getList(['is_deleted' => true], true);
+
+        return $this->success($response, $list);
     }
 
     /**

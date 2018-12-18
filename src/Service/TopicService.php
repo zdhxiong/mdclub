@@ -111,14 +111,26 @@ class TopicService extends ServiceAbstracts
     /**
      * 获取话题列表
      *
+     * @param  array $condition
+     * [
+     *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
+     * ]
      * @param  bool  $withRelationship
      * @return array
      */
-    public function getList(bool $withRelationship = false): array
+    public function getList(array $condition = [], bool $withRelationship = false): array
     {
+        $where = $this->getWhere();
+        $defaultOrder = ['topic_id' => 'ASC'];
+
+        if (isset($condition['is_deleted']) && $condition['is_deleted']) {
+            $this->topicModel->onlyTrashed();
+            $defaultOrder = ['delete_time' => 'DESC'];
+        }
+
         $list = $this->topicModel
-            ->where($this->getWhere())
-            ->order($this->getOrder(['topic_id' => 'ASC']))
+            ->where($where)
+            ->order($this->getOrder($defaultOrder))
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -344,8 +356,12 @@ class TopicService extends ServiceAbstracts
      *
      * @param  array $topicIds
      */
-    public function batchDelete(array $topicIds): void
+    public function deleteMultiple(array $topicIds): void
     {
+        if (!$topicIds) {
+            return;
+        }
+
         // todo 仅未删除的话题才可以删除
         $this->topicModel->where(['topic_id' => $topicIds])->delete();
 

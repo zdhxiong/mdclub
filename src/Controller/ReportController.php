@@ -6,6 +6,7 @@ namespace App\Controller;
 
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -44,15 +45,8 @@ class ReportController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $target = $request->getQueryParam('target');
-
-        if ($target) {
-            $target = array_unique(array_filter(array_slice(explode(',', $target), 0, 100)));
-        }
-
-        if ($target) {
-            $this->reportService->batchDelete($target);
-        }
+        $target = ArrayHelper::parseQuery($request, 'target', 100);
+        $this->reportService->deleteMultiple($target);
 
         return $this->success($response);
     }

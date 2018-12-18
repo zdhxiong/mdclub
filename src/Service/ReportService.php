@@ -196,7 +196,7 @@ class ReportService extends ServiceAbstracts
      *
      * @param array $targets
      */
-    public function batchDelete(array $targets): void
+    public function deleteMultiple(array $targets): void
     {
         $where = [];
 

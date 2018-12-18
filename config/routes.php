@@ -21,7 +21,6 @@ use App\Controller\ReportController;
 use App\Controller\TopicController;
 use App\Controller\UserController;
 use App\Controller\TokenController;
-use App\Controller\TrashController;
 
 // 页面
 $app->get(   '/',                             IndexController::class .        ':pageIndex');

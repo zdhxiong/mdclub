@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
+use Slim\Http\Request;
+
 /**
  * 数组相关方法
  *
@@ -166,5 +168,20 @@ class ArrayHelper
             }
         }
         return $ret;
+    }
+
+    /**
+     * 把 query 参数中用 , 分隔的参数转换为数组
+     *
+     * @param  Request $request
+     * @param  string  $query  query参数名
+     * @param  int     $count  数组中最大条目数
+     * @return array
+     */
+    public static function parseQuery($request, $query, $count = 100): array
+    {
+        $value = $request->getQueryParam($query);
+
+        return array_unique(array_filter(array_slice(explode(',', $value), 0, $count)));
     }
 }

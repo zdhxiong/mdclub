@@ -60,66 +60,39 @@ class AnswerService extends ServiceAbstracts
     /**
      * 获取回答列表
      *
+     * @param  array $condition
+     * 三个参数中仅可指定一个
+     * [
+     *     'user_id'     => '',
+     *     'question_id' => '',
+     *     'is_deleted'  => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
+     * ]
      * @param  bool  $withRelationship
      * @return array
      */
-    public function getList(bool $withRelationship = false): array
+    public function getList(array $condition = [], bool $withRelationship = false): array
     {
-        $list = $this->answerModel
-            ->where($this->getWhere())
-            ->order($this->getOrder(['create_time' => 'DESC']))
-            ->field($this->getPrivacyFields(), true)
-            ->paginate();
+        $where = $this->getWhere();
+        $defaultOrder = ['create_time' => 'DESC'];
 
-        $list['data'] = $this->handle($list['data']);
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
+        if (isset($condition['user_id'])) {
+            $this->userService->hasOrFail($condition['user_id']);
+            $where = ['user_id' => $condition['user_id']];
         }
 
-        return $list;
-    }
-
-    /**
-     * 根据用户ID获取回答列表
-     *
-     * @param  int   $userId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getListByUserId(int $userId, bool $withRelationship = false): array
-    {
-        $this->userService->hasOrFail($userId);
-
-        $list = $this->answerModel
-            ->where(['user_id' => $userId])
-            ->order($this->getOrder(['create_time' => 'DESC']))
-            ->field($this->getPrivacyFields(), true)
-            ->paginate();
-
-        $list['data'] = $this->handle($list['data']);
-
-        if ($withRelationship) {
-            $list['data'] = $this->addRelationship($list['data']);
+        elseif (isset($condition['question_id'])) {
+            $this->questionService->hasOrFail($condition['question_id']);
+            $where = ['question_id' => $condition['question_id']];
         }
 
-        return $list;
-    }
-
-    /**
-     * 根据提问ID获取回答列表
-     *
-     * @param  int   $questionId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getListByQuestionId(int $questionId, bool $withRelationship = false): array
-    {
-        $this->questionService->hasOrFail($questionId);
+        elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
+            $this->answerModel->onlyTrashed();
+            $defaultOrder = ['delete_time' => 'DESC'];
+        }
 
         $list = $this->answerModel
-            ->where(['question_id' => $questionId])
-            ->order($this->getOrder(['create_time' => 'DESC']))
+            ->where($where)
+            ->order($this->getOrder($defaultOrder))
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -343,8 +316,12 @@ class AnswerService extends ServiceAbstracts
      *
      * @param array $answerIds
      */
-    public function batchDelete(array $answerIds): void
+    public function deleteMultiple(array $answerIds): void
     {
+        if (!$answerIds) {
+            return;
+        }
+
         $answers = $this->answerModel
             ->field(['question_id', 'user_id', 'answer_id'])
             ->select($answerIds);

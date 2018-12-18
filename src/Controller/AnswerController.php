@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -26,7 +27,7 @@ class AnswerController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->answerService->getListByUserId($user_id, true);
+        $list = $this->answerService->getList(['user_id' => $user_id], true);
 
         return $this->success($response, $list);
     }
@@ -41,7 +42,7 @@ class AnswerController extends ControllerAbstracts
     public function getMyList(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $list = $this->answerService->getListByUserId($userId, true);
+        $list = $this->answerService->getList(['user_id' => $userId], true);
 
         return $this->success($response, $list);
     }
@@ -56,7 +57,7 @@ class AnswerController extends ControllerAbstracts
      */
     public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
     {
-        $list = $this->answerService->getListByQuestionId($question_id, true);
+        $list = $this->answerService->getList(['question_id' => $question_id], true);
 
         return $this->success($response, $list);
     }
@@ -94,7 +95,7 @@ class AnswerController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->answerService->getList(true);
+        $list = $this->answerService->getList([], true);
 
         return $this->success($response, $list);
     }
@@ -110,15 +111,8 @@ class AnswerController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $answerIds = $request->getQueryParam('answer_id');
-
-        if ($answerIds) {
-            $answerIds = array_unique(array_filter(array_slice(explode(',', $answerIds), 0, 100)));
-        }
-
-        if ($answerIds) {
-            $this->answerService->batchDelete($answerIds);
-        }
+        $answerIds = ArrayHelper::parseQuery($request, 'answer_id', 100);
+        $this->answerService->deleteMultiple($answerIds);
 
         return $this->success($response);
     }
@@ -253,6 +247,7 @@ class AnswerController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $answer_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->answerService->deleteVote($userId, $answer_id);
         $voteCount = $this->answerService->getVoteCount($answer_id);
 
@@ -268,7 +263,11 @@ class AnswerController extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $list = $this->answerService->getList(['is_deleted' => true], true);
+
+        return $this->success($response, $list);
     }
 
     /**

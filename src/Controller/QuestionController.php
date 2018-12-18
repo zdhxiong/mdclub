@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -51,7 +52,7 @@ class QuestionController extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->questionService->getListByUserId($user_id, true);
+        $list = $this->questionService->getList(['user_id' => $user_id], true);
 
         return $this->success($response, $list);
     }
@@ -66,7 +67,7 @@ class QuestionController extends ControllerAbstracts
     public function getMyList(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
-        $list = $this->questionService->getListByUserId($userId, true);
+        $list = $this->questionService->getList(['user_id' => $userId], true);
 
         return $this->success($response, $list);
     }
@@ -80,7 +81,7 @@ class QuestionController extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->questionService->getList(true);
+        $list = $this->questionService->getList([], true);
 
         return $this->success($response, $list);
     }
@@ -120,15 +121,8 @@ class QuestionController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $questionIds = $request->getQueryParam('question_id');
-
-        if ($questionIds) {
-            $questionIds = array_unique(array_filter(array_slice(explode(',', $questionIds), 0, 100)));
-        }
-
-        if ($questionIds) {
-            $this->questionService->batchDelete($questionIds);
-        }
+        $questionIds = ArrayHelper::parseQuery($request, 'question_id', 100);
+        $this->questionService->deleteMultiple($questionIds);
 
         return $this->success($response);
     }
@@ -360,7 +354,10 @@ class QuestionController extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+        $list = $this->questionService->getList(['is_deleted' => true], true);
+
+        return $this->success($response, $list);
     }
 
     /**
