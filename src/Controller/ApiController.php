@@ -51,7 +51,7 @@ class ApiController extends ControllerAbstracts
       presets: [ SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset ],
       plugins: [ SwaggerUIBundle.plugins.DownloadUrl ],
       layout: "StandaloneLayout",
-      url: "./swagger.yaml",
+      url: "./openapi.yaml",
     });
   }
 </script>
