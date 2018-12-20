@@ -884,7 +884,8 @@ paths:
     post:
       summary: 发表问题
       description: |
-        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
       requestBody:
         $ref: '#/components/requestBodies/Question'
       responses:
@@ -897,7 +898,9 @@ paths:
 
     delete:
       summary: 🔐批量删除问题
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/question_ids'
       responses:
@@ -928,7 +931,8 @@ paths:
       description: |
         仅问题的作者和管理员可以修改问题信息。
 
-        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
       requestBody:
         $ref: '#/components/requestBodies/Question'
       responses:
@@ -1035,7 +1039,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题的评论列表
+      summary: 获取指定问题的评论
       description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1067,7 +1071,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题下的回答列表
+      summary: 获取指定问题下的回答
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1084,7 +1088,8 @@ paths:
     post:
       summary: 在指定问题下发表回答
       description: |
-        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
       requestBody:
         $ref: '#/components/requestBodies/Answer'
       responses:
@@ -1129,7 +1134,9 @@ paths:
 
     delete:
       summary: 🔐批量删除话题
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。只要没有错误异常，
+        无论是否有话题被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/topic_ids'
       responses:
@@ -1243,7 +1250,9 @@ paths:
 
     delete:
       summary: 🔐批量删除回答
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/answer_ids'
       responses:
@@ -1274,7 +1283,8 @@ paths:
       description: |
         仅回答的作者和管理员可以修改文章信息。
 
-        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，若两个参数都传入，则以 `content_markdown` 为准。
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
       requestBody:
         $ref: '#/components/requestBodies/Answer'
       responses:
@@ -1343,7 +1353,7 @@ paths:
       - $ref: '#/components/parameters/answer_id.path'
 
     get:
-      summary: 获取指定回答的评论列表
+      summary: 获取指定回答的评论
       description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1392,7 +1402,9 @@ paths:
 
     delete:
       summary: 🔐批量删除评论
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/comment_ids'
       responses:
@@ -1502,7 +1514,9 @@ paths:
 
     delete:
       summary: 🔐批量删除举报
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/report_target'
       responses:
@@ -1590,7 +1604,9 @@ paths:
 
     delete:
       summary: 🔐批量删除图片
-      description: 仅管理员可调用该接口。只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/image_hashs'
       responses:
@@ -1672,7 +1688,9 @@ paths:
     get:
       summary: todo - 🔐获取已禁用用户列表
       description: |
-        仅管理员可调用该接口。可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
+        仅管理员可调用该接口。
+
+        可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1690,7 +1708,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复用户
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/user_ids'
       responses:
@@ -1720,12 +1740,14 @@ paths:
 
     get:
       summary: todo - 🔐获取回收站中的话题列表
-      description: 仅管理员可调用该接口。可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`
+      description: |
+        仅管理员可调用该接口。
+        可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
       responses:
         '200':
@@ -1737,7 +1759,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复话题
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/topic_ids'
       responses:
@@ -1795,7 +1819,9 @@ paths:
 
     get:
       summary: todo - 🔐获取回收站中的问题列表
-      description: 仅管理员可调用该接口。可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
+      description: |
+        仅管理员可调用该接口。
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1812,7 +1838,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复问题
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/question_ids'
       responses:
@@ -1870,7 +1898,9 @@ paths:
 
     get:
       summary: todo - 🔐获取回收站中的回答列表
-      description: 仅管理员可调用该接口。可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
+      description: |
+        仅管理员可调用该接口。
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1888,7 +1918,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复回答
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/answer_ids'
       responses:
@@ -1946,7 +1978,9 @@ paths:
 
     get:
       summary: todo - 🔐获取文章列表
-      description: 仅管理员可调用该接口。可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
+      description: |
+        仅管理员可调用该接口。
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1963,7 +1997,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复文章
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/article_ids'
       responses:
@@ -2021,7 +2057,9 @@ paths:
 
     get:
       summary: todo - 🔐获取回收站中的评论列表
-      description: 仅管理员可调用该接口。可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`
+      description: |
+        仅管理员可调用该接口。
+        可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -2040,7 +2078,9 @@ paths:
 
     post:
       summary: todo - 🔐批量恢复话题
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
+        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/comment_ids'
       responses:
@@ -2075,7 +2115,7 @@ paths:
       - $ref: '#/components/parameters/comment_id.path'
 
     post:
-      summary: todo - 🔐恢复指定回答
+      summary: todo - 🔐恢复指定评论
       responses:
         '200':
           $ref: '#/components/responses/Comment'
@@ -2085,7 +2125,7 @@ paths:
         - CommentTrash
 
     delete:
-      summary: todo - 🔐删除指定回答
+      summary: todo - 🔐删除指定评论
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -2338,10 +2378,10 @@ components:
           description: 🔐邮箱
         avatar:
           type: object
-          $ref: '#/definitions/UserAvatar'
+          $ref: '#/components/schemas/UserAvatar'
         cover:
           type: object
-          $ref: '#/definitions/UserCover'
+          $ref: '#/components/schemas/UserCover'
         create_ip:
           type: string
           description: 🔐注册 IP
@@ -2413,7 +2453,7 @@ components:
           description: 🔐禁用时间
         relationship:
           type: object
-          $ref: '#/definitions/UserRelationship'
+          $ref: '#/components/schemas/UserRelationship'
 
     UserWithToken:
       allOf:
@@ -2429,7 +2469,7 @@ components:
     Users:
       type: array
       items:
-        $ref: '#/definitions/User'
+        $ref: '#/components/schemas/User'
 
     UserAvatar:
       type: object
@@ -2504,12 +2544,12 @@ components:
           description: 🔐删除时间
         relationship:
           type: object
-          $ref: '#/definitions/QuestionRelationship'
+          $ref: '#/components/schemas/QuestionRelationship'
 
     Questions:
       type: array
       items:
-        $ref: '#/definitions/Question'
+        $ref: '#/components/schemas/Question'
 
     Answer:
       type: object
@@ -2546,12 +2586,12 @@ components:
           description: 🔐删除时间
         relationship:
           type: object
-          $ref: '#/definitions/AnswerRelationship'
+          $ref: '#/components/schemas/AnswerRelationship'
 
     Answers:
       type: array
       items:
-        $ref: '#/definitions/Answer'
+        $ref: '#/components/schemas/Answer'
 
     Topic:
       type: object
@@ -2564,7 +2604,7 @@ components:
           description: 话题名称
         cover:
           type: object
-          $ref: '#/definitions/TopicCover'
+          $ref: '#/components/schemas/TopicCover'
         description:
           type: string
           description: 话题描述
@@ -2582,12 +2622,12 @@ components:
           description: 🔐删除时间
         relationship:
           type: object
-          $ref: '#/definitions/TopicRelationship'
+          $ref: '#/components/schemas/TopicRelationship'
 
     Topics:
       type: array
       items:
-        $ref: '#/definitions/Topic'
+        $ref: '#/components/schemas/Topic'
 
     TopicCover:
       type: object
@@ -2643,12 +2683,12 @@ components:
           description: 🔐删除时间
         relationship:
           type: object
-          $ref: '#/definitions/ArticleRelationship'
+          $ref: '#/components/schemas/ArticleRelationship'
 
     Articles:
       type: array
       items:
-        $ref: '#/definitions/Article'
+        $ref: '#/components/schemas/Article'
 
     Comment:
       type: object
@@ -2686,12 +2726,12 @@ components:
           description: 删除时间
         relationship:
           type: object
-          $ref: '#/definitions/CommentRelationship'
+          $ref: '#/components/schemas/CommentRelationship'
 
     Comments:
       type: array
       items:
-        $ref: '#/definitions/Comment'
+        $ref: '#/components/schemas/Comment'
 
     VoteCount:
       type: object
@@ -2730,12 +2770,12 @@ components:
           description: 指定对象的被举报数量
         relationship:
           type: object
-          $ref: '#/definitions/ReportRelationship'
+          $ref: '#/components/schemas/ReportRelationship'
 
     ReportGroups:
       type: array
       items:
-        $ref: '#/definitions/ReportGroup'
+        $ref: '#/components/schemas/ReportGroup'
 
     Report:
       type: object
@@ -2767,12 +2807,12 @@ components:
           description: 举报时间
         relationship:
           type: object
-          $ref: '#/definitions/ReportRelationship'
+          $ref: '#/components/schemas/ReportRelationship'
 
     Reports:
       type: array
       items:
-        $ref: '#/definitions/Report'
+        $ref: '#/components/schemas/Report'
 
     Image:
       type: object
@@ -2815,12 +2855,12 @@ components:
               description: 固定宽高的缩略图地址
         relationship:
           type: object
-          $ref: '#/definitions/ImageRelationship'
+          $ref: '#/components/schemas/ImageRelationship'
 
     Images:
       type: array
       items:
-        $ref: '#/definitions/Image'
+        $ref: '#/components/schemas/Image'
 
     Email:
       type: object
@@ -2856,9 +2896,9 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         topics:
-          $ref: '#/definitions/TopicsInRelationship'
+          $ref: '#/components/schemas/TopicsInRelationship'
         is_following:
           type: boolean
           description: 当前登录用户是否已关注该问题
@@ -2870,9 +2910,9 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         question:
-          $ref: '#/definitions/QuestionInRelationship'
+          $ref: '#/components/schemas/QuestionInRelationship'
         voting:
           type: string
           description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
@@ -2891,9 +2931,9 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         topics:
-          $ref: '#/definitions/TopicsInRelationship'
+          $ref: '#/components/schemas/TopicsInRelationship'
         is_following:
           type: boolean
           description: 当前登录用户是否已关注该文章
@@ -2905,7 +2945,7 @@ components:
       type: object
       properties:
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         voting:
           type: string
           description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
@@ -2914,29 +2954,29 @@ components:
       type: object
       properties:
         reporter:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         question:
-          $ref: '#/definitions/QuestionInRelationship'
+          $ref: '#/components/schemas/QuestionInRelationship'
         answer:
-          $ref: '#/definitions/AnswerInRelationship'
+          $ref: '#/components/schemas/AnswerInRelationship'
         article:
-          $ref: '#/definitions/ArticleInRelationship'
+          $ref: '#/components/schemas/ArticleInRelationship'
         comment:
-          $ref: '#/definitions/CommentInRelationship'
+          $ref: '#/components/schemas/CommentInRelationship'
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
 
     ImageRelationship:
       type: object
       properties:
         user:
-          $ref: '#/definitions/UserInRelationship'
+          $ref: '#/components/schemas/UserInRelationship'
         question:
-          $ref: '#/definitions/QuestionInRelationship'
+          $ref: '#/components/schemas/QuestionInRelationship'
         article:
-          $ref: '#/definitions/ArticleInRelationship'
+          $ref: '#/components/schemas/ArticleInRelationship'
         answer:
-          $ref: '#/definitions/AnswerInRelationship'
+          $ref: '#/components/schemas/AnswerInRelationship'
 
     UserInRelationship:
       type: object
@@ -2952,7 +2992,7 @@ components:
           description: 一句话介绍
         avatar:
           type: object
-          $ref: '#/definitions/UserAvatar'
+          $ref: '#/components/schemas/UserAvatar'
 
     QuestionInRelationship:
       type: object
@@ -3031,7 +3071,7 @@ components:
             description: 话题名称
           cover:
             type: object
-            $ref: '#/definitions/TopicCover'
+            $ref: '#/components/schemas/TopicCover'
 
   responses:
 
@@ -3844,7 +3884,8 @@ components:
             type: object
             properties:
               avatar:
-                type: file
+                type: string
+                format: binary
                 description: 用户头像
 
     UserCover:
@@ -3855,7 +3896,8 @@ components:
             type: object
             properties:
               cover:
-                type: file
+                type: string
+                format: binary
                 description: 用户封面
 
     UserSendEmail:
@@ -3949,7 +3991,8 @@ components:
                 type: string
                 description: 话题描述
               cover:
-                type: file
+                type: string
+                format: binary
                 description: 封面图片
 
     Comment:
@@ -4002,7 +4045,8 @@ components:
             type: object
             properties:
               image:
-                type: file
+                type: string
+                format: binary
                 description: 图片
 
     ImageFilename:
@@ -4137,6 +4181,7 @@ tags:
 
   - name: Image
     description: 图片
+
 
 externalDocs:
   description: 更多文档参见
