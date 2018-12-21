@@ -45,7 +45,7 @@ class ReportController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $target = ArrayHelper::parseQuery($request, 'target', 100);
+        $target = ArrayHelper::getQueryParam($request, 'target', 100);
         $this->reportService->deleteMultiple($target);
 
         return $this->success($response);

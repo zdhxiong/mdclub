@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -27,15 +28,14 @@ class EmailController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $email = $request->getParsedBodyParam('email', '');
+        $email = ArrayHelper::getParsedBodyParam($request, 'email', 100);
         $subject = $request->getParsedBodyParam('subject', '');
         $content = $request->getParsedBodyParam('content', '');
 
-        $emailArray = array_unique(array_filter(array_slice(explode(',', $email), 0, 100)));
-        $this->emailService->send($emailArray, $subject, $content);
+        $this->emailService->send($email, $subject, $content);
 
         return $this->success($response, [
-            'email'   => implode(',', $emailArray),
+            'email'   => implode(',', $email),
             'subject' => $subject,
             'content' => $content,
         ]);

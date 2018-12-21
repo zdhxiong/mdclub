@@ -260,23 +260,22 @@ class UserService extends ServiceAbstracts
      * 批量禁用用户
      *
      * @param  array $userIds
-     * @return bool
      */
-    public function disableMultiple(array $userIds): bool
+    public function disableMultiple(array $userIds)
     {
+        if (!$userIds) {
+            return;
+        }
+
         $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
 
         $rowCount = $this->userModel
             ->where(['user_id' => $userIds])
             ->update(['disable_time' => $requestTime]);
 
-        if (!$rowCount) {
-            return true;
+        if ($rowCount) {
+            $this->tokenModel->where(['user_id' => $userIds])->delete();
         }
-
-        $this->tokenModel->where(['user_id' => $userIds])->delete();
-
-        return true;
     }
 
     /**

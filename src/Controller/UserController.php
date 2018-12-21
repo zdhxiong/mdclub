@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Helper\ArrayHelper;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -67,15 +68,8 @@ class UserController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $userIds = $request->getQueryParam('user_id');
-
-        if ($userIds) {
-            $userIds = array_unique(array_filter(array_slice(explode(',', $userIds), 0, 100)));
-        }
-
-        if ($userIds) {
-            $this->userService->disableMultiple($userIds);
-        }
+        $userIds = ArrayHelper::getQueryParam($request, 'user_id', 100);
+        $this->userService->disableMultiple($userIds);
 
         return $this->success($response);
     }
@@ -124,6 +118,7 @@ class UserController extends ControllerAbstracts
     public function disableOne(Request $request, Response $response, int $user_id): Response
     {
         $this->roleService->managerIdOrFail();
+
         $this->userService->disable($user_id);
 
         return $this->success($response);
@@ -139,6 +134,7 @@ class UserController extends ControllerAbstracts
     public function getMe(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $userInfo = $this->userService->get($userId, true);
 
         return $this->success($response, $userInfo);
@@ -293,7 +289,7 @@ class UserController extends ControllerAbstracts
     }
 
     /**
-     * 关注某一用户
+     * 添加关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -303,6 +299,7 @@ class UserController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $user_id): Response
     {
         $currentUserId = $this->roleService->userIdOrFail();
+
         $this->userService->addFollow($currentUserId, $user_id);
         $followerCount = $this->userService->getFollowerCount($user_id);
 
@@ -310,7 +307,7 @@ class UserController extends ControllerAbstracts
     }
 
     /**
-     * 取消关注某一用户
+     * 取消关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -320,6 +317,7 @@ class UserController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $user_id): Response
     {
         $currentUserId = $this->roleService->userIdOrFail();
+
         $this->userService->deleteFollow($currentUserId, $user_id);
         $followerCount = $this->userService->getFollowerCount($user_id);
 
@@ -351,6 +349,7 @@ class UserController extends ControllerAbstracts
     public function getMyFollowers(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $followers = $this->userService->getFollowers($userId, true);
 
         return $this->success($response, $followers);
@@ -366,6 +365,7 @@ class UserController extends ControllerAbstracts
     public function getMyFollowees(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $following = $this->userService->getFollowing($userId, true);
 
         return $this->success($response, $following);

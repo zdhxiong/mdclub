@@ -81,6 +81,10 @@ class EmailService extends ServiceAbstracts
      */
     public function send($to, string $subject, string $body): bool
     {
+        if (is_null($to)) {
+            $to = [];
+        }
+
         if (!is_array($to)) {
             $to = [$to];
         }

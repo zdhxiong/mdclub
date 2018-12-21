@@ -173,14 +173,35 @@ class ArrayHelper
     /**
      * 把 query 参数中用 , 分隔的参数转换为数组
      *
-     * @param  Request $request
-     * @param  string  $query  query参数名
-     * @param  int     $count  数组中最大条目数
-     * @return array
+     * @param  Request    $request
+     * @param  string     $param   query参数名
+     * @param  int        $count   数组中最大条目数
+     * @return array|null          若存在参数，但值为空，则返回空数组；若不存在参数，则返回 null
      */
-    public static function parseQuery($request, $query, $count = 100): array
+    public static function getQueryParam(Request $request, string $param, int $count = 100)
     {
-        $value = $request->getQueryParam($query);
+        $value = $request->getQueryParam($param);
+        if (is_null($value)) {
+            return null;
+        }
+
+        return array_unique(array_filter(array_slice(explode(',', $value), 0, $count)));
+    }
+
+    /**
+     * 把 body 中用 , 分隔的参数转换为数组
+     *
+     * @param  Request    $request
+     * @param  string     $param
+     * @param  int        $count
+     * @return array|null        若存在参数，但值为空，则返回空数组；若不存在参数，则返回 null
+     */
+    public static function getParsedBodyParam(Request $request, string $param, int $count = 10)
+    {
+        $value = $request->getParsedBodyParam($param);
+        if (is_null($value)) {
+            return null;
+        }
 
         return array_unique(array_filter(array_slice(explode(',', $value), 0, $count)));
     }

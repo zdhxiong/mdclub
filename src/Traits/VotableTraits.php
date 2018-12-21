@@ -135,10 +135,8 @@ trait VotableTraits
             'user.disable_time' => 0,
         ];
 
-        if ($type == 'up') {
-            $where['vote.type'] = 'up';
-        } elseif ($type == 'down') {
-            $where['vote.type'] = 'down';
+        if (in_array($type, ['up', 'down'])) {
+            $where['vote.type'] = $type;
         }
 
         $list = $this->userModel

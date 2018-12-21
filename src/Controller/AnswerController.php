@@ -111,7 +111,7 @@ class AnswerController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $answerIds = ArrayHelper::parseQuery($request, 'answer_id', 100);
+        $answerIds = ArrayHelper::getQueryParam($request, 'answer_id', 100);
         $this->answerService->deleteMultiple($answerIds);
 
         return $this->success($response);
@@ -134,7 +134,7 @@ class AnswerController extends ControllerAbstracts
     }
 
     /**
-     * 更新指定回答信息
+     * 更新指定回答
      *
      * @param  Request  $request
      * @param  Response $response

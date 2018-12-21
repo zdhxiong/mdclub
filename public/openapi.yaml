@@ -270,7 +270,7 @@ paths:
       - $ref: '#/components/parameters/user_id.path'
 
     get:
-      summary: 获取指定用户关注的问题列表
+      summary: 获取指定用户关注的提问列表
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -324,7 +324,7 @@ paths:
       - $ref: '#/components/parameters/user_id.path'
 
     get:
-      summary: 获取指定用户发表的问题
+      summary: 获取指定用户发表的提问
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -551,7 +551,7 @@ paths:
   /user/following_questions:
 
     get:
-      summary: 获取登录用户关注的问题
+      summary: 获取登录用户关注的提问
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -596,7 +596,7 @@ paths:
   /user/questions:
 
     get:
-      summary: 获取登录用户发表的问题
+      summary: 获取登录用户发表的提问
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -664,7 +664,7 @@ paths:
   /articles:
 
     get:
-      summary: 获取文章列表
+      summary: 获取文章列表。todo：添加 topic_id 参数
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -672,6 +672,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/topic_id.query'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -865,7 +866,7 @@ paths:
   /questions:
 
     get:
-      summary: 获取问题列表
+      summary: 获取提问列表。todo：添加 topic_id 参数
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -873,6 +874,7 @@ paths:
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/topic_id.query'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -882,7 +884,7 @@ paths:
         - Question
 
     post:
-      summary: 发表问题
+      summary: 发表提问
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -897,10 +899,10 @@ paths:
         - Question
 
     delete:
-      summary: 🔐批量删除问题
+      summary: 🔐批量删除提问
       description: |
         仅管理员可调用该接口。
-        只要没有错误异常，无论是否有问题被删除，该接口都会返回成功。
+        只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/question_ids'
       responses:
@@ -917,7 +919,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题信息
+      summary: 获取指定提问信息
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -927,9 +929,9 @@ paths:
         - Question
 
     patch:
-      summary: 更新问题信息
+      summary: 更新提问信息
       description: |
-        仅问题的作者和管理员可以修改问题信息。
+        仅提问的作者和管理员可以修改提问信息。
 
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -944,8 +946,8 @@ paths:
         - Question
 
     delete:
-      summary: 删除指定问题
-      description: 仅问题作者和管理员可以删除问题
+      summary: 删除指定提问
+      description: 仅提问作者和管理员可以删除提问
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -960,7 +962,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取问题的投票者
+      summary: 获取提问的投票者
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -974,7 +976,7 @@ paths:
         - QuestionVote
 
     post:
-      summary: 为问题投票
+      summary: 为提问投票
       requestBody:
         $ref: '#/components/requestBodies/Vote'
       responses:
@@ -986,7 +988,7 @@ paths:
         - QuestionVote
 
     delete:
-      summary: 取消为问题的投票
+      summary: 取消为提问的投票
       responses:
         '200':
           $ref: '#/components/responses/VoteCount'
@@ -1001,7 +1003,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题的关注者
+      summary: 获取指定提问的关注者
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1039,7 +1041,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题的评论
+      summary: 获取指定提问的评论
       description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1054,7 +1056,7 @@ paths:
         - QuestionComment
 
     post:
-      summary: 在指定问题下发表评论
+      summary: 在指定提问下发表评论
       requestBody:
         $ref: '#/components/requestBodies/Comment'
       responses:
@@ -1071,7 +1073,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     get:
-      summary: 获取指定问题下的回答
+      summary: 获取指定提问下的回答
       description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1086,7 +1088,7 @@ paths:
         - Answer
 
     post:
-      summary: 在指定问题下发表回答
+      summary: 在指定提问下发表回答
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -1227,6 +1229,46 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - TopicFollow
+
+  /topics/{topic_id}/questions:
+
+    parameters:
+      - $ref: '#/components/parameters/topic_id.path'
+
+    get:
+      summary: todo - 获取指定话题下的提问
+      description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+
+  /topics/{topic_id}/articles:
+
+    parameters:
+      - $ref: '#/components/parameters/topic_id.path'
+
+    get:
+      summary: todo - 获取指定话题下的文章
+      description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
 
   /answers:
 
@@ -1818,7 +1860,7 @@ paths:
   /trash/questions:
 
     get:
-      summary: todo - 🔐获取回收站中的问题列表
+      summary: todo - 🔐获取回收站中的提问列表
       description: |
         仅管理员可调用该接口。
         可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
@@ -1837,7 +1879,7 @@ paths:
         - QuestionTrash
 
     post:
-      summary: todo - 🔐批量恢复问题
+      summary: todo - 🔐批量恢复提问
       description: |
         仅管理员可调用该接口。
         只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
@@ -1852,13 +1894,13 @@ paths:
         - QuestionTrash
 
     delete:
-      summary: todo - 🔐批量删除回收站中的问题
+      summary: todo - 🔐批量删除回收站中的提问
       description: |
         仅管理员可调用该接口
 
         只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
 
-        若没有提供 question_id 参数，则将清空回收站中的所有问题。
+        若没有提供 question_id 参数，则将清空回收站中的所有提问。
       parameters:
         - $ref: '#/components/parameters/question_ids'
       responses:
@@ -1875,7 +1917,7 @@ paths:
       - $ref: '#/components/parameters/question_id.path'
 
     post:
-      summary: todo - 🔐恢复指定问题
+      summary: todo - 🔐恢复指定提问
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1885,7 +1927,7 @@ paths:
         - QuestionTrash
 
     delete:
-      summary: todo - 🔐删除指定问题
+      summary: todo - 🔐删除指定提问
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -2405,7 +2447,7 @@ components:
           description: 关注的文章数量
         following_question_count:
           type: integer
-          description: 关注的问题数量
+          description: 关注的提问数量
         following_topic_count:
           type: integer
           description: 关注的话题数量
@@ -2417,10 +2459,10 @@ components:
           description: 发表的文章数量
         question_count:
           type: integer
-          description: 发表的问题数量
+          description: 发表的提问数量
         answer_count:
           type: integer
-          description: 发表的问题回答数量
+          description: 发表的提问回答数量
         notification_unread:
           type: integer
           description: 🔐未读消息数量
@@ -2502,19 +2544,19 @@ components:
       properties:
         question_id:
           type: integer
-          description: 问题ID
+          description: 提问ID
         user_id:
           type: integer
           description: 用户ID
         title:
           type: string
-          description: 问题标题
+          description: 提问标题
         content_markdown:
           type: string
-          description: Markdown 格式的问题内容
+          description: Markdown 格式的提问内容
         content_rendered:
           type: string
-          description: HTML 格式的问题内容
+          description: HTML 格式的提问内容
         comment_count:
           type: integer
           description: 评论数量
@@ -2538,7 +2580,7 @@ components:
           description: 创建时间
         update_time:
           type: integer
-          description: 更新时间（更新问题本身，或在问题下发表回答，都会更新该字段）
+          description: 更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）
         delete_time:
           type: integer
           description: 🔐删除时间
@@ -2559,7 +2601,7 @@ components:
           description: 回答ID
         question_id:
           type: integer
-          description: 问题ID
+          description: 提问ID
         user_id:
           type: integer
           description: 用户ID
@@ -2613,7 +2655,7 @@ components:
           description: 文章数量
         question_count:
           type: integer
-          description: 问题数量
+          description: 提问数量
         follower_count:
           type: integer
           description: 关注者数量
@@ -2901,7 +2943,7 @@ components:
           $ref: '#/components/schemas/TopicsInRelationship'
         is_following:
           type: boolean
-          description: 当前登录用户是否已关注该问题
+          description: 当前登录用户是否已关注该提问
         voting:
           type: string
           description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
@@ -2999,10 +3041,10 @@ components:
       properties:
         question_id:
           type: integer
-          description: 问题ID
+          description: 提问ID
         title:
           type: string
-          description: 问题标题
+          description: 提问标题
         create_time:
           type: integer
           description: 发布时间
@@ -3169,7 +3211,7 @@ components:
                 $ref: '#/components/schemas/UserCover'
 
     Question:
-      description: 问题详情
+      description: 提问详情
       content:
         application/json:
           schema:
@@ -3181,7 +3223,7 @@ components:
                 $ref: '#/components/schemas/Question'
 
     Questions:
-      description: 问题列表
+      description: 提问列表
       content:
         application/json:
           schema:
@@ -3535,7 +3577,7 @@ components:
     question_id.path:
       name: question_id
       in: path
-      description: 问题ID
+      description: 提问ID
       required: true
       schema:
         type: integer
@@ -3544,7 +3586,7 @@ components:
     question_id.query:
       name: question_id
       in: query
-      description: 问题ID
+      description: 提问ID
       schema:
         type: integer
         minimum: 1
@@ -3552,7 +3594,7 @@ components:
     question_ids:
       name: question_id
       in: query
-      description: 用“,”分隔的问题ID，最多可提供100个ID
+      description: 用“,”分隔的提问ID，最多可提供100个ID
       schema:
         type: array
         items:
@@ -3652,7 +3694,7 @@ components:
     comment_ids:
       name: comment_id
       in: query
-      description: 用“,”分隔的问题ID，最多可提供100个ID
+      description: 用“,”分隔的提问ID，最多可提供100个ID
       schema:
         type: array
         items:
@@ -3952,7 +3994,7 @@ components:
                 description: 标题
               topic_id:
                 type: string
-                description: 话题ID，多个ID用“,”分隔
+                description: 话题ID，多个ID用“,”分隔，最多支持 10 个ID
               content_markdown:
                 type: string
                 description: Markdown 格式的正文
@@ -4114,19 +4156,19 @@ tags:
     description: 话题回收站
 
   - name: Question
-    description: 问题信息
+    description: 提问信息
 
   - name: QuestionComment
-    description: 问题评论
+    description: 提问评论
 
   - name: QuestionVote
-    description: 问题投票
+    description: 提问投票
 
   - name: QuestionFollow
-    description: 问题关注
+    description: 提问关注
 
   - name: QuestionTrash
-    description: 问题回收站
+    description: 提问回收站
 
   - name: Answer
     description: 回答信息

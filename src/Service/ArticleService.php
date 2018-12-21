@@ -65,6 +65,7 @@ class ArticleService extends ServiceAbstracts
      * 两个参数中仅可指定一个
      * [
      *     'user_id'    => '',
+     *     'topic_id'   => '', // todo: 支持该参数
      *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
      * ]
      * @param  bool  $withRelationship
@@ -115,7 +116,7 @@ class ArticleService extends ServiceAbstracts
         string $title,
         string $contentMarkdown,
         string $contentRendered,
-        array  $topicIds
+        array  $topicIds = null
     ): int {
         [
             $title,
@@ -174,7 +175,7 @@ class ArticleService extends ServiceAbstracts
         string $title,
         string $contentMarkdown,
         string $contentRendered,
-        array $topicIds
+        array $topicIds = null
     ): array {
         $errors = [];
 
@@ -211,6 +212,10 @@ class ArticleService extends ServiceAbstracts
 
         if ($errors) {
             throw new ValidationException($errors);
+        }
+
+        if (is_null($topicIds)) {
+            $topicIds = [];
         }
 
         // 过滤不存在的 topic_id

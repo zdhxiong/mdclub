@@ -31,7 +31,7 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
-     * 文章详情页
+     * 文章详情页面
      *
      * @param Request $request
      * @param Response $response
@@ -75,6 +75,21 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
+     * 根据话题ID获取文章列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function getListByTopicId(Request $request, Response $response, int $topic_id): Response
+    {
+        $list = $this->articleService->getList(['topic_id' => $topic_id], true);
+
+        return $this->success($response, $list);
+    }
+
+    /**
      * 获取文章列表
      *
      * @param  Request  $request
@@ -104,7 +119,7 @@ class ArticleController extends ControllerAbstracts
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_id'))))
+            ArrayHelper::getParsedBodyParam($request, 'topic_id', 10)
         );
 
         $articleInfo = $this->articleService->get($articleId, true);
@@ -123,7 +138,7 @@ class ArticleController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $articleIds = ArrayHelper::parseQuery($request, 'article_id', 100);
+        $articleIds = ArrayHelper::getQueryParam($request, 'article_id', 100);
         $this->articleService->deleteMultiple($articleIds);
 
         return $this->success($response);
@@ -157,11 +172,7 @@ class ArticleController extends ControllerAbstracts
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
         $contentRendered = $request->getParsedBodyParam('content_rendered');
-        $topicIds = $request->getParsedBodyParam('topic_id');
-
-        if ($topicIds) {
-            $topicIds = array_unique(array_filter(explode(',', $topicIds)));
-        }
+        $topicIds = ArrayHelper::getParsedBodyParam($request, 'topic_id', 10);
 
         $this->articleService->update($article_id, $title, $contentMarkdown, $contentRendered, $topicIds);
         $articleInfo = $this->articleService->get($article_id, true);
@@ -262,6 +273,7 @@ class ArticleController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->articleService->deleteVote($userId, $article_id);
         $voteCount = $this->articleService->getVoteCount($article_id);
 
@@ -314,7 +326,7 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
-     * 当前用户关注指定文章
+     * 添加关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -324,6 +336,7 @@ class ArticleController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->articleService->addFollow($userId, $article_id);
         $followerCount = $this->articleService->getFollowerCount($article_id);
 
@@ -331,7 +344,7 @@ class ArticleController extends ControllerAbstracts
     }
 
     /**
-     * 当前用户取消关注指定文章
+     * 取消关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -341,6 +354,7 @@ class ArticleController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $article_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->articleService->deleteFollow($userId, $article_id);
         $followerCount = $this->articleService->getFollowerCount($article_id);
 

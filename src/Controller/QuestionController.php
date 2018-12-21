@@ -73,6 +73,21 @@ class QuestionController extends ControllerAbstracts
     }
 
     /**
+     * 根据话题ID获取提问列表
+     *
+     * @param  Request  $request
+     * @param  Response $response
+     * @param  int      $topic_id
+     * @return Response
+     */
+    public function getListByTopicId(Request $request, Response $response, int $topic_id): Response
+    {
+        $list = $this->questionService->getList(['topic_id' => $topic_id], true);
+
+        return $this->success($response, $list);
+    }
+
+    /**
      * 获取问答列表
      *
      * @param  Request  $request
@@ -102,7 +117,7 @@ class QuestionController extends ControllerAbstracts
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            array_unique(array_filter(explode(',', $request->getParsedBodyParam('topic_id'))))
+            ArrayHelper::getParsedBodyParam($request, 'topic_id', 10)
         );
 
         $questionInfo = $this->questionService->get($questionId, true);
@@ -121,7 +136,7 @@ class QuestionController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $questionIds = ArrayHelper::parseQuery($request, 'question_id', 100);
+        $questionIds = ArrayHelper::getQueryParam($request, 'question_id', 100);
         $this->questionService->deleteMultiple($questionIds);
 
         return $this->success($response);
@@ -155,11 +170,7 @@ class QuestionController extends ControllerAbstracts
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
         $contentRendered = $request->getParsedBodyParam('content_rendered');
-        $topicIds = $request->getParsedBodyParam('topic_id');
-
-        if ($topicIds) {
-            $topicIds = array_unique(array_filter(explode(',', $topicIds)));
-        }
+        $topicIds = ArrayHelper::getParsedBodyParam($request, 'topic_id', 10);
 
         $this->questionService->update($question_id, $title, $contentMarkdown, $contentRendered, $topicIds);
         $questionInfo = $this->questionService->get($question_id, true);
@@ -260,6 +271,7 @@ class QuestionController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $question_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->questionService->deleteVote($userId, $question_id);
         $voteCount = $this->questionService->getVoteCount($question_id);
 
@@ -322,6 +334,7 @@ class QuestionController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $question_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->questionService->addFollow($userId, $question_id);
         $followerCount = $this->questionService->getFollowerCount($question_id);
 
@@ -339,6 +352,7 @@ class QuestionController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $question_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->questionService->deleteFollow($userId, $question_id);
         $followerCount = $this->questionService->getFollowerCount($question_id);
 
@@ -355,6 +369,7 @@ class QuestionController extends ControllerAbstracts
     public function getDeletedList(Request $request, Response $response): Response
     {
         $this->roleService->managerIdOrFail();
+
         $list = $this->questionService->getList(['is_deleted' => true], true);
 
         return $this->success($response, $list);

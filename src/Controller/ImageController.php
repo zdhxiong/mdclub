@@ -64,7 +64,7 @@ class ImageController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $hashs = ArrayHelper::parseQuery($request, 'hash', 40);
+        $hashs = ArrayHelper::getQueryParam($request, 'hash', 40);
         $this->imageService->deleteMultiple($hashs);
 
         return $this->success($response);

@@ -198,6 +198,10 @@ class ReportService extends ServiceAbstracts
      */
     public function deleteMultiple(array $targets): void
     {
+        if (!$targets) {
+            return;
+        }
+
         $where = [];
 
         foreach ($targets as $key => $target) {

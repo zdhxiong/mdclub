@@ -65,6 +65,7 @@ class QuestionService extends ServiceAbstracts
      * 两个参数中仅可指定一个
      * [
      *     'user_id'    => '',
+     *     'topic_id'   => '',  // todo: 添加该参数
      *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
      * ]
      * @param  bool  $withRelationship

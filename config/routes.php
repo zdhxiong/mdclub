@@ -112,6 +112,7 @@ $app->group('/api', function () {
     // 问题信息
     $this->get(   '/users/{user_id:\d+}/questions',                             QuestionController::class . ':getListByUserId');
     $this->get(   '/user/questions',                                            QuestionController::class . ':getMyList');
+    $this->get(   '/topics/{topic_id:\d+}/questions',                           QuestionController::class . ':getListByTopicId');
     $this->get(   '/questions',                                                 QuestionController::class . ':getList');
     $this->post(  '/questions',                                                 QuestionController::class . ':create');
     $this->delete('/questions',                                                 QuestionController::class . ':deleteMultiple');
@@ -172,6 +173,7 @@ $app->group('/api', function () {
     // 文章信息
     $this->get(   '/users/{user_id:\d+}/articles',                              ArticleController::class . ':getListByUserId');
     $this->get(   '/user/articles',                                             ArticleController::class . ':getMyList');
+    $this->get(   '/topics/{topic_id}/articles',                                ArticleController::class . ':getListByTopicId');
     $this->get(   '/articles',                                                  ArticleController::class . ':getList');
     $this->post(  '/articles',                                                  ArticleController::class . ':create');
     $this->delete('/articles',                                                  ArticleController::class . ':deleteMultiple');

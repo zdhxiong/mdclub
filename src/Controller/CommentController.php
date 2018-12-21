@@ -72,7 +72,7 @@ class CommentController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $commentIds = ArrayHelper::parseQuery($request, 'comment_id', 100);
+        $commentIds = ArrayHelper::getQueryParam($request, 'comment_id', 100);
         $this->commentService->deleteMultiple($commentIds);
 
         return $this->success($response);
@@ -172,6 +172,7 @@ class CommentController extends ControllerAbstracts
     public function deleteVote(Request $request, Response $response, int $comment_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->commentService->deleteVote($userId, $comment_id);
         $voteCount = $this->commentService->getVoteCount($comment_id);
 

@@ -90,7 +90,7 @@ class TopicController extends ControllerAbstracts
     {
         $this->roleService->managerIdOrFail();
 
-        $topicIds = ArrayHelper::parseQuery($request, 'topic_id', 100);
+        $topicIds = ArrayHelper::getQueryParam($request, 'topic_id', 100);
         $this->topicService->deleteMultiple($topicIds);
 
         return $this->success($response);
@@ -145,6 +145,7 @@ class TopicController extends ControllerAbstracts
     public function deleteOne(Request $request, Response $response, int $topic_id): Response
     {
         $this->roleService->managerIdOrFail();
+
         $this->topicService->delete($topic_id);
 
         return $this->success($response);
@@ -175,6 +176,7 @@ class TopicController extends ControllerAbstracts
     public function getMyFollowing(Request $request, Response $response): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $following = $this->topicService->getFollowing($userId, true);
 
         return $this->success($response, $following);
@@ -196,7 +198,7 @@ class TopicController extends ControllerAbstracts
     }
 
     /**
-     * 关注指定话题
+     * 添加关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -206,6 +208,7 @@ class TopicController extends ControllerAbstracts
     public function addFollow(Request $request, Response $response, int $topic_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->topicService->addFollow($userId, $topic_id);
         $followerCount = $this->topicService->getFollowerCount($topic_id);
 
@@ -213,7 +216,7 @@ class TopicController extends ControllerAbstracts
     }
 
     /**
-     * 取消关注指定话题
+     * 取消关注
      *
      * @param  Request  $request
      * @param  Response $response
@@ -223,6 +226,7 @@ class TopicController extends ControllerAbstracts
     public function deleteFollow(Request $request, Response $response, int $topic_id): Response
     {
         $userId = $this->roleService->userIdOrFail();
+
         $this->topicService->deleteFollow($userId, $topic_id);
         $followerCount = $this->topicService->getFollowerCount($topic_id);
 
