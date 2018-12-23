@@ -290,7 +290,7 @@ class ImageService extends ServiceAbstracts
         $fullFilename = $this->getFullFilename($hash, $timestamp);
 
         // 写入原始文件
-        $this->filesystem->write($fullFilename, $file->getStream()->getContents());
+        $this->storage->write($fullFilename, $file->getStream()->getContents());
 
         // local 和 ftp 需要预先裁剪图片
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
@@ -307,7 +307,7 @@ class ImageService extends ServiceAbstracts
             }
 
             $newImage->save(sys_get_temp_dir(), $hash);
-            $this->filesystem->write(
+            $this->storage->write(
                 $this->getFullFilename($hash, $timestamp, 'r'),
                 file_get_contents(sys_get_temp_dir() . '/' . $hash)
             );
@@ -328,7 +328,7 @@ class ImageService extends ServiceAbstracts
             }
 
             $newImage->save(sys_get_temp_dir(), $hash);
-            $this->filesystem->write(
+            $this->storage->write(
                 $this->getFullFilename($hash, $timestamp, 't'),
                 file_get_contents(sys_get_temp_dir() . '/' . $hash)
             );
@@ -380,7 +380,7 @@ class ImageService extends ServiceAbstracts
 
             foreach (['', 'r', 't'] as $size) {
                 $path = $this->getFullFilename($hash, $image['create_time'], $size);
-                $this->filesystem->delete($path);
+                $this->storage->delete($path);
             }
         }
     }
@@ -407,7 +407,7 @@ class ImageService extends ServiceAbstracts
         foreach ($images as $image) {
             foreach (['', 'r', 't'] as $size) {
                 $path = $this->getFullFilename($image['hash'], $image['create_time'], $size);
-                $this->filesystem->delete($path);
+                $this->storage->delete($path);
             }
         }
     }

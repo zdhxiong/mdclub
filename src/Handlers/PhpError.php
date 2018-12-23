@@ -10,7 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\AbstractHandler;
 use Slim\Http\Body;
-use Slim\Views\PhpRenderer;
 use App\Constant\ErrorConstant;
 
 /**
@@ -103,8 +102,8 @@ class PhpError extends AbstractHandler
      */
     protected function renderHtmlErrorMessage()
     {
-        /** @var PhpRenderer $view */
-        $view = $this->container->get(PhpRenderer::class);
+        /** @var \App\Library\ViewLibrary $view */
+        $view = $this->container->get(\App\Library\ViewLibrary::class);
 
         return $view->fetch('/500.php');
     }

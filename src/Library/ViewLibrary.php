@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Handlers;
+namespace App\Library;
 
 use Psr\Container\ContainerInterface;
 
 /**
  * PhpRenderer 重写，使其具有主题功能
  *
- * Class PhpRenderer
- * @package App\Handlers
+ * Class ViewLibrary
+ * @package App\Library
  */
-class PhpRenderer extends \Slim\Views\PhpRenderer
+class ViewLibrary extends \Slim\Views\PhpRenderer
 {
     /**
      * 当前使用的主题
@@ -29,7 +29,7 @@ class PhpRenderer extends \Slim\Views\PhpRenderer
     protected $defaultTheme = 'default';
 
     /**
-     * PhpRenderer constructor.
+     * ViewLibrary constructor.
      *
      * @param ContainerInterface $container
      * @param string $templatePath

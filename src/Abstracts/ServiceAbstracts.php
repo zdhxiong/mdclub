@@ -16,10 +16,10 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \Psr\SimpleCache\CacheInterface         kvCache
  * @property-read \Psr\SimpleCache\CacheInterface         cache
  * @property-read \Psr\Log\LoggerInterface                logger
- * @property-read \League\Flysystem\FilesystemInterface   filesystem
  * @property-read \Slim\Http\Request                      request
  * @property-read \Slim\Interfaces\RouterInterface        router
- * @property-read \Slim\Views\PhpRenderer                 view
+ * @property-read \App\Library\StorageLibrary             storage
+ * @property-read \App\Library\ViewLibrary                view
  *
  * @property-read \App\Model\AnswerModel                  answerModel
  * @property-read \App\Model\ArticleModel                 articleModel
@@ -152,10 +152,10 @@ abstract class ServiceAbstracts
             'kvCache'           => \App\Interfaces\KvCacheInterface::class,
             'cache'             => \Psr\SimpleCache\CacheInterface::class,
             'logger'            => \Psr\Log\LoggerInterface::class,
-            'filesystem'        => \League\Flysystem\FilesystemInterface::class,
             'request'           => 'request',
             'router'            => 'router',
-            'view'              => \Slim\Views\PhpRenderer::class,
+            'storage'           => \App\Library\StorageLibrary::class,
+            'view'              => \App\Library\ViewLibrary::class,
         ];
 
         if (isset($libs[$name]) && $this->container->has($libs[$name])) {

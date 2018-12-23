@@ -13,7 +13,7 @@ use Slim\Http\Response;
  * Class Controller
  *
  * @property-read \Slim\Http\Request                    request
- * @property-read \Slim\Views\PhpRenderer               view
+ * @property-read \App\Library\ViewLibrary              view
  *
  * @property-read \App\Service\AnswerService            answerService
  * @property-read \App\Service\ArticleService           articleService
@@ -78,7 +78,7 @@ abstract class ControllerAbstracts
 
         $libs = [
             'request'   => 'request',
-            'view'      => \Slim\Views\PhpRenderer::class,
+            'view'      => \App\Library\ViewLibrary::class,
         ];
 
         if (isset($libs[$name]) && $this->container->has($libs[$name])) {

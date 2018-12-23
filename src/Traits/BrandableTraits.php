@@ -191,7 +191,7 @@ trait BrandableTraits
 
         // 删除原图
         try {
-            $this->filesystem->delete($fullFilename);
+            $this->storage->delete($fullFilename);
         } catch (\Exception $e) {}
 
         // 仅 local 和 ftp 需要删除裁剪后的图片
@@ -199,7 +199,7 @@ trait BrandableTraits
             foreach (array_keys($this->getBrandWidths()) as $size) {
                 $fullFilename = $this->getFullBrandFilename($id, $filename, $size);
                 try {
-                    $this->filesystem->delete($fullFilename);
+                    $this->storage->delete($fullFilename);
                 } catch (\Exception $e) {}
             }
         }
@@ -220,7 +220,7 @@ trait BrandableTraits
         $fullFilename = $this->getFullBrandFilename($id, $filename);
 
         // 写入原始文件
-        $this->filesystem->write($fullFilename, $file->getStream()->getContents());
+        $this->storage->write($fullFilename, $file->getStream()->getContents());
 
         // 仅 local 和 ftp 需要预先裁剪图片，云存储不需要裁剪
         if (in_array($this->optionService->get('storage_type'), ['local', 'ftp'])) {
@@ -256,7 +256,7 @@ trait BrandableTraits
                 }
 
                 $newImage->save(sys_get_temp_dir(), $filename);
-                $this->filesystem->write(
+                $this->storage->write(
                     $this->getFullBrandFilename($id, $filename, $size),
                     file_get_contents(sys_get_temp_dir() . '/' . $filename)
                 );

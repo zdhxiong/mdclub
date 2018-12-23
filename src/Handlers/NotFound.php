@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace App\Handlers;
 
 use App\Constant\ErrorConstant;
-use App\Service\OptionService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\AbstractHandler;
 use Slim\Http\Body;
-use Slim\Views\PhpRenderer;
 
 /**
  * 404 处理
@@ -102,8 +100,8 @@ class NotFound extends AbstractHandler
      */
     protected function renderHtmlNotFoundOutput(ServerRequestInterface $request): string
     {
-        /** @var PhpRenderer $view */
-        $view = $this->container->get(PhpRenderer::class);
+        /** @var \App\Library\ViewLibrary $view */
+        $view = $this->container->get(\App\Library\ViewLibrary::class);
 
         return $view->fetch('/404.php');
     }

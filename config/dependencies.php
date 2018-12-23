@@ -202,89 +202,20 @@ $container[LoggerInterface::class] = function () {
  * @link http://flysystem.thephpleague.com/docs/
  *
  * @param  ContainerInterface $container
- * @return \League\Flysystem\FilesystemInterface
+ * @return \App\Library\StorageLibrary
  */
-$container[\League\Flysystem\FilesystemInterface::class] = function (ContainerInterface $container) {
-    /** @var \App\Service\OptionService $optionService */
-    $optionService = $container->get(\App\Service\OptionService::class);
-    $option = $optionService->getAll();
-
-    switch ($option['storage_type']) {
-        case 'local':
-            $uploadDir = $option['storage_local_dir'];
-            if ($uploadDir && !in_array(substr($uploadDir, -1), ['/', '\\'])) {
-                $uploadDir .= '/';
-            }
-
-            if (!$uploadDir) {
-                $uploadDir = __DIR__ . '/../public/static/upload/';
-            }
-
-            $adapter = new \League\Flysystem\Adapter\Local($uploadDir);
-            break;
-
-        case 'ftp':
-            $adapter = new \League\Flysystem\Adapter\Ftp([
-                'host'     => $option['storage_ftp_host'],
-                'username' => $option['storage_ftp_username'],
-                'password' => $option['storage_ftp_password'],
-
-                /** optional config settings */
-                'port'     => $option['storage_ftp_port'],
-                'root'     => $option['storage_ftp_root'],
-                'passive'  => !!$option['storage_ftp_passive'],
-                'ssl'      => !!$option['storage_ftp_ssl'],
-                'timeout'  => $option['storage_ftp_timeout'],
-            ]);
-            break;
-
-        case 'aliyun_oss':
-            $adapter = new \Xxtime\Flysystem\Aliyun\OssAdapter([
-                'access_id'      => $option['storage_aliyun_oss_access_id'],
-                'access_secret'  => $option['storage_aliyun_oss_access_secret'],
-                'bucket'         => $option['storage_aliyun_oss_bucket'],
-                'endpoint'       => $option['storage_aliyun_oss_endpoint'],
-                'timeout'        => 60,
-                'connectTimeout' => 5,
-            ]);
-            break;
-
-        case 'upyun':
-            $adapter = new \JellyBool\Flysystem\Upyun\UpyunAdapter(
-                $option['storage_upyun_bucket'],
-                $option['storage_upyun_operator'],
-                $option['storage_upyun_password'],
-                $option['storage_upyun_endpoint']
-            );
-
-            break;
-
-        case 'qiniu':
-            $adapter = new \Overtrue\Flysystem\Qiniu\QiniuAdapter(
-                $option['storage_qiniu_access_id'],
-                $option['storage_qiniu_access_secret'],
-                $option['storage_qiniu_bucket'],
-                $option['storage_qiniu_endpoint']
-            );
-            break;
-
-        default:
-            throw new Exception('不存在指定的存储类型：' . $option['storage_type']);
-    }
-
-    return new \League\Flysystem\Filesystem($adapter, [
-        'visibility' => \League\Flysystem\AdapterInterface::VISIBILITY_PUBLIC,
-    ]);
+$container[\App\Library\StorageLibrary::class] = function (ContainerInterface $container) {
+    return new \App\Library\StorageLibrary($container);
 };
 
 /**
  * PHP 模板
  *
- * @param  ContainerInterface      $container
- * @return \Slim\Views\PhpRenderer
+ * @param  ContainerInterface       $container
+ * @return \App\Library\ViewLibrary
  */
-$container[\Slim\Views\PhpRenderer::class] = function (ContainerInterface $container) {
-    return new \App\Handlers\PhpRenderer($container, __DIR__ . '/../templates/');
+$container[\App\Library\ViewLibrary::class] = function (ContainerInterface $container) {
+    return new \App\Library\ViewLibrary($container, __DIR__ . '/../templates/');
 };
 
 /**
