@@ -10,8 +10,8 @@ use Symfony\Component\Cache\Simple\MemcachedCache;
 use Symfony\Component\Cache\Simple\RedisCache;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
-use App\Interfaces\FilesystemCacheInterface;
-use App\Interfaces\DistributedCacheInterface;
+use App\Interfaces\FileCacheInterface;
+use App\Interfaces\KvCacheInterface;
 
 $container = $app->getContainer();
 
@@ -95,7 +95,7 @@ $container['errorHandler'] = function (ContainerInterface $container) {
  *
  * @return CacheInterface
  */
-$container[FilesystemCacheInterface::class] = function () {
+$container[FileCacheInterface::class] = function () {
     return new \Symfony\Component\Cache\Simple\FilesystemCache('', 0, __DIR__ . '/../var/cache/');
 };
 
@@ -162,7 +162,7 @@ $container[CacheInterface::class] = function (ContainerInterface $container) {
  * @param  ContainerInterface $container
  * @return CacheInterface
  */
-$container[DistributedCacheInterface::class] = function (ContainerInterface $container) {
+$container[KvCacheInterface::class] = function (ContainerInterface $container) {
     /** @var \App\Service\OptionService $optionService */
     $optionService = $container->get(\App\Service\OptionService::class);
     $option = $optionService->getAll();
@@ -284,33 +284,7 @@ $container[\League\Flysystem\FilesystemInterface::class] = function (ContainerIn
  * @return \Slim\Views\PhpRenderer
  */
 $container[\Slim\Views\PhpRenderer::class] = function (ContainerInterface $container) {
-    /** @var \App\Service\OptionService $optionService */
-    $optionService = $container->get(\App\Service\OptionService::class);
-
-    $theme = $optionService->getAll()['theme'];
-
-    // 继承 PhpRenderer，使其具有主题功能
-    return new class($theme, __DIR__ . '/../templates/') extends \Slim\Views\PhpRenderer {
-        // 用户设置的主题
-        protected $theme;
-
-        // 默认主题
-        protected $defaultTheme = 'default';
-
-        public function __construct(string $theme, string $templatePath)
-        {
-            $this->theme = $theme;
-            $this->templatePath = rtrim($templatePath, '/\\') . '/';
-            $this->attributes = [];
-        }
-
-        public function fetch($template, array $data = [])
-        {
-            $theme = is_file($this->templatePath . $this->theme . $template) ? $this->theme : $this->defaultTheme;
-
-            return parent::fetch('/' . $theme . $template, $data);
-        }
-    };
+    return new \App\Handlers\PhpRenderer($container, __DIR__ . '/../templates/');
 };
 
 /**

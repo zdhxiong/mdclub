@@ -148,7 +148,7 @@ class EmailService extends ServiceAbstracts
 
         $code = $this->generateCode($email);
         $subject = '你正在注册' . $option['site_name'] . '账号';
-        $body = $this->view->fetch('/email/register.php', [
+        $body = $this->view->fetch('/email_templates/register.php', [
             'code' => $code,
             'option' => $option,
         ]);
@@ -168,7 +168,7 @@ class EmailService extends ServiceAbstracts
 
         $code = $this->generateCode($email);
         $subject = '你正在重置' . $option['site_name'] . '的密码';
-        $body = $this->view->fetch('/email/password_reset.php', [
+        $body = $this->view->fetch('/email_templates/password_reset.php', [
             'code' => $code,
             'option' => $option,
         ]);
@@ -188,7 +188,7 @@ class EmailService extends ServiceAbstracts
 
         $email = $user['email'];
         $subject = '你已成功注册' . $option['site_name'] . '账号';
-        $body = $this->view->fetch('/email/welcome.php', [
+        $body = $this->view->fetch('/email_templates/welcome.php', [
             'user' => $user,
             'option' => $option,
         ]);

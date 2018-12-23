@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
 use App\Helper\ArrayHelper;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -21,26 +22,26 @@ class UserController extends ControllerAbstracts
     /**
      * 用户列表页
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
+     * @param  Request           $request
+     * @param  Response          $response
+     * @return ResponseInterface
      */
-    public function pageIndex(Request $request, Response $response): Response
+    public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $response;
+        return $this->view->render($response, '/user/index.php');
     }
 
     /**
      * 用户详情页
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $user_id
-     * @return Response
+     * @param  Request           $request
+     * @param  Response          $response
+     * @param  int               $user_id
+     * @return ResponseInterface
      */
-    public function pageDetail(Request $request, Response $response, int $user_id): Response
+    public function pageInfo(Request $request, Response $response, int $user_id): ResponseInterface
     {
-        return $response;
+        return $this->view->render($response, '/user/info.php');
     }
 
     /**

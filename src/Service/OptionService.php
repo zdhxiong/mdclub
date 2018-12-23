@@ -99,7 +99,7 @@ class OptionService extends ServiceAbstracts
     public function getAll(): array
     {
         if (is_null($this->options)) {
-            $result = $this->filesystemCache->get('options');
+            $result = $this->fileCache->get('options');
 
             if (is_null($result)) {
                 $result = $this->optionModel->select();
@@ -108,7 +108,7 @@ class OptionService extends ServiceAbstracts
                     array_column($result, 'value')
                 );
 
-                $this->filesystemCache->set('options', $result);
+                $this->fileCache->set('options', $result);
             }
 
             $this->options = $result;
@@ -154,7 +154,7 @@ class OptionService extends ServiceAbstracts
             $this->optionModel->where(['name' => $name])->update(['value' => $value]);
         }
 
-        $this->filesystemCache->delete('options');
+        $this->fileCache->delete('options');
         $this->options = null;
 
         return true;
@@ -174,7 +174,7 @@ class OptionService extends ServiceAbstracts
         }
 
         $this->optionModel->where(['name' => $name])->update(['value' => $value]);
-        $this->filesystemCache->delete('options');
+        $this->fileCache->delete('options');
         $this->options = null;
 
         return true;

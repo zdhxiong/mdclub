@@ -7,12 +7,12 @@ namespace App\Interfaces;
 use Psr\SimpleCache\CacheInterface;
 
 /**
- * 分布式缓存接口
+ * 文件缓存接口
  *
- * Interface DistributedCacheInterface
+ * Interface FileCacheInterface
  * @package App\Interfaces
  */
-interface DistributedCacheInterface extends CacheInterface
+interface FileCacheInterface extends CacheInterface
 {
 
 }

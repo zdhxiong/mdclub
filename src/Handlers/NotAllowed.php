@@ -115,6 +115,6 @@ class NotAllowed extends AbstractHandler
         /** @var PhpRenderer $view */
         $view = $this->container->get(PhpRenderer::class);
 
-        return $view->fetch('/404.php', $request);
+        return $view->fetch('/404.php');
     }
 }

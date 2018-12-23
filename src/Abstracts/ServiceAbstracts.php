@@ -12,8 +12,8 @@ use Slim\Exception\ContainerValueNotFoundException;
 /**
  * Class Service
  *
- * @property-read \Psr\SimpleCache\CacheInterface         filesystemCache
- * @property-read \Psr\SimpleCache\CacheInterface         distributedCache
+ * @property-read \Psr\SimpleCache\CacheInterface         fileCache
+ * @property-read \Psr\SimpleCache\CacheInterface         kvCache
  * @property-read \Psr\SimpleCache\CacheInterface         cache
  * @property-read \Psr\Log\LoggerInterface                logger
  * @property-read \League\Flysystem\FilesystemInterface   filesystem
@@ -148,8 +148,8 @@ abstract class ServiceAbstracts
 
         // 其他容器中的实例
         $libs = [
-            'filesystemCache'   => \App\Interfaces\FilesystemCacheInterface::class,
-            'distributedCache'  => \App\Interfaces\DistributedCacheInterface::class,
+            'fileCache'         => \App\Interfaces\FileCacheInterface::class,
+            'kvCache'           => \App\Interfaces\KvCacheInterface::class,
             'cache'             => \Psr\SimpleCache\CacheInterface::class,
             'logger'            => \Psr\Log\LoggerInterface::class,
             'filesystem'        => \League\Flysystem\FilesystemInterface::class,

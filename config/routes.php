@@ -27,16 +27,17 @@ $app->get(   '/',                             IndexController::class .        ':
 $app->get(   '/migration',                    IndexController::class .        ':migration');
 $app->get(   '/update_statistics',            IndexController::class .        ':statistics');
 $app->get(   '/topics',                       TopicController::class .        ':pageIndex');
-$app->get(   '/topics/{topic_id:\d+}',        TopicController::class .        ':pageDetail');
+$app->get(   '/topics/{topic_id:\d+}',        TopicController::class .        ':pageInfo');
 $app->get(   '/articles',                     ArticleController::class .      ':pageIndex');
-$app->get(   '/articles/{article_id:\d+}',    ArticleController::class .      ':pageDetail');
+$app->get(   '/articles/{article_id:\d+}',    ArticleController::class .      ':pageInfo');
 $app->get(   '/questions',                    QuestionController::class .     ':pageIndex');
-$app->get(   '/questions/{question_id:\d+}',  QuestionController::class .     ':pageDetail');
+$app->get(   '/questions/{question_id:\d+}',  QuestionController::class .     ':pageInfo');
 $app->get(   '/users',                        UserController::class .         ':pageIndex');
-$app->get(   '/users/{user_id:\d+}',          UserController::class .         ':pageDetail');
+$app->get(   '/users/{user_id:\d+}',          UserController::class .         ':pageInfo');
 $app->get(   '/notifications',                NotificationController::class . ':pageIndex');
 $app->get(   '/inbox',                        InboxController::class .        ':pageIndex');
 
+// api
 $app->group('/api', function () {
     $this->get(   '',                                                           ApiController::class . ':pageIndex');
 
@@ -257,5 +258,8 @@ $app->group('/api', function () {
     });
 
 // admin
-$app->get('/admin',        AdminController::class . ':pageIndex');
-$app->get('/admin/{name}', AdminController::class . ':pageIndex');
+$app->group('/admin', function () {
+    $this->get('', AdminController::class . ':pageIndex');
+    $this->get('/{name}',            AdminController::class . ':pageIndex');
+    $this->get('/{name}/{sub_name}', AdminController::class . ':pageIndex');
+});

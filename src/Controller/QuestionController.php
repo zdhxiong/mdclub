@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
 use App\Helper\ArrayHelper;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -20,26 +21,26 @@ class QuestionController extends ControllerAbstracts
     /**
      * 问答列表页
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
+     * @param  Request           $request
+     * @param  Response          $response
+     * @return ResponseInterface
      */
-    public function pageIndex(Request $request, Response $response): Response
+    public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $response;
+        return $this->view->render($response, '/question/index.php');
     }
 
     /**
      * 问答详情页
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @param  int      $question_id
-     * @return Response
+     * @param  Request           $request
+     * @param  Response          $response
+     * @param  int               $question_id
+     * @return ResponseInterface
      */
-    public function pageDetail(Request $request, Response $response, int $question_id): Response
+    public function pageInfo(Request $request, Response $response, int $question_id): ResponseInterface
     {
-        return $response;
+        return $this->view->render($response, '/question/info.php');
     }
 
     /**

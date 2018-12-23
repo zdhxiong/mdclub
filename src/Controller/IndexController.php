@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -17,13 +18,13 @@ use Slim\Http\Response;
 class IndexController extends ControllerAbstracts
 {
     /**
-     * @param Request $request
-     * @param Response $response
-     * @return Response
+     * @param  Request           $request
+     * @param  Response          $response
+     * @return ResponseInterface
      */
-    public function pageIndex(Request $request, Response $response): Response
+    public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $response->withJson(['t' => 'f']);
+        return $this->view->render($response, '/index.php');
     }
 
     /**
@@ -31,8 +32,8 @@ class IndexController extends ControllerAbstracts
      *
      * option 表需要手动迁移
      *
-     * @param Request $request
-     * @param Response $response
+     * @param  Request $request
+     * @param  Response $response
      * @return Response
      */
     public function migration(Request $request, Response $response): Response
