@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handlers;
 
+use App\Library\Logger;
+use App\Library\View;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -41,7 +43,7 @@ class PhpError extends AbstractHandler
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->logger = $container->get(LoggerInterface::class);
+        $this->logger = $container->get(Logger::class);
     }
 
     /**
@@ -102,8 +104,8 @@ class PhpError extends AbstractHandler
      */
     protected function renderHtmlErrorMessage()
     {
-        /** @var \App\Library\ViewLibrary $view */
-        $view = $this->container->get(\App\Library\ViewLibrary::class);
+        /** @var View $view */
+        $view = $this->container->get(View::class);
 
         return $view->fetch('/500.php');
     }

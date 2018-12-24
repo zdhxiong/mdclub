@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Library\Storage;
+namespace App\Library\Storage\Interfaces;
 
 /**
  * 存储驱动的接口
  *
- * Interface StorageInterface
+ * Interface StorageDriverInterface
  * @package App\Library\Storage
  */
-interface StorageInterface
+interface StorageDriverInterface
 {
     /**
-     * StorageInterface constructor.
+     * StorageDriverInterface constructor.
+     *
      * @param array $option
      */
     public function __construct(array $option);

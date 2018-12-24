@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use League\Flysystem\Adapter\Ftp as FtpAdapter;
 
 /**
@@ -12,7 +13,7 @@ use League\Flysystem\Adapter\Ftp as FtpAdapter;
  * Class Ftp
  * @package App\Library\Storage
  */
-class Ftp implements StorageInterface
+class Ftp implements StorageDriverInterface
 {
     /**
      * @array 配置参数

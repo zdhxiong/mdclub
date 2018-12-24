@@ -6,6 +6,7 @@ namespace App\Library;
 
 use App\Library\Storage\AliyunOSS;
 use App\Library\Storage\Ftp;
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use App\Library\Storage\Local;
 use App\Library\Storage\Qiniu;
 use App\Library\Storage\Upyun;
@@ -16,15 +17,15 @@ use Psr\Container\ContainerInterface;
 /**
  * 文件存储，仅限图片
  *
- * Class StorageLibrary
+ * Class Storage
  * @package App\Library
  */
-class StorageLibrary
+class Storage
 {
     /**
      * 存储驱动实例
      *
-     * @var
+     * @var StorageDriverInterface
      */
     protected $driver;
 
@@ -41,7 +42,7 @@ class StorageLibrary
     protected $container;
 
     /**
-     * StorageLibrary constructor.
+     * Storage constructor.
      *
      * @param ContainerInterface $container
      */
@@ -53,31 +54,20 @@ class StorageLibrary
         $optionService = $container->get(\App\Service\OptionService::class);
         $option = $optionService->getAll();
 
-        switch ($option['storage_type']) {
-            case 'local':
-                $this->driver = new Local($option);
-                break;
+        $storageType = $option['storage_type'];
+        $driverClass = [
+            'local'      => Local::class,
+            'ftp'        => Ftp::class,
+            'aliyun_oss' => AliyunOSS::class,
+            'upyun'      => Upyun::class,
+            'qiniu'      => Qiniu::class,
+        ];
 
-            case 'ftp':
-                $this->driver = new Ftp($option);
-                break;
-
-            case 'aliyun_oss':
-                $this->driver = new AliyunOSS($option);
-                break;
-
-            case 'upyun':
-                $this->driver = new Upyun($option);
-                break;
-
-            case 'qiniu':
-                $this->driver = new Qiniu($option);
-                break;
-
-            default:
-                throw new \Exception('不存在指定的存储类型：' . $option['storage_type']);
+        if (!isset($driverClass[$storageType])) {
+            throw new \Exception('不存在指定的存储类型：' . $storageType);
         }
 
+        $this->driver = new $driverClass[$storageType]($option);
         $this->filesystem = new Filesystem($this->driver->getAdapter(), [
             'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
         ]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use Xxtime\Flysystem\Aliyun\OssAdapter;
 
 /**
@@ -12,7 +13,7 @@ use Xxtime\Flysystem\Aliyun\OssAdapter;
  * Class AliyunOSS
  * @package App\Library\Storage
  */
-class AliyunOSS implements StorageInterface
+class AliyunOSS implements StorageDriverInterface
 {
     /**
      * @array 配置参数

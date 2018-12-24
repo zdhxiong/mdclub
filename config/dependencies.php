@@ -3,15 +3,6 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
-use Psr\SimpleCache\CacheInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Simple\PdoCache;
-use Symfony\Component\Cache\Simple\MemcachedCache;
-use Symfony\Component\Cache\Simple\RedisCache;
-use Symfony\Component\Cache\Adapter\MemcachedAdapter;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use App\Interfaces\FileCacheInterface;
-use App\Interfaces\KvCacheInterface;
 
 $container = $app->getContainer();
 
@@ -89,136 +80,6 @@ $container['errorHandler'] = function (ContainerInterface $container) {
 };
 
 /**
- * 文件系统缓存
- *
- * @link https://symfony.com/doc/current/components/cache.html
- *
- * @return CacheInterface
- */
-$container[FileCacheInterface::class] = function () {
-    return new \Symfony\Component\Cache\Simple\FilesystemCache('', 0, __DIR__ . '/../var/cache/');
-};
-
-/**
- * 缓存（包括 PDO 缓存和分布式缓存，不包括文件缓存，根据用户在后台的设置而定）
- *
- * @link https://symfony.com/doc/current/components/cache.html
- *
- * @param  ContainerInterface $container
- * @return CacheInterface
- */
-$container[CacheInterface::class] = function (ContainerInterface $container) {
-    /** @var \App\Service\OptionService $optionService */
-    $optionService = $container->get(\App\Service\OptionService::class);
-    $option = $optionService->getAll();
-
-    switch ($option['cache_type']) {
-        case 'pdo':
-            $databaseConfig = $container->get('settings')['database'];
-            $pdo = $container->get(\Medoo\Medoo::class)->pdo;
-
-            return new PdoCache($pdo, '', 0, [
-                'db_table'        => $databaseConfig['prefix'] . 'cache',
-                'db_id_col'       => 'name',
-                'db_data_col'     => 'value',
-                'db_lifetime_col' => 'life_time',
-                'db_time_col'     => 'create_time',
-            ]);
-
-        case 'memcached':
-            $config = [
-                'username' => $option['cache_memcached_username'],
-                'password' => $option['cache_memcached_password'],
-                'host'     => $option['cache_memcached_host'],
-                'port'     => $option['cache_memcached_port'],
-            ];
-
-            return new MemcachedCache(MemcachedAdapter::createConnection(
-                "memcached://{$config['username']}:{$config['password']}@{$config['host']}:{$config['port']}"
-            ));
-
-        case 'redis':
-            $config = [
-                'username' => $option['cache_redis_username'],
-                'password' => $option['cache_redis_password'],
-                'host'     => $option['cache_redis_host'],
-                'port'     => $option['cache_redis_port'],
-            ];
-
-            return new RedisCache(RedisAdapter::createConnection(
-                "redis://{$config['username']}:{$config['password']}@{$config['host']}:{$config['port']}"
-            ));
-
-        default:
-            throw new Exception('不存在指定的缓存类型: ' . $option['cache_type']);
-    }
-};
-
-/**
- * 分布式缓存
- *
- * @link https://symfony.com/doc/current/components/cache.html
- *
- * @param  ContainerInterface $container
- * @return CacheInterface
- */
-$container[KvCacheInterface::class] = function (ContainerInterface $container) {
-    /** @var \App\Service\OptionService $optionService */
-    $optionService = $container->get(\App\Service\OptionService::class);
-    $option = $optionService->getAll();
-
-    switch ($option['cache_type']) {
-        case 'memcached':
-        case 'redis':
-            return $container[CacheInterface::class]();
-
-        default:
-            throw new Exception('不存在指定的缓存类型：' . $option['cache_type']);
-    }
-};
-
-/**
- * 日志
- *
- * @link https://seldaek.github.io/monolog/
- *
- * @return LoggerInterface
- */
-$container[LoggerInterface::class] = function () {
-    $logger = new \Monolog\Logger('mdclub');
-
-    $logger->pushProcessor(new \Monolog\Processor\UidProcessor());
-    $logger->pushHandler(new \Monolog\Handler\StreamHandler(
-        __DIR__ . '/../var/logs/' . date('Y-m') . '/' . date('d') . '.log',
-        \Monolog\Logger::DEBUG
-    ));
-
-    return $logger;
-};
-
-/**
- * 文件存储
- *
- * @link http://flysystem.thephpleague.com/docs/
- *
- * @param  ContainerInterface $container
- * @return \App\Library\StorageLibrary
- */
-$container[\App\Library\StorageLibrary::class] = function (ContainerInterface $container) {
-    return new \App\Library\StorageLibrary($container);
-};
-
-/**
- * PHP 模板
- *
- * @param  ContainerInterface       $container
- * @return \App\Library\ViewLibrary
- */
-$container[\App\Library\ViewLibrary::class] = function (ContainerInterface $container) {
-    return new \App\Library\ViewLibrary($container, __DIR__ . '/../templates/');
-};
-
-/**
  * 数据库操作工具
  *
  * @link https://medoo.lvtao.net/1.2/doc.php
@@ -255,6 +116,13 @@ $container[\Medoo\Medoo::class] = function (ContainerInterface $container) {
  */
 
 $modules = [
+    \App\Library\Cache::class,
+    \App\Library\FileCache::class,
+    \App\Library\KvCache::class,
+    \App\Library\Logger::class,
+    \App\Library\Storage::class,
+    \App\Library\View::class,
+
     \App\Model\AnswerModel::class,
     \App\Model\ArticleModel::class,
     \App\Model\CommentModel::class,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use Overtrue\Flysystem\Qiniu\QiniuAdapter;
 
 /**
@@ -12,7 +13,7 @@ use Overtrue\Flysystem\Qiniu\QiniuAdapter;
  * Class Qiniu
  * @package App\Library\Storage
  */
-class Qiniu implements StorageInterface
+class Qiniu implements StorageDriverInterface
 {
     /**
      * @array 配置参数

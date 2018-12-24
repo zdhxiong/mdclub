@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 
 /**
@@ -12,7 +13,7 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
  * Class Local
  * @package App\Library\Storage
  */
-class Local implements StorageInterface
+class Local implements StorageDriverInterface
 {
     /**
      * @array 配置参数

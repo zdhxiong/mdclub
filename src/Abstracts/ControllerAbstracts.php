@@ -13,7 +13,7 @@ use Slim\Http\Response;
  * Class Controller
  *
  * @property-read \Slim\Http\Request                    request
- * @property-read \App\Library\ViewLibrary              view
+ * @property-read \App\Library\View                     view
  *
  * @property-read \App\Service\AnswerService            answerService
  * @property-read \App\Service\ArticleService           articleService
@@ -70,19 +70,16 @@ abstract class ControllerAbstracts
      */
     public function __get($name)
     {
-        $service = 'App\\Service\\' . ucfirst($name);
-
-        if ($this->container->has($service)) {
-            return $this->container->get($service);
-        }
-
-        $libs = [
-            'request'   => 'request',
-            'view'      => \App\Library\ViewLibrary::class,
+        $modules = [
+            'App\\Service\\' . ucfirst($name),
+            'App\\Library\\' . ucfirst($name),
+            'request',
         ];
 
-        if (isset($libs[$name]) && $this->container->has($libs[$name])) {
-            return $this->container->get($libs[$name]);
+        foreach ($modules as $module) {
+            if ($this->container->has($module)) {
+                return $this->container->get($module);
+            }
         }
 
         throw new ContainerValueNotFoundException();

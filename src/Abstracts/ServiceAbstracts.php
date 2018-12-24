@@ -12,14 +12,15 @@ use Slim\Exception\ContainerValueNotFoundException;
 /**
  * Class Service
  *
- * @property-read \Psr\SimpleCache\CacheInterface         fileCache
- * @property-read \Psr\SimpleCache\CacheInterface         kvCache
- * @property-read \Psr\SimpleCache\CacheInterface         cache
- * @property-read \Psr\Log\LoggerInterface                logger
  * @property-read \Slim\Http\Request                      request
  * @property-read \Slim\Interfaces\RouterInterface        router
- * @property-read \App\Library\StorageLibrary             storage
- * @property-read \App\Library\ViewLibrary                view
+ *
+ * @property-read \App\Library\Cache                      cache
+ * @property-read \App\Library\FileCache                  fileCache
+ * @property-read \App\Library\KvCache                    kvCache
+ * @property-read \App\Library\Storage                    storage
+ * @property-read \App\Library\View                       view
+ * @property-read \App\Library\Logger                     logger
  *
  * @property-read \App\Model\AnswerModel                  answerModel
  * @property-read \App\Model\ArticleModel                 articleModel
@@ -134,32 +135,18 @@ abstract class ServiceAbstracts
      */
     public function __get($name)
     {
-        // Model
-        $model = 'App\\Model\\' . ucfirst($name);
-        if ($this->container->has($model)) {
-            return $this->container->get($model);
-        }
-
-        // Service
-        $service = 'App\\Service\\' . ucfirst($name);
-        if ($this->container->has($service)) {
-            return $this->container->get($service);
-        }
-
-        // 其他容器中的实例
-        $libs = [
-            'fileCache'         => \App\Interfaces\FileCacheInterface::class,
-            'kvCache'           => \App\Interfaces\KvCacheInterface::class,
-            'cache'             => \Psr\SimpleCache\CacheInterface::class,
-            'logger'            => \Psr\Log\LoggerInterface::class,
-            'request'           => 'request',
-            'router'            => 'router',
-            'storage'           => \App\Library\StorageLibrary::class,
-            'view'              => \App\Library\ViewLibrary::class,
+        $modules = [
+            'App\\Model\\' . ucfirst($name),
+            'App\\Service\\' . ucfirst($name),
+            'App\\Library\\' . ucfirst($name),
+            'request',
+            'router',
         ];
 
-        if (isset($libs[$name]) && $this->container->has($libs[$name])) {
-            return $this->container->get($libs[$name]);
+        foreach ($modules as $module) {
+            if ($this->container->has($module)) {
+                return $this->container->get($module);
+            }
         }
 
         throw new ContainerValueNotFoundException();

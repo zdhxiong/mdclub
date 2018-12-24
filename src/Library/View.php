@@ -9,10 +9,10 @@ use Psr\Container\ContainerInterface;
 /**
  * PhpRenderer 重写，使其具有主题功能
  *
- * Class ViewLibrary
+ * Class View
  * @package App\Library
  */
-class ViewLibrary extends \Slim\Views\PhpRenderer
+class View extends \Slim\Views\PhpRenderer
 {
     /**
      * 当前使用的主题
@@ -29,14 +29,13 @@ class ViewLibrary extends \Slim\Views\PhpRenderer
     protected $defaultTheme = 'default';
 
     /**
-     * ViewLibrary constructor.
+     * View constructor.
      *
      * @param ContainerInterface $container
-     * @param string $templatePath
      */
-    public function __construct(ContainerInterface $container, string $templatePath)
+    public function __construct(ContainerInterface $container)
     {
-        parent::__construct($templatePath, []);
+        parent::__construct(__DIR__ . '/../../templates/', []);
 
         /** @var \App\Service\OptionService $optionService */
         $optionService = $container->get(\App\Service\OptionService::class);

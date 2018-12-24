@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use App\Library\Storage\Interfaces\StorageDriverInterface;
 use JellyBool\Flysystem\Upyun\UpyunAdapter;
 
 /**
@@ -12,7 +13,7 @@ use JellyBool\Flysystem\Upyun\UpyunAdapter;
  * Class Upyun
  * @package App\Library\Storage
  */
-class Upyun implements StorageInterface
+class Upyun implements StorageDriverInterface
 {
     /**
      * @array 配置参数
