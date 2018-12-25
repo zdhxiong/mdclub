@@ -246,16 +246,7 @@ $app->group('/api', function () {
     $this->get(   '/images/{hash}',                                             ImageController::class . ':getOne');
     $this->patch( '/images/{hash}',                                             ImageController::class . ':updateOne');
     $this->delete('/images/{hash}',                                             ImageController::class . ':deleteOne');
-})
-    ->add(function (ServerRequestInterface $request, ResponseInterface $response, callable $next) {
-        /** @var ResponseInterface $response */
-        $response = $next($request, $response);
-
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'Token, Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie')
-            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, DELETE');
-    });
+})->add(new \App\Middleware\EnableCrossRequestMiddleware());
 
 // admin
 $app->group('/admin', function () {
