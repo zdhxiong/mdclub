@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library;
 
-use App\Library\Cache\File;
+use App\Library\Cache\FileAdapter;
 use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 
@@ -16,8 +16,12 @@ use Psr\SimpleCache\CacheInterface;
  */
 class FileCache extends Cache implements CacheInterface
 {
+    /**
+     * FileCache constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->driver = (new File($container, []))();
+        $this->adapter = new FileAdapter($container, []);
     }
 }

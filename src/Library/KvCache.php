@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Library;
 
-use App\Library\Cache\Memcached;
-use App\Library\Cache\Redis;
+use App\Library\Cache\MemcachedAdapter;
+use App\Library\Cache\RedisAdapter;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -16,8 +16,8 @@ use Psr\SimpleCache\CacheInterface;
  */
 class KvCache extends Cache implements CacheInterface
 {
-    protected $driverClass = [
-        'memcached' => Memcached::class,
-        'redis'     => Redis::class,
+    protected $adapters = [
+        'memcached' => MemcachedAdapter::class,
+        'redis'     => RedisAdapter::class,
     ];
 }

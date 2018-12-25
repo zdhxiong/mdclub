@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Library\Db;
 use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request;
@@ -46,7 +47,7 @@ class TraceMiddleware
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->database = $container->get(Medoo::class);
+        $this->database = $container->get(Db::class);
     }
 
     /**

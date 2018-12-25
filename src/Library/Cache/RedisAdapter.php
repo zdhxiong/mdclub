@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Library\Cache;
+
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Cache\Adapter\RedisAdapter as SymfonyRedisAdapter;
+use Symfony\Component\Cache\Simple\RedisCache;
+
+/**
+ * Redis 缓存适配器
+ *
+ * Class RedisAdapter
+ * @package App\Library\Cache
+ */
+class RedisAdapter extends RedisCache
+{
+    /**
+     * RedisAdapter constructor.
+     *
+     * @param ContainerInterface $container
+     * @param array              $options
+     */
+    public function __construct(ContainerInterface $container, array $options)
+    {
+        $username = $options['cache_redis_username'];
+        $password = $options['cache_redis_password'];
+        $host = $options['cache_redis_host'];
+        $port = $options['cache_redis_port'];
+
+        $adapter = SymfonyRedisAdapter::createConnection("redis://{$username}:{$password}@{$host}:{$port}");
+
+        parent::__construct($adapter);
+    }
+}

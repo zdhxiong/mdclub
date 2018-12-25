@@ -28,95 +28,17 @@ if (APP_DEBUG) {
     $whoops->pushHandler($handler)->register();
 }
 
-/**
- * 展开控制器方法的第三个参数
- *
- * @link https://www.slimframework.com/docs/v3/objects/router.html#route-strategies
- *
- * @return \Slim\Handlers\Strategies\RequestResponseArgs
- */
-$container['foundHandler'] = function () {
-    return new \Slim\Handlers\Strategies\RequestResponseArgs();
-};
-
-/**
- * 404 错误处理
- *
- * @param  ContainerInterface $container
- * @return \App\Handlers\NotFound
- */
-$container['notFoundHandler'] = function (ContainerInterface $container) {
-    return new \App\Handlers\NotFound($container);
-};
-
-/**
- * 405 错误处理
- *
- * @param  ContainerInterface $container
- * @return \App\Handlers\NotAllowed
- */
-$container['notAllowedHandler'] = function (ContainerInterface $container) {
-    return new \App\Handlers\NotAllowed($container);
-};
-
-/**
- * PHP错误处理
- *
- * @param  ContainerInterface $container
- * @return \App\Handlers\PhpError
- */
-$container['phpErrorHandler'] = function (ContainerInterface $container) {
-    return new \App\Handlers\PhpError($container);
-};
-
-/**
- * 异常处理
- *
- * @param  ContainerInterface $container
- * @return \App\Handlers\Error
- */
-$container['errorHandler'] = function (ContainerInterface $container) {
-    return new \App\Handlers\Error($container);
-};
-
-/**
- * 数据库操作工具
- *
- * @link https://medoo.lvtao.net/1.2/doc.php
- *
- * @param  ContainerInterface $container
- * @return \Medoo\Medoo
- */
-$container[\Medoo\Medoo::class] = function (ContainerInterface $container) {
-    $config = $container->get('settings')['database'];
-
-    return new \Medoo\Medoo([
-        'database_type' => $config['driver'],
-        'server'        => $config['host'],
-        'database_name' => $config['database'],
-        'username'      => $config['username'],
-        'password'      => $config['password'],
-        'charset'       => $config['charset'],
-        'port'          => $config['port'],
-        'prefix'        => $config['prefix'],
-        'logging'       => APP_DEBUG,
-        'option'        => [
-            PDO::ATTR_CASE               => PDO::CASE_NATURAL,
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_ORACLE_NULLS       => PDO::NULL_NATURAL,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_STRINGIFY_FETCHES  => false,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ],
-    ]);
-};
-
-/**
- * 应用模块
- */
+$handlers = [
+    'foundHandler'      => \Slim\Handlers\Strategies\RequestResponseArgs::class,
+    'notFoundHandler'   => \App\Handlers\NotFound::class,
+    'notAllowedHandler' => \App\Handlers\NotAllowed::class,
+    'phpErrorHandler'   => \App\Handlers\PhpError::class,
+    'errorHandler'      => \App\Handlers\Error::class,
+];
 
 $modules = [
     \App\Library\Cache::class,
+    \App\Library\Db::class,
     \App\Library\FileCache::class,
     \App\Library\KvCache::class,
     \App\Library\Logger::class,
@@ -163,6 +85,12 @@ $modules = [
     \App\Service\UserService::class,
     \App\Service\VoteService::class,
 ];
+
+foreach ($handlers as $name => $class) {
+    $container[$name] = function (ContainerInterface $container) use ($class) {
+        return new $class($container);
+    };
+}
 
 foreach ($modules as $class) {
     $container[$class] = function (ContainerInterface $container) use ($class) {

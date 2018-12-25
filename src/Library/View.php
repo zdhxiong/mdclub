@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Library;
 
 use Psr\Container\ContainerInterface;
+use Slim\Views\PhpRenderer;
 
 /**
  * PhpRenderer 重写，使其具有主题功能
@@ -12,7 +13,7 @@ use Psr\Container\ContainerInterface;
  * Class View
  * @package App\Library
  */
-class View extends \Slim\Views\PhpRenderer
+class View extends PhpRenderer
 {
     /**
      * 当前使用的主题

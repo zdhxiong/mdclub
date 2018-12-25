@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
+use App\Library\Db;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Request;
@@ -132,7 +133,7 @@ abstract class ModelAbstracts
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->database = $container->get(Medoo::class);
+        $this->database = $container->get(Db::class);
         $this->request = $container->get('request');
         $this->reset();
     }

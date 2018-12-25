@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Abstracts\ControllerAbstracts;
+use App\Library\Db;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -39,7 +40,7 @@ class IndexController extends ControllerAbstracts
     public function migration(Request $request, Response $response): Response
     {
         /** @var \Medoo\Medoo $db */
-        $db = $this->container->get(\Medoo\Medoo::class);
+        $db = $this->container->get(Db::class);
 
         // answer 表迁移
         $answers = $db->select('md_answer', '*');
