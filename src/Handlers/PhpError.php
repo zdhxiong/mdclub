@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handlers;
 
+use App\Constant\ErrorConstant;
 use App\Library\Logger;
 use App\Library\View;
 use Psr\Container\ContainerInterface;
@@ -12,7 +13,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Handlers\AbstractHandler;
 use Slim\Http\Body;
-use App\Constant\ErrorConstant;
 
 /**
  * PHP错误处理

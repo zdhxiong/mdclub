@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Traits\BrandableTraits;
-use Psr\Http\Message\UploadedFileInterface;
-use Slim\Http\UploadedFile;
-use Md\MDAvatars;
 use App\Constant\ErrorConstant;
 use App\Helper\StringHelper;
 use App\Exception\ApiException;
+use App\Traits\BrandableTraits;
+use Md\MDAvatars;
+use Psr\Http\Message\UploadedFileInterface;
+use Slim\Http\UploadedFile;
 
 /**
  * 用户头像管理

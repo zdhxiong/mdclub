@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Abstracts;
 
 use App\Traits\UrlTraits;
-use Psr\Container\ContainerInterface;
 use App\Helper\ArrayHelper;
+use Psr\Container\ContainerInterface;
 use Slim\Exception\ContainerValueNotFoundException;
 
 /**
@@ -18,9 +18,9 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \App\Library\Cache                      cache
  * @property-read \App\Library\FileCache                  fileCache
  * @property-read \App\Library\KvCache                    kvCache
+ * @property-read \App\Library\Logger                     logger
  * @property-read \App\Library\Storage                    storage
  * @property-read \App\Library\View                       view
- * @property-read \App\Library\Logger                     logger
  *
  * @property-read \App\Model\AnswerModel                  answerModel
  * @property-read \App\Model\ArticleModel                 articleModel
@@ -76,7 +76,7 @@ abstract class ServiceAbstracts
     protected $container;
 
     /**
-     * 当前 Model 实例
+     * 当前 Service 对应的 Model 实例
      */
     protected $currentModel;
 
@@ -128,7 +128,7 @@ abstract class ServiceAbstracts
     }
 
     /**
-     * 魔术方法，从容器中获取 Model、Service 等
+     * 魔术方法，从容器中获取 Model、Service、Library 等
      *
      * @param  string $name
      * @return mixed

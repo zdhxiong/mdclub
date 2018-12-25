@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use App\Controller\AdminController;
 use App\Controller\AnswerController;
 use App\Controller\ApiController;
@@ -250,7 +248,7 @@ $app->group('/api', function () {
 
 // admin
 $app->group('/admin', function () {
-    $this->get('', AdminController::class . ':pageIndex');
+    $this->get('',                   AdminController::class . ':pageIndex');
     $this->get('/{name}',            AdminController::class . ':pageIndex');
     $this->get('/{name}/{sub_name}', AdminController::class . ':pageIndex');
 });

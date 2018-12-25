@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Helper\ArrayHelper;
-use PHPImageWorkshop\ImageWorkshop;
-use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Constant\UploadErrorConstant;
 use App\Exception\ApiException;
+use App\Helper\ArrayHelper;
 use App\Helper\StringHelper;
+use PHPImageWorkshop\ImageWorkshop;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 图片

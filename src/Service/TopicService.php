@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use App\Traits\BrandableTraits;
-use App\Traits\FollowableTraits;
-use App\Traits\BaseTraits;
-use Psr\Http\Message\UploadedFileInterface;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
+use App\Traits\BrandableTraits;
+use App\Traits\FollowableTraits;
+use App\Traits\BaseTraits;
+use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 话题

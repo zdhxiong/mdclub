@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Abstracts;
 
 use App\Library\Db;
+use Medoo\Medoo;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Request;
-use Medoo\Medoo;
 
 /**
  * Class Model

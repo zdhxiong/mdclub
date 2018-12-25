@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Handlers;
 
+use App\Constant\ErrorConstant;
+use App\Exception\ApiException;
+use App\Exception\ValidationException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Body;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
-use App\Exception\ValidationException;
 
 /**
  * 异常处理

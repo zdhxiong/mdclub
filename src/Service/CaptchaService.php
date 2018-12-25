@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use Gregwar\Captcha\CaptchaBuilder;
 use App\Exception\ValidationException;
 use App\Helper\StringHelper;
+use Gregwar\Captcha\CaptchaBuilder;
 
 /**
  * 图形验证码
