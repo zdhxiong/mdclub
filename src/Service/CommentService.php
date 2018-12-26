@@ -120,21 +120,23 @@ class CommentService extends ServiceAbstracts
         }
 
         // 验证内容
-        if (!is_null($content)) {
-            if (!$content) {
-                $errors['content'] = '评论内容不能为空';
-            } elseif (!ValidatorHelper::isMax($content, 1000)) {
-                $errors['content'] = '评论内容不能超过 1000 个字符';
-            }
-
-            if ($errors) {
-                throw new ValidationException($errors);
-            } else {
-                $this->commentModel
-                    ->where(['comment_id' => $commentId])
-                    ->update(['content' => $content]);
-            }
+        if (is_null($content)) {
+            return;
         }
+
+        if (!$content) {
+            $errors['content'] = '评论内容不能为空';
+        } elseif (!ValidatorHelper::isMax($content, 1000)) {
+            $errors['content'] = '评论内容不能超过 1000 个字符';
+        }
+
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        $this->commentModel
+            ->where(['comment_id' => $commentId])
+            ->update(['content' => $content]);
     }
 
     /**
@@ -178,15 +180,14 @@ class CommentService extends ServiceAbstracts
 
         $comments = $this->commentModel
             ->field(['comment_id', 'user_id', 'commentable_id', 'commentable_type'])
-            ->where(['comment_id' => $commentIds])
-            ->select();
+            ->select($commentIds);
 
         if (!$comments) {
             return;
         }
 
         $commentIds = array_column($comments, 'comment_id');
-        $this->commentModel->where(['comment_id' => $commentIds])->delete();
+        $this->commentModel->delete($commentIds);
 
         $targets = [];
 
@@ -211,7 +212,48 @@ class CommentService extends ServiceAbstracts
     }
 
     /**
+     * 恢复评论
+     *
+     * @param int $commentId
+     */
+    public function restore(int $commentId): void
+    {
+
+    }
+
+    /**
+     * 批量恢复评论
+     *
+     * @param array $commentIds
+     */
+    public function restoreMultiple(array $commentIds): void
+    {
+
+    }
+
+    /**
+     * 硬删除评论
+     *
+     * @param int $commentId
+     */
+    public function destroy(int $commentId): void
+    {
+
+    }
+
+    /**
+     * 批量硬删除评论
+     *
+     * @param array $commentIds
+     */
+    public function destroyMultiple(array $commentIds): void
+    {
+
+    }
+
+    /**
      * 对数据库中取出的评论数据进行处理
+     * todo 处理评论
      *
      * @param  array $comments 评论信息，或多个评论组成的数组
      * @return array
@@ -227,7 +269,6 @@ class CommentService extends ServiceAbstracts
         }
 
         foreach ($comments as &$comment) {
-            // todo 处理评论
         }
 
         if ($isArray) {

@@ -207,9 +207,8 @@ class UserService extends ServiceAbstracts
      *
      * @param  int   $userId
      * @param  array $data
-     * @return bool
      */
-    public function update(int $userId, array $data): bool
+    public function update(int $userId, array $data): void
     {
         if ($userId !== $this->roleService->userId()) {
             $this->userService->hasOrFail($userId);
@@ -226,19 +225,18 @@ class UserService extends ServiceAbstracts
         $data = ArrayHelper::filter($data, $canUpdateFields);
 
         if (!$data) {
-            return true;
+            return;
         }
 
-        return !!$this->userModel->where(['user_id' => $userId])->update($data);
+        $this->userModel->where(['user_id' => $userId])->update($data);
     }
 
     /**
      * 禁用用户
      *
      * @param  int  $userId
-     * @return bool
      */
-    public function disable(int $userId): bool
+    public function disable(int $userId): void
     {
         $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
 
@@ -252,8 +250,6 @@ class UserService extends ServiceAbstracts
 
         // 禁用后，删除该用户的所有token
         $this->tokenModel->where(['user_id' => $userId])->delete();
-
-        return true;
     }
 
     /**
@@ -261,7 +257,7 @@ class UserService extends ServiceAbstracts
      *
      * @param  array $userIds
      */
-    public function disableMultiple(array $userIds)
+    public function disableMultiple(array $userIds): void
     {
         if (!$userIds) {
             return;
@@ -276,6 +272,26 @@ class UserService extends ServiceAbstracts
         if ($rowCount) {
             $this->tokenModel->where(['user_id' => $userIds])->delete();
         }
+    }
+
+    /**
+     * 启用用户
+     *
+     * @param int $userId
+     */
+    public function enable(int $userId): void
+    {
+
+    }
+
+    /**
+     * 批量启用用户
+     *
+     * @param array $userIds
+     */
+    public function enableMultiple(array $userIds): void
+    {
+
     }
 
     /**

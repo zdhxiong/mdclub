@@ -176,7 +176,7 @@ class QuestionService extends ServiceAbstracts
         string $title,
         string $contentMarkdown,
         string $contentRendered,
-        array  $topicIds
+        array  $topicIds = null
     ): array
     {
         $errors = [];
@@ -214,6 +214,10 @@ class QuestionService extends ServiceAbstracts
 
         if ($errors) {
             throw new ValidationException($errors);
+        }
+
+        if (is_null($topicIds)) {
+            $topicIds = [];
         }
 
         // 过滤不存在的 topic_id
@@ -380,7 +384,7 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
-     * 删除提问
+     * 软删除提问
      *
      * @param  int  $questionId
      */
@@ -408,7 +412,6 @@ class QuestionService extends ServiceAbstracts
         $followerIds = $this->followModel
             ->where(['followable_id' => $questionId, 'followable_type' => 'question'])
             ->pluck('user_id');
-
         $this->userModel
             ->where(['user_id' => $followerIds])
             ->update(['following_question_count[-]' => 1]);
@@ -427,8 +430,7 @@ class QuestionService extends ServiceAbstracts
 
         $questions = $this->questionModel
             ->field(['question_id', 'user_id'])
-            ->where(['question_id' => $questionIds])
-            ->select();
+            ->select($questionIds);
 
         if (!$questions) {
             return;
@@ -475,7 +477,48 @@ class QuestionService extends ServiceAbstracts
     }
 
     /**
+     * 恢复文章
+     *
+     * @param int $questionId
+     */
+    public function restore(int $questionId): void
+    {
+
+    }
+
+    /**
+     * 批量恢复文章
+     *
+     * @param array $questionIds
+     */
+    public function restoreMultiple(array $questionIds): void
+    {
+
+    }
+
+    /**
+     * 硬删除文章
+     *
+     * @param int $questionId
+     */
+    public function destroy(int $questionId): void
+    {
+
+    }
+
+    /**
+     * 批量硬删除文章
+     *
+     * @param array $questionIds
+     */
+    public function destroyMultiple(array $questionIds): void
+    {
+
+    }
+
+    /**
      * 对数据库中取出的提问信息进行处理
+     * todo 处理提问
      *
      * @param  array $questions 提问信息，或多个提问组成的数组
      * @return array
@@ -491,7 +534,6 @@ class QuestionService extends ServiceAbstracts
         }
 
         foreach ($questions as &$question) {
-            // todo 处理提问
         }
 
         if ($isArray) {

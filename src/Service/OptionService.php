@@ -124,7 +124,8 @@ class OptionService extends ServiceAbstracts
      * @return string
      * @throws \Exception
      */
-    public function get(string $name): string {
+    public function get(string $name): string
+    {
         if (!in_array($name, $this->allNames)) {
             throw new \Exception('不存在指定的设置项：' . $name);
         }
@@ -136,12 +137,11 @@ class OptionService extends ServiceAbstracts
      * 更新多个设置
      *
      * @param  array $data
-     * @return bool
      */
-    public function setMultiple(array $data): bool
+    public function setMultiple(array $data): void
     {
         if (empty($data)) {
-            return true;
+            return;
         }
 
         foreach ($data as $name => $value) {
@@ -156,8 +156,6 @@ class OptionService extends ServiceAbstracts
 
         $this->fileCache->delete('options');
         $this->options = null;
-
-        return true;
     }
 
     /**
@@ -165,9 +163,8 @@ class OptionService extends ServiceAbstracts
      *
      * @param string $name
      * @param string $value
-     * @return bool
      */
-    public function set(string $name, string $value): bool
+    public function set(string $name, string $value): void
     {
         if (!in_array($name, $this->allNames)) {
             throw new \Exception('不存在指定的设置项：' . $name);
@@ -176,7 +173,5 @@ class OptionService extends ServiceAbstracts
         $this->optionModel->where(['name' => $name])->update(['value' => $value]);
         $this->fileCache->delete('options');
         $this->options = null;
-
-        return true;
     }
 }

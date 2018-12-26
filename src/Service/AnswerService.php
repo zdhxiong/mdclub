@@ -227,10 +227,9 @@ class AnswerService extends ServiceAbstracts
         string $contentRendered = null
     ): array {
         $data = [];
-
         $userId = $this->roleService->userIdOrFail();
-        $answerInfo = $this->answerModel->get($answerId);
 
+        $answerInfo = $this->answerModel->get($answerId);
         if (!$answerInfo) {
             throw new ApiException(ErrorConstant::ANSWER_NOT_FOUND);
         }
@@ -281,14 +280,16 @@ class AnswerService extends ServiceAbstracts
     }
 
     /**
-     * 删除回答
+     * 软删除回答
      *
      * @param int $answerId
      */
     public function delete(int $answerId): void
     {
         $userId = $this->roleService->userIdOrFail();
-        $answerInfo = $this->answerModel->field(['user_id', 'question_id'])->get($answerId);
+        $answerInfo = $this->answerModel
+            ->field(['user_id', 'question_id'])
+            ->get($answerId);
 
         if (!$answerInfo) {
             return;
@@ -312,7 +313,7 @@ class AnswerService extends ServiceAbstracts
     }
 
     /**
-     * 批量删除回答
+     * 批量软删除回答
      *
      * @param array $answerIds
      */
@@ -361,7 +362,48 @@ class AnswerService extends ServiceAbstracts
     }
 
     /**
+     * 恢复回答
+     *
+     * @param int $answerId
+     */
+    public function restore(int $answerId): void
+    {
+
+    }
+
+    /**
+     * 批量恢复回答
+     *
+     * @param array $answerIds
+     */
+    public function restoreMultiple(array $answerIds): void
+    {
+
+    }
+
+    /**
+     * 硬删除回答
+     *
+     * @param int $answerId
+     */
+    public function destroy(int $answerId): void
+    {
+
+    }
+
+    /**
+     * 批量硬删除回答
+     *
+     * @param array $answerIds
+     */
+    public function destroyMultiple(array $answerIds): void
+    {
+
+    }
+
+    /**
      * 对数据库中取出的回答信息进行处理
+     * // todo 对回答进行处理
      *
      * @param  array $answers 回答信息，或多个回答组成的数组
      * @return array
@@ -377,7 +419,6 @@ class AnswerService extends ServiceAbstracts
         }
 
         foreach ($answers as &$answer) {
-            // todo 对回答进行处理
         }
 
         if ($isArray) {

@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Helper\RequestHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\BrandableTraits;
 use App\Traits\FollowableTraits;
@@ -97,7 +98,7 @@ class TopicService extends ServiceAbstracts
      */
     protected function getDefaultBrandUrls(): array
     {
-        $suffix = $this->isSupportWebp() ? 'webp' : 'jpg';
+        $suffix = RequestHelper::isSupportWebp($this->request) ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
         $data = [];
 
@@ -168,7 +169,9 @@ class TopicService extends ServiceAbstracts
         $fileName = $this->uploadImage($topicId, $cover);
 
         // 更新图片到话题信息中
-        $this->topicModel->where(['topic_id' => $topicId])->update(['cover' => $fileName]);
+        $this->topicModel
+            ->where(['topic_id' => $topicId])
+            ->update(['cover' => $fileName]);
 
         return $topicId;
     }
@@ -224,14 +227,13 @@ class TopicService extends ServiceAbstracts
      * @param  string                $name
      * @param  string                $description
      * @param  UploadedFileInterface $cover
-     * @return bool
      */
     public function update(
         int $topicId,
         string $name = null,
         string $description = null,
         UploadedFileInterface $cover = null
-    ): bool {
+    ): void {
         $topicInfo = $this->updateValidator($topicId, $name, $description, $cover);
 
         $data = [];
@@ -239,7 +241,9 @@ class TopicService extends ServiceAbstracts
         !is_null($description) && $data['description'] = $description;
 
         if ($data) {
-            $this->topicModel->where(['topic_id' => $topicId])->update($data);
+            $this->topicModel
+                ->where(['topic_id' => $topicId])
+                ->update($data);
         }
 
         if (!is_null($cover)) {
@@ -248,10 +252,10 @@ class TopicService extends ServiceAbstracts
 
             // 上传并更新图片
             $fileName = $this->uploadImage($topicId, $cover);
-            $this->topicModel->where(['topic_id' => $topicId])->update(['cover' => $fileName]);
+            $this->topicModel
+                ->where(['topic_id' => $topicId])
+                ->update(['cover' => $fileName]);
         }
-
-        return true;
     }
 
     /**
@@ -362,8 +366,16 @@ class TopicService extends ServiceAbstracts
             return;
         }
 
-        // todo 仅未删除的话题才可以删除
-        $this->topicModel->where(['topic_id' => $topicIds])->delete();
+        $topics = $this->topicModel
+            ->field(['topic_id'])
+            ->select($topicIds);
+
+        if (!$topics) {
+            return;
+        }
+
+        $topicIds = array_column($topics, 'topic_id');
+        $this->topicModel->delete($topicIds);
 
         // 关注了这些话题的用户的 following_topic_count - 1
         $followerIds = $this->followModel
@@ -399,6 +411,46 @@ class TopicService extends ServiceAbstracts
             'followable_id' => $topicIds,
             'followable_type' => 'topic',
         ])->delete();*/
+    }
+
+    /**
+     * 恢复话题
+     *
+     * @param int $topicId
+     */
+    public function restore(int $topicId): void
+    {
+
+    }
+
+    /**
+     * 批量恢复话题
+     *
+     * @param array $topicIds
+     */
+    public function restoreMultiple(array $topicIds): void
+    {
+
+    }
+
+    /**
+     * 硬删除话题
+     *
+     * @param int $topicId
+     */
+    public function destroy(int $topicId): void
+    {
+
+    }
+
+    /**
+     * 批量硬删除话题
+     *
+     * @param array $topicIds
+     */
+    public function destroyMultiple(array $topicIds): void
+    {
+
     }
 
     /**

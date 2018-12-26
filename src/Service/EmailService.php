@@ -77,9 +77,8 @@ class EmailService extends ServiceAbstracts
      * @param  array|bool $to
      * @param  string     $subject
      * @param  string     $body
-     * @return bool
      */
-    public function send($to, string $subject, string $body): bool
+    public function send($to, string $subject, string $body): void
     {
         if (is_null($to)) {
             $to = [];
@@ -104,8 +103,6 @@ class EmailService extends ServiceAbstracts
         } catch (\Exception $e) {
             throw new ApiException(ErrorConstant::SYSTEM_SEND_EMAIL_FAILED, false, $e->getMessage());
         }
-
-        return true;
     }
 
     /**
@@ -140,9 +137,8 @@ class EmailService extends ServiceAbstracts
      * 发送注册验证码邮件
      *
      * @param  string $email
-     * @return bool
      */
-    public function sendRegisterEmail(string $email): bool
+    public function sendRegisterEmail(string $email): void
     {
         $option = $this->optionService->getAll();
 
@@ -153,7 +149,7 @@ class EmailService extends ServiceAbstracts
             'option' => $option,
         ]);
 
-        return $this->send($email, $subject, $body);
+        $this->send($email, $subject, $body);
     }
 
     /**

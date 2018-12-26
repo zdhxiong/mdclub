@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Helper\RequestHelper;
 use App\Traits\BrandableTraits;
 use Psr\Http\Message\UploadedFileInterface;
 
@@ -61,7 +62,7 @@ class UserCoverService extends ServiceAbstracts
      */
     protected function getDefaultBrandUrls(): array
     {
-        $suffix = $this->isSupportWebp() ? 'webp' : 'jpg';
+        $suffix = RequestHelper::isSupportWebp($this->request) ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
         $data = [];
 

@@ -166,34 +166,27 @@ class TokenService extends ServiceAbstracts
 
     /**
      * 删除当前请求对应的 token
-     *
-     * @return true
      */
-    public function deleteToken(): bool
+    public function deleteToken(): void
     {
         $tokenInfo = $this->getTokenInfo();
 
         if ($tokenInfo) {
             $this->tokenModel->delete($tokenInfo['token']);
         }
-
-        return true;
     }
 
     /**
      * 根据 token 参数删除对应的 token 记录
      *
      * @param  string $token
-     * @return true
      */
-    public function deleteByToken(string $token): bool
+    public function deleteByToken(string $token): void
     {
         $result = $this->tokenModel->delete($token);
 
         if (!$result) {
             throw new ApiException(ErrorConstant::USER_TOKEN_NOT_FOUND);
         }
-
-        return true;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * 又拍云存储驱动
  *
@@ -14,9 +16,11 @@ class UpyunAdapter extends \JellyBool\Flysystem\Upyun\UpyunAdapter
 {
     /**
      * UpyunAdapter constructor.
+     *
+     * @param ContainerInterface $container
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(ContainerInterface $container, array $options)
     {
         $bucket = $options['storage_upyun_bucket'];
         $operator = $options['storage_upyun_operator'];

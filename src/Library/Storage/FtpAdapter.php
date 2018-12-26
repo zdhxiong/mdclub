@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * FTP 适配器
  *
@@ -14,9 +16,11 @@ class FtpAdapter extends \League\Flysystem\Adapter\Ftp
 {
     /**
      * FtpAdapter constructor.
+     *
+     * @param ContainerInterface $container
      * @param array $options
      */
-    public function __construct(array $options)
+    public function __construct(ContainerInterface $container, array $options)
     {
         $config = [
             'host'     => $options['storage_ftp_host'],

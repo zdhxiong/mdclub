@@ -237,7 +237,7 @@ class ArticleService extends ServiceAbstracts
      * @param string $title
      * @param string $contentMarkdown
      * @param string $contentRendered
-     * @param array  $topicIds
+     * @param array  $topicIds         为 null 时表示不更新 topic_id
      */
     public function update(
         int    $articleId,
@@ -410,7 +410,6 @@ class ArticleService extends ServiceAbstracts
         $followerIds = $this->followModel
             ->where(['followable_id' => $articleId, 'followable_type' => 'article'])
             ->pluck('user_id');
-
         $this->userModel
             ->where(['user_id' => $followerIds])
             ->update(['following_article_count[-]' => 1]);
@@ -476,7 +475,48 @@ class ArticleService extends ServiceAbstracts
     }
 
     /**
+     * 恢复文章
+     *
+     * @param int $articleId
+     */
+    public function restore(int $articleId): void
+    {
+
+    }
+
+    /**
+     * 批量恢复文章
+     *
+     * @param array $articleIds
+     */
+    public function restoreMultiple(array $articleIds): void
+    {
+
+    }
+
+    /**
+     * 硬删除文章
+     *
+     * @param int $articleId
+     */
+    public function destroy(int $articleId): void
+    {
+
+    }
+
+    /**
+     * 批量硬删除文章
+     *
+     * @param array $articleIds
+     */
+    public function destroyMultiple(array $articleIds): void
+    {
+
+    }
+
+    /**
      * 对数据库中取出的文章信息进行处理
+     * todo 处理文章
      *
      * @param  array $articles 文章信息，或多个文章组成的数组
      * @return array
@@ -492,7 +532,6 @@ class ArticleService extends ServiceAbstracts
         }
 
         foreach ($articles as &$article) {
-            // todo 处理文章
         }
 
         if ($isArray) {

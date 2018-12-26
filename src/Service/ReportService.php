@@ -31,7 +31,7 @@ class ReportService extends ServiceAbstracts
      */
     public function getAllowFilterFields(): array
     {
-        return ['reportable_id', 'reportable_type'];
+        return ['reportable_type'];
     }
 
     /**
@@ -44,7 +44,6 @@ class ReportService extends ServiceAbstracts
     public function getList(bool $withRelationship = false): array
     {
         $where = $this->getWhere();
-        unset($where['reportable_id']);
 
         $list = $this->reportModel
             ->where($where)
@@ -61,8 +60,6 @@ class ReportService extends ServiceAbstracts
                 'reportable_type',
             ])
             ->paginate();
-
-        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -90,8 +87,6 @@ class ReportService extends ServiceAbstracts
                 'create_time' => 'DESC',
             ])
             ->paginate();
-
-        $list['data'] = $this->handle($list['data']);
 
         if ($withRelationship) {
             $list['data'] = $this->addRelationship($list['data']);
@@ -228,23 +223,7 @@ class ReportService extends ServiceAbstracts
      */
     public function handle(array $reports): array
     {
-        if (!$reports) {
-            return $reports;
-        }
-
-        if (!$isArray = is_array(current($reports))) {
-            $reports = [$reports];
-        }
-
-        foreach ($reports as &$report) {
-            // todo 处理举报
-        }
-
-        if ($isArray) {
-            return $reports;
-        }
-
-        return $reports[0];
+        return $reports;
     }
 
     /**

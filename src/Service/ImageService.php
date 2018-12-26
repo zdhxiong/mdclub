@@ -9,6 +9,7 @@ use App\Constant\ErrorConstant;
 use App\Constant\UploadErrorConstant;
 use App\Exception\ApiException;
 use App\Helper\ArrayHelper;
+use App\Helper\RequestHelper;
 use App\Helper\StringHelper;
 use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\UploadedFileInterface;
@@ -125,16 +126,6 @@ class ImageService extends ServiceAbstracts
     }
 
     /**
-     * 判断是否支持 webp
-     *
-     * @return bool
-     */
-    protected function isSupportWebp(): bool
-    {
-        return strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp') > -1;
-    }
-
-    /**
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
@@ -155,7 +146,7 @@ class ImageService extends ServiceAbstracts
         }
 
         $storageType = $this->optionService->get('storage_type');
-        $isSupportWebp = $this->isSupportWebp();
+        $isSupportWebp = RequestHelper::isSupportWebp($this->request);
 
         switch ($storageType) {
             // local 和 ftp，返回已裁剪好的图片

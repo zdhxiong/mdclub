@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Constant\UploadErrorConstant;
+use App\Helper\RequestHelper;
 use App\Helper\StringHelper;
 use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\UploadedFileInterface;
@@ -63,16 +64,6 @@ trait BrandableTraits
     }
 
     /**
-     * 判断是否支持 webp
-     *
-     * @return bool
-     */
-    protected function isSupportWebp(): bool
-    {
-        return strpos($this->request->getServerParam('HTTP_ACCEPT'), 'image/webp') > -1;
-    }
-
-    /**
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
@@ -93,7 +84,7 @@ trait BrandableTraits
         }
 
         $storageType = $this->optionService->get('storage_type');
-        $isSupportWebp = $this->isSupportWebp();
+        $isSupportWebp = RequestHelper::isSupportWebp($this->request);
 
         $width = $this->getBrandWidths()[$size];
         $height = round($width * $this->getBrandScale());

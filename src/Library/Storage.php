@@ -46,7 +46,7 @@ class Storage extends Filesystem
             throw new \Exception('不存在指定的存储类型：' . $storageType);
         }
 
-        $adapter = new $adapters[$storageType]($options);
+        $adapter = new $adapters[$storageType]($container, $options);
         $config = ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
 
         parent::__construct($adapter, $config);

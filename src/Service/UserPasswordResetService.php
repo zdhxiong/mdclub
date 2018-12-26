@@ -43,9 +43,8 @@ class UserPasswordResetService extends ServiceAbstracts
      * @param  string $email
      * @param  string $emailCode
      * @param  string $password
-     * @return true
      */
-    public function doReset(string $email, string $emailCode, string $password): bool
+    public function doReset(string $email, string $emailCode, string $password): void
     {
         // 验证
         $this->doResetValidator($email, $emailCode, $password);
@@ -62,8 +61,6 @@ class UserPasswordResetService extends ServiceAbstracts
 
         // 密码更新后，所有设备都需要重新登录，因此所有 token 都要失效
         $this->tokenModel->where(['user_id' => $userInfo['user_id']])->delete();
-
-        return true;
     }
 
     /**
