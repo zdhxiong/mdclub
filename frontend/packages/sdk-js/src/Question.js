@@ -26,6 +26,15 @@ export default {
   },
 
   /**
+   * 获取指定话题下的提问列表
+   *
+   * GET /topics/{topic_id}/questions
+   */
+  getListByTopicId(topic_id, data, success) {
+    get(`/topics/${topic_id}/questions`, data, success);
+  },
+
+  /**
    * 获取提问列表
    *
    * GET /questions
