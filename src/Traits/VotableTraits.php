@@ -118,16 +118,6 @@ trait VotableTraits
     {
         $this->hasOrFail($votableId);
 
-        // 需要查询的字段
-        $fields = ArrayHelper::remove(
-            $this->userModel->columns,
-            $this->userService->getPrivacyFields()
-        );
-
-        foreach ($fields as &$field) {
-            $field = 'user.' . $field;
-        }
-
         // 查询条件
         $where = [
             'vote.votable_id'   => $votableId,
@@ -147,7 +137,7 @@ trait VotableTraits
             ->order([
                 'vote.create_time' => 'DESC',
             ])
-            ->field($fields)
+            ->field($this->userService->getPrivacyFields(), true)
             ->paginate();
 
         if ($withRelationship) {

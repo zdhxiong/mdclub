@@ -35,7 +35,9 @@ class ArticleService extends ServiceAbstracts
      */
     public function getPrivacyFields(): array
     {
-        return ['delete_time'];
+        return $this->roleService->managerId()
+            ? []
+            : ['delete_time'];
     }
 
     /**

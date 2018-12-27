@@ -158,13 +158,18 @@ abstract class ServiceAbstracts
      * order=field 表示 field ASC
      * order=-field 表示 field DESC
      *
-     * @param  array $defaultOrder 默认排序；query 参数不存在时，该参数才生效
+     * @param  array $defaultOrder     默认排序；query 参数不存在时，该参数才生效
+     * @param  array $allowOrderFields 允许排序的字段，为 null 时，通过 getAllowOrderFields 方法获取
      * @return array
      */
-    protected function getOrder(array $defaultOrder = []): array
+    protected function getOrder(array $defaultOrder = [], array $allowOrderFields = null): array
     {
         $result = [];
         $order = $this->request->getQueryParam('order');
+
+        if (is_null($allowOrderFields)) {
+            $allowOrderFields = $this->getAllowOrderFields();
+        }
 
         if ($order) {
             if (strpos($order, '-') === 0) {
@@ -173,7 +178,7 @@ abstract class ServiceAbstracts
                 $result[$order] = 'ASC';
             }
 
-            $result = ArrayHelper::filter($result, $this->getAllowOrderFields());
+            $result = ArrayHelper::filter($result, $allowOrderFields);
         }
 
         if (!$result) {
@@ -186,13 +191,18 @@ abstract class ServiceAbstracts
     /**
      * 查询列表时的条件
      *
-     * @param  array $defaultFilter 默认条件。该条件将覆盖 query 中的同名参数
+     * @param  array $defaultFilter     默认条件。该条件将覆盖 query 中的同名参数
+     * @param  array $allowFilterFields 允许作为条件的字段，为 null 时，通过 getAllowFilterFields 方法获取
      * @return array
      */
-    protected function getWhere(array $defaultFilter = []): array
+    protected function getWhere(array $defaultFilter = [], array $allowFilterFields = null): array
     {
+        if (is_null($allowFilterFields)) {
+            $allowFilterFields = $this->getAllowFilterFields();
+        }
+
         $result = $this->request->getQueryParams();
-        $result = ArrayHelper::filter($result, $this->getAllowFilterFields());
+        $result = ArrayHelper::filter($result, $allowFilterFields);
         $result = array_merge($result, $defaultFilter);
 
         return $result;

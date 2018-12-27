@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Helper\ArrayHelper;
 use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
@@ -35,7 +36,9 @@ class QuestionService extends ServiceAbstracts
      */
     public function getPrivacyFields(): array
     {
-        return ['delete_time'];
+        return $this->roleService->managerId()
+            ? []
+            : ['delete_time'];
     }
 
     /**
@@ -65,7 +68,7 @@ class QuestionService extends ServiceAbstracts
      * 两个参数中仅可指定一个
      * [
      *     'user_id'    => '',
-     *     'topic_id'   => '',  // todo: 添加该参数
+     *     'topic_id'   => '',
      *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
      * ]
      * @param  bool  $withRelationship
@@ -73,22 +76,48 @@ class QuestionService extends ServiceAbstracts
      */
     public function getList(array $condition = [], bool $withRelationship = false): array
     {
-        $where = $this->getWhere();
-        $defaultOrder = ['update_time' => 'DESC'];
+        $join = null;
+        $where = [];
+        $order = null;
 
+        // 根据 用户ID 获取提问列表
         if (isset($condition['user_id'])) {
             $this->userService->hasOrFail($condition['user_id']);
+
             $where = ['user_id' => $condition['user_id']];
+            $order = $this->getOrder(['update_time' => 'DESC']);
         }
 
+        // 根据 话题ID 获取提问列表
+        elseif (isset($condition['topic_id'])) {
+            $this->topicService->hasOrFail($condition['topic_id']);
+
+            $join = ['[><]topicable' => ['question_id' => 'topicable_id']];
+            $where = [
+                'topicable.topic_id' => $condition['topic_id'],
+                'topicable.topicable_type' => 'question',
+            ];
+            $order = $this->getOrder(['update_time' => 'DESC']);
+        }
+
+        // 获取已删除的提问列表
         elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
             $this->questionModel->onlyTrashed();
+
             $defaultOrder = ['delete_time' => 'DESC'];
+            $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
+            $order = $this->getOrder($defaultOrder, $allowOrderFields);
+        }
+
+        // 根据 query 参数获取提问列表
+        else {
+
         }
 
         $list = $this->questionModel
+            ->join($join)
             ->where($where)
-            ->order($this->getOrder($defaultOrder))
+            ->order($order)
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 

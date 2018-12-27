@@ -31,15 +31,6 @@ trait FollowableTraits
     {
         $this->hasOrFail($followableId);
 
-        // 需要查询的字段
-        $fields = ArrayHelper::remove(
-            $this->userModel->columns,
-            $this->userService->getPrivacyFields()
-        );
-        foreach ($fields as &$field) {
-            $field = 'user.' . $field;
-        }
-
         $list = $this->userModel
             ->join([
                 '[><]follow' => ['user_id' => 'user_id'],
@@ -52,7 +43,7 @@ trait FollowableTraits
             ->order([
                 'follow.create_time' => 'DESC',
             ])
-            ->field($fields)
+            ->field($this->userService->getPrivacyFields(), true)
             ->paginate();
 
         if ($withRelationship) {
@@ -79,15 +70,6 @@ trait FollowableTraits
     {
         $this->userService->hasOrFail($userId);
 
-        // 需要查询的字段
-        $fields = ArrayHelper::remove(
-            $this->currentModel->columns,
-            $this->getPrivacyFields()
-        );
-        foreach ($fields as &$field) {
-            $field = $this->currentModel->table . '.' . $field;
-        }
-
         $list = $this->currentModel
             ->join([
                 '[><]follow' => [$this->currentModel->table . '_id' => 'followable_id'],
@@ -99,7 +81,7 @@ trait FollowableTraits
             ->order([
                 'follow.create_time' => 'DESC'
             ])
-            ->field($fields)
+            ->field($this->getPrivacyFields(), true)
             ->paginate();
 
         if ($withRelationship) {
