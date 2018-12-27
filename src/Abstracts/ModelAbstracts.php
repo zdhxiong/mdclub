@@ -205,10 +205,10 @@ abstract class ModelAbstracts
     /**
      * order
      *
-     * @param  string|array  $order
+     * @param  array  $order
      * @return ModelAbstracts
      */
-    public function order($order): self
+    public function order(array $order): self
     {
         $this->order = $order;
 
@@ -257,10 +257,10 @@ abstract class ModelAbstracts
     /**
      * join
      *
-     * @param $join
+     * @param  array $join
      * @return ModelAbstracts
      */
-    public function join($join): self
+    public function join(array $join): self
     {
         $this->join = $join;
 
@@ -301,11 +301,43 @@ abstract class ModelAbstracts
         ];
 
         foreach ($map as $name => $value) {
-            if ($value) {
+            if (!$value) {
+                continue;
+            }
+
+            if (!$this->join) {
+                $where[$name] = $value;
+                continue;
+            }
+
+            // 含 join，且字段中不含表名时，自动添加表名
+            if ($name === 'ORDER' || $name === 'MATCH' || $name === 'HAVING') {
+                foreach ($value as $field => $val) {
+                    if ($name === 'MATCH' && $field === 'mode') {
+                        continue;
+                    }
+
+                    if (strpos($field, '.') === false) {
+                        $value[$this->table . '.' . $field] = $val;
+                        unset($value[$field]);
+                    }
+                }
+
+                $where[$name] = $value;
+            }
+
+            if ($name === 'GROUP') {
+                foreach ($value as $key => $field) {
+                    if (strpos($field, '.') === false) {
+                        $value[$key] = $this->table . '.' . $field;
+                    }
+                }
+
                 $where[$name] = $value;
             }
         }
 
+        // 添加软删除条件
         if ($this->softDelete && !$this->force) {
             $deleteTimeField = $this->join
                 ? $this->table . '.' . static::DELETE_TIME
@@ -361,6 +393,15 @@ abstract class ModelAbstracts
             foreach ($columns as $key => $item) {
                 if (in_array($item, $columnExclude)) {
                     unset($columns[$key]);
+                }
+            }
+        }
+
+        // 含 join，且字段中不含表名时，自动添加表名
+        if ($this->join) {
+            foreach ($columns as $key => $item) {
+                if (strpos($item, '.') === false) {
+                    $columns[$key] = $this->table . '.' . $item;
                 }
             }
         }
