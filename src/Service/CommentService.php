@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Helper\ArrayHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\BaseTraits;
 use App\Traits\VotableTraits;
@@ -71,7 +72,7 @@ class CommentService extends ServiceAbstracts
     public function getList(array $condition = [], bool $withRelationship = false): array
     {
         $where = $this->getWhere();
-        $defaultOrder = ['create_time' => 'DESC'];
+        $order = $this->getOrder(['create_time' => 'DESC']);
 
         if (isset($condition['user_id'])) {
             $this->userService->hasOrFail($condition['user_id']);
@@ -80,12 +81,15 @@ class CommentService extends ServiceAbstracts
 
         elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
             $this->commentModel->onlyTrashed();
+
             $defaultOrder = ['delete_time' => 'DESC'];
+            $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
+            $order = $this->getOrder($defaultOrder, $allowOrderFields);
         }
 
         $list = $this->commentModel
             ->where($where)
-            ->order($this->getOrder($defaultOrder))
+            ->order($order)
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 

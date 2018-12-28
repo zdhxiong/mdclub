@@ -58,7 +58,7 @@ class QuestionService extends ServiceAbstracts
      */
     public function getAllowFilterFields(): array
     {
-        return ['question_id', 'user_id'];
+        return ['question_id', 'user_id', 'topic_id']; // topic_id 需要另外写逻辑
     }
 
     /**
@@ -78,40 +78,49 @@ class QuestionService extends ServiceAbstracts
     {
         $join = null;
         $where = [];
-        $order = null;
+        $order = $this->getOrder(['update_time' => 'DESC']);
 
-        // 根据 用户ID 获取提问列表
         if (isset($condition['user_id'])) {
             $this->userService->hasOrFail($condition['user_id']);
-
-            $where = ['user_id' => $condition['user_id']];
-            $order = $this->getOrder(['update_time' => 'DESC']);
+            $where['user_id'] = $condition['user_id'];
         }
 
-        // 根据 话题ID 获取提问列表
         elseif (isset($condition['topic_id'])) {
             $this->topicService->hasOrFail($condition['topic_id']);
-
             $join = ['[><]topicable' => ['question_id' => 'topicable_id']];
-            $where = [
-                'topicable.topic_id' => $condition['topic_id'],
-                'topicable.topicable_type' => 'question',
-            ];
-            $order = $this->getOrder(['update_time' => 'DESC']);
+            $where['topicable.topic_id'] = $condition['topic_id'];
+            $where['topicable.topicable_type'] = 'question';
         }
 
-        // 获取已删除的提问列表
-        elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
-            $this->questionModel->onlyTrashed();
-
-            $defaultOrder = ['delete_time' => 'DESC'];
-            $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
-            $order = $this->getOrder($defaultOrder, $allowOrderFields);
-        }
-
-        // 根据 query 参数获取提问列表
+        // 根据 query 参数获取提问列表，参数包括 question_id、user_id、topic_id
         else {
+            $where = $this->getWhere();
 
+            if (isset($where['topic_id'])) {
+                $join = ['[><]topicable' => ['question_id' => 'topicable_id']];
+                $where['topicable.topic_id'] = $where['topic_id'];
+                $where['topicable.topicable_type'] = 'question';
+                unset($where['topic_id']);
+            }
+
+            if (isset($where['user_id'])) {
+                $where['question.user_id'] = $where['user_id'];
+                unset($where['user_id']);
+            }
+
+            if (isset($where['question_id'])) {
+                $where['question.question_id'] = $where['question_id'];
+                unset($where['question_id']);
+            }
+
+            // 获取已删除的列表
+            if (isset($condition['is_deleted']) && $condition['is_deleted']) {
+                $this->questionModel->onlyTrashed();
+
+                $defaultOrder = ['delete_time' => 'DESC'];
+                $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
+                $order = $this->getOrder($defaultOrder, $allowOrderFields);
+            }
         }
 
         $list = $this->questionModel
@@ -145,7 +154,7 @@ class QuestionService extends ServiceAbstracts
         string $title,
         string $contentMarkdown,
         string $contentRendered,
-        array  $topicIds
+        array  $topicIds = null
     ): int
     {
         [

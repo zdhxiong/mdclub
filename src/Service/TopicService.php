@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Helper\ArrayHelper;
 use App\Helper\RequestHelper;
 use App\Helper\ValidatorHelper;
 use App\Traits\BrandableTraits;
@@ -124,16 +125,20 @@ class TopicService extends ServiceAbstracts
     public function getList(array $condition = [], bool $withRelationship = false): array
     {
         $where = $this->getWhere();
-        $defaultOrder = ['topic_id' => 'ASC'];
 
         if (isset($condition['is_deleted']) && $condition['is_deleted']) {
             $this->topicModel->onlyTrashed();
+
             $defaultOrder = ['delete_time' => 'DESC'];
+            $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
+            $order = $this->getOrder($defaultOrder, $allowOrderFields);
+        } else {
+            $order = $this->getOrder(['topic_id' => 'ASC']);
         }
 
         $list = $this->topicModel
             ->where($where)
-            ->order($this->getOrder($defaultOrder))
+            ->order($order)
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 

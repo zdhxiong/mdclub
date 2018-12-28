@@ -90,12 +90,12 @@ class UserService extends ServiceAbstracts
      */
     public function getList(array $condition = [], $withRelationship = false): array
     {
-        $defaultWhere = ['disable_time' => 0];
-        $defaultOrder = ['create_time' => 'ASC'];
-
         if (isset($condition['is_disabled']) && $condition['is_disabled']) {
             $defaultWhere = ['disable_time[>]' => 0];
             $defaultOrder = ['disable_time' => 'DESC'];
+        } else {
+            $defaultWhere = ['disable_time' => 0];
+            $defaultOrder = ['create_time' => 'ASC'];
         }
 
         $list = $this->userModel
@@ -234,6 +234,8 @@ class UserService extends ServiceAbstracts
     /**
      * 禁用用户
      *
+     * NOTE: 禁用用户不会影响该用户发表的内容，也不会影响关注关系
+     *
      * @param  int  $userId
      */
     public function disable(int $userId): void
@@ -281,7 +283,13 @@ class UserService extends ServiceAbstracts
      */
     public function enable(int $userId): void
     {
+        $rowCount = $this->userModel
+            ->where(['user_id' => $userId])
+            ->update(['disable_time' => 0]);
 
+        if (!$rowCount) {
+            throw new ApiException(ErrorConstant::USER_NOT_FOUND);
+        }
     }
 
     /**
@@ -291,7 +299,13 @@ class UserService extends ServiceAbstracts
      */
     public function enableMultiple(array $userIds): void
     {
+        if (!$userIds) {
+            return;
+        }
 
+        $this->userModel
+            ->where(['user_id' => $userIds])
+            ->update(['disable_time' => 0]);
     }
 
     /**

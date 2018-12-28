@@ -8,6 +8,7 @@ use App\Abstracts\ServiceAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Helper\ArrayHelper;
 use App\Helper\HtmlHelper;
 use App\Helper\MarkdownHelper;
 use App\Helper\ValidatorHelper;
@@ -57,7 +58,7 @@ class ArticleService extends ServiceAbstracts
      */
     public function getAllowFilterFields(): array
     {
-        return ['article_id', 'user_id'];
+        return ['article_id', 'user_id', 'topic_id']; // topic_id 需要另外写逻辑
     }
 
     /**
@@ -67,7 +68,7 @@ class ArticleService extends ServiceAbstracts
      * 两个参数中仅可指定一个
      * [
      *     'user_id'    => '',
-     *     'topic_id'   => '', // todo: 支持该参数
+     *     'topic_id'   => '',
      *     'is_deleted' => true, // 该值为 true 时，获取已删除的记录；否则获取未删除的记录
      * ]
      * @param  bool  $withRelationship
@@ -75,22 +76,61 @@ class ArticleService extends ServiceAbstracts
      */
     public function getList(array $condition = [], bool $withRelationship = false): array
     {
-        $where = $this->getWhere();
-        $defaultOrder = ['create_time' => 'DESC'];
+        $join = null;
+        $where = [];
+        $order = $this->getOrder(['update_time' => 'DESC']);
 
+        // 根据 用户ID 获取文章列表
         if (isset($condition['user_id'])) {
             $this->userService->hasOrFail($condition['user_id']);
-            $where = ['user_id' => $condition['user_id']];
+
+            $where['user_id'] = $condition['user_id'];
         }
 
-        elseif (isset($condition['is_deleted']) && $condition['is_deleted']) {
-            $this->articleModel->onlyTrashed();
-            $defaultOrder = ['delete_time' => 'DESC'];
+        // 根据 话题ID 获取文章列表
+        elseif (isset($condition['topic_id'])) {
+            $this->topicService->hasOrFail($condition['topic_id']);
+
+            $join = ['[><]topicable' => ['article_id' => 'topicable_id']];
+            $where['topicable.topic_id'] = $condition['topic_id'];
+            $where['topicable.topicable_type'] = 'article';
+        }
+
+        // 根据 query 参数获取文章列表，参数包括 article_id、user_id、topic_id
+        else {
+            $where = $this->getWhere();
+
+            if (isset($where['topic_id'])) {
+                $join = ['[><]topicable' => ['article_id' => 'topicable_id']];
+                $where['topicable.topic_id'] = $where['topic_id'];
+                $where['topicable.topicable_type'] = 'article';
+                unset($where['topic_id']);
+            }
+
+            if (isset($where['user_id'])) {
+                $where['article.user_id'] = $where['user_id'];
+                unset($where['user_id']);
+            }
+
+            if (isset($where['article_id'])) {
+                $where['article.article_id'] = $where['article_id'];
+                unset($where['article_id']);
+            }
+
+            // 获取已删除的列表
+            if (isset($condition['is_deleted']) && $condition['is_deleted']) {
+                $this->articleModel->onlyTrashed();
+
+                $defaultOrder = ['delete_time' => 'DESC'];
+                $allowOrderFields = ArrayHelper::push($this->getAllowOrderFields(), 'delete_time');
+                $order = $this->getOrder($defaultOrder, $allowOrderFields);
+            }
         }
 
         $list = $this->articleModel
+            ->join($join)
             ->where($where)
-            ->order($this->getOrder($defaultOrder))
+            ->order($order)
             ->field($this->getPrivacyFields(), true)
             ->paginate();
 
@@ -111,7 +151,7 @@ class ArticleService extends ServiceAbstracts
      * @param  string $contentMarkdown Markdown 正文
      * @param  string $contentRendered HTML 正文
      * @param  array  $topicIds        话题ID数组
-     * @return int
+     * @return int    $articleId
      */
     public function create(
         int    $userId,
@@ -146,7 +186,7 @@ class ArticleService extends ServiceAbstracts
             $topicable[] = [
                 'topic_id'       => $topicId,
                 'topicable_id'   => $articleId,
-                'topicable_type' => 'article'
+                'topicable_type' => 'article',
             ];
         }
         if ($topicable) {
@@ -590,7 +630,6 @@ class ArticleService extends ServiceAbstracts
         $articleIds = array_unique(array_column($articles, 'article_id'));
         $userIds = array_unique(array_column($articles, 'user_id'));
 
-        // is_following
         if (isset($relationship['is_following'])) {
             $followingArticleIds = $relationship['is_following'] ? $articleIds : [];
         } else {

@@ -195,7 +195,7 @@ abstract class ModelAbstracts
      * @param  int|array $limit
      * @return ModelAbstracts
      */
-    public function limit($limit): self
+    public function limit($limit = null): self
     {
         $this->limit = $limit;
 
@@ -208,7 +208,7 @@ abstract class ModelAbstracts
      * @param  array  $order
      * @return ModelAbstracts
      */
-    public function order(array $order): self
+    public function order(array $order = null): self
     {
         $this->order = $order;
 
@@ -221,7 +221,7 @@ abstract class ModelAbstracts
      * @param  array $match
      * @return ModelAbstracts
      */
-    public function match(array $match): self
+    public function match(array $match = null): self
     {
         $this->match = $match;
 
@@ -234,7 +234,7 @@ abstract class ModelAbstracts
      * @param  array  $group
      * @return ModelAbstracts
      */
-    public function group(array $group): self
+    public function group(array $group = null): self
     {
         $this->group = $group;
 
@@ -247,7 +247,7 @@ abstract class ModelAbstracts
      * @param  array  $having
      * @return ModelAbstracts
      */
-    public function having(array $having): self
+    public function having(array $having = null): self
     {
         $this->having = $having;
 
@@ -260,7 +260,7 @@ abstract class ModelAbstracts
      * @param  array $join
      * @return ModelAbstracts
      */
-    public function join(array $join): self
+    public function join(array $join = null): self
     {
         $this->join = $join;
 
@@ -273,7 +273,7 @@ abstract class ModelAbstracts
      * @param array $where
      * @return ModelAbstracts
      */
-    public function where(array $where): self
+    public function where(array $where = []): self
     {
         $this->where = $where;
 
