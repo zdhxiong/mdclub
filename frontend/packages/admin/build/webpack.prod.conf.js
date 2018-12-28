@@ -15,7 +15,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name].[chunkhash].js',
-    chunkFilename: 'js/[id].[chunkhash].js'
+    chunkFilename: 'js/[id].[chunkhash].js',
+    publicPath: '../'
   },
   plugins: [
     new webpack.DefinePlugin({
