@@ -84,8 +84,12 @@ export default (global_state, global_actions) => {
                   }}
                   onclick={e => actions.clickImage({ e, item, index })}
                 >
-                  <div
-                    class="overlay-top mdui-grid-tile-actions mdui-grid-tile-actions-top mdui-grid-tile-actions-gradient"></div>
+                  <div class={cc([
+                    'overlay-top',
+                    'mdui-grid-tile-actions',
+                    'mdui-grid-tile-actions-top',
+                    'mdui-grid-tile-actions-gradient',
+                  ])}></div>
                   <div class="overlay-bottom mdui-grid-tile-actions mdui-grid-tile-actions-gradient">
                     <i
                       class="preview-btn mdui-icon material-icons"

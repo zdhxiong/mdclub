@@ -68,7 +68,7 @@ export default $.extend({}, actionsAbstract, {
         type: 'string',
       },
       {
-        title: '发表时间',
+        title: '创建时间',
         field: 'create_time',
         type: 'time',
         width: 200,

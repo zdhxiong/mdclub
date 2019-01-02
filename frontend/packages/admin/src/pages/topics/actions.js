@@ -51,6 +51,12 @@ export default $.extend({}, actionsAbstract, {
         field: 'name',
         type: 'string',
       },
+      {
+        title: '关注者数量',
+        field: 'follower_count',
+        type: 'number',
+        width: 200,
+      },
     ];
 
     const buttons = [

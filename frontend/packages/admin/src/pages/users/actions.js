@@ -55,6 +55,12 @@ export default $.extend({}, actionsAbstract, {
         title: '用户名',
         field: 'avatar_username',
         type: 'html',
+        width: 208,
+      },
+      {
+        title: '一句话介绍',
+        field: 'headline',
+        type: 'string',
       },
       {
         title: '注册时间',
