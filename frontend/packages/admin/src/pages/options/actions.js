@@ -14,8 +14,19 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     global_actions.lazyComponents.searchBar.setState({ isNeedRender: false });
 
+    mdui.mutation();
+
     const $element = $(props.element);
+    const $appbar = $('.mc-appbar');
     const panel = new mdui.Panel($element.find('.mdui-panel'), { accordion: true });
+
+    $element.on('scroll', (e) => {
+      if (e.target.scrollTop) {
+        $appbar.addClass('is-top');
+      } else {
+        $appbar.removeClass('is-top');
+      }
+    });
 
     panel.$collapse.find('.mdui-panel-item')
       .on('open.mdui.panel', function () {

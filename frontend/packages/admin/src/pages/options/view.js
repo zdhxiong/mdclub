@@ -11,7 +11,6 @@ export default (global_state, global_actions) => {
       ondestroy={actions.destroy}
       key={match.url}
       id="page-options"
-      class="mdui-container"
     >
       <div class="mdui-panel">
 
@@ -21,12 +20,38 @@ export default (global_state, global_actions) => {
             <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
           </div>
           <div class="mdui-panel-item-body">
-            <p>First content</p>
-            <p>First content</p>
-            <p>First content</p>
-            <p>First content</p>
-            <p>First content</p>
-            <p>First content</p>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">网站名称</label>
+              <input class="mdui-textfield-input" name="site_name" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">网站关键词</label>
+              <input class="mdui-textfield-input" name="site_keywords" type="text"/>
+              <div class="mdui-textfield-helper">多个关键词之间用半角逗号隔开</div>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">网站简介</label>
+              <input class="mdui-textfield-input" name="site_description" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">ICP 备案号</label>
+              <input class="mdui-textfield-input" name="site_icp_beian" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">公安备案号</label>
+              <input class="mdui-textfield-input" name="site_gongan_beian" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">语言</label>
+              <input class="mdui-textfield-input" name="language" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">静态资源访问路径</label>
+              <input class="mdui-textfield-input" name="site_static_url" type="text"/>
+            </div>
+            <div class="mdui-panel-item-actions">
+              <button class="mdui-btn mdui-ripple">保存</button>
+            </div>
           </div>
         </div>
 
@@ -53,12 +78,41 @@ export default (global_state, global_actions) => {
             <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
           </div>
           <div class="mdui-panel-item-body">
-            <p>Third content</p>
-            <p>Third content</p>
-            <p>Third content</p>
-            <p>Third content</p>
-            <p>Third content</p>
-            <p>Third content</p>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">SMTP 服务器</label>
+              <input class="mdui-textfield-input" name="smtp_host" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">SMTP 账户</label>
+              <input class="mdui-textfield-input" name="smtp_username" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">SMTP 密码</label>
+              <input class="mdui-textfield-input" name="smtp_password" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">SMTP 端口</label>
+              <input class="mdui-textfield-input" name="smtp_port" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">加密连接类型</label>
+              <select class="mdui-select" mdui-select>
+                <option value="">无</option>
+                <option value="tls">tls</option>
+                <option value="ssl">ssl</option>
+              </select>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">加密连接类型</label>
+              <input class="mdui-textfield-input" name="smtp_secure" type="text"/>
+            </div>
+            <div class="mdui-textfield">
+              <label class="mdui-textfield-label">接收回复邮件的邮箱地址</label>
+              <input class="mdui-textfield-input" name="smtp_reply_to" type="text"/>
+            </div>
+            <div class="mdui-panel-item-actions">
+              <button class="mdui-btn mdui-ripple">保存</button>
+            </div>
           </div>
         </div>
 
