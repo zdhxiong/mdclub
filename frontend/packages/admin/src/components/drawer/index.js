@@ -80,8 +80,8 @@ export default () => (
       <div class="mdui-divider"></div>
       <RootItem url="/options" icon="settings" title="设置"/>
     </div>
-    <div class="toggle" onclick={toggle}>
-      <button class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">
+    <div class="toggle">
+      <button onclick={toggle} class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">
         <i class="mdui-icon material-icons">keyboard_capslock</i>
       </button>
     </div>

@@ -57,4 +57,11 @@ export default $.extend({}, actionsAbstract, {
    */
   destroy: () => {
   },
+
+  /**
+   * 响应输入框输入事件
+   */
+  input: e => ({
+    [e.target.name]: e.target.value,
+  }),
 });
