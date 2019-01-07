@@ -46,6 +46,14 @@ const Input = ({ label, name, value, helper = false, oninput }) => (
   </div>
 );
 
+const Textarea = ({ label, name, value, helper = false, oninput }) => (
+  <div class="mdui-textfield">
+    <label class="mdui-textfield-label">{label}</label>
+    <textarea class="mdui-textfield-input" name={name} oninput={oninput} value={value}></textarea>
+    {helper && <div class="mdui-textfield-helper">{helper}</div>}
+  </div>
+);
+
 const Select = ({ label, name, value, data, onchange }) => (
   <div class="mdui-textfield">
     <label class="mdui-textfield-label">{label}</label>
@@ -87,17 +95,17 @@ export default (global_state, global_actions) => {
                 value={state.data.site_name}
                 oninput={actions.data.input}
               />
-              <Input
+              <Textarea
+                label="网站简介"
+                name="site_description"
+                value={state.data.site_description}
+                oninput={actions.data.input}
+              />
+              <Textarea
                 label="网站关键词"
                 name="site_keywords"
                 helper="多个关键词之间用半角逗号隔开"
                 value={state.data.site_keywords}
-                oninput={actions.data.input}
-              />
-              <Input
-                label="网站简介"
-                name="site_description"
-                value={state.data.site_description}
                 oninput={actions.data.input}
               />
               <Input
@@ -120,7 +128,7 @@ export default (global_state, global_actions) => {
                 onchange={actions.data.input}
               />
               <Input
-                label="静态资源访问路径"
+                label="static 目录静态资源访问路径"
                 name="site_static_url"
                 value={state.data.site_static_url}
                 oninput={actions.data.input}
@@ -254,7 +262,7 @@ export default (global_state, global_actions) => {
           </div>
 
           <div class="mdui-panel-item">
-            <ItemHeader label="文件存储" value={storageTypeObject[state.data.storage_type]}/>
+            <ItemHeader label="上传文件存储" value={storageTypeObject[state.data.storage_type]}/>
             <div class="mdui-panel-item-body">
               <Select
                 label="存储类型"
@@ -263,20 +271,148 @@ export default (global_state, global_actions) => {
                 data={storageTypeObject}
                 onchange={actions.data.input}
               />
+              <Input
+                label="上传文件目录外部访问 URL 地址"
+                name="storage_url"
+                value={state.data.storage_url}
+                oninput={actions.data.input}
+              />
               <If condition={state.data.storage_type === 'local'}>
-
+                <Input
+                  label="本地文件存储目录绝对路径"
+                  name="storage_local_dir"
+                  value={state.data.storage_local_dir}
+                  oninput={actions.data.input}
+                />
               </If>
               <If condition={state.data.storage_type === 'ftp'}>
-
+                <Input
+                  label="FTP 服务器地址"
+                  name="storage_ftp_host"
+                  value={state.data.storage_ftp_host}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="用户名"
+                  name="storage_ftp_username"
+                  value={state.data.storage_ftp_username}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="密码"
+                  name="storage_ftp_password"
+                  value={state.data.storage_ftp_password}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="端口"
+                  name="storage_ftp_port"
+                  value={state.data.storage_ftp_port}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="上传目录"
+                  name="storage_ftp_root"
+                  value={state.data.storage_ftp_root}
+                  oninput={actions.data.input}
+                  helper="/path/to/root"
+                />
+                <Input
+                  label=""
+                  name="storage_ftp_passive"
+                  value={state.data.storage_ftp_passive}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label=""
+                  name="storage_ftp_ssl"
+                  value={state.data.storage_ftp_ssl}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label=""
+                  name="storage_ftp_timeout"
+                  value={state.data.storage_ftp_timeout}
+                  oninput={actions.data.input}
+                />
               </If>
               <If condition={state.data.storage_type === 'aliyun_oss'}>
-
+                <Input
+                  label="AccessKey ID"
+                  name="storage_aliyun_oss_access_id"
+                  value={state.data.storage_aliyun_oss_access_id}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="	Access Key Secret"
+                  name="storage_aliyun_oss_access_secret"
+                  value={state.data.storage_aliyun_oss_access_secret}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="Bucket 名称"
+                  name="storage_aliyun_oss_bucket"
+                  value={state.data.storage_aliyun_oss_bucket}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="EndPoint（地域节点）"
+                  name="storage_aliyun_oss_endpoint"
+                  value={state.data.storage_aliyun_oss_endpoint}
+                  oninput={actions.data.input}
+                />
               </If>
               <If condition={state.data.storage_type === 'upyun'}>
-
+                <Input
+                  label="服务名称"
+                  name="storage_upyun_bucket"
+                  value={state.data.storage_upyun_bucket}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="操作员账号"
+                  name="storage_upyun_operator"
+                  value={state.data.storage_upyun_operator}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="操作员密码"
+                  name="storage_upyun_password"
+                  value={state.data.storage_upyun_password}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="加速域名"
+                  name="storage_upyun_endpoint"
+                  value={state.data.storage_upyun_endpoint}
+                  oninput={actions.data.input}
+                />
               </If>
               <If condition={state.data.storage_type === 'qiniu'}>
-
+                <Input
+                  label="AccessKey"
+                  name="storage_qiniu_access_id"
+                  value={state.data.storage_qiniu_access_id}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="SecretKey"
+                  name="storage_qiniu_access_secret"
+                  value={state.data.storage_qiniu_access_secret}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="存储空间名称"
+                  name="storage_qiniu_bucket"
+                  value={state.data.storage_qiniu_bucket}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="加速域名"
+                  name="storage_qiniu_endpoint"
+                  value={state.data.storage_qiniu_endpoint}
+                  oninput={actions.data.input}
+                />
               </If>
               <div class="mdui-panel-item-actions">
                 <SaveBtn submitting={state.submitting} onsubmit={actions.submit}/>
