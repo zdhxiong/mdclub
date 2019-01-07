@@ -1,5 +1,6 @@
 import { h } from 'hyperapp';
 import { JQ as $ } from 'mdui';
+import cc from 'classcat';
 import { Link } from '@hyperapp/router';
 import './index.less';
 
@@ -68,7 +69,12 @@ export default () => (global_state, global_actions) => {
 
   return () => (
     <div
-      class="mc-appbar mdui-appbar mdui-appbar-fixed mdui-shadow-0"
+      class={cc([
+        'mc-appbar mdui-appbar mdui-appbar-fixed',
+        {
+          shadow: state.shadow,
+        },
+      ])}
       oncreate={element => actions.init({ element })}
     >
       <div class="mdui-toolbar">
