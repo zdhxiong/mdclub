@@ -9,6 +9,6 @@ export default {
    * POST /emails
    */
   send(data, success) {
-    post('/emails', success);
+    post('/emails', data, success);
   },
 };
