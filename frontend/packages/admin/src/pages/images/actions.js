@@ -20,7 +20,7 @@ export default $.extend({}, actionsAbstract, {
     global_actions = props.global_actions;
     const $element = $(props.element);
 
-    const { searchBar } = global_actions.lazyComponents;
+    const { searchBar } = global_actions.components;
 
     const searchBarState = {
       fields: [
@@ -81,7 +81,7 @@ export default $.extend({}, actionsAbstract, {
 
     // 调整浏览器宽度时，重新计算缩略图布局
     $(window).on('resize', actions.resize);
-    $('.mc-drawer')
+    $('.me-drawer')
       .on('opened.mdui.drawer', actions.resize)
       .on('closed.mdui.drawer', actions.resize);
   },
@@ -92,7 +92,7 @@ export default $.extend({}, actionsAbstract, {
   destroy: () => (state, actions) => {
     $(document).off('search-submit');
     $(window).off('resize', actions.resize);
-    $('.mc-drawer')
+    $('.me-drawer')
       .off('opened.mdui.drawer', actions.resize)
       .off('closed.mdui.drawer', actions.resize);
 
@@ -131,7 +131,7 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => (state, actions) => {
-    const { pagination, searchBar } = global_actions.lazyComponents;
+    const { pagination, searchBar } = global_actions.components;
 
     actions.loadStart();
 
@@ -192,7 +192,7 @@ export default $.extend({}, actionsAbstract, {
       thumbData,
     });
 
-    global_actions.lazyComponents.pagination.setState(response.pagination);
+    global_actions.components.pagination.setState(response.pagination);
   },
 
   /**

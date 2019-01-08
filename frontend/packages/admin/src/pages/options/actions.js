@@ -12,11 +12,11 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState({ isNeedRender: false });
+    global_actions.components.searchBar.setState({ isNeedRender: false });
 
     // 滚动时，应用栏添加阴影
     $(props.element).on('scroll', (e) => {
-      global_actions.lazyComponents.appBar.setState({ shadow: !!e.target.scrollTop });
+      global_actions.components.appbar.setState({ shadow: !!e.target.scrollTop });
     });
 
     actions.setState({ loading: true });
@@ -75,8 +75,11 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 销毁前
    */
-  destroy: (props) => {
+  destroy: (props) => (state, actions) => {
     $(props.element).off('scroll');
+
+    actions.setState({ loading: true });
+    global_actions.components.appbar.setState({ shadow: false });
   },
 
   /**

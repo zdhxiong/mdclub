@@ -2,10 +2,10 @@ import { h } from 'hyperapp';
 import cc from 'classcat';
 import './index.less';
 
-import Loading from '../../components/loading';
-import Empty from '../../components/empty';
-import PhotoSwipeDom from '../../components/photoswipe-dom';
-import Pagination from '../../lazyComponents/pagination/view';
+import Loading from '../../elements/loading';
+import Empty from '../../elements/empty';
+import Pswp from '../../elements/pswp';
+import Pagination from '../../components/pagination/view';
 
 export default (global_state, global_actions) => {
   const actions = global_actions.images;
@@ -102,7 +102,7 @@ export default (global_state, global_actions) => {
         </div>
       </div>
       <Pagination onChange={actions.loadData} loading={state.loading}/>
-      <PhotoSwipeDom/>
+      <Pswp/>
     </div>
   );
 };

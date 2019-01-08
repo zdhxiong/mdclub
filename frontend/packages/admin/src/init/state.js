@@ -17,17 +17,17 @@ import TrashTopics from '../pages/trash/topics/state';
 import TrashUsers from '../pages/trash/users/state';
 import Users from '../pages/users/state';
 
-import AppBar from '../lazyComponents/appbar/state';
-import SearchBar from '../lazyComponents/searchbar/state';
-import Pagination from '../lazyComponents/pagination/state';
-import Datatable from '../lazyComponents/datatable/state';
-import DialogAnswer from '../lazyComponents/dialog-answer/state';
-import DialogArticle from '../lazyComponents/dialog-article/state';
-import DialogComment from '../lazyComponents/dialog-comment/state';
-import DialogQuestion from '../lazyComponents/dialog-question/state';
-import DialogReporters from '../lazyComponents/dialog-reporters/state';
-import DialogTopic from '../lazyComponents/dialog-topic/state';
-import DialogUser from '../lazyComponents/dialog-user/state';
+import Appbar from '../components/appbar/state';
+import SearchBar from '../components/searchbar/state';
+import Pagination from '../components/pagination/state';
+import Datatable from '../components/datatable/state';
+import DialogAnswer from '../components/dialog-answer/state';
+import DialogArticle from '../components/dialog-article/state';
+import DialogComment from '../components/dialog-comment/state';
+import DialogQuestion from '../components/dialog-question/state';
+import DialogReporters from '../components/dialog-reporters/state';
+import DialogTopic from '../components/dialog-topic/state';
+import DialogUser from '../components/dialog-user/state';
 
 export default {
   location: location.state,
@@ -49,8 +49,8 @@ export default {
   trashUsers: TrashUsers,
   users: Users,
 
-  lazyComponents: {
-    appBar: AppBar,
+  components: {
+    appbar: Appbar,
     searchBar: SearchBar,
     pagination: Pagination,
     datatable: Datatable,

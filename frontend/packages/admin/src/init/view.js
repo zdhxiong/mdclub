@@ -19,19 +19,19 @@ import TrashTopics from '../pages/trash/topics/view';
 import TrashUsers from '../pages/trash/users/view';
 import Users from '../pages/users/view';
 
-import AppBar from '../lazyComponents/appbar/view';
-import Drawer from '../components/drawer';
-import DialogAnswer from '../lazyComponents/dialog-answer/view';
-import DialogArticle from '../lazyComponents/dialog-article/view';
-import DialogComment from '../lazyComponents/dialog-comment/view';
-import DialogQuestion from '../lazyComponents/dialog-question/view';
-import DialogReporters from '../lazyComponents/dialog-reporters/view';
-import DialogTopic from '../lazyComponents/dialog-topic/view';
-import DialogUser from '../lazyComponents/dialog-user/view';
+import Appbar from '../components/appbar/view';
+import Drawer from '../elements/drawer';
+import DialogAnswer from '../components/dialog-answer/view';
+import DialogArticle from '../components/dialog-article/view';
+import DialogComment from '../components/dialog-comment/view';
+import DialogQuestion from '../components/dialog-question/view';
+import DialogReporters from '../components/dialog-reporters/view';
+import DialogTopic from '../components/dialog-topic/view';
+import DialogUser from '../components/dialog-user/view';
 
 export default (global_state, global_actions) => (
   <div>
-    <AppBar/>
+    <Appbar/>
     <Drawer/>
     <Route path={$.path('')} render={Index(global_state, global_actions)}/>
     <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>

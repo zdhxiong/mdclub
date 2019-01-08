@@ -19,7 +19,7 @@ export default $.extend({}, actionsAbstract, {
       datatable,
       dialogArticle,
       dialogUser,
-    } = global_actions.lazyComponents;
+    } = global_actions.components;
 
     const searchBarState = {
       fields: [
@@ -142,7 +142,7 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => {
-    const { datatable, pagination, searchBar } = global_actions.lazyComponents;
+    const { datatable, pagination, searchBar } = global_actions.components;
 
     datatable.loadStart();
 

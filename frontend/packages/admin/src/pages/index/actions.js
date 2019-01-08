@@ -11,7 +11,7 @@ export default $.extend({}, actionsAbstract, {
   init: props => (state, actions) => {
     actions.routeChange();
     global_actions = props.global_actions;
-    global_actions.lazyComponents.searchBar.setState({ isNeedRender: false });
+    global_actions.components.searchBar.setState({ isNeedRender: false });
   },
 
   /**

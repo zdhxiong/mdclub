@@ -1,7 +1,8 @@
 import { h } from 'hyperapp';
+import cc from 'classcat';
 import './index.less';
 
-import Loading from '../../components/loading';
+import Loading from '../../elements/loading';
 
 const languageObject = {
   en: 'English',
@@ -41,7 +42,13 @@ const ItemHeader = ({ label, value = false }) => (
 const Input = ({ label, name, value, helper = false, oninput }) => (
   <div class="mdui-textfield">
     <label class="mdui-textfield-label">{label}</label>
-    <input class="mdui-textfield-input" name={name} type="text" value={value} oninput={oninput}/>
+    <input
+      class="mdui-textfield-input"
+      type="text"
+      name={name}
+      value={value}
+      oninput={oninput}
+    />
     {helper && <div class="mdui-textfield-helper">{helper}</div>}
   </div>
 );
@@ -49,7 +56,12 @@ const Input = ({ label, name, value, helper = false, oninput }) => (
 const Textarea = ({ label, name, value, helper = false, oninput }) => (
   <div class="mdui-textfield">
     <label class="mdui-textfield-label">{label}</label>
-    <textarea class="mdui-textfield-input" name={name} oninput={oninput} value={value}></textarea>
+    <textarea
+      class="mdui-textfield-input"
+      name={name}
+      oninput={oninput}
+      value={value}
+    ></textarea>
     {helper && <div class="mdui-textfield-helper">{helper}</div>}
   </div>
 );
@@ -57,8 +69,15 @@ const Textarea = ({ label, name, value, helper = false, oninput }) => (
 const Select = ({ label, name, value, data, onchange }) => (
   <div class="mdui-textfield">
     <label class="mdui-textfield-label">{label}</label>
-    <select class="mdui-select" name={name} onchange={onchange} mdui-select>
-      {Object.keys(data).map(v => <option value={v} selected={v === value}>{data[v]}</option>)}
+    <select
+      class="mdui-select"
+      mdui-select
+      name={name}
+      onchange={onchange}
+    >
+      {Object.keys(data).map(v => {
+        return <option value={v} selected={v === value}>{data[v]}</option>
+      })}
     </select>
   </div>
 );
@@ -203,7 +222,7 @@ export default (global_state, global_actions) => {
                 data={cacheTypeObject}
                 onchange={actions.data.input}
               />
-              <If condition={state.data.cache_type === 'redis'}>
+              <div class={cc([{ 'mdui-hidden': state.data.cache_type !== 'redis' }])}>
                 <Input
                   label="Redis 服务器地址"
                   name="cache_redis_host"
@@ -228,8 +247,8 @@ export default (global_state, global_actions) => {
                   value={state.data.cache_redis_port}
                   oninput={actions.data.input}
                 />
-              </If>
-              <If condition={state.data.cache_type === 'memcached'}>
+              </div>
+              <div class={cc([{'mdui-hidden': state.data.cache_type !== 'memcached'}])}>
                 <Input
                   label="Memcached 服务器地址"
                   name="cache_memcached_host"
@@ -254,7 +273,7 @@ export default (global_state, global_actions) => {
                   value={state.data.cache_memcached_port}
                   oninput={actions.data.input}
                 />
-              </If>
+              </div>
               <div class="mdui-panel-item-actions">
                 <SaveBtn submitting={state.submitting} onsubmit={actions.submit}/>
               </div>
@@ -264,6 +283,12 @@ export default (global_state, global_actions) => {
           <div class="mdui-panel-item">
             <ItemHeader label="上传文件存储" value={storageTypeObject[state.data.storage_type]}/>
             <div class="mdui-panel-item-body">
+              <Input
+                label="上传文件目录外部访问 URL 地址"
+                name="storage_url"
+                value={state.data.storage_url}
+                oninput={actions.data.input}
+              />
               <Select
                 label="存储类型"
                 name="storage_type"
@@ -271,21 +296,15 @@ export default (global_state, global_actions) => {
                 data={storageTypeObject}
                 onchange={actions.data.input}
               />
-              <Input
-                label="上传文件目录外部访问 URL 地址"
-                name="storage_url"
-                value={state.data.storage_url}
-                oninput={actions.data.input}
-              />
-              <If condition={state.data.storage_type === 'local'}>
+              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'local'}])}>
                 <Input
                   label="本地文件存储目录绝对路径"
                   name="storage_local_dir"
                   value={state.data.storage_local_dir}
                   oninput={actions.data.input}
                 />
-              </If>
-              <If condition={state.data.storage_type === 'ftp'}>
+              </div>
+              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'ftp'}])}>
                 <Input
                   label="FTP 服务器地址"
                   name="storage_ftp_host"
@@ -317,26 +336,22 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                   helper="/path/to/root"
                 />
-                <Input
-                  label=""
+                <Select
+                  label="传输模式"
                   name="storage_ftp_passive"
                   value={state.data.storage_ftp_passive}
-                  oninput={actions.data.input}
+                  data={{ 1: '主动模式', 0: '被动模式' }}
+                  onchange={actions.data.input}
                 />
-                <Input
-                  label=""
+                <Select
+                  label="是否启用 SSL"
                   name="storage_ftp_ssl"
                   value={state.data.storage_ftp_ssl}
-                  oninput={actions.data.input}
+                  data={{ 1: '启用', 0: '不启用' }}
+                  onchange={actions.data.input}
                 />
-                <Input
-                  label=""
-                  name="storage_ftp_timeout"
-                  value={state.data.storage_ftp_timeout}
-                  oninput={actions.data.input}
-                />
-              </If>
-              <If condition={state.data.storage_type === 'aliyun_oss'}>
+              </div>
+              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'aliyun_oss'}])}>
                 <Input
                   label="AccessKey ID"
                   name="storage_aliyun_oss_access_id"
@@ -344,7 +359,7 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
                 <Input
-                  label="	Access Key Secret"
+                  label="Access Key Secret"
                   name="storage_aliyun_oss_access_secret"
                   value={state.data.storage_aliyun_oss_access_secret}
                   oninput={actions.data.input}
@@ -361,8 +376,8 @@ export default (global_state, global_actions) => {
                   value={state.data.storage_aliyun_oss_endpoint}
                   oninput={actions.data.input}
                 />
-              </If>
-              <If condition={state.data.storage_type === 'upyun'}>
+              </div>
+              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'upyun'}])}>
                 <Input
                   label="服务名称"
                   name="storage_upyun_bucket"
@@ -387,8 +402,8 @@ export default (global_state, global_actions) => {
                   value={state.data.storage_upyun_endpoint}
                   oninput={actions.data.input}
                 />
-              </If>
-              <If condition={state.data.storage_type === 'qiniu'}>
+              </div>
+              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'qiniu'}])}>
                 <Input
                   label="AccessKey"
                   name="storage_qiniu_access_id"
@@ -413,7 +428,7 @@ export default (global_state, global_actions) => {
                   value={state.data.storage_qiniu_endpoint}
                   oninput={actions.data.input}
                 />
-              </If>
+              </div>
               <div class="mdui-panel-item-actions">
                 <SaveBtn submitting={state.submitting} onsubmit={actions.submit}/>
               </div>

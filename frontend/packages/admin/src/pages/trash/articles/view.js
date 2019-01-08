@@ -1,7 +1,7 @@
 import { h } from 'hyperapp';
 import './index.less';
 
-import Datatable from '../../../lazyComponents/datatable/view';
+import Datatable from '../../../components/datatable/view';
 
 export default (global_state, global_actions) => {
   const actions = global_actions.trashArticles;
