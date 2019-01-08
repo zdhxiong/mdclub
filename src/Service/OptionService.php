@@ -52,7 +52,6 @@ class OptionService extends ServiceAbstracts
         'storage_ftp_port',
         'storage_ftp_root',
         'storage_ftp_ssl',
-        'storage_ftp_timeout',
         'storage_ftp_username',
         'storage_local_dir',
         'storage_qiniu_access_id',

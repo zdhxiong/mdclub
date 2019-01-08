@@ -32,7 +32,6 @@ class FtpAdapter extends \League\Flysystem\Adapter\Ftp
             'root'     => $options['storage_ftp_root'],
             'passive'  => !!$options['storage_ftp_passive'],
             'ssl'      => !!$options['storage_ftp_ssl'],
-            'timeout'  => $options['storage_ftp_timeout'],
         ];
 
         parent::__construct($config);

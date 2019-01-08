@@ -21,9 +21,8 @@ class UserPasswordResetService extends ServiceAbstracts
      * 密码重置时，发送邮箱验证邮件
      *
      * @param  string $email
-     * @return bool
      */
-    public function sendEmail(string $email): bool
+    public function sendEmail(string $email): void
     {
         $needCaptcha = $this->captchaService->isNextTimeNeed(
             IpHelper::getIp(),
@@ -34,7 +33,7 @@ class UserPasswordResetService extends ServiceAbstracts
 
         $this->sendEmailValidator($email, $needCaptcha);
 
-        return $this->emailService->sendPasswordResetEmail($email);
+        $this->emailService->sendPasswordResetEmail($email);
     }
 
     /**

@@ -2284,8 +2284,8 @@ components:
             - en
             - pl
             - ru
-            - zh-cn
-            - zh-tw
+            - zh-CN
+            - zh-TW
           description: 系统语言
         site_description:
           type: string
@@ -2343,7 +2343,7 @@ components:
           enum:
             - 1
             - 0
-          description: 🔐FTP 是否被动连接
+          description: 🔐FTP 连接模式。1（主动模式）；0（被动模式）
         storage_ftp_password:
           type: string
           description: 🔐FTP 密码
@@ -2358,10 +2358,7 @@ components:
           enum:
             - 1
             - 0
-          description: 🔐FTP 是否启用 SSL
-        storage_ftp_timeout:
-          type: integer
-          description: 🔐FTP 连接超时时间
+          description: 🔐FTP 是否启用 SSL。1（启用）；0（不启用）
         storage_ftp_username:
           type: string
           description: 🔐FTP 用户名

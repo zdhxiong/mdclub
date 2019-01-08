@@ -156,9 +156,8 @@ class EmailService extends ServiceAbstracts
      * 发送重置密码验证码邮件
      *
      * @param  string $email
-     * @return bool
      */
-    public function sendPasswordResetEmail(string $email): bool
+    public function sendPasswordResetEmail(string $email): void
     {
         $option = $this->optionService->getAll();
 
@@ -169,16 +168,15 @@ class EmailService extends ServiceAbstracts
             'option' => $option,
         ]);
 
-        return $this->send($email, $subject, $body);
+        $this->send($email, $subject, $body);
     }
 
     /**
      * 发送注册成功的欢迎邮件
      *
      * @param  array        $user  用户信息
-     * @return bool
      */
-    public function sendWelcomeEmail(array $user): bool
+    public function sendWelcomeEmail(array $user): void
     {
         $option = $this->optionService->getAll();
 
@@ -189,7 +187,7 @@ class EmailService extends ServiceAbstracts
             'option' => $option,
         ]);
 
-        return $this->send($email, $subject, $body);
+        $this->send($email, $subject, $body);
     }
 
     /**
