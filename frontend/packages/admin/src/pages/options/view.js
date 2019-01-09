@@ -18,7 +18,6 @@ const smtpSecureObject = {
 };
 
 const cacheTypeObject = {
-  pdo: 'PDO',
   redis: 'Redis',
   memcached: 'Memcached',
 };
@@ -75,9 +74,7 @@ const Select = ({ label, name, value, data, onchange }) => (
       name={name}
       onchange={onchange}
     >
-      {Object.keys(data).map(v => {
-        return <option value={v} selected={v === value}>{data[v]}</option>
-      })}
+      {Object.keys(data).map(v => <option value={v} selected={v === value}>{data[v]}</option>)}
     </select>
   </div>
 );
@@ -166,7 +163,7 @@ export default (global_state, global_actions) => {
           </div>
 
           <div class="mdui-panel-item">
-            <ItemHeader label="邮箱"/>
+            <ItemHeader label="邮件"/>
             <form class="mdui-panel-item-body" method="post">
               <Input
                 label="SMTP 服务器"
@@ -215,6 +212,12 @@ export default (global_state, global_actions) => {
           <div class="mdui-panel-item">
             <ItemHeader label="缓存" value={cacheTypeObject[state.data.cache_type]}/>
             <div class="mdui-panel-item-body">
+              <Input
+                label="缓存键名前缀"
+                name="cache_prefix"
+                value={state.data.cache_prefix}
+                oninput={actions.data.input}
+              />
               <Select
                 label="缓存类型"
                 name="cache_type"
@@ -248,7 +251,7 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
               </div>
-              <div class={cc([{'mdui-hidden': state.data.cache_type !== 'memcached'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.cache_type !== 'memcached' }])}>
                 <Input
                   label="Memcached 服务器地址"
                   name="cache_memcached_host"
@@ -281,7 +284,14 @@ export default (global_state, global_actions) => {
           </div>
 
           <div class="mdui-panel-item">
-            <ItemHeader label="上传文件存储" value={storageTypeObject[state.data.storage_type]}/>
+            <ItemHeader label="搜索引擎"/>
+            <div class="mdui-panel-item-body">
+
+            </div>
+          </div>
+
+          <div class="mdui-panel-item">
+            <ItemHeader label="上传文件" value={storageTypeObject[state.data.storage_type]}/>
             <div class="mdui-panel-item-body">
               <Input
                 label="上传文件目录外部访问 URL 地址"
@@ -296,7 +306,7 @@ export default (global_state, global_actions) => {
                 data={storageTypeObject}
                 onchange={actions.data.input}
               />
-              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'local'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'local' }])}>
                 <Input
                   label="本地文件存储目录绝对路径"
                   name="storage_local_dir"
@@ -304,7 +314,7 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
               </div>
-              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'ftp'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'ftp' }])}>
                 <Input
                   label="FTP 服务器地址"
                   name="storage_ftp_host"
@@ -351,7 +361,7 @@ export default (global_state, global_actions) => {
                   onchange={actions.data.input}
                 />
               </div>
-              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'aliyun_oss'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'aliyun_oss' }])}>
                 <Input
                   label="AccessKey ID"
                   name="storage_aliyun_oss_access_id"
@@ -377,7 +387,7 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
               </div>
-              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'upyun'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'upyun' }])}>
                 <Input
                   label="服务名称"
                   name="storage_upyun_bucket"
@@ -403,7 +413,7 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
               </div>
-              <div class={cc([{'mdui-hidden': state.data.storage_type !== 'qiniu'}])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'qiniu' }])}>
                 <Input
                   label="AccessKey"
                   name="storage_qiniu_access_id"

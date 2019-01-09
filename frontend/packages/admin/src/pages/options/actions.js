@@ -75,7 +75,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 销毁前
    */
-  destroy: (props) => (state, actions) => {
+  destroy: props => (state, actions) => {
     $(props.element).off('scroll');
 
     actions.setState({ loading: true });
