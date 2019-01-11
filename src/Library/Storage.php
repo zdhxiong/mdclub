@@ -23,30 +23,39 @@ use Psr\Container\ContainerInterface;
 class Storage extends Filesystem
 {
     /**
+     * @var OptionService
+     */
+    protected $optionService;
+
+    /**
+     * 存储名称和适配器类名数组
+     *
+     * @var array
+     */
+    protected $adapterMap = [
+        'local'      => LocalAdapter::class,
+        'ftp'        => FtpAdapter::class,
+        'aliyun_oss' => AliyunOSSAdapter::class,
+        'upyun'      => UpyunAdapter::class,
+        'qiniu'      => QiniuAdapter::class,
+    ];
+
+    /**
      * Storage constructor.
      *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        /** @var OptionService $optionService */
-        $optionService = $container->get(OptionService::class);
-        $options = $optionService->getAll();
-
+        $this->optionService = $container->get(OptionService::class);
+        $options = $this->optionService->getAll();
         $storageType = $options['storage_type'];
-        $adapters = [
-            'local'      => LocalAdapter::class,
-            'ftp'        => FtpAdapter::class,
-            'aliyun_oss' => AliyunOSSAdapter::class,
-            'upyun'      => UpyunAdapter::class,
-            'qiniu'      => QiniuAdapter::class,
-        ];
 
-        if (!isset($adapters[$storageType])) {
+        if (!isset($this->adapterMap[$storageType])) {
             throw new \Exception('不存在指定的存储类型：' . $storageType);
         }
 
-        $adapter = new $adapters[$storageType]($container, $options);
+        $adapter = new $this->adapterMap[$storageType]($container, $options);
         $config = ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
 
         parent::__construct($adapter, $config);

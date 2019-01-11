@@ -39,8 +39,6 @@ $handlers = [
 $modules = [
     \App\Library\Cache::class,
     \App\Library\Db::class,
-    \App\Library\FileCache::class,
-    \App\Library\KvCache::class,
     \App\Library\Logger::class,
     \App\Library\Storage::class,
     \App\Library\View::class,

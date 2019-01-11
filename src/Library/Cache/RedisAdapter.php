@@ -29,8 +29,9 @@ class RedisAdapter extends RedisCache
         $host = $options['cache_redis_host'];
         $port = $options['cache_redis_port'];
 
-        $adapter = SymfonyRedisAdapter::createConnection("redis://{$username}:{$password}@{$host}:{$port}");
+        $client = SymfonyRedisAdapter::createConnection("redis://{$username}:{$password}@{$host}:{$port}");
+        $namespace = $options['cache_prefix'];
 
-        parent::__construct($adapter);
+        parent::__construct($client, $namespace);
     }
 }

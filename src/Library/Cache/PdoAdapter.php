@@ -27,7 +27,7 @@ class PdoAdapter extends PdoCache
         $databaseConfig = $container->get('settings')['database'];
 
         $pdo = $container->get(Db::class)->pdo;
-        $namespace = '';
+        $namespace = $options['cache_prefix'];
         $defaultLifetime = 0;
         $config = [
             'db_table'        => $databaseConfig['prefix'] . 'cache',

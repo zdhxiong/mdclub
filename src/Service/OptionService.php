@@ -24,6 +24,7 @@ class OptionService extends ServiceAbstracts
         'cache_memcached_password',
         'cache_memcached_port',
         'cache_memcached_username',
+        'cache_prefix',
         'cache_redis_host',
         'cache_redis_password',
         'cache_redis_port',
@@ -98,7 +99,7 @@ class OptionService extends ServiceAbstracts
     public function getAll(): array
     {
         if (is_null($this->options)) {
-            $result = $this->fileCache->get('options');
+            $result = $this->cache->get('options');
 
             if (is_null($result)) {
                 $result = $this->optionModel->select();
@@ -107,7 +108,7 @@ class OptionService extends ServiceAbstracts
                     array_column($result, 'value')
                 );
 
-                $this->fileCache->set('options', $result);
+                $this->cache->set('options', $result);
             }
 
             $this->options = $result;
@@ -153,7 +154,7 @@ class OptionService extends ServiceAbstracts
             $this->optionModel->where(['name' => $name])->update(['value' => $value]);
         }
 
-        $this->fileCache->delete('options');
+        $this->cache->delete('options');
         $this->options = null;
     }
 
@@ -170,7 +171,7 @@ class OptionService extends ServiceAbstracts
         }
 
         $this->optionModel->where(['name' => $name])->update(['value' => $value]);
-        $this->fileCache->delete('options');
+        $this->cache->delete('options');
         $this->options = null;
     }
 }

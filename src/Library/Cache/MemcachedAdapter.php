@@ -29,8 +29,9 @@ class MemcachedAdapter extends MemcachedCache
         $host = $options['cache_memcached_host'];
         $port = $options['cache_memcached_port'];
 
-        $adapter = SymfonyMemcachedAdapter::createConnection("memcached://{$username}:{$password}@{$host}:{$port}");
+        $client = SymfonyMemcachedAdapter::createConnection("memcached://{$username}:{$password}@{$host}:{$port}");
+        $namespace = $options['cache_prefix'];
 
-        parent::__construct($adapter);
+        parent::__construct($client, $namespace);
     }
 }

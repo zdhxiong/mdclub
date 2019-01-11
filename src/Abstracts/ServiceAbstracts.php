@@ -16,8 +16,6 @@ use Slim\Exception\ContainerValueNotFoundException;
  * @property-read \Slim\Interfaces\RouterInterface        router
  *
  * @property-read \App\Library\Cache                      cache
- * @property-read \App\Library\FileCache                  fileCache
- * @property-read \App\Library\KvCache                    kvCache
  * @property-read \App\Library\Logger                     logger
  * @property-read \App\Library\Storage                    storage
  * @property-read \App\Library\View                       view

@@ -2,7 +2,6 @@
     "name": "zdhxiong/mdclub",
     "description": "a material design forum",
     "keywords": ["material design"],
-    "version": "0.0.1",
     "license": "MIT",
     "authors": [
         {
@@ -11,11 +10,12 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.1.3",
+        "ext-curl": "*",
         "ext-gd": "*",
         "ext-fileinfo": "*",
         "ext-json": "*",
-        "ext-PDO": "*",
+        "ext-pdo": "*",
         "slim/slim": "^3.11",
         "slim/php-view": "^2.2",
         "slim/http-cache": "^0.4.0",

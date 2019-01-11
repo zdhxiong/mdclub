@@ -12,7 +12,10 @@ use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
- * 缓存（不包括文件缓存，根据用户在后台的设置而定）
+ * 缓存
+ *
+ * 缓存支持 pdo, memcached, redis，其中 memcached/redis 的优先级高于 pdo
+ * 如果没有设置 memcached/redis，才会使用 pdo 缓存
  *
  * Class Cache
  * @package App\Library
@@ -20,11 +23,16 @@ use Psr\SimpleCache\CacheInterface;
 class Cache implements CacheInterface
 {
     /**
+     * @var OptionService
+     */
+    protected $optionService;
+
+    /**
      * 缓存名称和适配器类名的数组
      *
      * @var array
      */
-    protected $adapters = [
+    protected $adapterMap = [
         'pdo'       => PdoAdapter::class,
         'memcached' => MemcachedAdapter::class,
         'redis'     => RedisAdapter::class,
@@ -43,17 +51,15 @@ class Cache implements CacheInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        /** @var OptionService $optionService */
-        $optionService = $container->get(OptionService::class);
-        $options = $optionService->getAll();
-
+        $this->optionService = $container->get(OptionService::class);
+        $options = $this->optionService->getAll();
         $cacheType = $options['cache_type'];
 
-        if (!isset($this->adapters[$cacheType])) {
-            throw new \Exception('不存在指定的缓存类型: ' . $options['cache_type']);
+        if (!isset($this->adapterMap[$cacheType])) {
+            throw new \Exception('不存在指定的缓存类型: ' . $cacheType);
         }
 
-        $this->adapter = new $this->adapters[$cacheType]($container, $options);
+        $this->adapter = new $this->adapterMap[$cacheType]($container, $options);
     }
 
     public function get($key, $default = null)

@@ -2259,6 +2259,9 @@ components:
         cache_memcached_username:
           type: string
           description: 🔐Memcached 用户名
+        cache_prefix:
+          type: string
+          description: 🔐缓存键名前缀
         cache_redis_host:
           type: string
           description: 🔐Redis 服务器地址
@@ -2274,7 +2277,6 @@ components:
         cache_type:
           type: string
           enum:
-            - pdo
             - redis
             - memcached
           description: 🔐缓存类型
