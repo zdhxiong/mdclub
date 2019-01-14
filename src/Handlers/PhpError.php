@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace App\Handlers;
 
 use App\Constant\ErrorConstant;
-use App\Library\Logger;
-use App\Library\View;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Handlers\AbstractHandler;
 use Slim\Http\Body;
 
 /**
@@ -25,27 +20,6 @@ use Slim\Http\Body;
  */
 class PhpError extends AbstractHandler
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * PhpError constructor.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-        $this->logger = $container->get(Logger::class);
-    }
-
     /**
      * @param  ServerRequestInterface  $request
      * @param  ResponseInterface       $response
@@ -61,7 +35,7 @@ class PhpError extends AbstractHandler
         }
 
         // 写入日志
-        $this->logger->error($error->getMessage(), $error->getTrace());
+        $this->container->logger->error($error->getMessage(), $error->getTrace());
 
         $contentType = $this->determineContentType($request);
 
@@ -104,9 +78,6 @@ class PhpError extends AbstractHandler
      */
     protected function renderHtmlErrorMessage()
     {
-        /** @var View $view */
-        $view = $this->container->get(View::class);
-
-        return $view->fetch('/500.php');
+        return $this->container->view->fetch('/500.php');
     }
 }

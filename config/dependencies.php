@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
-
+/**
+ * @var \App\Interfaces\ContainerInterface $container
+ */
 $container = $app->getContainer();
 
 /**
@@ -12,10 +13,7 @@ $container = $app->getContainer();
  * @link https://github.com/filp/whoops
  */
 if (APP_DEBUG) {
-    /** @var \Slim\Http\Request $request */
-    $request = $container->get('request');
-
-    $accept = $request->getHeaderLine('accept');
+    $accept = $container->request->getHeaderLine('accept');
 
     if (strpos($accept, 'application/json') > -1) {
         $handler = new \Whoops\Handler\JsonResponseHandler();
@@ -28,70 +26,71 @@ if (APP_DEBUG) {
     $whoops->pushHandler($handler)->register();
 }
 
-$handlers = [
-    'foundHandler'      => \Slim\Handlers\Strategies\RequestResponseArgs::class,
-    'notFoundHandler'   => \App\Handlers\NotFound::class,
-    'notAllowedHandler' => \App\Handlers\NotAllowed::class,
-    'phpErrorHandler'   => \App\Handlers\PhpError::class,
-    'errorHandler'      => \App\Handlers\Error::class,
+$names = [
+    /**
+     * - settings
+     * - environment
+     * - request
+     * - response
+     * - router
+     * - callableResolver
+     */
+
+    'foundHandler'             => \Slim\Handlers\Strategies\RequestResponseArgs::class,
+    'notFoundHandler'          => \App\Handlers\NotFound::class,
+    'notAllowedHandler'        => \App\Handlers\NotAllowed::class,
+    'phpErrorHandler'          => \App\Handlers\PhpError::class,
+    'errorHandler'             => \App\Handlers\Error::class,
+
+    'cache'                    => \App\Library\Cache::class,
+    'db'                       => \App\Library\Db::class,
+    'logger'                   => \App\Library\Logger::class,
+    'storage'                  => \App\Library\Storage::class,
+    'view'                     => \App\Library\View::class,
+
+    'answerModel'              => \App\Model\Answer::class,
+    'articleModel'             => \App\Model\Article::class,
+    'commentModel'             => \App\Model\Comment::class,
+    'followModel'              => \App\Model\Follow::class,
+    'imageModel'               => \App\Model\Image::class,
+    'inboxModel'               => \App\Model\Inbox::class,
+    'notificationModel'        => \App\Model\Notification::class,
+    'optionModel'              => \App\Model\Option::class,
+    'questionModel'            => \App\Model\Question::class,
+    'reportModel'              => \App\Model\Report::class,
+    'tokenModel'               => \App\Model\Token::class,
+    'topicableModel'           => \App\Model\Topicable::class,
+    'topicModel'               => \App\Model\Topic::class,
+    'userModel'                => \App\Model\User::class,
+    'voteModel'                => \App\Model\Vote::class,
+
+    'answerService'            => \App\Service\Answer::class,
+    'articleService'           => \App\Service\Article::class,
+    'captchaService'           => \App\Service\Captcha::class,
+    'commentService'           => \App\Service\Comment::class,
+    'emailService'             => \App\Service\Email::class,
+    'followService'            => \App\Service\Follow::class,
+    'imageService'             => \App\Service\Image::class,
+    'inboxService'             => \App\Service\Inbox::class,
+    'notificationService'      => \App\Service\Notification::class,
+    'optionService'            => \App\Service\Option::class,
+    'questionService'          => \App\Service\Question::class,
+    'reportService'            => \App\Service\Report::class,
+    'roleService'              => \App\Service\Role::class,
+    'throttleService'          => \App\Service\Throttle::class,
+    'tokenService'             => \App\Service\Token::class,
+    'topicService'             => \App\Service\Topic::class,
+    'userAvatarService'        => \App\Service\UserAvatar::class,
+    'userCoverService'         => \App\Service\UserCover::class,
+    'userLoginService'         => \App\Service\UserLogin::class,
+    'userPasswordResetService' => \App\Service\UserPasswordReset::class,
+    'userRegisterService'      => \App\Service\UserRegister::class,
+    'userService'              => \App\Service\User::class,
+    'voteService'              => \App\Service\Vote::class,
 ];
 
-$modules = [
-    \App\Library\Cache::class,
-    \App\Library\Db::class,
-    \App\Library\Logger::class,
-    \App\Library\Storage::class,
-    \App\Library\View::class,
-
-    \App\Model\AnswerModel::class,
-    \App\Model\ArticleModel::class,
-    \App\Model\CommentModel::class,
-    \App\Model\FollowModel::class,
-    \App\Model\ImageModel::class,
-    \App\Model\InboxModel::class,
-    \App\Model\NotificationModel::class,
-    \App\Model\OptionModel::class,
-    \App\Model\QuestionModel::class,
-    \App\Model\ReportModel::class,
-    \App\Model\TokenModel::class,
-    \App\Model\TopicableModel::class,
-    \App\Model\TopicModel::class,
-    \App\Model\UserModel::class,
-    \App\Model\VoteModel::class,
-
-    \App\Service\AnswerService::class,
-    \App\Service\ArticleService::class,
-    \App\Service\CaptchaService::class,
-    \App\Service\CommentService::class,
-    \App\Service\EmailService::class,
-    \App\Service\FollowService::class,
-    \App\Service\ImageService::class,
-    \App\Service\InboxService::class,
-    \App\Service\NotificationService::class,
-    \App\Service\OptionService::class,
-    \App\Service\QuestionService::class,
-    \App\Service\ReportService::class,
-    \App\Service\RoleService::class,
-    \App\Service\ThrottleService::class,
-    \App\Service\TokenService::class,
-    \App\Service\TopicService::class,
-    \App\Service\UserAvatarService::class,
-    \App\Service\UserCoverService::class,
-    \App\Service\UserLoginService::class,
-    \App\Service\UserPasswordResetService::class,
-    \App\Service\UserRegisterService::class,
-    \App\Service\UserService::class,
-    \App\Service\VoteService::class,
-];
-
-foreach ($handlers as $name => $class) {
-    $container[$name] = function (ContainerInterface $container) use ($class) {
-        return new $class($container);
-    };
-}
-
-foreach ($modules as $class) {
-    $container[$class] = function (ContainerInterface $container) use ($class) {
-        return new $class($container);
+foreach ($names as $key => $name) {
+    $container[$key] = function ($container) use ($name) {
+        return new $name($container);
     };
 }

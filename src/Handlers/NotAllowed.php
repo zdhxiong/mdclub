@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Handlers;
 
 use App\Constant\ErrorConstant;
-use App\Library\View;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Handlers\AbstractHandler;
 use Slim\Http\Body;
 
 /**
@@ -22,21 +19,6 @@ use Slim\Http\Body;
  */
 class NotAllowed extends AbstractHandler
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * NotAllowed constructor.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * @param  ServerRequestInterface $request
      * @param  ResponseInterface      $response
@@ -111,9 +93,6 @@ class NotAllowed extends AbstractHandler
      */
     protected function renderHtmlNotAllowedMessage(ServerRequestInterface $request): string
     {
-        /** @var View $view */
-        $view = $this->container->get(View::class);
-
-        return $view->fetch('/404.php');
+        return $this->container->view->fetch('/404.php');
     }
 }

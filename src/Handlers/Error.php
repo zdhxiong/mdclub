@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Handlers;
 
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
-use Psr\Container\ContainerInterface;
 use Slim\Http\Body;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -21,23 +21,8 @@ use Slim\Http\Response;
  *
  * @package App\Handlers
  */
-class Error
+class Error extends ContainerAbstracts
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Exception constructor.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * @param  Request    $request
      * @param  Response   $response
@@ -88,10 +73,7 @@ class Error
         }
 
         if ($isNeedCaptcha) {
-            /** @var \App\Service\CaptchaService $captchaService */
-            $captchaService = $this->container->get(\App\Service\CaptchaService::class);
-
-            $captchaInfo = $captchaService->build();
+            $captchaInfo = $this->container->captchaService->build();
             $output['captcha_token'] = $captchaInfo['token'];
             $output['captcha_image'] = $captchaInfo['image'];
         }
@@ -106,7 +88,7 @@ class Error
 
         // 因为异常中不会自动调用中间件，所以这里手动调用中间件
         if (APP_DEBUG) {
-            $response = (new \App\Middleware\TraceMiddleware($this->container))($request, $response, function () use ($response) {
+            $response = (new \App\Middleware\Trace($this->container))($request, $response, function () use ($response) {
                 return $response;
             });
         }

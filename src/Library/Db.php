@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Library;
 
+use App\Interfaces\ContainerInterface;
 use Medoo\Medoo;
-use Psr\Container\ContainerInterface;
 
 /**
  * ORM
@@ -20,9 +20,9 @@ class Db extends Medoo
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
-        $config = $container->get('settings')['database'];
+        $config = $container->settings['database'];
         $options = [
             'database_type' => $config['driver'],
             'server'        => $config['host'],

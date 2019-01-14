@@ -4,74 +4,17 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
-use App\Traits\UrlTraits;
+use App\Traits\Url;
 use App\Helper\ArrayHelper;
-use Psr\Container\ContainerInterface;
-use Slim\Exception\ContainerValueNotFoundException;
 
 /**
- * Class Service
- *
- * @property-read \Slim\Http\Request                      request
- * @property-read \Slim\Interfaces\RouterInterface        router
- *
- * @property-read \App\Library\Cache                      cache
- * @property-read \App\Library\Logger                     logger
- * @property-read \App\Library\Storage                    storage
- * @property-read \App\Library\View                       view
- *
- * @property-read \App\Model\AnswerModel                  answerModel
- * @property-read \App\Model\ArticleModel                 articleModel
- * @property-read \App\Model\CommentModel                 commentModel
- * @property-read \App\Model\FollowModel                  followModel
- * @property-read \App\Model\ImageModel                   imageModel
- * @property-read \App\Model\InboxModel                   inboxModel
- * @property-read \App\Model\NotificationModel            notificationModel
- * @property-read \App\Model\OptionModel                  optionModel
- * @property-read \App\Model\QuestionModel                questionModel
- * @property-read \App\Model\ReportModel                  reportModel
- * @property-read \App\Model\TokenModel                   tokenModel
- * @property-read \App\Model\TopicableModel               topicableModel
- * @property-read \App\Model\TopicModel                   topicModel
- * @property-read \App\Model\UserModel                    userModel
- * @property-read \App\Model\VoteModel                    voteModel
- *
- * @property-read \App\Service\AnswerService              answerService
- * @property-read \App\Service\ArticleService             articleService
- * @property-read \App\Service\CaptchaService             captchaService
- * @property-read \App\Service\CommentService             commentService
- * @property-read \App\Service\EmailService               emailService
- * @property-read \App\Service\FollowService              followService
- * @property-read \App\Service\ImageService               imageService
- * @property-read \App\Service\InboxService               inboxService
- * @property-read \App\Service\NotificationService        notificationService
- * @property-read \App\Service\OptionService              optionService
- * @property-read \App\Service\QuestionService            questionService
- * @property-read \App\Service\ReportService              reportService
- * @property-read \App\Service\RoleService                roleService
- * @property-read \App\Service\ThrottleService            throttleService
- * @property-read \App\Service\TokenService               tokenService
- * @property-read \App\Service\TopicService               topicService
- * @property-read \App\Service\UserAvatarService          userAvatarService
- * @property-read \App\Service\UserCoverService           userCoverService
- * @property-read \App\Service\UserLoginService           userLoginService
- * @property-read \App\Service\UserPasswordResetService   userPasswordResetService
- * @property-read \App\Service\UserRegisterService        userRegisterService
- * @property-read \App\Service\UserService                userService
- * @property-read \App\Service\VoteService                voteService
+ * Class ServiceAbstracts
  *
  * @package App\Service
  */
-abstract class ServiceAbstracts
+abstract class ServiceAbstracts extends ContainerAbstracts
 {
-    use UrlTraits;
-
-    /**
-     * 容器实例
-     *
-     * @var ContainerInterface
-     */
-    protected $container;
+    use Url;
 
     /**
      * 当前 Service 对应的 Model 实例
@@ -111,43 +54,18 @@ abstract class ServiceAbstracts
     /**
      * ServiceAbstracts constructor.
      *
-     * @param ContainerInterface $container
+     * @param $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
-        $this->container = $container;
+        parent::__construct($container);
 
         $serviceName = get_class($this);
-        $modelName = str_replace('\\Service\\', '\\Model\\', substr($serviceName, 0, -7) . 'Model');
+        $modelName = substr($serviceName, 15, -7) . 'Model';
 
         if ($this->container->has($modelName)) {
             $this->currentModel = $this->container->get($modelName);
         }
-    }
-
-    /**
-     * 魔术方法，从容器中获取 Model、Service、Library 等
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        $modules = [
-            'App\\Model\\' . ucfirst($name),
-            'App\\Service\\' . ucfirst($name),
-            'App\\Library\\' . ucfirst($name),
-            'request',
-            'router',
-        ];
-
-        foreach ($modules as $module) {
-            if ($this->container->has($module)) {
-                return $this->container->get($module);
-            }
-        }
-
-        throw new ContainerValueNotFoundException();
     }
 
     /**
@@ -163,7 +81,7 @@ abstract class ServiceAbstracts
     protected function getOrder(array $defaultOrder = [], array $allowOrderFields = null): array
     {
         $result = [];
-        $order = $this->request->getQueryParam('order');
+        $order = $this->container->request->getQueryParam('order');
 
         if (is_null($allowOrderFields)) {
             $allowOrderFields = $this->getAllowOrderFields();
@@ -199,7 +117,7 @@ abstract class ServiceAbstracts
             $allowFilterFields = $this->getAllowFilterFields();
         }
 
-        $result = $this->request->getQueryParams();
+        $result = $this->container->request->getQueryParams();
         $result = ArrayHelper::filter($result, $allowFilterFields);
         $result = array_merge($result, $defaultFilter);
 

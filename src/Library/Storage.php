@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Library;
 
+use App\Interfaces\ContainerInterface;
 use App\Library\Storage\AliyunOSSAdapter;
 use App\Library\Storage\FtpAdapter;
 use App\Library\Storage\LocalAdapter;
 use App\Library\Storage\QiniuAdapter;
 use App\Library\Storage\UpyunAdapter;
-use App\Service\OptionService;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
-use Psr\Container\ContainerInterface;
 
 /**
  * 文件存储，仅限图片
@@ -22,11 +21,6 @@ use Psr\Container\ContainerInterface;
  */
 class Storage extends Filesystem
 {
-    /**
-     * @var OptionService
-     */
-    protected $optionService;
-
     /**
      * 存储名称和适配器类名数组
      *
@@ -45,10 +39,9 @@ class Storage extends Filesystem
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
-        $this->optionService = $container->get(OptionService::class);
-        $options = $this->optionService->getAll();
+        $options = $container->optionService->getAll();
         $storageType = $options['storage_type'];
 
         if (!isset($this->adapterMap[$storageType])) {

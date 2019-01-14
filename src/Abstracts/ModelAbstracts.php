@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
-use App\Library\Db;
-use Medoo\Medoo;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Request;
-
 /**
  * Class Model
  *
@@ -20,7 +14,7 @@ use Slim\Http\Request;
  *
  * @package App\Model
  */
-abstract class ModelAbstracts
+abstract class ModelAbstracts extends ContainerAbstracts
 {
     /**
      * 自动维护的 create_time 字段名
@@ -36,27 +30,6 @@ abstract class ModelAbstracts
      * 软删除字段名
      */
     const DELETE_TIME = 'delete_time';
-
-    /**
-     * 容器实例
-     *
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Medoo 数据库实例
-     *
-     * @var Medoo
-     */
-    protected $database;
-
-    /**
-     * 请求实例
-     *
-     * @var ServerRequestInterface
-     */
-    protected $request;
 
     /**
      * 表名
@@ -128,13 +101,12 @@ abstract class ModelAbstracts
     /**
      * Model constructor.
      *
-     * @param ContainerInterface $container
+     * @param $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
-        $this->container = $container;
-        $this->database = $container->get(Db::class);
-        $this->request = $container->get('request');
+        parent::__construct($container);
+
         $this->reset();
     }
 
@@ -458,9 +430,9 @@ abstract class ModelAbstracts
         $this->reset();
 
         if ($join) {
-            $data = $this->database->select($this->table, $join, $columns, $where);
+            $data = $this->container->db->select($this->table, $join, $columns, $where);
         } else {
-            $data = $this->database->select($this->table, $columns, $where);
+            $data = $this->container->db->select($this->table, $columns, $where);
         }
 
         return $this->afterSelect($data, true);
@@ -488,22 +460,19 @@ abstract class ModelAbstracts
      */
     public function paginate($simple = false): array
     {
-        /** @var Request $request */
-        $request = $this->container->get('request');
-
         if (is_int($simple)) {
             $total = $simple;
             $simple = false;
         }
 
         // page 参数
-        $page = intval($request->getQueryParam('page', 1));
+        $page = intval($this->container->request->getQueryParam('page', 1));
         if ($page < 1) {
             $page = 1;
         }
 
         // per_page 参数
-        $perPage = intval($request->getQueryParam('per_page', 15));
+        $perPage = intval($this->container->request->getQueryParam('per_page', 15));
         if ($perPage > 100) {
             $perPage = 100;
         } elseif ($perPage < 1) {
@@ -550,11 +519,11 @@ abstract class ModelAbstracts
             $data = $this->beforeInsert($data);
 
             if ($this->timestamps && static::CREATE_TIME) {
-                $data[static::CREATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+                $data[static::CREATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
             }
 
             if ($this->timestamps && static::UPDATE_TIME) {
-                $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+                $data[static::UPDATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
             }
 
             if ($this->softDelete && static::DELETE_TIME) {
@@ -562,9 +531,9 @@ abstract class ModelAbstracts
             }
         }
 
-        $this->database->insert($this->table, $data_array);
+        $this->container->db->insert($this->table, $data_array);
 
-        return $this->database->id();
+        return $this->container->db->id();
     }
 
     /**
@@ -578,14 +547,14 @@ abstract class ModelAbstracts
         $data = $this->beforeUpdate($data);
 
         if ($this->timestamps && static::UPDATE_TIME) {
-            $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+            $data[static::UPDATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
         }
 
         $where = $this->getWhere();
 
         $this->reset();
 
-        $query = $this->database->update($this->table, $data, $where);
+        $query = $this->container->db->update($this->table, $data, $where);
 
         return $query->rowCount();
     }
@@ -609,11 +578,11 @@ abstract class ModelAbstracts
                 ? $this->table . '.' . static::DELETE_TIME
                 : static::DELETE_TIME;
 
-            $query = $this->database->update($this->table, [
-                $deleteTimeField => $this->request->getServerParams()['REQUEST_TIME']
+            $query = $this->container->db->update($this->table, [
+                $deleteTimeField => $this->container->request->getServerParams()['REQUEST_TIME']
             ], $where);
         } else {
-            $query = $this->database->delete($this->table, $where);
+            $query = $this->container->db->delete($this->table, $where);
         }
 
         return $query->rowCount();
@@ -634,9 +603,9 @@ abstract class ModelAbstracts
         $this->reset();
 
         if ($join) {
-            $data = $this->database->get($this->table, $join, $columns, $where);
+            $data = $this->container->db->get($this->table, $join, $columns, $where);
         } else {
-            $data = $this->database->get($this->table, $columns, $where);
+            $data = $this->container->db->get($this->table, $columns, $where);
         }
 
         if (is_array($data)) {
@@ -660,9 +629,9 @@ abstract class ModelAbstracts
         $this->reset();
 
         if ($join) {
-            return $this->database->has($this->table, $join, $where);
+            return $this->container->db->has($this->table, $join, $where);
         } else {
-            return $this->database->has($this->table, $where);
+            return $this->container->db->has($this->table, $where);
         }
     }
 
@@ -684,9 +653,9 @@ abstract class ModelAbstracts
         }
 
         if ($join) {
-            return $this->database->count($this->table, $join, '*', $where);
+            return $this->container->db->count($this->table, $join, '*', $where);
         } else {
-            return $this->database->count($this->table, $where);
+            return $this->container->db->count($this->table, $where);
         }
     }
 

@@ -7,11 +7,11 @@ declare(strict_types=1);
  *
  * 例如：访问 https://example.com/book/ 将 301 跳转到 https://example.com/book
  */
-$app->add(new \App\Middleware\TrailingSlashMiddleware());
+$app->add(new \App\Middleware\TrailingSlash());
 
 /**
  * 在 Response 中添加 Trace 信息
  */
 if (APP_DEBUG) {
-    $app->add(new \App\Middleware\TraceMiddleware($app->getContainer()));
+    $app->add(new \App\Middleware\Trace($app->getContainer()));
 }

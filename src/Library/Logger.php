@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Library;
 
+use App\Interfaces\ContainerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\UidProcessor;
-use Psr\Container\ContainerInterface;
 
 /**
  * 日志
@@ -21,7 +21,7 @@ class Logger extends \Monolog\Logger
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
         $name = 'mdclub';
         $processors[] = new UidProcessor();

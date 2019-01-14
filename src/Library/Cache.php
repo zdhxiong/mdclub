@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Library;
 
+use App\Interfaces\ContainerInterface;
 use App\Library\Cache\MemcachedAdapter;
 use App\Library\Cache\PdoAdapter;
 use App\Library\Cache\RedisAdapter;
-use App\Service\OptionService;
-use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -22,11 +21,6 @@ use Psr\SimpleCache\CacheInterface;
  */
 class Cache implements CacheInterface
 {
-    /**
-     * @var OptionService
-     */
-    protected $optionService;
-
     /**
      * 缓存名称和适配器类名的数组
      *
@@ -49,10 +43,9 @@ class Cache implements CacheInterface
      * Cache constructor.
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
-        $this->optionService = $container->get(OptionService::class);
-        $options = $this->optionService->getAll();
+        $options = $container->optionService->getAll();
         $cacheType = $options['cache_type'];
 
         if (!isset($this->adapterMap[$cacheType])) {

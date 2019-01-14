@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
-use Psr\Container\ContainerInterface;
+use App\Interfaces\ContainerInterface;
 
 /**
  * 七牛云存储适配器

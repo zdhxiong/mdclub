@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library;
 
-use Psr\Container\ContainerInterface;
+use App\Interfaces\ContainerInterface;
 use Slim\Views\PhpRenderer;
 
 /**
@@ -34,13 +34,11 @@ class View extends PhpRenderer
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct($container)
     {
         parent::__construct(__DIR__ . '/../../templates/', []);
 
-        /** @var \App\Service\OptionService $optionService */
-        $optionService = $container->get(\App\Service\OptionService::class);
-        $this->theme = $optionService->getAll()['theme'];
+        $this->theme = $container->optionService->getAll()['theme'];
     }
 
     /**

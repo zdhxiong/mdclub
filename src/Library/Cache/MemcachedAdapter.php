@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Cache;
 
-use Psr\Container\ContainerInterface;
+use App\Interfaces\ContainerInterface;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter as SymfonyMemcachedAdapter;
 use Symfony\Component\Cache\Simple\MemcachedCache;
 

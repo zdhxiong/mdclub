@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Library\Storage;
 
-use Psr\Container\ContainerInterface;
+use App\Interfaces\ContainerInterface;
 
 /**
  * 又拍云存储驱动
