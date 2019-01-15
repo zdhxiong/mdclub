@@ -36,9 +36,7 @@ class Trace extends ContainerAbstracts
 
         $this->getTrace($request);
 
-        $responseContentType = $response->getHeaderLine('Content-Type');
-
-        if (strpos($responseContentType, 'application/json') > -1) {
+        if (strpos($response->getHeaderLine('Content-Type'), 'application/json') > -1) {
             $response = $this->renderJsonMessage($response);
         } else {
             $response = $this->renderHtmlMessage($response);
@@ -94,6 +92,7 @@ class Trace extends ContainerAbstracts
     protected function getTrace(Request $request)
     {
         $sql = $this->container->db->log();
+        $cache = $this->container->cache->log();
         $time = microtime(true) - $request->getServerParams()['REQUEST_TIME_FLOAT'];
         $files = get_included_files();
 
@@ -101,6 +100,7 @@ class Trace extends ContainerAbstracts
             'TimeUsage'                => $this->timeFormat($time),
             'MemoryUsage'              => $this->memoryFormat(memory_get_usage()),
             'ThroughputRate'           => number_format(1 / $time, 2) . ' req/s',
+            'Cache('.count($cache).')' => $cache,
             'SQL('.count($sql).')'     => $sql,
             'File('.count($files).')'  => $files,
         ];

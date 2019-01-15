@@ -2261,7 +2261,7 @@ components:
           description: 🔐Memcached 用户名
         cache_prefix:
           type: string
-          description: 🔐缓存键名前缀
+          description: 🔐缓存键名前缀（只能包含字符 -+.A-Za-z0-9）
         cache_redis_host:
           type: string
           description: 🔐Redis 服务器地址

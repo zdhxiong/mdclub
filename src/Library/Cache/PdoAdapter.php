@@ -21,7 +21,7 @@ class PdoAdapter extends PdoCache
      * @param ContainerInterface $container
      * @param array              $options
      */
-    public function __construct(ContainerInterface $container, array $options)
+    public function __construct($container, array $options)
     {
         $databaseConfig = $container->settings['database'];
 

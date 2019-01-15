@@ -22,7 +22,7 @@ class MemcachedAdapter extends MemcachedCache
      * @param ContainerInterface $container
      * @param array              $options
      */
-    public function __construct(ContainerInterface $container, array $options)
+    public function __construct($container, array $options)
     {
         $username = $options['cache_memcached_username'];
         $password = $options['cache_memcached_password'];

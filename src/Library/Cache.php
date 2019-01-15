@@ -40,58 +40,97 @@ class Cache implements CacheInterface
     protected $adapter;
 
     /**
+     * 缓存类型
+     *
+     * @var string
+     */
+    protected $cacheType;
+
+    /**
+     * 缓存操作记录
+     *
+     * @var array
+     */
+    protected $logs = [];
+
+    /**
      * Cache constructor.
      * @param ContainerInterface $container
      */
     public function __construct($container)
     {
         $options = $container->optionService->getAll();
-        $cacheType = $options['cache_type'];
+        $this->cacheType = $options['cache_type'];
 
-        if (!isset($this->adapterMap[$cacheType])) {
-            throw new \Exception('不存在指定的缓存类型: ' . $cacheType);
+        if (!isset($this->adapterMap[$this->cacheType])) {
+            throw new \Exception('不存在指定的缓存类型: ' . $this->cacheType);
         }
 
-        $this->adapter = new $this->adapterMap[$cacheType]($container, $options);
+        $this->adapter = new $this->adapterMap[$this->cacheType]($container, $options);
     }
 
     public function get($key, $default = null)
     {
+        $this->logs[] = "{$this->cacheType} get {$key}";
+
         return $this->adapter->get($key, $default);
     }
 
     public function set($key, $value, $ttl = null)
     {
+        $this->logs[] = "{$this->cacheType} set {$key}";
+
         return $this->adapter->set($key, $value, $ttl);
     }
 
     public function delete($key)
     {
+        $this->logs[] = "{$this->cacheType} delete {$key}";
+
         return $this->adapter->delete($key);
     }
 
     public function clear()
     {
+        $this->logs[] = "{$this->cacheType} clear";
+
         return $this->adapter->clear();
     }
 
     public function getMultiple($keys, $default = null)
     {
+        $this->logs[] = "{$this->cacheType} getMultiple " . implode(',', $keys);
+
         return $this->adapter->getMultiple($keys, $default);
     }
 
     public function setMultiple($values, $ttl = null)
     {
+        $this->logs[] = "{$this->cacheType} setMultiple " . implode(',', array_keys($values));
+
         return $this->adapter->setMultiple($values, $ttl);
     }
 
     public function deleteMultiple($keys)
     {
+        $this->logs[] = "{$this->cacheType} deleteMultiple " . implode(',', $keys);
         return $this->adapter->deleteMultiple($keys);
     }
 
     public function has($key)
     {
+        $this->logs[] = "{$this->cacheType} has {$key}";
+
         return $this->adapter->has($key);
+    }
+
+    /**
+     * 获取缓存操作记录
+     *
+     * @return array
+     */
+    public function log(): array
+    {
+        return $this->logs;
     }
 }

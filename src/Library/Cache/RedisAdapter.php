@@ -22,7 +22,7 @@ class RedisAdapter extends RedisCache
      * @param ContainerInterface $container
      * @param array              $options
      */
-    public function __construct(ContainerInterface $container, array $options)
+    public function __construct($container, array $options)
     {
         $username = $options['cache_redis_username'];
         $password = $options['cache_redis_password'];
