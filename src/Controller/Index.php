@@ -88,7 +88,7 @@ class Index extends ControllerAbstracts
             $user['last_login_ip'] = long2ip($user['login_ip']);
             unset($user['login_ip']);
             unset($user['active_time']);
-            $user['following_user_count'] = $user['following_count'];
+            $user['followee_count'] = $user['following_count'];
             unset($user['following_count']);
             $user['following_article_count'] = 0;
             $user['following_question_count'] = 0;

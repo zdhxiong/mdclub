@@ -2443,6 +2443,9 @@ components:
         follower_count:
           type: integer
           description: 关注者数量
+        followee_count:
+          type: integer
+          description: 关注的用户数量
         following_article_count:
           type: integer
           description: 关注的文章数量
@@ -2452,9 +2455,6 @@ components:
         following_topic_count:
           type: integer
           description: 关注的话题数量
-        following_user_count:
-          type: integer
-          description: 关注的用户数量
         article_count:
           type: integer
           description: 发表的文章数量

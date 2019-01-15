@@ -103,7 +103,10 @@ trait Followable
      */
     public function addFollow(int $userId, int $followableId): void
     {
-        if ($this->currentModel->table == 'user' && $userId == $followableId) {
+        $table = $this->currentModel->table;
+        $isUser = $table == 'user';
+
+        if ($isUser && $userId == $followableId) {
             throw new ApiException(ErrorConstant::USER_CANT_FOLLOW_YOURSELF);
         }
 
@@ -114,15 +117,16 @@ trait Followable
         $this->container->followModel->insert([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
-            'followable_type' => $this->currentModel->table,
+            'followable_type' => $table,
         ]);
 
+        $followingFieldName = $isUser ? 'followee_count[+]' : "following_{$table}_count[+]";
         $this->container->userModel
             ->where(['user_id' => $userId])
-            ->update(["following_{$this->currentModel->table}_count[+]" => 1]);
+            ->update([$followingFieldName => 1]);
 
         $this->currentModel
-            ->where(["{$this->currentModel->table}_id" => $followableId])
+            ->where(["{$table}_id" => $followableId])
             ->update(['follower_count[+]' => 1]);
     }
 
@@ -134,6 +138,9 @@ trait Followable
      */
     public function deleteFollow(int $userId, int $followableId): void
     {
+        $table = $this->currentModel->table;
+        $isUser = $table == 'user';
+
         if (!$this->isFollowing($userId, $followableId)) {
             return;
         }
@@ -141,15 +148,16 @@ trait Followable
         $this->container->followModel->where([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
-            'followable_type' => $this->currentModel->table,
+            'followable_type' => $table,
         ])->delete();
 
+        $followingFieldName = $isUser ? 'followee_count[-]' : "following_{$table}_count[-]";
         $this->container->userModel
             ->where(['user_id' => $userId])
-            ->update(["following_{$this->currentModel->table}_count[-]" => 1]);
+            ->update([$followingFieldName => 1]);
 
         $this->currentModel
-            ->where(["{$this->currentModel->table}_id" => $followableId])
+            ->where(["{$table}_id" => $followableId])
             ->update(['follower_count[-]' => 1]);
     }
 
