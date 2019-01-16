@@ -111,10 +111,9 @@ class Question extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $this->container->roleService->userIdOrFail();
 
         $questionId = $this->container->questionService->create(
-            $userId,
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),

@@ -13,8 +13,10 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * 缓存
  *
- * 缓存支持 pdo, memcached, redis，其中 memcached/redis 的优先级高于 pdo
- * 如果没有设置 memcached/redis，才会使用 pdo 缓存
+ * 缓存级别分为三级：
+ * 1级：默认缓存到 memcached 或 redis，若没有启用这两项缓存，则缓存到 pdo
+ * 2级：必须启用 memcached 或 redis
+ * 3级：必须启用 redis，利用 redis 的高级特性进行缓存
  *
  * Class Cache
  * @package App\Library

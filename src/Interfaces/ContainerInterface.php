@@ -17,6 +17,7 @@ namespace App\Interfaces;
  * @property-read \App\Library\Logger                 logger
  * @property-read \App\Library\Storage                storage
  * @property-read \App\Library\View                   view
+ * @property-read \App\Library\Redis                  redis
  *
  * @property-read \App\Model\Answer                   answerModel
  * @property-read \App\Model\Article                  articleModel

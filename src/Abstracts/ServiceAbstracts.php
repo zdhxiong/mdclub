@@ -60,9 +60,7 @@ abstract class ServiceAbstracts extends ContainerAbstracts
     {
         parent::__construct($container);
 
-        $serviceName = get_class($this);
-        $modelName = substr($serviceName, 15, -7) . 'Model';
-
+        $modelName = lcfirst(substr(get_class($this), 12)) . 'Model';
         if ($this->container->has($modelName)) {
             $this->currentModel = $this->container->get($modelName);
         }

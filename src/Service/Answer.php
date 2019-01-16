@@ -114,27 +114,22 @@ class Answer extends ServiceAbstracts
     /**
      * 发表回答
      *
-     * @param  int    $userId
-     * @param  int    $questionId
-     * @param  string $contentMarkdown
-     * @param  string $contentRendered
-     * @return int
+     * @param  int    $questionId       提问ID
+     * @param  string $contentMarkdown  Markdown格式正文
+     * @param  string $contentRendered  HTML格式正文
+     * @return int                      回答ID
      */
-    public function create(
-        int    $userId,
-        int    $questionId,
-        string $contentMarkdown,
-        string $contentRendered
-    ): int {
-        [$contentMarkdown, $contentRendered] = $this->createValidator($questionId, $contentMarkdown, $contentRendered);
+    public function create(int $questionId, string $contentMarkdown, string $contentRendered): int
+    {
+        $userId = $this->container->roleService->userIdOrFail();
+        $this->container->questionService->hasOrFail($questionId);
+
+        $data = $this->handleContent($contentMarkdown, $contentRendered);
+        $data['question_id'] = $questionId;
+        $data['user_id'] = $userId;
 
         // 添加回答
-        $answerId = (int)$this->container->answerModel->insert([
-            'question_id'      => $questionId,
-            'user_id'          => $userId,
-            'content_markdown' => $contentMarkdown,
-            'content_rendered' => $contentRendered,
-        ]);
+        $answerId = (int)$this->container->answerModel->insert($data);
 
         // 用户的 answer_count + 1
         $this->container->userModel
@@ -153,89 +148,17 @@ class Answer extends ServiceAbstracts
     }
 
     /**
-     * 发表回答前对参数进行验证
-     *
-     * @param  int    $questionId
-     * @param  string $contentMarkdown
-     * @param  string $contentRendered
-     * @return array
-     */
-    private function createValidator(
-        int    $questionId,
-        string $contentMarkdown,
-        string $contentRendered
-    ): array {
-        $this->container->questionService->hasOrFail($questionId);
-
-        $errors = [];
-
-        $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
-        $contentRendered = HtmlHelper::removeXss($contentRendered);
-
-        // content_markdown 和 content_rendered 至少需传入一个；都传入时，以 content_markdown 为准
-        if (!$contentMarkdown && !$contentRendered) {
-            $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
-        } elseif (!$contentMarkdown) {
-            $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
-        } else {
-            $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
-        }
-
-        // 验证正文长度
-        if (
-               !isset($errors['content_markdown'])
-            && !isset($errors['content_rendered'])
-            && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)
-        ) {
-            $errors['content_markdown'] = $errors['content_rendered'] = '正文不能超过 100000 个字';
-        }
-
-        if ($errors) {
-            throw new ValidationException($errors);
-        }
-
-        return [$contentMarkdown, $contentRendered];
-    }
-
-    /**
      * 更新回答
      *
      * @param int    $answerId
      * @param string $contentMarkdown
      * @param string $contentRendered
      */
-    public function update(
-        int    $answerId,
-        string $contentMarkdown = null,
-        string $contentRendered = null
-    ): void {
-        $data = $this->updateValidator($answerId, $contentMarkdown, $contentRendered);
-
-        // 更新回答信息
-        if ($data) {
-            $this->container->answerModel
-                ->where(['answer_id' => $answerId])
-                ->update($data);
-        }
-    }
-
-    /**
-     * 更新回答前的字段验证
-     *
-     * @param int    $answerId
-     * @param string $contentMarkdown
-     * @param string $contentRendered
-     * @return array
-     */
-    private function updateValidator(
-        int    $answerId,
-        string $contentMarkdown = null,
-        string $contentRendered = null
-    ): array {
-        $data = [];
+    public function update(int $answerId, string $contentMarkdown = null, string $contentRendered = null): void
+    {
         $userId = $this->container->roleService->userIdOrFail();
-
         $answerInfo = $this->container->answerModel->get($answerId);
+
         if (!$answerInfo) {
             throw new ApiException(ErrorConstant::ANSWER_NOT_FOUND);
         }
@@ -244,45 +167,58 @@ class Answer extends ServiceAbstracts
             throw new ApiException(ErrorConstant::ANSWER_ONLY_AUTHOR_CAN_EDIT);
         }
 
-        $errors = [];
-
-        if (!is_null($contentMarkdown) || !is_null($contentRendered)) {
-            if (!is_null($contentMarkdown)) {
-                $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
-            }
-
-            if (!is_null($contentRendered)) {
-                $contentRendered = HtmlHelper::removeXss($contentRendered);
-            }
-
-            if (!$contentMarkdown && !$contentRendered) {
-                $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
-            } elseif (!$contentMarkdown) {
-                $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
-            } else {
-                $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
-            }
-
-            // 验证长度
-            if (
-                   !isset($errors['content_markdown'])
-                && !isset($errors['content_rendered'])
-                && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)
-            ) {
-                $errors['content_markdown'] = $errors['content_rendered'] = '正文不能超过 100000 个字';
-            }
-
-            if (!isset($errors['content_markdown']) && !isset($errors['content_rendered'])) {
-                $data['content_markdown'] = $contentMarkdown;
-                $data['content_rendered'] = $contentRendered;
-            }
+        if (is_null($contentMarkdown) && is_null($contentRendered)) {
+            return;
         }
 
-        if ($errors) {
-            throw new ValidationException($errors);
+        $content = $this->handleContent($contentMarkdown, $contentRendered);
+
+        // 更新回答信息
+        if ($content) {
+            $this->container->answerModel
+                ->where(['answer_id' => $answerId])
+                ->update($content);
+        }
+    }
+
+    /**
+     * 发表回答前对参数进行验证
+     *
+     * @param  string $contentMarkdown
+     * @param  string $contentRendered
+     * @return array
+     */
+    private function handleContent(string $contentMarkdown, string $contentRendered): array
+    {
+        $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
+        $contentRendered = HtmlHelper::removeXss($contentRendered);
+
+        // content_markdown 和 content_rendered 至少需传入一个；都传入时，以 content_markdown 为准
+        if (!$contentMarkdown && !$contentRendered) {
+            $error = '正文不能为空';
+        } elseif (!$contentMarkdown) {
+            $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
+        } else {
+            $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
         }
 
-        return $data;
+        // 验证正文长度
+        $isTooLong = ValidatorHelper::isMin(strip_tags($contentRendered), 100000);
+        if (empty($error) && $isTooLong) {
+            $error = '正文不能超过 100000 个字';
+        }
+
+        if (!empty($error)) {
+            throw new ValidationException([
+                'content_markdown' => $error,
+                'content_rendered' => $error,
+            ]);
+        }
+
+        return [
+            'content_markdown' => $contentMarkdown,
+            'content_rendered' => $contentRendered,
+        ];
     }
 
     /**

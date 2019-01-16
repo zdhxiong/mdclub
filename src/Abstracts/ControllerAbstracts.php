@@ -25,9 +25,7 @@ abstract class ControllerAbstracts extends ContainerAbstracts
      */
     public function success(Response $response, $data = []): Response
     {
-        $result = [
-            'code' => 0,
-        ];
+        $result = ['code' => 0];
 
         if (isset($data['data']) && isset($data['pagination'])) {
             $result['data'] = $data['data'];

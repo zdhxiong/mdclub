@@ -47,6 +47,7 @@ $names = [
     'logger'                   => \App\Library\Logger::class,
     'storage'                  => \App\Library\Storage::class,
     'view'                     => \App\Library\View::class,
+    'redis'                    => \App\Library\Redis::class,
 
     'answerModel'              => \App\Model\Answer::class,
     'articleModel'             => \App\Model\Article::class,
