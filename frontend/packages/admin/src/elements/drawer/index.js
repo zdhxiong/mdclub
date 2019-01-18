@@ -58,17 +58,18 @@ export default () => (
       mdui-collapse
       oncreate={element => $(element).mutation()}
     >
-      <Item title="首页" url="" icon="home"/>
+      <Item title="仪表盘" url="" icon="dashboard"/>
       <Divider/>
       <Item title="话题" url="/topics" icon="class"/>
-      <Item title="用户" url="/users" icon="people"/>
       <Item title="提问" url="/questions" icon="question_answer"/>
       <Item title="回答" url="/answers" icon="reply_all"/>
       <Item title="文章" url="/articles" icon="description"/>
       <Item title="评论" url="/comments" icon="comment"/>
       <Item title="图片" url="/images" icon="image"/>
       <Divider/>
+      <Item title="用户" url="/users" icon="people"/>
       <Item title="举报" url="/reports" icon="report"/>
+      <Item url="/options" icon="settings" title="设置"/>
       <div class="mdui-collapse-item">
         <ChildHeader/>
         <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
@@ -80,8 +81,6 @@ export default () => (
           <ChildItem url="/trash/comments" title="评论"/>
         </div>
       </div>
-      <Divider/>
-      <Item url="/options" icon="settings" title="设置"/>
     </div>
     <div class="toggle">
       <button onclick={toggleMini} class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">

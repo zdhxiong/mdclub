@@ -62,7 +62,7 @@
   }
 }
 
-// 修改下拉选择下边框
+// 修改下拉选择下边框，使其样式和输入框保持一致
 .mdui-select {
   border-bottom: 1px solid rgba(0, 0, 0, .42) !important;
 
@@ -77,6 +77,21 @@
       box-shadow: 0 1px 0 0 #fff !important;
     }
   }
+}
+
+// 修改默认菜单、下拉选择框的高度和字体
+.mdui-menu {
+  font-size: 15px;
+}
+
+.mdui-menu-item > a,
+.mdui-select-menu-item {
+  height: 40px;
+  line-height: 40px;
+}
+
+.mdui-menu-item-icon {
+  font-size: 22px;
 }
 
 // 自己添加的激活状态的纸片

@@ -75,7 +75,7 @@ const ColumnTHChecked = ({ state }) => (
 const ColumnTHOrder = ({ order, orders, changeOrder, afterChangeOrder }) => (
   <If condition={orders.length}>
     <button
-      class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
+      class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon"
       mdui-tooltip={'{content: \'排序选项\', delay: 300}'}
       mdui-menu="{target: '#datatable-sort-menu', covered: false}"
     >
@@ -170,7 +170,11 @@ export default ({ loadData }) => (global_state, global_actions) => {
               {state.columns.map(column => (
                 <ColumnTH column={column}/>
               ))}
-              <th class="actions" style="width: 172px;">
+              <th class="actions" style="width: 212px;">
+                <Pagination
+                  onChange={loadData}
+                  loading={state.loading}
+                />
                 <ColumnTHOrder
                   order={state.order}
                   orders={state.orders}
@@ -206,7 +210,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
               {state.columns.map(column => (
                 <ColumnTD column={column} row={row}/>
               ))}
-              <td class="actions" style="width: 172px;">
+              <td class="actions" style="width: 212px;">
                 {state.buttons.map(button => (
                   <ColumnTDAction button={button} row={row}/>
                 ))}
@@ -215,7 +219,6 @@ export default ({ loadData }) => (global_state, global_actions) => {
           ))}
         </tbody>
       </table>
-      <Pagination onChange={loadData} loading={state.loading}/>
     </div>
   );
 };

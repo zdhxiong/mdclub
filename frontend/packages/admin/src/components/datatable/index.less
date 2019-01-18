@@ -23,7 +23,7 @@
   tbody {
     display: block;
     width: 100%;
-    height: ~'calc(100vh - 180px)';
+    height: ~'calc(100vh - 114px)';
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -37,17 +37,22 @@
 
   // 加载中状态
   tbody.is-loading {
-    height: ~'calc(100vh - 210px)';
+    height: ~'calc(100vh - 144px)';
   }
 
   // 空状态表格
   tbody.is-empty {
-    height: ~'calc(100vh - 472px)';
+    height: ~'calc(100vh - 406px)';
   }
 
   // 表格 checkbox 部分宽度固定
   .mdui-table-cell-checkbox {
     width: 66px;
+
+    .mdui-checkbox {
+      float: left;
+      margin-top: 0;
+    }
   }
 
   // 表头含 colspan 时，不限制宽度
@@ -104,9 +109,11 @@
   th {
     font-size: 14px;
     font-weight: normal;
-    height: 60px;
+    height: 50px;
     color: #5f6368;
     cursor: default;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
   // 表格内容禁止换行
@@ -114,7 +121,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: 34px;
+    line-height: 32px;
   }
 
   // 表格内链接样式
@@ -139,11 +146,12 @@
   // 操作项
   .actions {
     text-align: right;
-
     .mdui-btn {
-      margin-left: 8px;
       display: none;
       border-bottom: none;
+      width: 40px;
+      height: 40px;
+      margin: -6px 0;
 
       .mdui-icon {
         font-size: 20px;
@@ -157,6 +165,7 @@
 
       .mdui-btn {
         display: inline-block;
+        margin: 0;
       }
 
       .mdui-menu {

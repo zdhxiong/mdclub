@@ -1,19 +1,9 @@
 .mc-pagination {
+  display: inline-block;
   color: rgba(0, 0, 0, 0.64);
-  padding-right: 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
 
   .mdui-theme-layout-dark & {
     color: rgba(255, 255, 255, 0.87);
-    border-top-color: rgba(255, 255, 255, 0.12);
-  }
-
-  .per-page {
-    overflow: visible;
-
-    .label {
-      margin-right: 0;
-    }
   }
 
   .mdui-select {
@@ -21,26 +11,14 @@
     margin-left: 8px;
   }
 
-  .page {
-    margin-right: 32px;
-    margin-left: 22px;
+  .mdui-menu-item[disabled] {
+    & > a {
+      color: rgba(0, 0, 0, 0.68) !important;
+      font-size: 14px;
 
-    .form {
-      display: inline;
+      .mdui-theme-layout-dark & {
+        color: rgba(255, 255, 255, 0.78) !important;
+      }
     }
-
-    .input {
-      display: inline;
-      text-align: center;
-      width: 46px;
-    }
-  }
-
-  .prev,
-  .next {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    margin: 0 6px;
   }
 }

@@ -1,45 +1,5 @@
 import { h } from 'hyperapp';
-import { JQ as $ } from 'mdui';
 import './index.less';
-
-const Spacer = () => (
-  <div class="mdui-toolbar-spacer"></div>
-);
-
-const PerPage = ({ state, loading, onChange }) => (
-  <div class="per-page">
-    <span class="label mdui-typo-caption">每页行数：</span>
-    <select
-      mdui-select
-      class="mdui-select"
-      disabled={loading}
-      onchange={onChange}
-      oncreate={element => $(element).mutation()}
-    >
-      <option value="10" selected={state.per_page === 10}>10</option>
-      <option value="20" selected={state.per_page === 20}>20</option>
-      <option value="40" selected={state.per_page === 40}>40</option>
-      <option value="100" selected={state.per_page === 100}>100</option>
-    </select>
-  </div>
-);
-
-const Page = ({ state, loading, onSubmit }) => (
-  <div class="page mdui-typo-caption">
-    第
-    <form class="form" onsubmit={onSubmit}>
-      <input
-        class="input mdui-textfield-input"
-        type="text"
-        name="page"
-        autoComplete="off"
-        disabled={loading}
-        value={state.page}
-      />
-    </form>
-    页，共 {state.pages} 页
-  </div>
-);
 
 const PrevPage = ({ state, loading, onClick }) => (
   <button
@@ -63,26 +23,33 @@ const NextPage = ({ state, loading, onClick }) => (
   </button>
 );
 
+const SettingDivider = () => (
+  <li class="mdui-divider"></li>
+);
+
+const SettingLabel = ({ label }) => (
+  <li class="mdui-menu-item" disabled>
+    <a href="javascript:;">{label}</a>
+  </li>
+);
+
+const PerPageItem = ({ perPage, num, onClick }) => (
+  <li class="mdui-menu-item">
+    <a href="" onclick={onClick}>
+      <i class="mdui-menu-item-icon mdui-icon material-icons">{perPage === num ? 'check' : ''}</i> {num}
+    </a>
+  </li>
+);
+
 export default ({ onChange, loading }) => (global_state, global_actions) => {
   const state = global_state.components.pagination;
   const actions = global_actions.components.pagination;
 
   return () => (
     <div
-      class="mc-pagination mdui-toolbar"
+      class="mc-pagination"
       ondestroy={actions.destroy}
     >
-      <Spacer/>
-      <PerPage
-        state={state}
-        loading={loading}
-        onChange={e => actions.onPerPageChange({ e, onChange })}
-      />
-      <Page
-        state={state}
-        loading={loading}
-        onSubmit={e => actions.onPageChange({ e, onChange })}
-      />
       <PrevPage
         state={state}
         loading={loading}
@@ -93,6 +60,38 @@ export default ({ onChange, loading }) => (global_state, global_actions) => {
         loading={loading}
         onClick={() => actions.toNextPage(onChange)}
       />
+      <button
+        class="mdui-btn mdui-btn-icon"
+        mdui-tooltip={'{content: \'分页设置\', delay: 300}'}
+        mdui-menu="{target: '#pagination-setting-menu', covered: false}"
+      >
+        <i class="mdui-icon material-icons">more_vert</i>
+      </button>
+      <ul class="mdui-menu" id="pagination-setting-menu">
+        <SettingLabel label={`第 ${state.page} 页，共 ${state.pages} 页`}/>
+        <SettingDivider/>
+        <SettingLabel label="每页显示行数"/>
+        <PerPageItem
+          perPage={state.per_page}
+          num={10}
+          onClick={e => actions.onPerPageChange({ e, num: 10, onChange})}
+        />
+        <PerPageItem
+          perPage={state.per_page}
+          num={20}
+          onClick={e => actions.onPerPageChange({ e, num: 20, onChange})}
+        />
+        <PerPageItem
+          perPage={state.per_page}
+          num={40}
+          onClick={e => actions.onPerPageChange({ e, num: 40, onChange})}
+        />
+        <PerPageItem
+          perPage={state.per_page}
+          num={100}
+          onClick={e => actions.onPerPageChange({ e, num: 100, onChange})}
+        />
+      </ul>
     </div>
   );
 };

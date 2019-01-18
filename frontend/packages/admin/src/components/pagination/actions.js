@@ -26,8 +26,10 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 修改每页行数
    */
-  onPerPageChange: ({ e, onChange }) => (state, actions) => {
-    const per_page = e.target.value;
+  onPerPageChange: ({ e, num, onChange }) => (state, actions) => {
+    e.preventDefault();
+
+    const per_page = num;
     window.localStorage.setItem('admin_per_page', per_page);
     actions.setState({
       page: 1,

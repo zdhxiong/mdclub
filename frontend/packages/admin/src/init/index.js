@@ -1,4 +1,4 @@
-import mdui, { JQ as $ } from 'mdui';
+import { JQ as $ } from 'mdui';
 
 $.extend({
   /**

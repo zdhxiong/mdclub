@@ -8,7 +8,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
+  init: props => {
     global_actions = props.global_actions;
     $element = $(props.element);
 
