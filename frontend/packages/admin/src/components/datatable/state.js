@@ -11,6 +11,7 @@ export default {
    * ]
    */
   columns: [],
+
   /**
    * 操作项定义
    * [
@@ -24,6 +25,7 @@ export default {
    * ]
    */
   buttons: [],
+
   /**
    * 批量操作项
    * [
@@ -35,6 +37,7 @@ export default {
    * ]
    */
   batchButtons: [],
+
   /**
    * 排序方式定义
    * [
@@ -45,7 +48,13 @@ export default {
    * ]
    */
   orders: [],
-  order: '', // 当前排序方式
+
+  /**
+   * 当前排序方式
+   *
+   * NOTE: 该参数的 view 部分在 pagination 组件中
+   */
+  order: '',
   primaryKey: '', // 主键字段名
   onRowClick: false, // 点击行执行的函数
 

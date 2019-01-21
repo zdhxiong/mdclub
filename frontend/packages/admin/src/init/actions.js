@@ -1,13 +1,18 @@
 import { location } from '@hyperapp/router';
 
 import Index from '../pages/index/actions';
+import Answer from '../pages/answer/actions';
 import Answers from '../pages/answers/actions';
+import Article from '../pages/article/actions';
 import Articles from '../pages/articles/actions';
+import Comment from '../pages/comment/actions';
 import Comments from '../pages/comments/actions';
 import Images from '../pages/images/actions';
 import Options from '../pages/options/actions';
+import Question from '../pages/question/actions';
 import Questions from '../pages/questions/actions';
 import Reports from '../pages/reports/actions';
+import Topic from '../pages/topic/actions';
 import Topics from '../pages/topics/actions';
 import TrashAnswers from '../pages/trash/answers/actions';
 import TrashArticles from '../pages/trash/articles/actions';
@@ -15,6 +20,7 @@ import TrashComments from '../pages/trash/comments/actions';
 import TrashQuestions from '../pages/trash/questions/actions';
 import TrashTopics from '../pages/trash/topics/actions';
 import TrashUsers from '../pages/trash/users/actions';
+import User from '../pages/user/actions';
 import Users from '../pages/users/actions';
 
 import Appbar from '../components/appbar/actions';
@@ -37,13 +43,18 @@ export default {
   getState: () => _state => _state,
 
   index: Index,
+  answer: Answer,
   answers: Answers,
+  article: Article,
   articles: Articles,
+  comment: Comment,
   comments: Comments,
   images: Images,
   options: Options,
+  question: Question,
   questions: Questions,
   reports: Reports,
+  topic: Topic,
   topics: Topics,
   trashAnswers: TrashAnswers,
   trashArticles: TrashArticles,
@@ -51,6 +62,7 @@ export default {
   trashQuestions: TrashQuestions,
   trashTopics: TrashTopics,
   trashUsers: TrashUsers,
+  user: User,
   users: Users,
 
   components: {

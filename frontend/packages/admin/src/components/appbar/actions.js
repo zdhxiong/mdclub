@@ -1,8 +1,7 @@
 import { JQ as $ } from 'mdui';
 import Cookies from 'js-cookie';
+import { themeReverse, setTheme } from './helper';
 import actionsAbstract from '../../abstracts/actions/component';
-
-const $body = $('body');
 
 export default $.extend({}, actionsAbstract, {
   /**
@@ -19,13 +18,9 @@ export default $.extend({}, actionsAbstract, {
 
     // 从 localStorage 中读取主题
     if (!state.theme) {
-      let theme = window.localStorage.getItem('admin_theme');
-      if (!theme) {
-        theme = 'light';
-      }
-
+      const theme = window.localStorage.getItem('admin_theme') || 'light';
+      setTheme(theme);
       actions.setState({ theme });
-      actions.setTheme(theme);
     }
   },
 
@@ -33,20 +28,11 @@ export default $.extend({}, actionsAbstract, {
    * 主题切换
    */
   toggleTheme: () => (state, actions) => {
-    const theme = state.theme === 'light' ? 'dark' : 'light';
+    const theme = themeReverse(state.theme);
 
     window.localStorage.setItem('admin_theme', theme);
+    setTheme(theme);
     actions.setState({ theme });
-    actions.setTheme(theme);
-  },
-
-  /**
-   * 设置主题
-   */
-  setTheme: (theme) => {
-    $body
-      .removeClass('mdui-theme-layout-light mdui-theme-layout-dark')
-      .addClass(`mdui-theme-layout-${theme}`);
   },
 
   /**

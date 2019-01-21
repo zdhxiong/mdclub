@@ -18,6 +18,7 @@ const smtpSecureObject = {
 };
 
 const cacheTypeObject = {
+  pdo: 'PDO',
   redis: 'Redis',
   memcached: 'Memcached',
 };

@@ -5,7 +5,7 @@ import 'photoswipe/dist/default-skin/default-skin.css';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
-import helper from './helper';
+import { resizeImage } from './helper';
 import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
 
@@ -106,7 +106,7 @@ export default $.extend({}, actionsAbstract, {
     window.requestAnimationFrame(() => {
       if (state.data) {
         actions.setState({
-          thumbData: helper.resizeImage(state.data),
+          thumbData: resizeImage(state.data),
         });
       }
     });
@@ -166,7 +166,7 @@ export default $.extend({}, actionsAbstract, {
 
     const isCheckedRows = {};
     const photoSwipeItems = [];
-    const thumbData = helper.resizeImage(response.data);
+    const thumbData = resizeImage(response.data);
 
     response.data.map((item) => {
       // 取消选中所有图片

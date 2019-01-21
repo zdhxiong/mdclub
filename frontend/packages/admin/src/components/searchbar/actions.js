@@ -9,7 +9,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
-  init: props => {
+  init: (props) => {
     global_actions = props.global_actions;
     $searchbar = $(props.element);
 

@@ -54,6 +54,6 @@ const resizeImage = (items) => {
   return thumbData;
 };
 
-export default {
+export {
   resizeImage,
 };

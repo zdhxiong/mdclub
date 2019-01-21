@@ -16,8 +16,8 @@ const DrawerBtn = () => (
 );
 
 const HomeLink = () => (
-  <Link to={$.path('')} class="link mdui-typo-title-opacity">
-    <i class="logo mdui-icon material-icons">dashboard</i>控制台
+  <Link to={$.path('')} class="logo mdui-typo-title-opacity">
+    <i class="mdui-icon material-icons">dashboard</i>控制台
   </Link>
 );
 
@@ -28,7 +28,9 @@ const ThemeBtn = ({ onClick, theme }) => (
       mdui-tooltip={theme === 'light' ? "{content: '夜间模式'}" : "{content: '日间模式'}"}
       onclick={onClick}
     >
-      <i class="mdui-icon material-icons">{theme === 'light' ? 'brightness_2' : 'brightness_5'}</i>
+      <i class="mdui-icon material-icons">
+        {theme === 'light' ? 'brightness_2' : 'brightness_5'}
+      </i>
     </button>
   </div>
 );
@@ -41,7 +43,9 @@ const UserMenuItem = ({ icon, name, href, onClick }) => (
       target={href ? '_blank' : false}
       onclick={onClick}
     >
-      <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">{icon}</i>{name}
+      <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">
+        {icon}
+      </i>{name}
     </a>
   </li>
 );
@@ -56,9 +60,9 @@ const UserMenu = ({ user, logout }) => (
       <img src={user.avatar.s} width="32" height="32"/>
     </div>
     <ul class="mdui-menu" id="appbar-user-popover">
-      <UserMenuItem icon="home" name="查看站点" href={`${window.G_ROOT}/`}/>
-      <UserMenuItem icon="person" name="我的主页" href={`${window.G_ROOT}/users/${user.user_id}`}/>
-      <UserMenuItem icon="exit_to_app" name="退出登录" onClick={logout}/>
+      <UserMenuItem name="查看站点" icon="home" href={`${window.G_ROOT}/`}/>
+      <UserMenuItem name="我的主页" icon="person" href={`${window.G_ROOT}/users/${user.user_id}`}/>
+      <UserMenuItem name="退出登录" icon="exit_to_app" onClick={logout}/>
     </ul>
   </div>
 );
@@ -71,9 +75,7 @@ export default () => (global_state, global_actions) => {
     <div
       class={cc([
         'mc-appbar mdui-appbar mdui-appbar-fixed',
-        {
-          shadow: state.shadow,
-        },
+        { shadow: state.shadow },
       ])}
       oncreate={element => actions.init({ element })}
     >

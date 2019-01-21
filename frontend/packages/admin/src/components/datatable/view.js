@@ -28,7 +28,7 @@ const CheckOne = ({ isChecked, onChange }) => (
 
 const ActionBtn = ({ icon, label, href, onClick }) => (
   <a
-    class="mdui-btn mdui-btn-icon mdui-btn-dense mdui-text-color-theme-icon"
+    class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon"
     mdui-tooltip={`{content: '${label}', delay: 300}`}
     href={href}
     target={href ? '_blank' : false}
@@ -70,30 +70,6 @@ const ColumnTHChecked = ({ state }) => (
     </span>
     <span class="mdui-float-right">已选择 {state.checkedCount} 个项目</span>
   </th>
-);
-
-const ColumnTHOrder = ({ order, orders, changeOrder, afterChangeOrder }) => (
-  <If condition={orders.length}>
-    <button
-      class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon"
-      mdui-tooltip={'{content: \'排序选项\', delay: 300}'}
-      mdui-menu="{target: '#datatable-sort-menu', covered: false}"
-    >
-      <i class="mdui-icon material-icons">sort</i>
-    </button>
-    <ul class="mdui-menu" id="datatable-sort-menu">
-      {orders.map(_order => (
-        <li class="mdui-menu-item">
-          <a href="" onclick={e => changeOrder({ e, order: _order.value, onChange: afterChangeOrder })}>
-            <i class="mdui-menu-item-icon mdui-icon material-icons">
-              {_order.value === order ? 'check' : ''}
-            </i>
-            {_order.name}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </If>
 );
 
 const ColumnTD = ({ column, row }) => {
@@ -170,14 +146,12 @@ export default ({ loadData }) => (global_state, global_actions) => {
               {state.columns.map(column => (
                 <ColumnTH column={column}/>
               ))}
-              <th class="actions" style="width: 212px;">
+              <th class="actions" style="width: 176px;">
                 <Pagination
                   onChange={loadData}
                   loading={state.loading}
-                />
-                <ColumnTHOrder
-                  order={state.order}
                   orders={state.orders}
+                  order={state.order}
                   changeOrder={actions.changeOrder}
                   afterChangeOrder={loadData}
                 />
@@ -210,7 +184,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
               {state.columns.map(column => (
                 <ColumnTD column={column} row={row}/>
               ))}
-              <td class="actions" style="width: 212px;">
+              <td class="actions" style="width: 176px;">
                 {state.buttons.map(button => (
                   <ColumnTDAction button={button} row={row}/>
                 ))}

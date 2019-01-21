@@ -6,7 +6,7 @@
     overflow: visible;
   }
 
-  // 表头阴影
+  // 滚动时添加表头阴影
   thead {
     transition: box-shadow .25s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -40,7 +40,7 @@
     height: ~'calc(100vh - 144px)';
   }
 
-  // 空状态表格
+  // 空状态
   tbody.is-empty {
     height: ~'calc(100vh - 406px)';
   }
@@ -60,6 +60,18 @@
     width: auto !important;
   }
 
+  // 表头样式
+  th {
+    font-size: 14px;
+    font-weight: normal;
+    height: 50px;
+    line-height: 40px;
+    color: #5f6368;
+    cursor: default;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   // 有选择的行时，修改表头样式
   thead tr.checked {
     th {
@@ -72,26 +84,28 @@
     }
 
     .mdui-btn {
+      width: 40px;
+      height: 40px;
       margin-left: 8px;
       color: #1a73e8 !important;
     }
   }
 
-  // 修改行悬浮状态颜色
-  .mdui-table-hoverable tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+  // 行悬浮状态
+  tbody tr {
+    cursor: pointer;
+    transition: none;
 
-    .mdui-theme-layout-dark & {
-      background-color: rgba(255, 255, 255, 0.08);
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+
+      .mdui-theme-layout-dark & {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
     }
   }
 
-  // 移除行之间的分隔线
-  tbody td {
-    border-bottom: none !important;
-  }
-
-  // 表格行选中状态颜色
+  // 行选中状态
   .mdui-table-row-selected {
     background-color: rgba(0, 0, 0, 0.06) !important;
 
@@ -100,28 +114,13 @@
     }
   }
 
-  // 行悬浮状态
-  tr {
-    cursor: pointer;
-  }
-
-  // 表头样式
-  th {
-    font-size: 14px;
-    font-weight: normal;
-    height: 50px;
-    color: #5f6368;
-    cursor: default;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  // 表格内容禁止换行
+  // body 表格样式
   td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 32px;
+    border-bottom: none !important;
   }
 
   // 表格内链接样式
@@ -146,6 +145,7 @@
   // 操作项
   .actions {
     text-align: right;
+
     .mdui-btn {
       display: none;
       border-bottom: none;
@@ -175,12 +175,10 @@
     }
   }
 
-  tbody {
-    tr:hover {
-      .actions {
-        .mdui-btn {
-          display: inline-block;
-        }
+  tbody tr:hover {
+    .actions {
+      .mdui-btn {
+        display: inline-block;
       }
     }
   }
