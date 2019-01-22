@@ -14,12 +14,6 @@ import Questions from '../pages/questions/actions';
 import Reports from '../pages/reports/actions';
 import Topic from '../pages/topic/actions';
 import Topics from '../pages/topics/actions';
-import TrashAnswers from '../pages/trash/answers/actions';
-import TrashArticles from '../pages/trash/articles/actions';
-import TrashComments from '../pages/trash/comments/actions';
-import TrashQuestions from '../pages/trash/questions/actions';
-import TrashTopics from '../pages/trash/topics/actions';
-import TrashUsers from '../pages/trash/users/actions';
 import User from '../pages/user/actions';
 import Users from '../pages/users/actions';
 
@@ -56,12 +50,6 @@ export default {
   reports: Reports,
   topic: Topic,
   topics: Topics,
-  trashAnswers: TrashAnswers,
-  trashArticles: TrashArticles,
-  trashComments: TrashComments,
-  trashQuestions: TrashQuestions,
-  trashTopics: TrashTopics,
-  trashUsers: TrashUsers,
   user: User,
   users: Users,
 

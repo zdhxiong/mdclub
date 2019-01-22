@@ -29,7 +29,7 @@ const SettingDivider = () => (
 
 const SettingLabel = ({ label }) => (
   <li class="mdui-menu-item" disabled>
-    <a href="javascript:;">{label}</a>
+    <a href="" onclick={e => e.preventDefault()}>{label}</a>
   </li>
 );
 
@@ -51,7 +51,14 @@ const OrderItem = ({ order, currentOrder, changeOrder, afterChangeOrder }) => (
   </li>
 );
 
-export default ({ onChange, loading, orders, order, changeOrder, afterChangeOrder }) => (global_state, global_actions) => {
+export default ({
+                  onChange,
+                  loading,
+                  orders,
+                  order,
+                  changeOrder,
+                  afterChangeOrder,
+}) => (global_state, global_actions) => {
   const state = global_state.components.pagination;
   const actions = global_actions.components.pagination;
 
@@ -80,14 +87,12 @@ export default ({ onChange, loading, orders, order, changeOrder, afterChangeOrde
       <ul class="mdui-menu mdui-menu-cascade" id="pagination-setting-menu">
         <If condition={orders.length}>
           <SettingLabel label="排序方式"/>
-          {orders.map((_order) => {
-            return <OrderItem
-              order={_order}
-              currentOrder={order}
-              changeOrder={changeOrder}
-              afterChangeOrder={afterChangeOrder}
-            />
-          })}
+          {orders.map(_order => <OrderItem
+            order={_order}
+            currentOrder={order}
+            changeOrder={changeOrder}
+            afterChangeOrder={afterChangeOrder}
+          />)}
           <SettingDivider/>
         </If>
         <SettingLabel label={`第 ${state.page} 页，共 ${state.pages} 页`}/>

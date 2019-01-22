@@ -7,7 +7,11 @@ const $body = $('body');
  * @param  theme
  * @return string
  */
-const themeReverse = theme => theme === 'light' ? 'dark' : 'light';
+const themeReverse = (theme) => {
+  const isLight = theme === 'light';
+
+  return isLight ? 'dark' : 'light';
+};
 
 /**
  * 设置主题颜色

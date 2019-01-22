@@ -5,7 +5,7 @@ import 'photoswipe/dist/default-skin/default-skin.css';
 import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
-import { resizeImage } from './helper';
+import resizeImage from './helper';
 import ObjectHelper from '../../helper/obj';
 import actionsAbstract from '../../abstracts/actions/page';
 

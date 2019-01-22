@@ -73,6 +73,7 @@ const ColumnTHChecked = ({ state }) => (
 );
 
 const ColumnTD = ({ column, row }) => {
+  /* eslint-disable no-eval */
   const value = eval(`row.${column.field}`);
   const style = column.width && `width: ${column.width}px;`;
 
