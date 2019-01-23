@@ -6,15 +6,81 @@
     color: rgba(255, 255, 255, 0.87);
   }
 
-  // 用禁用的行当标签用
-  .mdui-menu-item[disabled] {
-    & > a {
+  .menu {
+    .label {
       color: rgba(0, 0, 0, 0.68) !important;
       font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      padding: 0 16px;
+      margin-bottom: 8px;
 
       .mdui-theme-layout-dark & {
         color: rgba(255, 255, 255, 0.78) !important;
       }
+    }
+
+    .divider {
+      margin: 8px 0;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.12);
+
+      .mdui-theme-layout-dark & {
+        background-color: rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    .page {
+      padding: 0 16px;
+
+      form {
+        display: inline;
+      }
+
+      input {
+        display: inline;
+        width: 60px;
+        text-align: center;
+      }
+    }
+
+    .mdui-btn-group {
+      width: 100%;
+      padding: 0 16px;
+      box-sizing: border-box;
+      display: flex;
+
+      .mdui-btn {
+        width: auto;
+        height: 36px;
+        flex: 1;
+        margin-right: 4px;
+        padding: 0;
+        border-radius: 2px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .mdui-theme-layout-dark & {
+          color: #fff;
+        }
+      }
+
+      .mdui-btn-active {
+        color: #1a73e8;
+        background-color: #e8f0fe;
+
+        .mdui-theme-layout-dark & {
+          color: #fff;
+          background-color: rgba(255, 255, 255, 0.16);
+        }
+      }
+    }
+
+    .mdui-menu-item > a {
+      height: 36px;
+      line-height: 36px;
     }
   }
 }

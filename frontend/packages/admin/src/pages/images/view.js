@@ -101,7 +101,6 @@ export default (global_state, global_actions) => {
           })}
         </div>
       </div>
-      <Pagination onChange={actions.loadData} loading={state.loading}/>
       <Pswp/>
     </div>
   );

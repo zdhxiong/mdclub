@@ -42,7 +42,6 @@ export default () => (
       <Item title="回答" url="/answers" icon="reply_all"/>
       <Item title="文章" url="/articles" icon="description"/>
       <Item title="评论" url="/comments" icon="comment"/>
-      <Item title="图片" url="/images" icon="image"/>
       <Divider/>
       <Item title="用户" url="/users" icon="people"/>
       <Item title="举报" url="/reports" icon="report"/>

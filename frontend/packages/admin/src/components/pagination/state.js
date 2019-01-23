@@ -1,5 +1,5 @@
 let per_page = window.localStorage.getItem('admin_per_page');
-per_page = per_page ? parseInt(per_page, 10) : 10;
+per_page = per_page ? parseInt(per_page, 10) : 25;
 
 export default {
   page: 1,

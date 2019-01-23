@@ -1,4 +1,4 @@
-import { JQ as $ } from 'mdui';
+import mdui, { JQ as $ } from 'mdui';
 import actionsAbstract from '../../abstracts/actions/component';
 
 export default $.extend({}, actionsAbstract, {
@@ -36,6 +36,8 @@ export default $.extend({}, actionsAbstract, {
       per_page: parseInt(per_page, 10),
     });
 
+    (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
+
     onChange();
   },
 
@@ -49,6 +51,8 @@ export default $.extend({}, actionsAbstract, {
     actions.setState({
       page: parseInt(page, 10),
     });
+
+    (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
 
     onChange();
   },
