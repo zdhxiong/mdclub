@@ -47,12 +47,6 @@ export default $.extend({}, actionsAbstract, {
 
     const columns = [
       {
-        title: 'ID',
-        field: 'answer_id',
-        type: 'number',
-        width: 100,
-      },
-      {
         title: '作者',
         field: 'relationship.user.username',
         type: 'relation',
@@ -71,7 +65,7 @@ export default $.extend({}, actionsAbstract, {
         title: '创建时间',
         field: 'create_time',
         type: 'time',
-        width: 200,
+        width: 154,
       },
     ];
 

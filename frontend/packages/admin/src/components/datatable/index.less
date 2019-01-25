@@ -24,7 +24,7 @@
     display: block;
     width: 100%;
     height: ~'calc(100vh - 112px)';
-    overflow: auto;
+    overflow: scroll;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -45,13 +45,47 @@
     height: ~'calc(100vh - 404px)';
   }
 
-  // 表格 checkbox 部分宽度固定
+  // 单元格样式
+  th, td {
+    padding-left: 6px;
+  }
+
+  // 表格 checkbox 部分
   .mdui-table-cell-checkbox {
     width: 66px;
+    padding-left: 24px;
+
+    .avatar {
+      float: left;
+      width: 28px;
+      height: 28px;
+      margin-left: -7px;
+    }
 
     .mdui-checkbox {
       float: left;
       margin-top: 0;
+    }
+
+    &.with-avatar {
+      .mdui-checkbox {
+        display: none;
+      }
+    }
+  }
+
+  tbody tr:hover,
+  .mdui-table-row-selected {
+    .mdui-table-cell-checkbox {
+      &.with-avatar {
+        .avatar {
+          display: none;
+        }
+
+        .mdui-checkbox {
+          display: block;
+        }
+      }
     }
   }
 
@@ -173,15 +207,8 @@
     text-align: right;
 
     .mdui-btn {
-      display: none;
-      border-bottom: none;
       width: 40px;
       height: 40px;
-      margin-top: -2px;
-
-      .mdui-icon {
-        font-size: 20px;
-      }
     }
   }
 
@@ -201,8 +228,40 @@
     }
   }
 
+  tbody {
+    .actions {
+      font-size: 12px;
+
+      .placeholder {
+        color: rgba(0, 0, 0, 0.64);
+
+        .mdui-theme-layout-dark & {
+          color: rgba(255, 255, 255, 0.64);
+        }
+      }
+
+      .mdui-btn {
+        display: none;
+        border-bottom: none;
+        margin-top: -2px;
+
+        &:last-child {
+          margin-right: -8px;
+        }
+
+        .mdui-icon {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
   tbody tr:hover {
     .actions {
+      .placeholder {
+        display: none;
+      }
+
       .mdui-btn {
         display: inline-block;
       }

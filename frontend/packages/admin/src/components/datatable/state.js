@@ -1,11 +1,11 @@
 export default {
   /**
-   * 列定义
+   * 列定义，最后一列将不显示标题，鼠标悬浮时替换为操作按钮
    * [
    *   {
    *     title: '列头标题',
    *     field: '字段名称',
-   *     type: '字段类型：time、string、number、html、relation'
+   *     type: '字段类型：time、string、number、relation'
    *     onClick: function // type 为 relation 时需要
    *   }
    * ]

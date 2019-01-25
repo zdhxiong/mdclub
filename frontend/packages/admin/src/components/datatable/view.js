@@ -1,7 +1,6 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
 import timeHelper from '../../helper/time';
-import rawHtml from '../../helper/rawHtml';
 import './index.less';
 
 import Loading from '../../elements/loading';
@@ -17,8 +16,14 @@ const CheckAll = ({ isChecked, onChange }) => (
   </th>
 );
 
-const CheckOne = ({ isChecked, onChange }) => (
-  <td class="mdui-table-cell-checkbox">
+const CheckOne = ({ isChecked, onChange, avatar = false }) => (
+  <td class={cc([
+    'mdui-table-cell-checkbox',
+    { 'with-avatar': avatar },
+  ])}>
+    <If condition={avatar}>
+      <img class="avatar" src={avatar}/>
+    </If>
     <label class="mdui-checkbox">
       <input type="checkbox" checked={isChecked} onchange={onChange}/>
       <i class="mdui-checkbox-icon"></i>
@@ -72,30 +77,39 @@ const ColumnTHChecked = ({ state }) => (
   </th>
 );
 
-const ColumnTD = ({ column, row }) => {
+const ColumnTdText = ({ column, row }) => {
   /* eslint-disable no-eval */
   const value = eval(`row.${column.field}`);
+
+  switch (column.type) {
+    case 'time':
+      return <span title={timeHelper.format(value)}>{timeHelper.friendly(value)}</span>;
+
+    case 'relation':
+      return <a onclick={e => column.onClick({ e, row })}>{value}</a>;
+
+    default:
+      return value;
+  }
+};
+
+const ColumnTD = ({ column, row }) => {
   const style = column.width && `width: ${column.width}px;`;
 
   switch (column.type) {
     case 'number':
-      return <td class="mdui-table-col-numeric" style={style}>{value}</td>;
-
-    case 'time':
       return (
-        <td style={style}>
-          <span title={timeHelper.format(value)}>{timeHelper.friendly(value)}</span>
+        <td class="mdui-table-col-numeric" style={style}>
+          <ColumnTdText column={column} row={row}/>
         </td>
       );
 
-    case 'html':
-      return <td oncreate={rawHtml(value)} onupdate={rawHtml(value)} style={style}></td>;
-
-    case 'relation':
-      return <td style={style}><a onclick={e => column.onClick({ e, row })}>{value}</a></td>;
-
     default:
-      return <td style={style}>{value}</td>;
+      return (
+        <td style={style}>
+          <ColumnTdText column={column} row={row}/>
+        </td>
+      );
   }
 };
 
@@ -136,18 +150,24 @@ export default ({ loadData }) => (global_state, global_actions) => {
       oncreate={element => actions.init({ element, global_actions })}
       ondestroy={actions.destroy}
     >
-      <table class="mdui-table mdui-table-hoverable">
+      <table class="mdui-table">
         <thead>
           <tr class={cc([{ checked: state.checkedCount }])}>
-            <CheckAll isChecked={state.isCheckedAll} onChange={e => actions.checkAll(e)}/>
+            <CheckAll
+              isChecked={state.isCheckedAll}
+              onChange={e => actions.checkAll(e)}
+            />
             <If condition={state.checkedCount}>
               <ColumnTHChecked state={state}/>
             </If>
             <If condition={!state.checkedCount}>
-              {state.columns.map(column => (
-                <ColumnTH column={column}/>
-              ))}
-              <th class="actions" style="width: 176px;">
+              {state.columns.map((column, index) => {
+                if (index !== state.columns.length - 1) {
+                  return <ColumnTH column={column}/>;
+                }
+                return null;
+              })}
+              <th class="actions" style={state.columns.length && `width: ${state.columns[state.columns.length - 1].width}px`}>
                 <Pagination
                   onChange={loadData}
                   loading={state.loading}
@@ -181,11 +201,18 @@ export default ({ loadData }) => (global_state, global_actions) => {
               <CheckOne
                 isChecked={state.isCheckedRows[row[state.primaryKey]]}
                 onChange={() => actions.checkOne(row[state.primaryKey])}
+                avatar={row.avatar ? row.avatar.s : false}
               />
-              {state.columns.map(column => (
-                <ColumnTD column={column} row={row}/>
-              ))}
-              <td class="actions" style="width: 176px;">
+              {state.columns.map((column, index) => {
+                if (index !== state.columns.length - 1) {
+                  return <ColumnTD column={column} row={row}/>;
+                }
+                return null;
+              })}
+              <td class="actions" style={`width: ${state.columns[state.columns.length - 1].width}px;`}>
+                <span class="placeholder">
+                  <ColumnTdText column={state.columns[state.columns.length - 1]} row={row}/>
+                </span>
                 {state.buttons.map(button => (
                   <ColumnTDAction button={button} row={row}/>
                 ))}

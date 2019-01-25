@@ -41,21 +41,21 @@ export default $.extend({}, actionsAbstract, {
 
     const columns = [
       {
-        title: 'ID',
-        field: 'topic_id',
-        type: 'number',
-        width: 100,
-      },
-      {
         title: '名称',
         field: 'name',
+        type: 'string',
+        width: 208,
+      },
+      {
+        title: '描述',
+        field: 'description',
         type: 'string',
       },
       {
         title: '关注者数量',
         field: 'follower_count',
         type: 'number',
-        width: 200,
+        width: 154,
       },
     ];
 

@@ -46,14 +46,8 @@ export default $.extend({}, actionsAbstract, {
 
     const columns = [
       {
-        title: 'ID',
-        field: 'user_id',
-        type: 'number',
-        width: 100,
-      },
-      {
         title: '用户名',
-        field: 'avatar_username',
+        field: 'username',
         type: 'html',
         width: 208,
       },
@@ -66,7 +60,7 @@ export default $.extend({}, actionsAbstract, {
         title: '注册时间',
         field: 'create_time',
         type: 'time',
-        width: 200,
+        width: 154,
       },
     ];
 
@@ -148,13 +142,7 @@ export default $.extend({}, actionsAbstract, {
       order: datatable.getState().order,
     });
 
-    User.getList(data, (response) => {
-      response.data.map((item, index) => {
-        response.data[index].avatar_username = `<img src="${item.avatar.s}" class="mdui-float-left mdui-m-r-2"/>${item.username}`;
-      });
-
-      datatable.loadEnd(response);
-    });
+    User.getList(data, datatable.loadEnd);
   },
 
   /**
