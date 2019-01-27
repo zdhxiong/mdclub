@@ -265,7 +265,7 @@ class Report extends ServiceAbstracts
         foreach ($targetTypes as $type) {
             if (isset($targetIds[$type])) {
                 $targetIds[$type] = array_unique($targetIds[$type]);
-                $targets[$type] = $this->{$type . 'Service'}->getInRelationship($targetIds[$type]);
+                $targets[$type] = $this->container->{$type . 'Service'}->getInRelationship($targetIds[$type]);
             }
         }
 

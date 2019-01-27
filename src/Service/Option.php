@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Abstracts\ServiceAbstracts;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 /**
  * @property-read \App\Model\Option      currentModel
@@ -93,21 +92,12 @@ class Option extends ServiceAbstracts
     private $options;
 
     /**
-     * 文件缓存实例
-     *
-     * @var FilesystemCache
-     */
-    protected $cache;
-
-    /**
      * Option constructor.
      * @param $container
      */
     public function __construct($container)
     {
         parent::__construct($container);
-
-        $this->cache = new FilesystemCache('', 0, __DIR__ . '/../../var/cache/');
     }
 
     /**
@@ -118,17 +108,11 @@ class Option extends ServiceAbstracts
     public function getAll(): array
     {
         if (is_null($this->options)) {
-            $result = $this->cache->get('options');
-
-            if (is_null($result)) {
-                $result = $this->container->optionModel->select();
-                $result = array_combine(
-                    array_column($result, 'name'),
-                    array_column($result, 'value')
-                );
-
-                $this->cache->set('options', $result);
-            }
+            $result = $this->container->optionModel->select();
+            $result = array_combine(
+                array_column($result, 'name'),
+                array_column($result, 'value')
+            );
 
             $this->options = $result;
         }
@@ -173,7 +157,6 @@ class Option extends ServiceAbstracts
             $this->container->optionModel->where(['name' => $name])->update(['value' => $value]);
         }
 
-        $this->cache->delete('options');
         $this->options = null;
     }
 
@@ -190,7 +173,6 @@ class Option extends ServiceAbstracts
         }
 
         $this->container->optionModel->where(['name' => $name])->update(['value' => $value]);
-        $this->cache->delete('options');
         $this->options = null;
     }
 }
