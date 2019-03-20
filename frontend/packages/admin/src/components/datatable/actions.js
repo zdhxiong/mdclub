@@ -86,6 +86,21 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
+   * 更新某一行的数据
+   */
+  updateOne: row => (state, actions) => {
+    const data = state.data;
+
+    data.forEach((item, index) => {
+      if (item[state.primaryKey] === row[state.primaryKey]) {
+        data[index] = row;
+      }
+    });
+
+    actions.setState({ data });
+  },
+
+  /**
    * 切换某一行的选中状态
    */
   checkOne: rowId => (state, actions) => {

@@ -30,7 +30,7 @@ export default ({
     >
       <button
         class="prev mdui-btn mdui-btn-icon"
-        title="上一页"
+        title={(!state.previous || loading) ? '' : '上一页'}
         disabled={!state.previous || loading}
         onclick={() => actions.toPrevPage(onChange)}
       >
@@ -38,7 +38,7 @@ export default ({
       </button>
       <button
         class="next mdui-btn mdui-btn-icon"
-        title="下一页"
+        title={(!state.next || loading) ? '' : '下一页'}
         disabled={!state.next || loading}
         onclick={() => actions.toNextPage(onChange)}
       >
@@ -61,7 +61,7 @@ export default ({
               'mdui-btn',
               { 'mdui-btn-active': state.per_page === 10 },
             ])}
-            onclick={e => actions.onPerPageChange({ e, num: 10, onChange })}
+            onclick={e => actions.onPerPageChange({ e, per_page: 10, onChange })}
           >10</button>
           <button
             type="button"
@@ -69,7 +69,7 @@ export default ({
               'mdui-btn',
               { 'mdui-btn-active': state.per_page === 25 },
             ])}
-            onclick={e => actions.onPerPageChange({ e, num: 25, onChange })}
+            onclick={e => actions.onPerPageChange({ e, per_page: 25, onChange })}
           >25</button>
           <button
             type="button"
@@ -77,7 +77,7 @@ export default ({
               'mdui-btn',
               { 'mdui-btn-active': state.per_page === 50 },
             ])}
-            onclick={e => actions.onPerPageChange({ e, num: 50, onChange })}
+            onclick={e => actions.onPerPageChange({ e, per_page: 50, onChange })}
           >50</button>
           <button
             type="button"
@@ -85,7 +85,7 @@ export default ({
               'mdui-btn',
               { 'mdui-btn-active': state.per_page === 100 },
             ])}
-            onclick={e => actions.onPerPageChange({ e, num: 100, onChange })}
+            onclick={e => actions.onPerPageChange({ e, per_page: 100, onChange })}
           >100</button>
         </div>
         <If condition={orders.length}>

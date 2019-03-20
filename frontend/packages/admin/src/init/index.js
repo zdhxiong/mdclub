@@ -9,19 +9,14 @@ $.extend({
       return;
     }
 
-    const $overlay = $(
-      `<div class="mc-loading-overlay">
-        <div class="mdui-spinner mdui-spinner-colorful"></div>
-      </div>`);
+    const $overlay = $('<div class="mc-loading-overlay"><div class="mdui-spinner mdui-spinner-colorful"></div></div>');
 
     $overlay
       .appendTo(document.body)
       .reflow()
       .addClass('mc-loading-overlay-show');
 
-    setTimeout(() => {
-      $overlay.mutation();
-    }, 0);
+    setTimeout($overlay.mutation);
 
     $.lockScreen();
   },

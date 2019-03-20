@@ -30,11 +30,7 @@ const Item = ({ url, icon, title }) => (
 
 export default () => (
   <div class="me-drawer mdui-drawer" key="me-drawer">
-    <div
-      class="mdui-list"
-      mdui-collapse
-      oncreate={element => $(element).mutation()}
-    >
+    <div class="mdui-list">
       <Item title="仪表盘" url="" icon="dashboard"/>
       <Divider/>
       <Item title="话题" url="/topics" icon="class"/>
@@ -45,7 +41,7 @@ export default () => (
       <Divider/>
       <Item title="用户" url="/users" icon="people"/>
       <Item title="举报" url="/reports" icon="report"/>
-      <Item url="/options" icon="settings" title="设置"/>
+      <Item title="设置" url="/options" icon="settings"/>
     </div>
     <div class="toggle">
       <button onclick={toggleMini} class="mdui-btn mdui-btn-icon mdui-text-color-theme-icon">

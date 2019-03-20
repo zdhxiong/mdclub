@@ -14,12 +14,7 @@ export default $.extend({}, actionsAbstract, {
     actions.routeChange();
     global_actions = props.global_actions;
 
-    const {
-      searchBar,
-      datatable,
-      dialogUser,
-    } = global_actions.components;
-
+    const { components } = global_actions;
     const searchBarState = {
       fields: [
         {
@@ -104,10 +99,10 @@ export default $.extend({}, actionsAbstract, {
 
     const order = '-create_time';
     const primaryKey = 'user_id';
-    const onRowClick = dialogUser.open;
+    const onRowClick = components.user.open;
 
-    searchBar.setState(searchBarState);
-    datatable.setState({
+    components.searchBar.setState(searchBarState);
+    components.datatable.setState({
       columns,
       buttons,
       batchButtons,

@@ -14,13 +14,7 @@ export default $.extend({}, actionsAbstract, {
     actions.routeChange();
     global_actions = props.global_actions;
 
-    const {
-      searchBar,
-      datatable,
-      dialogAnswer,
-      dialogUser,
-    } = global_actions.components;
-
+    const { components } = global_actions;
     const searchBarState = {
       fields: [
         {
@@ -53,7 +47,7 @@ export default $.extend({}, actionsAbstract, {
         width: 160,
         onClick: ({ e, row }) => {
           e.preventDefault();
-          dialogUser.open(row.user_id);
+          components.user.open(row.user_id);
         },
       },
       {
@@ -113,10 +107,10 @@ export default $.extend({}, actionsAbstract, {
 
     const order = '-create_time';
     const primaryKey = 'answer_id';
-    const onRowClick = dialogAnswer.open;
+    const onRowClick = components.answer.open;
 
-    searchBar.setState(searchBarState);
-    datatable.setState({
+    components.searchBar.setState(searchBarState);
+    components.datatable.setState({
       columns,
       buttons,
       batchButtons,

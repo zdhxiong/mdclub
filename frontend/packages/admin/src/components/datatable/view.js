@@ -88,6 +88,9 @@ const ColumnTdText = ({ column, row }) => {
     case 'relation':
       return <a onclick={e => column.onClick({ e, row })}>{value}</a>;
 
+    case 'handler':
+      return column.handler(row);
+
     default:
       return value;
   }
@@ -194,7 +197,7 @@ export default ({ loadData }) => (global_state, global_actions) => {
               class={cc([{ 'mdui-table-row-selected': state.isCheckedRows[row[state.primaryKey]] }])}
               onclick={(e) => {
                 if (typeof state.onRowClick === 'function' && e.target.nodeName === 'TD') {
-                  state.onRowClick(row[state.primaryKey]);
+                  state.onRowClick(row);
                 }
               }}
             >

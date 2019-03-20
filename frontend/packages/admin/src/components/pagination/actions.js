@@ -26,15 +26,12 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 修改每页行数
    */
-  onPerPageChange: ({ e, num, onChange }) => (state, actions) => {
+  onPerPageChange: ({ e, per_page, onChange }) => (state, actions) => {
     e.preventDefault();
 
-    const per_page = num;
     window.localStorage.setItem('admin_per_page', per_page);
-    actions.setState({
-      page: 1,
-      per_page: parseInt(per_page, 10),
-    });
+
+    actions.setState({ page: 1, per_page });
 
     (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
 
@@ -48,9 +45,7 @@ export default $.extend({}, actionsAbstract, {
     e.preventDefault();
 
     const page = $(e.target).find('input[name="page"]').val();
-    actions.setState({
-      page: parseInt(page, 10),
-    });
+    actions.setState({ page: parseInt(page, 10) });
 
     (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
 
@@ -61,9 +56,7 @@ export default $.extend({}, actionsAbstract, {
    * 切换到上一页
    */
   toPrevPage: onChange => (state, actions) => {
-    actions.setState({
-      page: state.page - 1,
-    });
+    actions.setState({ page: state.page - 1 });
 
     onChange();
   },
@@ -72,9 +65,7 @@ export default $.extend({}, actionsAbstract, {
    * 切换到下一页
    */
   toNextPage: onChange => (state, actions) => {
-    actions.setState({
-      page: state.page + 1,
-    });
+    actions.setState({ page: state.page + 1 });
 
     onChange();
   },

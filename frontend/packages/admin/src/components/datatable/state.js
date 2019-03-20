@@ -5,8 +5,9 @@ export default {
    *   {
    *     title: '列头标题',
    *     field: '字段名称',
-   *     type: '字段类型：time、string、number、relation'
+   *     type: '字段类型：time、string、number、relation、handler'
    *     onClick: function // type 为 relation 时需要
+   *     handler: function // type 为 handler 时需要
    *   }
    * ]
    */
@@ -16,7 +17,7 @@ export default {
    * 操作项定义
    * [
    *   {
-   *     type: '类型: target、btn',
+   *     type: '类型: target、btn', // target：新窗口打开页面，btn：绑定函数的按钮
    *     getTargetLink: function, // type 为 target 时，需要该函数返回链接
    *     label: '提示文本'   // type 为 target 时需要
    *     icon: '图标'       // type 为 target 时需要

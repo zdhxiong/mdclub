@@ -43,13 +43,7 @@ export default $.extend({}, actionsAbstract, {
     actions.routeChange();
     global_actions = props.global_actions;
 
-    const {
-      searchBar,
-      datatable,
-      dialogReporters,
-      dialogUser,
-    } = global_actions.components;
-
+    const { components } = global_actions;
     const searchBarState = {
       fields: [
         {
@@ -108,7 +102,7 @@ export default $.extend({}, actionsAbstract, {
             case 'comment':
               break;
             case 'user':
-              dialogUser.open(row.relationship.user.user_id);
+              components.user.open(row.relationship.user.user_id);
               break;
             default:
               break;
@@ -119,7 +113,7 @@ export default $.extend({}, actionsAbstract, {
         title: '举报人数',
         field: 'reporter_count',
         type: 'number',
-        width: 120,
+        width: 154,
       },
     ];
 
@@ -141,10 +135,10 @@ export default $.extend({}, actionsAbstract, {
     ];
 
     const primaryKey = 'key';
-    const onRowClick = dialogReporters.open;
+    const onRowClick = components.reporters.open;
 
-    searchBar.setState(searchBarState);
-    datatable.setState({
+    components.searchBar.setState(searchBarState);
+    components.datatable.setState({
       columns,
       buttons,
       batchButtons,

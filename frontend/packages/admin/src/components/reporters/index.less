@@ -1,0 +1,54 @@
+@import "../../helper/mixin";
+
+.mc-reporters {
+  max-width: 530px;
+  height: 94% !important;
+  max-height: 720px !important;
+
+  .mdui-dialog-title {
+    line-height: 36px;
+    padding: 16px 24px;
+  }
+
+  .mdui-dialog-content,
+  .mdui-list {
+    padding: 0;
+  }
+
+  .mdui-dialog-content {
+    padding-bottom: 62px;
+  }
+
+  .mdui-list-item {
+    padding: 8px 24px;
+  }
+
+  .mdui-list-item-title {
+    font-size: 14px;
+    opacity: .54;
+  }
+
+  .mdui-list-item-text {
+    font-size: 16px;
+    opacity: .87;
+  }
+
+  .close {
+    display: none;
+  }
+
+  @media (max-width: @screen-xs-max) {
+    .mc-dialog-fullscreen();
+
+    .mdui-dialog-title {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .close {
+      float: left;
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}

@@ -25,8 +25,8 @@ const cacheTypeObject = {
 
 const storageTypeObject = {
   local: '本地文件系统',
-  ftp: 'FTP 服务器',
-  aliyun_oss: '阿里云 OSS',
+  ftp: 'FTP(s) 服务器',
+  aliyun: '阿里云 OSS',
   upyun: '又拍云',
   qiniu: '七牛云',
 };
@@ -316,6 +316,13 @@ export default (global_state, global_actions) => {
                 />
               </div>
               <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'ftp' }])}>
+                <Select
+                  label="协议"
+                  name="storage_ftp_ftps"
+                  value={state.data.storage_ftp_ftps}
+                  data={{ 1: 'FTPS', 0: 'FTP' }}
+                  onchange={actions.data.input}
+                />
                 <Input
                   label="FTP 服务器地址"
                   name="storage_ftp_host"
@@ -347,44 +354,30 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                   helper="/path/to/root"
                 />
-                <Select
-                  label="传输模式"
-                  name="storage_ftp_passive"
-                  value={state.data.storage_ftp_passive}
-                  data={{ 1: '主动模式', 0: '被动模式' }}
-                  onchange={actions.data.input}
-                />
-                <Select
-                  label="是否启用 SSL"
-                  name="storage_ftp_ssl"
-                  value={state.data.storage_ftp_ssl}
-                  data={{ 1: '启用', 0: '不启用' }}
-                  onchange={actions.data.input}
-                />
               </div>
-              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'aliyun_oss' }])}>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'aliyun' }])}>
                 <Input
                   label="AccessKey ID"
-                  name="storage_aliyun_oss_access_id"
-                  value={state.data.storage_aliyun_oss_access_id}
+                  name="storage_aliyun_access_id"
+                  value={state.data.storage_aliyun_access_id}
                   oninput={actions.data.input}
                 />
                 <Input
                   label="Access Key Secret"
-                  name="storage_aliyun_oss_access_secret"
-                  value={state.data.storage_aliyun_oss_access_secret}
+                  name="storage_aliyun_access_secret"
+                  value={state.data.storage_aliyun_access_secret}
                   oninput={actions.data.input}
                 />
                 <Input
                   label="Bucket 名称"
-                  name="storage_aliyun_oss_bucket"
-                  value={state.data.storage_aliyun_oss_bucket}
+                  name="storage_aliyun_bucket"
+                  value={state.data.storage_aliyun_bucket}
                   oninput={actions.data.input}
                 />
                 <Input
                   label="EndPoint（地域节点）"
-                  name="storage_aliyun_oss_endpoint"
-                  value={state.data.storage_aliyun_oss_endpoint}
+                  name="storage_aliyun_endpoint"
+                  value={state.data.storage_aliyun_endpoint}
                   oninput={actions.data.input}
                 />
               </div>

@@ -14,12 +14,7 @@ export default $.extend({}, actionsAbstract, {
     actions.routeChange();
     global_actions = props.global_actions;
 
-    const {
-      searchBar,
-      datatable,
-      dialogTopic,
-    } = global_actions.components;
-
+    const { components } = global_actions;
     const searchBarState = {
       fields: [
         {
@@ -54,7 +49,8 @@ export default $.extend({}, actionsAbstract, {
       {
         title: '关注者数量',
         field: 'follower_count',
-        type: 'number',
+        type: 'handler',
+        handler: row => `${row.follower_count} 人关注`,
         width: 154,
       },
     ];
@@ -99,10 +95,10 @@ export default $.extend({}, actionsAbstract, {
 
     const order = 'topic_id';
     const primaryKey = 'topic_id';
-    const onRowClick = dialogTopic.open;
+    const onRowClick = components.topic.open;
 
-    searchBar.setState(searchBarState);
-    datatable.setState({
+    components.searchBar.setState(searchBarState);
+    components.datatable.setState({
       columns,
       buttons,
       batchButtons,
@@ -143,8 +139,8 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 编辑指定话题
    */
-  editOne: topic => (state, actions) => {
-
+  editOne: (topic) => {
+    global_actions.components.topicEdit.open(topic);
   },
 
   /**
