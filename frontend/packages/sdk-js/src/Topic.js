@@ -1,7 +1,6 @@
 import {
   get,
   post,
-  put,
   del,
 } from './util/requestAlias';
 
@@ -20,11 +19,11 @@ export default {
    *
    * POST /topics
    */
-  create(name, description, file, success) {
+  create(name, description, cover, success) {
     const data = new FormData();
     data.append('name', name);
     data.append('description', description);
-    data.append('file', file);
+    data.append('cover', cover);
 
     post('/topics', data, success);
   },
@@ -63,8 +62,8 @@ export default {
       data.append('description', params.description);
     }
 
-    if (typeof params.file !== 'undefined') {
-      data.append('file', params.file);
+    if (typeof params.cover !== 'undefined') {
+      data.append('cover', params.cover);
     }
 
     post(`/topics/${topic_id}`, data, success);
