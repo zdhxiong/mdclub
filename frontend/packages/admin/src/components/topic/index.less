@@ -1,5 +1,50 @@
-@import "../../helper/mixin";
-
 .mc-topic {
   max-width: 408px;
+  max-height: 95%;
+
+  .mdui-dialog-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .actions {
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  .item {
+    padding: 4px 0 16px 0;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    .label {
+      display: block;
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px;
+      padding-bottom: 8px;
+    }
+
+    .text {
+      padding-bottom: 8px;
+      line-height: 28px;
+      font-size: 16px;
+    }
+
+    .cover {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56%;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
 }

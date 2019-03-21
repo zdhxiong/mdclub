@@ -127,10 +127,8 @@ export default $.extend({}, actionsAbstract, {
     };
 
     if (state.topic_id) { // 修改
-      const params = {
-        name: state.name,
-        description: state.description,
-      };
+      const { name, description } = state;
+      const params = { name, description };
 
       if ($cover[0].files.length) {
         params.cover = $cover[0].files[0];
@@ -144,8 +142,7 @@ export default $.extend({}, actionsAbstract, {
         global_actions.components.datatable.updateOne(response.data);
       }));
     } else { // 新增
-      const name = state.name;
-      const description = state.description;
+      const { name, description } = state;
       const file = $cover[0].files[0];
 
       Topic.create(name, description, file, response => success(response, () => {

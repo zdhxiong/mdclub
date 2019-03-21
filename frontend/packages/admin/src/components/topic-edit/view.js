@@ -12,7 +12,7 @@ export default () => (global_state, global_actions) => {
       class="mdui-dialog mc-topic-edit"
       oncreate={() => actions.init({ global_actions })}
     >
-      <div class="mdui-dialog-title">{state.topic_id ? '修改话题' : '添加话题'}</div>
+      <div class="mdui-dialog-title">{state.topic_id ? '编辑话题' : '添加话题'}</div>
       <div class="mdui-dialog-content">
 
         <div class={cc([
@@ -58,12 +58,14 @@ export default () => (global_state, global_actions) => {
           <div class="title">封面图片</div>
           <div class="content">
             <img class={cc([{ 'mdui-hidden': !state.cover }])} src={state.cover}/>
-            <input class="mdui-hidden" type="file" name="cover" onchange={actions.coverSelected}/>
+            <input
+              class="mdui-hidden"
+              type="file"
+              name="cover"
+              onchange={actions.coverSelected}
+            />
             <div
-              class={cc([
-                'placeholder',
-                { selected: state.cover },
-              ])}
+              class={cc(['placeholder', { selected: state.cover }])}
               title="点击上传封面图片"
               onclick={actions.clickCover}
             >
