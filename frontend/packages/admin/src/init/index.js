@@ -16,7 +16,7 @@ $.extend({
       .reflow()
       .addClass('mc-loading-overlay-show');
 
-    setTimeout($overlay.mutation);
+    setTimeout(() => $overlay.mutation());
 
     $.lockScreen();
   },

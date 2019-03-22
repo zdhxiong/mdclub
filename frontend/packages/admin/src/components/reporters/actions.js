@@ -2,7 +2,7 @@ import mdui, { JQ as $ } from 'mdui';
 import { Report } from 'mdclub-sdk-js';
 import actionsAbstract from '../../abstracts/actions/component';
 
-let Dialog; // 对话框实例
+let dialog; // 对话框实例
 let $dialog;
 let $content;
 
@@ -13,17 +13,14 @@ export default $.extend({}, actionsAbstract, {
   init: (element) => {
     $dialog = $(element);
     $content = $dialog.find('.mdui-dialog-content');
+    dialog = new mdui.Dialog($dialog);
   },
 
   /**
    * 打开对话框
    */
-  open: key => (state, actions) => {
-    const [reportable_type, reportable_id] = key.split(':');
-
-    if (!Dialog) {
-      Dialog = new mdui.Dialog('.mc-reporters');
-    }
+  open: report => (state, actions) => {
+    const [reportable_type, reportable_id] = report.key.split(':');
 
     actions.setState({
       data: [],
@@ -31,7 +28,7 @@ export default $.extend({}, actionsAbstract, {
       loading: true,
     });
 
-    Dialog.open();
+    dialog.open();
 
     const loaded = (response) => {
       actions.setState({ loading: false });
@@ -80,7 +77,5 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 关闭对话框
    */
-  close: () => {
-    Dialog.close();
-  },
+  close: () => dialog.close(),
 });

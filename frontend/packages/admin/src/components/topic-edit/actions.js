@@ -28,20 +28,64 @@ export default $.extend({}, actionsAbstract, {
 
   /**
    * 打开对话框
+   * @param topic 若topic为null，表示添加数据；若topic为整型，则需要先根据该参数获取话题信息；若topic为对象，则不需要再获取话题信息
    */
   open: (topic = null) => (state, actions) => {
-    // 传入了 topic 时，为修改数据，否则为添加数据。topic_id > 0 表示修改数据
     actions.setState({
-      topic_id: topic ? topic.topic_id : 0,
-      name: topic ? topic.name : '',
-      description: topic ? topic.description : '',
-      cover: topic ? topic.cover.s : '',
       name_msg: '',
       description_msg: '',
       cover_msg: '',
     });
 
+    // 添加数据
+    if (topic === null) {
+      actions.setState({
+        topic_id: 0,
+        name: '',
+        description: '',
+        cover: '',
+        loading: false,
+      });
+
+      dialog.open();
+
+      return;
+    }
+
+    const isComplete = typeof topic === 'object';
+
+    actions.setState({
+      topic_id: isComplete ? topic.topic_id : topic,
+      name: isComplete ? topic.name : '',
+      description: isComplete ? topic.description : '',
+      cover: isComplete ? topic.cover.s : '',
+      loading: !isComplete,
+    });
+
     dialog.open();
+
+    if (isComplete) {
+      return;
+    }
+
+    Topic.getOne(topic, (response) => {
+      actions.setState({ loading: false });
+
+      if (response.code) {
+        dialog.close();
+        mdui.snackbar(response.message);
+        return;
+      }
+
+      actions.setState({
+        topic_id: response.data.topic_id,
+        name: response.data.name,
+        description: response.data.description,
+        cover: response.data.cover.s,
+      });
+
+      setTimeout(() => dialog.handleUpdate());
+    });
   },
 
   /**
@@ -91,6 +135,8 @@ export default $.extend({}, actionsAbstract, {
    * 添加话题
    */
   submit: () => (state, actions) => {
+    $.loadStart();
+
     const handleValidationError = (response) => {
       const errors = {};
 
@@ -109,6 +155,8 @@ export default $.extend({}, actionsAbstract, {
     };
 
     const success = (response, handler) => {
+      $.loadEnd();
+
       // 字段验证失败
       if (response.code === 100002) {
         handleValidationError(response);

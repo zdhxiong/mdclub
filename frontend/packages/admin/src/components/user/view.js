@@ -39,11 +39,14 @@ export default () => (global_state, global_actions) => {
   const state = global_state.components.user;
 
   return (
-    <div class="mdui-dialog mc-user">
+    <div
+      class="mdui-dialog mc-user"
+      oncreate={() => actions.init({ global_actions })}
+    >
       <If condition={!state.loading && state.user}>
         <div
           class="header"
-          oncreate={element => actions.headerInit(element)}
+          oncreate={() => actions.headerInit()}
           style={{ backgroundImage: `url(${state.user.cover.m})` }}
         >
           <div class="gradient mdui-card-media-covered mdui-card-media-covered-gradient"></div>
@@ -102,7 +105,7 @@ export default () => (global_state, global_actions) => {
                   <ItemCount label="文章" count={state.user.following_article_count}/>
                   <ItemCount label="提问" count={state.user.following_question_count}/>
                   <ItemCount label="话题" count={state.user.following_topic_count}/>
-                  <ItemCount label="用户" count={state.user.following_user_count}/>
+                  <ItemCount label="用户" count={state.user.followee_count}/>
                   <ItemCount label="关注者" count={state.user.follower_count}/>
                 </div>
               </div>

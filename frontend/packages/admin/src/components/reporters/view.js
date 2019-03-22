@@ -10,16 +10,8 @@ export default () => (global_state, global_actions) => {
   const actions = global_actions.components.reporters;
   const state = global_state.components.reporters;
 
-  const isEmpty =
-    !state.loading &&
-    !state.data.length &&
-    state.pagination;
-
-  const isLoaded =
-    !state.loading &&
-    state.pagination &&
-    state.pagination.page === state.pagination.pages;
-
+  const isEmpty = !state.loading && !state.data.length && state.pagination;
+  const isLoaded = !state.loading && state.pagination && state.pagination.page === state.pagination.pages;
   const isLoading = state.loading;
 
   return (

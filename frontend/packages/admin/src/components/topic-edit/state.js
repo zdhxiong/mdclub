@@ -6,4 +6,5 @@ export default {
   name_msg: '',        // 话题名称的错误提示
   description_msg: '', // 话题描述的错误提示
   cover_msg: '',       // 封面的错误提示
+  loading: false,
 };

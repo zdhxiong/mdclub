@@ -112,12 +112,32 @@ export default $.extend({}, actionsAbstract, {
       {
         title: '举报人数',
         field: 'reporter_count',
-        type: 'number',
+        type: 'handler',
+        handler: row => `${row.reporter_count} 人举报`,
         width: 154,
       },
     ];
 
     const buttons = [
+      {
+        type: 'target',
+        getTargetLink: (row) => {
+          switch (row.reportable_type) {
+            case 'question':
+              return `${window.G_ROOT}/questions/${row.reportable_id}`;
+            case 'article':
+              return `${window.G_ROOT}/articles/${row.reportable_id}`;
+            case 'answer':
+              return '';
+            case 'comment':
+              return '';
+            case 'user':
+              return `${window.G_ROOT}/users/${row.reportable_id}`;
+            default:
+              return '';
+          }
+        },
+      },
       {
         type: 'btn',
         onClick: actions.deleteOne,
@@ -161,13 +181,13 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => {
-    const { datatable, pagination, searchBar } = global_actions.components;
+    const { components } = global_actions;
 
-    datatable.loadStart();
+    components.datatable.loadStart();
 
-    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
-      page: pagination.getState().page,
-      per_page: pagination.getState().per_page,
+    const data = $.extend({}, ObjectHelper.filter(components.searchBar.getState().data), {
+      page: components.pagination.getState().page,
+      per_page: components.pagination.getState().per_page,
     });
 
     Report.getList(data, (response) => {
@@ -175,7 +195,7 @@ export default $.extend({}, actionsAbstract, {
         response.data[index] = getExtraFields(item);
       });
 
-      datatable.loadEnd(response);
+      components.datatable.loadEnd(response);
     });
   },
 

@@ -1,50 +1,70 @@
 .mc-topic {
   max-width: 408px;
   max-height: 95%;
+  min-height: 404px;
 
-  .mdui-dialog-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .header {
+    width: 100%;
+    position: relative;
+    padding-bottom: 56%;
 
-  .actions {
-    button {
-      margin-left: 8px;
+    .gradient {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 60px;
+      background: linear-gradient(to top, rgba(0, 0, 0, .46), rgba(0, 0, 0, 0));
+    }
+
+    .name {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      padding-left: 24px;
+      font-size: 30px;
+      color: #fff;
+      height: 60px;
+      line-height: 60px;
+    }
+
+    .actions {
+      position: absolute;
+      right: 28px;
+      bottom: -20px;
+
+      button {
+        margin-left: 16px;
+      }
     }
   }
 
+  .content {
+    padding: 36px 24px 16px 24px;
+  }
+
   .item {
-    padding: 4px 0 16px 0;
+    padding-bottom: 24px;
+    line-height: 24px;
 
     &:last-child {
       padding-bottom: 0;
     }
+  }
 
-    .label {
+  .item-delete {
+    font-size: 13px;
+  }
+
+  .chip-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .mdui-chip {
       display: block;
-      font-size: 14px;
-      height: 24px;
-      line-height: 24px;
-      padding-bottom: 8px;
-    }
-
-    .text {
-      padding-bottom: 8px;
-      line-height: 28px;
-      font-size: 16px;
-    }
-
-    .cover {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56%;
-
-      img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-      }
+      margin-bottom: 8px;
+      width: ~'calc(50% - 8px)';
     }
   }
 }

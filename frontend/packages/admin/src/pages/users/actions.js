@@ -127,17 +127,17 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => {
-    const { datatable, pagination, searchBar } = global_actions.components;
+    const { components } = global_actions;
 
-    datatable.loadStart();
+    components.datatable.loadStart();
 
-    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
-      page: pagination.getState().page,
-      per_page: pagination.getState().per_page,
-      order: datatable.getState().order,
+    const data = $.extend({}, ObjectHelper.filter(components.searchBar.getState().data), {
+      page: components.pagination.getState().page,
+      per_page: components.pagination.getState().per_page,
+      order: components.datatable.getState().order,
     });
 
-    User.getList(data, datatable.loadEnd);
+    User.getList(data, components.datatable.loadEnd);
   },
 
   /**
@@ -150,10 +150,10 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 禁用指定用户
    */
-  disableOne: user => (state, actions) => {
+  disableOne: ({ user_id }) => (state, actions) => {
     const confirm = () => {
       $.loadStart();
-      User.disableOne(user.user_id, actions.deleteSuccess);
+      User.disableOne(user_id, actions.deleteSuccess);
     };
 
     const options = {

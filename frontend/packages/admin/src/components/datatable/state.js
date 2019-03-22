@@ -19,9 +19,9 @@ export default {
    *   {
    *     type: '类型: target、btn', // target：新窗口打开页面，btn：绑定函数的按钮
    *     getTargetLink: function, // type 为 target 时，需要该函数返回链接
-   *     label: '提示文本'   // type 为 target 时需要
-   *     icon: '图标'       // type 为 target 时需要
-   *     onClick: function // type 为 target 时需要
+   *     label: '提示文本'   // type 为 btn 时需要
+   *     icon: '图标'       // type 为 btn 时需要
+   *     onClick: function // type 为 btn 时需要
    *   }
    * ]
    */

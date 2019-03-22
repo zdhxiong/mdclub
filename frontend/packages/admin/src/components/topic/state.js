@@ -1,3 +1,4 @@
 export default {
-  topic: false, // 话题信息
+  topic: false, // 为 false 表示未加载过
+  loading: false,
 };
