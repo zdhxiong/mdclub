@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Library;
 
 use App\Interfaces\ContainerInterface;
-use App\Library\Cache\MemcachedAdapter;
-use App\Library\Cache\PdoAdapter;
-use App\Library\Cache\RedisAdapter;
+use App\Library\CacheAdapter\Memcached;
+use App\Library\CacheAdapter\Pdo;
+use App\Library\CacheAdapter\Redis;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -21,7 +21,7 @@ use Psr\SimpleCache\CacheInterface;
  * Class Cache
  * @package App\Library
  */
-class Cache implements CacheInterface
+class Cache
 {
     /**
      * 缓存名称和适配器类名的数组
@@ -29,9 +29,9 @@ class Cache implements CacheInterface
      * @var array
      */
     protected $adapterMap = [
-        'pdo'       => PdoAdapter::class,
-        'memcached' => MemcachedAdapter::class,
-        'redis'     => RedisAdapter::class,
+        'pdo'       => Pdo::class,
+        'memcached' => Memcached::class,
+        'redis'     => Redis::class,
     ];
 
     /**
@@ -61,14 +61,13 @@ class Cache implements CacheInterface
      */
     public function __construct($container)
     {
-        $options = $container->optionService->getAll();
-        $this->cacheType = $options['cache_type'];
+        $this->cacheType = $container->optionService->cache_type;
 
         if (!isset($this->adapterMap[$this->cacheType])) {
             throw new \Exception('不存在指定的缓存类型: ' . $this->cacheType);
         }
 
-        $this->adapter = new $this->adapterMap[$this->cacheType]($container, $options);
+        $this->adapter = new $this->adapterMap[$this->cacheType]($container);
     }
 
     public function get($key, $default = null)

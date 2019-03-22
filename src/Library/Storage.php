@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Library;
 
 use App\Interfaces\ContainerInterface;
-use App\Library\Storage\AliyunOSSAdapter;
-use App\Library\Storage\FtpAdapter;
-use App\Library\Storage\LocalAdapter;
-use App\Library\Storage\QiniuAdapter;
-use App\Library\Storage\UpyunAdapter;
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Filesystem;
+use App\Interfaces\StorageInterface;
+use App\Library\StorageAdapter\Aliyun;
+use App\Library\StorageAdapter\Ftp;
+use App\Library\StorageAdapter\Local;
+use App\Library\StorageAdapter\Qiniu;
+use App\Library\StorageAdapter\Upyun;
 
 /**
  * 文件存储，仅限图片
@@ -19,7 +18,7 @@ use League\Flysystem\Filesystem;
  * Class Storage
  * @package App\Library
  */
-class Storage extends Filesystem
+class Storage
 {
     /**
      * 存储名称和适配器类名数组
@@ -27,12 +26,19 @@ class Storage extends Filesystem
      * @var array
      */
     protected $adapterMap = [
-        'local'      => LocalAdapter::class,
-        'ftp'        => FtpAdapter::class,
-        'aliyun_oss' => AliyunOSSAdapter::class,
-        'upyun'      => UpyunAdapter::class,
-        'qiniu'      => QiniuAdapter::class,
+        'local'  => Local::class,
+        'ftp'    => Ftp::class,
+        'aliyun' => Aliyun::class,
+        'upyun'  => Upyun::class,
+        'qiniu'  => Qiniu::class,
     ];
+
+    /**
+     * 存储适配器实例
+     *
+     * @var StorageInterface
+     */
+    protected $adapter;
 
     /**
      * Storage constructor.
@@ -41,16 +47,27 @@ class Storage extends Filesystem
      */
     public function __construct($container)
     {
-        $options = $container->optionService->getAll();
-        $storageType = $options['storage_type'];
+        $storageType = $container->optionService->storage_type;
 
         if (!isset($this->adapterMap[$storageType])) {
             throw new \Exception('不存在指定的存储类型：' . $storageType);
         }
 
-        $adapter = new $this->adapterMap[$storageType]($container, $options);
-        $config = ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
+        $this->adapter = new $this->adapterMap[$storageType]($container);
+    }
 
-        parent::__construct($adapter, $config);
+    public function write(string $path, string $content): bool
+    {
+        return $this->adapter->write($path, $content);
+    }
+
+    public function delete(string $path): bool
+    {
+        return $this->adapter->delete($path);
+    }
+
+    public function deleteMultiple(array $paths): bool
+    {
+        return $this->adapter->deleteMultiple($paths);
     }
 }

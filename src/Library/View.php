@@ -38,7 +38,7 @@ class View extends PhpRenderer
     {
         parent::__construct(__DIR__ . '/../../templates/', []);
 
-        $this->theme = $container->optionService->getAll()['theme'];
+        $this->theme = $container->optionService->theme;
     }
 
     /**

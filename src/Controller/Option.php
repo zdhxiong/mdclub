@@ -27,7 +27,7 @@ class Option extends ControllerAbstracts
      */
     public function getAll(Request $request, Response $response): Response
     {
-        $data = $this->container->optionService->getAll();
+        $data = $this->container->optionService->getMultiple();
 
         if (!$this->container->roleService->managerId()) {
             $data = ArrayHelper::filter($data, $this->container->optionService->publicNames);
@@ -49,7 +49,7 @@ class Option extends ControllerAbstracts
         $this->container->roleService->managerIdOrFail();
 
         $this->container->optionService->setMultiple($request->getParsedBody());
-        $data = $this->container->optionService->getAll();
+        $data = $this->container->optionService->getMultiple();
 
         return $this->success($response, $data);
     }

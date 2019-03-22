@@ -129,7 +129,7 @@ class Image extends ServiceAbstracts
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
-     * 如果是 aliyun_oss、upyun、qiniu 存储，则添加 url 参数
+     * 如果是 aliyun、upyun、qiniu 存储，则添加 url 参数
      *
      * @param  string $hash 图片存储的文件名，带后缀，用 . 分隔
      * @param  string $size 默认为原图， r：缩小的图  t：裁剪成固定尺寸的缩略图
@@ -155,8 +155,8 @@ class Image extends ServiceAbstracts
                 list($name, $suffix) = explode('.', $hash);
                 return "{$name}_{$size}.{$suffix}";
 
-            // aliyun_oss 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
-            case 'aliyun_oss':
+            // aliyun OSS 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
+            case 'aliyun':
                 $params = '?x-oss-process=image/resize,';
                 $params .= $size == 'r'
                     ? 'm_lfit,w_' . self::RELEASE_WIDTH

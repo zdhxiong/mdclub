@@ -1540,7 +1540,7 @@ paths:
   /reports:
 
     get:
-      summary: 🔐获取举报列表
+      summary: 🔐获取被举报的内容列表
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/page'
@@ -1576,7 +1576,7 @@ paths:
       - $ref: '#/components/parameters/reportable_id.path'
 
     get:
-      summary: 🔐获取举报详情列表
+      summary: 🔐获取被举报内容的举报详情
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/page'
@@ -2325,16 +2325,16 @@ components:
         smtp_username:
           type: string
           description: 🔐SMTP 账户
-        storage_aliyun_oss_access_id:
+        storage_aliyun_access_id:
           type: string
           description: 🔐阿里云 AccessKey ID
-        storage_aliyun_oss_access_secret:
+        storage_aliyun_access_secret:
           type: string
           description: 🔐阿里云 Access Key Secret
-        storage_aliyun_oss_bucket:
+        storage_aliyun_bucket:
           type: string
           description: 🔐阿里云 OSS 的 Bucket 名称
-        storage_aliyun_oss_endpoint:
+        storage_aliyun_endpoint:
           type: string
           description: 🔐阿里云 OSS 的 EndPoint
         storage_ftp_host:
@@ -2384,7 +2384,7 @@ components:
           enum:
             - local
             - ftp
-            - aliyun_oss
+            - aliyun
             - upyun
             - qiniu
           description: 🔐存储类型
@@ -2813,7 +2813,7 @@ components:
           description: 指定对象的被举报数量
         relationship:
           type: object
-          $ref: '#/components/schemas/ReportRelationship'
+          $ref: '#/components/schemas/ReportGroupRelationship'
 
     ReportGroups:
       type: array
@@ -2992,6 +2992,20 @@ components:
         voting:
           type: string
           description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
+
+    ReportGroupRelationship:
+      type: object
+      properties:
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        comment:
+          $ref: '#/components/schemas/CommentInRelationship'
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
 
     ReportRelationship:
       type: object

@@ -49,7 +49,7 @@ class Email extends ServiceAbstracts
     {
         parent::__construct($container);
 
-        $options = $this->container->optionService->getAll();
+        $options = $this->container->optionService->getMultiple();
 
         $PHPMailer = new PHPMailer(true);
         $PHPMailer->setLanguage($options['language']);
@@ -140,7 +140,7 @@ class Email extends ServiceAbstracts
      */
     public function sendRegisterEmail(string $email): void
     {
-        $option = $this->container->optionService->getAll();
+        $option = $this->container->optionService->getMultiple();
 
         $code = $this->generateCode($email);
         $subject = '你正在注册' . $option['site_name'] . '账号';
@@ -159,7 +159,7 @@ class Email extends ServiceAbstracts
      */
     public function sendPasswordResetEmail(string $email): void
     {
-        $option = $this->container->optionService->getAll();
+        $option = $this->container->optionService->getMultiple();
 
         $code = $this->generateCode($email);
         $subject = '你正在重置' . $option['site_name'] . '的密码';
@@ -178,7 +178,7 @@ class Email extends ServiceAbstracts
      */
     public function sendWelcomeEmail(array $user): void
     {
-        $option = $this->container->optionService->getAll();
+        $option = $this->container->optionService->getMultiple();
 
         $email = $user['email'];
         $subject = '你已成功注册' . $option['site_name'] . '账号';

@@ -67,7 +67,7 @@ trait Brandable
      * 获取文件名（带后缀、或图片裁剪参数）
      *
      * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
-     * 如果是 aliyun_oss、upyun、qiniu 存储，则添加 url 参数
+     * 如果是 aliyun、upyun、qiniu 存储，则添加 url 参数
      *
      * @param  string $filename  带图片后缀，用 . 分隔
      * @param  string $size      默认为原图
@@ -96,8 +96,8 @@ trait Brandable
                 list($name, $suffix) = explode('.', $filename);
                 return "{$name}_{$size}.{$suffix}";
 
-            // aliyun_oss 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
-            case 'aliyun_oss':
+            // aliyun OSS 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
+            case 'aliyun':
                 $params = "?x-oss-process=image/resize,m_fill,w_{$width},h_{$height},limit_0";
                 $params .= $isSupportWebp ? '/format,webp' : '';
 

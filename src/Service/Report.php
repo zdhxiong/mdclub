@@ -36,7 +36,7 @@ class Report extends ServiceAbstracts
 
     /**
      *
-     * 获取举报列表
+     * 获取被举报的内容列表
      *
      * @param  bool  $withRelationship
      * @return array
@@ -69,7 +69,7 @@ class Report extends ServiceAbstracts
     }
 
     /**
-     * 获取举报列表
+     * 获取被举报内容的举报详情
      *
      * @param  string $reportableType
      * @param  int    $reportableId

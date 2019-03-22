@@ -4,70 +4,62 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 
 /**
- * @property-read \App\Model\Option      currentModel
+ * Class Option
  *
- * Class OptionService
+ * @property string cache_memcached_host
+ * @property string cache_memcached_password
+ * @property string cache_memcached_port
+ * @property string cache_memcached_username
+ * @property string cache_prefix
+ * @property string cache_redis_host
+ * @property string cache_redis_password
+ * @property string cache_redis_port
+ * @property string cache_redis_username
+ * @property string cache_type
+ * @property string language
+ * @property string site_description
+ * @property string site_gongan_beian
+ * @property string site_icp_beian
+ * @property string site_keywords
+ * @property string site_name
+ * @property string site_static_url
+ * @property string smtp_host
+ * @property string smtp_password
+ * @property string smtp_port
+ * @property string smtp_reply_to
+ * @property string smtp_secure
+ * @property string smtp_username
+ * @property string storage_aliyun_access_id
+ * @property string storage_aliyun_access_secret
+ * @property string storage_aliyun_bucket
+ * @property string storage_aliyun_endpoint
+ * @property string storage_ftp_host
+ * @property string storage_ftp_passive
+ * @property string storage_ftp_password
+ * @property string storage_ftp_port
+ * @property string storage_ftp_root
+ * @property string storage_ftp_ssl
+ * @property string storage_ftp_username
+ * @property string storage_local_dir
+ * @property string storage_qiniu_access_id
+ * @property string storage_qiniu_access_secret
+ * @property string storage_qiniu_bucket
+ * @property string storage_qiniu_endpoint
+ * @property string storage_type
+ * @property string storage_upyun_bucket
+ * @property string storage_upyun_endpoint
+ * @property string storage_upyun_operator
+ * @property string storage_upyun_password
+ * @property string storage_url
+ * @property string theme
+ *
  * @package App\Service
  */
-class Option extends ServiceAbstracts
+class Option extends ContainerAbstracts
 {
-    /**
-     * 所有字段
-     *
-     * @var array
-     */
-    public $allNames = [
-        'cache_memcached_host',
-        'cache_memcached_password',
-        'cache_memcached_port',
-        'cache_memcached_username',
-        'cache_prefix',
-        'cache_redis_host',
-        'cache_redis_password',
-        'cache_redis_port',
-        'cache_redis_username',
-        'cache_type',
-        'language',
-        'site_description',
-        'site_gongan_beian',
-        'site_icp_beian',
-        'site_keywords',
-        'site_name',
-        'site_static_url',
-        'smtp_host',
-        'smtp_password',
-        'smtp_port',
-        'smtp_reply_to',
-        'smtp_secure',
-        'smtp_username',
-        'storage_aliyun_oss_access_id',
-        'storage_aliyun_oss_access_secret',
-        'storage_aliyun_oss_bucket',
-        'storage_aliyun_oss_endpoint',
-        'storage_ftp_host',
-        'storage_ftp_passive',
-        'storage_ftp_password',
-        'storage_ftp_port',
-        'storage_ftp_root',
-        'storage_ftp_ssl',
-        'storage_ftp_username',
-        'storage_local_dir',
-        'storage_qiniu_access_id',
-        'storage_qiniu_access_secret',
-        'storage_qiniu_bucket',
-        'storage_qiniu_endpoint',
-        'storage_type',
-        'storage_upyun_bucket',
-        'storage_upyun_endpoint',
-        'storage_upyun_operator',
-        'storage_upyun_password',
-        'storage_url',
-        'theme',
-    ];
-
     /**
      * 公共字段
      *
@@ -101,11 +93,11 @@ class Option extends ServiceAbstracts
     }
 
     /**
-     * 获取所有设置
+     * 获取所有配置项的值
      *
      * @return array
      */
-    public function getAll(): array
+    public function getMultiple(): array
     {
         if (is_null($this->options)) {
             $result = $this->container->optionModel->select();
@@ -121,19 +113,20 @@ class Option extends ServiceAbstracts
     }
 
     /**
-     * 获取某一项设置
+     * 获取指定配置项的值
      *
      * @param  string $name
      * @return string
-     * @throws \Exception
      */
     public function get(string $name): string
     {
-        if (!in_array($name, $this->allNames)) {
+        $options = $this->getMultiple();
+
+        if (!isset($options[$name])) {
             throw new \Exception('不存在指定的设置项：' . $name);
         }
 
-        return $this->getAll()[$name];
+        return $options[$name];
     }
 
     /**
@@ -147,8 +140,10 @@ class Option extends ServiceAbstracts
             return;
         }
 
+        $options = $this->getMultiple();
+
         foreach ($data as $name => $value) {
-            if (!in_array($name, $this->allNames)) {
+            if (!isset($options[$name])) {
                 throw new \Exception('不存在指定的设置项：' . $name);
             }
         }
@@ -164,15 +159,39 @@ class Option extends ServiceAbstracts
      * 更新某一项设置
      *
      * @param string $name
-     * @param string $value
+     * @param mixed  $value
      */
-    public function set(string $name, string $value): void
+    public function set(string $name, $value): void
     {
-        if (!in_array($name, $this->allNames)) {
+        $options = $this->getMultiple();
+
+        if (!isset($options[$name])) {
             throw new \Exception('不存在指定的设置项：' . $name);
         }
 
         $this->container->optionModel->where(['name' => $name])->update(['value' => $value]);
         $this->options = null;
+    }
+
+    /********************************************************************************
+     * 魔术方法
+     *******************************************************************************/
+
+    /**
+     * @param  string $name
+     * @return string
+     */
+    public function __get(string $name): string
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function __set(string $name, $value): void
+    {
+        $this->set($name, $value);
     }
 }

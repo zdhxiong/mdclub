@@ -288,18 +288,28 @@ class Topic extends ServiceAbstracts
         $errors = [];
 
         // 验证名称
-        if (!is_null($name) && !ValidatorHelper::isMax($name, 20)) {
-            $errors['name'] = '名称长度不能超过 20 个字符';
+        if (!is_null($name)) {
+            if (!$name) {
+                $errors['name'] = '名称不能为空';
+            } elseif (!ValidatorHelper::isMax($name, 20)) {
+                $errors['name'] = '名称长度不能超过 20 个字符';
+            }
         }
 
         // 验证描述
-        if (!is_null($description) && !ValidatorHelper::isMax($description, 1000)) {
-            $errors['description'] = '描述不能超过 1000 个字符';
+        if (!is_null($description)) {
+            if (!$description) {
+                $errors['description'] = '描述不能为空';
+            } elseif (!ValidatorHelper::isMax($description, 1000)) {
+                $errors['description'] = '描述不能超过 1000 个字符';
+            }
         }
 
         // 验证图片
-        if (!is_null($cover) && $coverError = $this->validateImage($cover)) {
-            $errors['cover'] = $coverError;
+        if (!is_null($cover)) {
+            if ($coverError = $this->validateImage($cover)) {
+                $errors['cover'] = $coverError;
+            }
         }
 
         if (
@@ -336,9 +346,11 @@ class Topic extends ServiceAbstracts
             ->where(['followable_id' => $topicId, 'followable_type' => 'topic'])
             ->pluck('user_id');
 
-        $this->container->userModel
-            ->where(['user_id' => $followerIds])
-            ->update(['following_topic_count[-]' => 1]);
+        if ($followerIds) {
+            $this->container->userModel
+                ->where(['user_id' => $followerIds])
+                ->update(['following_topic_count[-]' => 1]);
+        }
 
         /*$database = $this->container->get(Medoo::class);
         $prefix = $this->container->get('settings')['database']['prefix'];

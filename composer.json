@@ -16,7 +16,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "slim/slim": "^3.11",
+        "slim/slim": "^3.12",
         "slim/php-view": "^2.2",
         "slim/http-cache": "^0.4.0",
         "symfony/cache": "^4.2",
@@ -30,24 +30,14 @@
         "mobiledetect/mobiledetectlib": "^2.8",
         "phpmailer/phpmailer": "^6.0",
         "predis/predis": "^1.1",
-        "league/flysystem": "^1.0",
-        "xxtime/flysystem-aliyun-oss": "^1.2",
-        "overtrue/flysystem-qiniu": "^1.0",
-        "jellybool/flysystem-upyun": "^1.0",
         "filp/whoops": "^2.3",
-        "catfan/Medoo": "dev-bugfix",
+        "catfan/Medoo": "^1.6",
         "thepixeldeveloper/sitemap": "^5.1",
         "suin/php-rss-writer": "^1.6",
-        "algolia/algoliasearch-client-php": "^2.1",
+        "algolia/algoliasearch-client-php": "^2.2",
         "sybio/image-workshop": "^2.1",
         "zhuzhichao/ip-location-zh": "^2.4"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/zdhxiong/Medoo"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "App\\": "src/"

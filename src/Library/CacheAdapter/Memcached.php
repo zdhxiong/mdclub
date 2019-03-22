@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Library\Cache;
+namespace App\Library\CacheAdapter;
 
 use App\Interfaces\ContainerInterface;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter as SymfonyMemcachedAdapter;
@@ -14,23 +14,24 @@ use Symfony\Component\Cache\Simple\MemcachedCache;
  * Class MemcachedAdapter
  * @package App\Library\Cache
  */
-class MemcachedAdapter extends MemcachedCache
+class Memcached extends MemcachedCache
 {
     /**
      * MemcachedAdapter constructor.
      *
      * @param ContainerInterface $container
-     * @param array              $options
      */
-    public function __construct($container, array $options)
+    public function __construct($container)
     {
-        $username = $options['cache_memcached_username'];
-        $password = $options['cache_memcached_password'];
-        $host = $options['cache_memcached_host'];
-        $port = $options['cache_memcached_port'];
+        [
+            'cache_memcached_username' => $username,
+            'cache_memcached_password' => $password,
+            'cache_memcached_host' => $host,
+            'cache_memcached_port' => $port,
+            'cache_prefix' => $namespace
+        ] = $container->optionService->getMultiple();
 
         $client = SymfonyMemcachedAdapter::createConnection("memcached://{$username}:{$password}@{$host}:{$port}");
-        $namespace = $options['cache_prefix'];
 
         parent::__construct($client, $namespace);
     }
