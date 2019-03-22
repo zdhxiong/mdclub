@@ -281,7 +281,7 @@ class Image extends ServiceAbstracts
         $fullFilename = $this->getFullFilename($hash, $timestamp);
 
         // 写入原始文件
-        $this->container->storage->write($fullFilename, $file->getStream()->getContents());
+        $this->container->storage->write($fullFilename, $file->getStream()->getMetadata('uri'));
 
         // local 和 ftp 需要预先裁剪图片
         if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp'])) {
@@ -300,7 +300,7 @@ class Image extends ServiceAbstracts
             $newImage->save(sys_get_temp_dir(), $hash);
             $this->container->storage->write(
                 $this->getFullFilename($hash, $timestamp, 'r'),
-                file_get_contents(sys_get_temp_dir() . '/' . $hash)
+                sys_get_temp_dir() . '/' . $hash
             );
 
             // 裁剪成缩略图
@@ -321,7 +321,7 @@ class Image extends ServiceAbstracts
             $newImage->save(sys_get_temp_dir(), $hash);
             $this->container->storage->write(
                 $this->getFullFilename($hash, $timestamp, 't'),
-                file_get_contents(sys_get_temp_dir() . '/' . $hash)
+                sys_get_temp_dir() . '/' . $hash
             );
         } else {
             // 通过 getimagesize 函数获取图片宽高

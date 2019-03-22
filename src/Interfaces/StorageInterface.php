@@ -22,11 +22,11 @@ interface StorageInterface
     /**
      * 写入文件
      *
-     * @param  string $path    文件路径
-     * @param  string $content 文件内容
+     * @param  string $path     写入的文件路径
+     * @param  string $tmp_path 临时文件路径
      * @return bool
      */
-    public function write(string $path, string $content): bool;
+    public function write(string $path, string $tmp_path): bool;
 
     /**
      * 删除文件

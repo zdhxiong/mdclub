@@ -31,16 +31,17 @@ class Local extends ContainerAbstracts implements StorageInterface
     public function __construct($container)
     {
         parent::__construct($container);
-        $this->setPathPrefix($this->container->optionService->storage_local_dir);
+
+        $this->setPathPrefix();
     }
 
     /**
      * 设置文件存储路径
-     *
-     * @param string $prefix
      */
-    protected function setPathPrefix(string $prefix): void
+    protected function setPathPrefix(): void
     {
+        $prefix = $this->container->optionService->storage_local_dir;
+
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
         }
@@ -90,15 +91,15 @@ class Local extends ContainerAbstracts implements StorageInterface
      * 写入文件
      *
      * @param  string $path
-     * @param  string $content
+     * @param  string $tmp_path
      * @return bool
      */
-    public function write(string $path, string $content): bool
+    public function write(string $path, string $tmp_path): bool
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        return !!file_put_contents($location, $content);
+        return copy($tmp_path, $location);
     }
 
     /**

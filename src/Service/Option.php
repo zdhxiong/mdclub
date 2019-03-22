@@ -37,7 +37,6 @@ use App\Abstracts\ContainerAbstracts;
  * @property string storage_aliyun_bucket
  * @property string storage_aliyun_endpoint
  * @property string storage_ftp_host
- * @property string storage_ftp_passive
  * @property string storage_ftp_password
  * @property string storage_ftp_port
  * @property string storage_ftp_root

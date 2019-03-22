@@ -2340,12 +2340,6 @@ components:
         storage_ftp_host:
           type: string
           description: 🔐FTP 服务器地址
-        storage_ftp_passive:
-          type: integer
-          enum:
-            - 1
-            - 0
-          description: 🔐FTP 连接模式。1（主动模式）；0（被动模式）
         storage_ftp_password:
           type: string
           description: 🔐FTP 密码

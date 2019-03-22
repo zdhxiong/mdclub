@@ -16,6 +16,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-ftp": "*",
         "slim/slim": "^3.12",
         "slim/php-view": "^2.2",
         "slim/http-cache": "^0.4.0",

@@ -9,8 +9,6 @@ use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
 
 /**
- * 数据库中删除 storage_ftp_passive、storage_ftp_ssl，新增 storage_ftp_ftps（是否是 ftps）
- *
  * FTP/FTPS 适配器
  *
  * NOTE: FTPS 需要开启 openssl 扩展
@@ -20,6 +18,11 @@ use App\Interfaces\StorageInterface;
  */
 class Ftp extends ContainerAbstracts implements StorageInterface
 {
+    /**
+     * @var resource FTP 链接实例
+     */
+    protected $connect;
+
     /**
      * 存储路径
      *
@@ -35,7 +38,22 @@ class Ftp extends ContainerAbstracts implements StorageInterface
     public function __construct($container)
     {
         parent::__construct($container);
+
         $this->setPathPrefix();
+
+        [
+            'storage_ftp_username' => $username,
+            'storage_ftp_password' => $password,
+            'storage_ftp_host' => $host,
+            'storage_ftp_port' => $port,
+            'storage_ftp_ssl' => $ssl,
+        ] = $container->optionService->getMultiple();
+
+        $this->connect = $ssl
+            ? ftp_ssl_connect($host, (int)$port)
+            : ftp_connect($host, (int)$port);
+
+        ftp_login($this->connect, $username, $password);
     }
 
     /**
@@ -43,27 +61,13 @@ class Ftp extends ContainerAbstracts implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        [
-            'storage_ftp_ftps' => $ftps,
-            'storage_ftp_username' => $username,
-            'storage_ftp_password' => $password,
-            'storage_ftp_host' => $host,
-            'storage_ftp_port' => $port,
-            'storage_ftp_root' => $root,
-        ] = $this->container->optionService->getMultiple();
+        $prefix = $this->container->optionService->storage_ftp_root;
 
-        $protocol = $ftps ? 'ftps://' : 'ftp://';
-
-        // 移除最前面的 /，在最后添加 /
-        if ($root) {
-            $root = ltrim($root, '\\/');
-
-            if (!in_array(substr($root, -1), ['/', '\\'])) {
-                $root .= '/';
-            }
+        if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
+            $prefix .= '/';
         }
 
-        $this->pathPrefix = "{$protocol}{$username}:{$password}@{$host}:{$port}/{$root}";
+        $this->pathPrefix = $prefix;
     }
 
     /**
@@ -84,18 +88,13 @@ class Ftp extends ContainerAbstracts implements StorageInterface
      */
     protected function ensureDirectory(string $root): void
     {
-        if (!is_dir($root)) {
-            $umask = umask(0);
+        $parts = explode('/', $root);
 
-            if (!@mkdir($root, 0755, true)) {
-                $mkdirError = error_get_last();
-            }
-
-            umask($umask);
-
-            if (!is_dir($root)) {
-                $errorMessage = $mkdirError['message'] ?? '';
-                throw new \Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
+        foreach ($parts as $part) {
+            if (!@ftp_chdir($this->connect, $part)) {
+                ftp_mkdir($this->connect, $part);
+                ftp_chmod($this->connect, 0755, $part);
+                ftp_chdir($this->connect, $part);
             }
         }
     }
@@ -104,16 +103,15 @@ class Ftp extends ContainerAbstracts implements StorageInterface
      * 写入文件
      *
      * @param  string $path
-     * @param  string $content
+     * @param  string $tmp_path
      * @return bool
      */
-    public function write(string $path, string $content): bool
+    public function write(string $path, string $tmp_path): bool
     {
         $location = $this->applyPathPrefix($path);
-        // todo 测试 ftp/ftps 是否会自动创建目录
         $this->ensureDirectory(dirname($location));
 
-        return !!file_put_contents($location, $content);
+        return ftp_put($this->connect, $location, $tmp_path, FTP_BINARY);
     }
 
     /**
@@ -126,11 +124,29 @@ class Ftp extends ContainerAbstracts implements StorageInterface
     {
         $location = $this->applyPathPrefix($path);
 
-        return @unlink($location);
+        return @ftp_delete($this->connect, $location);
     }
 
+    /**
+     * 批量删除文件
+     *
+     * @param  array $paths
+     * @return bool
+     */
     public function deleteMultiple(array $paths): bool
     {
-        // TODO: Implement deleteMultiple() method.
+        foreach ($paths as $path) {
+            $this->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * 析构方法，断开 FTP 连接
+     */
+    public function __destruct()
+    {
+        ftp_close($this->connect);
     }
 }
