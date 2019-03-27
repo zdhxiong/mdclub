@@ -7,6 +7,7 @@ namespace App\Library\StorageAdapter;
 use App\Abstracts\ContainerAbstracts;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * 阿里云 OSS 适配器
@@ -17,6 +18,34 @@ use App\Interfaces\StorageInterface;
 class Aliyun extends ContainerAbstracts implements StorageInterface
 {
     /**
+     * AccessKey ID
+     *
+     * @var string
+     */
+    protected $accessKeyId;
+
+    /**
+     * Access Key Secret
+     *
+     * @var string
+     */
+    protected $accessKeySecret;
+
+    /**
+     * Bucket 名称
+     *
+     * @var string
+     */
+    protected $bucket;
+
+    /**
+     * EndPoint（地域节点）
+     *
+     * @var string
+     */
+    protected $endpoint;
+
+    /**
      * AliyunOSS constructor.
      *
      * @param ContainerInterface $container
@@ -26,29 +55,85 @@ class Aliyun extends ContainerAbstracts implements StorageInterface
         parent::__construct($container);
 
         [
-            'storage_aliyun_access_id' => $AccessKeyId,
-            'storage_aliyun_access_secret' => $AccessKeySecret,
-            'storage_aliyun_bucket' => $bucket,
-            'storage_aliyun_endpoint' => $endpoint,
+            'storage_aliyun_access_id' => $this->accessKeyId,
+            'storage_aliyun_access_secret' => $this->accessKeySecret,
+            'storage_aliyun_bucket' => $this->bucket,
+            'storage_aliyun_endpoint' => $this->endpoint,
         ] = $container->optionService->getMultiple();
+    }
 
+    /**
+     * 获取请求头
+     *
+     * @param  string  $method
+     * @param  string  $path
+     * @param  array   $headers
+     * @return array
+     */
+    protected function getRequestHeaders(string $method, string $path, array $headers = []): array
+    {
+        $accessKeyId = $this->accessKeyId;
+        $accessKeySecret = $this->accessKeySecret;
 
+        // 签名（https://help.aliyun.com/document_detail/31951.html?spm=a2c4g.11186623.6.1097.b2c43bdbx35G1S）
+        $contentType = $method === 'PUT' ? 'application/x-www-form-urlencoded' : 'application/octet-stream';
+        $date = gmdate('D, d M Y H:i:s \G\M\T');
+        $canonicalizedResource = "/{$this->bucket}/$path";
+        $signature  = base64_encode(hash_hmac('sha1', "{$method}\n\n{$contentType}\n{$date}\n{$canonicalizedResource}", $accessKeySecret, true));
+        $authorization = "OSS {$accessKeyId}:{$signature}";
+
+        // headers
+        $headers['Authorization'] = $authorization;
+        $headers['Date'] = $date;
+        $headers['Host'] = "{$this->bucket}.{$this->endpoint}";
+        $headers['Content-Type'] = $contentType;
+
+        array_walk($headers, function (&$item, $key) {
+            $item = "{$key}: {$item}";
+        });
+
+        return array_values($headers);
+    }
+
+    /**
+     * 处理 curl 返回值
+     *
+     * @param  $curl_handle
+     * @param  $response
+     * @return bool
+     */
+    protected function handleResponse($curl_handle, $response): bool
+    {
+        $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
+        $body = substr($response, $header_size);
+        $code = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
+
+        if (in_array(intval($code), [200, 201, 204, 206])) {
+            return true;
+        }
+
+        preg_match('/<Message>(.*?)<\/Message>/', $body, $matches);
+        throw new \Exception($matches[1]);
     }
 
     /**
      * 发起请求
      *
-     * @param string $method  请求方式
-     * @param string $url     请求 URL
-     * @param string $content 请求内容
-     * @param array  $headers 请求 header
+     * @param  string          $method   请求方式
+     * @param  string          $path     请求 URL
+     * @param  StreamInterface $stream   请求内容
+     * @param  array           $headers
+     * @return string|false
      */
-    protected function request(string $method, string $url, string $content = null, array $headers = [])
+    protected function request(string $method, string $path, StreamInterface $stream = null, array $headers = []): bool
     {
+        $url = "https://{$this->bucket}.{$this->endpoint}/$path";
+        $headers = $this->getRequestHeaders($method, $path, $headers);
+
         $curl_handle = curl_init();
 
-        curl_setopt($curl_handle, CURLOPT_URL, $url);
         curl_setopt($curl_handle, CURLOPT_FILETIME, true);
+        curl_setopt($curl_handle, CURLOPT_URL, $url);
         curl_setopt($curl_handle, CURLOPT_FRESH_CONNECT, false);
         curl_setopt($curl_handle, CURLOPT_MAXREDIRS, 5);
         curl_setopt($curl_handle, CURLOPT_HEADER, true);
@@ -59,34 +144,35 @@ class Aliyun extends ContainerAbstracts implements StorageInterface
         curl_setopt($curl_handle, CURLOPT_REFERER, $url);
         curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->container->request->getServerParam('HTTP_USER_AGENT'));
         curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $content);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $headers);
 
-        if (count($headers)) {
-            $temp_headers = [];
-
-            foreach ($headers as $k => $v) {
-                $temp_headers[] = $k . ': ' . $v;
-            }
-
-            curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $temp_headers);
+        if ($stream) {
+            curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $stream->getContents());
         }
 
-        $output = curl_exec($curl_handle);
+        if (!$response = curl_exec($curl_handle)) {
+            throw new \Exception('cURL resource: ' . (string)$curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
+        }
+
+        $response = $this->handleResponse($curl_handle, $response);
+
         curl_close($curl_handle);
+
+        return $response;
     }
 
     /**
      * 写入文件
      *
-     * @param  string $path
-     * @param  string $content
+     * @param  string          $path
+     * @param  StreamInterface $stream
      * @return bool
      */
-    public function write(string $path, string $content): bool
+    public function write(string $path, StreamInterface $stream): bool
     {
-        $this->request('PUT', $path, $content);
+        return $this->request('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
     }
 
     /**
@@ -97,17 +183,6 @@ class Aliyun extends ContainerAbstracts implements StorageInterface
      */
     public function delete(string $path): bool
     {
-        $this->request('DELETE', $path);
-    }
-
-    /**
-     * 删除多个文件
-     *
-     * @param  array $paths
-     * @return bool
-     */
-    public function deleteMultiple(array $paths): bool
-    {
-        $this->request('POST', '/?delete');
+        return $this->request('DELETE', $path);
     }
 }

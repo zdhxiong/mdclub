@@ -13,6 +13,7 @@ use App\Helper\RequestHelper;
 use App\Helper\StringHelper;
 use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\UploadedFileInterface;
+use Slim\Http\Stream;
 
 /**
  * 图片
@@ -149,9 +150,10 @@ class Image extends ServiceAbstracts
         $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
 
         switch ($storageType) {
-            // local 和 ftp，返回已裁剪好的图片
+            // local、ftp 和 sftp，返回已裁剪好的图片
             case 'local':
             case 'ftp':
+            case 'sftp':
                 list($name, $suffix) = explode('.', $hash);
                 return "{$name}_{$size}.{$suffix}";
 
@@ -281,10 +283,10 @@ class Image extends ServiceAbstracts
         $fullFilename = $this->getFullFilename($hash, $timestamp);
 
         // 写入原始文件
-        $this->container->storage->write($fullFilename, $file->getStream()->getMetadata('uri'));
+        $this->container->storage->write($fullFilename, $file->getStream());
 
-        // local 和 ftp 需要预先裁剪图片
-        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp'])) {
+        // local、ftp 和 sftp 需要预先裁剪图片
+        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp', 'sftp'])) {
             ini_set('memory_limit', '300M');
 
             $image = ImageWorkshop::initFromPath($file->getStream()->getMetadata('uri'));
@@ -300,7 +302,7 @@ class Image extends ServiceAbstracts
             $newImage->save(sys_get_temp_dir(), $hash);
             $this->container->storage->write(
                 $this->getFullFilename($hash, $timestamp, 'r'),
-                sys_get_temp_dir() . '/' . $hash
+                new Stream(fopen(sys_get_temp_dir() . '/' . $hash, 'r'))
             );
 
             // 裁剪成缩略图
@@ -321,7 +323,7 @@ class Image extends ServiceAbstracts
             $newImage->save(sys_get_temp_dir(), $hash);
             $this->container->storage->write(
                 $this->getFullFilename($hash, $timestamp, 't'),
-                sys_get_temp_dir() . '/' . $hash
+                new Stream(fopen(sys_get_temp_dir() . '/' . $hash, 'r'))
             );
         } else {
             // 通过 getimagesize 函数获取图片宽高

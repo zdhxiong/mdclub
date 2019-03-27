@@ -37,6 +37,7 @@ use App\Abstracts\ContainerAbstracts;
  * @property string storage_aliyun_bucket
  * @property string storage_aliyun_endpoint
  * @property string storage_ftp_host
+ * @property string storage_ftp_passive
  * @property string storage_ftp_password
  * @property string storage_ftp_port
  * @property string storage_ftp_root
@@ -46,10 +47,14 @@ use App\Abstracts\ContainerAbstracts;
  * @property string storage_qiniu_access_id
  * @property string storage_qiniu_access_secret
  * @property string storage_qiniu_bucket
- * @property string storage_qiniu_endpoint
+ * @property string storage_qiniu_zone
+ * @property string storage_sftp_host
+ * @property string storage_sftp_password
+ * @property string storage_sftp_port
+ * @property string storage_sftp_root
+ * @property string storage_sftp_username
  * @property string storage_type
  * @property string storage_upyun_bucket
- * @property string storage_upyun_endpoint
  * @property string storage_upyun_operator
  * @property string storage_upyun_password
  * @property string storage_url

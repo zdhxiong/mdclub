@@ -10,7 +10,9 @@ use App\Library\StorageAdapter\Aliyun;
 use App\Library\StorageAdapter\Ftp;
 use App\Library\StorageAdapter\Local;
 use App\Library\StorageAdapter\Qiniu;
+use App\Library\StorageAdapter\Sftp;
 use App\Library\StorageAdapter\Upyun;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * 文件存储，仅限图片
@@ -28,6 +30,7 @@ class Storage
     protected $adapterMap = [
         'local'  => Local::class,
         'ftp'    => Ftp::class,
+        'sftp'   => Sftp::class,
         'aliyun' => Aliyun::class,
         'upyun'  => Upyun::class,
         'qiniu'  => Qiniu::class,
@@ -56,18 +59,13 @@ class Storage
         $this->adapter = new $this->adapterMap[$storageType]($container);
     }
 
-    public function write(string $path, string $content): bool
+    public function write(string $path, StreamInterface $stream): bool
     {
-        return $this->adapter->write($path, $content);
+        return $this->adapter->write($path, $stream);
     }
 
     public function delete(string $path): bool
     {
         return $this->adapter->delete($path);
-    }
-
-    public function deleteMultiple(array $paths): bool
-    {
-        return $this->adapter->deleteMultiple($paths);
     }
 }

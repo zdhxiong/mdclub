@@ -2340,6 +2340,12 @@ components:
         storage_ftp_host:
           type: string
           description: 🔐FTP 服务器地址
+        storage_ftp_passive:
+          type: integer
+          enum:
+            - 1
+            - 0
+          description: 🔐是否使用被动传输模式。1（被动模式）；0（主动模式）
         storage_ftp_password:
           type: string
           description: 🔐FTP 密码
@@ -2373,11 +2379,27 @@ components:
         storage_qiniu_endpoint:
           type: string
           description: 🔐七牛云域名
+        storage_sftp_host:
+          type: string
+          description: 🔐SFTP 服务器地址
+        storage_sftp_password:
+          type: string
+          description: 🔐SFTP 密码
+        storage_sftp_port:
+          type: integer
+          description: 🔐SFTP 端口号
+        storage_sftp_root:
+          type: string
+          description: 🔐SFTP 存储目录
+        storage_sftp_username:
+          type: string
+          description: 🔐SFTP 用户名
         storage_type:
           type: string
           enum:
             - local
             - ftp
+            - sftp
             - aliyun
             - upyun
             - qiniu
@@ -2385,9 +2407,6 @@ components:
         storage_upyun_bucket:
           type: string
           description: 🔐又拍云 Bucket
-        storage_upyun_endpoint:
-          type: string
-          description: 🔐又拍云域名
         storage_upyun_operator:
           type: string
           description: 🔐又拍云操作员账号

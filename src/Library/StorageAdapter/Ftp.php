@@ -7,6 +7,7 @@ namespace App\Library\StorageAdapter;
 use App\Abstracts\ContainerAbstracts;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * FTP/FTPS 适配器
@@ -19,9 +20,11 @@ use App\Interfaces\StorageInterface;
 class Ftp extends ContainerAbstracts implements StorageInterface
 {
     /**
-     * @var resource FTP 链接实例
+     * FTP 连接 resource
+     *
+     * @var resource
      */
-    protected $connect;
+    protected $connection;
 
     /**
      * 存储路径
@@ -39,6 +42,10 @@ class Ftp extends ContainerAbstracts implements StorageInterface
     {
         parent::__construct($container);
 
+        if (!extension_loaded('ftp')) {
+            throw new \Exception('PHP extension FTP is not loaded.');
+        }
+
         $this->setPathPrefix();
 
         [
@@ -47,13 +54,19 @@ class Ftp extends ContainerAbstracts implements StorageInterface
             'storage_ftp_host' => $host,
             'storage_ftp_port' => $port,
             'storage_ftp_ssl' => $ssl,
+            'storage_ftp_passive' => $passive,
         ] = $container->optionService->getMultiple();
 
-        $this->connect = $ssl
+        $this->connection = $ssl
             ? ftp_ssl_connect($host, (int)$port)
             : ftp_connect($host, (int)$port);
 
-        ftp_login($this->connect, $username, $password);
+        if (!$this->connection) {
+            throw new \Exception("Couldn't connect to FTP Server ${host}:${port}");
+        }
+
+        ftp_login($this->connection, $username, $password);
+        ftp_pasv($this->connection, !!$passive);
     }
 
     /**
@@ -88,30 +101,36 @@ class Ftp extends ContainerAbstracts implements StorageInterface
      */
     protected function ensureDirectory(string $root): void
     {
+        $pwd = ftp_pwd($this->connection);
         $parts = explode('/', $root);
 
         foreach ($parts as $part) {
-            if (!@ftp_chdir($this->connect, $part)) {
-                ftp_mkdir($this->connect, $part);
-                ftp_chmod($this->connect, 0755, $part);
-                ftp_chdir($this->connect, $part);
+            if (!$part) {
+                continue;
+            }
+
+            if (!@ftp_chdir($this->connection, $part)) {
+                ftp_mkdir($this->connection, $part);
+                ftp_chdir($this->connection, $part);
             }
         }
+
+        ftp_chdir($this->connection, $pwd);
     }
 
     /**
      * 写入文件
      *
-     * @param  string $path
-     * @param  string $tmp_path
+     * @param  string          $path
+     * @param  StreamInterface $stream
      * @return bool
      */
-    public function write(string $path, string $tmp_path): bool
+    public function write(string $path, StreamInterface $stream): bool
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        return ftp_put($this->connect, $location, $tmp_path, FTP_BINARY);
+        return ftp_put($this->connection, $location, $stream->getMetadata('uri'), FTP_BINARY);
     }
 
     /**
@@ -124,22 +143,7 @@ class Ftp extends ContainerAbstracts implements StorageInterface
     {
         $location = $this->applyPathPrefix($path);
 
-        return @ftp_delete($this->connect, $location);
-    }
-
-    /**
-     * 批量删除文件
-     *
-     * @param  array $paths
-     * @return bool
-     */
-    public function deleteMultiple(array $paths): bool
-    {
-        foreach ($paths as $path) {
-            $this->delete($path);
-        }
-
-        return true;
+        return @ftp_delete($this->connection, $location);
     }
 
     /**
@@ -147,6 +151,6 @@ class Ftp extends ContainerAbstracts implements StorageInterface
      */
     public function __destruct()
     {
-        ftp_close($this->connect);
+        @ftp_close($this->connection);
     }
 }

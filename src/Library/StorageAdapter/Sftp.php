@@ -10,13 +10,28 @@ use App\Interfaces\StorageInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * 本地文件适配器
+ * SFTP 适配器
  *
- * Class Local
- * @package App\Library\Storage\Adapter
+ * todo 无法使用
+ *
+ * Class Sftp
+ * @package App\Library\StorageAdapter
  */
-class Local extends ContainerAbstracts implements StorageInterface
+class Sftp extends ContainerAbstracts implements StorageInterface
 {
+    /**
+     * SSH2 连接 resource
+     *
+     * @var resource
+     */
+    protected $connection;
+
+    /**
+     * SFTP resource
+     *
+     * @var resource
+     */
+    protected $sftp;
     /**
      * 存储路径
      *
@@ -25,7 +40,7 @@ class Local extends ContainerAbstracts implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * Local constructor.
+     * Sftp constructor.
      *
      * @param ContainerInterface $container
      */
@@ -33,7 +48,30 @@ class Local extends ContainerAbstracts implements StorageInterface
     {
         parent::__construct($container);
 
+        if (!extension_loaded('ssh2')) {
+            throw new \Exception('PHP extension ssh2 is not loaded');
+        }
+
         $this->setPathPrefix();
+
+        [
+            'storage_sftp_username' => $username,
+            'storage_sftp_password' => $password,
+            'storage_sftp_host' => $host,
+            'storage_sftp_port' => $port,
+        ] = $container->optionService->getMultiple();
+
+        if (!$this->connection = @ssh2_connect($host, (int)$port)) {
+            throw new \Exception("Could not connect to SSH2 Server");
+        }
+
+        if (!@ssh2_auth_password($this->connection, $username, $password)) {
+            throw new \Exception('Could not authenticate to SSH2 Server');
+        }
+
+        if (!$this->sftp = @ssh2_sftp($this->connection)) {
+            throw new \Exception('Could not initialize SFTP subsystem');
+        }
     }
 
     /**
@@ -41,14 +79,10 @@ class Local extends ContainerAbstracts implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->container->optionService->storage_local_dir;
+        $prefix = $this->container->optionService->storage_sftp_root;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
-        }
-
-        if (!$prefix) {
-            $prefix = __DIR__ . '/../../../public/static/upload/';
         }
 
         $this->pathPrefix = $prefix;
@@ -72,20 +106,7 @@ class Local extends ContainerAbstracts implements StorageInterface
      */
     protected function ensureDirectory(string $root): void
     {
-        if (!is_dir($root)) {
-            $umask = umask(0);
 
-            if (!@mkdir($root, 0755, true)) {
-                $mkdirError = error_get_last();
-            }
-
-            umask($umask);
-
-            if (!is_dir($root)) {
-                $errorMessage = $mkdirError['message'] ?? '';
-                throw new \Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
-            }
-        }
     }
 
     /**
@@ -100,7 +121,7 @@ class Local extends ContainerAbstracts implements StorageInterface
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        return copy($stream->getMetadata('uri'), $location);
+        return ssh2_scp_send($this->connection, $stream, $location);
     }
 
     /**
@@ -113,6 +134,14 @@ class Local extends ContainerAbstracts implements StorageInterface
     {
         $location = $this->applyPathPrefix($path);
 
-        return @unlink($location);
+        return ssh2_sftp_unlink($this->connection, $location);
+    }
+
+    /**
+     * 析构方法，断开 SSH 连接
+     */
+    public function __destruct()
+    {
+        ssh2_disconnect($this->connection);
     }
 }

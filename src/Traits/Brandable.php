@@ -9,6 +9,7 @@ use App\Helper\RequestHelper;
 use App\Helper\StringHelper;
 use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\UploadedFileInterface;
+use Slim\Http\Stream;
 
 /**
  * 对象的标识图 （user-avatar、user-cover、topic-cover）
@@ -90,9 +91,10 @@ trait Brandable
         $height = round($width * $this->getBrandScale());
 
         switch ($storageType) {
-            // local 和 ftp，返回已裁剪好的图片
+            // local、ftp 和 sftp，返回已裁剪好的图片
             case 'local':
             case 'ftp':
+            case 'sftp':
                 list($name, $suffix) = explode('.', $filename);
                 return "{$name}_{$size}.{$suffix}";
 
@@ -184,7 +186,7 @@ trait Brandable
         $this->container->storage->delete($fullFilename);
 
         // 仅 local 和 ftp 需要删除裁剪后的图片
-        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp'])) {
+        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp', 'sftp'])) {
             foreach (array_keys($this->getBrandWidths()) as $size) {
                 $fullFilename = $this->getFullBrandFilename($id, $filename, $size);
                 $this->container->storage->delete($fullFilename);
@@ -207,10 +209,10 @@ trait Brandable
         $fullFilename = $this->getFullBrandFilename($id, $filename);
 
         // 写入原始文件
-        $this->container->storage->write($fullFilename, $file->getStream()->getMetadata('uri'));
+        $this->container->storage->write($fullFilename, $file->getStream());
 
         // 仅 local 和 ftp 需要预先裁剪图片，云存储不需要裁剪
-        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp'])) {
+        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp', 'sftp'])) {
             ini_set('memory_limit', '300M');
 
             $image = ImageWorkshop::initFromPath($file->getStream()->getMetadata('uri'));
@@ -245,7 +247,7 @@ trait Brandable
                 $newImage->save(sys_get_temp_dir(), $filename);
                 $this->container->storage->write(
                     $this->getFullBrandFilename($id, $filename, $size),
-                    sys_get_temp_dir() . '/' . $filename
+                    new Stream(fopen(sys_get_temp_dir() . '/' . $filename, 'r'))
                 );
             }
         }

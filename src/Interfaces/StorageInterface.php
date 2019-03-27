@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use Psr\Http\Message\StreamInterface;
+
 /**
  * 文件存储接口
  *
@@ -22,11 +24,11 @@ interface StorageInterface
     /**
      * 写入文件
      *
-     * @param  string $path     写入的文件路径
-     * @param  string $tmp_path 临时文件路径
+     * @param  string          $path    写入的文件路径
+     * @param  StreamInterface $stream  临时文件路径
      * @return bool
      */
-    public function write(string $path, string $tmp_path): bool;
+    public function write(string $path, StreamInterface $stream): bool;
 
     /**
      * 删除文件
@@ -35,12 +37,4 @@ interface StorageInterface
      * @return bool
      */
     public function delete(string $path): bool;
-
-    /**
-     * 批量删除多个文件
-     *
-     * @param  array $paths 多个文件路径组成的数组
-     * @return bool
-     */
-    public function deleteMultiple(array $paths): bool;
 }
