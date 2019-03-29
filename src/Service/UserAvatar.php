@@ -34,27 +34,17 @@ class UserAvatar extends ServiceAbstracts
     }
 
     /**
-     * 图片尺寸数组
+     * 图片尺寸，宽高比为 1
      *
      * @return array
      */
-    protected function getBrandWidths(): array
+    protected function getBrandSize(): array
     {
         return [
-            's' => 32,
-            'm' => 64,
-            'l' => 96,
+            's' => [32, 32],
+            'm' => [64, 64],
+            'l' => [96, 96],
         ];
-    }
-
-    /**
-     * 图片高度/宽度的比例
-     *
-     * @return float
-     */
-    protected function getBrandScale(): float
-    {
-        return 1;
     }
 
     /**

@@ -39,27 +39,17 @@ class Topic extends ServiceAbstracts
     }
 
     /**
-     * 图片尺寸
+     * 图片尺寸，宽高比为 0.56
      *
      * @return array
      */
-    protected function getBrandWidths(): array
+    protected function getBrandSize(): array
     {
         return [
-            's' => 360,
-            'm' => 720,
-            'l' => 1084,
+            's' => [360, 202],
+            'm' => [720, 404],
+            'l' => [1080, 606],
         ];
-    }
-
-    /**
-     * 图片高宽比
-     *
-     * @return float
-     */
-    protected function getBrandScale(): float
-    {
-        return 0.56;
     }
 
     /**
@@ -103,9 +93,9 @@ class Topic extends ServiceAbstracts
     {
         $suffix = RequestHelper::isSupportWebp($this->container->request) ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
-        $data = [];
+        $data['o'] = "{$staticUrl}default/topic_cover.{$suffix}";
 
-        foreach (array_keys($this->getBrandWidths()) as $size) {
+        foreach (array_keys($this->getBrandSize()) as $size) {
             $data[$size] = "{$staticUrl}default/topic_cover_{$size}.{$suffix}";
         }
 

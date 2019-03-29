@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Abstracts\ContainerAbstracts;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use App\Traits\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -17,8 +17,10 @@ use Psr\Http\Message\StreamInterface;
  * Class Sftp
  * @package App\Library\StorageAdapter
  */
-class Sftp extends ContainerAbstracts implements StorageInterface
+class Sftp extends AbstractAdapter implements StorageInterface
 {
+    use Url;
+
     /**
      * SSH2 连接 resource
      *
@@ -110,31 +112,64 @@ class Sftp extends ContainerAbstracts implements StorageInterface
     }
 
     /**
+     * 获取图片 URL
+     *
+     * @param  string $path
+     * @param  array  $thumbs
+     * @return array
+     */
+    public function get(string $path, array $thumbs): array
+    {
+        $url = $this->getStorageUrl();
+        $data['o'] = $url . $path;
+
+        foreach (array_keys($thumbs) as $size) {
+            $data[$size] = $url . $this->getThumbLocation($path, $size);
+        }
+
+        return $data;
+    }
+
+    /**
      * 写入文件
      *
      * @param  string          $path
      * @param  StreamInterface $stream
+     * @param  array           $thumbs
      * @return bool
      */
-    public function write(string $path, StreamInterface $stream): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        return ssh2_scp_send($this->connection, $stream, $location);
+        ssh2_scp_send($this->connection, $stream->getMetadata('uri'), $location);
+
+        $this->crop($stream, $thumbs, $location, function ($pathTmp, $cropLocation) {
+            ssh2_scp_send($this->connection, $pathTmp, $cropLocation);
+        });
+
+        return true;
     }
 
     /**
      * 删除文件
      *
      * @param  string $path
+     * @param  array  $thumbs
      * @return bool
      */
-    public function delete(string $path): bool
+    public function delete(string $path, array $thumbs): bool
     {
         $location = $this->applyPathPrefix($path);
 
-        return ssh2_sftp_unlink($this->connection, $location);
+        @ssh2_sftp_unlink($this->connection, $location);
+
+        foreach (array_keys($thumbs) as $size) {
+            @ssh2_sftp_unlink($this->connection, $this->getThumbLocation($location, $size));
+        }
+
+        return true;
     }
 
     /**

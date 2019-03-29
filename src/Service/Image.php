@@ -30,9 +30,18 @@ use Slim\Http\Stream;
  */
 class Image extends ServiceAbstracts
 {
-    const RELEASE_WIDTH = 650;
-    const THUMB_WIDTH = 132;
-    const THUMB_HEIGHT = 88;
+    /**
+     * 图片尺寸
+     *
+     * @return array
+     */
+    protected function getSize(): array
+    {
+        return [
+            't' => [132, 88],
+            'r' => [650, 0],
+        ];
+    }
 
     /**
      * 获取允许搜索的字段
@@ -118,101 +127,9 @@ class Image extends ServiceAbstracts
      */
     protected function getPath(string $hash, int $timestamp): string
     {
-        return implode('/', [
-            'image',
-            date('Y-m', $timestamp),
-            date('d', $timestamp),
-            substr($hash, 0, 2),
-        ]);
-    }
+        $path = implode('/', ['image', date('Y-m/d', $timestamp), substr($hash, 0, 2)]);
 
-    /**
-     * 获取文件名（带后缀、或图片裁剪参数）
-     *
-     * 如果是 local 或 ftp，则在上传时已生成不同尺寸的图片
-     * 如果是 aliyun、upyun、qiniu 存储，则添加 url 参数
-     *
-     * @param  string $hash 图片存储的文件名，带后缀，用 . 分隔
-     * @param  string $size 默认为原图， r：缩小的图  t：裁剪成固定尺寸的缩略图
-     * @return string
-     */
-    protected function getFilename(string $hash, string $size = ''): string
-    {
-        if (!in_array($size, ['r', 't'])) {
-            $size = '';
-        }
-
-        if (!$size) {
-            return $hash;
-        }
-
-        $storageType = $this->container->optionService->get('storage_type');
-        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
-
-        switch ($storageType) {
-            // local、ftp 和 sftp，返回已裁剪好的图片
-            case 'local':
-            case 'ftp':
-            case 'sftp':
-                list($name, $suffix) = explode('.', $hash);
-                return "{$name}_{$size}.{$suffix}";
-
-            // aliyun OSS 添加缩略图参数：https://help.aliyun.com/document_detail/44688.html
-            case 'aliyun':
-                $params = '?x-oss-process=image/resize,';
-                $params .= $size == 'r'
-                    ? 'm_lfit,w_' . self::RELEASE_WIDTH
-                    : 'm_fill,w_' . self::THUMB_WIDTH . ',h_' . self::THUMB_HEIGHT . ',limit_0';
-                $params .= $isSupportWebp ? '/format,webp' : '';
-
-                return $hash . $params;
-
-            // upyun 添加缩略图参数：https://help.upyun.com/knowledge-base/image/#e7bca9e5b08fe694bee5a4a7
-            case 'upyun':
-                $params = $size == 'r'
-                    ? '!/fw/' . self::RELEASE_WIDTH
-                    : '!/both/' . self::THUMB_WIDTH . 'x' . self::THUMB_HEIGHT;
-                $params .= $isSupportWebp ? '/format/webp' : '';
-
-                return $hash . $params;
-
-            // qiniu 添加缩略图参数：https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2
-            case 'qiniu':
-                $params = $size == 'r'
-                    ? '?imageView2/2/w/' . self::RELEASE_WIDTH
-                    : '?imageView2/1/w/' . self::THUMB_WIDTH . '/h/' . self::THUMB_HEIGHT;
-                $params .= $isSupportWebp ? '/format/webp' : '';
-
-                return $hash . $params;
-        }
-
-        throw new \Exception('不存在指定的存储类型：' . $storageType);
-    }
-
-    /**
-     * 获取包含相对路径的文件名
-     *
-     * @param  string $hash
-     * @param  int    $timestamp
-     * @param  string $size      默认为原图
-     * @return string
-     */
-    protected function getFullFilename(string $hash, int $timestamp, string $size = ''): string
-    {
-        return $this->getPath($hash, $timestamp) . '/' . $this->getFilename($hash, $size);
-    }
-
-    /**
-     * 获取图片的访问路径
-     *
-     * @param  string $hash
-     * @param  int    $timestamp
-     * @param  string $size      默认为原图
-     * @return string
-     */
-    public function getUrl(string $hash, int $timestamp, string $size = ''): string
-    {
-        return $this->getStorageUrl() . $this->getFullFilename($hash, $timestamp, $size);
+        return "{$path}/{$hash}";
     }
 
     /**
@@ -224,11 +141,10 @@ class Image extends ServiceAbstracts
      */
     public function getUrls(string $hash, int $timestamp): array
     {
-        return [
-            'o' => $this->getUrl($hash, $timestamp),
-            'r'  => $this->getUrl($hash, $timestamp, 'r'),
-            't'    => $this->getUrl($hash, $timestamp, 't'),
-        ];
+        $path = $this->getPath($hash, $timestamp);
+        $thumbs = $this->getSize();
+
+        return $this->container->storage->get($path, $thumbs);
     }
 
     /**
@@ -280,57 +196,12 @@ class Image extends ServiceAbstracts
         $suffix = $this->getSuffix($file);
         $hash = StringHelper::guid() . '.' . $suffix;
         $timestamp = (int)$this->container->request->getServerParam('REQUEST_TIME');
-        $fullFilename = $this->getFullFilename($hash, $timestamp);
+        $path = $this->getPath($hash, $timestamp);
 
-        // 写入原始文件
-        $this->container->storage->write($fullFilename, $file->getStream());
+        $this->container->storage->write($path, $file->getStream(), $this->getSize());
 
-        // local、ftp 和 sftp 需要预先裁剪图片
-        if (in_array($this->container->optionService->get('storage_type'), ['local', 'ftp', 'sftp'])) {
-            ini_set('memory_limit', '300M');
+        list($imageWidth, $imageHeight) = getimagesize($file->getStream()->getMetadata('uri'));
 
-            $image = ImageWorkshop::initFromPath($file->getStream()->getMetadata('uri'));
-            $imageWidth = $image->getWidth();
-            $imageHeight = $image->getHeight();
-
-            // 缩小图片
-            $newImage = clone $image;
-            if ($imageWidth > self::RELEASE_WIDTH) {
-                $newImage->resizeInPixel(self::RELEASE_WIDTH, null, true);
-            }
-
-            $newImage->save(sys_get_temp_dir(), $hash);
-            $this->container->storage->write(
-                $this->getFullFilename($hash, $timestamp, 'r'),
-                new Stream(fopen(sys_get_temp_dir() . '/' . $hash, 'r'))
-            );
-
-            // 裁剪成缩略图
-            $newImage = clone $image;
-            $scale = self::THUMB_HEIGHT / self::THUMB_WIDTH;
-            if ($imageHeight / $imageWidth > $scale) {
-                $height = round($imageWidth * $scale);
-                $newImage->cropInPixel($imageWidth, $height, 0, 0, 'MM');
-            } else {
-                $width = round($imageHeight / $scale);
-                $newImage->cropInPixel($width, $imageHeight, 0, 0, 'MM');
-            }
-
-            if ($imageWidth > self::THUMB_WIDTH && $imageHeight > self::THUMB_HEIGHT) {
-                $newImage->resizeInPixel(self::THUMB_WIDTH, null, true);
-            }
-
-            $newImage->save(sys_get_temp_dir(), $hash);
-            $this->container->storage->write(
-                $this->getFullFilename($hash, $timestamp, 't'),
-                new Stream(fopen(sys_get_temp_dir() . '/' . $hash, 'r'))
-            );
-        } else {
-            // 通过 getimagesize 函数获取图片宽高
-            list($imageWidth, $imageHeight) = getimagesize($file->getStream()->getMetadata('uri'));
-        }
-
-        // 写入数据库
         $this->container->imageModel->insert([
             'hash'     => $hash,
             'filename' => $file->getClientFilename(),
@@ -371,10 +242,10 @@ class Image extends ServiceAbstracts
         if ($image) {
             $this->container->imageModel->delete($hash);
 
-            foreach (['', 'r', 't'] as $size) {
-                $path = $this->getFullFilename($hash, $image['create_time'], $size);
-                $this->container->storage->delete($path);
-            }
+            $path = $this->getPath($hash, $image['create_time']);
+            $thumbs = $this->getSize();
+
+            $this->container->storage->delete($path, $thumbs);
         }
     }
 
@@ -398,10 +269,10 @@ class Image extends ServiceAbstracts
         $this->container->imageModel->delete(array_column($images, 'hash'));
 
         foreach ($images as $image) {
-            foreach (['', 'r', 't'] as $size) {
-                $path = $this->getFullFilename($image['hash'], $image['create_time'], $size);
-                $this->container->storage->delete($path);
-            }
+            $path = $this->getPath($image['hash'], $image['create_time']);
+            $thumbs = $this->getSize();
+
+            $this->container->storage->delete($path, $thumbs);
         }
     }
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Abstracts\ContainerAbstracts;
+use App\Helper\RequestHelper;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use App\Traits\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -15,8 +16,10 @@ use Psr\Http\Message\StreamInterface;
  * Class Upyun
  * @package App\Library\Storage\Adapter
  */
-class Upyun extends ContainerAbstracts implements StorageInterface
+class Upyun extends AbstractAdapter implements StorageInterface
 {
+    use Url;
+
     /**
      * 域名
      */
@@ -157,13 +160,37 @@ class Upyun extends ContainerAbstracts implements StorageInterface
     }
 
     /**
+     * 获取图片 URL
+     *
+     * @param  string $path
+     * @param  array  $thumbs
+     * @return array
+     */
+    public function get(string $path, array $thumbs): array
+    {
+        $url = $this->getStorageUrl();
+        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
+        $data['o'] = $url . $path;
+
+        foreach ($thumbs as $size => [$width, $height]) {
+            $params = "!/both/{$width}x{$height}";
+            $params .= $isSupportWebp ? '/format/webp' : '';
+
+            $data[$size] = "{$url}{$path}{$params}";
+        }
+
+        return $data;
+    }
+
+    /**
      * 写入文件
      *
      * @param  string          $path
      * @param  StreamInterface $stream
+     * @param  array           $thumbs
      * @return bool
      */
-    public function write(string $path, StreamInterface $stream): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
         return $this->request('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
     }
@@ -172,9 +199,10 @@ class Upyun extends ContainerAbstracts implements StorageInterface
      * 删除文件
      *
      * @param  string $path
+     * @param  array  $thumbs
      * @return bool
      */
-    public function delete(string $path): bool
+    public function delete(string $path, array $thumbs): bool
     {
         return $this->request('DELETE', $path, null, ['x-upyun-async' => true]);
     }

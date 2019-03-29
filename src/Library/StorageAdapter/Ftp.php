@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Abstracts\ContainerAbstracts;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use App\Traits\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -17,8 +17,10 @@ use Psr\Http\Message\StreamInterface;
  * Class Ftp
  * @package App\Library\Storage\Adapter
  */
-class Ftp extends ContainerAbstracts implements StorageInterface
+class Ftp extends AbstractAdapter implements StorageInterface
 {
+    use Url;
+
     /**
      * FTP 连接 resource
      *
@@ -119,31 +121,64 @@ class Ftp extends ContainerAbstracts implements StorageInterface
     }
 
     /**
+     * 获取图片 URL
+     *
+     * @param  string $path
+     * @param  array  $thumbs
+     * @return array
+     */
+    public function get(string $path, array $thumbs): array
+    {
+        $url = $this->getStorageUrl();
+        $data['o'] = $url . $path;
+
+        foreach (array_keys($thumbs) as $size) {
+            $data[$size] = $url . $this->getThumbLocation($path, $size);
+        }
+
+        return $data;
+    }
+
+    /**
      * 写入文件
      *
      * @param  string          $path
      * @param  StreamInterface $stream
+     * @param  array           $thumbs
      * @return bool
      */
-    public function write(string $path, StreamInterface $stream): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        return ftp_put($this->connection, $location, $stream->getMetadata('uri'), FTP_BINARY);
+        ftp_put($this->connection, $location, $stream->getMetadata('uri'), FTP_BINARY);
+
+        $this->crop($stream, $thumbs, $location, function ($pathTmp, $cropLocation) {
+            ftp_put($this->connection, $cropLocation, $pathTmp, FTP_BINARY);
+        });
+
+        return true;
     }
 
     /**
      * 删除文件
      *
      * @param  string $path
+     * @param  array  $thumbs
      * @return bool
      */
-    public function delete(string $path): bool
+    public function delete(string $path, array $thumbs): bool
     {
         $location = $this->applyPathPrefix($path);
 
-        return @ftp_delete($this->connection, $location);
+        @ftp_delete($this->connection, $location);
+
+        foreach (array_keys($thumbs) as $size) {
+            @ftp_delete($this->connection, $this->getThumbLocation($location, $size));
+        }
+
+        return true;
     }
 
     /**

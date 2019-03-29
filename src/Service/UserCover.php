@@ -32,27 +32,17 @@ class UserCover extends ServiceAbstracts
     }
 
     /**
-     * 图片尺寸
+     * 图片尺寸，宽高比为 0.56
      *
      * @return array
      */
-    protected function getBrandWidths(): array
+    protected function getBrandSize(): array
     {
         return [
-            's' => 600,
-            'm' => 1024,
-            'l' => 1440,
+            's' => [600, 336],
+            'm' => [1050, 588],
+            'l' => [1450, 812],
         ];
-    }
-
-    /**
-     * 图片高宽比
-     *
-     * @return float
-     */
-    protected function getBrandScale(): float
-    {
-        return 0.56;
     }
 
     /**
@@ -64,9 +54,9 @@ class UserCover extends ServiceAbstracts
     {
         $suffix = RequestHelper::isSupportWebp($this->container->request) ? 'webp' : 'jpg';
         $staticUrl = $this->getStaticUrl();
-        $data = [];
+        $data['o'] = "{$staticUrl}default/user_cover.{$suffix}";
 
-        foreach (array_keys($this->getBrandWidths()) as $size) {
+        foreach (array_keys($this->getBrandSize()) as $size) {
             $data[$size] = "{$staticUrl}default/user_cover_{$size}.{$suffix}";
         }
 

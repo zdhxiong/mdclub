@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Abstracts\ContainerAbstracts;
+use App\Helper\RequestHelper;
 use App\Interfaces\ContainerInterface;
 use App\Interfaces\StorageInterface;
+use App\Traits\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -15,8 +16,10 @@ use Psr\Http\Message\StreamInterface;
  * Class Qiniu
  * @package App\Library\Storage\Adapter
  */
-class Qiniu extends ContainerAbstracts implements StorageInterface
+class Qiniu extends AbstractAdapter implements StorageInterface
 {
+    use Url;
+
     /**
      * 存储区域和域名的映射
      */
@@ -213,13 +216,37 @@ class Qiniu extends ContainerAbstracts implements StorageInterface
     }
 
     /**
+     * 获取图片 URL
+     *
+     * @param  string $path
+     * @param  array  $thumbs
+     * @return array
+     */
+    public function get(string $path, array $thumbs): array
+    {
+        $url = $this->getStorageUrl();
+        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
+        $data['o'] = $url . $path;
+
+        foreach ($thumbs as $size => [$width, $height]) {
+            $params = "?imageView2/1/w/{$width}/h/{$height}";
+            $params .= $isSupportWebp ? '/format/webp' : '';
+
+            $data[$size] = "{$url}{$path}{$params}";
+        }
+
+        return $data;
+    }
+
+    /**
      * 写入文件
      *
      * @param  string          $path
      * @param  StreamInterface $stream
+     * @param  array           $thumbs
      * @return bool
      */
-    public function write(string $path, StreamInterface $stream): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
         $postData = [
             'key' => $path,
@@ -238,9 +265,10 @@ class Qiniu extends ContainerAbstracts implements StorageInterface
      * 删除文件
      *
      * @param  string $path
+     * @param  array  $thumbs
      * @return bool
      */
-    public function delete(string $path): bool
+    public function delete(string $path, array $thumbs): bool
     {
         $encodedEntryURI = $this->base64Encode("{$this->bucket}:{$path}");
         $headers = [

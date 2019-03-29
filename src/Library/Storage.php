@@ -59,13 +59,18 @@ class Storage
         $this->adapter = new $this->adapterMap[$storageType]($container);
     }
 
-    public function write(string $path, StreamInterface $stream): bool
+    public function get(string $path, array $thumbs): array
     {
-        return $this->adapter->write($path, $stream);
+        return $this->adapter->get($path, $thumbs);
     }
 
-    public function delete(string $path): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
-        return $this->adapter->delete($path);
+        return $this->adapter->write($path, $stream, $thumbs);
+    }
+
+    public function delete(string $path, array $thumbs): bool
+    {
+        return $this->adapter->delete($path, $thumbs);
     }
 }
