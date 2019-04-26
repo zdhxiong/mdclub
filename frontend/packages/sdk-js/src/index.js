@@ -30,10 +30,10 @@ export {
 
 /**
  * // 设置全局默认参数
- * mdclubAPI.defaults.token = '';
- * mdclubAPI.defaults.baseURL = '';
- * mdclubAPI.defaults.beforeSend = function () {}
- * mdclubAPI.defaults.success = function () {}
- * mdclubAPI.defaults.error = function () {}
- * mdclubAPI.defaults.complete = function () {}
+ * mdclubSDK.defaults.token = '';
+ * mdclubSDK.defaults.baseURL = '';
+ * mdclubSDK.defaults.beforeSend = function () {}
+ * mdclubSDK.defaults.success = function (responseData) {}
+ * mdclubSDK.defaults.error = function (errorMsg) {}
+ * mdclubSDK.defaults.complete = function () {}
  */

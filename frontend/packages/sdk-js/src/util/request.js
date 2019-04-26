@@ -1,75 +1,33 @@
+import 'promise-polyfill/src/polyfill';
+import 'mdn-polyfills/Object.assign';
+import { encode } from 'qss';
 import globalOptions from './defaults';
+
+// 默认参数
+const defaults = {
+  method: 'GET',
+  url: '',
+  data: false,
+};
 
 // 判断是否支持 webp
 const isSupportWebp = !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
 
-// 对象转为查询字符串
-function param(obj) {
-  const args = [];
-
-  Object.keys(obj).forEach((key) => {
-    let value = '';
-
-    if (obj[key] !== null && obj[key] !== '') {
-      value = `=${encodeURIComponent(obj[key])}`;
-    }
-
-    args.push(encodeURIComponent(key) + value);
-  });
-
-  return args.join('&');
-}
-
-// 扩展函数
-function extend(obj, ...args) {
-  const { length } = args;
-  let i;
-  let options;
-
-  for (i = 0; i < length; i += 1) {
-    options = args[i];
-
-    /* eslint no-loop-func: "off" */
-    Object.keys(options).forEach((prop) => {
-      obj[prop] = options[prop];
-    });
+// 触发回调函数
+const triggerCallback = (callback, ...args) => {
+  if (globalOptions[callback]) {
+    globalOptions[callback](...args);
   }
-
-  return obj;
-}
+};
 
 // 发送请求
 function request(opts) {
-  // 默认参数
-  const defaults = {
-    method: 'GET',
-    url: '',
-    data: false,
-    // beforeSend:    function (XMLHttpRequest) 请求发送前执行，返回 false 可取消本次 ajax 请求
-    // success:       function (data, textStatus, XMLHttpRequest) 请求成功时调用
-    // error:         function (XMLHttpRequest, textStatus) 请求失败时调用
-    // complete:      function (XMLHttpRequest, textStatus) 请求完成后回调函数 (请求成功或失败之后均调用)
-  };
+  const options = Object.assign({}, defaults, opts);
 
-  const options = extend({}, defaults, opts);
-  let { data, url, method } = options;
-  url = globalOptions.baseURL + url;
-  method = method.toUpperCase();
+  const method = options.method.toUpperCase();
+  let url = globalOptions.baseURL + options.url;
+  let { data } = options;
 
-  // 触发 xhr 回调
-  function triggerCallback(callback, ...args) {
-    // 全局回调
-    if (globalOptions[callback]) {
-      globalOptions[callback](...args);
-    }
-
-    // 自定义回调
-    if (options[callback]) {
-      options[callback](...args);
-    }
-  }
-
-  // headers
   const headers = {
     Accept: `application/json, text/javascript${isSupportWebp ? ', image/webp' : ''}`,
     'X-Requested-With': 'XMLHttpRequest',
@@ -80,14 +38,13 @@ function request(opts) {
     headers.token = globalOptions.token;
   }
 
-  // data
   if (data) {
-    if (['GET', 'DELETE'].indexOf(method) > -1 && typeof data !== 'string') {
-      // GET 请求参数序列化
-      data = param(data);
-    }
-
     if (['GET', 'DELETE'].indexOf(method) > -1) {
+      // GET 请求参数序列化
+      if (typeof data !== 'string') {
+        data = encode(data);
+      }
+
       // GET 请求，把 data 数据添加到 URL 中。URL 中不存在 ? 时，自动把第一个 & 替换为 ?
       url = `${url}&${data}`.replace(/[&?]{1,2}/, '?');
     }
@@ -102,52 +59,63 @@ function request(opts) {
     }
   }
 
-  const xhr = new XMLHttpRequest();
-  xhr.open(method, url, true, '', '');
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true, '', '');
 
-  Object.keys(headers).forEach((key) => {
-    xhr.setRequestHeader(key, headers[key]);
+    Object.keys(headers).forEach((name) => {
+      xhr.setRequestHeader(name, headers[name]);
+    });
+
+    xhr.onload = function () {
+      let statusText = 'success';
+      const { status } = xhr;
+
+      if ((status >= 200 && status < 300) || status === 0) {
+        let responseData;
+
+        try {
+          responseData = JSON.parse(xhr.responseText);
+        } catch (err) {
+          statusText = 'parsererror';
+          triggerCallback('error', statusText);
+        }
+
+        if (statusText !== 'parseerror') {
+          triggerCallback('success', responseData);
+
+          if (responseData.code) {
+            reject(responseData);
+          } else {
+            resolve(responseData);
+          }
+        }
+      } else {
+        statusText = 'error';
+        triggerCallback('error', statusText);
+      }
+
+      triggerCallback('complete');
+    };
+
+    xhr.onerror = function () {
+      const { statusText } = xhr;
+
+      triggerCallback('error', statusText);
+      triggerCallback('complete');
+    };
+
+    xhr.onabort = function () {
+      const statusText = 'abort';
+
+      triggerCallback('error', statusText);
+      triggerCallback('complete');
+    };
+
+    triggerCallback('beforeSend');
+
+    xhr.send(data);
   });
-
-  xhr.onload = function () {
-    let textStatus = 'success';
-
-    if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) {
-      let responseData;
-
-      try {
-        responseData = JSON.parse(xhr.responseText);
-      } catch (err) {
-        textStatus = 'parsererror';
-        triggerCallback('error', xhr, textStatus);
-      }
-
-      if (textStatus !== 'parseerror') {
-        triggerCallback('success', responseData, textStatus, xhr);
-      }
-    } else {
-      textStatus = 'error';
-      triggerCallback('error', xhr, textStatus);
-    }
-
-    triggerCallback('complete', xhr, textStatus);
-  };
-
-  xhr.onerror = function () {
-    triggerCallback('error', xhr, xhr.statusText);
-    triggerCallback('complete', xhr, xhr.statusText);
-  };
-
-  xhr.onabort = function () {
-    triggerCallback('error', xhr, 'abort');
-    triggerCallback('complete', xhr, 'abort');
-  };
-
-  triggerCallback('beforeSend', xhr);
-
-  xhr.send(data);
-
-  return xhr;
 }
 
 export default request;

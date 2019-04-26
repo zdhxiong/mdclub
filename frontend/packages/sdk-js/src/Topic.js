@@ -5,53 +5,27 @@ import {
 } from './util/requestAlias';
 
 export default {
-  /**
-   * 获取话题列表
-   *
-   * GET /topics
-   */
-  getList(data, success) {
-    get('/topics', data, success);
-  },
+  // 获取话题列表
+  getList: data => get('/topics', data),
 
-  /**
-   * 发布话题
-   *
-   * POST /topics
-   */
-  create(name, description, cover, success) {
+  // 发布话题
+  create: (name, description, cover) => {
     const data = new FormData();
     data.append('name', name);
     data.append('description', description);
     data.append('cover', cover);
 
-    post('/topics', data, success);
+    return post('/topics', data);
   },
 
-  /**
-   * 删除多个话题
-   *
-   * DELETE /topics
-   */
-  deleteMultiple(topic_id, success) {
-    del('/topics', { topic_id }, success);
-  },
+  // 删除多个话题
+  deleteMultiple: topic_id => del('/topics', { topic_id }),
 
-  /**
-   * 获取指定话题信息
-   *
-   * GET /topics/{topic_id}
-   */
-  getOne(topic_id, success) {
-    get(`/topics/${topic_id}`, success);
-  },
+  // 获取指定话题信息
+  getOne: topic_id => get(`/topics/${topic_id}`),
 
-  /**
-   * 更新话题信息
-   *
-   * POST /topics/{topic_id}
-   */
-  updateOne(topic_id, params, success) {
+  // 更新话题信息
+  updateOne: (topic_id, params) => {
     const data = new FormData();
 
     if (typeof params.name !== 'undefined') {
@@ -66,105 +40,39 @@ export default {
       data.append('cover', params.cover);
     }
 
-    post(`/topics/${topic_id}`, data, success);
+    return post(`/topics/${topic_id}`, data);
   },
 
-  /**
-   * 删除指定话题
-   *
-   * DELETE /topics/{topic_id}
-   */
-  deleteOne(topic_id, success) {
-    del(`/topics/${topic_id}`, success);
-  },
+  // 删除指定话题
+  deleteOne: topic_id => del(`/topics/${topic_id}`),
 
-  /**
-   * 获取指定用户关注的话题列表
-   *
-   * GET /users/{user_id}/following_topics
-   */
-  getFollowing(user_id, data, success) {
-    get(`/users/${user_id}/following_topics`, data, success);
-  },
+  // 获取指定用户关注的话题列表
+  getFollowing: (user_id, data) => get(`/users/${user_id}/following_topics`, data),
 
-  /**
-   * 获取当前用户关注的话题列表
-   *
-   * GET /user/following_topics
-   */
-  getMyFollowing(data, success) {
-    get('/user/following_topics', data, success);
-  },
+  // 获取当前用户关注的话题列表
+  getMyFollowing: data => get('/user/following_topics', data),
 
-  /**
-   * 获取指定话题的关注者
-   *
-   * GET /topics/{topic_id}/followers
-   */
-  getFollowers(topic_id, data, success) {
-    get(`/topics/${topic_id}/followers`, data, success);
-  },
+  // 获取指定话题的关注者
+  getFollowers: (topic_id, data) => get(`/topics/${topic_id}/followers`, data),
 
-  /**
-   * 添加关注
-   *
-   * POST /topics/{topic_id}/followers
-   */
-  addFollow(topic_id, success) {
-    post(`/topics/${topic_id}/followers`, success);
-  },
+  // 添加关注
+  addFollow: topic_id => post(`/topics/${topic_id}/followers`),
 
-  /**
-   * 取消关注
-   *
-   * DELETE /topics/{topic_id}/followers
-   */
-  deleteFollow(topic_id, success) {
-    del(`/topics/${topic_id}/followers`, success);
-  },
+  // 取消关注
+  deleteFollow: topic_id => del(`/topics/${topic_id}/followers`),
 
-  /**
-   * 获取已删除的话题列表
-   *
-   * GET /trash/topics
-   */
-  getDeletedList(data, success) {
-    get('/trash/topics', data, success);
-  },
+  // 获取已删除的话题列表
+  getDeletedList: data => get('/trash/topics', data),
 
-  /**
-   * 恢复多个话题
-   *
-   * POST /trash/topics
-   */
-  restoreMultiple(topic_id, success) {
-    post('/trash/topics', { topic_id }, success);
-  },
+  // 恢复多个话题
+  restoreMultiple: topic_id => post('/trash/topics', { topic_id }),
 
-  /**
-   * 销毁已删除的多个话题
-   *
-   * DELETE /trash/topics
-   */
-  destroyMultiple(topic_id, success) {
-    del('/trash/topics', { topic_id }, success);
-  },
+  // 销毁已删除的多个话题
+  destroyMultiple: topic_id => del('/trash/topics', { topic_id }),
 
-  /**
-   * 恢复指定话题
-   *
-   * POST /trash/topics/{topic_id}
-   */
-  restoreOne(topic_id, success) {
-    post(`/trash/topics/${topic_id}`, success);
-  },
+  // 恢复指定话题
+  restoreOne: topic_id => post(`/trash/topics/${topic_id}`),
 
-  /**
-   * 销毁指定的已删除的话题
-   *
-   * DELETE /trash/topics/{topic_id}
-   */
-  destroyOne(topic_id, success) {
-    del(`/trash/topics/${topic_id}`, success);
-  },
+  // 销毁指定的已删除的话题
+  destroyOne: topic_id => del(`/trash/topics/${topic_id}`),
 };

@@ -1,41 +1,18 @@
 import request from './request';
 
-function requestHandle(method, url, ...args) {
-  let [data, success] = args;
-
-  if (typeof data === 'function') {
-    success = data;
-    data = false;
-  }
-
-  request({
+function requestHandle(method, url, data = false) {
+  return request({
     method,
     url,
     data,
-    success: response => success(response),
   });
 }
 
-
-function get(...args) {
-  requestHandle('GET', ...args);
-}
-
-function post(...args) {
-  requestHandle('POST', ...args);
-}
-
-function patch(...args) {
-  requestHandle('PATCH', ...args);
-}
-
-function put(...args) {
-  requestHandle('PUT', ...args);
-}
-
-function del(...args) {
-  requestHandle('DELETE', ...args);
-}
+const get = (...args) => requestHandle('GET', ...args);
+const post = (...args) => requestHandle('POST', ...args);
+const patch = (...args) => requestHandle('PATCH', ...args);
+const put = (...args) => requestHandle('PUT', ...args);
+const del = (...args) => requestHandle('DELETE', ...args);
 
 export {
   get,

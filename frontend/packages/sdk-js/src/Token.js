@@ -4,14 +4,11 @@ import {
 } from './util/requestAlias';
 
 export default {
-  /**
-   * 生成 token
-   *
-   * POST /tokens
-   */
-  create(_data, success) {
+  // 生成 token
+  create: (_data) => {
     const data = _data;
     data.password = sha1(data.password);
-    post('/tokens', data, success);
+
+    return post('/tokens', data);
   },
 };

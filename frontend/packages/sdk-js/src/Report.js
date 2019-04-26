@@ -5,50 +5,18 @@ import {
 } from './util/requestAlias';
 
 export default {
-  /**
-   * 获取举报列表
-   *
-   * GET /reports
-   */
-  getList(data, success) {
-    get('/reports', data, success);
-  },
+  // 获取举报列表
+  getList: data => get('/reports', data),
 
-  /**
-   * 删除多个举报
-   *
-   * DELETE /reports
-   */
-  deleteMultiple(target, success) {
-    del('/reports', { target }, success);
-  },
+  // 删除多个举报
+  deleteMultiple: target => del('/reports', { target }),
 
-  /**
-   * 获取举报详情列表
-   *
-   * GET /reports/{reportable_type}/{reportable_id}
-   */
-  getDetailList(reportable_type, reportable_id, data, success) {
-    get(`/reports/${reportable_type}/${reportable_id}`, data, success);
-  },
+  // 获取举报详情列表
+  getDetailList: (reportable_type, reportable_id, data) => get(`/reports/${reportable_type}/${reportable_id}`, data),
 
-  /**
-   * 添加举报
-   *
-   * POST /reports/{reportable_type}/{reportable_id}
-   */
-  create(reportable_type, reportable_id, reason, success) {
-    post(`/reports/${reportable_type}/${reportable_id}`, { reason }, success);
-  },
+  // 添加举报
+  create: (reportable_type, reportable_id, reason) => post(`/reports/${reportable_type}/${reportable_id}`, { reason }),
 
-
-
-  /**
-   * 删除举报
-   *
-   * DELETE /reports/{reportable_type}/{reportable_id}
-   */
-  deleteOne(reportable_type, reportable_id, success) {
-    del(`/reports/${reportable_type}/${reportable_id}`, success);
-  },
+  // 删除举报
+  deleteOne: (reportable_type, reportable_id) => del(`/reports/${reportable_type}/${reportable_id}`),
 };

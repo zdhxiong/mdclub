@@ -6,14 +6,14 @@ export default {
   baseURL: '',
 
   // 开始发送请求前的回调函数
-  beforeSend: null,
+  beforeSend: null, // function () {}
 
   // 请求成功的回调函数
-  success: null,
+  success: null, // function (responseData) {}
 
   // 请求失败的回调函数
-  error: null,
+  error: null, // function (errorMsg) {}
 
   // 请求完成的回调函数
-  complete: null,
+  complete: null, // function () {}
 };
