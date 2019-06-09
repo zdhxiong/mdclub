@@ -13,9 +13,6 @@ use Slim\Http\Body;
  * 405 处理
  *
  * NOTE: 输出 HTML 页面时，和 404 共用模板
- *
- * Class NotAllowed
- * @package App\Handlers
  */
 class NotAllowed extends AbstractHandler
 {
@@ -34,17 +31,17 @@ class NotAllowed extends AbstractHandler
         } else {
             $contentType = $this->determineContentType($request);
 
-            if ($contentType == 'application/json') {
+            if ($contentType === 'application/json') {
                 $status = 200;
                 $output = $this->renderJsonNotAllowedMessage($methods);
             } else {
                 $status = 404;
                 $contentType = 'text/html';
-                $output = $this->renderHtmlNotAllowedMessage($request);
+                $output = $this->renderHtmlNotAllowedMessage();
             }
         }
 
-        $body = new Body(fopen('php://temp', 'r+'));
+        $body = new Body(fopen('php://temp', 'r+b'));
         $body->write($output);
 
         return $response
@@ -88,11 +85,10 @@ class NotAllowed extends AbstractHandler
     /**
      * HTML 模板
      *
-     * @param  ServerRequestInterface $request
      * @return string
      */
-    protected function renderHtmlNotAllowedMessage(ServerRequestInterface $request): string
+    protected function renderHtmlNotAllowedMessage(): string
     {
-        return $this->container->view->fetch('/404.php');
+        return $this->view->fetch('/404.php');
     }
 }

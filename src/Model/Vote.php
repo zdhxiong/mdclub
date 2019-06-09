@@ -7,16 +7,14 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Vote
- * @package App\Model
+ * 投票模型
  */
 class Vote extends ModelAbstracts
 {
     public $table = 'vote';
-    public $primaryKey = null;
     protected $timestamps = true;
 
-    const UPDATE_TIME = false;
+    protected const UPDATE_TIME = false;
 
     public $columns = [
         'user_id',

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * API
- *
- * Class Api
- * @package App\Controller
  */
-class Api extends ControllerAbstracts
+class Api extends ContainerAbstracts
 {
     /**
      * API 接口页面
@@ -26,12 +23,12 @@ class Api extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): Response
     {
-        return $response->write('
+        return $response->write(<<<END
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Swagger UI</title>
+  <title>MDClub API</title>
   <link rel="stylesheet" type="text/css" href="//fonts.loli.net/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700"/>
   <link rel="stylesheet" type="text/css" href="//cdnjs.loli.net/ajax/libs/swagger-ui/3.20.3/swagger-ui.css"/>
   <style>
@@ -57,6 +54,7 @@ class Api extends ControllerAbstracts
 </script>
 </body>
 </html>
-');
+END
+        );
     }
 }

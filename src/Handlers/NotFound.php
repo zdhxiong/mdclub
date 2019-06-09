@@ -11,9 +11,6 @@ use Slim\Http\Body;
 
 /**
  * 404 处理
- *
- * Class NotFound
- * @package App\Handlers
  */
 class NotFound extends AbstractHandler
 {
@@ -31,17 +28,17 @@ class NotFound extends AbstractHandler
         } else {
             $contentType = $this->determineContentType($request);
 
-            if ($contentType == 'application/json') {
+            if ($contentType === 'application/json') {
                 $status = 200;
                 $output = $this->renderJsonNotFoundOutput();
             } else {
                 $status = 404;
                 $contentType = 'text/html';
-                $output = $this->renderHtmlNotFoundOutput($request);
+                $output = $this->renderHtmlNotFoundOutput();
             }
         }
 
-        $body = new Body(fopen('php://temp', 'r+'));
+        $body = new Body(fopen('php://temp', 'r+b'));
         $body->write($output);
 
         return $response
@@ -78,11 +75,10 @@ class NotFound extends AbstractHandler
     /**
      * HTML 模板
      *
-     * @param  ServerRequestInterface $request
      * @return string
      */
-    protected function renderHtmlNotFoundOutput(ServerRequestInterface $request): string
+    protected function renderHtmlNotFoundOutput(): string
     {
-        return $this->container->view->fetch('/404.php');
+        return $this->view->fetch('/404.php');
     }
 }

@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 举报
- *
- * Class Report
- * @package App\Controller
  */
-class Report extends ControllerAbstracts
+class Report extends ContainerAbstracts
 {
     /**
      * 获取举报列表
@@ -26,11 +22,12 @@ class Report extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->reportService->getList(true);
-
-        return $this->success($response, $list);
+        return $this->reportService
+            ->fetchCollection()
+            ->getList(true)
+            ->render($response);
     }
 
     /**
@@ -42,12 +39,12 @@ class Report extends ControllerAbstracts
      */
     public function deleteMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $target = ArrayHelper::getQueryParam($request, 'target', 100);
-        $this->container->reportService->deleteMultiple($target);
+        $target = $this->requestService->getQueryParamToArray('target', 100);
+        $this->reportService->deleteMultiple($target);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -61,11 +58,12 @@ class Report extends ControllerAbstracts
      */
     public function getDetailList(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->reportService->getDetailList($reportable_type, $reportable_id, true);
-
-        return $this->success($response, $list);
+        return $this->reportService
+            ->fetchCollection()
+            ->getDetailList($reportable_type, $reportable_id, true)
+            ->render($response);
     }
 
     /**
@@ -80,10 +78,12 @@ class Report extends ControllerAbstracts
     public function create(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
     {
         $reason = $request->getParsedBodyParam('reason');
-        $reportId = $this->container->reportService->create($reportable_type, $reportable_id, $reason);
-        $report = $this->container->reportService->get($reportId, true);
+        $reportId = $this->reportService->create($reportable_type, $reportable_id, $reason);
 
-        return $this->success($response, $report);
+        return $this->reportService
+            ->fetchCollection()
+            ->get($reportId, true)
+            ->render($response);
     }
 
     /**
@@ -97,10 +97,10 @@ class Report extends ControllerAbstracts
      */
     public function deleteOne(Request $request, Response $response, string $reportable_type, int $reportable_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $this->container->reportService->delete($reportable_type, $reportable_id);
+        $this->reportService->delete($reportable_type, $reportable_id);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 }

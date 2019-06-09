@@ -10,13 +10,11 @@ use PHPImageWorkshop\ImageWorkshop;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Class AbstractAdapter
- * @package App\Library\StorageAdapter
  */
 abstract class AbstractAdapter extends ContainerAbstracts
 {
     /**
-     * 获取缩略图存储路径，用于 local、ftp、sftp
+     * 获取缩略图存储路径，用于 local, ftp, sftp
      *
      * @param  string $location
      * @param  string $size
@@ -58,17 +56,13 @@ abstract class AbstractAdapter extends ContainerAbstracts
             // 缩略图的宽高比和原图不一致，需要先裁剪
             if ($width / $height !== $originalWidth / $originalHeight) {
                 if ($width === $height) {
-                    // 裁剪成正方形
                     $newImage->cropMaximumInPercent(0, 0, 'MM');
+                } elseif ($originalWidth / $originalHeight < $width / $height) {
+                    $cropHeight = round($originalWidth / ($width / $height));
+                    $newImage->cropInPixel($originalWidth, $cropHeight, 0, 0, 'MM');
                 } else {
-                    // 裁剪成长方形
-                    if ($originalWidth / $originalHeight < $width / $height) {
-                        $cropHeight = round($originalWidth / ($width / $height));
-                        $newImage->cropInPixel($originalWidth, $cropHeight, 0, 0, 'MM');
-                    } else {
-                        $cropWidth = round($originalHeight * ($width / $height));
-                        $newImage->cropInPixel($cropWidth, $originalHeight, 0, 0, 'MM');
-                    }
+                    $cropWidth = round($originalHeight * ($width / $height));
+                    $newImage->cropInPixel($cropWidth, $originalHeight, 0, 0, 'MM');
                 }
             }
 

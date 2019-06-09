@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
+use App\Exception\SystemException;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 后台管理
- *
- * Class Admin
- * @package App\Controller
  */
-class Admin extends ControllerAbstracts
+class Admin extends ContainerAbstracts
 {
     /**
      * 后台管理控制台页面
@@ -27,45 +25,40 @@ class Admin extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        $userId = $this->container->roleService->managerId();
-
-        if (!$userId) {
-            // 非管理员登录禁止访问
-            return $this->container->view->render($response, '/404.php');
+        if (!$userId = $this->roleService->managerId()) {
+            return $this->view->render($response, '/404.php');
         }
 
-        $staticUrl = $this->getStaticUrl();
-        $rootUrl = $this->getRootUrl();
-        $siteUrl = $this->getSiteUrl();
-        $assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json');
+        $siteUrl = $this->urlService->site();
+        $staticUrl = $this->urlService->static();
+        $rootUrl = $this->urlService->root();
 
-        if (!$assetsInfo) {
-            throw new \Exception('无法访问 ' . $staticUrl . 'admin/webpack-assets.json 文件');
+        if (!$assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json')) {
+            throw new SystemException('无法访问 ' . $staticUrl . 'admin/webpack-assets.json 文件');
         }
 
         $assetsInfo = json_decode($assetsInfo, true);
-        $css = [];
-        $js = [];
+        $css = $js = [];
 
-        foreach ($assetsInfo as $files) {
-            foreach ($files as $suffix => $file) {
-                if ($suffix == 'css') {
-                    $css[] = '<link rel="stylesheet" href="' . $staticUrl . 'admin/' . $file . '"/>';
-                }
-
-                if ($suffix == 'js') {
-                    if ($file == 'bundle.js') {
-                        $js[] = '<script src="http://localhost:8080/' . $file . '"></script>';
-                    } else {
-                        $js[] = '<script src="' . $staticUrl . 'admin/' . $file . '"></script>';
-                    }
-                }
+        collect($assetsInfo)->flatten()->each(static function ($item) use ($staticUrl, &$css, &$js) {
+            if ($item === 'bundle.js') {
+                $js[] = "<script src='http://localhost:8080/${item}'></script>";
+            } elseif (strpos($item, 'css') === 0) {
+                $css[] = "<link rel='stylesheet' href='${staticUrl}admin/${item}'/>";
+            } elseif (strpos($item, 'js') === 0) {
+                $js[] = "<script src='${staticUrl}admin/${item}'></script>";
             }
-        }
+        });
 
-        $userInfo = $this->container->userService->get($userId, true);
+        $cssString = implode('', $css);
+        $jsString = implode('', $js);
 
-        $response->getBody()->write('
+        $userInfo = $this->userGetService
+            ->fetchCollection()
+            ->get($userId, true)
+            ->toJson();
+
+        $response->getBody()->write(<<<END
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,19 +67,22 @@ class Admin extends ControllerAbstracts
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    ' . implode('', $css) . '
+    <title></title>
+    $cssString
 </head>
 <body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
     <script>
-        window.G_API = "' . $rootUrl . '/api"; // api 地址
-        window.G_ROOT = "' . $rootUrl . '"; // 网站根目录相对路径
-        window.G_ADMIN_ROOT = "' . $rootUrl . '/admin"; // 网站后台根目录相对路径
-        window.G_SITE = "' . $siteUrl . '"; // 网址（含域名）
-        window.G_USER = ' . json_encode($userInfo) . ';
+        window.G_API = "$rootUrl/api"; // api 地址
+        window.G_ROOT = "$rootUrl"; // 网站根目录相对路径
+        window.G_ADMIN_ROOT = "$rootUrl/admin"; // 网站后台根目录相对路径
+        window.G_SITE = "$siteUrl"; // 网址（含域名）
+        window.G_USER = $userInfo;
     </script>
-    ' . implode('', $js) . '
+    $jsString
 </body>
-</html>');
+</html>
+END
+        );
 
         return $response;
     }

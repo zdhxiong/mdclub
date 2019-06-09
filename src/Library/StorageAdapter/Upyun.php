@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Helper\RequestHelper;
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 又拍云适配器
- *
- * Class Upyun
- * @package App\Library\Storage\Adapter
  */
 class Upyun extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * 域名
      */
@@ -47,19 +41,15 @@ class Upyun extends AbstractAdapter implements StorageInterface
     protected $password;
 
     /**
-     * Upyun constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        [
-            'storage_upyun_bucket' => $this->bucket,
-            'storage_upyun_operator' => $this->operator,
-            'storage_upyun_password' => $this->password,
-        ] = $container->optionService->getMultiple();
+        $this->bucket = $this->optionService->storage_upyun_bucket;
+        $this->operator = $this->optionService->storage_upyun_operator;
+        $this->password = $this->optionService->storage_upyun_password;
     }
 
     /**
@@ -85,7 +75,7 @@ class Upyun extends AbstractAdapter implements StorageInterface
         $headers['Authorization'] = $authorization;
         $headers['Date'] = $date;
 
-        array_walk($headers, function (&$item, $key) {
+        array_walk($headers, static function (&$item, $key) {
             $item = "{$key}: {$item}";
         });
 
@@ -103,13 +93,13 @@ class Upyun extends AbstractAdapter implements StorageInterface
     {
         $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
         $body = substr($response, $header_size);
-        $code = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
+        $code = (int) curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
 
-        if (intval($code) === 200) {
+        if ($code === 200) {
             return true;
         }
 
-        throw new \Exception(json_decode($body, true)['msg']);
+        throw new SystemException(json_decode($body, true)['msg']);
     }
 
     /**
@@ -138,7 +128,7 @@ class Upyun extends AbstractAdapter implements StorageInterface
         curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl_handle, CURLOPT_NOSIGNAL, true);
         curl_setopt($curl_handle, CURLOPT_REFERER, $url);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->container->request->getServerParam('HTTP_USER_AGENT'));
+        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->request->getServerParam('HTTP_USER_AGENT'));
         curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
@@ -149,7 +139,7 @@ class Upyun extends AbstractAdapter implements StorageInterface
         }
 
         if (!$response = curl_exec($curl_handle)) {
-            throw new \Exception('cURL resource: ' . (string)$curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
+            throw new SystemException('cURL resource: ' . $curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
         }
 
         $response = $this->handleResponse($curl_handle, $response);
@@ -168,8 +158,8 @@ class Upyun extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
+        $url = $this->urlService->storage();
+        $isSupportWebp = $this->requestService->isSupportWebp();
         $data['o'] = $url . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {

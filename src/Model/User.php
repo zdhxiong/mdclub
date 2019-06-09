@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Abstracts\ModelAbstracts;
-use App\Helper\ArrayHelper;
 use App\Helper\IpHelper;
 
 /**
- * Class User
- * @package App\Model
+ * 用户模型
  */
 class User extends ModelAbstracts
 {
@@ -65,7 +63,7 @@ class User extends ModelAbstracts
 
     protected function beforeInsert(array $data): array
     {
-        $data = ArrayHelper::fill($data, [
+        $data = collect($data)->union([
             'avatar' => '',
             'cover' => '',
             'create_ip' => IpHelper::getIp(),
@@ -89,7 +87,7 @@ class User extends ModelAbstracts
             'company' => '',
             'location' => '',
             'disable_time' => 0,
-        ]);
+        ])->all();
 
         $data['password'] = $this->passwordHash($data['password']);
 

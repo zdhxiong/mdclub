@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 首页
- *
- * Class Index
- * @package App\Controller
  */
-class Index extends ControllerAbstracts
+class Index extends ContainerAbstracts
 {
     /**
      * @param  Request           $request
@@ -24,7 +21,7 @@ class Index extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $this->container->view->render($response, '/index.php');
+        return $this->view->render($response, '/index.php');
     }
 
     /**
@@ -39,15 +36,15 @@ class Index extends ControllerAbstracts
     public function migration(Request $request, Response $response): Response
     {
         // answer 表迁移
-        $answers = $this->container->db->select('md_answer', '*');
+        $answers = $this->db->select('md_answer', '*');
         foreach ($answers as &$answer) {
             unset($answer['status']);
             $answer['delete_time'] = 0;
         }
-        $this->container->db->insert('mc_answer', $answers);
+        $this->db->insert('mc_answer', $answers);
 
         // question 表迁移
-        $questions = $this->container->db->select('md_question', '*');
+        $questions = $this->db->select('md_question', '*');
         foreach ($questions as &$question) {
             $question['last_answer_time'] = $question['answer_time'];
             $question['delete_time'] = 0;
@@ -55,11 +52,11 @@ class Index extends ControllerAbstracts
             unset($question['status']);
             unset($question['topic_id']);
         }
-        $this->container->db->insert('mc_question', $questions);
+        $this->db->insert('mc_question', $questions);
 
         // question_follow 和 user_follow 表迁移
-        $questionFollows = $this->container->db->select('md_question_follow', '*');
-        $userFollows = $this->container->db->select('md_user_follow', '*');
+        $questionFollows = $this->db->select('md_question_follow', '*');
+        $userFollows = $this->db->select('md_user_follow', '*');
 
         foreach ($questionFollows as &$questionFollow) {
             $questionFollow['followable_id'] = $questionFollow['question_id'];
@@ -75,11 +72,11 @@ class Index extends ControllerAbstracts
             unset($userFollow['target_user_id']);
         }
 
-        $this->container->db->insert('mc_followable', $questionFollows);
-        $this->container->db->insert('mc_followable', $userFollows);
+        $this->db->insert('mc_followable', $questionFollows);
+        $this->db->insert('mc_followable', $userFollows);
 
         // user 表迁移
-        $users = $this->container->db->select('md_user', '*');
+        $users = $this->db->select('md_user', '*');
         foreach ($users as &$user) {
             unset($user['mobile']);
             $user['last_login_time'] = $user['login_time'];
@@ -101,7 +98,7 @@ class Index extends ControllerAbstracts
             $user['update_time'] = $user['create_time'];
             $user['delete_time'] = 0;
         }
-        $this->container->db->insert('mc_user', $users);
+        $this->db->insert('mc_user', $users);
 
 
         return $response;

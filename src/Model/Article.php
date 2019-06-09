@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Abstracts\ModelAbstracts;
-use App\Helper\ArrayHelper;
 
 /**
- * Class Article
- * @package App\Model
+ * 文章模型
  */
 class Article extends ModelAbstracts
 {
@@ -35,11 +33,11 @@ class Article extends ModelAbstracts
 
     protected function beforeInsert(array $data): array
     {
-        return ArrayHelper::fill($data, [
+        return collect($data)->union([
             'comment_count'  => 0,
             'view_count'     => 0,
             'follower_count' => 0,
             'vote_count'     => 0,
-        ]);
+        ])->all();
     }
 }

@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
 use App\Helper\ValidatorHelper;
 use App\Helper\StringHelper;
-use App\Interfaces\ContainerInterface;
 use PHPMailer\PHPMailer\PHPMailer;
+use Psr\Container\ContainerInterface;
 
 /**
- * Class Email
- *
- * @package App\Service
+ * 邮件
  */
-class Email extends ServiceAbstracts
+class Email extends ContainerAbstracts
 {
     /**
      * 邮件验证码有效期：3小时
@@ -42,30 +40,29 @@ class Email extends ServiceAbstracts
     protected $mailer;
 
     /**
-     * EmailService constructor.
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        $options = $this->container->optionService->getMultiple();
+        $options = $this->optionService;
 
         $PHPMailer = new PHPMailer(true);
-        $PHPMailer->setLanguage($options['language']);
+        $PHPMailer->setLanguage($options->language);
         $PHPMailer->isSMTP();
-        $PHPMailer->setFrom($options['smtp_username'], $options['site_name']);
-        $PHPMailer->isHTML(true);
-        $PHPMailer->Host = $options['smtp_host'];
+        $PHPMailer->setFrom($options->smtp_username, $options->site_name);
+        $PHPMailer->isHTML();
+        $PHPMailer->Host = $options->smtp_host;
         $PHPMailer->SMTPAuth = true;
-        $PHPMailer->Username = $options['smtp_username'];
-        $PHPMailer->Password = $options['smtp_password'];
-        $PHPMailer->SMTPSecure = $options['smtp_secure'];
-        $PHPMailer->Port = $options['smtp_port'];
+        $PHPMailer->Username = $options->smtp_username;
+        $PHPMailer->Password = $options->smtp_password;
+        $PHPMailer->SMTPSecure = $options->smtp_secure;
+        $PHPMailer->Port = $options->smtp_port;
         $PHPMailer->CharSet = 'utf-8';
 
-        if ($options['smtp_reply_to']) {
-            $PHPMailer->addReplyTo($options['smtp_reply_to'], $options['site_name']);
+        if ($options->smtp_reply_to) {
+            $PHPMailer->addReplyTo($options->smtp_reply_to, $options->site_name);
         }
 
         $this->mailer = $PHPMailer;
@@ -74,13 +71,13 @@ class Email extends ServiceAbstracts
     /**
      * 发送邮件
      *
-     * @param  array|bool $to
-     * @param  string     $subject
-     * @param  string     $body
+     * @param  array|string $to
+     * @param  string       $subject
+     * @param  string       $body
      */
     public function send($to, string $subject, string $body): void
     {
-        if (is_null($to)) {
+        if ($to === null) {
             $to = [];
         }
 
@@ -128,9 +125,9 @@ class Email extends ServiceAbstracts
         $cacheKey = $this->getCacheKey($email);
         $cacheValue = $codeInfo['code'] . '-' . ($codeInfo['times'] + 1);
 
-        $this->container->cache->set($cacheKey, $cacheValue, $this->lifeTime);
+        $this->cache->set($cacheKey, $cacheValue, $this->lifeTime);
 
-        return $codeInfo['code'] == $code;
+        return $codeInfo['code'] === $code;
     }
 
     /**
@@ -140,13 +137,13 @@ class Email extends ServiceAbstracts
      */
     public function sendRegisterEmail(string $email): void
     {
-        $option = $this->container->optionService->getMultiple();
+        $options = $this->optionService;
 
         $code = $this->generateCode($email);
-        $subject = '你正在注册' . $option['site_name'] . '账号';
-        $body = $this->container->view->fetch('/email_templates/register.php', [
+        $subject = '你正在注册' . $options->site_name . '账号';
+        $body = $this->view->fetch('/email_templates/register.php', [
             'code' => $code,
-            'option' => $option,
+            'option' => $options->getMultiple()->all(),
         ]);
 
         $this->send($email, $subject, $body);
@@ -159,13 +156,13 @@ class Email extends ServiceAbstracts
      */
     public function sendPasswordResetEmail(string $email): void
     {
-        $option = $this->container->optionService->getMultiple();
+        $options = $this->optionService;
 
         $code = $this->generateCode($email);
-        $subject = '你正在重置' . $option['site_name'] . '的密码';
-        $body = $this->container->view->fetch('/email_templates/password_reset.php', [
+        $subject = '你正在重置' . $options->site_name . '的密码';
+        $body = $this->view->fetch('/email_templates/password_reset.php', [
             'code' => $code,
-            'option' => $option,
+            'option' => $options->getMultiple()->all(),
         ]);
 
         $this->send($email, $subject, $body);
@@ -178,13 +175,13 @@ class Email extends ServiceAbstracts
      */
     public function sendWelcomeEmail(array $user): void
     {
-        $option = $this->container->optionService->getMultiple();
+        $options = $this->optionService;
 
         $email = $user['email'];
-        $subject = '你已成功注册' . $option['site_name'] . '账号';
-        $body = $this->container->view->fetch('/email_templates/welcome.php', [
+        $subject = '你已成功注册' . $options->site_name . '账号';
+        $body = $this->view->fetch('/email_templates/welcome.php', [
             'user' => $user,
-            'option' => $option,
+            'option' => $options->getMultiple()->all(),
         ]);
 
         $this->send($email, $subject, $body);
@@ -236,7 +233,7 @@ class Email extends ServiceAbstracts
     private function getCodeInfo(string $email)
     {
         $cacheKey = $this->getCacheKey($email);
-        $codeInfo = $this->container->cache->get($cacheKey);
+        $codeInfo = $this->cache->get($cacheKey);
 
         if (!$codeInfo) {
             return false;
@@ -266,7 +263,7 @@ class Email extends ServiceAbstracts
             $code = StringHelper::rand(6);
             $cacheKey = $this->getCacheKey($email);
 
-            $this->container->cache->set($cacheKey, "{$code}-0", $this->lifeTime);
+            $this->cache->set($cacheKey, "{$code}-0", $this->lifeTime);
         } else {
             $code = $codeInfo['code'];
         }

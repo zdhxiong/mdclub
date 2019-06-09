@@ -6,9 +6,6 @@ namespace App\Helper;
 
 /**
  * GUID
- *
- * Class StringHelper
- * @package App\Util
  */
 class StringHelper
 {
@@ -21,7 +18,7 @@ class StringHelper
     {
         mt_srand((int)microtime()*10000);
 
-        return md5(uniqid((string)rand(), true));
+        return md5(uniqid((string)mt_rand(), true));
     }
 
     /**
@@ -39,7 +36,7 @@ class StringHelper
 
         $result = '';
         for ($i = 0; $i < $length; $i++) {
-            $result .= $chars[mt_rand(0, strlen($chars) - 1)];
+            $result .= $chars[random_int(0, strlen($chars) - 1)];
         }
 
         return $result;
@@ -53,6 +50,6 @@ class StringHelper
      */
     public static function randNumber(int $length): string
     {
-        return StringHelper::rand($length, '0123456789');
+        return self::rand($length, '0123456789');
     }
 }

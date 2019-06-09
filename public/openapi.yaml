@@ -2376,9 +2376,15 @@ components:
         storage_qiniu_bucket:
           type: string
           description: 🔐七牛云 Bucket
-        storage_qiniu_endpoint:
+        storage_qiniu_zone:
           type: string
-          description: 🔐七牛云域名
+          enum:
+            - z0
+            - z1
+            - z2
+            - na0
+            - as0
+          description: 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
         storage_sftp_host:
           type: string
           description: 🔐SFTP 服务器地址

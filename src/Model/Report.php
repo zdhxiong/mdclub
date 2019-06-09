@@ -7,8 +7,7 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Report
- * @package App\Model
+ * 举报模型
  */
 class Report extends ModelAbstracts
 {
@@ -16,7 +15,7 @@ class Report extends ModelAbstracts
     public $primaryKey = 'report_id';
     protected $timestamps = true;
 
-    const UPDATE_TIME = false;
+    protected const UPDATE_TIME = false;
 
     public $columns = [
         'report_id',

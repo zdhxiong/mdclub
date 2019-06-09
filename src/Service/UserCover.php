@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
-use App\Helper\RequestHelper;
 use App\Traits\Brandable;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
  * 用户封面管理
- *
- * Class UserCover
- * @package App\Service
  */
-class UserCover extends ServiceAbstracts
+class UserCover extends ContainerAbstracts
 {
     use Brandable;
 
@@ -52,8 +48,8 @@ class UserCover extends ServiceAbstracts
      */
     protected function getDefaultBrandUrls(): array
     {
-        $suffix = RequestHelper::isSupportWebp($this->container->request) ? 'webp' : 'jpg';
-        $staticUrl = $this->getStaticUrl();
+        $suffix = $this->requestService->isSupportWebp() ? 'webp' : 'jpg';
+        $staticUrl = $this->urlService->static();
         $data['o'] = "{$staticUrl}default/user_cover.{$suffix}";
 
         foreach (array_keys($this->getBrandSize()) as $size) {
@@ -86,13 +82,13 @@ class UserCover extends ServiceAbstracts
             throw new ApiException(ErrorConstant::USER_COVER_UPLOAD_FAILED, false, $imageError);
         }
 
-        $userInfo = $this->container->userModel->field(['user_id', 'cover'])->get($userId);
+        $userInfo = $this->userModel->field(['user_id', 'cover'])->get($userId);
         if ($userInfo['cover']) {
             $this->deleteImage($userId, $userInfo['cover']);
         }
 
         $filename = $this->uploadImage($userId, $cover);
-        $this->container->userModel->where(['user_id' => $userId])->update(['cover' => $filename]);
+        $this->userModel->where('user_id', $userId)->update('cover', $filename);
 
         return $filename;
     }
@@ -104,14 +100,14 @@ class UserCover extends ServiceAbstracts
      */
     public function delete(int $userId): void
     {
-        $userInfo = $this->container->userModel->field(['user_id', 'cover'])->get($userId);
+        $userInfo = $this->userModel->field(['user_id', 'cover'])->get($userId);
         if (!$userInfo) {
             throw new ApiException(ErrorConstant::USER_NOT_FOUND);
         }
 
         if ($userInfo['cover']) {
             $this->deleteImage($userId, $userInfo['cover']);
-            $this->container->userModel->where(['user_id' => $userId])->update(['cover' => '']);
+            $this->userModel->where('user_id', $userId)->update('cover', '');
         }
     }
 }

@@ -4,26 +4,20 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Helper\RequestHelper;
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 七牛云适配器
- *
- * Class Qiniu
- * @package App\Library\Storage\Adapter
  */
 class Qiniu extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * 存储区域和域名的映射
      */
-    protected $zones = [
+    static protected $zones = [
         'z0' => 'up.qiniup.com',
         'z1' => 'up-z1.qiniup.com',
         'z2' => 'up-z2.qiniup.com',
@@ -60,6 +54,19 @@ class Qiniu extends AbstractAdapter implements StorageInterface
     protected $bucket;
 
     /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+
+        $this->accessKey = $this->optionService->storage_qiniu_access_id;
+        $this->secretKey = $this->optionService->storage_qiniu_access_secret;
+        $this->bucket = $this->optionService->storage_qiniu_bucket;
+        $this->zone = $this->optionService->storage_qiniu_zone;
+    }
+
+    /**
      * URL 安全的 Base64 编码
      *
      * @param  string $data
@@ -69,23 +76,6 @@ class Qiniu extends AbstractAdapter implements StorageInterface
     protected function base64Encode(string $data): string
     {
         return str_replace(['+', '/'], ['-', '_'], base64_encode($data));
-    }
-
-    /**
-     * Qiniu constructor.
-     *
-     * @param ContainerInterface $container
-     */
-    public function __construct($container)
-    {
-        parent::__construct($container);
-
-        [
-            'storage_qiniu_access_id' => $this->accessKey,
-            'storage_qiniu_access_secret' => $this->secretKey,
-            'storage_qiniu_bucket' => $this->bucket,
-            'storage_qiniu_zone' => $this->zone,
-        ] = $container->optionService->getMultiple();
     }
 
     /**
@@ -112,7 +102,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
      * @return string
      * @link https://developer.qiniu.com/kodo/manual/1208/upload-token
      */
-    protected function getUploadToken(string $path)
+    protected function getUploadToken(string $path): string
     {
         $policy = $this->getPolicy($path);
         $sign = $this->base64Encode(hash_hmac('sha1', $policy, $this->secretKey, true));
@@ -127,7 +117,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
      * @return string
      * @link https://developer.qiniu.com/kodo/manual/1201/access-token
      */
-    protected function getAccessToken(string $path)
+    protected function getAccessToken(string $path): string
     {
         $sign = $this->base64Encode(hash_hmac('sha1', "{$path}\n", $this->secretKey, true));
 
@@ -142,7 +132,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
      */
     protected function getRequestHeaders(array $headers = []): array
     {
-        array_walk($headers, function (&$item, $key) {
+        array_walk($headers, static function (&$item, $key) {
             $item = "{$key}: {$item}";
         });
 
@@ -160,13 +150,13 @@ class Qiniu extends AbstractAdapter implements StorageInterface
     {
         $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
         $body = substr($response, $header_size);
-        $code = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
+        $code = (int) curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
 
-        if (in_array(intval($code), [200, 612])) { // 612: 待删除资源不存在
+        if (in_array($code, [200, 612], true)) { // 612: 待删除资源不存在
             return true;
         }
 
-        throw new \Exception(json_decode($body, true)['error']);
+        throw new SystemException(json_decode($body, true)['error']);
     }
 
     /**
@@ -194,7 +184,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
         curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl_handle, CURLOPT_NOSIGNAL, true);
         curl_setopt($curl_handle, CURLOPT_REFERER, $url);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->container->request->getServerParam('HTTP_USER_AGENT'));
+        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->request->getServerParam('HTTP_USER_AGENT'));
         curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
@@ -205,7 +195,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
         }
 
         if (!$response = curl_exec($curl_handle)) {
-            throw new \Exception('cURL resource: ' . (string)$curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
+            throw new SystemException('cURL resource: ' . $curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
         }
 
         $response = $this->handleResponse($curl_handle, $response);
@@ -224,8 +214,8 @@ class Qiniu extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
+        $url = $this->urlService->storage();
+        $isSupportWebp = $this->requestService->isSupportWebp();
         $data['o'] = $url . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
@@ -248,6 +238,7 @@ class Qiniu extends AbstractAdapter implements StorageInterface
      */
     public function write(string $path, StreamInterface $stream, array $thumbs): bool
     {
+        $zones = self::$zones;
         $postData = [
             'key' => $path,
             'token' => $this->getUploadToken($path),
@@ -255,10 +246,10 @@ class Qiniu extends AbstractAdapter implements StorageInterface
         ];
 
         $headers = [
-            'Host' => $this->zones[$this->zone],
+            'Host' => $zones[$this->zone],
         ];
 
-        return $this->request('POST', "https://{$this->zones[$this->zone]}/", $postData, $headers);
+        return $this->request('POST', "https://{$zones[$this->zone]}/", $postData, $headers);
     }
 
     /**

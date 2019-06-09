@@ -6,107 +6,43 @@ namespace App\Traits;
 
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
-use App\Helper\ArrayHelper;
+use Tightenco\Collect\Support\Collection;
 
 /**
- * 可关注对象 （article、question、topic、user）
+ * 可关注对象。用于 article, question, topic, user
  *
- * Trait Followable
- * @package App\Traits
+ * @property-read \App\Abstracts\ModelAbstracts     $model
+ * @property-read \App\Service\User\Get             $userGetService
+ * @property-read \App\Service\Role                 $roleService
+ * @property-read \App\Model\Follow                 $followModel
+ * @property-read \App\Model\User                   $userModel
  */
 trait Followable
 {
-    abstract public function hasOrFail(int $id);
-    abstract public function addRelationship(array $data, array $relationship = []): array;
-    abstract public function getPrivacyFields(): array;
+    protected $isForApi = false;
 
     /**
-     * 获取指定对象的关注者列表，带分页
-     *
-     * @param  int    $followableId
-     * @param  bool   $withRelationship
-     * @return array
+     * @return Followable
      */
-    public function getFollowers(int $followableId, bool $withRelationship = false): array
+    public function forApi(): self
     {
-        $this->hasOrFail($followableId);
+        $this->isForApi = true;
 
-        $list = $this->container->userModel
-            ->join([
-                '[><]follow' => ['user_id' => 'user_id'],
-            ])
-            ->where([
-                'follow.followable_id'   => $followableId,
-                'follow.followable_type' => $this->currentModel->table,
-                'user.disable_time'      => 0,
-            ])
-            ->order([
-                'follow.create_time' => 'DESC',
-            ])
-            ->field($this->container->userService->getPrivacyFields(), true)
-            ->paginate();
-
-        if ($withRelationship) {
-            $relationship = [];
-
-            if ($this->currentModel->table == 'user' && $followableId == $this->container->roleService->userId()) {
-                $relationship = ['is_followed' => true];
-            }
-
-            $list['data'] = $this->container->userService->addRelationship($list['data'], $relationship);
-        }
-
-        return $list;
-    }
-
-    /**
-     * 获取指定用户关注的对象列表，带分页
-     *
-     * @param  int   $userId
-     * @param  bool  $withRelationship
-     * @return array
-     */
-    public function getFollowing(int $userId, bool $withRelationship = false): array
-    {
-        $this->container->userService->hasOrFail($userId);
-
-        $list = $this->currentModel
-            ->join([
-                '[><]follow' => [$this->currentModel->table . '_id' => 'followable_id'],
-            ])
-            ->where([
-                'follow.user_id'         => $userId,
-                'follow.followable_type' => $this->currentModel->table,
-            ])
-            ->order([
-                'follow.create_time' => 'DESC'
-            ])
-            ->field($this->getPrivacyFields(), true)
-            ->paginate();
-
-        if ($withRelationship) {
-            $relationship = $userId == $this->container->roleService->userId()
-                ? ['is_following' => true]
-                : [];
-
-            $list['data'] = $this->addRelationship($list['data'], $relationship);
-        }
-
-        return $list;
+        return $this;
     }
 
     /**
      * 添加关注
      *
-     * @param  int    $userId
-     * @param  int    $followableId
+     * @param  int    $userId       关注者ID
+     * @param  int    $followableId 关注目标ID
      */
-    public function addFollow(int $userId, int $followableId): void
+    public function add(int $userId, int $followableId): void
     {
-        $table = $this->currentModel->table;
-        $isUser = $table == 'user';
+        $table = $this->model->table;
+        $isUser = $table === 'user';
 
-        if ($isUser && $userId == $followableId) {
+        if ($isUser && $userId === $followableId) {
             throw new ApiException(ErrorConstant::USER_CANT_FOLLOW_YOURSELF);
         }
 
@@ -114,51 +50,139 @@ trait Followable
             return;
         }
 
-        $this->container->followModel->insert([
+        $this->followModel->insert([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
             'followable_type' => $table,
         ]);
 
-        $followingFieldName = $isUser ? 'followee_count[+]' : "following_{$table}_count[+]";
-        $this->container->userModel
-            ->where(['user_id' => $userId])
-            ->update([$followingFieldName => 1]);
+        $this->userModel
+            ->where('user_id', $userId)
+            ->inc($isUser ? 'followee_count' : "following_${table}_count")
+            ->update();
 
-        $this->currentModel
-            ->where(["{$table}_id" => $followableId])
-            ->update(['follower_count[+]' => 1]);
+        $this->model
+            ->where("${table}_id", $followableId)
+            ->inc('follower_count')
+            ->update();
     }
 
     /**
      * 取消关注
      *
-     * @param  int    $userId
-     * @param  int    $followableId
+     * @param  int    $userId       关注者ID
+     * @param  int    $followableId 关注目标ID
      */
-    public function deleteFollow(int $userId, int $followableId): void
+    public function delete(int $userId, int $followableId): void
     {
-        $table = $this->currentModel->table;
-        $isUser = $table == 'user';
+        $table = $this->model->table;
+        $isUser = $table === 'user';
 
         if (!$this->isFollowing($userId, $followableId)) {
             return;
         }
 
-        $this->container->followModel->where([
+        $this->followModel->where([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
             'followable_type' => $table,
         ])->delete();
 
-        $followingFieldName = $isUser ? 'followee_count[-]' : "following_{$table}_count[-]";
-        $this->container->userModel
-            ->where(['user_id' => $userId])
-            ->update([$followingFieldName => 1]);
+        $this->userModel
+            ->where('user_id', $userId)
+            ->dec($isUser ? 'followee_count' : "following_{$table}_count")
+            ->update();
 
-        $this->currentModel
-            ->where(["{$table}_id" => $followableId])
-            ->update(['follower_count[-]' => 1]);
+        $this->model
+            ->where("{$table}_id", $followableId)
+            ->dec('follower_count')
+            ->update();
+    }
+
+    /**
+     * 获取指定对象的关注者列表，带分页
+     *
+     * @param  int              $followableId
+     * @return array|Collection
+     */
+    public function getFollowers(int $followableId)
+    {
+        $table = $this->model->table;
+        $isUser = $table === 'user';
+
+        $this->{"${table}GetService"}->hasOrFail($followableId);
+
+        $knownRelationship = [];
+
+        if ($this->isForApi) {
+            $this->userGetService->forApi();
+            $this->isForApi = false;
+
+            if ($isUser && $followableId === $this->roleService->userId()) {
+                $knownRelationship = ['is_followed' => true];
+            }
+        }
+
+        $this->userGetService->beforeGet();
+
+        $result = $this->userModel
+            ->join([
+                '[><]follow' => ['user_id' => 'user_id'],
+            ])
+            ->where([
+                'follow.followable_id'   => $followableId,
+                'follow.followable_type' => $table,
+                'user.disable_time'      => 0,
+            ])
+            ->order('follow.create_time', 'DESC')
+            ->paginate();
+
+        $result = $this->userGetService->afterGet($result, $knownRelationship);
+
+        return $this->userGetService->returnArray($result);
+    }
+
+    /**
+     * 获取指定用户关注的对象列表，带分页
+     *
+     * @param  int              $userId
+     * @return array|Collection
+     */
+    public function getFollowing(int $userId)
+    {
+        $this->userGetService->hasOrFail($userId);
+
+        $table = $this->model->table;
+        $knownRelationship = [];
+
+        /** @var Getable $service */
+        $service = $this->{"${table}GetService"};
+
+        if ($this->isForApi) {
+            $service->forApi();
+            $this->isForApi = false;
+
+            if ($userId === $this->roleService->userId()) {
+                $knownRelationship = ['is_following' => true];
+            }
+        }
+
+        $service->beforeGet();
+
+        $result = $this->model
+            ->join([
+                '[><]follow' => ["${table}_id" => 'followable_id'],
+            ])
+            ->where([
+                'follow.user_id'         => $userId,
+                'follow.followable_type' => $table,
+            ])
+            ->order('follow.create_time', 'DESC')
+            ->paginate();
+
+        $result = $service->afterGet($result, $knownRelationship);
+
+        return $service->returnArray($result);
     }
 
     /**
@@ -169,7 +193,7 @@ trait Followable
      */
     public function getFollowerCount(int $followableId): int
     {
-        $followableTarget = $this->currentModel->field(['follower_count'])->get($followableId);
+        $followableTarget = $this->model->field(['follower_count'])->get($followableId);
 
         return $followableTarget['follower_count'];
     }
@@ -183,13 +207,13 @@ trait Followable
      */
     protected function isFollowing(int $userId, int $followableId): bool
     {
-        $this->container->userService->hasOrFail($userId);
-        $this->hasOrFail($followableId);
+        $this->userGetService->hasOrFail($userId);
+        $this->{$this->model->table . 'GetService'}->hasOrFail($followableId);
 
-        return $this->container->followModel->where([
+        return $this->followModel->where([
             'user_id'         => $userId,
             'followable_id'   => $followableId,
-            'followable_type' => $this->currentModel->table,
+            'followable_type' => $this->model->table,
         ])->has();
     }
 }

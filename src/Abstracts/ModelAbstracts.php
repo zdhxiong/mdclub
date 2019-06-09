@@ -4,32 +4,33 @@ declare(strict_types=1);
 
 namespace App\Abstracts;
 
+use Psr\Container\ContainerInterface;
+use Tightenco\Collect\Support\Collection;
+
 /**
- * Class Model
+ * 数据库操作封装，支持链式调用操作数据库
  *
- * @method max(): int
- * @method min(): int
- * @method avg(): int
- * @method sum(): int
- *
- * @package App\Model
+ * @method int max()
+ * @method int min()
+ * @method int avg()
+ * @method int sum()
  */
 abstract class ModelAbstracts extends ContainerAbstracts
 {
     /**
      * 自动维护的 create_time 字段名
      */
-    const CREATE_TIME = 'create_time';
+    protected const CREATE_TIME = 'create_time';
 
     /**
      * 自动维护的 update_time 字段名
      */
-    const UPDATE_TIME = 'update_time';
+    protected const UPDATE_TIME = 'update_time';
 
     /**
      * 软删除字段名
      */
-    const DELETE_TIME = 'delete_time';
+    protected const DELETE_TIME = 'delete_time';
 
     /**
      * 表名
@@ -66,47 +67,45 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     protected $timestamps = false;
 
-    private $force;           // 删除时是否强制删除
-    private $withTrashed;     // 查询结果包含软删除值
-    private $onlyTrashed;     // 查询结果仅含软删除值
-    private $order;           // 排序
-    private $limit;           // limit
-    private $where;           // where
-    private $match;           // 全文检索
-    private $group;           // group
-    private $having;          // having
-    private $join;            // join
-    private $column;          // 查询字段
+    private $isForce;         // 删除时是否强制删除
+    private $isWithTrashed;   // 查询结果包含软删除值
+    private $isOnlyTrashed;   // 查询结果仅含软删除值
     private $isColumnExclude; // 是否排除查询字段
+    private $isCollection;    // 是否返回 Collection 集合
+    private $orderData;       // 排序
+    private $limitData;       // limit
+    private $whereData;       // where
+    private $matchData;       // 全文检索
+    private $groupData;       // group
+    private $havingData;      // having
+    private $joinData;        // join
+    private $columnData;      // 查询字段
+    private $updateData;      // 需要更新的数据
 
     /**
      * 恢复默认状态
      */
-    private function reset()
+    private function reset(): void
     {
-        $this->force = false;
-        $this->withTrashed = false;
-        $this->onlyTrashed = false;
-        $this->order = null;
-        $this->limit = null;
-        $this->where = [];
-        $this->match = null;
-        $this->group = null;
-        $this->having = null;
-        $this->join = null;
-        $this->column = $this->columns;
+        $this->isForce = false;
+        $this->isWithTrashed = false;
+        $this->isOnlyTrashed = false;
         $this->isColumnExclude = false;
+        $this->isCollection = false;
+        $this->orderData = [];
+        $this->limitData = null;
+        $this->whereData = [];
+        $this->matchData = null;
+        $this->groupData = null;
+        $this->havingData = null;
+        $this->joinData = null;
+        $this->columnData = $this->columns;
+        $this->updateData = [];
     }
 
-    /**
-     * Model constructor.
-     *
-     * @param $container
-     */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
-
         $this->reset();
     }
 
@@ -117,7 +116,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     public function force(): self
     {
-        $this->force = true;
+        $this->isForce = true;
 
         return $this;
     }
@@ -129,7 +128,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     public function withTrashed(): self
     {
-        $this->withTrashed = true;
+        $this->isWithTrashed = true;
 
         return $this;
     }
@@ -141,7 +140,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     public function onlyTrashed(): self
     {
-        $this->onlyTrashed = true;
+        $this->isOnlyTrashed = true;
 
         return $this;
     }
@@ -149,13 +148,13 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * columns
      *
-     * @param  array|string  $columns    字段数组
+     * @param  string|array  $columns  字段数组
      * @param  bool          $exclude  是否为排除字段
      * @return ModelAbstracts
      */
     public function field($columns, bool $exclude = false): self
     {
-        $this->column = $columns;
+        $this->columnData = $columns;
         $this->isColumnExclude = $exclude;
 
         return $this;
@@ -164,12 +163,12 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * limit
      *
-     * @param  int|array $limit
+     * @param  int|array      $limit
      * @return ModelAbstracts
      */
     public function limit($limit = null): self
     {
-        $this->limit = $limit;
+        $this->limitData = $limit;
 
         return $this;
     }
@@ -177,12 +176,25 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * order
      *
-     * @param  array  $order
+     * ->order(['field' => 'DESC']) // 传入数组
+     * ->order('field')             // 传入一个字符串，默认按 ASC 排序
+     * ->order('field', 'DESC')     // 传入两个字符串，指定排序方式
+     *
+     * @param  string|array    $order
+     * @param  string          $sort
      * @return ModelAbstracts
      */
-    public function order(array $order = null): self
+    public function order($order = [], string $sort = null): self
     {
-        $this->order = $order;
+        if (!is_array($order)) {
+            if ($sort === null) {
+                $sort = 'ASC';
+            }
+
+            $order = [$order => $sort];
+        }
+
+        $this->orderData = array_merge($this->orderData, $order);
 
         return $this;
     }
@@ -190,12 +202,12 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * match
      *
-     * @param  array $match
+     * @param  array          $match
      * @return ModelAbstracts
      */
     public function match(array $match = null): self
     {
-        $this->match = $match;
+        $this->matchData = $match;
 
         return $this;
     }
@@ -203,12 +215,12 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * group
      *
-     * @param  array  $group
+     * @param  array         $group
      * @return ModelAbstracts
      */
     public function group(array $group = null): self
     {
-        $this->group = $group;
+        $this->groupData = $group;
 
         return $this;
     }
@@ -216,12 +228,12 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * having
      *
-     * @param  array  $having
+     * @param  array         $having
      * @return ModelAbstracts
      */
     public function having(array $having = null): self
     {
-        $this->having = $having;
+        $this->havingData = $having;
 
         return $this;
     }
@@ -229,12 +241,12 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * join
      *
-     * @param  array $join
+     * @param  array         $join
      * @return ModelAbstracts
      */
     public function join(array $join = null): self
     {
-        $this->join = $join;
+        $this->joinData = $join;
 
         return $this;
     }
@@ -242,12 +254,85 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * where
      *
-     * @param array $where
+     * ->where(['id' => 'value']) // 传入数组
+     * ->where('id', 'value')     // 传入两个参数
+     *
+     * @param  string|array    $where
+     * @param  mixed           $value
      * @return ModelAbstracts
      */
-    public function where(array $where = []): self
+    public function where($where = [], $value = null): self
     {
-        $this->where = $where;
+        if (!is_array($where)) {
+            $where = [$where => $value];
+        }
+
+        $this->whereData = array_merge($this->whereData, $where);
+
+        return $this;
+    }
+
+    /**
+     * 增加字段值
+     *
+     * @param  string         $field 字段名
+     * @param  int            $step  步进值
+     * @return ModelAbstracts
+     */
+    public function inc(string $field, int $step = 1): self
+    {
+        unset($this->updateData["${field}[-]"]);
+
+        $this->updateData = array_merge($this->updateData, ["${field}[+]" => $step]);
+
+        return $this;
+    }
+
+    /**
+     * 减少字段值
+     *
+     * @param  string         $field 字段名
+     * @param  int            $step  步进值
+     * @return ModelAbstracts
+     */
+    public function dec(string $field, int $step = 1): self
+    {
+        unset($this->updateData["${field}[+]"]);
+
+        $this->updateData = array_merge($this->updateData, ["${field}[-]" => $step]);
+
+        return $this;
+    }
+
+    /**
+     * 设置更新的数据
+     *
+     * ->set(['id' => 'value']) // 传入数组
+     * ->set('id', 'value')     // 传入两个参数
+     *
+     * @param  string|array   $data
+     * @param  mixed          $value
+     * @return ModelAbstracts
+     */
+    public function set($data, $value = null): self
+    {
+        if (!is_array($data)) {
+            $data = [$data => $value];
+        }
+
+        $this->updateData = array_merge($this->updateData, $data);
+
+        return $this;
+    }
+
+    /**
+     * 是否返回 Collection
+     *
+     * @return ModelAbstracts
+     */
+    public function fetchCollection(): self
+    {
+        $this->isCollection = true;
 
         return $this;
     }
@@ -258,18 +343,18 @@ abstract class ModelAbstracts extends ContainerAbstracts
      * @param  array  $where
      * @return array
      */
-    private function getWhere(array $where = null)
+    private function getWhere(array $where = null): array
     {
         if (!$where) {
-            $where = $this->where;
+            $where = $this->whereData;
         }
 
         $map = [
-            'ORDER' => $this->order,
-            'MATCH' => $this->match,
-            'GROUP' => $this->group,
-            'HAVING' => $this->having,
-            'LIMIT' => $this->limit,
+            'ORDER' => $this->orderData,
+            'MATCH' => $this->matchData,
+            'GROUP' => $this->groupData,
+            'HAVING' => $this->havingData,
+            'LIMIT' => $this->limitData,
         ];
 
         foreach ($map as $name => $value) {
@@ -277,7 +362,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
                 continue;
             }
 
-            if (!$this->join) {
+            if (!$this->joinData) {
                 $where[$name] = $value;
                 continue;
             }
@@ -310,18 +395,18 @@ abstract class ModelAbstracts extends ContainerAbstracts
         }
 
         // 添加软删除条件
-        if ($this->softDelete && !$this->force) {
-            $deleteTimeField = $this->join
+        if ($this->softDelete && !$this->isForce) {
+            $deleteTimeField = $this->joinData
                 ? $this->table . '.' . static::DELETE_TIME
                 : static::DELETE_TIME;
 
             $where[$deleteTimeField] = 0;
 
-            if ($this->withTrashed || $this->onlyTrashed) {
+            if ($this->isWithTrashed || $this->isOnlyTrashed) {
                 unset($where[$deleteTimeField]);
             }
 
-            if ($this->onlyTrashed) {
+            if ($this->isOnlyTrashed) {
                 $where[$deleteTimeField . '[>]'] = 0;
             }
         }
@@ -334,9 +419,9 @@ abstract class ModelAbstracts extends ContainerAbstracts
      *
      * @return array
      */
-    private function getColumns()
+    private function getColumns(): array
     {
-        $columns = $this->column;
+        $columns = $this->columnData;
         $isColumnExclude = $this->isColumnExclude;
 
         if (is_string($columns)) {
@@ -345,9 +430,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
 
         if ($columns && is_string($columns)) {
             $columns = explode(',', $columns);
-            $columns = array_map(function ($item) {
-                return trim($item);
-            }, $columns);
+            $columns = array_map('trim', $columns);
         }
 
         if (!$columns) {
@@ -363,14 +446,14 @@ abstract class ModelAbstracts extends ContainerAbstracts
             $columns = $this->columns;
 
             foreach ($columns as $key => $item) {
-                if (in_array($item, $columnExclude)) {
+                if (in_array($item, $columnExclude, true)) {
                     unset($columns[$key]);
                 }
             }
         }
 
         // 含 join，且字段中不含表名时，自动添加表名
-        if ($this->join) {
+        if ($this->joinData) {
             foreach ($columns as $key => $item) {
                 if (strpos($item, '.') === false) {
                     $columns[$key] = $this->table . '.' . $item;
@@ -418,61 +501,63 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * 根据条件获取多条数据
      *
-     * @param  array  $primaryValues 若传入了该参数，则根据主键值数组获取，否则根据前面的 where 条件获取
-     * @return array
+     * @param  array      $primaryValues 若传入了该参数，则根据主键值数组获取，否则根据前面的 where 条件获取；可传入多个主键组成的数组
+     * @return array|Collection
      */
-    public function select(array $primaryValues = null): array
+    public function select($primaryValues = null)
     {
-        $join = $this->join;
+        $isCollection = $this->isCollection;
+        $join = $this->joinData;
         $columns = $this->getColumns();
         $where = $this->getWhere($primaryValues ? [$this->primaryKey => $primaryValues] : null);
 
         $this->reset();
 
-        if ($join) {
-            $data = $this->container->db->select($this->table, $join, $columns, $where);
-        } else {
-            $data = $this->container->db->select($this->table, $columns, $where);
-        }
+        $args = $join ? [$join, $columns, $where] : [$columns, $where];
+        $data = $this->db->select($this->table, ...$args);
+        $data = $this->afterSelect($data, true);
 
-        return $this->afterSelect($data, true);
+        return $isCollection ? collect($data) : $data;
     }
 
     /**
      * 获取包含单列值的数组
      *
-     * @param  string $column 列名
-     * @return array
+     * @param  string           $column 列名
+     * @return array|Collection
      */
-    public function pluck(string $column): array
+    public function pluck(string $column)
     {
+        $isCollection = $this->isCollection;
         $this->field($column);
         $result = $this->select();
 
-        return array_column($result, $column);
+        return $isCollection ? $result->pluck($column) : array_column($result, $column);
     }
 
     /**
      * 根据条件获取带分页的数据
      *
-     * @param  bool|int $simple 是否使用简单分页（简单分页不含总数据量）；已知数据总量的情况下，可以传入数据总量
-     * @return array
+     * @param  bool|int   $simple 是否使用简单分页（简单分页不含总数据量）；已知数据总量的情况下，可以传入数据总量
+     * @return array|Collection
      */
-    public function paginate($simple = false): array
+    public function paginate($simple = false)
     {
+        $isCollection = $this->isCollection;
+
         if (is_int($simple)) {
             $total = $simple;
             $simple = false;
         }
 
         // page 参数
-        $page = intval($this->container->request->getQueryParam('page', 1));
+        $page = (int) $this->request->getQueryParam('page', 1);
         if ($page < 1) {
             $page = 1;
         }
 
         // per_page 参数
-        $perPage = intval($this->container->request->getQueryParam('per_page', 15));
+        $perPage = (int) $this->request->getQueryParam('per_page', 15);
         if ($perPage > 100) {
             $perPage = 100;
         } elseif ($perPage < 1) {
@@ -482,11 +567,11 @@ abstract class ModelAbstracts extends ContainerAbstracts
         $this->limit([$perPage * ($page - 1), $perPage]);
 
         if (!$simple && !isset($total)) {
-            $total = (int)$this->count(false);
+            $total = (int) $this->count(false);
         }
 
         $result = [
-            'data' => $this->select(),
+            'data' => $isCollection ? $this->select()->all() : $this->select(),
             'pagination' => [
                 'page' => $page,
                 'per_page' => $perPage,
@@ -500,13 +585,13 @@ abstract class ModelAbstracts extends ContainerAbstracts
             $result['pagination']['next']     = $result['pagination']['pages'] > $page ? $page + 1 : null;
         }
 
-        return $result;
+        return $isCollection ? collect($result) : $result;
     }
 
     /**
      * 插入数据
      *
-     * @param  array   $data_array 数据数组、或多个数据组成的二维数组
+     * @param  array      $data_array 数据数组、或多个数据组成的二维数组
      * @return int|string
      */
     public function insert(array $data_array)
@@ -519,11 +604,11 @@ abstract class ModelAbstracts extends ContainerAbstracts
             $data = $this->beforeInsert($data);
 
             if ($this->timestamps && static::CREATE_TIME) {
-                $data[static::CREATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
+                $data[static::CREATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
             }
 
             if ($this->timestamps && static::UPDATE_TIME) {
-                $data[static::UPDATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
+                $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
             }
 
             if ($this->softDelete && static::DELETE_TIME) {
@@ -531,30 +616,41 @@ abstract class ModelAbstracts extends ContainerAbstracts
             }
         }
 
-        $this->container->db->insert($this->table, $data_array);
+        unset($data);
 
-        return $this->container->db->id();
+        $this->db->insert($this->table, $data_array);
+
+        return $this->db->id();
     }
 
     /**
      * 更新数据
      *
-     * @param  array $data    需要更新的数据
+     * ->update(['id' => 'value']) // 传入数组
+     * ->update('id', 'value')     // 传入两个参数
+     *
+     * @param  string|array $data  需要更新的数据
+     * @param  mixed        $value
      * @return int
      */
-    public function update(array $data): int
+    public function update($data = [], $value = null): int
     {
+        if (!is_array($data)) {
+            $data = [$data => $value];
+        }
+
+        $data = array_merge($this->updateData, $data);
         $data = $this->beforeUpdate($data);
 
         if ($this->timestamps && static::UPDATE_TIME) {
-            $data[static::UPDATE_TIME] = $this->container->request->getServerParams()['REQUEST_TIME'];
+            $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
         }
 
         $where = $this->getWhere();
 
         $this->reset();
 
-        $query = $this->container->db->update($this->table, $data, $where);
+        $query = $this->db->update($this->table, $data, $where);
 
         return $query->rowCount();
     }
@@ -562,13 +658,13 @@ abstract class ModelAbstracts extends ContainerAbstracts
     /**
      * 根据条件删除数据
      *
-     * @param  int|string|array    $primaryValues 若传入该参数，则根据主键删除，否则根据前面的 where 条件删除
+     * @param  int|string|array  $primaryValues 若传入该参数，则根据主键删除，否则根据前面的 where 条件删除；可传入多个主键组成的数组
      * @return int
      */
     public function delete($primaryValues = null): int
     {
-        $force = $this->force;
-        $join = $this->join;
+        $force = $this->isForce;
+        $join = $this->joinData;
         $where = $this->getWhere($primaryValues ? [$this->primaryKey => $primaryValues] : null);
 
         $this->reset();
@@ -578,11 +674,11 @@ abstract class ModelAbstracts extends ContainerAbstracts
                 ? $this->table . '.' . static::DELETE_TIME
                 : static::DELETE_TIME;
 
-            $query = $this->container->db->update($this->table, [
-                $deleteTimeField => $this->container->request->getServerParams()['REQUEST_TIME']
+            $query = $this->db->update($this->table, [
+                $deleteTimeField => $this->request->getServerParams()['REQUEST_TIME']
             ], $where);
         } else {
-            $query = $this->container->db->delete($this->table, $where);
+            $query = $this->db->delete($this->table, $where);
         }
 
         return $query->rowCount();
@@ -592,27 +688,25 @@ abstract class ModelAbstracts extends ContainerAbstracts
      * 根据条件获取一条数据
      *
      * @param  int|string  $primaryValue 若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
-     * @return array|null
+     * @return null|array|Collection
      */
     public function get($primaryValue = null)
     {
-        $join = $this->join;
+        $isCollection = $this->isCollection;
+        $join = $this->joinData;
         $columns = $this->getColumns();
         $where = $this->getWhere($primaryValue ? [$this->primaryKey => $primaryValue] : null);
 
         $this->reset();
 
-        if ($join) {
-            $data = $this->container->db->get($this->table, $join, $columns, $where);
-        } else {
-            $data = $this->container->db->get($this->table, $columns, $where);
-        }
+        $args = $join ? [$join, $columns, $where] : [$columns, $where];
+        $data = $this->db->get($this->table, ...$args);
 
         if (is_array($data)) {
             $data = $this->afterSelect($data, false);
         }
 
-        return $data;
+        return $isCollection ? collect($data) : $data;
     }
 
     /**
@@ -623,16 +717,14 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     public function has($primaryValue = null): bool
     {
-        $join = $this->join;
+        $join = $this->joinData;
         $where = $this->getWhere($primaryValue ? [$this->primaryKey => $primaryValue] : null);
 
         $this->reset();
 
-        if ($join) {
-            return $this->container->db->has($this->table, $join, $where);
-        } else {
-            return $this->container->db->has($this->table, $where);
-        }
+        $args = $join ? [$join, $where] : [$where];
+
+        return $this->db->has($this->table, ...$args);
     }
 
     /**
@@ -643,7 +735,7 @@ abstract class ModelAbstracts extends ContainerAbstracts
      */
     public function count($reset = true)
     {
-        $join = $this->join;
+        $join = $this->joinData;
         $where = $this->getWhere();
 
         unset($where['ORDER'], $where['LIMIT']);
@@ -652,11 +744,9 @@ abstract class ModelAbstracts extends ContainerAbstracts
             $this->reset();
         }
 
-        if ($join) {
-            return $this->container->db->count($this->table, $join, '*', $where);
-        } else {
-            return $this->container->db->count($this->table, $where);
-        }
+        $args = $join ? [$join, '*', $where] : [$where];
+
+        return $this->db->count($this->table, ...$args);
     }
 
     /**
@@ -668,20 +758,18 @@ abstract class ModelAbstracts extends ContainerAbstracts
     {
         $aggregation = ['avg', 'max', 'min', 'sum'];
 
-        if (in_array($name, $aggregation)) {
-            $join = $this->join;
-            $columns = $this->getColumns();
-            $where = $this->getWhere();
-
-            $this->reset();
-
-            if ($join) {
-                return call_user_func_array([$this, $name], [$this->table, $join, $columns, $where]);
-            } else {
-                return call_user_func_array([$this, $name], [$this->table, $columns, $where]);
-            }
-        } else {
-            throw new \BadMethodCallException();
+        if (!in_array($name, $aggregation, true)) {
+            throw new \BadMethodCallException('Call to undefined method ' . self::class . '::' . $name);
         }
+
+        $join = $this->joinData;
+        $columns = $this->getColumns();
+        $where = $this->getWhere();
+
+        $this->reset();
+
+        $args = $join ? [$join, $columns, $where] : [$columns, $where];
+
+        return $this->$name($this->table, $args);
     }
 }

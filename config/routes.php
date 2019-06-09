@@ -16,9 +16,11 @@ use App\Controller\Notification;
 use App\Controller\Option;
 use App\Controller\Question;
 use App\Controller\Report;
+use App\Controller\Rss;
 use App\Controller\Topic;
 use App\Controller\User;
 use App\Controller\Token;
+use App\Middleware\EnableCrossRequest;
 
 // 页面
 $app->get(   '/',                             Index::class .        ':pageIndex');
@@ -244,7 +246,19 @@ $app->group('/api', function () {
     $this->get(   '/images/{hash}',                                   Image::class . ':getOne');
     $this->patch( '/images/{hash}',                                   Image::class . ':updateOne');
     $this->delete('/images/{hash}',                                   Image::class . ':deleteOne');
-})->add(new \App\Middleware\EnableCrossRequest());
+})->add(new EnableCrossRequest());
+
+// rss
+$app->group('/rss', function () {
+    $this->get('/questions',                           Rss::class . ':getQuestions');
+    $this->get('/articles',                            Rss::class . ':getArticles');
+    $this->get('/users/{user_id:\d+}/questions',       Rss::class . ':getQuestionsByUserId');
+    $this->get('/users/{user_id:\d+}/articles',        Rss::class . ':getArticlesByUserId');
+    $this->get('/topics/{topic_id:\d+}/questions',     Rss::class . ':getQuestionsByTopicId');
+    $this->get('/topics/{topic_id:\d+}/articles',      Rss::class . ':getArticlesByTopicId');
+    $this->get('/users/{user_id:\d+}/answers',         Rss::class . ':getAnswersByUserId');
+    $this->get('/questions/{question_id:\d+}/answers', Rss::class . ':getAnswersByQuestionId');
+});
 
 // admin
 $app->group('/admin', function () {

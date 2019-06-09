@@ -8,6 +8,8 @@ use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 use App\Exception\ValidationException;
+use App\Middleware\Trace;
+use Exception;
 use Slim\Http\Body;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -16,26 +18,22 @@ use Slim\Http\Response;
  * 异常处理
  *
  * 未处理的异常，在生产环境显示错误页面，调试环境交由 whoops 处理
- *
- * Class Exception
- *
- * @package App\Handlers
  */
 class Error extends ContainerAbstracts
 {
     /**
      * @param  Request    $request
      * @param  Response   $response
-     * @param  \Exception $exception
+     * @param  Exception $exception
      * @return Response
      */
-    public function __invoke(Request $request, Response $response, \Exception $exception): Response
+    public function __invoke(Request $request, Response $response, Exception $exception): Response
     {
         // 字段验证异常
         if ($exception instanceof ValidationException) {
             $output = [
-                'code' => ErrorConstant::SYSTEM_FIELD_VERIFY_FAILED[0],
-                'message' => ErrorConstant::SYSTEM_FIELD_VERIFY_FAILED[1],
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
                 'errors' => $exception->getErrors(),
             ];
 
@@ -73,12 +71,12 @@ class Error extends ContainerAbstracts
         }
 
         if ($isNeedCaptcha) {
-            $captchaInfo = $this->container->captchaService->build();
+            $captchaInfo = $this->captchaService->build();
             $output['captcha_token'] = $captchaInfo['token'];
             $output['captcha_image'] = $captchaInfo['image'];
         }
 
-        $body = new Body(fopen('php://temp', 'r+'));
+        $body = new Body(fopen('php://temp', 'r+b'));
         $body->write(json_encode($output));
 
         $response = $response
@@ -88,7 +86,7 @@ class Error extends ContainerAbstracts
 
         // 因为异常中不会自动调用中间件，所以这里手动调用中间件
         if (APP_DEBUG) {
-            $response = (new \App\Middleware\Trace($this->container))($request, $response, function () use ($response) {
+            $response = (new Trace($this->container))($request, $response, static function () use ($response) {
                 return $response;
             });
         }

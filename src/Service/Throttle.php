@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 
 /**
  * 操作频率限制
- *
- * Class ThrottleService
- * @package App\Service
  */
-class Throttle extends ServiceAbstracts
+class Throttle extends ContainerAbstracts
 {
     /**
      * 获取剩余可执行的次数
@@ -27,16 +24,16 @@ class Throttle extends ServiceAbstracts
      */
     public function getRemaining(string $id, string $action, int $max_count, int $period): int
     {
-        $time = $this->container->request->getServerParam('REQUEST_TIME');
-        $ttl = intval($time / $period) * $period + $period - $time;
+        $time = $this->requestService->time();
+        $ttl = ($time / $period) * $period + $period - $time;
         $key = "throttle_{$action}_{$id}";
-        $currentCount = intval($this->container->cache->get($key, 0)) + 1;
+        $currentCount = (int) $this->cache->get($key, 0) + 1;
 
         if ($currentCount > $max_count) {
             return 0;
         }
 
-        $this->container->cache->set($key, $currentCount, $ttl);
+        $this->cache->set($key, $currentCount, $ttl);
 
         return $max_count - $currentCount + 1;
     }

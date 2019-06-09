@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace App\Library;
 
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Library\CacheAdapter\Memcached;
 use App\Library\CacheAdapter\Pdo;
 use App\Library\CacheAdapter\Redis;
+use Psr\Container\ContainerInterface;
 use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Psr16Cache;
 
 /**
  * 缓存
- *
- * 缓存级别分为三级：
- * 1级：默认缓存到 memcached 或 redis，若没有启用这两项缓存，则缓存到 pdo
- * 2级：必须启用 memcached 或 redis
- * 3级：必须启用 redis，利用 redis 的高级特性进行缓存
- *
- * Class Cache
- * @package App\Library
  */
-class Cache
+class Cache implements CacheInterface
 {
     /**
      * 缓存名称和适配器类名的数组
@@ -56,20 +50,24 @@ class Cache
     protected $logs = [];
 
     /**
-     * Cache constructor.
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
-        $this->cacheType = $container->optionService->cache_type;
+        $this->cacheType = $container->get('optionService')->cache_type;
 
         if (!isset($this->adapterMap[$this->cacheType])) {
-            throw new \Exception('不存在指定的缓存类型: ' . $this->cacheType);
+            throw new SystemException('不存在指定的缓存类型: ' . $this->cacheType);
         }
 
-        $this->adapter = new $this->adapterMap[$this->cacheType]($container);
+        $psr6Cache = new $this->adapterMap[$this->cacheType]($container);
+
+        $this->adapter = new Psr16Cache($psr6Cache);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function get($key, $default = null)
     {
         $this->logs[] = "{$this->cacheType} get {$key}";
@@ -77,48 +75,70 @@ class Cache
         return $this->adapter->get($key, $default);
     }
 
-    public function set($key, $value, $ttl = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function set($key, $value, $ttl = null): bool
     {
         $this->logs[] = "{$this->cacheType} set {$key}";
 
         return $this->adapter->set($key, $value, $ttl);
     }
 
-    public function delete($key)
+    /**
+     * {@inheritDoc}
+     */
+    public function delete($key): bool
     {
         $this->logs[] = "{$this->cacheType} delete {$key}";
 
         return $this->adapter->delete($key);
     }
 
-    public function clear()
+    /**
+     * {@inheritDoc}
+     */
+    public function clear(): bool
     {
         $this->logs[] = "{$this->cacheType} clear";
 
         return $this->adapter->clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getMultiple($keys, $default = null)
     {
-        $this->logs[] = "{$this->cacheType} getMultiple " . implode(',', $keys);
+        $this->logs[] = "{$this->cacheType} getMultiple " . collect($keys)->implode(',');
 
         return $this->adapter->getMultiple($keys, $default);
     }
 
-    public function setMultiple($values, $ttl = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function setMultiple($values, $ttl = null): bool
     {
-        $this->logs[] = "{$this->cacheType} setMultiple " . implode(',', array_keys($values));
+        $this->logs[] = "{$this->cacheType} setMultiple " . collect($values)->keys()->implode(',');
 
         return $this->adapter->setMultiple($values, $ttl);
     }
 
-    public function deleteMultiple($keys)
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteMultiple($keys): bool
     {
-        $this->logs[] = "{$this->cacheType} deleteMultiple " . implode(',', $keys);
+        $this->logs[] = "{$this->cacheType} deleteMultiple " . collect($keys)->implode(',');
+
         return $this->adapter->deleteMultiple($keys);
     }
 
-    public function has($key)
+    /**
+     * {@inheritDoc}
+     */
+    public function has($key): bool
     {
         $this->logs[] = "{$this->cacheType} has {$key}";
 

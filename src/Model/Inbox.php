@@ -7,8 +7,7 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Inbox
- * @package App\Model
+ * 私信模型
  */
 class Inbox extends ModelAbstracts
 {
@@ -16,7 +15,7 @@ class Inbox extends ModelAbstracts
     public $primaryKey = 'inbox_id';
     protected $timestamps = true;
 
-    const UPDATE_TIME = false;
+    protected const UPDATE_TIME = false;
 
     public $columns = [
         'inbox_id',

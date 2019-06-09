@@ -10,9 +10,6 @@ use Slim\Http\Response;
 
 /**
  * 在 Response 中添加 Trace 信息
- *
- * Class Trace
- * @package App\Middleware
  */
 class Trace extends ContainerAbstracts
 {
@@ -89,10 +86,10 @@ class Trace extends ContainerAbstracts
      *
      * @param Request $request
      */
-    protected function getTrace(Request $request)
+    protected function getTrace(Request $request): void
     {
-        $sql = $this->container->db->log();
-        $cache = $this->container->cache->log();
+        $sql = $this->db->log();
+        $cache = $this->cache->log();
         $time = microtime(true) - $request->getServerParams()['REQUEST_TIME_FLOAT'];
         $files = get_included_files();
 
@@ -112,9 +109,9 @@ class Trace extends ContainerAbstracts
      * @param Response $response
      * @return Response
      */
-    protected function renderJsonMessage(Response $response)
+    protected function renderJsonMessage(Response $response): Response
     {
-        $body = json_decode($response->getBody()->__toString());
+        $body = json_decode($response->getBody()->__toString(), false);
 
         $body->trace = $this->trace;
 
@@ -127,7 +124,7 @@ class Trace extends ContainerAbstracts
      * @param Response $response
      * @return Response
      */
-    protected function renderHtmlMessage(Response $response)
+    protected function renderHtmlMessage(Response $response): Response
     {
         $html = '<script type="text/javascript">console.log(' . json_encode($this->trace) . ');</script>';
 

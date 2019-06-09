@@ -4,28 +4,23 @@ declare(strict_types=1);
 
 namespace App\Library\CacheAdapter;
 
-use App\Interfaces\ContainerInterface;
-use Symfony\Component\Cache\Simple\PdoCache;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Cache\Adapter\PdoAdapter;
 
 /**
- * PdoAdapter 缓存适配器
- *
- * Class PdoAdapter
- * @package App\Library\Cache
+ * Pdo 缓存适配器
  */
-class Pdo extends PdoCache
+class Pdo extends PdoAdapter
 {
     /**
-     * PdoAdapter constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
-        $databaseConfig = $container->settings['database'];
+        $databaseConfig = $container->get('settings')['database'];
 
-        $pdo = $container->db->pdo;
-        $namespace = $container->optionService->cache_prefix;
+        $pdo = $container->get('db')->pdo;
+        $namespace = $container->get('optionService')->cache_prefix;
         $defaultLifetime = 0;
         $config = [
             'db_table'        => $databaseConfig['prefix'] . 'cache',

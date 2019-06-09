@@ -8,26 +8,23 @@ use App\Constant\ErrorConstant;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Body;
+use Throwable;
 
 /**
  * PHP错误处理
  *
  * 调试环境直接重新抛出错误，交由 whoops 处理
- *
- * Class Error
- *
- * @package App\Handlers
  */
 class PhpError extends AbstractHandler
 {
     /**
      * @param  ServerRequestInterface  $request
      * @param  ResponseInterface       $response
-     * @param  \Throwable              $error
+     * @param  Throwable              $error
      * @return ResponseInterface
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, \Throwable $error)
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, Throwable $error)
     {
         // 调试环境直接抛出错误，交由 whoops 处理
         if (APP_DEBUG) {
@@ -35,11 +32,11 @@ class PhpError extends AbstractHandler
         }
 
         // 写入日志
-        $this->container->logger->error($error->getMessage(), $error->getTrace());
+        $this->logger->error($error->getMessage(), $error->getTrace());
 
         $contentType = $this->determineContentType($request);
 
-        if ($contentType == 'application/json') {
+        if ($contentType === 'application/json') {
             $status = 200;
             $output = $this->renderJsonErrorMessage();
         } else {
@@ -47,7 +44,7 @@ class PhpError extends AbstractHandler
             $output = $this->renderHtmlErrorMessage();
         }
 
-        $body = new Body(fopen('php://temp', 'r+'));
+        $body = new Body(fopen('php://temp', 'r+b'));
         $body->write($output);
 
         return $response
@@ -61,7 +58,7 @@ class PhpError extends AbstractHandler
      *
      * @return string
      */
-    protected function renderJsonErrorMessage()
+    protected function renderJsonErrorMessage(): string
     {
         $json = [
             'code' => ErrorConstant::SYSTEM_ERROR[0],
@@ -78,6 +75,6 @@ class PhpError extends AbstractHandler
      */
     protected function renderHtmlErrorMessage()
     {
-        return $this->container->view->fetch('/500.php');
+        return $this->view->fetch('/500.php');
     }
 }

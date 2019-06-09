@@ -9,9 +9,6 @@ use Slim\Http\Response;
 
 /**
  * 添加支持跨域请求的响应头
- *
- * Class EnableCrossRequest
- * @package App\Middleware
  */
 class EnableCrossRequest
 {

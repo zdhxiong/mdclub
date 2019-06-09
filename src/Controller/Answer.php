@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 回答
- *
- * Class Answer
- * @package App\Controller
  */
-class Answer extends ControllerAbstracts
+class Answer extends ContainerAbstracts
 {
     /**
      * 获取指定用户发表的回答列表
@@ -27,9 +23,10 @@ class Answer extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->container->answerService->getList(['user_id' => $user_id], true);
-
-        return $this->success($response, $list);
+        return $this->answerGetService
+            ->forApi()
+            ->getByUserId($user_id)
+            ->render($response);
     }
 
     /**
@@ -41,10 +38,12 @@ class Answer extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
-        $list = $this->container->answerService->getList(['user_id' => $userId], true);
+        $userId = $this->roleService->userIdOrFail();
 
-        return $this->success($response, $list);
+        return $this->answerGetService
+            ->forApi()
+            ->getByUserId($userId)
+            ->render($response);
     }
 
     /**
@@ -57,9 +56,10 @@ class Answer extends ControllerAbstracts
      */
     public function getListByQuestionId(Request $request, Response $response, int $question_id): Response
     {
-        $list = $this->container->answerService->getList(['question_id' => $question_id], true);
-
-        return $this->success($response, $list);
+        return $this->answerGetService
+            ->forApi()
+            ->getByQuestionId($question_id)
+            ->render($response);
     }
 
     /**
@@ -72,17 +72,16 @@ class Answer extends ControllerAbstracts
      */
     public function create(Request $request, Response $response, int $question_id): Response
     {
-        $this->container->roleService->userIdOrFail();
-
-        $answerId = $this->container->answerService->create(
+        $answerId = $this->answerUpdateService->create(
             $question_id,
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered')
         );
 
-        $answerInfo = $this->container->answerService->get($answerId, true);
-
-        return $this->success($response, $answerInfo);
+        return $this->answerGetService
+            ->forApi()
+            ->get($answerId)
+            ->render($response);
     }
 
     /**
@@ -94,9 +93,10 @@ class Answer extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->container->answerService->getList([], true);
-
-        return $this->success($response, $list);
+        return $this->answerGetService
+            ->forApi()
+            ->getList()
+            ->render($response);
     }
 
     /**
@@ -108,12 +108,12 @@ class Answer extends ControllerAbstracts
      */
     public function deleteMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $answerIds = ArrayHelper::getQueryParam($request, 'answer_id', 100);
-        $this->container->answerService->deleteMultiple($answerIds);
+        $answerIds = $this->requestService->getQueryParamToArray('answer_id', 100);
+        $this->answerDeleteService->deleteMultiple($answerIds);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
 
@@ -127,9 +127,10 @@ class Answer extends ControllerAbstracts
      */
     public function getOne(Request $request, Response $response, int $answer_id): Response
     {
-        $answerInfo = $this->container->answerService->getOrFail($answer_id, true);
-
-        return $this->success($response, $answerInfo);
+        return $this->answerGetService
+            ->forApi()
+            ->getOrFail($answer_id)
+            ->render($response);
     }
 
     /**
@@ -142,15 +143,16 @@ class Answer extends ControllerAbstracts
      */
     public function updateOne(Request $request, Response $response, int $answer_id): Response
     {
-        $this->container->answerService->update(
+        $this->answerUpdateService->update(
             $answer_id,
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered')
         );
 
-        $answerInfo = $this->container->answerService->get($answer_id, true);
-
-        return $this->success($response, $answerInfo);
+        return $this->answerGetService
+            ->forApi()
+            ->get($answer_id)
+            ->render($response);
     }
 
     /**
@@ -163,9 +165,9 @@ class Answer extends ControllerAbstracts
      */
     public function deleteOne(Request $request, Response $response, int $answer_id): Response
     {
-        $this->container->answerService->delete($answer_id);
+        $this->answerDeleteService->delete($answer_id);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -178,9 +180,10 @@ class Answer extends ControllerAbstracts
      */
     public function getComments(Request $request, Response $response, int $answer_id): Response
     {
-        $list = $this->container->answerService->getComments($answer_id, true);
-
-        return $this->success($response, $list);
+        return $this->commentGetService
+            ->forApi()
+            ->getByAnswerId($answer_id)
+            ->render($response);
     }
 
     /**
@@ -194,10 +197,12 @@ class Answer extends ControllerAbstracts
     public function addComment(Request $request, Response $response, int $answer_id): Response
     {
         $content = $request->getParsedBodyParam('content');
-        $commentId = $this->container->answerService->addComment($answer_id, $content);
-        $comment = $this->container->commentService->get($commentId, true);
+        $commentId = $this->commentUpdateService->createInAnswer($answer_id, $content);
 
-        return $this->success($response, $comment);
+        return $this->commentGetService
+            ->forApi()
+            ->get($commentId)
+            ->render($response);
     }
 
     /**
@@ -211,9 +216,11 @@ class Answer extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $answer_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->container->answerService->getVoters($answer_id, $type, true);
 
-        return $this->success($response, $voters);
+        return $this->answerVoteService
+            ->forApi()
+            ->getVoters($answer_id, $type)
+            ->render($response);
     }
 
     /**
@@ -226,13 +233,13 @@ class Answer extends ControllerAbstracts
      */
     public function addVote(Request $request, Response $response, int $answer_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->container->answerService->addVote($userId, $answer_id, $type);
-        $voteCount = $this->container->answerService->getVoteCount($answer_id);
+        $this->answerVoteService->add($userId, $answer_id, $type);
+        $voteCount = $this->answerVoteService->getCount($answer_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -245,12 +252,12 @@ class Answer extends ControllerAbstracts
      */
     public function deleteVote(Request $request, Response $response, int $answer_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->answerService->deleteVote($userId, $answer_id);
-        $voteCount = $this->container->answerService->getVoteCount($answer_id);
+        $this->answerVoteService->delete($userId, $answer_id);
+        $voteCount = $this->answerVoteService->getCount($answer_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -262,11 +269,12 @@ class Answer extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->answerService->getList(['is_deleted' => true], true);
-
-        return $this->success($response, $list);
+        return $this->answerGetService
+            ->forApi()
+            ->getDeleted()
+            ->render($response);
     }
 
     /**
@@ -278,7 +286,12 @@ class Answer extends ControllerAbstracts
      */
     public function restoreMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $answerIds = $this->requestService->getQueryParamToArray('answer_id', 100);
+        $this->answerDeleteService->restoreMultiple($answerIds);
+
+        return collect()->render($response);
     }
 
     /**
@@ -290,7 +303,12 @@ class Answer extends ControllerAbstracts
      */
     public function destroyMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+
+        $answerIds = $this->requestService->getQueryParamToArray('answer_id', 100);
+        $this->answerDeleteService->destroyMultiple($answerIds);
+
+        return collect()->render($response);
     }
 
     /**
@@ -303,7 +321,10 @@ class Answer extends ControllerAbstracts
      */
     public function restoreOne(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+        $this->answerDeleteService->restore($answer_id);
+
+        return collect()->render($response);
     }
 
     /**
@@ -316,6 +337,9 @@ class Answer extends ControllerAbstracts
      */
     public function destroyOne(Request $request, Response $response, int $answer_id): Response
     {
-        return $response;
+        $this->roleService->managerIdOrFail();
+        $this->answerDeleteService->destroy($answer_id);
+
+        return collect()->render($response);
     }
 }

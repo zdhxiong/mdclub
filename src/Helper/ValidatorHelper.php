@@ -6,9 +6,6 @@ namespace App\Helper;
 
 /**
  * 验证相关方法
- *
- * Class ValidatorHelper
- * @package App\Helper
  */
 class ValidatorHelper
 {
@@ -97,7 +94,7 @@ class ValidatorHelper
      */
     public static function isMobile(string $value): bool
     {
-        return preg_match('/^1[0-9]{10}$/', $value) === 1;
+        return preg_match('/^1\d{10}$/', $value) === 1;
     }
 
     /**
@@ -112,13 +109,13 @@ class ValidatorHelper
     {
         $length = mb_strlen($value, 'utf-8');
 
-        if (!$max){
+        if (!$max) {
             // 指定长度
-            return $length == $min;
-        } else {
-            // 指定长度区间
-            return $length >= $min && $length <= $max;
+            return $length === $min;
         }
+
+        // 指定长度区间
+        return $length >= $min && $length <= $max;
     }
 
     /**

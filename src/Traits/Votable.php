@@ -6,16 +6,30 @@ namespace App\Traits;
 
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use Tightenco\Collect\Support\Collection;
 
 /**
- * 可投票对象 （question、answer、article、comment）
+ * 可投票对象。用于 question, answer, article, comment
  *
- * Trait Votable
- * @package App\Traits
+ * @property-read \App\Abstracts\ModelAbstracts     $model
+ * @property-read \App\Service\User\Get             $userGetService
+ * @property-read \App\Service\Request              $requestService
+ * @property-read \App\Model\Vote                   $voteModel
+ * @property-read \App\Model\User                   $userModel
  */
 trait Votable
 {
-    abstract public function hasOrFail(int $id);
+    protected $isForApi = false;
+
+    /**
+     * @return Votable
+     */
+    public function forApi(): self
+    {
+        $this->isForApi = true;
+
+        return $this;
+    }
 
     /**
      * 添加投票
@@ -24,43 +38,48 @@ trait Votable
      * @param  int    $votableId
      * @param  string $type
      */
-    public function addVote(int $userId, int $votableId, string $type): void
+    public function add(int $userId, int $votableId, string $type): void
     {
         if (!in_array($type, ['up', 'down'])) {
             throw new ApiException(ErrorConstant::SYSTEM_VOTE_TYPE_ERROR);
         }
 
-        $this->container->userService->hasOrFail($userId);
-        $this->hasOrFail($votableId);
+        $table = $this->model->table;
+
+        $this->userGetService->hasOrFail($userId);
+        $this->{"${table}GetService"}->hasOrFail($votableId);
 
         $voteWhere = [
             'user_id'      => $userId,
             'votable_id'   => $votableId,
-            'votable_type' => $this->currentModel->table,
+            'votable_type' => $table,
         ];
 
-        $vote = $this->container->voteModel->where($voteWhere)->get();
+        $vote = $this->voteModel->where($voteWhere)->get();
 
+        // 没有投过票时，添加投票
         if (!$vote) {
-            // 没有投过票时，添加投票
-            $this->container->voteModel->insert(array_merge($voteWhere, ['type' => $type]));
+            $this->voteModel->insert(array_merge($voteWhere, ['type' => $type]));
 
-            $voteCount = [$type == 'up' ? '+' : '-', 1];
-        } elseif ($type != $vote['type']) {
-            // 新的投票与旧的投票不同时，修改原始投票
-            $this->container->voteModel->where($voteWhere)->update([
-                'type' => $type,
-                'create_time' => $this->container->request->getServerParam('REQUEST_TIME'),
-            ]);
+            $type === 'up'
+                ? $this->model->inc('vote_count')
+                : $this->model->dec('vote_count');
 
-            $voteCount = [$type == 'up' ? '+' : '-' , 2];
+            $this->model->where("${table}_id", $votableId)->update();
         }
 
-        // 更新投票数量
-        if (isset($voteCount)) {
-            $this->currentModel
-                ->where([ $this->currentModel->table . '_id' => $votableId ])
-                ->update([ 'vote_count[' . $voteCount[0] . ']' => $voteCount[1] ]);
+        // 新的投票与旧的投票不同时，修改原始投票
+        elseif ($type !== $vote['type']) {
+            $this->voteModel->where($voteWhere)->update([
+                'type' => $type,
+                'create_time' => $this->requestService->time(),
+            ]);
+
+            $type === 'up'
+                ? $this->model->inc('vote_count', 2)
+                : $this->model->dec('vote_count', 2);
+
+            $this->model->where("${table}_id", $votableId)->update();
         }
     }
 
@@ -70,37 +89,40 @@ trait Votable
      * @param  int $userId
      * @param  int $votableId
      */
-    public function deleteVote(int $userId, int $votableId): void
+    public function delete(int $userId, int $votableId): void
     {
-        $this->container->userService->hasOrFail($userId);
-        $this->hasOrFail($votableId);
+        $this->userGetService->hasOrFail($userId);
+        $this->{$this->model->table . 'GetService'}->hasOrFail($votableId);
 
+        $table = $this->model->table;
         $voteWhere = [
             'user_id'      => $userId,
             'votable_id'   => $votableId,
-            'votable_type' => $this->currentModel->table,
+            'votable_type' => $table,
         ];
 
-        $vote = $this->container->voteModel->where($voteWhere)->get();
+        $vote = $this->voteModel->where($voteWhere)->get();
 
         if ($vote) {
-            $this->container->voteModel->where($voteWhere)->delete();
+            $this->voteModel->where($voteWhere)->delete();
 
-            $this->currentModel
-                ->where([ $this->currentModel->table . '_id' => $votableId ])
-                ->update([ 'vote_count[' . ($vote['type'] == 'up' ? '-' : '+') . ']' => 1 ]);
+            $vote['type'] === 'up'
+                ? $this->model->dec('vote_count')
+                : $this->model->inc('vote_count');
+
+            $this->model->where("${table}_id", $votableId)->update();
         }
     }
 
     /**
-     * 获取投票总数（赞同票 - 反对票）
+     * 获取投票总数（赞同票 - 反对票），可能出现负数
      *
      * @param int $votableId
      * @return int
      */
-    public function getVoteCount(int $votableId): int
+    public function getCount(int $votableId): int
     {
-        $votableTarget = $this->currentModel->field(['vote_count'])->get($votableId);
+        $votableTarget = $this->model->field('vote_count')->get($votableId);
 
         return $votableTarget['vote_count'];
     }
@@ -108,41 +130,40 @@ trait Votable
     /**
      * 获取指定对象的投票者
      *
-     * @param  int    $votableId
-     * @param  string $type             投票类型：up、down，默认为获取所有类型
-     * @param  bool   $withRelationship
-     * @return array
+     * @param  int              $votableId
+     * @param  string           $type             投票类型：up, down，默认为获取所有类型
+     * @return array|Collection
      */
-    public function getVoters(int $votableId, string $type = null, bool $withRelationship = false): array
+    public function getVoters(int $votableId, string $type = null)
     {
-        $this->hasOrFail($votableId);
+        $table = $this->model->table;
+        $this->{"${table}GetService"}->hasOrFail($votableId);
 
-        // 查询条件
-        $where = [
-            'vote.votable_id'   => $votableId,
-            'vote.votable_type' => $this->currentModel->table,
-            'user.disable_time' => 0,
-        ];
-
-        if (in_array($type, ['up', 'down'])) {
-            $where['vote.type'] = $type;
+        if ($this->isForApi) {
+            $this->userGetService->forApi();
+            $this->isForApi = false;
         }
 
-        $list = $this->container->userModel
+        $this->userGetService->beforeGet();
+
+        if (in_array($type, ['up', 'down'])) {
+            $this->userModel->where('vote.type', $type);
+        }
+
+        $result = $this->userModel
             ->join([
                 '[><]vote' => ['user_id' => 'user_id'],
             ])
-            ->where($where)
-            ->order([
-                'vote.create_time' => 'DESC',
+            ->where([
+                'vote.votable_id'   => $votableId,
+                'vote.votable_type' => $table,
+                'user.disable_time' => 0,
             ])
-            ->field($this->container->userService->getPrivacyFields(), true)
+            ->order('vote.create_time', 'DESC')
             ->paginate();
 
-        if ($withRelationship) {
-            $list['data'] = $this->container->userService->addRelationship($list['data']);
-        }
+        $result = $this->userGetService->afterGet($result);
 
-        return $list;
+        return $this->userGetService->returnArray($result);
     }
 }

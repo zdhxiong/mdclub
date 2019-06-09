@@ -7,8 +7,7 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Notification
- * @package App\Model
+ * 通知模型
  */
 class Notification extends ModelAbstracts
 {
@@ -16,7 +15,7 @@ class Notification extends ModelAbstracts
     public $primaryKey = 'notification_id';
     protected $timestamps = true;
 
-    const UPDATE_TIME = false;
+    protected const UPDATE_TIME = false;
 
     public $columns = [
         'notification_id',

@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * SFTP 适配器
  *
  * todo 无法使用
- *
- * Class Sftp
- * @package App\Library\StorageAdapter
  */
 class Sftp extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * SSH2 连接 resource
      *
@@ -42,37 +37,33 @@ class Sftp extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * Sftp constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
         if (!extension_loaded('ssh2')) {
-            throw new \Exception('PHP extension ssh2 is not loaded');
+            throw new SystemException('PHP extension ssh2 is not loaded');
         }
 
         $this->setPathPrefix();
 
-        [
-            'storage_sftp_username' => $username,
-            'storage_sftp_password' => $password,
-            'storage_sftp_host' => $host,
-            'storage_sftp_port' => $port,
-        ] = $container->optionService->getMultiple();
+        $username = $this->optionService->storage_sftp_username;
+        $password = $this->optionService->storage_sftp_password;
+        $host = $this->optionService->storage_sftp_host;
+        $port = $this->optionService->storage_sftp_port;
 
         if (!$this->connection = @ssh2_connect($host, (int)$port)) {
-            throw new \Exception("Could not connect to SSH2 Server");
+            throw new SystemException("Could not connect to SSH2 Server");
         }
 
         if (!@ssh2_auth_password($this->connection, $username, $password)) {
-            throw new \Exception('Could not authenticate to SSH2 Server');
+            throw new SystemException('Could not authenticate to SSH2 Server');
         }
 
         if (!$this->sftp = @ssh2_sftp($this->connection)) {
-            throw new \Exception('Could not initialize SFTP subsystem');
+            throw new SystemException('Could not initialize SFTP subsystem');
         }
     }
 
@@ -81,7 +72,7 @@ class Sftp extends AbstractAdapter implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->container->optionService->storage_sftp_root;
+        $prefix = $this->optionService->storage_sftp_root;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -120,7 +111,7 @@ class Sftp extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
+        $url = $this->urlService->storage();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {

@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Helper\RequestHelper;
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 阿里云 OSS 适配器
- *
- * Class Aliyun
- * @package App\Library\Storage\Adapter
  */
 class Aliyun extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * AccessKey ID
      *
@@ -49,20 +43,16 @@ class Aliyun extends AbstractAdapter implements StorageInterface
     protected $endpoint;
 
     /**
-     * AliyunOSS constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        [
-            'storage_aliyun_access_id' => $this->accessKeyId,
-            'storage_aliyun_access_secret' => $this->accessKeySecret,
-            'storage_aliyun_bucket' => $this->bucket,
-            'storage_aliyun_endpoint' => $this->endpoint,
-        ] = $container->optionService->getMultiple();
+        $this->accessKeyId = $this->optionService->storage_aliyun_access_id;
+        $this->accessKeySecret = $this->optionService->storage_aliyun_access_secret;
+        $this->bucket = $this->optionService->storage_aliyun_bucket;
+        $this->endpoint = $this->optionService->storage_aliyun_endpoint;
     }
 
     /**
@@ -91,7 +81,7 @@ class Aliyun extends AbstractAdapter implements StorageInterface
         $headers['Host'] = "{$this->bucket}.{$this->endpoint}";
         $headers['Content-Type'] = $contentType;
 
-        array_walk($headers, function (&$item, $key) {
+        array_walk($headers, static function (&$item, $key) {
             $item = "{$key}: {$item}";
         });
 
@@ -109,14 +99,14 @@ class Aliyun extends AbstractAdapter implements StorageInterface
     {
         $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
         $body = substr($response, $header_size);
-        $code = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
+        $code = (int) curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
 
-        if (in_array(intval($code), [200, 201, 204, 206])) {
+        if (in_array($code, [200, 201, 204, 206], true)) {
             return true;
         }
 
         preg_match('/<Message>(.*?)<\/Message>/', $body, $matches);
-        throw new \Exception($matches[1]);
+        throw new SystemException($matches[1]);
     }
 
     /**
@@ -145,7 +135,7 @@ class Aliyun extends AbstractAdapter implements StorageInterface
         curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl_handle, CURLOPT_NOSIGNAL, true);
         curl_setopt($curl_handle, CURLOPT_REFERER, $url);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->container->request->getServerParam('HTTP_USER_AGENT'));
+        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->request->getServerParam('HTTP_USER_AGENT'));
         curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
@@ -156,7 +146,7 @@ class Aliyun extends AbstractAdapter implements StorageInterface
         }
 
         if (!$response = curl_exec($curl_handle)) {
-            throw new \Exception('cURL resource: ' . (string)$curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
+            throw new SystemException('cURL resource: ' . $curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
         }
 
         $response = $this->handleResponse($curl_handle, $response);
@@ -175,8 +165,8 @@ class Aliyun extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = RequestHelper::isSupportWebp($this->container->request);
+        $url = $this->urlService->storage();
+        $isSupportWebp = $this->requestService->isSupportWebp();
         $data['o'] = $url . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {

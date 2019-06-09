@@ -8,8 +8,6 @@ use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Class AbstractHandler
- * @package App\Handlers
  */
 abstract class AbstractHandler extends ContainerAbstracts
 {
@@ -18,7 +16,7 @@ abstract class AbstractHandler extends ContainerAbstracts
      *
      * @var array
      */
-    protected $knownContentTypes = [
+    protected static $knownContentTypes = [
         'application/json',
         'application/xml',
         'text/xml',
@@ -31,10 +29,10 @@ abstract class AbstractHandler extends ContainerAbstracts
      * @param  ServerRequestInterface $request
      * @return string
      */
-    protected function determineContentType(ServerRequestInterface $request)
+    protected function determineContentType(ServerRequestInterface $request): string
     {
         $acceptHeader = $request->getHeaderLine('Accept');
-        $selectedContentTypes = array_intersect(explode(',', $acceptHeader), $this->knownContentTypes);
+        $selectedContentTypes = array_intersect(explode(',', $acceptHeader), self::$knownContentTypes);
 
         if (count($selectedContentTypes)) {
             return current($selectedContentTypes);
@@ -43,7 +41,8 @@ abstract class AbstractHandler extends ContainerAbstracts
         // handle +json and +xml specially
         if (preg_match('/\+(json|xml)/', $acceptHeader, $matches)) {
             $mediaType = 'application/' . $matches[1];
-            if (in_array($mediaType, $this->knownContentTypes)) {
+
+            if (in_array($mediaType, self::$knownContentTypes, true)) {
                 return $mediaType;
             }
         }

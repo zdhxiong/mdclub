@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Library;
 
-use App\Interfaces\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
 
 /**
  * PhpRenderer 重写，使其具有主题功能
- *
- * Class View
- * @package App\Library
  */
 class View extends PhpRenderer
 {
@@ -30,15 +27,13 @@ class View extends PhpRenderer
     protected $defaultTheme = 'default';
 
     /**
-     * View constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
-        parent::__construct(__DIR__ . '/../../templates/', []);
+        parent::__construct(__DIR__ . '/../../templates/');
 
-        $this->theme = $container->optionService->theme;
+        $this->theme = $container->get('optionService')->theme;
     }
 
     /**

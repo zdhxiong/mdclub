@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
 
 /**
  * 用户角色
- *
- * Class Role
- * @package App\Service
  */
-class Role extends ServiceAbstracts
+class Role extends ContainerAbstracts
 {
     /**
      * 获取当前登录用户的 user_id，未登录则返回 false
@@ -23,7 +20,7 @@ class Role extends ServiceAbstracts
      */
     public function userId()
     {
-        $tokenInfo = $this->container->tokenService->getTokenInfo();
+        $tokenInfo = $this->tokenService->getTokenInfo();
 
         return $tokenInfo ? $tokenInfo['user_id'] : false;
     }
@@ -35,7 +32,7 @@ class Role extends ServiceAbstracts
      */
     public function userIdOrFail(): int
     {
-        $tokenInfo = $this->container->tokenService->getTokenInfoOrFail();
+        $tokenInfo = $this->tokenService->getTokenInfoOrFail();
 
         return $tokenInfo['user_id'];
     }

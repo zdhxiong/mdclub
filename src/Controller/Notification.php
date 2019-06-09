@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 通知
- *
- * Class NotificationController
- * @package App\Controller
  */
-class Notification extends ControllerAbstracts
+class Notification extends ContainerAbstracts
 {
     /**
      * 通知列表页
@@ -26,6 +23,6 @@ class Notification extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $this->container->view->render($response, '/notification/index.php');
+        return $this->view->render($response, '/notification/index.php');
     }
 }

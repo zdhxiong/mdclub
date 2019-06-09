@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 文章
- *
- * Class Article
- * @package App\Controller
  */
-class Article extends ControllerAbstracts
+class Article extends ContainerAbstracts
 {
     /**
      * 文章列表页面
@@ -27,7 +23,7 @@ class Article extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $this->container->view->render($response, '/article/index.php');
+        return $this->view->render($response, '/article/index.php');
     }
 
     /**
@@ -40,7 +36,7 @@ class Article extends ControllerAbstracts
      */
     public function pageInfo(Request $request, Response $response, int $article_id): ResponseInterface
     {
-        return $this->container->view->render($response, '/article/info.php');
+        return $this->view->render($response, '/article/info.php');
     }
 
     /**
@@ -53,9 +49,10 @@ class Article extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->container->articleService->getList(['user_id' => $user_id], true);
-
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getList(['user_id' => $user_id], true)
+            ->render($response);
     }
 
     /**
@@ -67,10 +64,12 @@ class Article extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
-        $list = $this->container->articleService->getList(['user_id' => $userId], true);
+        $userId = $this->roleService->userIdOrFail();
 
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getList(['user_id' => $userId], true)
+            ->render($response);
     }
 
     /**
@@ -83,9 +82,10 @@ class Article extends ControllerAbstracts
      */
     public function getListByTopicId(Request $request, Response $response, int $topic_id): Response
     {
-        $list = $this->container->articleService->getList(['topic_id' => $topic_id], true);
-
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getList(['topic_id' => $topic_id], true)
+            ->render($response);
     }
 
     /**
@@ -97,9 +97,10 @@ class Article extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->container->articleService->getList([], true);
-
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getList([], true)
+            ->render($response);
     }
 
     /**
@@ -111,18 +112,19 @@ class Article extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        $this->container->roleService->userIdOrFail();
+        $this->roleService->userIdOrFail();
 
-        $articleId = $this->container->articleService->create(
+        $articleId = $this->articleService->create(
             $request->getParsedBodyParam('title'),
             $request->getParsedBodyParam('content_markdown'),
             $request->getParsedBodyParam('content_rendered'),
-            ArrayHelper::getParsedBodyParam($request, 'topic_id', 10)
+            $this->requestService->getParsedBodyParamToArray('topic_id', 10)
         );
 
-        $articleInfo = $this->container->articleService->get($articleId, true);
-
-        return $this->success($response, $articleInfo);
+        return $this->articleService
+            ->fetchCollection()
+            ->get($articleId, true)
+            ->render($response);
     }
 
     /**
@@ -134,12 +136,12 @@ class Article extends ControllerAbstracts
      */
     public function deleteMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $articleIds = ArrayHelper::getQueryParam($request, 'article_id', 100);
-        $this->container->articleService->deleteMultiple($articleIds);
+        $articleIds = $this->requestService->getQueryParamToArray('article_id', 100);
+        $this->articleService->deleteMultiple($articleIds);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -152,9 +154,10 @@ class Article extends ControllerAbstracts
      */
     public function getOne(Request $request, Response $response, int $article_id): Response
     {
-        $articleInfo = $this->container->articleService->getOrFail($article_id, true);
-
-        return $this->success($response, $articleInfo);
+        return $this->articleService
+            ->fetchCollection()
+            ->getOrFail($article_id, true)
+            ->render($response);
     }
 
     /**
@@ -170,12 +173,14 @@ class Article extends ControllerAbstracts
         $title = $request->getParsedBodyParam('title');
         $contentMarkdown = $request->getParsedBodyParam('content_markdown');
         $contentRendered = $request->getParsedBodyParam('content_rendered');
-        $topicIds = ArrayHelper::getParsedBodyParam($request, 'topic_id', 10);
+        $topicIds = $this->requestService->getParsedBodyParamToArray('topic_id', 10);
 
-        $this->container->articleService->update($article_id, $title, $contentMarkdown, $contentRendered, $topicIds);
-        $articleInfo = $this->container->articleService->get($article_id, true);
+        $this->articleService->update($article_id, $title, $contentMarkdown, $contentRendered, $topicIds);
 
-        return $this->success($response, $articleInfo);
+        return $this->articleService
+            ->fetchCollection()
+            ->get($article_id, true)
+            ->render($response);
     }
 
     /**
@@ -188,9 +193,9 @@ class Article extends ControllerAbstracts
      */
     public function deleteOne(Request $request, Response $response, int $article_id): Response
     {
-        $this->container->articleService->delete($article_id);
+        $this->articleService->delete($article_id);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -203,9 +208,10 @@ class Article extends ControllerAbstracts
      */
     public function getComments(Request $request, Response $response, int $article_id): Response
     {
-        $list = $this->container->articleService->getComments($article_id, true);
-
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getComments($article_id, true)
+            ->render($response);
     }
 
     /**
@@ -219,10 +225,12 @@ class Article extends ControllerAbstracts
     public function addComment(Request $request, Response $response, int $article_id): Response
     {
         $content = $request->getParsedBodyParam('content');
-        $commentId = $this->container->articleService->addComment($article_id, $content);
-        $comment = $this->container->commentService->get($commentId, true);
+        $commentId = $this->articleService->addComment($article_id, $content);
 
-        return $this->success($response, $comment);
+        return $this->commentService
+            ->fetchCollection()
+            ->get($commentId, true)
+            ->render($response);
     }
 
     /**
@@ -236,9 +244,11 @@ class Article extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $article_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->container->articleService->getVoters($article_id, $type, true);
 
-        return $this->success($response, $voters);
+        return $this->articleService
+            ->fetchCollection()
+            ->getVoters($article_id, $type, true)
+            ->render($response);
     }
 
     /**
@@ -251,13 +261,13 @@ class Article extends ControllerAbstracts
      */
     public function addVote(Request $request, Response $response, int $article_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->container->articleService->addVote($userId, $article_id, $type);
-        $voteCount = $this->container->articleService->getVoteCount($article_id);
+        $this->articleService->addVote($userId, $article_id, $type);
+        $voteCount = $this->articleService->getVoteCount($article_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -270,12 +280,12 @@ class Article extends ControllerAbstracts
      */
     public function deleteVote(Request $request, Response $response, int $article_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->articleService->deleteVote($userId, $article_id);
-        $voteCount = $this->container->articleService->getVoteCount($article_id);
+        $this->articleService->deleteVote($userId, $article_id);
+        $voteCount = $this->articleService->getVoteCount($article_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -288,9 +298,10 @@ class Article extends ControllerAbstracts
      */
     public function getFollowing(Request $request, Response $response, int $user_id): Response
     {
-        $following = $this->container->articleService->getFollowing($user_id, true);
-
-        return $this->success($response, $following);
+        return $this->articleService
+            ->fetchCollection()
+            ->getFollowing($user_id, true)
+            ->render($response);
     }
 
     /**
@@ -302,10 +313,12 @@ class Article extends ControllerAbstracts
      */
     public function getMyFollowing(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
-        $following = $this->container->articleService->getFollowing($userId, true);
+        $userId = $this->roleService->userIdOrFail();
 
-        return $this->success($response, $following);
+        return $this->articleService
+            ->fetchCollection()
+            ->getFollowing($userId, true)
+            ->render($response);
     }
 
     /**
@@ -318,9 +331,10 @@ class Article extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $article_id): Response
     {
-        $followers = $this->container->articleService->getFollowers($article_id, true);
-
-        return $this->success($response, $followers);
+        return $this->articleService
+            ->fetchCollection()
+            ->getFollowers($article_id, true)
+            ->render($response);
     }
 
     /**
@@ -333,12 +347,12 @@ class Article extends ControllerAbstracts
      */
     public function addFollow(Request $request, Response $response, int $article_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->articleService->addFollow($userId, $article_id);
-        $followerCount = $this->container->articleService->getFollowerCount($article_id);
+        $this->articleService->addFollow($userId, $article_id);
+        $followerCount = $this->articleService->getFollowerCount($article_id);
 
-        return $this->success($response, ['follower_count' => $followerCount]);
+        return collect(['follower_count' => $followerCount])->render($response);
     }
 
     /**
@@ -351,12 +365,12 @@ class Article extends ControllerAbstracts
      */
     public function deleteFollow(Request $request, Response $response, int $article_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->articleService->deleteFollow($userId, $article_id);
-        $followerCount = $this->container->articleService->getFollowerCount($article_id);
+        $this->articleService->deleteFollow($userId, $article_id);
+        $followerCount = $this->articleService->getFollowerCount($article_id);
 
-        return $this->success($response, ['follower_count' => $followerCount]);
+        return collect(['follower_count' => $followerCount])->render($response);
     }
 
     /**
@@ -368,11 +382,12 @@ class Article extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->articleService->getList(['is_deleted' => true], true);
-
-        return $this->success($response, $list);
+        return $this->articleService
+            ->fetchCollection()
+            ->getList(['is_deleted' => true], true)
+            ->render($response);
     }
 
     /**
@@ -384,7 +399,7 @@ class Article extends ControllerAbstracts
      */
     public function restoreMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -396,7 +411,7 @@ class Article extends ControllerAbstracts
      */
     public function destroyMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -409,7 +424,7 @@ class Article extends ControllerAbstracts
      */
     public function restoreOne(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -422,6 +437,6 @@ class Article extends ControllerAbstracts
      */
     public function destroyOne(Request $request, Response $response, int $article_id): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 }

@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 验证码
- *
- * Class Captcha
- * @package App\Controller
  */
-class Captcha extends ControllerAbstracts
+class Captcha extends ContainerAbstracts
 {
     /**
      * 生成图形验证码
@@ -26,11 +23,11 @@ class Captcha extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        $captcha = $this->container->captchaService->build();
+        $captcha = $this->captchaService->build();
 
-        return $this->success($response, [
+        return collect([
             'captcha_token' => $captcha['token'],
             'captcha_image' => $captcha['image'],
-        ]);
+        ])->render($response);
     }
 }

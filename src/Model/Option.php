@@ -7,8 +7,7 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Option
- * @package App\Model
+ * 配置模型
  */
 class Option extends ModelAbstracts
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -11,18 +12,13 @@ use Psr\Http\Message\StreamInterface;
  *
  * 所有文件都需要保留原图
  * 若图片存储服务支持实时图片处理，则不需要预先裁剪图片，在获取图片时添加参数即可；若不支持，则需预先裁剪好所需的缩略图
- *
- * Interface StorageInterface
- * @package App\Interfaces
  */
 interface StorageInterface
 {
     /**
-     * StorageInterface constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container);
+    public function __construct(ContainerInterface $container);
 
     /**
      * 获取文件的访问路径

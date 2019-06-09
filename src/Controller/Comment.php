@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 评论
- *
- * Class Comment
- * @package App\Controller
  */
-class Comment extends ControllerAbstracts
+class Comment extends ContainerAbstracts
 {
     /**
      * 获取指定用户发表的评论列表
@@ -27,9 +23,10 @@ class Comment extends ControllerAbstracts
      */
     public function getListByUserId(Request $request, Response $response, int $user_id): Response
     {
-        $list = $this->container->commentService->getList(['user_id' => $user_id], true);
-
-        return $this->success($response, $list);
+        return $this->commentGetService
+            ->forApi()
+            ->getByUserId($user_id)
+            ->render($response);
     }
 
     /**
@@ -41,10 +38,12 @@ class Comment extends ControllerAbstracts
      */
     public function getMyList(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
-        $list = $this->container->commentService->getList(['user_id' => $userId], true);
+        $userId = $this->roleService->userIdOrFail();
 
-        return $this->success($response, $list);
+        return $this->commentGetService
+            ->forApi()
+            ->getByUserId($userId)
+            ->render($response);
     }
 
     /**
@@ -56,9 +55,10 @@ class Comment extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->container->commentService->getList([], true);
-
-        return $this->success($response, $list);
+        return $this->commentGetService
+            ->forApi()
+            ->getList()
+            ->render($response);
     }
 
     /**
@@ -70,12 +70,12 @@ class Comment extends ControllerAbstracts
      */
     public function deleteMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $commentIds = ArrayHelper::getQueryParam($request, 'comment_id', 100);
-        $this->container->commentService->deleteMultiple($commentIds);
+        $commentIds = $this->requestService->getQueryParamToArray('comment_id', 100);
+        $this->commentService->deleteMultiple($commentIds);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -88,9 +88,10 @@ class Comment extends ControllerAbstracts
      */
     public function getOne(Request $request, Response $response, int $comment_id): Response
     {
-        $comment = $this->container->commentService->getOrFail($comment_id, true);
-
-        return $this->success($response, $comment);
+        return $this->commentGetService
+            ->forApi()
+            ->getOrFail($comment_id)
+            ->render($response);
     }
 
     /**
@@ -105,10 +106,12 @@ class Comment extends ControllerAbstracts
     {
         $content = $request->getParsedBodyParam('content');
 
-        $this->container->commentService->update($comment_id, $content);
-        $commentInfo = $this->container->commentService->get($comment_id, true);
+        $this->commentUpdateService->update($comment_id, $content);
 
-        return $this->success($response, $commentInfo);
+        return $this->commentGetService
+            ->forApi()
+            ->get($comment_id)
+            ->render($response);
     }
 
     /**
@@ -121,9 +124,9 @@ class Comment extends ControllerAbstracts
      */
     public function deleteOne(Request $request, Response $response, int $comment_id): Response
     {
-        $this->container->commentService->delete($comment_id);
+        $this->commentService->delete($comment_id);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -137,9 +140,11 @@ class Comment extends ControllerAbstracts
     public function getVoters(Request $request, Response $response, int $comment_id): Response
     {
         $type = $request->getQueryParam('type');
-        $voters = $this->container->commentService->getVoters($comment_id, $type, true);
 
-        return $this->success($response, $voters);
+        return $this->commentService
+            ->fetchCollection()
+            ->getVoters($comment_id, $type, true)
+            ->render($response);
     }
 
     /**
@@ -152,13 +157,13 @@ class Comment extends ControllerAbstracts
      */
     public function addVote(Request $request, Response $response, int $comment_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
         $type = $request->getParsedBodyParam('type');
 
-        $this->container->commentService->addVote($userId, $comment_id, $type);
-        $voteCount = $this->container->commentService->getVoteCount($comment_id);
+        $this->commentService->addVote($userId, $comment_id, $type);
+        $voteCount = $this->commentService->getVoteCount($comment_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -171,12 +176,12 @@ class Comment extends ControllerAbstracts
      */
     public function deleteVote(Request $request, Response $response, int $comment_id): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->commentService->deleteVote($userId, $comment_id);
-        $voteCount = $this->container->commentService->getVoteCount($comment_id);
+        $this->commentService->deleteVote($userId, $comment_id);
+        $voteCount = $this->commentService->getVoteCount($comment_id);
 
-        return $this->success($response, ['vote_count' => $voteCount]);
+        return collect(['vote_count' => $voteCount])->render($response);
     }
 
     /**
@@ -188,11 +193,12 @@ class Comment extends ControllerAbstracts
      */
     public function getDeletedList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->commentService->getList(['is_deleted' => true], true);
-
-        return $this->success($response, $list);
+        return $this->commentGetService
+            ->forApi()
+            ->getDeleted()
+            ->render($response);
     }
 
     /**
@@ -204,7 +210,7 @@ class Comment extends ControllerAbstracts
      */
     public function restoreMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -216,7 +222,7 @@ class Comment extends ControllerAbstracts
      */
     public function destroyMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -229,7 +235,7 @@ class Comment extends ControllerAbstracts
      */
     public function restoreOne(Request $request, Response $response, int $comment_id): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -242,6 +248,6 @@ class Comment extends ControllerAbstracts
      */
     public function destroyOne(Request $request, Response $response, int $comment_id): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 }

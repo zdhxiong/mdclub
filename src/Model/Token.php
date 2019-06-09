@@ -7,8 +7,7 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Token
- * @package App\Model
+ * Token 模型
  */
 class Token extends ModelAbstracts
 {
@@ -16,7 +15,7 @@ class Token extends ModelAbstracts
     public $primaryKey = 'token';
     protected $timestamps = true;
 
-    const UPDATE_TIME = false;
+    protected const UPDATE_TIME = false;
 
     public $columns = [
         'token',

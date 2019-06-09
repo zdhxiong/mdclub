@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Exception\ValidationException;
 use App\Helper\StringHelper;
 use Gregwar\Captcha\CaptchaBuilder;
@@ -15,11 +15,8 @@ use Gregwar\Captcha\CaptchaBuilder;
  * 1. 调用 build() 方法生成一个新的图形验证码，返回 token 和 image
  * 2. 前端提交用户输入的验证码 code 和 token，服务端调用 check() 检查 code 和 token 是否匹配
  * 3. 无论是否匹配，每个验证码都只能验证一次，验证后即删除
- *
- * Class Captcha
- * @package App\Service
  */
-class Captcha extends ServiceAbstracts
+class Captcha extends ContainerAbstracts
 {
     /**
      * 验证码有效期
@@ -27,6 +24,17 @@ class Captcha extends ServiceAbstracts
      * @var int
      */
     protected $lifeTime = 3600;
+
+    /**
+     * 获取缓存键名
+     *
+     * @param  string $key
+     * @return string
+     */
+    protected function getCacheKey(string $key): string
+    {
+        return "captcha_{$key}";
+    }
 
     /**
      * 生成图形验证码。每次调用都会生成一个新的验证码。
@@ -40,11 +48,11 @@ class Captcha extends ServiceAbstracts
         $builder = new CaptchaBuilder();
         $builder->build($width, $height);
 
-        $code = $builder->getPhrase();
         $token = StringHelper::guid();
+        $code = $builder->getPhrase();
         $cacheKey = $this->getCacheKey($token);
 
-        $this->container->cache->set($cacheKey, $code, $this->lifeTime);
+        $this->cache->set($cacheKey, $code, $this->lifeTime);
 
         return [
             'image' => $builder->inline(),
@@ -62,15 +70,15 @@ class Captcha extends ServiceAbstracts
     public function check(string $token, string $code): bool
     {
         $cacheKey = $this->getCacheKey($token);
-        $correctCode = $this->container->cache->get($cacheKey);
+        $correctCode = $this->cache->get($cacheKey);
 
         if (!$correctCode) {
             return false;
         }
 
-        $this->container->cache->delete($cacheKey);
+        $this->cache->delete($cacheKey);
 
-        return $correctCode == $code;
+        return $correctCode === $code;
     }
 
     /**
@@ -85,11 +93,11 @@ class Captcha extends ServiceAbstracts
      */
     public function isNextTimeNeed(string $id, string $action, int $max_count, int $period): bool
     {
-        $remaining = $this->container->throttleService->getRemaining($id, $action, $max_count, $period);
+        $remaining = $this->throttleService->getRemaining($id, $action, $max_count, $period);
         $needCaptcha = $remaining <= 1;
 
-        $captchaToken = $this->container->request->getParsedBodyParam('captcha_token');
-        $captchaCode = $this->container->request->getParsedBodyParam('captcha_code');
+        $captchaToken = $this->request->getParsedBodyParam('captcha_token');
+        $captchaCode = $this->request->getParsedBodyParam('captcha_code');
 
         if ($remaining <= 0 && (!$captchaToken || !$captchaCode || !$this->check($captchaToken, $captchaCode))) {
             throw new ValidationException([
@@ -98,16 +106,5 @@ class Captcha extends ServiceAbstracts
         }
 
         return $needCaptcha;
-    }
-
-    /**
-     * 获取缓存键名
-     *
-     * @param  string $key
-     * @return string
-     */
-    protected function getCacheKey(string $key): string
-    {
-        return "captcha_{$key}";
     }
 }

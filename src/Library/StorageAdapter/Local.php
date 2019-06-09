@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 本地文件适配器
- *
- * Class Local
- * @package App\Library\Storage\Adapter
  */
 class Local extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * 存储路径
      *
@@ -27,11 +22,9 @@ class Local extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * Local constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
@@ -43,7 +36,7 @@ class Local extends AbstractAdapter implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->container->optionService->storage_local_dir;
+        $prefix = $this->optionService->storage_local_dir;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -74,19 +67,14 @@ class Local extends AbstractAdapter implements StorageInterface
      */
     protected function ensureDirectory(string $root): void
     {
-        if (!is_dir($root)) {
-            $umask = umask(0);
+        if (is_dir($root)) {
+            return;
+        }
 
-            if (!@mkdir($root, 0755, true)) {
-                $mkdirError = error_get_last();
-            }
-
-            umask($umask);
-
-            if (!is_dir($root)) {
-                $errorMessage = $mkdirError['message'] ?? '';
-                throw new \Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
-            }
+        if (!@mkdir($root, 0755, true) && !is_dir($root)) {
+            $mkdirError = error_get_last();
+            $errorMessage = $mkdirError['message'] ?? '';
+            throw new SystemException(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
         }
     }
 
@@ -99,7 +87,7 @@ class Local extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
+        $url = $this->urlService->storage();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {
@@ -124,7 +112,7 @@ class Local extends AbstractAdapter implements StorageInterface
 
         copy($stream->getMetadata('uri'), $location);
 
-        $this->crop($stream, $thumbs, $location, function ($pathTmp, $cropLocation) {
+        $this->crop($stream, $thumbs, $location, static function ($pathTmp, $cropLocation) {
             copy($pathTmp, $cropLocation);
         });
 

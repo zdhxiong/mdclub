@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 私信
- *
- * Class Inbox
- * @package App\Controller
  */
-class Inbox extends ControllerAbstracts
+class Inbox extends ContainerAbstracts
 {
     /**
      * 私信列表页
@@ -26,6 +23,6 @@ class Inbox extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $this->container->view->render($response, '/inbox/index.php');
+        return $this->view->render($response, '/inbox/index.php');
     }
 }

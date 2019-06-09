@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 邮件
- *
- * Class EmailController
- * @package App\Controller
  */
-class Email extends ControllerAbstracts
+class Email extends ContainerAbstracts
 {
     /**
      * 发送邮件
@@ -26,18 +22,18 @@ class Email extends ControllerAbstracts
      */
     public function send(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $email = ArrayHelper::getParsedBodyParam($request, 'email', 100);
+        $email = $this->requestService->getParsedBodyParamToArray('email', 100);
         $subject = $request->getParsedBodyParam('subject', '');
         $content = $request->getParsedBodyParam('content', '');
 
-        $this->container->emailService->send($email, $subject, $content);
+        $this->emailService->send($email, $subject, $content);
 
-        return $this->success($response, [
+        return collect([
             'email'   => implode(',', $email),
             'subject' => $subject,
             'content' => $content,
-        ]);
+        ])->render($response);
     }
 }

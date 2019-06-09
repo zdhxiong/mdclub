@@ -4,66 +4,106 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ContainerAbstracts;
+use App\Exception\SystemException;
+use App\Traits\fetchCollection;
+use Psr\Container\ContainerInterface;
+use Tightenco\Collect\Support\Collection;
 
 /**
- * Class Option
+ * 配置
  *
- * @property string cache_memcached_host
- * @property string cache_memcached_password
- * @property string cache_memcached_port
- * @property string cache_memcached_username
- * @property string cache_prefix
- * @property string cache_redis_host
- * @property string cache_redis_password
- * @property string cache_redis_port
- * @property string cache_redis_username
- * @property string cache_type
- * @property string language
- * @property string site_description
- * @property string site_gongan_beian
- * @property string site_icp_beian
- * @property string site_keywords
- * @property string site_name
- * @property string site_static_url
- * @property string smtp_host
- * @property string smtp_password
- * @property string smtp_port
- * @property string smtp_reply_to
- * @property string smtp_secure
- * @property string smtp_username
- * @property string storage_aliyun_access_id
- * @property string storage_aliyun_access_secret
- * @property string storage_aliyun_bucket
- * @property string storage_aliyun_endpoint
- * @property string storage_ftp_host
- * @property string storage_ftp_passive
- * @property string storage_ftp_password
- * @property string storage_ftp_port
- * @property string storage_ftp_root
- * @property string storage_ftp_ssl
- * @property string storage_ftp_username
- * @property string storage_local_dir
- * @property string storage_qiniu_access_id
- * @property string storage_qiniu_access_secret
- * @property string storage_qiniu_bucket
- * @property string storage_qiniu_zone
- * @property string storage_sftp_host
- * @property string storage_sftp_password
- * @property string storage_sftp_port
- * @property string storage_sftp_root
- * @property string storage_sftp_username
- * @property string storage_type
- * @property string storage_upyun_bucket
- * @property string storage_upyun_operator
- * @property string storage_upyun_password
- * @property string storage_url
- * @property string theme
+ * @property string  answer_can_delete
+ * @property string  answer_can_delete_before
+ * @property string  answer_can_delete_only_no_comment
+ * @property string  answer_can_edit
+ * @property string  answer_can_edit_before
+ * @property string  answer_can_edit_only_no_comment
+ * @property string  article_can_delete
+ * @property string  article_can_delete_before
+ * @property string  article_can_delete_only_no_comment
+ * @property string  article_can_edit
+ * @property string  article_can_edit_before
+ * @property string  article_can_edit_only_no_comment
+ * @property string  cache_memcached_host
+ * @property string  cache_memcached_password
+ * @property string  cache_memcached_port
+ * @property string  cache_memcached_username
+ * @property string  cache_prefix
+ * @property string  cache_redis_host
+ * @property string  cache_redis_password
+ * @property string  cache_redis_port
+ * @property string  cache_redis_username
+ * @property string  cache_type
+ * @property string  comment_can_delete
+ * @property string  comment_can_delete_before
+ * @property string  comment_can_edit
+ * @property string  comment_can_edit_before
+ * @property string  language
+ * @property string  question_can_delete
+ * @property string  question_can_delete_before
+ * @property string  question_can_delete_only_no_answer
+ * @property string  question_can_delete_only_no_comment
+ * @property string  question_can_edit
+ * @property string  question_can_edit_before
+ * @property string  question_can_edit_only_no_answer
+ * @property string  question_can_edit_only_no_comment
+ * @property string  site_description
+ * @property string  site_gongan_beian
+ * @property string  site_icp_beian
+ * @property string  site_keywords
+ * @property string  site_name
+ * @property string  site_static_url
+ * @property string  smtp_host
+ * @property string  smtp_password
+ * @property string  smtp_port
+ * @property string  smtp_reply_to
+ * @property string  smtp_secure
+ * @property string  smtp_username
+ * @property string  storage_aliyun_access_id
+ * @property string  storage_aliyun_access_secret
+ * @property string  storage_aliyun_bucket
+ * @property string  storage_aliyun_endpoint
+ * @property string  storage_ftp_host
+ * @property string  storage_ftp_passive
+ * @property string  storage_ftp_password
+ * @property string  storage_ftp_port
+ * @property string  storage_ftp_root
+ * @property string  storage_ftp_ssl
+ * @property string  storage_ftp_username
+ * @property string  storage_local_dir
+ * @property string  storage_qiniu_access_id
+ * @property string  storage_qiniu_access_secret
+ * @property string  storage_qiniu_bucket
+ * @property string  storage_qiniu_zone
+ * @property string  storage_sftp_host
+ * @property string  storage_sftp_password
+ * @property string  storage_sftp_port
+ * @property string  storage_sftp_root
+ * @property string  storage_sftp_username
+ * @property string  storage_type
+ * @property string  storage_upyun_bucket
+ * @property string  storage_upyun_operator
+ * @property string  storage_upyun_password
+ * @property string  storage_url
+ * @property string  theme
  *
- * @package App\Service
+ * @property-read \App\Model\Option  $optionModel
+ * @property-read Role               $roleService
  */
-class Option extends ContainerAbstracts
+class Option
 {
+    use fetchCollection;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * 公共字段
      *
@@ -71,7 +111,7 @@ class Option extends ContainerAbstracts
      *
      * @var array
      */
-    public $publicNames = [
+    private static $publicNames = [
         'language',
         'site_description',
         'site_gongan_beian',
@@ -83,37 +123,51 @@ class Option extends ContainerAbstracts
     /**
      * 保存的设置值
      *
-     * @var array
+     * @var Collection
      */
     private $options;
 
     /**
-     * Option constructor.
-     * @param $container
+     * 是否仅获取用户有权限访问的字段
+     *
+     * @var bool
      */
-    public function __construct($container)
+    private $onlyAuthorized = false;
+
+    /**
+     * 是否仅获取用户有权限访问的字段
+     *
+     * @return Option
+     */
+    public function onlyAuthorized(): self
     {
-        parent::__construct($container);
+        $this->onlyAuthorized = true;
+
+        return $this;
     }
 
     /**
      * 获取所有配置项的值
      *
-     * @return array
+     * @return array|Collection
      */
-    public function getMultiple(): array
+    public function getMultiple()
     {
-        if (is_null($this->options)) {
-            $result = $this->container->optionModel->select();
-            $result = array_combine(
-                array_column($result, 'name'),
-                array_column($result, 'value')
-            );
-
-            $this->options = $result;
+        if ($this->options === null) {
+            $this->options = $this->optionModel
+                ->fetchCollection()
+                ->select()
+                ->pluck('value', 'name');
         }
 
-        return $this->options;
+        $options = $this->options;
+
+        if ($this->onlyAuthorized && !$this->roleService->managerId()) {
+            $this->onlyAuthorized = false;
+            $options =  $options->only(self::$publicNames);
+        }
+
+        return $this->returnArray($options);
     }
 
     /**
@@ -127,7 +181,7 @@ class Option extends ContainerAbstracts
         $options = $this->getMultiple();
 
         if (!isset($options[$name])) {
-            throw new \Exception('不存在指定的设置项：' . $name);
+            throw new SystemException('不存在指定的设置项：' . $name);
         }
 
         return $options[$name];
@@ -144,16 +198,14 @@ class Option extends ContainerAbstracts
             return;
         }
 
-        $options = $this->getMultiple();
-
-        foreach ($data as $name => $value) {
-            if (!isset($options[$name])) {
-                throw new \Exception('不存在指定的设置项：' . $name);
-            }
+        if ($diffKeys = collect($data)->diffKeys($this->getMultiple())->keys()->implode(', ')) {
+            throw new SystemException('不存在指定的设置项：' . $diffKeys);
         }
 
         foreach ($data as $name => $value) {
-            $this->container->optionModel->where(['name' => $name])->update(['value' => $value]);
+            $this->optionModel
+                ->where('name', $name)
+                ->update('value', $value);
         }
 
         $this->options = null;
@@ -167,14 +219,7 @@ class Option extends ContainerAbstracts
      */
     public function set(string $name, $value): void
     {
-        $options = $this->getMultiple();
-
-        if (!isset($options[$name])) {
-            throw new \Exception('不存在指定的设置项：' . $name);
-        }
-
-        $this->container->optionModel->where(['name' => $name])->update(['value' => $value]);
-        $this->options = null;
+        $this->setMultiple([$name => $value]);
     }
 
     /********************************************************************************
@@ -183,10 +228,18 @@ class Option extends ContainerAbstracts
 
     /**
      * @param  string $name
-     * @return string
+     * @return mixed
      */
-    public function __get(string $name): string
+    public function __get(string $name)
     {
+        if ($name === 'optionModel') {
+            return $this->container->get('optionModel');
+        }
+
+        if ($name === 'roleService') {
+            return $this->container->get('roleService');
+        }
+
         return $this->get($name);
     }
 
@@ -197,5 +250,14 @@ class Option extends ContainerAbstracts
     public function __set(string $name, $value): void
     {
         $this->set($name, $value);
+    }
+
+    /**
+     * @param  string $name
+     * @return bool
+     */
+    public function __isset(string $name): bool
+    {
+        return $this->fetchCollection()->getMultiple()->has($name);
     }
 }

@@ -8,9 +8,6 @@ use Zhuzhichao\IpLocationZh\Ip;
 
 /**
  * IP 相关方法
- *
- * Class IpHelper
- * @package App\Helper
  */
 class IpHelper
 {
@@ -21,15 +18,7 @@ class IpHelper
      */
     public static function getIp(): string
     {
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
-            return $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'];
-        } else {
-            return '0.0.0.0';
-        }
+        return $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     }
 
     /**
@@ -49,8 +38,8 @@ class IpHelper
         if (is_array($arr)) {
             array_pop($arr);
             return trim(implode(' ', array_unique($arr)));
-        } else {
-            return '';
         }
+
+        return '';
     }
 }

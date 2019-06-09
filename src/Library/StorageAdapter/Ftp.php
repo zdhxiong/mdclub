@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Library\StorageAdapter;
 
-use App\Interfaces\ContainerInterface;
+use App\Exception\SystemException;
 use App\Interfaces\StorageInterface;
-use App\Traits\Url;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * FTP/FTPS 适配器
  *
  * NOTE: FTPS 需要开启 openssl 扩展
- *
- * Class Ftp
- * @package App\Library\Storage\Adapter
  */
 class Ftp extends AbstractAdapter implements StorageInterface
 {
-    use Url;
-
     /**
      * FTP 连接 resource
      *
@@ -36,35 +31,31 @@ class Ftp extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * Ftp constructor.
-     *
      * @param ContainerInterface $container
      */
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
         if (!extension_loaded('ftp')) {
-            throw new \Exception('PHP extension FTP is not loaded.');
+            throw new SystemException('PHP extension FTP is not loaded.');
         }
 
         $this->setPathPrefix();
 
-        [
-            'storage_ftp_username' => $username,
-            'storage_ftp_password' => $password,
-            'storage_ftp_host' => $host,
-            'storage_ftp_port' => $port,
-            'storage_ftp_ssl' => $ssl,
-            'storage_ftp_passive' => $passive,
-        ] = $container->optionService->getMultiple();
+        $username = $this->optionService->storage_ftp_username;
+        $password = $this->optionService->storage_ftp_password;
+        $host = $this->optionService->storage_ftp_host;
+        $port = $this->optionService->storage_ftp_port;
+        $ssl = $this->optionService->storage_ftp_ssl;
+        $passive = $this->optionService->storage_ftp_passive;
 
         $this->connection = $ssl
-            ? ftp_ssl_connect($host, (int)$port)
-            : ftp_connect($host, (int)$port);
+            ? ftp_ssl_connect($host, (int) $port)
+            : ftp_connect($host, (int) $port);
 
         if (!$this->connection) {
-            throw new \Exception("Couldn't connect to FTP Server ${host}:${port}");
+            throw new SystemException("Couldn't connect to FTP Server ${host}:${port}");
         }
 
         ftp_login($this->connection, $username, $password);
@@ -76,7 +67,7 @@ class Ftp extends AbstractAdapter implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->container->optionService->storage_ftp_root;
+        $prefix = $this->optionService->storage_ftp_root;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -129,7 +120,7 @@ class Ftp extends AbstractAdapter implements StorageInterface
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
+        $url = $this->urlService->storage();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {

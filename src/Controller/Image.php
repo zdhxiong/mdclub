@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * 图片
- *
- * Class Image
- * @package App\Controller
  */
-class Image extends ControllerAbstracts
+class Image extends ContainerAbstracts
 {
     /**
      * 获取图片列表
@@ -27,10 +23,12 @@ class Image extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
-        $list = $this->container->imageService->getList(true);
+        $this->roleService->managerIdOrFail();
 
-        return $this->success($response, $list);
+        return $this->imageService
+            ->fetchCollection()
+            ->getList(true)
+            ->render($response);
     }
 
     /**
@@ -42,15 +40,17 @@ class Image extends ControllerAbstracts
      */
     public function upload(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
         /** @var UploadedFileInterface $file */
         $file = $request->getUploadedFiles()['image'] ?? null;
 
-        $hash = $this->container->imageService->upload($userId, $file);
-        $info = $this->container->imageService->getInfo($hash, true);
+        $hash = $this->imageService->upload($userId, $file);
 
-        return $this->success($response, $info);
+        return $this->imageService
+            ->fetchCollection()
+            ->getInfo($hash, true)
+            ->render($response);
     }
 
     /**
@@ -62,12 +62,12 @@ class Image extends ControllerAbstracts
      */
     public function deleteMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $hashs = ArrayHelper::getQueryParam($request, 'hash', 40);
-        $this->container->imageService->deleteMultiple($hashs);
+        $hashs = $this->requestService->getQueryParamToArray('hash', 40);
+        $this->imageService->deleteMultiple($hashs);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -80,9 +80,10 @@ class Image extends ControllerAbstracts
      */
     public function getOne(Request $request, Response $response, string $hash): Response
     {
-        $imageInfo = $this->container->imageService->getInfo($hash, true);
-
-        return $this->success($response, $imageInfo);
+        return $this->imageService
+            ->fetchCollection()
+            ->getInfo($hash, true)
+            ->render($response);
     }
 
     /**
@@ -95,14 +96,15 @@ class Image extends ControllerAbstracts
      */
     public function updateOne(Request $request, Response $response, string $hash): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
         $filename = $request->getParsedBodyParam('filename');
+        $this->imageService->updateInfo($hash, ['filename' => $filename]);
 
-        $this->container->imageService->updateInfo($hash, ['filename' => $filename]);
-        $imageInfo = $this->container->imageService->getInfo($hash, true);
-
-        return $this->success($response, $imageInfo);
+        return $this->imageService
+            ->fetchCollection()
+            ->getInfo($hash, true)
+            ->render($response);
     }
 
     /**
@@ -115,9 +117,9 @@ class Image extends ControllerAbstracts
      */
     public function deleteOne(Request $request, Response $response, string $hash): Response
     {
-        $this->container->roleService->managerIdOrFail();
-        $this->container->imageService->delete($hash);
+        $this->roleService->managerIdOrFail();
+        $this->imageService->delete($hash);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 }

@@ -4,44 +4,57 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Exception\ValidationException;
-use App\Helper\ValidatorHelper;
+use Tightenco\Collect\Support\Collection;
 
 /**
- * 可评论对象 （question、answer、article）
+ * 可评论对象。用于 question, answer, article
  *
- * Trait Commentable
- * @package App\Traits
+ * @property-read \App\Abstracts\ModelAbstracts $model
+ * @property-read \App\Service\Comment\Get      $commentGetService
+ * @property-read \App\Service\Comment\Update   $commentUpdateService
+ * @property-read \App\Service\Role             $roleService
+ * @property-read \App\Model\Comment            $commentModel
  */
 trait Commentable
 {
-    abstract public function hasOrFail(int $id);
+    protected $isForApi = false;
+
+    /**
+     * @return Commentable
+     */
+    public function forApi(): self
+    {
+        $this->isForApi = true;
+
+        return $this;
+    }
 
     /**
      * 获取评论列表
      *
-     * @param  int   $commentableId
-     * @param  bool  $withRelationship
-     * @return array
+     * @param  int              $commentableId
+     * @return array|Collection
      */
-    public function getComments(int $commentableId, bool $withRelationship = false): array
+    public function getList(int $commentableId)
     {
-        $this->hasOrFail($commentableId);
+        $this->{$this->model->table . 'GetService'}->hasOrFail($commentableId);
 
-        $list = $this->container->commentModel
-            ->where([
-                'commentable_id'   => $commentableId,
-                'commentable_type' => $this->currentModel->table,
-            ])
-            ->order($this->container->commentService->getOrder(['create_time' => 'ASC']))
-            ->field($this->container->commentService->getPrivacyFields(), true)
-            ->paginate();
-
-        if ($withRelationship) {
-            $list['data'] = $this->container->commentService->addRelationship($list['data']);
+        if ($this->isForApi) {
+            $this->commentGetService->forApi();
+            $this->isForApi = false;
         }
 
-        return $list;
+        $this->commentGetService->beforeGet();
+
+        $result = $this->commentModel
+            ->where('commentable_type', $this->model->table)
+            ->where('commentable_id', $commentableId)
+            ->order($this->commentGetService->getOrder(['create_time' => 'DESC']))
+            ->paginate();
+
+        $result = $this->commentGetService->afterGet($result);
+
+        return $this->commentGetService->returnArray($result);
     }
 
     /**
@@ -49,39 +62,26 @@ trait Commentable
      *
      * @param  int    $commentableId
      * @param  string $content
-     * @return int                   评论ID
+     * @return int                    评论ID
      */
-    public function addComment(int $commentableId, string $content = null): int
+    public function add(int $commentableId, string $content = null): int
     {
-        $userId = $this->container->roleService->userIdOrFail();
-        $this->hasOrFail($commentableId);
+        $userId = $this->roleService->userIdOrFail();
+        $this->{$this->model->table . 'GetService'}->hasOrFail($commentableId);
 
-        if ($content) {
-            $content = strip_tags($content);
-        }
+        $content = $this->commentUpdateService->validContent($content);
 
-        // 评论最多 1000 个字，最少 1 个字
-        $errors = [];
-        if (!$content) {
-            $errors['content'] = '评论内容不能为空';
-        } elseif (!ValidatorHelper::isMax($content, 1000)) {
-            $errors['content'] = '评论内容不能超过 1000 个字符';
-        }
-
-        if ($errors) {
-            throw new ValidationException($errors);
-        }
-
-        $commentId = (int)$this->container->commentModel->insert([
+        $commentId = (int) $this->commentModel->insert([
+            'commentable_type' => $this->model->table,
             'commentable_id'   => $commentableId,
-            'commentable_type' => $this->currentModel->table,
             'user_id'          => $userId,
             'content'          => $content,
         ]);
 
-        $this->currentModel
-            ->where([$this->currentModel->table . '_id' => $commentableId])
-            ->update(['comment_count[+]' => 1]);
+        $this->model
+            ->where($this->model->table . '_id', $commentableId)
+            ->inc('comment_count')
+            ->update();
 
         return $commentId;
     }

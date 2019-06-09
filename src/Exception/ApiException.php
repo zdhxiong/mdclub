@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
+use Exception;
+
 /**
  * API 异常
- *
- * Class ApiException
- * @package App\Exception
  */
-class ApiException extends \Exception
+class ApiException extends Exception
 {
     /**
      * 下次验证是否需要图形验证码
@@ -27,15 +26,13 @@ class ApiException extends \Exception
     protected $extraMessage;
 
     /**
-     * ApiException constructor.
-     *
-     * @param array  $error         错误代码
+     * @param array  $error         错误代码和错误描述 [code, message]
      * @param bool   $needCaptcha   下一次调用该接口是否需要输入图形验证码
      * @param string $extraMessage  额外的错误说明
      */
     public function __construct(array $error, bool $needCaptcha = false, string $extraMessage = '')
     {
-        [$this->code, $this->message] = $error;
+        parent::__construct(...array_reverse($error));
         $this->needCaptcha = $needCaptcha;
         $this->extraMessage = $extraMessage;
     }

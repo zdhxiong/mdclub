@@ -9,15 +9,14 @@ use App\Helper\StringHelper;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
- * 对象的标识图 （user-avatar、user-cover、topic-cover）
+ * 对象的标识图。包括 user-avatar, user-cover, topic-cover
  *
- * Trait Brandable
- * @package App\Traits
+ * @property-read \App\Library\Storage $storage
  */
 trait Brandable
 {
     /**
-     * 图片类型，包括 user-avatar、user-cover、topic-cover
+     * 图片类型，包括 user-avatar, user-cover, topic-cover
      *
      * @return string
      */
@@ -68,7 +67,7 @@ trait Brandable
         $path = $this->getBrandPath($id, $filename);
         $thumbs = $this->getBrandSize();
 
-        return $this->container->storage->get($path, $thumbs);
+        return $this->storage->get($path, $thumbs);
     }
 
     /**
@@ -82,7 +81,7 @@ trait Brandable
         $path = $this->getBrandPath($id, $filename);
         $thumbs = $this->getBrandSize();
 
-        $this->container->storage->delete($path, $thumbs);
+        $this->storage->delete($path, $thumbs);
     }
 
     /**
@@ -100,7 +99,7 @@ trait Brandable
         $path = $this->getBrandPath($id, $filename);
         $thumbs = $this->getBrandSize();
 
-        $this->container->storage->write($path, $file->getStream(), $thumbs);
+        $this->storage->write($path, $file->getStream(), $thumbs);
 
         return $filename;
     }
@@ -115,7 +114,9 @@ trait Brandable
     {
         if ($file->getError() !== UPLOAD_ERR_OK) {
             return UploadErrorConstant::getMessage()[$file->getError()];
-        } elseif (!in_array($file->getClientMediaType(), ['image/jpeg', 'image/png'])) {
+        }
+
+        if (!in_array($file->getClientMediaType(), ['image/jpeg', 'image/png'])) {
             return '仅允许上传 jpg 或 png 图片';
         }
 

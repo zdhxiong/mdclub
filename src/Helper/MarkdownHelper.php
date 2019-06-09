@@ -20,7 +20,7 @@ class MarkdownHelper
         }
 
         static $parsedown;
-        if (is_null($parsedown)) {
+        if ($parsedown === null) {
             $parsedown = new \Parsedown();
         }
 

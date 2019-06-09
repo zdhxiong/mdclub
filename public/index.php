@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Slim\App;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $settings = require __DIR__ . '/../config/settings.php';
-$app = new \Slim\App($settings);
+$app = new App($settings);
 
 require __DIR__ . '/../config/dependencies.php';
 require __DIR__ . '/../config/middleware.php';

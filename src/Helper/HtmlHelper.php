@@ -8,9 +8,6 @@ use Markdownify\Converter;
 
 /**
  * HTML 相关方法
- *
- * Class HtmlUtil
- * @package App\Util
  */
 class HtmlHelper
 {
@@ -27,7 +24,7 @@ class HtmlHelper
         }
 
         static $converter;
-        if (is_null($converter)) {
+        if ($converter === null) {
             $converter = new Converter;
         }
 

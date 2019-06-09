@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Helper\StringHelper;
 use App\Exception\ApiException;
@@ -15,11 +15,8 @@ use Slim\Http\UploadedFile;
 
 /**
  * 用户头像管理
- *
- * Class UserAvatar
- * @package App\Service
  */
-class UserAvatar extends ServiceAbstracts
+class UserAvatar extends ContainerAbstracts
 {
     use Brandable;
 
@@ -80,11 +77,11 @@ class UserAvatar extends ServiceAbstracts
             throw new ApiException(ErrorConstant::USER_AVATAR_UPLOAD_FAILED, false, $imageError);
         }
 
-        $userInfo = $this->container->userModel->field(['user_id', 'avatar'])->get($userId);
+        $userInfo = $this->userModel->field(['user_id', 'avatar'])->get($userId);
 
         $this->deleteImage($userId, $userInfo['avatar']);
         $filename = $this->uploadImage($userId, $avatar);
-        $this->container->userModel->where(['user_id' => $userId])->update(['avatar' => $filename]);
+        $this->userModel->where('user_id', $userId)->update('avatar', $filename);
 
         return $filename;
     }
@@ -97,7 +94,7 @@ class UserAvatar extends ServiceAbstracts
      */
     public function delete(int $userId): string
     {
-        $userInfo = $this->container->userModel->field(['user_id', 'username', 'avatar'])->get($userId);
+        $userInfo = $this->userModel->field(['user_id', 'username', 'avatar'])->get($userId);
         if (!$userInfo) {
             throw new ApiException(ErrorConstant::USER_NOT_FOUND);
         }
@@ -117,7 +114,7 @@ class UserAvatar extends ServiceAbstracts
 
         // 上传新头像
         $filename = $this->uploadImage($userId, $uploadedFile);
-        $this->container->userModel->where(['user_id' => $userId])->update(['avatar' => $filename]);
+        $this->userModel->where('user_id', $userId)->update('avatar', $filename);
 
         return $filename;
     }

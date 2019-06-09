@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
-use App\Helper\ArrayHelper;
+use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Slim\Http\Request;
@@ -13,11 +12,8 @@ use Slim\Http\Response;
 
 /**
  * 用户
- *
- * Class UserController
- * @package App\Controller
  */
-class User extends ControllerAbstracts
+class User extends ContainerAbstracts
 {
     /**
      * 用户列表页
@@ -28,7 +24,7 @@ class User extends ControllerAbstracts
      */
     public function pageIndex(Request $request, Response $response): ResponseInterface
     {
-        return $this->container->view->render($response, '/user/index.php');
+        return $this->view->render($response, '/user/index.php');
     }
 
     /**
@@ -41,7 +37,7 @@ class User extends ControllerAbstracts
      */
     public function pageInfo(Request $request, Response $response, int $user_id): ResponseInterface
     {
-        return $this->container->view->render($response, '/user/info.php');
+        return $this->view->render($response, '/user/info.php');
     }
 
     /**
@@ -53,9 +49,10 @@ class User extends ControllerAbstracts
      */
     public function getList(Request $request, Response $response): Response
     {
-        $list = $this->container->userService->getList([], true);
-
-        return $this->success($response, $list);
+        return $this->userService
+            ->fetchCollection()
+            ->getList([], true)
+            ->render($response);
     }
 
     /**
@@ -67,12 +64,12 @@ class User extends ControllerAbstracts
      */
     public function disableMultiple(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $userIds = ArrayHelper::getQueryParam($request, 'user_id', 100);
-        $this->container->userService->disableMultiple($userIds);
+        $userIds = $this->requestService->getQueryParamToArray('user_id', 100);
+        $this->userService->disableMultiple($userIds);
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -85,9 +82,10 @@ class User extends ControllerAbstracts
      */
     public function getOne(Request $request, Response $response, int $user_id): Response
     {
-        $userInfo = $this->container->userService->getOrFail($user_id, true);
-
-        return $this->success($response, $userInfo);
+        return $this->userService
+            ->fetchCollection()
+            ->getOrFail($user_id, true)
+            ->render($response);
     }
 
     /**
@@ -100,12 +98,14 @@ class User extends ControllerAbstracts
      */
     public function updateOne(Request $request, Response $response, int $user_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $this->container->userService->update($user_id, $request->getParsedBody());
-        $userInfo = $this->container->userService->get($user_id, true);
+        $this->userService->update($user_id, $request->getParsedBody());
 
-        return $this->success($response, $userInfo);
+        return $this->userService
+            ->fetchCollection()
+            ->get($user_id, true)
+            ->render($response);
     }
 
     /**
@@ -118,11 +118,10 @@ class User extends ControllerAbstracts
      */
     public function disableOne(Request $request, Response $response, int $user_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
+        $this->userService->disable($user_id);
 
-        $this->container->userService->disable($user_id);
-
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -134,11 +133,12 @@ class User extends ControllerAbstracts
      */
     public function getMe(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $userInfo = $this->container->userService->get($userId, true);
-
-        return $this->success($response, $userInfo);
+        return $this->userService
+            ->fetchCollection()
+            ->get($userId, true)
+            ->render($response);
     }
 
     /**
@@ -150,12 +150,14 @@ class User extends ControllerAbstracts
      */
     public function updateMe(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->userService->update($userId, $request->getParsedBody());
-        $userInfo = $this->container->userService->get($userId, true);
+        $this->userService->update($userId, $request->getParsedBody());
 
-        return $this->success($response, $userInfo);
+        return $this->userService
+            ->fetchCollection()
+            ->get($userId, true)
+            ->render($response);
     }
 
     /**
@@ -169,12 +171,14 @@ class User extends ControllerAbstracts
      */
     public function deleteAvatar(Request $request, Response $response, int $user_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $filename = $this->container->userAvatarService->delete($user_id);
-        $newAvatars = $this->container->userAvatarService->getBrandUrls($user_id, $filename);
+        $filename = $this->userAvatarService->delete($user_id);
 
-        return $this->success($response, $newAvatars);
+        return $this->userAvatarService
+            ->fetchCollection()
+            ->getBrandUrls($user_id, $filename)
+            ->render($response);
     }
 
     /**
@@ -187,15 +191,17 @@ class User extends ControllerAbstracts
      */
     public function uploadMyAvatar(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
         /** @var UploadedFileInterface $avatar */
         $avatar = $request->getUploadedFiles()['avatar'] ?? null;
 
-        $filename = $this->container->userAvatarService->upload($userId, $avatar);
-        $newAvatars = $this->container->userAvatarService->getBrandUrls($userId, $filename);
+        $filename = $this->userAvatarService->upload($userId, $avatar);
 
-        return $this->success($response, $newAvatars);
+        return $this->userAvatarService
+            ->fetchCollection()
+            ->getBrandUrls($userId, $filename)
+            ->render($response);
     }
 
     /**
@@ -208,12 +214,14 @@ class User extends ControllerAbstracts
      */
     public function deleteMyAvatar(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $filename = $this->container->userAvatarService->delete($userId);
-        $newAvatars = $this->container->userAvatarService->getBrandUrls($userId, $filename);
+        $filename = $this->userAvatarService->delete($userId);
 
-        return $this->success($response, $newAvatars);
+        return $this->userAvatarService
+            ->fetchCollection()
+            ->getBrandUrls($userId, $filename)
+            ->render($response);
     }
 
     /**
@@ -227,12 +235,14 @@ class User extends ControllerAbstracts
      */
     public function deleteCover(Request $request, Response $response, int $user_id): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $this->container->userCoverService->delete($user_id);
-        $newCovers = $this->container->userCoverService->getBrandUrls($user_id);
+        $this->userCoverService->delete($user_id);
 
-        return $this->success($response, $newCovers);
+        return $this->userCoverService
+            ->fetchCollection()
+            ->getBrandUrls($user_id)
+            ->render($response);
     }
 
     /**
@@ -245,15 +255,17 @@ class User extends ControllerAbstracts
      */
     public function uploadMyCover(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
         /** @var UploadedFileInterface $cover */
         $cover = $request->getUploadedFiles()['cover'] ?? null;
 
-        $filename = $this->container->userCoverService->upload($userId, $cover);
-        $newCovers = $this->container->userCoverService->getBrandUrls($userId, $filename);
+        $filename = $this->userCoverService->upload($userId, $cover);
 
-        return $this->success($response, $newCovers);
+        return $this->userCoverService
+            ->fetchCollection()
+            ->getBrandUrls($userId, $filename)
+            ->render($response);
     }
 
     /**
@@ -266,12 +278,14 @@ class User extends ControllerAbstracts
      */
     public function deleteMyCover(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $this->container->userCoverService->delete($userId);
-        $newCovers = $this->container->userCoverService->getBrandUrls($userId);
+        $this->userCoverService->delete($userId);
 
-        return $this->success($response, $newCovers);
+        return $this->userCoverService
+            ->fetchCollection()
+            ->getBrandUrls($userId)
+            ->render($response);
     }
 
     /**
@@ -284,9 +298,10 @@ class User extends ControllerAbstracts
      */
     public function getFollowers(Request $request, Response $response, int $user_id): Response
     {
-        $followers = $this->container->userService->getFollowers($user_id, true);
-
-        return $this->success($response, $followers);
+        return $this->userService
+            ->fetchCollection()
+            ->getFollowers($user_id, true)
+            ->render($response);
     }
 
     /**
@@ -299,12 +314,12 @@ class User extends ControllerAbstracts
      */
     public function addFollow(Request $request, Response $response, int $user_id): Response
     {
-        $currentUserId = $this->container->roleService->userIdOrFail();
+        $currentUserId = $this->roleService->userIdOrFail();
 
-        $this->container->userService->addFollow($currentUserId, $user_id);
-        $followerCount = $this->container->userService->getFollowerCount($user_id);
+        $this->userService->addFollow($currentUserId, $user_id);
+        $followerCount = $this->userService->getFollowerCount($user_id);
 
-        return $this->success($response, ['follower_count' => $followerCount]);
+        return collect(['follower_count' => $followerCount])->render($response);
     }
 
     /**
@@ -317,12 +332,12 @@ class User extends ControllerAbstracts
      */
     public function deleteFollow(Request $request, Response $response, int $user_id): Response
     {
-        $currentUserId = $this->container->roleService->userIdOrFail();
+        $currentUserId = $this->roleService->userIdOrFail();
 
-        $this->container->userService->deleteFollow($currentUserId, $user_id);
-        $followerCount = $this->container->userService->getFollowerCount($user_id);
+        $this->userService->deleteFollow($currentUserId, $user_id);
+        $followerCount = $this->userService->getFollowerCount($user_id);
 
-        return $this->success($response, ['follower_count' => $followerCount]);
+        return collect(['follower_count' => $followerCount])->render($response);
     }
 
     /**
@@ -335,9 +350,10 @@ class User extends ControllerAbstracts
      */
     public function getFollowees(Request $request, Response $response, int $user_id): Response
     {
-        $following = $this->container->userService->getFollowing($user_id, true);
-
-        return $this->success($response, $following);
+        return $this->userService
+            ->fetchCollection()
+            ->getFollowing($user_id, true)
+            ->render($response);
     }
 
     /**
@@ -349,11 +365,12 @@ class User extends ControllerAbstracts
      */
     public function getMyFollowers(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $followers = $this->container->userService->getFollowers($userId, true);
-
-        return $this->success($response, $followers);
+        return $this->userService
+            ->fetchCollection()
+            ->getFollowers($userId, true)
+            ->render($response);
     }
 
     /**
@@ -365,11 +382,12 @@ class User extends ControllerAbstracts
      */
     public function getMyFollowees(Request $request, Response $response): Response
     {
-        $userId = $this->container->roleService->userIdOrFail();
+        $userId = $this->roleService->userIdOrFail();
 
-        $following = $this->container->userService->getFollowing($userId, true);
-
-        return $this->success($response, $following);
+        return $this->userService
+            ->fetchCollection()
+            ->getFollowing($userId, true)
+            ->render($response);
     }
 
     /**
@@ -382,9 +400,9 @@ class User extends ControllerAbstracts
      */
     public function sendResetEmail(Request $request, Response $response): Response
     {
-        $this->container->userPasswordResetService->sendEmail($request->getParsedBodyParam('email'));
+        $this->userPasswordResetService->sendEmail($request->getParsedBodyParam('email'));
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -397,13 +415,13 @@ class User extends ControllerAbstracts
      */
     public function updatePasswordByEmail(Request $request, Response $response): Response
     {
-        $this->container->userPasswordResetService->doReset(
+        $this->userPasswordResetService->doReset(
             $request->getParsedBodyParam('email'),
             $request->getParsedBodyParam('email_code'),
             $request->getParsedBodyParam('password')
         );
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -416,15 +434,15 @@ class User extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        $userInfo = $this->container->userRegisterService->doRegister(
-            $request->getParsedBodyParam('email'),
-            $request->getParsedBodyParam('email_code'),
-            $request->getParsedBodyParam('username'),
-            $request->getParsedBodyParam('password'),
-            $request->getParsedBodyParam('device')
-        );
-
-        return $this->success($response, $userInfo);
+        return $this->userRegisterService
+            ->fetchCollection()
+            ->doRegister(
+                $request->getParsedBodyParam('email'),
+                $request->getParsedBodyParam('email_code'),
+                $request->getParsedBodyParam('username'),
+                $request->getParsedBodyParam('password'),
+                $request->getParsedBodyParam('device')
+            )->render($response);
     }
 
     /**
@@ -437,9 +455,9 @@ class User extends ControllerAbstracts
      */
     public function sendRegisterEmail(Request $request, Response $response): Response
     {
-        $this->container->userRegisterService->sendEmail($request->getParsedBodyParam('email'));
+        $this->userRegisterService->sendEmail($request->getParsedBodyParam('email'));
 
-        return $this->success($response);
+        return collect()->render($response);
     }
 
     /**
@@ -451,11 +469,12 @@ class User extends ControllerAbstracts
      */
     public function getDisabledList(Request $request, Response $response): Response
     {
-        $this->container->roleService->managerIdOrFail();
+        $this->roleService->managerIdOrFail();
 
-        $list = $this->container->userService->getList(['is_disabled' => true], true);
-
-        return $this->success($response, $list);
+        return $this->userService
+            ->fetchCollection()
+            ->getList(['is_disabled' => true], true)
+            ->render($response);
     }
 
     /**
@@ -467,7 +486,7 @@ class User extends ControllerAbstracts
      */
     public function enableMultiple(Request $request, Response $response): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 
     /**
@@ -480,6 +499,6 @@ class User extends ControllerAbstracts
      */
     public function enableOne(Request $request, Response $response, int $user_id): Response
     {
-        return $response;
+        return collect()->render($response);
     }
 }

@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use App\Constant\ErrorConstant;
 use App\Exception\ApiException;
+use App\Traits\fetchCollection;
 
 /**
- * @property-read \App\Model\Token      currentModel
- *
- * Class TokenService
- * @package App\Service
+ * Token
  */
-class Token extends ServiceAbstracts
+class Token extends ContainerAbstracts
 {
+    use fetchCollection;
+
     /**
-     * token 的有效期
+     * token 的有效期，默认为 15天（3600*24*15）
      *
      * @var int
      */
-    public $lifeTime = 3600*24*15;
+    public $lifeTime = 1296000;
 
     /**
-     * 当前请求的 token。为 false 时表示 token 不存在
+     * 当前请求的 token. 为 false 时表示 token 不存在
      *
      * @var string
      */
@@ -47,10 +47,12 @@ class Token extends ServiceAbstracts
         $tokenInfo = $this->getTokenInfoOrFail();
         $user_id = $tokenInfo['user_id'];
 
-        return $this->container->tokenModel
-            ->where(['user_id' => $user_id])
-            ->order(['expire_time' => 'DESC'])
+        $result = $this->tokenModel
+            ->where('user_id', $user_id)
+            ->order('expire_time', 'DESC')
             ->paginate();
+
+        return $this->returnArray($result);
     }
 
     /**
@@ -62,14 +64,13 @@ class Token extends ServiceAbstracts
      */
     public function getToken()
     {
-        if (!is_null($this->token)) {
+        if ($this->token !== null) {
             return $this->token;
         }
 
-        $this->token = $this->container->request->getServerParam('HTTP_TOKEN', false);
-        if (!$this->token) {
-            $this->token = $this->container->request->getCookieParam('token', false);
-        }
+        $this->token = $this->request->getServerParam('HTTP_TOKEN')
+            ?? $this->request->getCookieParam('token')
+            ?? false;
 
         return $this->token;
     }
@@ -110,7 +111,7 @@ class Token extends ServiceAbstracts
      */
     public function getTokenInfo()
     {
-        if (!is_null($this->tokenInfo)) {
+        if ($this->tokenInfo !== null) {
             return $this->tokenInfo;
         }
 
@@ -122,25 +123,25 @@ class Token extends ServiceAbstracts
         }
 
         // token 对应的数据不存在
-        $tokenInfo = $this->container->tokenModel->get($token);
+        $tokenInfo = $this->tokenModel->get($token);
         if (!$tokenInfo) {
             $this->tokenInfo = false;
             return false;
         }
 
         // token 已过期，删除该 token
-        $requestTime = $this->container->request->getServerParam('REQUEST_TIME');
+        $requestTime = $this->requestService->time();
         if ($tokenInfo['expire_time'] < $requestTime) {
-            $this->container->tokenModel->delete($token);
+            $this->tokenModel->delete($token);
             $this->tokenInfo = false;
             return false;
         }
 
         // token 有效，自动续期
-        if ($tokenInfo['expire_time'] < $requestTime + $this->lifeTime - 3600*24) {
-            $this->container->tokenModel
-                ->where(['token' => $token])
-                ->update(['expire_time' => $requestTime + $this->lifeTime]);
+        if ($this->lifeTime - ($tokenInfo['expire_time'] - $requestTime) > 86400) {
+            $this->tokenModel
+                ->where('token', $token)
+                ->update('expire_time', $requestTime + $this->lifeTime);
         }
 
         $this->tokenInfo = $tokenInfo;
@@ -172,7 +173,7 @@ class Token extends ServiceAbstracts
         $tokenInfo = $this->getTokenInfo();
 
         if ($tokenInfo) {
-            $this->container->tokenModel->delete($tokenInfo['token']);
+            $this->tokenModel->delete($tokenInfo['token']);
         }
     }
 
@@ -183,7 +184,7 @@ class Token extends ServiceAbstracts
      */
     public function deleteByToken(string $token): void
     {
-        $result = $this->container->tokenModel->delete($token);
+        $result = $this->tokenModel->delete($token);
 
         if (!$result) {
             throw new ApiException(ErrorConstant::USER_TOKEN_NOT_FOUND);

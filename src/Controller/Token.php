@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Abstracts\ControllerAbstracts;
+use App\Abstracts\ContainerAbstracts;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
  * Token
- *
- * Class TokenController
- * @package App\Controller
  */
-class Token extends ControllerAbstracts
+class Token extends ContainerAbstracts
 {
     /**
      * 创建 token，即登录
@@ -25,12 +22,12 @@ class Token extends ControllerAbstracts
      */
     public function create(Request $request, Response $response): Response
     {
-        $userInfo = $this->container->userLoginService->doLogin(
-            $request->getParsedBodyParam('name'),
-            $request->getParsedBodyParam('password'),
-            $request->getParsedBodyParam('device')
-        );
-
-        return $this->success($response, $userInfo);
+        return $this->userLoginService
+            ->fetchCollection()
+            ->doLogin(
+                $request->getParsedBodyParam('name'),
+                $request->getParsedBodyParam('password'),
+                $request->getParsedBodyParam('device')
+            )->render($response);
     }
 }

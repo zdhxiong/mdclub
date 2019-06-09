@@ -7,16 +7,14 @@ namespace App\Model;
 use App\Abstracts\ModelAbstracts;
 
 /**
- * Class Topicable
- * @package App\Model
+ * 话题关系模型
  */
 class Topicable extends ModelAbstracts
 {
     public $table = 'topicable';
-    public $primaryKey = null;
     protected $timestamps = true;
 
-    const UPDATE_TIME = false; // 不维护 update_time 字段
+    protected const UPDATE_TIME = false; // 不维护 update_time 字段
 
     public $columns = [
         'topic_id',

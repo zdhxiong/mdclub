@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Abstracts\ServiceAbstracts;
+use App\Abstracts\ContainerAbstracts;
 
 /**
  * 通知
- *
- * @property-read \App\Model\Notification      currentModel
- *
- * Class Notification
- * @package App\Service
  */
-class Notification extends ServiceAbstracts
+class Notification extends ContainerAbstracts
 {
 
 }
