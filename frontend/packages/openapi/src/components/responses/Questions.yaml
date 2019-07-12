@@ -7,6 +7,8 @@ content:
         code:
           type: integer
         data:
-          $ref: '#/components/schemas/Questions'
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
         pagination:
           $ref: '#/components/schemas/Pagination'

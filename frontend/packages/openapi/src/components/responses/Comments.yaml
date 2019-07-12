@@ -7,6 +7,8 @@ content:
         code:
           type: integer
         data:
-          $ref: '#/components/schemas/Comments'
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
         pagination:
           $ref: '#/components/schemas/Pagination'
