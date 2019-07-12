@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/user_id.path'
 
 post:
-  operationId: enableUser
+  operationId: enable
   summary: 🔐恢复指定用户
   responses:
     '200':
@@ -10,4 +10,4 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserDisabled
+    - User

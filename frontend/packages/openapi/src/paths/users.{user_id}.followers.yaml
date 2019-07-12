@@ -15,10 +15,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserFollow
+    - User
 
 post:
-  operationId: addUserFollow
+  operationId: addFollow
   summary: 添加关注
   responses:
     '200':
@@ -26,10 +26,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserFollow
+    - User
 
 delete:
-  operationId: deleteUserFollow
+  operationId: deleteFollow
   summary: 取消关注
   responses:
     '200':
@@ -37,4 +37,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserFollow
+    - User

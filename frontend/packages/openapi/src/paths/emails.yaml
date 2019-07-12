@@ -1,5 +1,5 @@
 post:
-  operationId: sendEmail
+  operationId: send
   summary: 🔐发送邮件
   description: 用于后台管理员发送邮件，需要管理员权限
   requestBody:

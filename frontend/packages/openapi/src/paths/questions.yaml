@@ -1,5 +1,5 @@
 get:
-  operationId: getQuestions
+  operationId: getList
   summary: 获取提问列表
   description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
   parameters:
@@ -18,7 +18,7 @@ get:
     - Question
 
 post:
-  operationId: createQuestion
+  operationId: create
   summary: 发表提问
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
@@ -34,7 +34,7 @@ post:
     - Question
 
 delete:
-  operationId: deleteQuestions
+  operationId: deleteMultiple
   summary: 🔐批量删除提问
   description: |
     仅管理员可调用该接口。

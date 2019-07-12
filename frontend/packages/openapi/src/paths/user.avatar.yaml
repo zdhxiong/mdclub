@@ -9,7 +9,7 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserAvatar
+    - User
 
 delete:
   operationId: deleteMyAvatar
@@ -20,4 +20,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserAvatar
+    - User

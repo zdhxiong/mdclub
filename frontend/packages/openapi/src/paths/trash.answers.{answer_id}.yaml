@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/answer_id.path'
 
 post:
-  operationId: restoreAnswer
+  operationId: restore
   summary: todo - 🔐恢复指定回答
   responses:
     '200':
@@ -10,10 +10,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - AnswerTrash
+    - Answer
 
 delete:
-  operationId: destroyAnswer
+  operationId: destroy
   summary: todo - 🔐删除指定回答
   responses:
     '200':
@@ -21,4 +21,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - AnswerTrash
+    - Answer

@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/answer_id.path'
 
 get:
-  operationId: getAnswerComments
+  operationId: getComments
   summary: 获取指定回答的评论
   description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
   parameters:
@@ -15,10 +15,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - AnswerComment
+    - Answer
 
 post:
-  operationId: createAnswerComment
+  operationId: createComment
   summary: 在指定回答下发表评论
   requestBody:
     $ref: '#/components/requestBodies/Comment'
@@ -28,4 +28,4 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - AnswerComment
+    - Answer

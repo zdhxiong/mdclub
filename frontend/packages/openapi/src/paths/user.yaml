@@ -1,5 +1,5 @@
 get:
-  operationId: getMyUserInfo
+  operationId: getMine
   summary: 获取当前登录用户的信息
   description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
   parameters:
@@ -10,10 +10,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserInfo
+    - User
 
 patch:
-  operationId: updateMyUserInfo
+  operationId: updateMine
   summary: 更新当前登录用户信息
   description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
   parameters:
@@ -26,4 +26,4 @@ patch:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserInfo
+    - User

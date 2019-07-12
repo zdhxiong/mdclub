@@ -1,5 +1,5 @@
 get:
-  operationId: getDeletedTopics
+  operationId: getDeleted
   summary: 🔐获取回收站中的话题列表
   description: |
     仅管理员可调用该接口。
@@ -16,10 +16,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicTrash
+    - Topic
 
 post:
-  operationId: restoreTopics
+  operationId: restoreMultiple
   summary: todo - 🔐批量恢复话题
   description: |
     仅管理员可调用该接口。
@@ -32,10 +32,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicTrash
+    - Topic
 
 delete:
-  operationId: destroyTopics
+  operationId: destroyMultiple
   summary: todo - 🔐批量删除回收站中的话题
   description: |
     仅管理员可调用该接口
@@ -51,4 +51,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicTrash
+    - Topic

@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/comment_id.path'
 
 get:
-  operationId: getComment
+  operationId: get
   summary: 获取评论详情
   responses:
     '200':
@@ -13,7 +13,7 @@ get:
     - Comment
 
 patch:
-  operationId: updateComment
+  operationId: update
   summary: 修改评论
   description: 仅评论的作者和管理员可以修改评论。
   requestBody:
@@ -27,7 +27,7 @@ patch:
     - Comment
 
 delete:
-  operationId: deleteComment
+  operationId: delete
   summary: 删除评论
   description: 仅评论作者和管理员可删除评论
   responses:

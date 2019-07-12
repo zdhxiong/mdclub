@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/question_id.path'
 
 get:
-  operationId: getQuestionFollowers
+  operationId: getFollowers
   summary: 获取指定提问的关注者
   parameters:
     - $ref: '#/components/parameters/page'
@@ -13,10 +13,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionFollow
+    - Question
 
 post:
-  operationId: addQuestionFollow
+  operationId: addFollow
   summary: 添加关注
   responses:
     '200':
@@ -24,10 +24,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionFollow
+    - Question
 
 delete:
-  operationId: deleteQuestionFollow
+  operationId: deleteFollow
   summary: 取消关注
   responses:
     '200':
@@ -35,4 +35,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionFollow
+    - Question

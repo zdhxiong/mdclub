@@ -1,5 +1,5 @@
 get:
-  operationId: getReports
+  operationId: getList
   summary: 🔐获取被举报的内容列表
   description: 仅管理员可调用该接口
   parameters:
@@ -15,7 +15,7 @@ get:
     - Report
 
 delete:
-  operationId: deleteReports
+  operationId: deleteMultiple
   summary: 🔐批量删除举报
   description: |
     仅管理员可调用该接口。

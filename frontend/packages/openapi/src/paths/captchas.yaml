@@ -1,5 +1,5 @@
 post:
-  operationId: createCaptcha
+  operationId: generate
   summary: 生成新的图形验证码
   responses:
     '200':

@@ -12,4 +12,4 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - Answer
+    - User

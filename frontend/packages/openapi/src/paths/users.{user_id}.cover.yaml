@@ -11,4 +11,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserCover
+    - User

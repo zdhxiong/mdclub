@@ -3,7 +3,7 @@ parameters:
   - $ref: '#/components/parameters/reportable_id.path'
 
 get:
-  operationId: getReportReasons
+  operationId: getReasons
   summary: 🔐获取被举报内容的举报详情
   description: 仅管理员可调用该接口
   parameters:
@@ -18,7 +18,7 @@ get:
     - Report
 
 post:
-  operationId: createReport
+  operationId: create
   summary: 添加举报
   requestBody:
     $ref: '#/components/requestBodies/Report'
@@ -31,7 +31,7 @@ post:
     - Report
 
 delete:
-  operationId: deleteReport
+  operationId: delete
   summary: 🔐删除举报
   description: 仅管理员可调用该接口
   responses:

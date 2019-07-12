@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/article_id.path'
 
 post:
-  operationId: restoreArticle
+  operationId: restore
   summary: todo - 🔐恢复指定文章
   responses:
     '200':
@@ -10,10 +10,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - ArticleTrash
+    - Article
 
 delete:
-  operationId: destroyArticle
+  operationId: destroy
   summary: todo - 🔐删除指定文章
   responses:
     '200':
@@ -21,4 +21,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - ArticleTrash
+    - Article

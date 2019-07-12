@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/comment_id.path'
 
 post:
-  operationId: restoreComment
+  operationId: restore
   summary: todo - 🔐恢复指定评论
   responses:
     '200':
@@ -10,10 +10,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - CommentTrash
+    - Comment
 
 delete:
-  operationId: destroyComment
+  operationId: destroy
   summary: todo - 🔐删除指定评论
   responses:
     '200':
@@ -21,4 +21,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - CommentTrash
+    - Comment

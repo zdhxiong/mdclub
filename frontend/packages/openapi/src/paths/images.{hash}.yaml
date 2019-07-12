@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/image_hash.path'
 
 get:
-  operationId: getImage
+  operationId: get
   summary: 获取指定图片信息
   responses:
     '200':
@@ -13,7 +13,7 @@ get:
     - Image
 
 patch:
-  operationId: updateImage
+  operationId: update
   summary: 🔐更新指定图片信息
   description: 仅管理员可调用该接口
   requestBody:
@@ -27,7 +27,7 @@ patch:
     - Image
 
 delete:
-  operationId: deleteImage
+  operationId: delete
   summary: 🔐删除指定图片
   description: 仅管理员可调用该接口
   responses:

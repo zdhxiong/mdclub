@@ -1,5 +1,5 @@
 post:
-  operationId: createToken
+  operationId: login
   summary: 生成 Token
   description: |
     通过账号密码登陆，返回带 Token 的用户信息。
@@ -18,4 +18,4 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserLogin
+    - User

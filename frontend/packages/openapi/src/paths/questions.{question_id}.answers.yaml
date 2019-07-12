@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/question_id.path'
 
 get:
-  operationId: getQuestionAnswers
+  operationId: getAnswers
   summary: 获取指定提问下的回答
   description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
   parameters:
@@ -15,10 +15,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - Answer
+    - Question
 
 post:
-  operationId: createQuestionAnswer
+  operationId: createAnswer
   summary: 在指定提问下发表回答
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
@@ -31,4 +31,4 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - Answer
+    - Question

@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/answer_id.path'
 
 get:
-  operationId: getAnswer
+  operationId: get
   summary: 获取回答详情
   responses:
     '200':
@@ -13,7 +13,7 @@ get:
     - Answer
 
 patch:
-  operationId: updateAnswer
+  operationId: update
   summary: 修改回答信息
   description: |
     仅回答的作者和管理员可以修改文章信息。
@@ -31,7 +31,7 @@ patch:
     - Answer
 
 delete:
-  operationId: deleteAnswer
+  operationId: delete
   summary: 删除指定回答
   description: 仅回答作者和管理员可以删除文章
   responses:

@@ -1,5 +1,5 @@
 get:
-  operationId: getArticles
+  operationId: getList
   summary: 获取文章列表
   description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
   parameters:
@@ -18,7 +18,7 @@ get:
     - Article
 
 post:
-  operationId: createArticle
+  operationId: create
   summary: 发表文章
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
@@ -34,7 +34,7 @@ post:
     - Article
 
 delete:
-  operationId: deleteArticles
+  operationId: deleteMultiple
   summary: 🔐批量删除文章
   description: 仅管理员可调用该接口。只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
   parameters:

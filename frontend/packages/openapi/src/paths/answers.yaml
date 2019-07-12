@@ -1,5 +1,5 @@
 get:
-  operationId: getAnswers
+  operationId: getList
   summary: 获取回答列表
   description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
   parameters:
@@ -18,7 +18,7 @@ get:
     - Answer
 
 delete:
-  operationId: deleteAnswers
+  operationId: deleteMultiple
   summary: 🔐批量删除回答
   description: |
     仅管理员可调用该接口。

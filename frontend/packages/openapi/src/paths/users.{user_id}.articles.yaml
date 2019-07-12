@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/user_id.path'
 
 get:
-  operationId: getUserArticles
+  operationId: getArticles
   summary: 获取指定用户发表的文章
   description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
   parameters:
@@ -15,4 +15,4 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - Article
+    - User

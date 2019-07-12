@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/article_id.path'
 
 get:
-  operationId: getArticleFollowers
+  operationId: getFollowers
   summary: 获取指定文章的关注者
   parameters:
     - $ref: '#/components/parameters/page'
@@ -13,10 +13,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - ArticleFollow
+    - Article
 
 post:
-  operationId: addArticleFollow
+  operationId: addFollow
   summary: 添加关注
   responses:
     '200':
@@ -24,14 +24,15 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - ArticleFollow
+    - Article
 
 delete:
-  summary: deleteArticleFollow
+  operationId: deleteFollow
+  summary: 取消关注
   responses:
     '200':
       $ref: '#/components/responses/FollowerCount'
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - ArticleFollow
+    - Article

@@ -1,5 +1,5 @@
 get:
-  operationId: getTopics
+  operationId: getList
   summary: 获取全部话题
   description: |
     可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`
@@ -21,7 +21,7 @@ get:
     - Topic
 
 post:
-  operationId: createTopic
+  operationId: create
   summary: 🔐发布话题
   description: 仅管理员可调用该接口
   requestBody:
@@ -35,7 +35,7 @@ post:
     - Topic
 
 delete:
-  operationId: deleteTopics
+  operationId: deleteMultiple
   summary: 🔐批量删除话题
   description: |
     仅管理员可调用该接口。只要没有错误异常，

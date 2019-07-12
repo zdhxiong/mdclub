@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/question_id.path'
 
 get:
-  operationId: getQuestionVoters
+  operationId: getVoters
   summary: 获取提问的投票者
   parameters:
     - $ref: '#/components/parameters/page'
@@ -14,10 +14,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionVote
+    - Question
 
 post:
-  operationId: addQuestionVote
+  operationId: addVote
   summary: 为提问投票
   requestBody:
     $ref: '#/components/requestBodies/Vote'
@@ -27,10 +27,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionVote
+    - Question
 
 delete:
-  operationId: deleteQuestionVote
+  operationId: deleteVote
   summary: 取消为提问的投票
   responses:
     '200':
@@ -38,4 +38,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionVote
+    - Question

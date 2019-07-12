@@ -1,5 +1,5 @@
 get:
-  operationId: getDisabledUsers
+  operationId: getDisabled
   summary: 🔐获取已禁用用户列表
   description: |
     仅管理员可调用该接口。
@@ -21,10 +21,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserDisabled
+    - User
 
 post:
-  operationId: enableUsers
+  operationId: enableMultiple
   summary: 🔐批量恢复用户
   description: |
     仅管理员可调用该接口。
@@ -37,4 +37,4 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserDisabled
+    - User

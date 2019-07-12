@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/topic_id.path'
 
 get:
-  operationId: getTopicFollowers
+  operationId: getFollowers
   summary: 获取指定话题的关注者
   description: 不含已禁用的用户
   parameters:
@@ -14,10 +14,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicFollow
+    - Topic
 
 post:
-  operationId: addTopicFollow
+  operationId: addFollow
   summary: 关注指定话题
   responses:
     '200':
@@ -25,10 +25,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicFollow
+    - Topic
 
 delete:
-  operationId: deleteTopicFollow
+  operationId: deleteFollow
   summary: 取消关注指定话题
   responses:
     '200':
@@ -36,4 +36,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - TopicFollow
+    - Topic

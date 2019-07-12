@@ -1,5 +1,5 @@
 get:
-  operationId: getDeletedQuestions
+  operationId: getDeleted
   summary: 🔐获取回收站中的提问列表
   description: |
     仅管理员可调用该接口。
@@ -17,10 +17,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionTrash
+    - Question
 
 post:
-  operationId: restoreQuestions
+  operationId: restoreMultiple
   summary: todo - 🔐批量恢复提问
   description: |
     仅管理员可调用该接口。
@@ -33,10 +33,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionTrash
+    - Question
 
 delete:
-  operationId: destroyQuestions
+  operationId: destroyMultiple
   summary: todo - 🔐批量删除回收站中的提问
   description: |
     仅管理员可调用该接口
@@ -52,4 +52,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - QuestionTrash
+    - Question

@@ -1,5 +1,5 @@
 get:
-  operationId: getDeletedComments
+  operationId: getDeleted
   summary: 🔐获取回收站中的评论列表
   description: |
     仅管理员可调用该接口。
@@ -18,10 +18,10 @@ get:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - CommentTrash
+    - Comment
 
 post:
-  operationId: restoreComments
+  operationId: restoreMultiple
   summary: todo - 🔐批量恢复评论
   description: |
     仅管理员可调用该接口。
@@ -34,10 +34,10 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - CommentTrash
+    - Comment
 
 delete:
-  operationId: destroyComments
+  operationId: destroyMultiple
   summary: todo - 🔐批量删除回收站中的话题
   description: |
     仅管理员可调用该接口
@@ -53,4 +53,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - CommentTrash
+    - Comment

@@ -16,9 +16,6 @@ User:
 UserWithToken:
   $ref: ./UserWithTOken.yaml
 
-Users:
-  $ref: ./Users.yaml
-
 UserAvatar:
   $ref: ./UserAvatar.yaml
 
@@ -28,20 +25,11 @@ UserCover:
 Question:
   $ref: ./Question.yaml
 
-Questions:
-  $ref: ./Questions.yaml
-
 Answer:
   $ref: ./Answer.yaml
 
-Answers:
-  $ref: ./Answers.yaml
-
 Topic:
   $ref: ./Topic.yaml
-
-Topics:
-  $ref: ./Topics.yaml
 
 TopicCover:
   $ref: ./TopicCover.yaml
@@ -49,14 +37,8 @@ TopicCover:
 Article:
   $ref: ./Article.yaml
 
-Articles:
-  $ref: ./Articles.yaml
-
 Comment:
   $ref: ./Comment.yaml
-
-Comments:
-  $ref: ./Comments.yaml
 
 VoteCount:
   $ref: ./VoteCount.yaml
@@ -67,20 +49,11 @@ FollowerCount:
 ReportGroup:
   $ref: ./ReportGroup.yaml
 
-ReportGroups:
-  $ref: ./ReportGroups.yaml
-
 Report:
   $ref: ./Report.yaml
 
-Reports:
-  $ref: ./Reports.yaml
-
 Image:
   $ref: ./Image.yaml
-
-Images:
-  $ref: ./Images.yaml
 
 Email:
   $ref: ./Email.yaml

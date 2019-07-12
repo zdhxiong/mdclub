@@ -2,7 +2,7 @@ parameters:
   - $ref: '#/components/parameters/article_id.path'
 
 get:
-  operationId: getArticle
+  operationId: get
   summary: 获取指定文章信息
   responses:
     '200':
@@ -13,7 +13,7 @@ get:
     - Article
 
 patch:
-  operationId: updateArticle
+  operationId: update
   summary: 更新文章信息
   description: |
     仅文章的作者和管理员可以修改文章信息。
@@ -31,7 +31,7 @@ patch:
     - Article
 
 delete:
-  operationId: deleteArticle
+  operationId: delete
   summary: 删除指定文章
   description: 仅文章作者和管理员可以删除文章
   responses:

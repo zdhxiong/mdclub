@@ -9,7 +9,7 @@ post:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserCover
+    - User
 
 delete:
   operationId: deleteMyCover
@@ -20,4 +20,4 @@ delete:
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - UserCover
+    - User
