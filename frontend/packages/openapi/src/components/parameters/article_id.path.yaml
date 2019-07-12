@@ -1,0 +1,7 @@
+name: article_id
+in: path
+description: 文章ID
+required: true
+schema:
+  type: integer
+  minimum: 1

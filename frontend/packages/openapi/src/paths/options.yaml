@@ -1,0 +1,24 @@
+get:
+  operationId: getOptions
+  summary: 获取站点全局设置参数
+  responses:
+    '200':
+      $ref: '#/components/responses/Option'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Option
+
+patch:
+  operationId: updateOptions
+  summary: 🔐更新站点全局设置
+  description: 仅管理员可调用该接口
+  requestBody:
+    $ref: '#/components/requestBodies/Option'
+  responses:
+    '200':
+      $ref: '#/components/responses/Option'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Option

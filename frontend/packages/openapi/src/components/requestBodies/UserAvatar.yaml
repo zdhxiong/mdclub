@@ -1,0 +1,10 @@
+required: true
+content:
+  multipart/form-data:
+    schema:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+          description: 用户头像

@@ -1,0 +1,47 @@
+get:
+  operationId: getImages
+  summary: 🔐获取图片列表
+  description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/image_hash.query'
+    - $ref: '#/components/parameters/image_item_type.query'
+    - $ref: '#/components/parameters/image_item_id.query'
+    - $ref: '#/components/parameters/user_id.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Images'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image
+
+post:
+  operationId: uploadImage
+  summary: 上传图片
+  requestBody:
+    $ref: '#/components/requestBodies/Image'
+  responses:
+    '200':
+      $ref: '#/components/responses/Image'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image
+
+delete:
+  operationId: deleteImages
+  summary: 🔐批量删除图片
+  description: |
+    仅管理员可调用该接口。
+    只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/image_hashs'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image

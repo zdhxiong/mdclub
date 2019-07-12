@@ -1,0 +1,18 @@
+parameters:
+  - $ref: '#/components/parameters/topic_id.path'
+
+get:
+  operationId: getTopicArticles
+  summary: 获取指定话题下的文章
+  description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+  responses:
+    '200':
+      $ref: '#/components/responses/Articles'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article

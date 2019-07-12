@@ -1,0 +1,5 @@
+type: object
+properties:
+  is_following:
+    type: boolean
+    description: 当前登录用户是否已关注该话题

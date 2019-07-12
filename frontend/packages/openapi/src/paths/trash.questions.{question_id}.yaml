@@ -1,0 +1,24 @@
+parameters:
+  - $ref: '#/components/parameters/question_id.path'
+
+post:
+  operationId: restoreQuestion
+  summary: todo - 🔐恢复指定提问
+  responses:
+    '200':
+      $ref: '#/components/responses/Question'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionTrash
+
+delete:
+  operationId: destroyQuestion
+  summary: todo - 🔐删除指定提问
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionTrash

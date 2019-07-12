@@ -1,0 +1,24 @@
+parameters:
+  - $ref: '#/components/parameters/article_id.path'
+
+post:
+  operationId: restoreArticle
+  summary: todo - 🔐恢复指定文章
+  responses:
+    '200':
+      $ref: '#/components/responses/Article'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleTrash
+
+delete:
+  operationId: destroyArticle
+  summary: todo - 🔐删除指定文章
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleTrash

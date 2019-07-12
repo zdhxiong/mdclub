@@ -1,0 +1,11 @@
+name: reportable_type
+in: query
+description: 目标类型
+schema:
+  type: string
+  enum:
+    - question
+    - answer
+    - article
+    - comment
+    - user

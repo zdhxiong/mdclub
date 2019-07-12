@@ -1,0 +1,29 @@
+get:
+  operationId: getMyUserInfo
+  summary: 获取当前登录用户的信息
+  description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  parameters:
+    - $ref: '#/components/parameters/include'
+  responses:
+    '200':
+      $ref: '#/components/responses/User'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserInfo
+
+patch:
+  operationId: updateMyUserInfo
+  summary: 更新当前登录用户信息
+  description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  parameters:
+    - $ref: '#/components/parameters/include'
+  requestBody:
+    $ref: '#/components/requestBodies/UserUpdate'
+  responses:
+    '200':
+      $ref: '#/components/responses/User'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserInfo

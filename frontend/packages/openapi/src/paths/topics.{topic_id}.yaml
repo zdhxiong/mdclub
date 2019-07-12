@@ -1,0 +1,45 @@
+parameters:
+  - $ref: '#/components/parameters/topic_id.path'
+
+get:
+  operationId: getTopic
+  summary: 获取指定话题信息
+  description: 可包含的关联数据包括：`is_following`
+  parameters:
+    - $ref: '#/components/parameters/include'
+  responses:
+    '200':
+      $ref: '#/components/responses/Topic'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Topic
+
+post:
+  operationId: updateTopic
+  summary: 🔐更新话题信息
+  description: |
+    **仅管理员可调用该接口**
+
+    因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
+  requestBody:
+    $ref: '#/components/requestBodies/Topic'
+  responses:
+    '200':
+      $ref: '#/components/responses/Topic'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Topic
+
+delete:
+  operationId: deleteTopic
+  summary: 🔐删除话题
+  description: 仅管理员可调用该接口
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Topic

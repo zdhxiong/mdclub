@@ -1,0 +1,16 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+get:
+  operationId: getFollowingArticles
+  summary: 获取指定用户关注的文章列表
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+  responses:
+    '200':
+      $ref: '#/components/responses/Articles'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleFollow

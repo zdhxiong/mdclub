@@ -1,0 +1,16 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+get:
+  operationId: getFollowingQuestions
+  summary: 获取指定用户关注的提问列表
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+  responses:
+    '200':
+      $ref: '#/components/responses/Questions'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionFollow

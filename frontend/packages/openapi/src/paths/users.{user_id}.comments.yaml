@@ -1,0 +1,18 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+get:
+  operationId: getUserComments
+  summary: 获取指定用户发表的评论
+  description: 可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+  responses:
+    '200':
+      $ref: '#/components/responses/Comments'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Comment

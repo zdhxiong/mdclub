@@ -1,0 +1,20 @@
+title: MDClub API 文档
+description: |
+  MDClub 是一个 Material Design 风格的社区应用。
+
+  **接口文档说明**
+
+  * 接口描述中，若含 🔐 图标，表示该接口仅管理员有权限调用。
+  * 接口返回值的字段描述中，若含 🔐 图标，表示只有管理员调用接口时，返回值中才会包含该字段。
+  * 接口参数的描述中，若含 🔐 图标，表示只有管理员才能添加该参数。
+
+  `GET`、`PUT`、`DELETE` 请求均符合幂等性。
+termsOfService: https://github.com/zdhxiong
+contact:
+  name: zdhxiong
+  url: https://github.com/zdhxiong
+  email: zdhxiong@gmail.com
+license:
+  name: MIT
+  url: https://github.com/zdhxiong/mdclub/blob/master/LICENSE
+version: 1.0.0

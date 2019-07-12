@@ -1,0 +1,17 @@
+description: 图形验证码信息
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          properties:
+            captcha_token:
+              type: string
+              description: 图形验证码token
+            captcha_image:
+              type: string
+              description: base64格式的图形验证码图片

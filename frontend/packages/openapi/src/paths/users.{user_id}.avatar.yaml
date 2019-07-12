@@ -1,0 +1,14 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+delete:
+  operationId: deleteAvatar
+  summary: 🔐删除指定用户的头像，并重置为默认头像
+  description: 仅管理员可调用该接口
+  responses:
+    '200':
+      $ref: '#/components/responses/UserAvatar'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserAvatar

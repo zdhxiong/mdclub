@@ -1,0 +1,18 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+get:
+  operationId: getFollowees
+  summary: 获取指定用户关注的用户列表
+  description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserFollow

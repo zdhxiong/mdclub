@@ -1,0 +1,6 @@
+name: topic_id
+in: query
+description: 话题ID
+schema:
+  type: integer
+  minimum: 1

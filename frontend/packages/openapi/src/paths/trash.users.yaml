@@ -1,0 +1,40 @@
+get:
+  operationId: getDisabledUsers
+  summary: 🔐获取已禁用用户列表
+  description: |
+    仅管理员可调用该接口。
+
+    可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
+
+    可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/user_id.query'
+    - $ref: '#/components/parameters/username.query'
+    - $ref: '#/components/parameters/email.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserDisabled
+
+post:
+  operationId: enableUsers
+  summary: 🔐批量恢复用户
+  description: |
+    仅管理员可调用该接口。
+    只要没有异常错误，无论是否有用户被启用，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/user_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserDisabled

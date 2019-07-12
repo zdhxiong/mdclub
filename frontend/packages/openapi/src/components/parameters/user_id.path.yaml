@@ -1,0 +1,7 @@
+name: user_id
+in: path
+description: 用户ID
+required: true
+schema:
+  type: integer
+  minimum: 1

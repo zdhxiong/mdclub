@@ -1,0 +1,6 @@
+name: comment_id
+in: query
+description: 评论ID
+schema:
+  type: integer
+  minimum: 1

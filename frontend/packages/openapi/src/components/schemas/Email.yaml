@@ -1,0 +1,15 @@
+type: object
+required:
+  - email
+  - subject
+  - content
+properties:
+  email:
+    type: string
+    description: 邮箱地址，多个地址间用“,”分隔，最多支持100个
+  subject:
+    type: string
+    description: 邮件标题
+  content:
+    type: string
+    description: 邮件内容

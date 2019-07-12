@@ -1,0 +1,7 @@
+name: question_id
+in: path
+description: 提问ID
+required: true
+schema:
+  type: integer
+  minimum: 1

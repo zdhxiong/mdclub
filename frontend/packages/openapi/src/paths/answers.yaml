@@ -1,0 +1,34 @@
+get:
+  operationId: getAnswers
+  summary: 获取回答列表
+  description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/answer_id.query'
+    - $ref: '#/components/parameters/question_id.query'
+    - $ref: '#/components/parameters/user_id.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Answers'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer
+
+delete:
+  operationId: deleteAnswers
+  summary: 🔐批量删除回答
+  description: |
+    仅管理员可调用该接口。
+    只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/answer_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer

@@ -1,0 +1,9 @@
+name: commentable_type
+in: query
+description: 评论目标类型
+schema:
+  type: string
+  enum:
+    - article
+    - question
+    - answer

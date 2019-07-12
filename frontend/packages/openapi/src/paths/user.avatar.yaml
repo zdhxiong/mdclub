@@ -1,0 +1,23 @@
+post:
+  operationId: uploadMyAvatar
+  summary: 上传当前登录用户的头像
+  requestBody:
+    $ref: '#/components/requestBodies/UserAvatar'
+  responses:
+    '200':
+      $ref: '#/components/responses/UserAvatar'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserAvatar
+
+delete:
+  operationId: deleteMyAvatar
+  summary: 删除当前登录用户的头像，并重置为默认头像
+  responses:
+    '200':
+      $ref: '#/components/responses/UserAvatar'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserAvatar

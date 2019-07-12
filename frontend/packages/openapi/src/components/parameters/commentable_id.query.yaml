@@ -1,0 +1,6 @@
+name: commentable_id
+in: query
+description: 评论目标的ID
+schema:
+  type: integer
+  minimum: 1

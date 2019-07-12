@@ -1,0 +1,6 @@
+name: article_id
+in: query
+description: 文章ID
+schema:
+  type: integer
+  minimum: 1

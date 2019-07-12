@@ -1,0 +1,29 @@
+type: object
+description: 举报
+properties:
+  report_id:
+    type: integer
+    description: 举报ID
+  reportable_id:
+    type: integer
+    description: 举报目标的ID
+  reportable_type:
+    type: string
+    description: 举报目标类型
+    enum:
+      - question
+      - answer
+      - article
+      - comment
+      - user
+  user_id:
+    type: integer
+    description: 用户ID
+  reason:
+    type: string
+    description: 举报理由
+  create_time:
+    type: string
+    description: 举报时间
+  relationship:
+    $ref: '#/components/schemas/ReportRelationship'

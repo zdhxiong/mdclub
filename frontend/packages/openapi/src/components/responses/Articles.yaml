@@ -1,0 +1,12 @@
+description: 文章列表
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/Articles'
+        pagination:
+          $ref: '#/components/schemas/Pagination'

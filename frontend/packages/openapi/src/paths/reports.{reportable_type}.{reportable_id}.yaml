@@ -1,0 +1,43 @@
+parameters:
+  - $ref: '#/components/parameters/reportable_type.path'
+  - $ref: '#/components/parameters/reportable_id.path'
+
+get:
+  operationId: getReportReasons
+  summary: 🔐获取被举报内容的举报详情
+  description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+  responses:
+    '200':
+      $ref: '#/components/responses/Reports'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Report
+
+post:
+  operationId: createReport
+  summary: 添加举报
+  requestBody:
+    $ref: '#/components/requestBodies/Report'
+  responses:
+    '200':
+      $ref: '#/components/responses/Report'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Report
+
+delete:
+  operationId: deleteReport
+  summary: 🔐删除举报
+  description: 仅管理员可调用该接口
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Report

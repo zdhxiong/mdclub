@@ -1,0 +1,41 @@
+parameters:
+  - $ref: '#/components/parameters/comment_id.path'
+
+get:
+  operationId: getCommentVoters
+  summary: 获取评论的投票者
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/vote_type.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - CommentVote
+
+post:
+  operationId: addCommentVote
+  summary: 为评论投票
+  requestBody:
+    $ref: '#/components/requestBodies/Vote'
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - CommentVote
+
+delete:
+  operationId: deleteCommentVote
+  summary: 取消为评论的投票
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - CommentVote

@@ -1,0 +1,20 @@
+type: object
+properties:
+  page:
+    type: integer
+    description: 当前页码
+  per_page:
+    type: integer
+    description: 每页条数
+  previous:
+    type: integer
+    description: 上一页页码，为 `null` 表示没有上一页
+  next:
+    type: integer
+    description: 下一页页码，为 `null` 表示没有下一页
+  total:
+    type: integer
+    description: 数据总数
+  pages:
+    type: integer
+    description: 总页数

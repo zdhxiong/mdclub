@@ -1,0 +1,10 @@
+description: 完整的用户信息
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/User'

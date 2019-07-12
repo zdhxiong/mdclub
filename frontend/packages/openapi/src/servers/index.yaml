@@ -1,0 +1,12 @@
+- url: /api
+  description: 当前服务器
+- url: '{scheme}://{host}/api'
+  description: 指定的服务器
+  variables:
+    scheme:
+      enum:
+        - http
+        - https
+      default: http
+    host:
+      default: mdclub.test

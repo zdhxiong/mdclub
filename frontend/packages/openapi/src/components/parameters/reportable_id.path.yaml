@@ -1,0 +1,7 @@
+name: reportable_id
+in: path
+description: 目标ID
+required: true
+schema:
+  type: integer
+  minimum: 1

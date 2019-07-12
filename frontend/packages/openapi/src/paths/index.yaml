@@ -1,0 +1,212 @@
+/options:
+  $ref: ./options.yaml
+
+/tokens:
+  $ref: ./tokens.yaml
+
+/users:
+  $ref: ./users.yaml
+
+/users/{user_id}:
+  $ref: ./users.{user_id}.yaml
+
+/users/{user_id}/avatar:
+  $ref: ./users.{user_id}.avatar.yaml
+
+/users/{user_id}/cover:
+  $ref: ./users.{user_id}.cover.yaml
+
+/users/{user_id}/followers:
+  $ref: ./users.{user_id}.followers.yaml
+
+/users/{user_id}/followees:
+  $ref: ./users.{user_id}.followees.yaml
+
+/users/{user_id}/following_questions:
+  $ref: ./users.{user_id}.following_questions.yaml
+
+/users/{user_id}/following_articles:
+  $ref: ./users.{user_id}.following_articles.yaml
+
+/users/{user_id}/following_topics:
+  $ref: ./users.{user_id}.following_topics.yaml
+
+/users/{user_id}/questions:
+  $ref: ./users.{user_id}.questions.yaml
+
+/users/{user_id}/answers:
+  $ref: ./users.{user_id}.answers.yaml
+
+/users/{user_id}/articles:
+  $ref: ./users.{user_id}.articles.yaml
+
+/users/{user_id}/comments:
+  $ref: ./users.{user_id}.comments.yaml
+
+/user:
+  $ref: ./user.yaml
+
+/user/avatar:
+  $ref: ./user.avatar.yaml
+
+/user/cover:
+  $ref: ./user.cover.yaml
+
+/user/register/email:
+  $ref: ./user.register.email.yaml
+
+/user/password/email:
+  $ref: ./user.password.email.yaml
+
+/user/password:
+  $ref: ./user.password.yaml
+
+/user/followers:
+  $ref: ./user.followers.yaml
+
+/user/followees:
+  $ref: ./user.followees.yaml
+
+/user/following_questions:
+  $ref: ./user.following_questions.yaml
+
+/user/following_articles:
+  $ref: ./user.following_articles.yaml
+
+/user/following_topics:
+  $ref: ./user.following_topics.yaml
+
+/user/questions:
+  $ref: ./user.questions.yaml
+
+/user/answers:
+  $ref: ./user.answers.yaml
+
+/user/articles:
+  $ref: ./user.articles.yaml
+
+/user/comments:
+  $ref: ./user.comments.yaml
+
+/articles:
+  $ref: ./articles.yaml
+
+/articles/{article_id}:
+  $ref: ./articles.{article_id}.yaml
+
+/articles/{article_id}/voters:
+  $ref: ./articles.{article_id}.voters.yaml
+
+/articles/{article_id}/followers:
+  $ref: ./articles.{article_id}.followers.yaml
+
+/articles/{article_id}/comments:
+  $ref: ./articles.{article_id}.comments.yaml
+
+/questions:
+  $ref: ./questions.yaml
+
+/questions/{question_id}:
+  $ref: ./questions.{question_id}.yaml
+
+/questions/{question_id}/voters:
+  $ref: ./questions.{question_id}.voters.yaml
+
+/questions/{question_id}/followers:
+  $ref: ./questions.{question_id}.followers.yaml
+
+/questions/{question_id}/comments:
+  $ref: ./questions.{question_id}.comments.yaml
+
+/questions/{question_id}/answers:
+  $ref: ./questions.{question_id}.answers.yaml
+
+/topics:
+  $ref: ./topics.yaml
+
+/topics/{topic_id}:
+  $ref: ./topics.{topic_id}.yaml
+
+/topics/{topic_id}/followers:
+  $ref: ./topics.{topic_id}.followers.yaml
+
+/topics/{topic_id}/questions:
+  $ref: ./topics.{topic_id}.questions.yaml
+
+/topics/{topic_id}/articles:
+  $ref: ./topics.{topic_id}.articles.yaml
+
+/answers:
+  $ref: ./answers.yaml
+
+/answers/{answer_id}:
+  $ref: ./answers.{answer_id}.yaml
+
+/answers/{answer_id}/voters:
+  $ref: ./answers.{answer_id}.voters.yaml
+
+/answers/{answer_id}/comments:
+  $ref: ./answers.{answer_id}.comments.yaml
+
+/comments:
+  $ref: ./comments.yaml
+
+/comments/{comment_id}:
+  $ref: ./comments.{comment_id}.yaml
+
+/comments/{comment_id}/voters:
+  $ref: ./comments.{comment_id}.voters.yaml
+
+/reports:
+  $ref: ./reports.yaml
+
+/reports/{reportable_type}/{reportable_id}:
+  $ref: ./reports.{reportable_type}.{reportable_id}.yaml
+
+/images:
+  $ref: ./images.yaml
+
+/images/{hash}:
+  $ref: ./images.{hash}.yaml
+
+/emails:
+  $ref: ./emails.yaml
+
+/captchas:
+  $ref: ./captchas.yaml
+
+/trash/users:
+  $ref: ./trash.users.yaml
+
+/trash/users/{user_id}:
+  $ref: ./trash.users.{user_id}.yaml
+
+/trash/topics:
+  $ref: ./trash.topics.yaml
+
+/trash/topics/{topic_id}:
+  $ref: ./trash.topics.{topic_id}.yaml
+
+/trash/questions:
+  $ref: ./trash.questions.yaml
+
+/trash/questions/{question_id}:
+  $ref: ./trash.questions.{question_id}.yaml
+
+/trash/answers:
+  $ref: ./trash.answers.yaml
+
+/trash/answers/{answer_id}:
+  $ref: ./trash.answers.{answer_id}.yaml
+
+/trash/articles:
+  $ref: ./trash.articles.yaml
+
+/trash/articles/{article_id}:
+  $ref: ./trash.articles.{article_id}.yaml
+
+/trash/comments:
+  $ref: ./trash.comments.yaml
+
+/trash/comments/{comment_id}:
+  $ref: ./trash.comments.{comment_id}.yaml

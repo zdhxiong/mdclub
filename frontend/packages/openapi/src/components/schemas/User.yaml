@@ -1,0 +1,86 @@
+type: object
+properties:
+  user_id:
+    type: integer
+    description: 用户 ID
+  username:
+    type: string
+    description: 用户名
+  email:
+    type: string
+    description: 🔐邮箱
+  avatar:
+    $ref: '#/components/schemas/UserAvatar'
+  cover:
+    $ref: '#/components/schemas/UserCover'
+  create_ip:
+    type: string
+    description: 🔐注册 IP
+  create_location:
+    type: string
+    description: 🔐注册地
+  last_login_time:
+    type: integer
+    description: 🔐最后登陆时间
+  last_login_ip:
+    type: string
+    description: 🔐最后登陆 IP
+  last_login_location:
+    type: string
+    description: 🔐最后登录地
+  follower_count:
+    type: integer
+    description: 关注者数量
+  followee_count:
+    type: integer
+    description: 关注的用户数量
+  following_article_count:
+    type: integer
+    description: 关注的文章数量
+  following_question_count:
+    type: integer
+    description: 关注的提问数量
+  following_topic_count:
+    type: integer
+    description: 关注的话题数量
+  article_count:
+    type: integer
+    description: 发表的文章数量
+  question_count:
+    type: integer
+    description: 发表的提问数量
+  answer_count:
+    type: integer
+    description: 发表的提问回答数量
+  notification_unread:
+    type: integer
+    description: 🔐未读消息数量
+  inbox_unread:
+    type: integer
+    description: 🔐未读私信数量
+  headline:
+    type: string
+    description: 一句话介绍自己
+  bio:
+    type: string
+    description: 个人简介
+  blog:
+    type: string
+    description: 个人主页链接
+  company:
+    type: string
+    description: 所属企业
+  location:
+    type: string
+    description: 所在地区
+  create_time:
+    type: integer
+    description: 注册时间
+  update_time:
+    type: integer
+    description: 🔐更新时间
+  disable_time:
+    type: integer
+    description: 🔐禁用时间
+  relationship:
+    $ref: '#/components/schemas/UserRelationship'

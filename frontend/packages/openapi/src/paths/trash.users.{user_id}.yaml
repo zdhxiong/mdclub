@@ -1,0 +1,13 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+post:
+  operationId: enableUser
+  summary: 🔐恢复指定用户
+  responses:
+    '200':
+      $ref: '#/components/responses/User'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserDisabled

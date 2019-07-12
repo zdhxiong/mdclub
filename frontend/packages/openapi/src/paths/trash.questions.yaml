@@ -1,0 +1,55 @@
+get:
+  operationId: getDeletedQuestions
+  summary: 🔐获取回收站中的提问列表
+  description: |
+    仅管理员可调用该接口。
+    可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/question_id.query'
+    - $ref: '#/components/parameters/user_id.query'
+    - $ref: '#/components/parameters/topic_id.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Questions'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionTrash
+
+post:
+  operationId: restoreQuestions
+  summary: todo - 🔐批量恢复提问
+  description: |
+    仅管理员可调用该接口。
+    只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/question_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionTrash
+
+delete:
+  operationId: destroyQuestions
+  summary: todo - 🔐批量删除回收站中的提问
+  description: |
+    仅管理员可调用该接口
+
+    只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+
+    若没有提供 question_id 参数，则将清空回收站中的所有提问。
+  parameters:
+    - $ref: '#/components/parameters/question_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionTrash

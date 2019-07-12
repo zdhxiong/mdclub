@@ -1,0 +1,40 @@
+parameters:
+  - $ref: '#/components/parameters/user_id.path'
+
+get:
+  operationId: getFollowers
+  summary: 获取指定用户的关注者
+  description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserFollow
+
+post:
+  operationId: addUserFollow
+  summary: 添加关注
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserFollow
+
+delete:
+  operationId: deleteUserFollow
+  summary: 取消关注
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserFollow

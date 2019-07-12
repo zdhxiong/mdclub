@@ -1,0 +1,6 @@
+name: answer_id
+in: query
+description: 回答ID
+schema:
+  type: integer
+  minimum: 1

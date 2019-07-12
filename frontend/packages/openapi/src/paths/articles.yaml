@@ -1,0 +1,48 @@
+get:
+  operationId: getArticles
+  summary: 获取文章列表
+  description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/article_id.query'
+    - $ref: '#/components/parameters/user_id.query'
+    - $ref: '#/components/parameters/topic_id.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Articles'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article
+
+post:
+  operationId: createArticle
+  summary: 发表文章
+  description: |
+    `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+    若两个参数都传入，则以 `content_markdown` 为准。
+  requestBody:
+    $ref: '#/components/requestBodies/Article'
+  responses:
+    '200':
+      $ref: '#/components/responses/Article'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article
+
+delete:
+  operationId: deleteArticles
+  summary: 🔐批量删除文章
+  description: 仅管理员可调用该接口。只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/article_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article

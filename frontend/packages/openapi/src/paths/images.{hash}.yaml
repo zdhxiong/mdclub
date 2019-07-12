@@ -1,0 +1,39 @@
+parameters:
+  - $ref: '#/components/parameters/image_hash.path'
+
+get:
+  operationId: getImage
+  summary: 获取指定图片信息
+  responses:
+    '200':
+      $ref: '#/components/responses/Image'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image
+
+patch:
+  operationId: updateImage
+  summary: 🔐更新指定图片信息
+  description: 仅管理员可调用该接口
+  requestBody:
+    $ref: '#/components/requestBodies/ImageFilename'
+  responses:
+    '200':
+      $ref: '#/components/responses/Image'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image
+
+delete:
+  operationId: deleteImage
+  summary: 🔐删除指定图片
+  description: 仅管理员可调用该接口
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Image

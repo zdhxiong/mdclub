@@ -1,0 +1,34 @@
+type: object
+properties:
+  answer_id:
+    type: integer
+    description: 回答ID
+  question_id:
+    type: integer
+    description: 提问ID
+  user_id:
+    type: integer
+    description: 用户ID
+  content_markdown:
+    type: string
+    description: markdown 格式的内容
+  content_rendered:
+    type: string
+    description: html 格式的内容
+  comment_count:
+    type: integer
+    description: 评论数量
+  vote_count:
+    type: integer
+    description: 投票数（赞成票 - 反对票，可能为负数）
+  create_time:
+    type: integer
+    description: 创建时间
+  update_time:
+    type: integer
+    description: 🔐更新时间
+  delete_time:
+    type: integer
+    description: 🔐删除时间
+  relationship:
+    $ref: '#/components/schemas/AnswerRelationship'

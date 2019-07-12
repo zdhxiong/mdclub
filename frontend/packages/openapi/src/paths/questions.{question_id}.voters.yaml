@@ -1,0 +1,41 @@
+parameters:
+  - $ref: '#/components/parameters/question_id.path'
+
+get:
+  operationId: getQuestionVoters
+  summary: 获取提问的投票者
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/vote_type.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionVote
+
+post:
+  operationId: addQuestionVote
+  summary: 为提问投票
+  requestBody:
+    $ref: '#/components/requestBodies/Vote'
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionVote
+
+delete:
+  operationId: deleteQuestionVote
+  summary: 取消为提问的投票
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionVote

@@ -1,0 +1,10 @@
+post:
+  operationId: createCaptcha
+  summary: 生成新的图形验证码
+  responses:
+    '200':
+      $ref: '#/components/responses/Captcha'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Captcha

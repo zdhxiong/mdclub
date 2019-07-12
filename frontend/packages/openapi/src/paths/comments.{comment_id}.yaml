@@ -1,0 +1,39 @@
+parameters:
+  - $ref: '#/components/parameters/comment_id.path'
+
+get:
+  operationId: getComment
+  summary: 获取评论详情
+  responses:
+    '200':
+      $ref: '#/components/responses/Comment'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Comment
+
+patch:
+  operationId: updateComment
+  summary: 修改评论
+  description: 仅评论的作者和管理员可以修改评论。
+  requestBody:
+    $ref: '#/components/requestBodies/Comment'
+  responses:
+    '200':
+      $ref: '#/components/responses/Comment'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Comment
+
+delete:
+  operationId: deleteComment
+  summary: 删除评论
+  description: 仅评论作者和管理员可删除评论
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Comment

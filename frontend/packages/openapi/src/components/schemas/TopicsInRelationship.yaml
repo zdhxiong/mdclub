@@ -1,0 +1,12 @@
+type: array
+items:
+  type: object
+  properties:
+    topic_id:
+      type: integer
+      description: 话题 ID
+    name:
+      type: string
+      description: 话题名称
+    cover:
+      $ref: '#/components/schemas/TopicCover'

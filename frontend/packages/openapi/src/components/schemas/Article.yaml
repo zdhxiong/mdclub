@@ -1,0 +1,40 @@
+type: object
+properties:
+  article_id:
+    type: integer
+    description: 文章ID
+  user_id:
+    type: integer
+    description: 用户ID
+  title:
+    type: string
+    description: 文章标题
+  content_markdown:
+    type: string
+    description: Markdown 格式的文章内容
+  content_rendered:
+    type: string
+    description: HTML 格式的文章内容
+  comment_count:
+    type: integer
+    description: 评论数量
+  view_count:
+    type: integer
+    description: 浏览量
+  follower_count:
+    type: integer
+    description: 关注者数量
+  vote_count:
+    type: integer
+    description: 投票数（赞成票 - 反对票，可能为负数）
+  create_time:
+    type: integer
+    description: 创建时间
+  update_time:
+    type: integer
+    description: 更新时间（用户可以更新自己的文章）
+  delete_time:
+    type: integer
+    description: 🔐删除时间
+  relationship:
+    $ref: '#/components/schemas/ArticleRelationship'

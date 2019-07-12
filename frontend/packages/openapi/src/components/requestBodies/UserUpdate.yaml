@@ -1,0 +1,21 @@
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        headline:
+          type: string
+          description: 一句话介绍
+        bio:
+          type: string
+          description: 个人简介
+        blog:
+          type: string
+          description: 个人主页
+        company:
+          type: string
+          description: 所属企业
+        location:
+          type: string
+          description: 所属地区

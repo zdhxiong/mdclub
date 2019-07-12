@@ -1,0 +1,23 @@
+schemas:
+  $ref: ./schemas/index.yaml
+
+responses:
+  $ref: ./responses/index.yaml
+
+parameters:
+  $ref: ./parameters/index.yaml
+
+#examples:
+
+requestBodies:
+  $ref: ./requestBodies/index.yaml
+
+#headers:
+
+securitySchemes:
+  $ref: ./securitySchemes/index.yaml
+
+#links:
+
+#callbacks:
+

@@ -1,0 +1,14 @@
+type: object
+properties:
+  question_id:
+    type: integer
+    description: 提问ID
+  title:
+    type: string
+    description: 提问标题
+  create_time:
+    type: integer
+    description: 发布时间
+  update_time:
+    type: integer
+    description: 更新时间

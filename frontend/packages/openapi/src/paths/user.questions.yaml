@@ -1,0 +1,15 @@
+get:
+  operationId: getMyQuestions
+  summary: 获取登录用户发表的提问
+  description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+  responses:
+    '200':
+      $ref: '#/components/responses/Questions'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Question

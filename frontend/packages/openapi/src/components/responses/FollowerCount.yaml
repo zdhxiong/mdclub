@@ -1,0 +1,10 @@
+description: 关注者数量
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/FollowerCount'

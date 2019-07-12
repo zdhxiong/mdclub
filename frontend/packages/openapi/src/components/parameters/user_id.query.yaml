@@ -1,0 +1,6 @@
+name: user_id
+in: query
+description: 用户ID
+schema:
+  type: integer
+  minimum: 1

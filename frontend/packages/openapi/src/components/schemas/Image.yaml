@@ -1,0 +1,40 @@
+type: object
+properties:
+  hash:
+    type: string
+    description: 图片的 hash 值
+  filename:
+    type: string
+    description: 图片原始文件名
+  width:
+    type: integer
+    description: 原始图片宽度
+  height:
+    type: integer
+    description: 原始图片高度
+  create_time:
+    type: integer
+    description: 图片上传时间
+  item_type:
+    type: string
+    description: 图片关联对象类型
+  item_id:
+    type: integer
+    description: 图片管理对象ID
+  user_id:
+    type: integer
+    description: 图片上传者ID
+  urls:
+    type: object
+    properties:
+      o:
+        type: string
+        description: 原图地址
+      r:
+        type: string
+        description: 宽度固定，高度自适应的图片地址
+      t:
+        type: string
+        description: 固定宽高的缩略图地址
+  relationship:
+    $ref: '#/components/schemas/ImageRelationship'

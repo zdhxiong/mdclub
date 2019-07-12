@@ -1,0 +1,10 @@
+description: 文章详情
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/Article'

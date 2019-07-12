@@ -1,0 +1,31 @@
+parameters:
+  - $ref: '#/components/parameters/article_id.path'
+
+get:
+  operationId: getArticleComments
+  summary: 获取指定文章的评论列表
+  description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/order'
+  responses:
+    '200':
+      $ref: '#/components/responses/Comments'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleComment
+
+post:
+  operationId: createArticleComment
+  summary: 在指定文章下发表评论
+  requestBody:
+    $ref: '#/components/requestBodies/Comment'
+  responses:
+    '200':
+      $ref: '#/components/responses/Comment'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleComment

@@ -1,0 +1,104 @@
+- name: Option
+  description: 系统设置
+
+- name: UserLogin
+  description: 登录
+
+- name: UserRegister
+  description: 注册
+
+- name: UserPasswordReset
+  description: 重置密码
+
+- name: UserInfo
+  description: 用户信息
+
+- name: UserAvatar
+  description: 用户头像
+
+- name: UserCover
+  description: 用户封面
+
+- name: UserFollow
+  description: 用户关注
+
+- name: UserDisabled
+  description: 禁用的用户
+
+- name: Topic
+  description: 话题信息
+
+- name: TopicFollow
+  description: 话题关注
+
+- name: TopicTrash
+  description: 话题回收站
+
+- name: Question
+  description: 提问信息
+
+- name: QuestionComment
+  description: 提问评论
+
+- name: QuestionVote
+  description: 提问投票
+
+- name: QuestionFollow
+  description: 提问关注
+
+- name: QuestionTrash
+  description: 提问回收站
+
+- name: Answer
+  description: 回答信息
+
+- name: AnswerComment
+  description: 回答评论
+
+- name: AnswerVote
+  description: 回答投票
+
+- name: AnswerTrash
+  description: 回答回收站
+
+- name: Article
+  description: 文章信息
+
+- name: ArticleComment
+  description: 文章评论
+
+- name: ArticleVote
+  description: 文章投票
+
+- name: ArticleFollow
+  description: 文章关注
+
+- name: ArticleTrash
+  description: 文章回收站
+
+- name: Comment
+  description: 评论
+
+- name: CommentVote
+  description: 评论投票
+
+- name: CommentTrash
+  description: 评论回收站
+
+- name: Report
+  description: 举报
+
+- name: Inbox
+  description: 私信
+
+- name: Notification
+  description: 通知
+
+- name: Captcha
+  description: 图形验证码
+
+- name: Email
+  description: 邮件
+
+- name: Image
+  description: 图片

@@ -1,0 +1,41 @@
+parameters:
+  - $ref: '#/components/parameters/article_id.path'
+
+get:
+  operationId: getArticleVoters
+  summary: 获取文章的投票者
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/vote_type.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleVote
+
+post:
+  operationId: addArticleVote
+  summary: 为文章投票
+  requestBody:
+    $ref: '#/components/requestBodies/Vote'
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleVote
+
+delete:
+  operationId: deleteArticleVote
+  summary: 取消为文章的投票
+  responses:
+    '200':
+      $ref: '#/components/responses/VoteCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - ArticleVote

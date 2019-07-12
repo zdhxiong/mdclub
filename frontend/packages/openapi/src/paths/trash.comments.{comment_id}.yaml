@@ -1,0 +1,24 @@
+parameters:
+  - $ref: '#/components/parameters/comment_id.path'
+
+post:
+  operationId: restoreComment
+  summary: todo - 🔐恢复指定评论
+  responses:
+    '200':
+      $ref: '#/components/responses/Comment'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - CommentTrash
+
+delete:
+  operationId: destroyComment
+  summary: todo - 🔐删除指定评论
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - CommentTrash

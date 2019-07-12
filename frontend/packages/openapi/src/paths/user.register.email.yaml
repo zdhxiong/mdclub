@@ -1,0 +1,15 @@
+post:
+  operationId: sendRegisterEmail
+  summary: 发送注册邮箱验证码
+  description: |
+    若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，
+    并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
+  requestBody:
+    $ref: '#/components/requestBodies/UserSendEmail'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - UserRegister

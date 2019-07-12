@@ -1,0 +1,38 @@
+parameters:
+  - $ref: '#/components/parameters/question_id.path'
+
+get:
+  operationId: getQuestionFollowers
+  summary: 获取指定提问的关注者
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionFollow
+
+post:
+  operationId: addQuestionFollow
+  summary: 添加关注
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionFollow
+
+delete:
+  operationId: deleteQuestionFollow
+  summary: 取消关注
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - QuestionFollow

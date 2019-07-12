@@ -1,0 +1,7 @@
+type: object
+properties:
+  user:
+    $ref: '#/components/schemas/UserInRelationship'
+  voting:
+    type: string
+    description: 当前登录用户的投票类型（up、down），未投过票则为空字符串

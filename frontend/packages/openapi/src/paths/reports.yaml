@@ -1,0 +1,31 @@
+get:
+  operationId: getReports
+  summary: 🔐获取被举报的内容列表
+  description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/reportable_type.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/ReportGroups'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Report
+
+delete:
+  operationId: deleteReports
+  summary: 🔐批量删除举报
+  description: |
+    仅管理员可调用该接口。
+    只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/report_target'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Report

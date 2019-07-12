@@ -1,0 +1,131 @@
+Error:
+  $ref: ./Error.yaml
+
+ErrorField:
+  $ref: ./ErrorField.yaml
+
+Pagination:
+  $ref: ./Pagination.yaml
+
+Option:
+  $ref: ./Option.yaml
+
+User:
+  $ref: ./User.yaml
+
+UserWithToken:
+  $ref: ./UserWithTOken.yaml
+
+Users:
+  $ref: ./Users.yaml
+
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+
+UserCover:
+  $ref: ./UserCover.yaml
+
+Question:
+  $ref: ./Question.yaml
+
+Questions:
+  $ref: ./Questions.yaml
+
+Answer:
+  $ref: ./Answer.yaml
+
+Answers:
+  $ref: ./Answers.yaml
+
+Topic:
+  $ref: ./Topic.yaml
+
+Topics:
+  $ref: ./Topics.yaml
+
+TopicCover:
+  $ref: ./TopicCover.yaml
+
+Article:
+  $ref: ./Article.yaml
+
+Articles:
+  $ref: ./Articles.yaml
+
+Comment:
+  $ref: ./Comment.yaml
+
+Comments:
+  $ref: ./Comments.yaml
+
+VoteCount:
+  $ref: ./VoteCount.yaml
+
+FollowerCount:
+  $ref: ./FollowerCount.yaml
+
+ReportGroup:
+  $ref: ./ReportGroup.yaml
+
+ReportGroups:
+  $ref: ./ReportGroups.yaml
+
+Report:
+  $ref: ./Report.yaml
+
+Reports:
+  $ref: ./Reports.yaml
+
+Image:
+  $ref: ./Image.yaml
+
+Images:
+  $ref: ./Images.yaml
+
+Email:
+  $ref: ./Email.yaml
+
+UserRelationship:
+  $ref: ./UserRelationship.yaml
+
+QuestionRelationship:
+  $ref: ./QuestionRelationship.yaml
+
+AnswerRelationship:
+  $ref: ./AnswerRelationship.yaml
+
+TopicRelationship:
+  $ref: ./TopicRelationship.yaml
+
+ArticleRelationship:
+  $ref: ./ArticleRelationship.yaml
+
+CommentRelationship:
+  $ref: ./CommentRelationship.yaml
+
+ReportGroupRelationship:
+  $ref: ./ReportGroupRelationship.yaml
+
+ReportRelationship:
+  $ref: ./ReportRelationship.yaml
+
+ImageRelationship:
+  $ref: ./ImageRelationship.yaml
+
+UserInRelationship:
+  $ref: ./UserInRelationship.yaml
+
+QuestionInRelationship:
+  $ref: ./QuestionInRelationship.yaml
+
+AnswerInRelationship:
+  $ref: ./AnswerInRelationship.yaml
+
+ArticleInRelationship:
+  $ref: ./ArticleInRelationship.yaml
+
+CommentInRelationship:
+  $ref: ./CommentInRelationship.yaml
+
+TopicsInRelationship:
+  $ref: ./TopicsInRelationship.yaml

@@ -1,0 +1,24 @@
+parameters:
+  - $ref: '#/components/parameters/topic_id.path'
+
+post:
+  operationId: restoreTopic
+  summary: todo - 🔐恢复指定话题
+  responses:
+    '200':
+      $ref: '#/components/responses/Topic'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - TopicTrash
+
+delete:
+  operationId: destroyTopic
+  summary: todo - 🔐删除指定话题
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - TopicTrash

@@ -1,0 +1,11 @@
+type: object
+required:
+  - field
+  - message
+properties:
+  field:
+    type: string
+    description: 错误字段名
+  message:
+    type: string
+    description: 错误描述

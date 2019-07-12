@@ -1,0 +1,53 @@
+Option:
+  $ref: ./Option.yaml
+
+UserLogin:
+  $ref: ./UserLogin.yaml
+
+UserRegister:
+  $ref: ./UserRegister.yaml
+
+UserUpdate:
+  $ref: ./UserUpdate.yaml
+
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+
+UserCover:
+  $ref: ./UserCover.yaml
+
+UserSendEmail:
+  $ref: ./UserSendEmail.yaml
+
+UserPasswordReset:
+  $ref: ./UserPasswordReset.yaml
+
+Article:
+  $ref: ./Article.yaml
+
+Question:
+  $ref: ./Question.yaml
+
+Answer:
+  $ref: ./Answer.yaml
+
+Topic:
+  $ref: ./Topic.yaml
+
+Comment:
+  $ref: ./Comment.yaml
+
+Vote:
+  $ref: ./Vote.yaml
+
+Report:
+  $ref: ./Report.yaml
+
+Image:
+  $ref: ./Image.yaml
+
+ImageFilename:
+  $ref: ./ImageFilename.yaml
+
+Email:
+  $ref: ./Email.yaml

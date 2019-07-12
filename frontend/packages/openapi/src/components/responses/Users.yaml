@@ -1,0 +1,12 @@
+description: 用户列表
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/Users'
+        pagination:
+          $ref: '#/components/schemas/Pagination'

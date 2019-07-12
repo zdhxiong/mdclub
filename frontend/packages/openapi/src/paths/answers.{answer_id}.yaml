@@ -1,0 +1,43 @@
+parameters:
+  - $ref: '#/components/parameters/answer_id.path'
+
+get:
+  operationId: getAnswer
+  summary: 获取回答详情
+  responses:
+    '200':
+      $ref: '#/components/responses/Answer'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer
+
+patch:
+  operationId: updateAnswer
+  summary: 修改回答信息
+  description: |
+    仅回答的作者和管理员可以修改文章信息。
+
+    `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+    若两个参数都传入，则以 `content_markdown` 为准。
+  requestBody:
+    $ref: '#/components/requestBodies/Answer'
+  responses:
+    '200':
+      $ref: '#/components/responses/Answer'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer
+
+delete:
+  operationId: deleteAnswer
+  summary: 删除指定回答
+  description: 仅回答作者和管理员可以删除文章
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer

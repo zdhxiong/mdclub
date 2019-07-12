@@ -1,0 +1,10 @@
+description: 含 token 的用户信息
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/UserWithToken'

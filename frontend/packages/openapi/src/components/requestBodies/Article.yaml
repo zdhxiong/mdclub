@@ -1,0 +1,18 @@
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 标题
+        topic_id:
+          type: string
+          description: 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+        content_markdown:
+          type: string
+          description: Markdown 格式的正文
+        content_rendered:
+          type: string
+          description: HTML 格式的正文

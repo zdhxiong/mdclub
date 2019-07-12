@@ -1,0 +1,7 @@
+name: topic_id
+in: path
+description: 话题ID
+required: true
+schema:
+  type: integer
+  minimum: 1

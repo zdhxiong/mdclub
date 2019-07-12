@@ -1,0 +1,7 @@
+name: comment_id
+in: path
+description: 评论ID
+required: true
+schema:
+  type: integer
+  minimum: 1

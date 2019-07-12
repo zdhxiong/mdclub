@@ -1,0 +1,9 @@
+name: item_type
+in: query
+description: 图片关联对象的类型
+schema:
+  type: string
+  enum:
+    - question
+    - answer
+    - article

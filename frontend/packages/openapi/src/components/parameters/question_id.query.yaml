@@ -1,0 +1,6 @@
+name: question_id
+in: query
+description: 提问ID
+schema:
+  type: integer
+  minimum: 1

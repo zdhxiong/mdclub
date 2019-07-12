@@ -1,0 +1,80 @@
+Error:
+  $ref: ./Error.yaml
+
+Empty:
+  $ref: ./Empty.yaml
+
+Option:
+  $ref: ./Option.yaml
+
+User:
+  $ref: ./User.yaml
+
+UserWithToken:
+  $ref: ./UserWithToken.yaml
+
+Users:
+  $ref: ./Users.yaml
+
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+
+UserCover:
+  $ref: ./UserCover.yaml
+
+Question:
+  $ref: ./Question.yaml
+
+Questions:
+  $ref: ./Questions.yaml
+
+Answer:
+  $ref: ./Answer.yaml
+
+Answers:
+  $ref: ./Answers.yaml
+
+Article:
+  $ref: ./Article.yaml
+
+Articles:
+  $ref: ./Articles.yaml
+
+Topic:
+  $ref: ./Topic.yaml
+
+Topics:
+  $ref: ./Topics.yaml
+
+Comment:
+  $ref: ./Comment.yaml
+
+Comments:
+  $ref: ./Comments.yaml
+
+Image:
+  $ref: ./Image.yaml
+
+Images:
+  $ref: ./Images.yaml
+
+Email:
+  $ref: ./Email.yaml
+
+ReportGroups:
+  $ref: ./ReportGroups.yaml
+
+Report:
+  $ref: ./Report.yaml
+
+Reports:
+  $ref: ./Reports.yaml
+
+Captcha:
+  $ref: ./Captcha.yaml
+
+FollowerCount:
+  $ref: ./FollowerCount.yaml
+
+VoteCount:
+  $ref: ./VoteCount.yaml

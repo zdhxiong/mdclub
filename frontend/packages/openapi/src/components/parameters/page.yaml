@@ -1,0 +1,7 @@
+name: page
+in: query
+description: 当前页数
+schema:
+  type: integer
+  minimum: 1
+  default: 1

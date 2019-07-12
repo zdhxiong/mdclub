@@ -1,0 +1,6 @@
+name: hash
+in: path
+description: 图片hash
+required: true
+schema:
+  type: string

@@ -1,0 +1,13 @@
+post:
+  operationId: sendEmail
+  summary: 🔐发送邮件
+  description: 用于后台管理员发送邮件，需要管理员权限
+  requestBody:
+    $ref: '#/components/requestBodies/Email'
+  responses:
+    '200':
+      $ref: '#/components/responses/Email'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Email

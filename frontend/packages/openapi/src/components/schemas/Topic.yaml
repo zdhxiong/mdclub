@@ -1,0 +1,27 @@
+type: object
+properties:
+  topic_id:
+    type: integer
+    description: 话题ID
+  name:
+    type: string
+    description: 话题名称
+  cover:
+    $ref: '#/components/schemas/TopicCover'
+  description:
+    type: string
+    description: 话题描述
+  article_count:
+    type: integer
+    description: 文章数量
+  question_count:
+    type: integer
+    description: 提问数量
+  follower_count:
+    type: integer
+    description: 关注者数量
+  delete_time:
+    type: integer
+    description: 🔐删除时间
+  relationship:
+    $ref: '#/components/schemas/TopicRelationship'

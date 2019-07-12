@@ -1,0 +1,9 @@
+name: include
+in: query
+description: 包含的关联数据，用“,”分隔。
+schema:
+  type: array
+  items:
+    type: string
+style: form
+explode: false

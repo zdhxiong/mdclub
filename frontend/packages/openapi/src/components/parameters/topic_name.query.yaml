@@ -1,0 +1,5 @@
+name: name
+in: query
+description: 话题名称
+schema:
+  type: string

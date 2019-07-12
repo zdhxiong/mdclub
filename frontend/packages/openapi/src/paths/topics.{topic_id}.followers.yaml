@@ -1,0 +1,39 @@
+parameters:
+  - $ref: '#/components/parameters/topic_id.path'
+
+get:
+  operationId: getTopicFollowers
+  summary: 获取指定话题的关注者
+  description: 不含已禁用的用户
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+  responses:
+    '200':
+      $ref: '#/components/responses/Users'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - TopicFollow
+
+post:
+  operationId: addTopicFollow
+  summary: 关注指定话题
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - TopicFollow
+
+delete:
+  operationId: deleteTopicFollow
+  summary: 取消关注指定话题
+  responses:
+    '200':
+      $ref: '#/components/responses/FollowerCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - TopicFollow

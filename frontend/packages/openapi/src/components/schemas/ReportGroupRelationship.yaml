@@ -1,0 +1,12 @@
+type: object
+properties:
+  question:
+    $ref: '#/components/schemas/QuestionInRelationship'
+  answer:
+    $ref: '#/components/schemas/AnswerInRelationship'
+  article:
+    $ref: '#/components/schemas/ArticleInRelationship'
+  comment:
+    $ref: '#/components/schemas/CommentInRelationship'
+  user:
+    $ref: '#/components/schemas/UserInRelationship'

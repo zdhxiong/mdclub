@@ -1,0 +1,6 @@
+type: object
+description: 关注者数量
+properties:
+  follower_count:
+    type: integer
+    description: 关注者数量

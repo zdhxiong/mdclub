@@ -1,0 +1,27 @@
+{
+  "name": "mdclub-openapi",
+  "description": "MDClub 的 OpenAPI 描述文件",
+  "version": "0.0.1",
+  "homepage": "https://www.mdclub.org/api",
+  "author": "zdhxiong",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zdhxiong/mdclub-openapi"
+  },
+  "scripts": {
+    "build": "node index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/zdhxiong/mdclub-openapi/issues",
+    "email": "zdhxiong@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=10"
+  },
+  "devDependencies": {
+    "js-yaml": "^3.13.1",
+    "json-refs": "^3.0.13"
+  }
+}

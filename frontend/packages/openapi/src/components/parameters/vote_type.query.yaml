@@ -1,0 +1,11 @@
+name: type
+in: query
+description: |
+  默认获取全部投票类型的用户
+  `up` 表示仅获取投赞成票的用户
+  `down` 表示仅获取投反对票的用户
+schema:
+  type: string
+  enum:
+    - up
+    - down

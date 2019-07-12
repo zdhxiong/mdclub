@@ -1,0 +1,24 @@
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - name
+        - password
+      properties:
+        name:
+          type: string
+          description: 用户名或邮箱
+        password:
+          type: string
+          description: 经过 hash1 加密后的密码
+        device:
+          type: string
+          description: 设备信息
+        captcha_token:
+          type: string
+          description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+        captcha_code:
+          type: string
+          description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数

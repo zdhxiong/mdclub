@@ -1,0 +1,12 @@
+name: user_id
+in: query
+description: 用“,”分隔的用户ID，最多可提供100个ID
+schema:
+  type: array
+  items:
+    type: integer
+    minimum: 1
+  minItems: 1
+  maxItems: 100
+style: form
+explode: false

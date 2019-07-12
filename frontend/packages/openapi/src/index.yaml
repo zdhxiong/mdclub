@@ -1,0 +1,18 @@
+# https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md
+openapi: 3.0.2
+
+info:
+  $ref: ./info/index.yaml
+servers:
+  $ref: ./servers/index.yaml
+paths:
+  $ref: ./paths/index.yaml
+components:
+  $ref: ./components/index.yaml
+
+tags:
+  $ref: ./tags/index.yaml
+
+externalDocs:
+  description: 更多文档参见
+  url: https://mdclub.org

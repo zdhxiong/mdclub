@@ -1,0 +1,180 @@
+type: object
+properties:
+  cache_memcached_host:
+    type: string
+    description: 🔐Memcached 服务器地址
+  cache_memcached_password:
+    type: string
+    description: 🔐Memcached 密码
+  cache_memcached_port:
+    type: string
+    description: 🔐Memcached 端口号
+  cache_memcached_username:
+    type: string
+    description: 🔐Memcached 用户名
+  cache_prefix:
+    type: string
+    description: 🔐缓存键名前缀（只能包含字符 -+.A-Za-z0-9）
+  cache_redis_host:
+    type: string
+    description: 🔐Redis 服务器地址
+  cache_redis_password:
+    type: string
+    description: 🔐Redis 密码
+  cache_redis_port:
+    type: string
+    description: 🔐Redis 端口号
+  cache_redis_username:
+    type: string
+    description: 🔐Redis 用户名
+  cache_type:
+    type: string
+    enum:
+      - redis
+      - memcached
+    description: 🔐缓存类型
+  language:
+    type: string
+    enum:
+      - en
+      - pl
+      - ru
+      - zh-CN
+      - zh-TW
+    description: 系统语言
+  site_description:
+    type: string
+    description: 站点简介
+  site_gongan_beian:
+    type: string
+    description: 站点公安备案号
+  site_icp_beian:
+    type: string
+    description: 站点 ICP 备案号
+  site_keywords:
+    type: string
+    description: 站点关键词
+  site_name:
+    type: string
+    description: 站点名称
+  site_static_url:
+    type: string
+    description: 🔐静态资源 URL 地址
+  smtp_host:
+    type: string
+    description: 🔐SMTP 服务器地址
+  smtp_password:
+    type: string
+    description: 🔐SMTP 密码
+  smtp_port:
+    type: integer
+    description: 🔐SMTP 端口
+  smtp_reply_to:
+    type: string
+    description: 🔐SMTP 回信地址
+  smtp_secure:
+    type: string
+    description: 🔐SMTP 加密方式
+  smtp_username:
+    type: string
+    description: 🔐SMTP 账户
+  storage_aliyun_access_id:
+    type: string
+    description: 🔐阿里云 AccessKey ID
+  storage_aliyun_access_secret:
+    type: string
+    description: 🔐阿里云 Access Key Secret
+  storage_aliyun_bucket:
+    type: string
+    description: 🔐阿里云 OSS 的 Bucket 名称
+  storage_aliyun_endpoint:
+    type: string
+    description: 🔐阿里云 OSS 的 EndPoint
+  storage_ftp_host:
+    type: string
+    description: 🔐FTP 服务器地址
+  storage_ftp_passive:
+    type: integer
+    enum:
+      - 1
+      - 0
+    description: 🔐是否使用被动传输模式。1（被动模式）；0（主动模式）
+  storage_ftp_password:
+    type: string
+    description: 🔐FTP 密码
+  storage_ftp_port:
+    type: integer
+    description: 🔐FTP 端口号
+  storage_ftp_root:
+    type: string
+    description: 🔐FTP 存储目录
+  storage_ftp_ssl:
+    type: integer
+    enum:
+      - 1
+      - 0
+    description: 🔐FTP 是否启用 SSL。1（启用）；0（不启用）
+  storage_ftp_username:
+    type: string
+    description: 🔐FTP 用户名
+  storage_local_dir:
+    type: string
+    description: 🔐本地文件存储目录
+  storage_qiniu_access_id:
+    type: string
+    description: 🔐七牛云 AccessKey
+  storage_qiniu_access_secret:
+    type: string
+    description: 🔐七牛云 SecretKey
+  storage_qiniu_bucket:
+    type: string
+    description: 🔐七牛云 Bucket
+  storage_qiniu_zone:
+    type: string
+    enum:
+      - z0
+      - z1
+      - z2
+      - na0
+      - as0
+    description: 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
+  storage_sftp_host:
+    type: string
+    description: 🔐SFTP 服务器地址
+  storage_sftp_password:
+    type: string
+    description: 🔐SFTP 密码
+  storage_sftp_port:
+    type: integer
+    description: 🔐SFTP 端口号
+  storage_sftp_root:
+    type: string
+    description: 🔐SFTP 存储目录
+  storage_sftp_username:
+    type: string
+    description: 🔐SFTP 用户名
+  storage_type:
+    type: string
+    enum:
+      - local
+      - ftp
+      - sftp
+      - aliyun
+      - upyun
+      - qiniu
+    description: 🔐存储类型
+  storage_upyun_bucket:
+    type: string
+    description: 🔐又拍云 Bucket
+  storage_upyun_operator:
+    type: string
+    description: 🔐又拍云操作员账号
+  storage_upyun_password:
+    type: string
+    description: 🔐又拍云操作员密码
+  storage_url:
+    type: string
+    description: 🔐本地文件访问链接
+  theme:
+    type: string
+    description: 🔐主题名称

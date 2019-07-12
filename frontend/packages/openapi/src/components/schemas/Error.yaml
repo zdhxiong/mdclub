@@ -1,0 +1,24 @@
+type: object
+required:
+  - code
+  - message
+properties:
+  code:
+    type: integer
+    description: 错误代码
+  message:
+    type: string
+    description: 错误描述
+  extra_message:
+    type: string
+    description: 额外的错误描述
+  captcha_token:
+    type: string
+    description: 图形验证码token。若返回了该参数，表示下次调用该接口需要输入图形验证码
+  captcha_image:
+    type: string
+    description: 图形验证码的base64格式图片
+  errors:
+    type: array
+    items:
+      $ref: '#/components/schemas/ErrorField'

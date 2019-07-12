@@ -1,0 +1,11 @@
+type: object
+properties:
+  s:
+    type: string
+    description: 小型封面地址
+  m:
+    type: string
+    description: 中型封面地址
+  l:
+    type: string
+    description: 大型封面地址

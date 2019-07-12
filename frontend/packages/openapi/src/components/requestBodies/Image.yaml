@@ -1,0 +1,10 @@
+required: true
+content:
+  multipart/form-data:
+    schema:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+          description: 图片

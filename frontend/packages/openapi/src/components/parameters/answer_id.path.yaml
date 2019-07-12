@@ -1,0 +1,7 @@
+name: answer_id
+in: path
+description: 回答ID
+required: true
+schema:
+  type: integer
+  minimum: 1

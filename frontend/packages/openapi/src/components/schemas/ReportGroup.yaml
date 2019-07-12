@@ -1,0 +1,20 @@
+type: object
+description: 举报集合
+properties:
+  reportable_id:
+    type: integer
+    description: 举报目标的ID
+  reportable_type:
+    type: string
+    description: 举报目标类型
+    enum:
+      - question
+      - answer
+      - article
+      - comment
+      - user
+  reporter_count:
+    type: integer
+    description: 指定对象的被举报数量
+  relationship:
+    $ref: '#/components/schemas/ReportGroupRelationship'

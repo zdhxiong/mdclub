@@ -1,0 +1,12 @@
+name: reportable_type
+in: path
+description: 目标类型
+required: true
+schema:
+  type: string
+  enum:
+    - question
+    - answer
+    - article
+    - comment
+    - user

@@ -1,0 +1,14 @@
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - up
+            - down
+          description: 投票类型

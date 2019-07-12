@@ -1,0 +1,2 @@
+token:
+  $ref: ./token.yaml
