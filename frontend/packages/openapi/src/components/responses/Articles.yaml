@@ -2,13 +2,4 @@ description: 文章列表
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Article'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+      $ref: '#/components/schemas/ArticlesResponse'

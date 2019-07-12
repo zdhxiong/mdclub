@@ -2,9 +2,4 @@ description: 回答详情
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          $ref: '#/components/schemas/Answer'
+      $ref: '#/components/schemas/AnswerResponse'

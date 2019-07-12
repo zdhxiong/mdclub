@@ -2,9 +2,4 @@ description: 空数据，通过状态码区分成功还是失败
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          type: object
+      $ref: '#/components/schemas/EmptyResponse'

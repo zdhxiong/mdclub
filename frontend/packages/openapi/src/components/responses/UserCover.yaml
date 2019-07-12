@@ -2,9 +2,4 @@ description: 新封面地址
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          $ref: '#/components/schemas/UserCover'
+      $ref: '#/components/schemas/UserCoverResponse'

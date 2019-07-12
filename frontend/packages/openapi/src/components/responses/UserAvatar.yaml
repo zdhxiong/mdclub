@@ -2,9 +2,4 @@ description: 新头像地址
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          $ref: '#/components/schemas/UserAvatar'
+      $ref: '#/components/schemas/UserAvatarResponse'

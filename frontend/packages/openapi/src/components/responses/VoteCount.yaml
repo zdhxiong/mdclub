@@ -2,9 +2,5 @@ description: 投票数量
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          $ref: '#/components/schemas/VoteCount'
+      $ref: '#/components/schemas/VoteCountResponse'
+

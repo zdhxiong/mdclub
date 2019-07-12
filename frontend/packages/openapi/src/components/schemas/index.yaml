@@ -1,104 +1,125 @@
-Error:
-  $ref: ./Error.yaml
+AnswerResponse:
+  $ref: ./response/AnswerResponse.yaml
+AnswersResponse:
+  $ref: ./response/AnswersResponse.yaml
+ArticleResponse:
+  $ref: ./response/ArticleResponse.yaml
+ArticlesResponse:
+  $ref: ./response/ArticlesResponse.yaml
+CaptchaResponse:
+  $ref: ./response/CaptchaResponse.yaml
+CommentResponse:
+  $ref: ./response/CommentResponse.yaml
+CommentsResponse:
+  $ref: ./response/CommentsResponse.yaml
+EmailResponse:
+  $ref: ./response/EmailResponse.yaml
+EmptyResponse:
+  $ref: ./response/EmptyResponse.yaml
+ErrorResponse:
+  $ref: ./response/ErrorResponse.yaml
+FollowerCountResponse:
+  $ref: ./response/FollowerCountResponse.yaml
+ImageResponse:
+  $ref: ./response/ImageResponse.yaml
+ImagesResponse:
+  $ref: ./response/ImagesResponse.yaml
+OptionResponse:
+  $ref: ./response/OptionResponse.yaml
+QuestionResponse:
+  $ref: ./response/QuestionResponse.yaml
+QuestionsResponse:
+  $ref: ./response/QuestionsResponse.yaml
+ReportGroupsResponse:
+  $ref: ./response/ReportGroupsResponse.yaml
+ReportResponse:
+  $ref: ./response/ReportResponse.yaml
+ReportsResponse:
+  $ref: ./response/ReportsResponse.yaml
+TopicResponse:
+  $ref: ./response/TopicResponse.yaml
+TopicsResponse:
+  $ref: ./response/TopicsResponse.yaml
+UserAvatarResponse:
+  $ref: ./response/UserAvatarResponse.yaml
+UserCoverResponse:
+  $ref: ./response/UserCoverResponse.yaml
+UserResponse:
+  $ref: ./response/UserResponse.yaml
+UsersResponse:
+  $ref: ./response/UsersResponse.yaml
+UserWithTokenResponse:
+  $ref: ./response/UserWithTokenResponse.yaml
+VoteCountResponse:
+  $ref: ./response/VoteCountResponse.yaml
 
-ErrorField:
-  $ref: ./ErrorField.yaml
+AnswerRelationship:
+  $ref: ./relationship/AnswerRelationship.yaml
+ArticleRelationship:
+  $ref: ./relationship/ArticleRelationship.yaml
+CommentRelationship:
+  $ref: ./relationship/CommentRelationship.yaml
+ImageRelationship:
+  $ref: ./relationship/ImageRelationship.yaml
+QuestionRelationship:
+  $ref: ./relationship/QuestionRelationship.yaml
+ReportGroupRelationship:
+  $ref: ./relationship/ReportGroupRelationship.yaml
+ReportRelationship:
+  $ref: ./relationship/ReportRelationship.yaml
+TopicRelationship:
+  $ref: ./relationship/TopicRelationship.yaml
+UserRelationship:
+  $ref: ./relationship/UserRelationship.yaml
 
-Pagination:
-  $ref: ./Pagination.yaml
-
-Option:
-  $ref: ./Option.yaml
-
-User:
-  $ref: ./User.yaml
-
-UserWithToken:
-  $ref: ./UserWithTOken.yaml
-
-UserAvatar:
-  $ref: ./UserAvatar.yaml
-
-UserCover:
-  $ref: ./UserCover.yaml
-
-Question:
-  $ref: ./Question.yaml
+AnswerInRelationship:
+  $ref: ./inRelationship/AnswerInRelationship.yaml
+ArticleInRelationship:
+  $ref: ./inRelationship/ArticleInRelationship.yaml
+CommentInRelationship:
+  $ref: ./inRelationship/CommentInRelationship.yaml
+QuestionInRelationship:
+  $ref: ./inRelationship/QuestionInRelationship.yaml
+TopicsInRelationship:
+  $ref: ./inRelationship/TopicsInRelationship.yaml
+UserInRelationship:
+  $ref: ./inRelationship/UserInRelationship.yaml
 
 Answer:
   $ref: ./Answer.yaml
-
-Topic:
-  $ref: ./Topic.yaml
-
-TopicCover:
-  $ref: ./TopicCover.yaml
-
 Article:
   $ref: ./Article.yaml
-
 Comment:
   $ref: ./Comment.yaml
-
-VoteCount:
-  $ref: ./VoteCount.yaml
-
-FollowerCount:
-  $ref: ./FollowerCount.yaml
-
-ReportGroup:
-  $ref: ./ReportGroup.yaml
-
-Report:
-  $ref: ./Report.yaml
-
-Image:
-  $ref: ./Image.yaml
-
 Email:
   $ref: ./Email.yaml
-
-UserRelationship:
-  $ref: ./UserRelationship.yaml
-
-QuestionRelationship:
-  $ref: ./QuestionRelationship.yaml
-
-AnswerRelationship:
-  $ref: ./AnswerRelationship.yaml
-
-TopicRelationship:
-  $ref: ./TopicRelationship.yaml
-
-ArticleRelationship:
-  $ref: ./ArticleRelationship.yaml
-
-CommentRelationship:
-  $ref: ./CommentRelationship.yaml
-
-ReportGroupRelationship:
-  $ref: ./ReportGroupRelationship.yaml
-
-ReportRelationship:
-  $ref: ./ReportRelationship.yaml
-
-ImageRelationship:
-  $ref: ./ImageRelationship.yaml
-
-UserInRelationship:
-  $ref: ./UserInRelationship.yaml
-
-QuestionInRelationship:
-  $ref: ./QuestionInRelationship.yaml
-
-AnswerInRelationship:
-  $ref: ./AnswerInRelationship.yaml
-
-ArticleInRelationship:
-  $ref: ./ArticleInRelationship.yaml
-
-CommentInRelationship:
-  $ref: ./CommentInRelationship.yaml
-
-TopicsInRelationship:
-  $ref: ./TopicsInRelationship.yaml
+ErrorField:
+  $ref: ./ErrorField.yaml
+FollowerCount:
+  $ref: ./FollowerCount.yaml
+Image:
+  $ref: ./Image.yaml
+Option:
+  $ref: ./Option.yaml
+Pagination:
+  $ref: ./Pagination.yaml
+Question:
+  $ref: ./Question.yaml
+Report:
+  $ref: ./Report.yaml
+ReportGroup:
+  $ref: ./ReportGroup.yaml
+Topic:
+  $ref: ./Topic.yaml
+TopicCover:
+  $ref: ./TopicCover.yaml
+User:
+  $ref: ./User.yaml
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+UserCover:
+  $ref: ./UserCover.yaml
+UserWithToken:
+  $ref: ./UserWithTOken.yaml
+VoteCount:
+  $ref: ./VoteCount.yaml

@@ -2,13 +2,4 @@ description: 举报详情列表
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Report'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+      $ref: '#/components/schemas/ReportsResponse'

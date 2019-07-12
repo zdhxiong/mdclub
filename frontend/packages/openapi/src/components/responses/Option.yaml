@@ -2,9 +2,4 @@ description: 全局设置参数列表
 content:
   application/json:
     schema:
-      type: object
-      properties:
-        code:
-          type: integer
-        data:
-          $ref: '#/components/schemas/Option'
+      $ref: '#/components/schemas/OptionResponse'
