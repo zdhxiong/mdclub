@@ -1,3 +1,78 @@
+# 数据模型
+Answer:
+  $ref: ./Answer.yaml
+Article:
+  $ref: ./Article.yaml
+Comment:
+  $ref: ./Comment.yaml
+Email:
+  $ref: ./Email.yaml
+ErrorField:
+  $ref: ./ErrorField.yaml
+FollowerCount:
+  $ref: ./FollowerCount.yaml
+Image:
+  $ref: ./Image.yaml
+Option:
+  $ref: ./Option.yaml
+Pagination:
+  $ref: ./Pagination.yaml
+Question:
+  $ref: ./Question.yaml
+Report:
+  $ref: ./Report.yaml
+ReportGroup:
+  $ref: ./ReportGroup.yaml
+Topic:
+  $ref: ./Topic.yaml
+TopicCover:
+  $ref: ./TopicCover.yaml
+User:
+  $ref: ./User.yaml
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+UserCover:
+  $ref: ./UserCover.yaml
+UserWithToken:
+  $ref: ./UserWithTOken.yaml
+VoteCount:
+  $ref: ./VoteCount.yaml
+
+# 请求体模型
+AnswerRequestBody:
+  $ref: ./requestBody/AnswerRequestBody.yaml
+ArticleRequestBody:
+  $ref: ./requestBody/ArticleRequestBody.yaml
+CommentRequestBody:
+  $ref: ./requestBody/CommentRequestBody.yaml
+ImageUpdateRequestBody:
+  $ref: ./requestBody/ImageUpdateRequestBody.yaml
+ImageUploadRequestBody:
+  $ref: ./requestBody/ImageUploadRequestBody.yaml
+QuestionRequestBody:
+  $ref: ./requestBody/QuestionRequestBody.yaml
+ReportRequestBody:
+  $ref: ./requestBody/ReportRequestBody.yaml
+TopicRequestBody:
+  $ref: ./requestBody/TopicRequestBody.yaml
+UserAvatarRequestBody:
+  $ref: ./requestBody/UserAvatarRequestBody.yaml
+UserCoverRequestBody:
+  $ref: ./requestBody/UserCoverRequestBody.yaml
+UserLoginRequestBody:
+  $ref: ./requestBody/UserLoginRequestBody.yaml
+UserPasswordResetRequestBody:
+  $ref: ./requestBody/UserPasswordResetRequestBody.yaml
+UserRegisterRequestBody:
+  $ref: ./requestBody/UserRegisterRequestBody.yaml
+UserRequestBody:
+  $ref: ./requestBody/UserRequestBody.yaml
+UserSendEmailRequestBody:
+  $ref: ./requestBody/UserSendEmailRequestBody.yaml
+VoteRequestBody:
+  $ref: ./requestBody/VoteRequestBody.yaml
+
+# 响应体模型
 AnswerResponse:
   $ref: ./response/AnswerResponse.yaml
 AnswersResponse:
@@ -53,6 +128,7 @@ UserWithTokenResponse:
 VoteCountResponse:
   $ref: ./response/VoteCountResponse.yaml
 
+# 对象中的关联信息模型
 AnswerRelationship:
   $ref: ./relationship/AnswerRelationship.yaml
 ArticleRelationship:
@@ -72,6 +148,7 @@ TopicRelationship:
 UserRelationship:
   $ref: ./relationship/UserRelationship.yaml
 
+# 关联信息中的数据模型
 AnswerInRelationship:
   $ref: ./inRelationship/AnswerInRelationship.yaml
 ArticleInRelationship:
@@ -84,42 +161,3 @@ TopicsInRelationship:
   $ref: ./inRelationship/TopicsInRelationship.yaml
 UserInRelationship:
   $ref: ./inRelationship/UserInRelationship.yaml
-
-Answer:
-  $ref: ./Answer.yaml
-Article:
-  $ref: ./Article.yaml
-Comment:
-  $ref: ./Comment.yaml
-Email:
-  $ref: ./Email.yaml
-ErrorField:
-  $ref: ./ErrorField.yaml
-FollowerCount:
-  $ref: ./FollowerCount.yaml
-Image:
-  $ref: ./Image.yaml
-Option:
-  $ref: ./Option.yaml
-Pagination:
-  $ref: ./Pagination.yaml
-Question:
-  $ref: ./Question.yaml
-Report:
-  $ref: ./Report.yaml
-ReportGroup:
-  $ref: ./ReportGroup.yaml
-Topic:
-  $ref: ./Topic.yaml
-TopicCover:
-  $ref: ./TopicCover.yaml
-User:
-  $ref: ./User.yaml
-UserAvatar:
-  $ref: ./UserAvatar.yaml
-UserCover:
-  $ref: ./UserCover.yaml
-UserWithToken:
-  $ref: ./UserWithTOken.yaml
-VoteCount:
-  $ref: ./VoteCount.yaml

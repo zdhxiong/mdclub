@@ -2,15 +2,4 @@ required: true
 content:
   multipart/form-data:
     schema:
-      type: object
-      properties:
-        name:
-          type: string
-          description: 话题名称
-        description:
-          type: string
-          description: 话题描述
-        cover:
-          type: string
-          format: binary
-          description: 封面图片
+      $ref: '#/components/schemas/TopicRequestBody'

@@ -21,7 +21,7 @@ post:
   operationId: upload
   summary: 上传图片
   requestBody:
-    $ref: '#/components/requestBodies/Image'
+    $ref: '#/components/requestBodies/ImageUpload'
   responses:
     '200':
       $ref: '#/components/responses/Image'

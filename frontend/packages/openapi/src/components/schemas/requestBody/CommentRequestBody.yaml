@@ -1,0 +1,7 @@
+type: object
+required:
+  - content
+properties:
+  content:
+    type: string
+    description: 评论内容

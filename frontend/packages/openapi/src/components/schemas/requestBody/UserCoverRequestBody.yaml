@@ -1,0 +1,6 @@
+type: object
+properties:
+  cover:
+    type: string
+    format: binary
+    description: 用户封面

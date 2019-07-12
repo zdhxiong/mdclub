@@ -2,10 +2,4 @@ required: true
 content:
   application/json:
     schema:
-      type: object
-      required:
-        - content
-      properties:
-        content:
-          type: string
-          description: 评论内容
+      $ref: '#/components/schemas/CommentRequestBody'

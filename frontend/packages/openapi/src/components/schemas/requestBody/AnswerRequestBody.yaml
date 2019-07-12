@@ -1,0 +1,8 @@
+type: object
+properties:
+  content_markdown:
+    type: string
+    description: Markdown 格式的正文
+  content_rendered:
+    type: string
+    description: HTML 格式的正文

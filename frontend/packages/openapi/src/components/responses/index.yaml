@@ -1,33 +1,3 @@
-Error:
-  $ref: ./Error.yaml
-
-Empty:
-  $ref: ./Empty.yaml
-
-Option:
-  $ref: ./Option.yaml
-
-User:
-  $ref: ./User.yaml
-
-UserWithToken:
-  $ref: ./UserWithToken.yaml
-
-Users:
-  $ref: ./Users.yaml
-
-UserAvatar:
-  $ref: ./UserAvatar.yaml
-
-UserCover:
-  $ref: ./UserCover.yaml
-
-Question:
-  $ref: ./Question.yaml
-
-Questions:
-  $ref: ./Questions.yaml
-
 Answer:
   $ref: ./Answer.yaml
 
@@ -40,11 +10,8 @@ Article:
 Articles:
   $ref: ./Articles.yaml
 
-Topic:
-  $ref: ./Topic.yaml
-
-Topics:
-  $ref: ./Topics.yaml
+Captcha:
+  $ref: ./Captcha.yaml
 
 Comment:
   $ref: ./Comment.yaml
@@ -52,29 +19,62 @@ Comment:
 Comments:
   $ref: ./Comments.yaml
 
+Email:
+  $ref: ./Email.yaml
+
+Empty:
+  $ref: ./Empty.yaml
+
+Error:
+  $ref: ./Error.yaml
+
+FollowerCount:
+  $ref: ./FollowerCount.yaml
+
 Image:
   $ref: ./Image.yaml
 
 Images:
   $ref: ./Images.yaml
 
-Email:
-  $ref: ./Email.yaml
+Option:
+  $ref: ./Option.yaml
 
-ReportGroups:
-  $ref: ./ReportGroups.yaml
+Question:
+  $ref: ./Question.yaml
+
+Questions:
+  $ref: ./Questions.yaml
 
 Report:
   $ref: ./Report.yaml
 
+ReportGroups:
+  $ref: ./ReportGroups.yaml
+
 Reports:
   $ref: ./Reports.yaml
 
-Captcha:
-  $ref: ./Captcha.yaml
+Topic:
+  $ref: ./Topic.yaml
 
-FollowerCount:
-  $ref: ./FollowerCount.yaml
+Topics:
+  $ref: ./Topics.yaml
+
+User:
+  $ref: ./User.yaml
+
+UserAvatar:
+  $ref: ./UserAvatar.yaml
+
+UserCover:
+  $ref: ./UserCover.yaml
+
+Users:
+  $ref: ./Users.yaml
+
+UserWithToken:
+  $ref: ./UserWithToken.yaml
 
 VoteCount:
   $ref: ./VoteCount.yaml

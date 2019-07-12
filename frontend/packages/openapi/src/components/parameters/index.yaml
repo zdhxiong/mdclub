@@ -1,32 +1,11 @@
-token:
-  $ref: ./token.yaml
+answer_id.path:
+  $ref: ./answer_id.path.yaml
 
-page:
-  $ref: ./page.yaml
+answer_id.query:
+  $ref: ./answer_id.query.yaml
 
-per_page:
-  $ref: ./per_page.yaml
-
-order:
-  $ref: ./order.yaml
-
-include:
-  $ref: ./include.yaml
-
-user_id.path:
-  $ref: ./user_id.path.yaml
-
-user_id.query:
-  $ref: ./user_id.query.yaml
-
-user_ids:
-  $ref: ./user_ids.yaml
-
-username.query:
-  $ref: ./username.query.yaml
-
-email.query:
-  $ref: ./email.query.yaml
+answer_ids:
+  $ref: ./answer_ids.yaml
 
 article_id.path:
   $ref: ./article_id.path.yaml
@@ -36,36 +15,6 @@ article_id.query:
 
 article_ids:
   $ref: ./article_ids.yaml
-
-question_id.path:
-  $ref: ./question_id.path.yaml
-
-question_id.query:
-  $ref: ./question_id.query.yaml
-
-question_ids:
-  $ref: ./question_ids.yaml
-
-topic_id.path:
-  $ref: ./topic_id.path.yaml
-
-topic_id.query:
-  $ref: ./topic_id.query.yaml
-
-topic_ids:
-  $ref: ./topic_ids.yaml
-
-topic_name.query:
-  $ref: ./topic_name.query.yaml
-
-answer_id.path:
-  $ref: ./answer_id.path.yaml
-
-answer_id.query:
-  $ref: ./answer_id.query.yaml
-
-answer_ids:
-  $ref: ./answer_ids.yaml
 
 comment_id.path:
   $ref: ./comment_id.path.yaml
@@ -82,17 +31,8 @@ commentable_type.query:
 commentable_id.query:
   $ref: ./commentable_id.query.yaml
 
-reportable_type.path:
-  $ref: ./reportable_type.path.yaml
-
-reportable_type.query:
-  $ref: ./reportable_type.query.yaml
-
-reportable_id.path:
-  $ref: ./reportable_id.path.yaml
-
-report_target:
-  $ref: ./report_target.yaml
+email.query:
+  $ref: ./email.query.yaml
 
 image_hash.path:
   $ref: ./image_hash.path.yaml
@@ -103,11 +43,71 @@ image_hash.query:
 image_hashs:
   $ref: ./image_hashs.yaml
 
+image_item_id.query:
+  $ref: ./image_item_id.query.yaml
+
 image_item_type.query:
   $ref: ./image_item_type.query.yaml
 
-image_item_id.query:
-  $ref: ./image_item_id.query.yaml
+include:
+  $ref: ./include.yaml
+
+order:
+  $ref: ./order.yaml
+
+page:
+  $ref: ./page.yaml
+
+per_page:
+  $ref: ./per_page.yaml
+
+question_id.path:
+  $ref: ./question_id.path.yaml
+
+question_id.query:
+  $ref: ./question_id.query.yaml
+
+question_ids:
+  $ref: ./question_ids.yaml
+
+report_target:
+  $ref: ./report_target.yaml
+
+reportable_id.path:
+  $ref: ./reportable_id.path.yaml
+
+reportable_type.path:
+  $ref: ./reportable_type.path.yaml
+
+reportable_type.query:
+  $ref: ./reportable_type.query.yaml
+
+token:
+  $ref: ./token.yaml
+
+topic_id.path:
+  $ref: ./topic_id.path.yaml
+
+topic_id.query:
+  $ref: ./topic_id.query.yaml
+
+topic_ids:
+  $ref: ./topic_ids.yaml
+
+topic_name.query:
+  $ref: ./topic_name.query.yaml
+
+user_id.path:
+  $ref: ./user_id.path.yaml
+
+user_id.query:
+  $ref: ./user_id.query.yaml
+
+user_ids:
+  $ref: ./user_ids.yaml
+
+username.query:
+  $ref: ./username.query.yaml
 
 vote_type.query:
   $ref: ./vote_type.query.yaml

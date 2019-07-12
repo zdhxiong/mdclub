@@ -1,4 +1,10 @@
 {
+  "sortParamsByRequiredFlag": false,
+  "ensureUniqueParams": false,
+  "allowUnicodeIdentifiers": true,
   "invokerPackage": "MDClubSDK",
-  "gitUserId": "zdhxiong"
+  "packagePath": "sdk/php",
+  "gitUserId": "zdhxiong",
+  "gitRepoId": "mdclub-sdk-php",
+  "artifactVersion": "1.0.0"
 }

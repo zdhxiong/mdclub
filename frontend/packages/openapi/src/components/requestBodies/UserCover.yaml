@@ -2,9 +2,4 @@ required: true
 content:
   multipart/form-data:
     schema:
-      type: object
-      properties:
-        cover:
-          type: string
-          format: binary
-          description: 用户封面
+      $ref: '#/components/schemas/UserCoverRequestBody'

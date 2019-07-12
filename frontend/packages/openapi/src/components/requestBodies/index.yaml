@@ -1,14 +1,35 @@
+Answer:
+  $ref: ./Answer.yaml
+
+Article:
+  $ref: ./Article.yaml
+
+Comment:
+  $ref: ./Comment.yaml
+
+Email:
+  $ref: ./Email.yaml
+
+ImageUpdate:
+  $ref: ./ImageUpdate.yaml
+
+ImageUpload:
+  $ref: ./ImageUpload.yaml
+
 Option:
   $ref: ./Option.yaml
 
-UserLogin:
-  $ref: ./UserLogin.yaml
+Question:
+  $ref: ./Question.yaml
 
-UserRegister:
-  $ref: ./UserRegister.yaml
+Report:
+  $ref: ./Report.yaml
 
-UserUpdate:
-  $ref: ./UserUpdate.yaml
+Topic:
+  $ref: ./Topic.yaml
+
+User:
+  $ref: ./User.yaml
 
 UserAvatar:
   $ref: ./UserAvatar.yaml
@@ -16,38 +37,17 @@ UserAvatar:
 UserCover:
   $ref: ./UserCover.yaml
 
-UserSendEmail:
-  $ref: ./UserSendEmail.yaml
+UserLogin:
+  $ref: ./UserLogin.yaml
 
 UserPasswordReset:
   $ref: ./UserPasswordReset.yaml
 
-Article:
-  $ref: ./Article.yaml
+UserRegister:
+  $ref: ./UserRegister.yaml
 
-Question:
-  $ref: ./Question.yaml
-
-Answer:
-  $ref: ./Answer.yaml
-
-Topic:
-  $ref: ./Topic.yaml
-
-Comment:
-  $ref: ./Comment.yaml
+UserSendEmail:
+  $ref: ./UserSendEmail.yaml
 
 Vote:
   $ref: ./Vote.yaml
-
-Report:
-  $ref: ./Report.yaml
-
-Image:
-  $ref: ./Image.yaml
-
-ImageFilename:
-  $ref: ./ImageFilename.yaml
-
-Email:
-  $ref: ./Email.yaml

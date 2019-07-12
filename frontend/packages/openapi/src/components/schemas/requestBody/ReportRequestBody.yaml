@@ -1,0 +1,7 @@
+type: object
+required:
+  - reason
+properties:
+  reason:
+    type: string
+    description: 举报理由

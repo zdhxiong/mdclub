@@ -19,7 +19,7 @@ patch:
   parameters:
     - $ref: '#/components/parameters/include'
   requestBody:
-    $ref: '#/components/requestBodies/UserUpdate'
+    $ref: '#/components/requestBodies/User'
   responses:
     '200':
       $ref: '#/components/responses/User'
