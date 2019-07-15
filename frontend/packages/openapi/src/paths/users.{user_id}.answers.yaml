@@ -1,6 +1,3 @@
-parameters:
-  - $ref: '#/components/parameters/user_id.path'
-
 get:
   operationId: getAnswers
   summary: 获取指定用户发表的回答
@@ -9,6 +6,7 @@ get:
 
     可包含的关联数据：`user`, `question`, `voting`
   parameters:
+    - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'

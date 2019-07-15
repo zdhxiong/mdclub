@@ -1,9 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/answer_id.path'
-
 post:
   operationId: restore
   summary: todo - 🔐恢复指定回答
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Answer'
@@ -15,6 +14,8 @@ post:
 delete:
   operationId: destroy
   summary: todo - 🔐删除指定回答
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

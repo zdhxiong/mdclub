@@ -1,6 +1,3 @@
-parameters:
-  - $ref: '#/components/parameters/user_id.path'
-
 get:
   operationId: get
   summary: 获取指定用户信息
@@ -10,6 +7,7 @@ get:
 
     可包含的关联数据：`is_me`、`is_following`、`is_followed`
   parameters:
+    - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/include'
   responses:
     '200':
@@ -27,6 +25,7 @@ patch:
 
     可包含的关联数据：`is_me`、`is_following`、`is_followed`
   parameters:
+    - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/User'
@@ -42,6 +41,8 @@ delete:
   operationId: disable
   summary: 🔐禁用指定用户
   description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/user_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

@@ -1,9 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/answer_id.path'
-
 get:
   operationId: get
   summary: 获取回答详情
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Answer'
@@ -20,6 +19,8 @@ patch:
 
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
   requestBody:
     $ref: '#/components/requestBodies/Answer'
   responses:
@@ -34,6 +35,8 @@ delete:
   operationId: delete
   summary: 删除指定回答
   description: 仅回答作者和管理员可以删除文章
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

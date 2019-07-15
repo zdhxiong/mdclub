@@ -1,9 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/user_id.path'
-
 post:
   operationId: enable
   summary: 🔐恢复指定用户
+  parameters:
+    - $ref: '#/components/parameters/user_id.path'
   responses:
     '200':
       $ref: '#/components/responses/User'

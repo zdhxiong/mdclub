@@ -1,10 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/article_id.path'
-
 get:
   operationId: getFollowers
   summary: 获取指定文章的关注者
   parameters:
+    - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
   responses:
@@ -18,6 +16,8 @@ get:
 post:
   operationId: addFollow
   summary: 添加关注
+  parameters:
+    - $ref: '#/components/parameters/article_id.path'
   responses:
     '200':
       $ref: '#/components/responses/FollowerCount'
@@ -29,6 +29,8 @@ post:
 delete:
   operationId: deleteFollow
   summary: 取消关注
+  parameters:
+    - $ref: '#/components/parameters/article_id.path'
   responses:
     '200':
       $ref: '#/components/responses/FollowerCount'

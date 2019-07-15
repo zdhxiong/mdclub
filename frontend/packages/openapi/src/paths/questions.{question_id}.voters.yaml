@@ -1,10 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/question_id.path'
-
 get:
   operationId: getVoters
   summary: 获取提问的投票者
   parameters:
+    - $ref: '#/components/parameters/question_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/vote_type.query'
@@ -19,6 +17,8 @@ get:
 post:
   operationId: addVote
   summary: 为提问投票
+  parameters:
+    - $ref: '#/components/parameters/question_id.path'
   requestBody:
     $ref: '#/components/requestBodies/Vote'
   responses:
@@ -32,6 +32,8 @@ post:
 delete:
   operationId: deleteVote
   summary: 取消为提问的投票
+  parameters:
+    - $ref: '#/components/parameters/question_id.path'
   responses:
     '200':
       $ref: '#/components/responses/VoteCount'

@@ -1,9 +1,8 @@
-parameters:
-  - $ref: '#/components/parameters/comment_id.path'
-
 get:
   operationId: get
   summary: 获取评论详情
+  parameters:
+    - $ref: '#/components/parameters/comment_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Comment'
@@ -16,6 +15,8 @@ patch:
   operationId: update
   summary: 修改评论
   description: 仅评论的作者和管理员可以修改评论。
+  parameters:
+    - $ref: '#/components/parameters/comment_id.path'
   requestBody:
     $ref: '#/components/requestBodies/Comment'
   responses:
@@ -30,6 +31,8 @@ delete:
   operationId: delete
   summary: 删除评论
   description: 仅评论作者和管理员可删除评论
+  parameters:
+    - $ref: '#/components/parameters/comment_id.path'
   responses:
     '200':
       $ref: '#/components/responses/Empty'
