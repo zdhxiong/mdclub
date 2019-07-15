@@ -7,6 +7,7 @@ get:
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Questions'

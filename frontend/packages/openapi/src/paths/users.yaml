@@ -26,11 +26,12 @@ get:
 post:
   operationId: register
   summary: 验证邮箱并创建账号
+  description: 返回用户信息
   requestBody:
     $ref: '#/components/requestBodies/UserRegister'
   responses:
     '200':
-      $ref: '#/components/responses/UserWithToken'
+      $ref: '#/components/responses/User'
     default:
       $ref: '#/components/responses/Error'
   tags:

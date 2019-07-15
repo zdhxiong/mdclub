@@ -3,4 +3,4 @@ properties:
   code:
     type: integer
   data:
-    $ref: '#/components/schemas/UserWithToken'
+    $ref: '#/components/schemas/Token'

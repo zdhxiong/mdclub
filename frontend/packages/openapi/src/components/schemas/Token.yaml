@@ -1,0 +1,20 @@
+type: object
+properties:
+  token:
+    type: string
+    description: Token 字符串
+  user_id:
+    type: integer
+    description: 用户ID
+  device:
+    type: string
+    description: 设备信息
+  create_time:
+    type: integer
+    description: 创建时间
+  update_time:
+    type: integer
+    description: 更新时间
+  expire_time:
+    type: integer
+    description: 过期时间

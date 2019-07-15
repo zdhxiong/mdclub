@@ -42,5 +42,5 @@ properties:
   delete_time:
     type: integer
     description: 🔐删除时间
-  relationship:
+  relationships:
     $ref: '#/components/schemas/QuestionRelationship'

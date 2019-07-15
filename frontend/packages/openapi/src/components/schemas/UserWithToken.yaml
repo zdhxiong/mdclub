@@ -1,9 +1,0 @@
-allOf:
-  - $ref: '#/components/schemas/User'
-  - type: object
-    required:
-      - token
-    properties:
-      token:
-        type: string
-        description: Token

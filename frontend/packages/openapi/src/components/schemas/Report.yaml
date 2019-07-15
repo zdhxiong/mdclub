@@ -25,5 +25,5 @@ properties:
   create_time:
     type: string
     description: 举报时间
-  relationship:
+  relationships:
     $ref: '#/components/schemas/ReportRelationship'

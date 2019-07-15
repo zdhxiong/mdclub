@@ -1,3 +1,6 @@
+- name: Token
+  description: 身份验证
+
 - name: Option
   description: 系统设置
 

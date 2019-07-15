@@ -1,0 +1,5 @@
+description: Token 信息
+content:
+  application/json:
+    schema:
+      $ref: '#/components/schemas/TokenResponse'

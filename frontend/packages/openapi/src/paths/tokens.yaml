@@ -2,20 +2,18 @@ post:
   operationId: login
   summary: 生成 Token
   description: |
-    通过账号密码登陆，返回带 Token 的用户信息。
+    通过账号密码登陆，返回 Token 信息。
 
     若登录失败，且返回信息中含参数 `captcha_token` 和 `captcha_image`，
     表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
-
-    可包含的关联数据为：`is_followed`、`is_following`、`is_me`
   parameters:
     - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/UserLogin'
   responses:
     '200':
-      $ref: '#/components/responses/UserWithToken'
+      $ref: '#/components/responses/Token'
     default:
       $ref: '#/components/responses/Error'
   tags:
-    - User
+    - Token

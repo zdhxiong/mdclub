@@ -23,6 +23,8 @@ Report:
   $ref: ./Report.yaml
 ReportGroup:
   $ref: ./ReportGroup.yaml
+Token:
+  $ref: ./Token.yaml
 Topic:
   $ref: ./Topic.yaml
 TopicCover:
@@ -33,8 +35,6 @@ UserAvatar:
   $ref: ./UserAvatar.yaml
 UserCover:
   $ref: ./UserCover.yaml
-UserWithToken:
-  $ref: ./UserWithTOken.yaml
 VoteCount:
   $ref: ./VoteCount.yaml
 
@@ -111,6 +111,8 @@ ReportResponse:
   $ref: ./response/ReportResponse.yaml
 ReportsResponse:
   $ref: ./response/ReportsResponse.yaml
+TokenResponse:
+  $ref: ./response/TokenResponse.yaml
 TopicResponse:
   $ref: ./response/TopicResponse.yaml
 TopicsResponse:
@@ -123,30 +125,28 @@ UserResponse:
   $ref: ./response/UserResponse.yaml
 UsersResponse:
   $ref: ./response/UsersResponse.yaml
-UserWithTokenResponse:
-  $ref: ./response/UserWithTokenResponse.yaml
 VoteCountResponse:
   $ref: ./response/VoteCountResponse.yaml
 
 # 对象中的关联信息模型
 AnswerRelationship:
-  $ref: ./relationship/AnswerRelationship.yaml
+  $ref: ./relationships/AnswerRelationship.yaml
 ArticleRelationship:
-  $ref: ./relationship/ArticleRelationship.yaml
+  $ref: ./relationships/ArticleRelationship.yaml
 CommentRelationship:
-  $ref: ./relationship/CommentRelationship.yaml
+  $ref: ./relationships/CommentRelationship.yaml
 ImageRelationship:
-  $ref: ./relationship/ImageRelationship.yaml
+  $ref: ./relationships/ImageRelationship.yaml
 QuestionRelationship:
-  $ref: ./relationship/QuestionRelationship.yaml
+  $ref: ./relationships/QuestionRelationship.yaml
 ReportGroupRelationship:
-  $ref: ./relationship/ReportGroupRelationship.yaml
+  $ref: ./relationships/ReportGroupRelationship.yaml
 ReportRelationship:
-  $ref: ./relationship/ReportRelationship.yaml
+  $ref: ./relationships/ReportRelationship.yaml
 TopicRelationship:
-  $ref: ./relationship/TopicRelationship.yaml
+  $ref: ./relationships/TopicRelationship.yaml
 UserRelationship:
-  $ref: ./relationship/UserRelationship.yaml
+  $ref: ./relationships/UserRelationship.yaml
 
 # 关联信息中的数据模型
 AnswerInRelationship:

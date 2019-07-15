@@ -16,5 +16,5 @@ properties:
   reporter_count:
     type: integer
     description: 指定对象的被举报数量
-  relationship:
+  relationships:
     $ref: '#/components/schemas/ReportGroupRelationship'

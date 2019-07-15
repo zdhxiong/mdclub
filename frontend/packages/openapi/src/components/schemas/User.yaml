@@ -82,5 +82,5 @@ properties:
   disable_time:
     type: integer
     description: 🔐禁用时间
-  relationship:
+  relationships:
     $ref: '#/components/schemas/UserRelationship'

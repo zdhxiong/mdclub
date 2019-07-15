@@ -55,6 +55,9 @@ ReportGroups:
 Reports:
   $ref: ./Reports.yaml
 
+Token:
+  $ref: ./Token.yaml
+
 Topic:
   $ref: ./Topic.yaml
 
@@ -72,9 +75,6 @@ UserCover:
 
 Users:
   $ref: ./Users.yaml
-
-UserWithToken:
-  $ref: ./UserWithToken.yaml
 
 VoteCount:
   $ref: ./VoteCount.yaml
