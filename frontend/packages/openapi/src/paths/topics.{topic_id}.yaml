@@ -1,7 +1,8 @@
 get:
   operationId: get
   summary: 获取指定话题信息
-  description: 可包含的关联数据包括：`is_following`
+  description: |
+    `include` 参数取值包括：`is_following`
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
     - $ref: '#/components/parameters/include'
@@ -20,8 +21,11 @@ post:
     **仅管理员可调用该接口**
 
     因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
+
+    `include` 参数取值包括：`is_following`
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/Topic'
   responses:

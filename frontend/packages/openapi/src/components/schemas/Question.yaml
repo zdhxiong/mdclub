@@ -44,3 +44,17 @@ properties:
     description: 🔐删除时间
   relationships:
     $ref: '#/components/schemas/QuestionRelationship'
+required:
+  - question_id
+  - user_id
+  - title
+  - content_markdown
+  - content_rendered
+  - comment_count
+  - answer_count
+  - view_count
+  - follower_count
+  - vote_count
+  - last_answer_time
+  - create_time
+  - update_time

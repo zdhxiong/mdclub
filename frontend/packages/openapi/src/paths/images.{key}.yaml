@@ -1,8 +1,11 @@
 get:
   operationId: get
   summary: 获取指定图片信息
+  description: |
+    `include` 参数取值包括：`user`、`question`、`article`、`answer`
   parameters:
-    - $ref: '#/components/parameters/image_hash.path'
+    - $ref: '#/components/parameters/image_key.path'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Image'
@@ -14,9 +17,13 @@ get:
 patch:
   operationId: update
   summary: 🔐更新指定图片信息
-  description: 仅管理员可调用该接口
+  description: |
+    仅管理员可调用该接口
+
+    `include` 参数取值包括：`user`、`question`、`article`、`answer`
   parameters:
-    - $ref: '#/components/parameters/image_hash.path'
+    - $ref: '#/components/parameters/image_key.path'
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/ImageUpdate'
   responses:
@@ -32,7 +39,7 @@ delete:
   summary: 🔐删除指定图片
   description: 仅管理员可调用该接口
   parameters:
-    - $ref: '#/components/parameters/image_hash.path'
+    - $ref: '#/components/parameters/image_key.path'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

@@ -1,8 +1,11 @@
 get:
   operationId: get
   summary: 获取回答详情
+  description: |
+    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Answer'
@@ -19,8 +22,11 @@ patch:
 
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
+
+    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/Answer'
   responses:

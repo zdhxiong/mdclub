@@ -9,7 +9,9 @@
     "url": "https://github.com/zdhxiong/mdclub-openapi"
   },
   "scripts": {
-    "build": "node index.js"
+    "build-openapi": "node index.js",
+    "build-php-sdk": "npm run build-openapi && npx openapi-generator generate -i dist/openapi.yaml -g php -c config/php.json -o dist/php --skip-validate-spec",
+    "build-angular-sdk": "npm run build-openapi && npx openapi-generator generate -i dist/openapi.yaml -g typescript-angular -o dist/typescript-angular --skip-validate-spec"
   },
   "bugs": {
     "url": "https://github.com/zdhxiong/mdclub-openapi/issues",
@@ -21,6 +23,7 @@
     "node": ">=10"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^0.0.16-4.0.3",
     "js-yaml": "^3.13.1",
     "json-refs": "^3.0.13"
   }

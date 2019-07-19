@@ -34,14 +34,14 @@ commentable_id.query:
 email.query:
   $ref: ./email.query.yaml
 
-image_hash.path:
-  $ref: ./image_hash.path.yaml
+image_key.path:
+  $ref: ./image_key.path.yaml
 
-image_hash.query:
-  $ref: ./image_hash.query.yaml
+image_key.query:
+  $ref: ./image_key.query.yaml
 
-image_hashs:
-  $ref: ./image_hashs.yaml
+image_keys:
+  $ref: ./image_keys.yaml
 
 image_item_id.query:
   $ref: ./image_item_id.query.yaml

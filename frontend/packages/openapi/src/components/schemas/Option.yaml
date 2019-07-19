@@ -178,3 +178,10 @@ properties:
   theme:
     type: string
     description: 🔐主题名称
+required:
+  - language
+  - site_description
+  - site_gongan_beian
+  - site_icp_beian
+  - site_keywords
+  - site_name

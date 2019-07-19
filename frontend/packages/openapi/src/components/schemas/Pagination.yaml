@@ -18,3 +18,10 @@ properties:
   pages:
     type: integer
     description: 总页数
+required:
+  - page
+  - per_page
+  - previous
+  - next
+  - total
+  - pages

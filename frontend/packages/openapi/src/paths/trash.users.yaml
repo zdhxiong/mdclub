@@ -6,7 +6,7 @@ get:
 
     可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
 
-    可包含的关联数据：`is_me`、`is_following`、`is_followed`
+    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

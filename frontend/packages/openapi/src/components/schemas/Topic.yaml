@@ -25,3 +25,11 @@ properties:
     description: 🔐删除时间
   relationships:
     $ref: '#/components/schemas/TopicRelationship'
+required:
+  - topic_id
+  - name
+  - cover
+  - description
+  - article_count
+  - question_count
+  - follower_count

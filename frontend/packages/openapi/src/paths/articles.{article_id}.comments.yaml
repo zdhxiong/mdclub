@@ -1,12 +1,16 @@
 get:
   operationId: getComments
   summary: 获取指定文章的评论列表
-  description: 可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+  description: |
+    可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+
+    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Comments'
@@ -18,8 +22,11 @@ get:
 post:
   operationId: createComment
   summary: 在指定文章下发表评论
+  description: |
+    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/article_id.path'
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/Comment'
   responses:

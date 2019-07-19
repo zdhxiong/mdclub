@@ -6,8 +6,6 @@ post:
 
     若登录失败，且返回信息中含参数 `captcha_token` 和 `captcha_image`，
     表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
-  parameters:
-    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/UserLogin'
   responses:

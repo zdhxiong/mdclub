@@ -1,8 +1,11 @@
 get:
   operationId: get
   summary: 获取指定提问信息
+  description: |
+    `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
   parameters:
     - $ref: '#/components/parameters/question_id.path'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Question'

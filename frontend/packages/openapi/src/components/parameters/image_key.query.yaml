@@ -1,0 +1,5 @@
+name: key
+in: query
+description: 图片key
+schema:
+  type: string

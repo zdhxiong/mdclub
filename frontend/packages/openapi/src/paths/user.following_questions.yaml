@@ -1,9 +1,12 @@
 get:
   operationId: getMyFollowingQuestions
   summary: 获取登录用户关注的提问
+  description: |
+    `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Questions'

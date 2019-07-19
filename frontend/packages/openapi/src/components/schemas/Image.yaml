@@ -1,8 +1,8 @@
 type: object
 properties:
-  hash:
+  key:
     type: string
-    description: 图片的 hash 值
+    description: 图片的 key
   filename:
     type: string
     description: 图片原始文件名
@@ -38,3 +38,13 @@ properties:
         description: 固定宽高的缩略图地址
   relationships:
     $ref: '#/components/schemas/ImageRelationship'
+required:
+  - key
+  - filename
+  - width
+  - height
+  - create_time
+  - item_type
+  - item_id
+  - user_id
+  - urls

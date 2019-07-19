@@ -1,11 +1,15 @@
 get:
   operationId: getMyAnswers
   summary: 获取当前登录用户发表的回答
-  description: 可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+  description: |
+    可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+
+    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Answers'

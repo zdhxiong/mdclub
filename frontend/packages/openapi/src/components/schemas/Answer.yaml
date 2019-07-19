@@ -32,3 +32,25 @@ properties:
     description: 🔐删除时间
   relationships:
     $ref: '#/components/schemas/AnswerRelationship'
+required:
+  - answer_id
+  - question_id
+  - user_id
+  - content_markdown
+  - content_rendered
+  - comment_count
+  - vote_count
+  - create_time
+example:
+  answer_id: 124
+  question_id: 11
+  user_id: 45332
+  content_markdown: |
+    #标题
+    ##二级标题
+  content_rendered: <h1>标题</h1><h2>二级标题</h2>
+  comment_count: 23
+  vote_count: 44
+  create_time: 1563512214
+  update_time: 1563512214
+  delete_time: 0

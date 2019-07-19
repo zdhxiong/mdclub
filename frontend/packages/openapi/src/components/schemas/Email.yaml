@@ -1,8 +1,4 @@
 type: object
-required:
-  - email
-  - subject
-  - content
 properties:
   email:
     type: string
@@ -13,3 +9,7 @@ properties:
   content:
     type: string
     description: 邮件内容
+required:
+  - email
+  - subject
+  - content

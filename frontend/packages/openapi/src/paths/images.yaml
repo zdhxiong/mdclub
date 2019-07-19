@@ -1,11 +1,15 @@
 get:
   operationId: getList
   summary: 🔐获取图片列表
-  description: 仅管理员可调用该接口
+  description: |
+    仅管理员可调用该接口
+
+    `include` 参数取值包括：`user`、`question`、`article`、`answer`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/image_hash.query'
+    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/image_key.query'
     - $ref: '#/components/parameters/image_item_type.query'
     - $ref: '#/components/parameters/image_item_id.query'
     - $ref: '#/components/parameters/user_id.query'
@@ -20,6 +24,10 @@ get:
 post:
   operationId: upload
   summary: 上传图片
+  description: |
+    `include` 参数取值包括：`user`、`question`、`article`、`answer`
+  parameters:
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/ImageUpload'
   responses:
@@ -37,7 +45,7 @@ delete:
     仅管理员可调用该接口。
     只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
   parameters:
-    - $ref: '#/components/parameters/image_hashs'
+    - $ref: '#/components/parameters/image_keys'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

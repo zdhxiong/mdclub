@@ -33,3 +33,12 @@ properties:
     description: 🔐删除时间
   relationships:
     $ref: '#/components/schemas/CommentRelationship'
+required:
+  - comment_id
+  - commentable_id
+  - commentable_type
+  - user_id
+  - content
+  - vote_count
+  - create_time
+  - update_time

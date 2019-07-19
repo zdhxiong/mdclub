@@ -18,3 +18,7 @@ properties:
     description: 指定对象的被举报数量
   relationships:
     $ref: '#/components/schemas/ReportGroupRelationship'
+required:
+  - reportable_id
+  - reportable_type
+  - reporter_count

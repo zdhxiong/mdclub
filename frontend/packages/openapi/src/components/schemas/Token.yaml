@@ -18,3 +18,10 @@ properties:
   expire_time:
     type: integer
     description: 过期时间
+required:
+  - token
+  - user_id
+  - device
+  - create_time
+  - update_time
+  - expire_time

@@ -27,3 +27,10 @@ properties:
     description: 举报时间
   relationships:
     $ref: '#/components/schemas/ReportRelationship'
+required:
+  - report_id
+  - reportable_id
+  - reportable_type
+  - user_id
+  - reason
+  - create_time

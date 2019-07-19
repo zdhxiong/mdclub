@@ -5,7 +5,7 @@ get:
     若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。
     其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
 
-    可包含的关联数据：`is_me`、`is_following`、`is_followed`
+    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/include'
@@ -23,7 +23,7 @@ patch:
   description: |
     仅管理员可调用该接口
 
-    可包含的关联数据：`is_me`、`is_following`、`is_followed`
+    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/include'

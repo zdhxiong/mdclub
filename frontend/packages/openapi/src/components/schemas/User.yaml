@@ -84,3 +84,22 @@ properties:
     description: 🔐禁用时间
   relationships:
     $ref: '#/components/schemas/UserRelationship'
+required:
+  - user_id
+  - username
+  - avatar
+  - cover
+  - follower_count
+  - followee_count
+  - following_article_count
+  - following_question_count
+  - following_topic_count
+  - article_count
+  - question_count
+  - answer_count
+  - headline
+  - bio
+  - blog
+  - company
+  - location
+  - create_time

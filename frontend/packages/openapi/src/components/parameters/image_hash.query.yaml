@@ -1,5 +1,0 @@
-name: hash
-in: query
-description: 图片hash
-schema:
-  type: string

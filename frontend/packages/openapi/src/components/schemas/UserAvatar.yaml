@@ -9,3 +9,7 @@ properties:
   l:
     type: string
     description: 大头像地址
+required:
+  - s
+  - m
+  - l

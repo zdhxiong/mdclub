@@ -1,10 +1,13 @@
 get:
   operationId: getFollowingArticles
   summary: 获取指定用户关注的文章列表
+  description: |
+    `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Articles'

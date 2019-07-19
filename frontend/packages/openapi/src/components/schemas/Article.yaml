@@ -38,3 +38,15 @@ properties:
     description: 🔐删除时间
   relationships:
     $ref: '#/components/schemas/ArticleRelationship'
+required:
+  - article_id
+  - user_id
+  - title
+  - content_markdown
+  - content_rendered
+  - comment_count
+  - view_count
+  - follower_count
+  - vote_count
+  - create_time
+  - update_time

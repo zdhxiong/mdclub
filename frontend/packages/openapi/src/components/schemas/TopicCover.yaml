@@ -9,3 +9,7 @@ properties:
   l:
     type: string
     description: 大型封面地址
+required:
+  - s
+  - m
+  - l

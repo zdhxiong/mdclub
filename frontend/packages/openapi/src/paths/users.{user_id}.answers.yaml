@@ -4,7 +4,7 @@ get:
   description: |
     可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
 
-    可包含的关联数据：`user`, `question`, `voting`
+    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'

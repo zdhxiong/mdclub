@@ -1,6 +1,6 @@
-name: hash
+name: key
 in: path
-description: 图片hash
+description: 图片key
 required: true
 schema:
   type: string

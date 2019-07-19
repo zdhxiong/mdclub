@@ -1,7 +1,8 @@
 get:
   operationId: getFollowers
   summary: 获取指定用户的关注者
-  description: 可包含的关联数据：`is_me`、`is_following`、`is_followed`
+  description: |
+    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'

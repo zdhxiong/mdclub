@@ -43,8 +43,8 @@
 /images:
   $ref: ./images.yaml
 
-/images/{hash}:
-  $ref: ./images.{hash}.yaml
+/images/{key}:
+  $ref: ./images.{key}.yaml
 
 /options:
   $ref: ./options.yaml

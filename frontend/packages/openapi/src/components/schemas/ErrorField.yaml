@@ -1,7 +1,4 @@
 type: object
-required:
-  - field
-  - message
 properties:
   field:
     type: string
@@ -9,3 +6,6 @@ properties:
   message:
     type: string
     description: 错误描述
+required:
+  - field
+  - message
