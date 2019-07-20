@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Library;
+namespace MDClub\Library;
 
 use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
@@ -33,7 +33,7 @@ class View extends PhpRenderer
     {
         parent::__construct(__DIR__ . '/../../templates/');
 
-        $this->theme = $container->get('optionService')->theme;
+        $this->theme = $container->get('option')->theme;
     }
 
     /**

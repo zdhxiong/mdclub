@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Question;
+namespace MDClub\Service\Question;
 
 /**
  * 删除提问

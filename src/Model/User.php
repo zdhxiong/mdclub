@@ -2,19 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
-use App\Helper\IpHelper;
+use MDClub\Helper\Ip;
+use MDClub\Library\Auth;
+use MDClub\Observer\User as UserObserver;
+use Psr\Container\ContainerInterface;
 
 /**
  * 用户模型
+ *
+ * @property-read Auth $auth
  */
-class User extends ModelAbstracts
+class User extends Abstracts
 {
     public $table = 'user';
     public $primaryKey = 'user_id';
     protected $timestamps = true;
+    protected $observe = UserObserver::class;
 
     // 被禁用的用户也是真实用户，不作为软删除字段处理
 
@@ -50,6 +55,23 @@ class User extends ModelAbstracts
         'disable_time',
     ];
 
+    public $allowOrderFields = [
+        'follower_count',
+        'create_time',
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct($container);
+
+        $this->allowFilterFields = $this->auth->isManager()
+            ? ['user_id', 'username', 'email']
+            : ['user_id', 'username'];
+    }
+
     /**
      * 密码加密方式
      *
@@ -61,16 +83,19 @@ class User extends ModelAbstracts
         return password_hash($password, PASSWORD_DEFAULT);
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function beforeInsert(array $data): array
     {
         $data = collect($data)->union([
             'avatar' => '',
             'cover' => '',
-            'create_ip' => IpHelper::getIp(),
-            'create_location' => IpHelper::getLocation(),
-            'last_login_time' => $this->container->request->getServerParams()['REQUEST_TIME'],
-            'last_login_ip' => IpHelper::getIp(),
-            'last_login_location' => IpHelper::getLocation(),
+            'create_ip' => Ip::getIp(),
+            'create_location' => Ip::getLocation(),
+            'last_login_time' => $this->request->getServerParams()['REQUEST_TIME'] ?? time(),
+            'last_login_ip' => Ip::getIp(),
+            'last_login_location' => Ip::getLocation(),
             'follower_count' => 0,
             'followee_count' => 0,
             'following_article_count' => 0,
@@ -94,6 +119,9 @@ class User extends ModelAbstracts
         return $data;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function beforeUpdate(array $data): array
     {
         if (isset($data['password'])) {
@@ -101,5 +129,33 @@ class User extends ModelAbstracts
         }
 
         return $data;
+    }
+
+    /**
+     * 根据 url 参数获取未禁用的用户列表
+     *
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this
+            ->where($this->getWhereFromRequest(['disable_time' => 0]))
+            ->order($this->getOrderFromRequest(['create_time' => 'ASC']))
+            ->field('password', true)
+            ->paginate();
+    }
+
+    /**
+     * 根据 url 参数获取已禁用的用户列表
+     *
+     * @return array
+     */
+    public function getDisabled(): array
+    {
+        return $this
+            ->where($this->getWhereFromRequest(['disable_time[>]' => 0]))
+            ->order($this->getOrderFromRequest(['disable_time' => 'DESC']))
+            ->field('password', true)
+            ->paginate();
     }
 }

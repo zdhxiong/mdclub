@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Library;
+namespace MDClub\Library;
 
 use Medoo\Medoo;
 use PDO;
@@ -28,7 +28,7 @@ class Db extends Medoo
             'charset'       => $config['charset'],
             'port'          => $config['port'],
             'prefix'        => $config['prefix'],
-            'logging'       => APP_DEBUG,
+            'logging'       => $container->get('settings')['debug'],
             'option'        => [
                 PDO::ATTR_CASE               => PDO::CASE_NATURAL,
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

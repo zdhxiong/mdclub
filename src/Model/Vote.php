@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
+use MDClub\Observer\Vote as VoteObserver;
 
 /**
  * 投票模型
  */
-class Vote extends ModelAbstracts
+class Vote extends Abstracts
 {
     public $table = 'vote';
     protected $timestamps = true;
+    protected $observe = VoteObserver::class;
 
     protected const UPDATE_TIME = false;
 

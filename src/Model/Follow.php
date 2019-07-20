@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
+use MDClub\Observer\Follow as FollowObserver;
 
 /**
  * 关注模型
  */
-class Follow extends ModelAbstracts
+class Follow extends Abstracts
 {
     public $table = 'follow';
     protected $timestamps = true;
+    protected $observe = FollowObserver::class;
 
     protected const UPDATE_TIME = false; // 不维护 update_time 字段
 

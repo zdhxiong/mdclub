@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
-
-use App\Abstracts\ContainerAbstracts;
+namespace MDClub\Service;
 
 /**
  * 通知
  */
-class Notification extends ContainerAbstracts
+class Notification extends Abstracts
 {
 
 }

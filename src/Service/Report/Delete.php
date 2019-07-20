@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Report;
+namespace MDClub\Service\Report;
 
 /**
  * 删除举报

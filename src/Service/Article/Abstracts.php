@@ -2,21 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Article;
+namespace MDClub\Service\Article;
 
-use App\Abstracts\ContainerAbstracts;
+use MDClub\Abstracts\ContainerProperty;
 use Psr\Container\ContainerInterface;
 
 /**
  * 文章抽象类
  */
-abstract class Abstracts extends ContainerAbstracts
+abstract class Abstracts extends ContainerProperty
 {
     /**
-     * @var \App\Model\Article
+     * @var \MDClub\Model\Article
      */
     protected $model;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);

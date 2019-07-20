@@ -2,20 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Middleware;
+namespace MDClub\Middleware;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * 添加支持跨域请求的响应头
  */
-class EnableCrossRequest
+class EnableCrossRequest implements MiddlewareInterface
 {
-    public function __invoke(Request $request, Response $response, callable $next)
+    /**
+     * @inheritDoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        /** @var Response $response */
-        $response = $next($request, $response);
+        $response = $handler->handle($request);
 
         return $response
             ->withHeader('Access-Control-Allow-Origin', '*')

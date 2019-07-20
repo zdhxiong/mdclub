@@ -2,18 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Library\StorageAdapter;
+namespace MDClub\Library\StorageAdapter;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
+use Buzz\Client\Curl;
+use MDClub\Exception\SystemException;
+use MDClub\Helper\Request;
+use MDClub\Traits\Url;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Headers;
+use Slim\Psr7\Request as Psr7Request;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 阿里云 OSS 适配器
  */
-class Aliyun extends AbstractAdapter implements StorageInterface
+class Aliyun extends Abstracts implements Interfaces
 {
+    use Url;
+
     /**
      * AccessKey ID
      *
@@ -43,130 +50,85 @@ class Aliyun extends AbstractAdapter implements StorageInterface
     protected $endpoint;
 
     /**
-     * @param ContainerInterface $container
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        $this->accessKeyId = $this->optionService->storage_aliyun_access_id;
-        $this->accessKeySecret = $this->optionService->storage_aliyun_access_secret;
-        $this->bucket = $this->optionService->storage_aliyun_bucket;
-        $this->endpoint = $this->optionService->storage_aliyun_endpoint;
+        $this->accessKeyId = $this->option->storage_aliyun_access_id;
+        $this->accessKeySecret = $this->option->storage_aliyun_access_secret;
+        $this->bucket = $this->option->storage_aliyun_bucket;
+        $this->endpoint = $this->option->storage_aliyun_endpoint;
     }
 
     /**
      * 获取请求头
      *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  array   $headers
+     * @param  string          $method
+     * @param  string          $path
+     * @param  StreamInterface $stream
      * @return array
      */
-    protected function getRequestHeaders(string $method, string $path, array $headers = []): array
+    protected function getRequestHeaders(string $method, string $path, StreamInterface $stream): array
     {
-        $accessKeyId = $this->accessKeyId;
-        $accessKeySecret = $this->accessKeySecret;
-
         // 签名（https://help.aliyun.com/document_detail/31951.html?spm=a2c4g.11186623.6.1097.b2c43bdbx35G1S）
         $contentType = $method === 'PUT' ? 'application/x-www-form-urlencoded' : 'application/octet-stream';
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $canonicalizedResource = "/{$this->bucket}/$path";
-        $signature  = base64_encode(hash_hmac('sha1', "{$method}\n\n{$contentType}\n{$date}\n{$canonicalizedResource}", $accessKeySecret, true));
-        $authorization = "OSS {$accessKeyId}:{$signature}";
+        $signature  = base64_encode(hash_hmac(
+            'sha1',
+            "{$method}\n\n{$contentType}\n{$date}\n{$canonicalizedResource}",
+            $this->accessKeySecret,
+            true
+        ));
+        $authorization = "OSS {$this->accessKeyId}:{$signature}";
 
-        // headers
-        $headers['Authorization'] = $authorization;
-        $headers['Date'] = $date;
-        $headers['Host'] = "{$this->bucket}.{$this->endpoint}";
-        $headers['Content-Type'] = $contentType;
-
-        array_walk($headers, static function (&$item, $key) {
-            $item = "{$key}: {$item}";
-        });
-
-        return array_values($headers);
+        return [
+            'Authorization' => $authorization,
+            'Date' => $date,
+            'Host' => "{$this->bucket}.{$this->endpoint}",
+            'Content-Type' => $contentType,
+            'Content-Length' => $stream->getSize(),
+        ];
     }
 
     /**
-     * 处理 curl 返回值
+     * 发送请求
      *
-     * @param  $curl_handle
-     * @param  $response
-     * @return bool
+     * @param  string               $method
+     * @param  string               $path
+     * @param  StreamInterface|null $stream
      */
-    protected function handleResponse($curl_handle, $response): bool
+    protected function sendRequest(string $method, string $path, StreamInterface $stream = null): void
     {
-        $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
-        $body = substr($response, $header_size);
-        $code = (int) curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
-
-        if (in_array($code, [200, 201, 204, 206], true)) {
-            return true;
+        if ($stream === null) {
+            $stream = $this->getStreamFactory()->createStream();
         }
 
-        preg_match('/<Message>(.*?)<\/Message>/', $body, $matches);
-        throw new SystemException($matches[1]);
+        $uri = $this->getUriFactory()->createUri("https://{$this->bucket}.{$this->endpoint}/$path");
+        $headers = new Headers($this->getRequestHeaders($method, $path, $stream));
+        $request = new Psr7Request($method, $uri, $headers, [], [], $stream);
+
+        $client = new Curl(new ResponseFactory(), [
+            'timeout' => 10,
+            'verify' => false,
+        ]);
+
+        $response = $client->sendRequest($request);
+
+        if (!in_array($response->getStatusCode(), [200, 201, 204, 206], true)) {
+            throw new SystemException($response->getReasonPhrase());
+        }
     }
 
     /**
-     * 发起请求
-     *
-     * @param  string          $method   请求方式
-     * @param  string          $path     请求 URL
-     * @param  StreamInterface $stream   请求内容
-     * @param  array           $headers
-     * @return string|false
-     */
-    protected function request(string $method, string $path, StreamInterface $stream = null, array $headers = []): bool
-    {
-        $url = "https://{$this->bucket}.{$this->endpoint}/$path";
-        $headers = $this->getRequestHeaders($method, $path, $headers);
-
-        $curl_handle = curl_init();
-
-        curl_setopt($curl_handle, CURLOPT_FILETIME, true);
-        curl_setopt($curl_handle, CURLOPT_URL, $url);
-        curl_setopt($curl_handle, CURLOPT_FRESH_CONNECT, false);
-        curl_setopt($curl_handle, CURLOPT_MAXREDIRS, 5);
-        curl_setopt($curl_handle, CURLOPT_HEADER, true);
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl_handle, CURLOPT_TIMEOUT, 5184000);
-        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl_handle, CURLOPT_NOSIGNAL, true);
-        curl_setopt($curl_handle, CURLOPT_REFERER, $url);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->request->getServerParam('HTTP_USER_AGENT'));
-        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $headers);
-
-        if ($stream) {
-            curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $stream->getContents());
-        }
-
-        if (!$response = curl_exec($curl_handle)) {
-            throw new SystemException('cURL resource: ' . $curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
-        }
-
-        $response = $this->handleResponse($curl_handle, $response);
-
-        curl_close($curl_handle);
-
-        return $response;
-    }
-
-    /**
-     * 获取图片 URL
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return array
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->urlService->storage();
-        $isSupportWebp = $this->requestService->isSupportWebp();
+        $url = $this->getStorageUrl();
+        $isSupportWebp = Request::isSupportWebp($this->request);
         $data['o'] = $url . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
@@ -180,27 +142,18 @@ class Aliyun extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 写入文件
-     *
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        return $this->request('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
+        $this->sendRequest('PUT', $path, $stream);
     }
 
     /**
-     * 删除文件
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
-        return $this->request('DELETE', $path);
+        $this->sendRequest('DELETE', $path);
     }
 }

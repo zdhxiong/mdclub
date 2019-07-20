@@ -2,84 +2,75 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace MDClub\Traits;
 
-use Tightenco\Collect\Support\Collection;
+use MDClub\Exception\ValidationException;
+use MDClub\Helper\Validator;
 
 /**
  * 可评论对象。用于 question, answer, article
  *
- * @property-read \App\Abstracts\ModelAbstracts $model
- * @property-read \App\Service\Comment\Get      $commentGetService
- * @property-read \App\Service\Comment\Update   $commentUpdateService
- * @property-read \App\Service\Role             $roleService
- * @property-read \App\Model\Comment            $commentModel
+ * @property-read \MDClub\Library\Auth       $auth
+ * @property-read \MDClub\Model\Abstracts    $model
+ * @property-read \MDClub\Model\Comment      $commentModel
  */
 trait Commentable
 {
-    protected $isForApi = false;
-
     /**
-     * @return Commentable
-     */
-    public function forApi(): self
-    {
-        $this->isForApi = true;
-
-        return $this;
-    }
-
-    /**
-     * 获取评论列表
+     * 获取指定对象下的评论列表
      *
-     * @param  int              $commentableId
-     * @return array|Collection
+     * @param  int   $commentableId
+     * @return array
      */
-    public function getList(int $commentableId)
+    public function getComments(int $commentableId): array
     {
-        $this->{$this->model->table . 'GetService'}->hasOrFail($commentableId);
+        $table = $this->model->table;
 
-        if ($this->isForApi) {
-            $this->commentGetService->forApi();
-            $this->isForApi = false;
-        }
+        $this->{"${table}Service"}->hasOrFail($commentableId);
 
-        $this->commentGetService->beforeGet();
-
-        $result = $this->commentModel
-            ->where('commentable_type', $this->model->table)
-            ->where('commentable_id', $commentableId)
-            ->order($this->commentGetService->getOrder(['create_time' => 'DESC']))
-            ->paginate();
-
-        $result = $this->commentGetService->afterGet($result);
-
-        return $this->commentGetService->returnArray($result);
+        return $this->commentModel->getByCommentableId($this->model->table, $commentableId);
     }
 
     /**
      * 发表评论
      *
+     *
      * @param  int    $commentableId
      * @param  string $content
      * @return int                    评论ID
      */
-    public function add(int $commentableId, string $content = null): int
+    public function addComment(int $commentableId, string $content = null): int
     {
-        $userId = $this->roleService->userIdOrFail();
-        $this->{$this->model->table . 'GetService'}->hasOrFail($commentableId);
+        $userId = $this->auth->userId();
+        $table = $this->model->table;
 
-        $content = $this->commentUpdateService->validContent($content);
+        $this->{"${table}Service"}->hasOrFail($commentableId);
 
+        // 验证 content
+        $content = strip_tags($content);
+        $errors = [];
+
+        if (!$content) {
+            $errors['content'] = '评论内容不能为空';
+        } elseif (!Validator::isMax($content, 1000)) {
+            $errors['content'] = '评论内容不能超过 1000 个字符';
+        }
+
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        // 新增评论
         $commentId = (int) $this->commentModel->insert([
-            'commentable_type' => $this->model->table,
-            'commentable_id'   => $commentableId,
-            'user_id'          => $userId,
-            'content'          => $content,
+            'commentable_type' => $table,
+            'commentable_id' => $commentableId,
+            'user_id' => $userId,
+            'content' => $content,
         ]);
 
+        // 评论数量 +1
         $this->model
-            ->where($this->model->table . '_id', $commentableId)
+            ->where("${table}_id", $commentableId)
             ->inc('comment_count')
             ->update();
 

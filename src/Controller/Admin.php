@@ -2,36 +2,33 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace MDClub\Controller;
 
-use App\Abstracts\ContainerAbstracts;
-use App\Exception\SystemException;
+use MDClub\Exception\SystemException;
+use MDClub\Traits\Url;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
 
 /**
  * 后台管理
  */
-class Admin extends ContainerAbstracts
+class Admin extends Abstracts
 {
+    use Url;
+
     /**
      * 后台管理控制台页面
      *
-     * @param Request $request
-     * @param Response $response
-     *
      * @return ResponseInterface
      */
-    public function pageIndex(Request $request, Response $response): ResponseInterface
+    public function pageIndex(): ResponseInterface
     {
-        if (!$userId = $this->roleService->managerId()) {
-            return $this->view->render($response, '/404.php');
+        if (!$this->auth->isManager()) {
+            return $this->render('/404.php');
         }
 
-        $siteUrl = $this->urlService->site();
-        $staticUrl = $this->urlService->static();
-        $rootUrl = $this->urlService->root();
+        $siteUrl = $this->getSiteUrl();
+        $staticUrl = $this->getStaticUrl();
+        $rootUrl = $this->getRootUrl();
 
         if (!$assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json')) {
             throw new SystemException('无法访问 ' . $staticUrl . 'admin/webpack-assets.json 文件');
@@ -53,12 +50,10 @@ class Admin extends ContainerAbstracts
         $cssString = implode('', $css);
         $jsString = implode('', $js);
 
-        $userInfo = $this->userGetService
-            ->fetchCollection()
-            ->get($userId, true)
-            ->toJson();
+        $userInfo = $this->userService->get($this->auth->userId());
+        $userInfo = json_encode($userInfo);
 
-        $response->getBody()->write(<<<END
+        $this->response->getBody()->write(<<<END
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,6 +79,6 @@ class Admin extends ContainerAbstracts
 END
         );
 
-        return $response;
+        return $this->response;
     }
 }

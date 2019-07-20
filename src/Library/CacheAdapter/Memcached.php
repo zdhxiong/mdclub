@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Library\CacheAdapter;
+namespace MDClub\Library\CacheAdapter;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
@@ -23,9 +23,9 @@ class Memcached extends MemcachedAdapter
             'cache_memcached_host' => $host,
             'cache_memcached_port' => $port,
             'cache_prefix' => $namespace,
-        ] = $container->get('optionService')->getMultiple();
+        ] = $container->get('option')->all();
 
-        $client = MemcachedAdapter::createConnection("memcached://{$username}:{$password}@{$host}:{$port}");
+        $client = MemcachedAdapter::createConnection("memcached://${username}:${password}@${host}:${port}");
 
         parent::__construct($client, $namespace);
     }

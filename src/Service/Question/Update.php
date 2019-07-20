@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Question;
+namespace MDClub\Service\Question;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
-use App\Exception\ValidationException;
-use App\Helper\HtmlHelper;
-use App\Helper\MarkdownHelper;
-use App\Helper\ValidatorHelper;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use MDClub\Exception\ValidationException;
+use MDClub\Helper\Html;
+use MDClub\Helper\Markdown;
+use MDClub\Helper\Request;
+use MDClub\Helper\Validator;
 
 /**
  * 更新提问
@@ -162,24 +163,24 @@ class Update extends Abstracts
         $question = $this->questionGetService->getOrFail($questionId);
 
         if ($question['user_id'] !== $userId) {
-            throw new ApiException(ErrorConstant::QUESTION_CANT_EDIT_NOT_AUTHOR);
+            throw new ApiException(ApiError::QUESTION_CANT_EDIT_NOT_AUTHOR);
         }
 
         $canEdit = $this->optionService->question_can_edit;
         $canEditBefore = $this->optionService->question_can_edit_before;
         $canEditOnlyNoComment = $this->optionService->question_can_edit_only_no_comment;
-        $requestTime = $this->requestService->time();
+        $requestTime = Request::time($this->request);
 
         if (!$canEdit) {
-            throw new ApiException(ErrorConstant::QUESTION_CANT_EDIT);
+            throw new ApiException(ApiError::QUESTION_CANT_EDIT);
         }
 
         if ($canEditBefore && $question['create_time'] + (int) $canEditBefore < $requestTime) {
-            throw new ApiException(ErrorConstant::QUESTION_CANT_EDIT_TIMEOUT);
+            throw new ApiException(ApiError::QUESTION_CANT_EDIT_TIMEOUT);
         }
 
         if ($canEditOnlyNoComment && $question['comment_count']) {
-            throw new ApiException(ErrorConstant::QUESTION_CANT_EDIT_HAS_COMMENT);
+            throw new ApiException(ApiError::QUESTION_CANT_EDIT_HAS_COMMENT);
         }
     }
 
@@ -216,9 +217,9 @@ class Update extends Abstracts
 
         if (!$title) {
             $errors['title'] = '标题不能为空';
-        } elseif (!ValidatorHelper::isMin($title, 2)) {
+        } elseif (!Validator::isMin($title, 2)) {
             $errors['title'] = '标题长度不能小于 2 个字符';
-        } elseif (!ValidatorHelper::isMax($title, 80)) {
+        } elseif (!Validator::isMax($title, 80)) {
             $errors['title'] = '标题长度不能超过 80 个字符';
         }
 
@@ -237,20 +238,20 @@ class Update extends Abstracts
         $errors = [];
 
         // 验证正文不能为空
-        $contentMarkdown = HtmlHelper::removeXss($contentMarkdown);
-        $contentRendered = HtmlHelper::removeXss($contentRendered);
+        $contentMarkdown = Html::removeXss($contentMarkdown);
+        $contentRendered = Html::removeXss($contentRendered);
 
         // content_markdown 和 content_rendered 至少需传入一个；都传入时，以 content_markdown 为准
         if (!$contentMarkdown && !$contentRendered) {
             $errors['content_markdown'] = $errors['content_rendered'] = '正文不能为空';
         } elseif (!$contentMarkdown) {
-            $contentMarkdown = HtmlHelper::toMarkdown($contentRendered);
+            $contentMarkdown = Html::toMarkdown($contentRendered);
         } else {
-            $contentRendered = MarkdownHelper::toHtml($contentMarkdown);
+            $contentRendered = Markdown::toHtml($contentMarkdown);
         }
 
         // 验证正文长度
-        if (!$errors && !ValidatorHelper::isMax(strip_tags($contentRendered), 100000)) {
+        if (!$errors && !Validator::isMax(strip_tags($contentRendered), 100000)) {
             $errors['content_markdown'] = $errors['content_rendered'] = '正文不能超过 100000 个字';
         }
 

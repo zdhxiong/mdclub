@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
+use MDClub\Observer\Topicable as TopicableObserver;
 
 /**
  * 话题关系模型
  */
-class Topicable extends ModelAbstracts
+class Topicable extends Abstracts
 {
     public $table = 'topicable';
     protected $timestamps = true;
+    protected $observe = TopicableObserver::class;
 
     protected const UPDATE_TIME = false; // 不维护 update_time 字段
 

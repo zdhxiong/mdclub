@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace MDClub\Service;
 
-use App\Abstracts\ContainerAbstracts;
-use App\Constant\ErrorConstant;
-use App\Helper\StringHelper;
-use App\Exception\ApiException;
-use App\Traits\Brandable;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use MDClub\Helper\Guid;
+use MDClub\Traits\Brandable;
 use Md\MDAvatars;
 use Psr\Http\Message\UploadedFileInterface;
-use Slim\Http\UploadedFile;
+use Slim\Psr7\UploadedFile;
 
 /**
  * 用户头像管理
  */
-class UserAvatar extends ContainerAbstracts
+class UserAvatar extends Abstracts
 {
     use Brandable;
 
@@ -38,9 +37,9 @@ class UserAvatar extends ContainerAbstracts
     protected function getBrandSize(): array
     {
         return [
-            's' => [32, 32],
-            'm' => [64, 64],
-            'l' => [96, 96],
+            's' => [64, 64],
+            'm' => [128, 128],
+            'l' => [256, 256],
         ];
     }
 
@@ -74,12 +73,12 @@ class UserAvatar extends ContainerAbstracts
         }
 
         if ($imageError) {
-            throw new ApiException(ErrorConstant::USER_AVATAR_UPLOAD_FAILED, false, $imageError);
+            throw new ApiException(ApiError::USER_AVATAR_UPLOAD_FAILED, false, $imageError);
         }
 
         $userInfo = $this->userModel->field(['user_id', 'avatar'])->get($userId);
-
         $this->deleteImage($userId, $userInfo['avatar']);
+
         $filename = $this->uploadImage($userId, $avatar);
         $this->userModel->where('user_id', $userId)->update('avatar', $filename);
 
@@ -96,7 +95,7 @@ class UserAvatar extends ContainerAbstracts
     {
         $userInfo = $this->userModel->field(['user_id', 'username', 'avatar'])->get($userId);
         if (!$userInfo) {
-            throw new ApiException(ErrorConstant::USER_NOT_FOUND);
+            throw new ApiException(ApiError::USER_NOT_FOUND);
         }
 
         // 删除旧头像
@@ -106,7 +105,7 @@ class UserAvatar extends ContainerAbstracts
 
         // 生成新头像
         $Avatar = new MDAvatars(mb_substr($userInfo['username'], 0, 1));
-        $avatarTmpFilename = StringHelper::guid() . '.png';
+        $avatarTmpFilename = Guid::generate() . '.png';
         $avatarTmpPath = sys_get_temp_dir() . '/' . $avatarTmpFilename;
         $Avatar->Save($avatarTmpPath);
         $Avatar->Free();

@@ -2,25 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace MDClub\Controller;
 
-use App\Abstracts\ContainerAbstracts;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * 输出 RSS
  */
-class Rss extends ContainerAbstracts
+class Rss extends Abstracts
 {
     /**
      * 获取提问列表
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getQuestions(Request $request, Response $response): Response
+    public function getQuestions(): ResponseInterface
     {
 
     }
@@ -28,11 +24,9 @@ class Rss extends ContainerAbstracts
     /**
      * 获取文章列表
      *
-     * @param  Request  $request
-     * @param  Response $response
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getArticles(Request $request, Response $response): Response
+    public function getArticles(): ResponseInterface
     {
 
     }
@@ -40,12 +34,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 user_id 获取提问列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $user_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getQuestionsByUserId(Request $request, Response $response, int $user_id): Response
+    public function getQuestionsByUserId(int $user_id): ResponseInterface
     {
 
     }
@@ -53,12 +45,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 user_id 获取文章列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $user_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getArticlesByUserId(Request $request, Response $response, int $user_id): Response
+    public function getArticlesByUserId(int $user_id): ResponseInterface
     {
 
     }
@@ -66,12 +56,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 topic_id 获取提问列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $topic_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getQuestionsByTopicId(Request $request, Response $response, int $topic_id): Response
+    public function getQuestionsByTopicId(int $topic_id): ResponseInterface
     {
 
     }
@@ -79,12 +67,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 topic_id 获取文章列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $topic_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getArticlesByTopicId(Request $request, Response $response, int $topic_id): Response
+    public function getArticlesByTopicId(int $topic_id): ResponseInterface
     {
 
     }
@@ -92,12 +78,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 user_id 获取回答列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $user_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getAnswersByUserId(Request $request, Response $response, int $user_id): Response
+    public function getAnswersByUserId(int $user_id): ResponseInterface
     {
 
     }
@@ -105,12 +89,10 @@ class Rss extends ContainerAbstracts
     /**
      * 根据 question_id 获取回答列表
      *
-     * @param  Request  $request
-     * @param  Response $response
      * @param  int      $question_id
-     * @return Response
+     * @return ResponseInterface
      */
-    public function getAnswersByQuestionId(Request $request, Response $response, int $question_id): Response
+    public function getAnswersByQuestionId(int $question_id): ResponseInterface
     {
 
     }

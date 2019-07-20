@@ -2,18 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Library\StorageAdapter;
+namespace MDClub\Library\StorageAdapter;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
+use Buzz\Client\Curl;
+use MDClub\Exception\SystemException;
+use MDClub\Helper\Request;
+use MDClub\Traits\Url;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Headers;
+use Slim\Psr7\Request as Psr7Request;
 
 /**
  * 又拍云适配器
  */
-class Upyun extends AbstractAdapter implements StorageInterface
+class Upyun extends Abstracts implements Interfaces
 {
+    use Url;
+
     /**
      * 域名
      */
@@ -41,125 +48,85 @@ class Upyun extends AbstractAdapter implements StorageInterface
     protected $password;
 
     /**
-     * @param ContainerInterface $container
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);
 
-        $this->bucket = $this->optionService->storage_upyun_bucket;
-        $this->operator = $this->optionService->storage_upyun_operator;
-        $this->password = $this->optionService->storage_upyun_password;
+        $this->bucket = $this->option->storage_upyun_bucket;
+        $this->operator = $this->option->storage_upyun_operator;
+        $this->password = $this->option->storage_upyun_password;
     }
 
     /**
      * 获取请求头
      *
-     * @param  string          $method
-     * @param  string          $path
-     * @param  array           $headers
+     * @param  string $method
+     * @param  string $path
+     * @param  array  $headers
      * @return array
      */
     protected function getRequestHeaders(string $method, string $path, array $headers = []): array
     {
-        $operator = $this->operator;
-        $password = md5($this->password);
-        $bucket = $this->bucket;
-
         // 签名（https://help.upyun.com/knowledge-base/object_storage_authorization/#e4bba3e7a081e6bc94e7a4ba）
         $date = gmdate('D, d M Y H:i:s \G\M\T');
-        $signature = base64_encode(hash_hmac('sha1', "{$method}&/{$bucket}/{$path}&{$date}", $password, true));
-        $authorization = "UPYUN {$operator}:{$signature}";
+        $signature = base64_encode(hash_hmac(
+            'sha1',
+            "{$method}&/{$this->bucket}/{$path}&{$date}",
+            md5($this->password),
+            true
+        ));
+        $authorization = "UPYUN {$this->operator}:{$signature}";
 
         // headers
         $headers['Authorization'] = $authorization;
         $headers['Date'] = $date;
 
-        array_walk($headers, static function (&$item, $key) {
-            $item = "{$key}: {$item}";
-        });
-
-        return array_values($headers);
+        return $headers;
     }
 
     /**
-     * 处理 curl 返回值
+     * 发送请求
      *
-     * @param  $curl_handle
-     * @param  $response
-     * @return bool
+     * @param string               $method
+     * @param string               $path
+     * @param StreamInterface|null $stream
+     * @param array                $headers
      */
-    protected function handleResponse($curl_handle, $response): bool
-    {
-        $header_size = curl_getinfo($curl_handle, CURLINFO_HEADER_SIZE);
-        $body = substr($response, $header_size);
-        $code = (int) curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
-
-        if ($code === 200) {
-            return true;
+    protected function sendRequest(
+        string $method,
+        string $path,
+        StreamInterface $stream = null,
+        array $headers = []
+    ): void {
+        if ($stream === null) {
+            $stream = $this->getStreamFactory()->createStream();
         }
 
-        throw new SystemException(json_decode($body, true)['msg']);
+        $uri = $this->getUriFactory()->createUri("https://{$this->endpoint}/{$this->bucket}/{$path}");
+        $headers = new Headers($this->getRequestHeaders($method, $path, $headers));
+        $request = new Psr7Request($method, $uri, $headers, [], [], $stream);
+
+        $client = new Curl(new ResponseFactory(), [
+            'timeout' => 10,
+            'verify' => false,
+        ]);
+
+        $response = $client->sendRequest($request);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new SystemException($response->getReasonPhrase());
+        }
     }
 
     /**
-     * 发起请求
-     *
-     * @param  string          $method
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $headers
-     * @return bool
-     */
-    protected function request(string $method, string $path, StreamInterface $stream = null, array $headers = []): bool
-    {
-        $url = "https://{$this->endpoint}/{$this->bucket}/{$path}";
-        $headers = $this->getRequestHeaders($method, $path, $headers);
-
-        $curl_handle = curl_init();
-
-        curl_setopt($curl_handle, CURLOPT_FILETIME, true);
-        curl_setopt($curl_handle, CURLOPT_URL, $url);
-        curl_setopt($curl_handle, CURLOPT_FRESH_CONNECT, false);
-        curl_setopt($curl_handle, CURLOPT_MAXREDIRS, 5);
-        curl_setopt($curl_handle, CURLOPT_HEADER, true);
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl_handle, CURLOPT_TIMEOUT, 5184000);
-        curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl_handle, CURLOPT_NOSIGNAL, true);
-        curl_setopt($curl_handle, CURLOPT_REFERER, $url);
-        curl_setopt($curl_handle, CURLOPT_USERAGENT, $this->request->getServerParam('HTTP_USER_AGENT'));
-        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl_handle, CURLOPT_HTTPHEADER, $headers);
-
-        if ($stream) {
-            curl_setopt($curl_handle, CURLOPT_POSTFIELDS, $stream->getContents());
-        }
-
-        if (!$response = curl_exec($curl_handle)) {
-            throw new SystemException('cURL resource: ' . $curl_handle . ';cURL error: ' .curl_error($curl_handle). ' (' . curl_errno($curl_handle) . ')');
-        }
-
-        $response = $this->handleResponse($curl_handle, $response);
-
-        curl_close($curl_handle);
-
-        return $response;
-    }
-
-    /**
-     * 获取图片 URL
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return array
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->urlService->storage();
-        $isSupportWebp = $this->requestService->isSupportWebp();
+        $url = $this->getStorageUrl();
+        $isSupportWebp = Request::isSupportWebp($this->request);
         $data['o'] = $url . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
@@ -173,27 +140,18 @@ class Upyun extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 写入文件
-     *
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        return $this->request('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
+        $this->sendRequest('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
     }
 
     /**
-     * 删除文件
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
-        return $this->request('DELETE', $path, null, ['x-upyun-async' => true]);
+        $this->sendRequest('DELETE', $path, null, ['x-upyun-async' => 'true']);
     }
 }

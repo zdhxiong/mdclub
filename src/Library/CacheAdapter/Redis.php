@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Library\CacheAdapter;
+namespace MDClub\Library\CacheAdapter;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -23,9 +23,9 @@ class Redis extends RedisAdapter
             'cache_redis_host' => $host,
             'cache_redis_port' => $port,
             'cache_prefix' => $namespace,
-        ] = $container->get('optionService')->getMultiple();
+        ] = $container->get('option')->all();
 
-        $client = RedisAdapter::createConnection("redis://{$username}:{$password}@{$host}:{$port}");
+        $client = RedisAdapter::createConnection("redis://${username}:${password}@${host}:${port}");
 
         parent::__construct($client, $namespace);
     }

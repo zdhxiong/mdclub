@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Answer;
+namespace MDClub\Service\Answer;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use MDClub\Helper\Request;
 
 /**
  * 删除回答
@@ -40,24 +41,24 @@ class Delete extends Abstracts
         // 检查删除权限
         if (!$this->roleService->managerId()) {
             if ($answer['user_id'] !== $userId) {
-                throw new ApiException(ErrorConstant::ANSWER_CANT_DELETE_NOT_AUTHOR);
+                throw new ApiException(ApiError::ANSWER_CANT_DELETE_NOT_AUTHOR);
             }
 
             $canDelete = $this->optionService->answer_can_delete;
             $canDeleteBefore = $this->optionService->answer_can_delete_before;
             $canDeleteOnlyNoComment = $this->optionService->answer_can_delete_only_no_comment;
-            $requestTime = $this->requestService->time();
+            $requestTime = Request::time($this->request)
 
             if (!$canDelete) {
-                throw new ApiException(ErrorConstant::ANSWER_CANT_DELETE);
+                throw new ApiException(ApiError::ANSWER_CANT_DELETE);
             }
 
             if ($canDeleteBefore && $answer['create_time'] + (int) $canDeleteBefore < $requestTime) {
-                throw new ApiException(ErrorConstant::ANSWER_CANT_DELETE_TIMEOUT);
+                throw new ApiException(ApiError::ANSWER_CANT_DELETE_TIMEOUT);
             }
 
             if ($canDeleteOnlyNoComment && $answer['comment_count']) {
-                throw new ApiException(ErrorConstant::ANSWER_CANT_DELETE_HAS_COMMENT);
+                throw new ApiException(ApiError::ANSWER_CANT_DELETE_HAS_COMMENT);
             }
         }
 

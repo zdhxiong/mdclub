@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace MDClub\Traits;
 
-use App\Constant\UploadErrorConstant;
-use App\Helper\StringHelper;
+use MDClub\Constant\UploadError;
+use MDClub\Helper\Guid;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
- * 对象的标识图。包括 user-avatar, user-cover, topic-cover
+ * 对象的标识图。包括 user-avatar, user-cover, topic-cover。
  *
- * @property-read \App\Library\Storage $storage
+ * 只允许使用 jpg 和 png 格式
+ *
+ * @property-read \MDClub\Library\Storage $storage
  */
 trait Brandable
 {
@@ -93,7 +95,7 @@ trait Brandable
      */
     public function uploadImage(int $id, UploadedFileInterface $file): string
     {
-        $token = StringHelper::guid();
+        $token = Guid::generate();
         $suffix = $file->getClientMediaType() === 'image/png' ? 'png' : 'jpg';
         $filename = "{$token}.{$suffix}";
         $path = $this->getBrandPath($id, $filename);
@@ -113,7 +115,7 @@ trait Brandable
     protected function validateImage(UploadedFileInterface $file)
     {
         if ($file->getError() !== UPLOAD_ERR_OK) {
-            return UploadErrorConstant::getMessage()[$file->getError()];
+            return UploadError::getMessage()[$file->getError()];
         }
 
         if (!in_array($file->getClientMediaType(), ['image/jpeg', 'image/png'])) {

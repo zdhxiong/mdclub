@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Report;
+namespace MDClub\Service\Report;
 
-use App\Traits\Getable;
+use MDClub\Library\Collection;
+use MDClub\Traits\Getable;
 use Medoo\Medoo;
-use Tightenco\Collect\Support\Collection;
 
 /**
  * 获取举报
@@ -73,10 +73,10 @@ class Get extends Abstracts
 
         foreach ($reports as &$report) {
             if (isset($report['user_id'])) {
-                $report['relationship']['reporter'] = $targets['user'][$report['user_id']];
+                $report['relationships']['reporter'] = $targets['user'][$report['user_id']];
             }
 
-            $report['relationship'][$report['reportable_type']] = $targets[$report['reportable_type']][$report['reportable_id']];
+            $report['relationships'][$report['reportable_type']] = $targets[$report['reportable_type']][$report['reportable_id']];
         }
 
         unset($report);
@@ -87,11 +87,11 @@ class Get extends Abstracts
     /**
      * 获取被举报的内容列表
      *
-     * @return array|Collection
+     * @return array
      */
     public function getList()
     {
-        $result = $this->model
+        return $this->model
             ->where($this->getWhere())
             ->field([
                 'reporter_count' => Medoo::raw('COUNT(<report_id>)'),
@@ -104,10 +104,6 @@ class Get extends Abstracts
                 'reportable_type',
             ])
             ->paginate();
-
-        $result = $this->afterGet($result);
-
-        return $this->returnArray($result);
     }
 
     /**
@@ -119,14 +115,10 @@ class Get extends Abstracts
      */
     public function getDetailList(string $reportableType, int $reportableId): array
     {
-        $result = $this->model
+        return $this->model
             ->where('reportable_type', $reportableType)
             ->where('reportable_id', $reportableId)
             ->order('create_time', 'DESC')
             ->paginate();
-
-        $result = $this->afterGet($result);
-
-        return $this->returnArray($result);
     }
 }

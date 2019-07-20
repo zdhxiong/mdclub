@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Report;
+namespace MDClub\Service\Report;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
-use App\Exception\ValidationException;
-use App\Helper\ValidatorHelper;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use MDClub\Exception\ValidationException;
+use MDClub\Helper\Validator;
 
 /**
  * 更新举报
@@ -65,9 +65,9 @@ class Update extends Abstracts
         // 验证 reason
         if (!$reason) {
             $errors['reason'] = '举报原因不能为空';
-        } elseif (!ValidatorHelper::isMin($reason, 2)) {
+        } elseif (!Validator::isMin($reason, 2)) {
             $errors['reason'] = '举报原因不能少于 2 个字符';
-        } elseif (!ValidatorHelper::isMax($reason, 200)) {
+        } elseif (!Validator::isMax($reason, 200)) {
             $errors['reason'] = '举报原因不能超过 200 个字符';
         }
 
@@ -85,7 +85,7 @@ class Update extends Abstracts
             ->has();
 
         if ($isExist) {
-            throw new ApiException(ErrorConstant::REPORT_ALREADY_SUBMITTED);
+            throw new ApiException(ApiError::REPORT_ALREADY_SUBMITTED);
         }
     }
 }

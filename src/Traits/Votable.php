@@ -2,52 +2,40 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace MDClub\Traits;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
-use Tightenco\Collect\Support\Collection;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * 可投票对象。用于 question, answer, article, comment
  *
- * @property-read \App\Abstracts\ModelAbstracts     $model
- * @property-read \App\Service\User\Get             $userGetService
- * @property-read \App\Service\Request              $requestService
- * @property-read \App\Model\Vote                   $voteModel
- * @property-read \App\Model\User                   $userModel
+ * @property-read ServerRequestInterface  $request
+ * @property-read \MDClub\Library\Auth    $auth
+ * @property-read \MDClub\Model\Abstracts $model
+ * @property-read \MDClub\Service\User    $userService
+ * @property-read \MDClub\Model\Vote      $voteModel
+ * @property-read \MDClub\Model\User      $userModel
  */
 trait Votable
 {
-    protected $isForApi = false;
-
-    /**
-     * @return Votable
-     */
-    public function forApi(): self
-    {
-        $this->isForApi = true;
-
-        return $this;
-    }
-
     /**
      * 添加投票
      *
-     * @param  int    $userId
      * @param  int    $votableId
      * @param  string $type
      */
-    public function add(int $userId, int $votableId, string $type): void
+    public function addVote(int $votableId, string $type): void
     {
         if (!in_array($type, ['up', 'down'])) {
-            throw new ApiException(ErrorConstant::SYSTEM_VOTE_TYPE_ERROR);
+            throw new ApiException(ApiError::SYSTEM_VOTE_TYPE_ERROR);
         }
 
         $table = $this->model->table;
+        $userId = $this->auth->userId();
 
-        $this->userGetService->hasOrFail($userId);
-        $this->{"${table}GetService"}->hasOrFail($votableId);
+        $this->{"${table}Service"}->hasOrFail($votableId);
 
         $voteWhere = [
             'user_id'      => $userId,
@@ -72,7 +60,7 @@ trait Votable
         elseif ($type !== $vote['type']) {
             $this->voteModel->where($voteWhere)->update([
                 'type' => $type,
-                'create_time' => $this->requestService->time(),
+                'create_time' => $this->request->getServerParams()['REQUEST_TIME'] ?? time(),
             ]);
 
             $type === 'up'
@@ -86,15 +74,15 @@ trait Votable
     /**
      * 删除投票
      *
-     * @param  int $userId
      * @param  int $votableId
      */
-    public function delete(int $userId, int $votableId): void
+    public function deleteVote(int $votableId): void
     {
-        $this->userGetService->hasOrFail($userId);
-        $this->{$this->model->table . 'GetService'}->hasOrFail($votableId);
-
+        $userId = $this->auth->userId();
         $table = $this->model->table;
+
+        $this->{"${table}Service"}->hasOrFail($votableId);
+
         $voteWhere = [
             'user_id'      => $userId,
             'votable_id'   => $votableId,
@@ -120,37 +108,30 @@ trait Votable
      * @param int $votableId
      * @return int
      */
-    public function getCount(int $votableId): int
+    public function getVoteCount(int $votableId): int
     {
         $votableTarget = $this->model->field('vote_count')->get($votableId);
 
-        return $votableTarget['vote_count'];
+        return $votableTarget['vote_count'] ?? 0;
     }
 
     /**
      * 获取指定对象的投票者
      *
-     * @param  int              $votableId
-     * @param  string           $type             投票类型：up, down，默认为获取所有类型
-     * @return array|Collection
+     * @param  int    $votableId
+     * @param  string $type      投票类型：up, down，默认为获取所有类型
+     * @return array
      */
-    public function getVoters(int $votableId, string $type = null)
+    public function getVoters(int $votableId, string $type = null): array
     {
         $table = $this->model->table;
-        $this->{"${table}GetService"}->hasOrFail($votableId);
-
-        if ($this->isForApi) {
-            $this->userGetService->forApi();
-            $this->isForApi = false;
-        }
-
-        $this->userGetService->beforeGet();
+        $this->{"${table}Service"}->hasOrFail($votableId);
 
         if (in_array($type, ['up', 'down'])) {
             $this->userModel->where('vote.type', $type);
         }
 
-        $result = $this->userModel
+        return $this->userModel
             ->join([
                 '[><]vote' => ['user_id' => 'user_id'],
             ])
@@ -161,9 +142,5 @@ trait Votable
             ])
             ->order('vote.create_time', 'DESC')
             ->paginate();
-
-        $result = $this->userGetService->afterGet($result);
-
-        return $this->userGetService->returnArray($result);
     }
 }

@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Library;
+namespace MDClub\Library;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
-use App\Library\StorageAdapter\Aliyun;
-use App\Library\StorageAdapter\Ftp;
-use App\Library\StorageAdapter\Local;
-use App\Library\StorageAdapter\Qiniu;
-use App\Library\StorageAdapter\Sftp;
-use App\Library\StorageAdapter\Upyun;
+use MDClub\Exception\SystemException;
+use MDClub\Library\StorageAdapter\Aliyun;
+use MDClub\Library\StorageAdapter\Ftp;
+use MDClub\Library\StorageAdapter\Interfaces;
+use MDClub\Library\StorageAdapter\Local;
+use MDClub\Library\StorageAdapter\Qiniu;
+use MDClub\Library\StorageAdapter\Sftp;
+use MDClub\Library\StorageAdapter\Upyun;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * 文件存储，仅限图片
  */
-class Storage implements StorageInterface
+class Storage implements Interfaces
 {
     /**
      * 存储名称和适配器类名数组
@@ -37,7 +37,7 @@ class Storage implements StorageInterface
     /**
      * 存储适配器实例
      *
-     * @var StorageInterface
+     * @var Interfaces
      */
     protected $adapter;
 
@@ -46,7 +46,10 @@ class Storage implements StorageInterface
      */
     public function __construct(ContainerInterface $container)
     {
-        $storageType = $container->get('optionService')->storage_type;
+        /** @var Option $option */
+        $option = $container->get('option');
+
+        $storageType = $option->storage_type;
 
         if (!isset($this->adapterMap[$storageType])) {
             throw new SystemException('不存在指定的存储类型：' . $storageType);
@@ -56,7 +59,7 @@ class Storage implements StorageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
@@ -64,18 +67,18 @@ class Storage implements StorageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        return $this->adapter->write($path, $stream, $thumbs);
+        $this->adapter->write($path, $stream, $thumbs);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
-        return $this->adapter->delete($path, $thumbs);
+        $this->adapter->delete($path, $thumbs);
     }
 }

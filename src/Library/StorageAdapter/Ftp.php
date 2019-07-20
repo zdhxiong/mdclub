@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Library\StorageAdapter;
+namespace MDClub\Library\StorageAdapter;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
+use MDClub\Exception\SystemException;
+use MDClub\Traits\Url;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -14,8 +14,10 @@ use Psr\Http\Message\StreamInterface;
  *
  * NOTE: FTPS 需要开启 openssl 扩展
  */
-class Ftp extends AbstractAdapter implements StorageInterface
+class Ftp extends Abstracts implements Interfaces
 {
+    use Url;
+
     /**
      * FTP 连接 resource
      *
@@ -31,7 +33,7 @@ class Ftp extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * @param ContainerInterface $container
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {
@@ -43,12 +45,12 @@ class Ftp extends AbstractAdapter implements StorageInterface
 
         $this->setPathPrefix();
 
-        $username = $this->optionService->storage_ftp_username;
-        $password = $this->optionService->storage_ftp_password;
-        $host = $this->optionService->storage_ftp_host;
-        $port = $this->optionService->storage_ftp_port;
-        $ssl = $this->optionService->storage_ftp_ssl;
-        $passive = $this->optionService->storage_ftp_passive;
+        $username = $this->option->storage_ftp_username;
+        $password = $this->option->storage_ftp_password;
+        $host = $this->option->storage_ftp_host;
+        $port = $this->option->storage_ftp_port;
+        $ssl = $this->option->storage_ftp_ssl;
+        $passive = $this->option->storage_ftp_passive;
 
         $this->connection = $ssl
             ? ftp_ssl_connect($host, (int) $port)
@@ -67,7 +69,7 @@ class Ftp extends AbstractAdapter implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->optionService->storage_ftp_root;
+        $prefix = $this->option->storage_ftp_root;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -112,15 +114,11 @@ class Ftp extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 获取图片 URL
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return array
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->urlService->storage();
+        $url = $this->getStorageUrl();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {
@@ -131,35 +129,29 @@ class Ftp extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 写入文件
-     *
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
         ftp_put($this->connection, $location, $stream->getMetadata('uri'), FTP_BINARY);
 
-        $this->crop($stream, $thumbs, $location, function ($pathTmp, $cropLocation) {
-            ftp_put($this->connection, $cropLocation, $pathTmp, FTP_BINARY);
-        });
-
-        return true;
+        $this->crop($stream, $thumbs, $location,
+            /**
+             * @param string $pathTmp      缩略图临时文件路径
+             * @param string $cropLocation 缩略图将要保存的路径
+             */
+            function ($pathTmp, $cropLocation) {
+                ftp_put($this->connection, $cropLocation, $pathTmp, FTP_BINARY);
+            });
     }
 
     /**
-     * 删除文件
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
 
@@ -168,8 +160,6 @@ class Ftp extends AbstractAdapter implements StorageInterface
         foreach (array_keys($thumbs) as $size) {
             @ftp_delete($this->connection, $this->getThumbLocation($location, $size));
         }
-
-        return true;
     }
 
     /**

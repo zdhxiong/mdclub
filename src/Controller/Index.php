@@ -2,26 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace MDClub\Controller;
 
-use App\Abstracts\ContainerAbstracts;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Request;
-use Slim\Http\Response;
 
 /**
  * 首页
  */
-class Index extends ContainerAbstracts
+class Index extends Abstracts
 {
     /**
-     * @param  Request           $request
-     * @param  Response          $response
      * @return ResponseInterface
      */
-    public function pageIndex(Request $request, Response $response): ResponseInterface
+    public function pageIndex(): ResponseInterface
     {
-        return $this->view->render($response, '/index.php');
+        return $this->render('/index.php');
     }
 
     /**
@@ -29,11 +24,9 @@ class Index extends ContainerAbstracts
      *
      * option 表需要手动迁移
      *
-     * @param  Request $request
-     * @param  Response $response
-     * @return Response
+     * @return ResponseInterface
      */
-    public function migration(Request $request, Response $response): Response
+    public function migration(): ResponseInterface
     {
         // answer 表迁移
         $answers = $this->db->select('md_answer', '*');
@@ -101,11 +94,6 @@ class Index extends ContainerAbstracts
         $this->db->insert('mc_user', $users);
 
 
-        return $response;
-    }
-
-    public function statistics(Request $request, Response $response): Response
-    {
-
+        return $this->response;
     }
 }

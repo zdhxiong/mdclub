@@ -2,21 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Comment;
+namespace MDClub\Service\Comment;
 
-use App\Abstracts\ContainerAbstracts;
+use MDClub\Abstracts\ContainerProperty;
 use Psr\Container\ContainerInterface;
 
 /**
  * 评论抽象类
  */
-abstract class Abstracts extends ContainerAbstracts
+abstract class Abstracts extends ContainerProperty
 {
     /**
-     * @var \App\Model\Comment
+     * @var \MDClub\Model\Comment
      */
     protected $model;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct($container);

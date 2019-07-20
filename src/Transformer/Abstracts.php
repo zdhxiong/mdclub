@@ -1,0 +1,217 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MDClub\Transformer;
+
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+/**
+ * 转换器抽象类
+ *
+ * @property-read ServerRequestInterface     $request
+ * @property-read \MDClub\Library\Auth       $auth
+ * @property-read User                       $userTransformer
+ * @property-read Question                   $questionTransformer
+ * @property-read Vote                       $voteTransformer
+ * @property-read Topic                      $topicTransformer
+ * @property-read Follow                     $followTransformer
+ */
+abstract class Abstracts
+{
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var string 表名
+     */
+    protected $table;
+
+    /**
+     * @var string 主键列名
+     */
+    protected $primaryKey;
+
+    /**
+     * @var array 可返回的子资源
+     */
+    protected $availableIncludes = [];
+
+    /**
+     * @var array 根据url参数，需要返回的子资源
+     */
+    protected $includes = [];
+
+    /**
+     * @var array 普通用户需移除的字段
+     */
+    protected $userExcept = [];
+
+    /**
+     * @var array 管理员需移除的字段
+     */
+    protected $managerExcept = [];
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+
+        $includes = $this->request->getQueryParams()['include'] ?? '';
+        $includes = explode(',', $includes);
+        $this->includes = array_intersect($this->availableIncludes, $includes);
+    }
+
+    public function __get($name)
+    {
+        return $this->container->get($name);
+    }
+
+    /**
+     * 数据格式化
+     *
+     * @param  array $item
+     * @return array
+     */
+    protected function format(array $item): array
+    {
+        return $item;
+    }
+
+    /**
+     * 添加 user 子资源
+     *
+     * @param  array $items
+     * @return array
+     */
+    protected function user(array $items): array
+    {
+        $userIds = array_unique(array_column($items, 'user_id'));
+        $users = $this->userTransformer->getInRelationship($userIds);
+
+        foreach ($items as &$item) {
+            $item['relationships']['user'] = $users[$item['user_id']];
+        }
+
+        return $items;
+    }
+
+    /**
+     * 添加 question 子资源
+     *
+     * @param  array $items
+     * @return array
+     */
+    protected function question(array $items): array
+    {
+        $questionIds = array_unique(array_column($items, 'question_id'));
+        $questions = $this->questionTransformer->getInRelationship($questionIds);
+
+        foreach ($items as &$item) {
+            $item['relationships']['question'] = $questions[$item['question_id']];
+        }
+
+        return $items;
+    }
+
+    /**
+     * 添加投票状态
+     *
+     * @param  array $items
+     * @return array
+     */
+    protected function voting(array $items): array
+    {
+        $keys = array_unique(array_column($items, $this->primaryKey));
+        $votings = $this->voteTransformer->getInRelationship($keys, $this->table);
+
+        foreach ($items as &$item) {
+            $item['relationships']['voting'] = $votings[$item[$this->primaryKey]];
+        }
+
+        return $items;
+    }
+
+    /**
+     * 添加 topics 子资源
+     *
+     * @param  array $items
+     * @return array
+     */
+    protected function topics(array $items): array
+    {
+        $keys = array_unique(array_column($items, $this->primaryKey));
+        $topics = $this->topicTransformer->getInRelationship($keys, $this->table);
+
+        foreach ($items as &$item) {
+            $item['relationships']['topics'] = $topics[$item[$this->primaryKey]];
+        }
+
+        return $items;
+    }
+
+    /**
+     * 添加 is_following 状态
+     *
+     * @param  array $items
+     * @param  array $knownRelationship ['is_following' => true]
+     * @return array
+     */
+    protected function is_following(array $items, array $knownRelationship): array
+    {
+        $keys = array_unique(array_column($items, $this->primaryKey));
+
+        if (isset($knownRelationship['is_following'])) {
+            $followingKeys = $knownRelationship['is_following'] ? $keys : [];
+        } else {
+            $followingKeys = $this->followTransformer->getInRelationship($keys, $this->table);
+        }
+
+        foreach ($items as &$item) {
+            $item['relationships']['is_following'] = in_array($item[$this->primaryKey], $followingKeys, true);
+        }
+
+        return $items;
+    }
+
+    /**
+     * 转换数据
+     *
+     * @param  array $items             数组，或多个元素组成的二维数组
+     * @param  array $knownRelationship 已知的 relationship，若指定了该参数，则对于的字段不再需要计算
+     * @return array
+     */
+    public function transform(array $items, array $knownRelationship = []): array
+    {
+        if (!$items) {
+            return $items;
+        }
+
+        $isSingleItem = !isset($items[0]);
+
+        if ($isSingleItem) {
+            $items = [$items];
+        }
+
+        // 移除字段
+        $except = $this->auth->isManager() ? $this->managerExcept : $this->userExcept;
+        $items = collect($items)->exceptSpread($except);
+
+        // 格式化
+        $items = $items->map(function ($item) {
+            return $this->format($item);
+        })->all();
+
+        // 添加 relationships
+        foreach ($this->includes as $include) {
+            $items = $this->{$include}($items, $knownRelationship);
+        }
+
+        return $isSingleItem ? $items[0] : $items;
+    }
+}

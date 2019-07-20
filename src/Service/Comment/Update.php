@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Comment;
+namespace MDClub\Service\Comment;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
-use App\Exception\ValidationException;
-use App\Helper\ValidatorHelper;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
+use MDClub\Exception\ValidationException;
+use MDClub\Helper\Request;
+use MDClub\Helper\Validator;
 
 /**
  * 更新评论
@@ -34,19 +35,19 @@ class Update extends Abstracts
         // 检查编辑权限
         if (!$this->roleService->managerId()) {
             if ($comment['user_id'] !== $userId) {
-                throw new ApiException(ErrorConstant::COMMENT_CANT_EDIT_NOT_AUTHOR);
+                throw new ApiException(ApiError::COMMENT_CANT_EDIT_NOT_AUTHOR);
             }
 
             $canEdit = $this->optionService->comment_can_edit;
             $canEditBefore = $this->optionService->comment_can_edit_before;
-            $requestTime = $this->requestService->time();
+            $requestTime = Request::time($this->request);
 
             if (!$canEdit) {
-                throw new ApiException(ErrorConstant::COMMENT_CANT_EDIT);
+                throw new ApiException(ApiError::COMMENT_CANT_EDIT);
             }
 
             if ($canEditBefore && $comment['create_time'] + (int) $canEditBefore < $requestTime) {
-                throw new ApiException(ErrorConstant::COMMENT_CANT_EDIT_TIMEOUT);
+                throw new ApiException(ApiError::COMMENT_CANT_EDIT_TIMEOUT);
             }
         }
 
@@ -74,7 +75,7 @@ class Update extends Abstracts
 
         if (!$content) {
             $errors['content'] = '评论内容不能为空';
-        } elseif (!ValidatorHelper::isMax($content, 1000)) {
+        } elseif (!Validator::isMax($content, 1000)) {
             $errors['content'] = '评论内容不能超过 1000 个字符';
         }
 

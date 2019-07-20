@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Comment;
+namespace MDClub\Service\Comment;
 
-use App\Constant\ErrorConstant;
-use App\Exception\ApiException;
+use MDClub\Constant\ApiError;
+use MDClub\Exception\ApiException;
 
 /**
  * 删除评论
@@ -35,7 +35,7 @@ class Delete extends Abstracts
         }
 
         if ($commentInfo['user_id'] != $userId && !$this->roleService->managerId()) {
-            throw new ApiException(ErrorConstant::COMMENT_CANT_DELETE_NOT_AUTHOR);
+            throw new ApiException(ApiError::COMMENT_CANT_DELETE_NOT_AUTHOR);
         }
 
         $this->commentModel->delete($commentId);

@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Library\StorageAdapter;
+namespace MDClub\Library\StorageAdapter;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
+use MDClub\Traits\Url;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * 本地文件适配器
  */
-class Local extends AbstractAdapter implements StorageInterface
+class Local extends Abstracts implements Interfaces
 {
+    use Url;
+
     /**
      * 存储路径
      *
@@ -22,7 +24,12 @@ class Local extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * @param ContainerInterface $container
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {
@@ -32,11 +39,25 @@ class Local extends AbstractAdapter implements StorageInterface
     }
 
     /**
+     * 获取 Filesystem 实例
+     *
+     * @return Filesystem
+     */
+    protected function getFilesystem(): Filesystem
+    {
+        if (!$this->filesystem) {
+            $this->filesystem = new Filesystem();
+        }
+
+        return $this->filesystem;
+    }
+
+    /**
      * 设置文件存储路径
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->optionService->storage_local_dir;
+        $prefix = $this->option->storage_local_dir;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -61,33 +82,11 @@ class Local extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 确保指定目录存在，若不存在，则创建指定目录
-     *
-     * @param string $root
-     */
-    protected function ensureDirectory(string $root): void
-    {
-        if (is_dir($root)) {
-            return;
-        }
-
-        if (!@mkdir($root, 0755, true) && !is_dir($root)) {
-            $mkdirError = error_get_last();
-            $errorMessage = $mkdirError['message'] ?? '';
-            throw new SystemException(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
-        }
-    }
-
-    /**
-     * 获取图片 URL
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return array
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->urlService->storage();
+        $url = $this->getStorageUrl();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {
@@ -98,44 +97,37 @@ class Local extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 写入文件
-     *
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
-        $this->ensureDirectory(dirname($location));
+        $filesystem = $this->getFilesystem();
 
-        copy($stream->getMetadata('uri'), $location);
+        $filesystem->copy((string) $stream->getMetadata('uri'), $location);
 
-        $this->crop($stream, $thumbs, $location, static function ($pathTmp, $cropLocation) {
-            copy($pathTmp, $cropLocation);
-        });
-
-        return true;
+        $this->crop($stream, $thumbs, $location,
+            /**
+             * @param string $pathTmp      缩略图临时文件路径
+             * @param string $cropLocation 缩略图将要保存的路径
+             */
+            function (string $pathTmp, string $cropLocation) use ($filesystem) {
+                $filesystem->copy($pathTmp, $cropLocation);
+            });
     }
 
     /**
-     * 删除文件
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
+        $filesystem = $this->getFilesystem();
 
-        @unlink($location);
+        $filesystem->remove($location);
 
         foreach (array_keys($thumbs) as $size) {
-            @unlink($this->getThumbLocation($location, $size));
+            $filesystem->remove($this->getThumbLocation($location, $size));
         }
-
-        return true;
     }
 }

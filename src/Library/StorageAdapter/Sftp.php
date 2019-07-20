@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Library\StorageAdapter;
+namespace MDClub\Library\StorageAdapter;
 
-use App\Exception\SystemException;
-use App\Interfaces\StorageInterface;
+use MDClub\Exception\SystemException;
+use MDClub\Traits\Url;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -14,8 +14,10 @@ use Psr\Http\Message\StreamInterface;
  *
  * todo 无法使用
  */
-class Sftp extends AbstractAdapter implements StorageInterface
+class Sftp extends Abstracts implements Interfaces
 {
+    use Url;
+
     /**
      * SSH2 连接 resource
      *
@@ -37,7 +39,7 @@ class Sftp extends AbstractAdapter implements StorageInterface
     protected $pathPrefix;
 
     /**
-     * @param ContainerInterface $container
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {
@@ -49,10 +51,10 @@ class Sftp extends AbstractAdapter implements StorageInterface
 
         $this->setPathPrefix();
 
-        $username = $this->optionService->storage_sftp_username;
-        $password = $this->optionService->storage_sftp_password;
-        $host = $this->optionService->storage_sftp_host;
-        $port = $this->optionService->storage_sftp_port;
+        $username = $this->option->storage_sftp_username;
+        $password = $this->option->storage_sftp_password;
+        $host = $this->option->storage_sftp_host;
+        $port = $this->option->storage_sftp_port;
 
         if (!$this->connection = @ssh2_connect($host, (int)$port)) {
             throw new SystemException("Could not connect to SSH2 Server");
@@ -72,7 +74,7 @@ class Sftp extends AbstractAdapter implements StorageInterface
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->optionService->storage_sftp_root;
+        $prefix = $this->option->storage_sftp_root;
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -103,15 +105,11 @@ class Sftp extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 获取图片 URL
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return array
+     * @inheritDoc
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->urlService->storage();
+        $url = $this->getStorageUrl();
         $data['o'] = $url . $path;
 
         foreach (array_keys($thumbs) as $size) {
@@ -122,14 +120,9 @@ class Sftp extends AbstractAdapter implements StorageInterface
     }
 
     /**
-     * 写入文件
-     *
-     * @param  string          $path
-     * @param  StreamInterface $stream
-     * @param  array           $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function write(string $path, StreamInterface $stream, array $thumbs): bool
+    public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
@@ -139,18 +132,12 @@ class Sftp extends AbstractAdapter implements StorageInterface
         $this->crop($stream, $thumbs, $location, function ($pathTmp, $cropLocation) {
             ssh2_scp_send($this->connection, $pathTmp, $cropLocation);
         });
-
-        return true;
     }
 
     /**
-     * 删除文件
-     *
-     * @param  string $path
-     * @param  array  $thumbs
-     * @return bool
+     * @inheritDoc
      */
-    public function delete(string $path, array $thumbs): bool
+    public function delete(string $path, array $thumbs): void
     {
         $location = $this->applyPathPrefix($path);
 
@@ -159,8 +146,6 @@ class Sftp extends AbstractAdapter implements StorageInterface
         foreach (array_keys($thumbs) as $size) {
             @ssh2_sftp_unlink($this->connection, $this->getThumbLocation($location, $size));
         }
-
-        return true;
     }
 
     /**

@@ -2,19 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Middleware;
+namespace MDClub\Middleware;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Psr7\Response;
 
 /**
  * 如果请求 URL 以 / 结尾，则跳转到不带 / 的 URL
  *
- * @link https://www.slimframework.com/docs/v3/cookbook/route-patterns.html
+ * @link http://dev.slimframework.com/docs/v4/cookbook/route-patterns.html
  */
-class TrailingSlash
+class TrailingSlash implements MiddlewareInterface
 {
-    public function __invoke(Request $request, Response $response, callable $next)
+    /**
+     * @inheritDoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $uri = $request->getUri();
         $path = $uri->getPath();
@@ -22,13 +28,17 @@ class TrailingSlash
         if ($path !== '/' && substr($path, -1) === '/') {
             $uri = $uri->withPath(substr($path, 0, -1));
 
-            if ($request->isGet()) {
-                return $response->withRedirect((string)$uri, 301);
-            }
+            if ($request->getMethod() === 'GET') {
+                $response = new Response();
 
-            return $next($request->withUri($uri), $response);
+                return $response
+                    ->withHeader('Location', (string) $uri)
+                    ->withStatus(301);
+            } else {
+                $request = $request->withUri($uri);
+            }
         }
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 }

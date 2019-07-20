@@ -2,41 +2,49 @@
 
 declare(strict_types=1);
 
-namespace App\Middleware;
+namespace MDClub\Middleware;
 
-use App\Abstracts\ContainerAbstracts;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use MDClub\Library\Cache;
+use MDClub\Library\Db;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Psr7\Factory\StreamFactory;
 
 /**
  * 在 Response 中添加 Trace 信息
+ *
+ * @property-read Db    $db
+ * @property-read Cache $cache
  */
-class Trace extends ContainerAbstracts
+class Trace extends Abstracts implements MiddlewareInterface
 {
     /**
-     * Trace 数据
-     *
-     * @var array
+     * @inheritDoc
      */
-    protected $trace = [];
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $response = $handler->handle($request);
+
+        return $this->appendTraceMessage($request, $response);
+    }
 
     /**
-     * @param  Request   $request
-     * @param  Response  $response
-     * @param  callable  $next
-     * @return Response
+     * 追加 trace 消息到 response 中
+     *
+     * @param  ServerRequestInterface $request
+     * @param  ResponseInterface      $response
+     * @return ResponseInterface
      */
-    public function __invoke(Request $request, Response $response, callable $next)
+    public function appendTraceMessage(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        /** @var Response $response */
-        $response = $next($request, $response);
-
-        $this->getTrace($request);
+        $trace = $this->generateTrace($request);
 
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') > -1) {
-            $response = $this->renderJsonMessage($response);
+            $response = $this->renderJsonMessage($response, $trace);
         } else {
-            $response = $this->renderHtmlMessage($response);
+            $response = $this->renderHtmlMessage($response, $trace);
         }
 
         return $response;
@@ -84,16 +92,17 @@ class Trace extends ContainerAbstracts
     /**
      * 获取 Trace 信息
      *
-     * @param Request $request
+     * @param  ServerRequestInterface $request
+     * @return array
      */
-    protected function getTrace(Request $request): void
+    protected function generateTrace(ServerRequestInterface $request): array
     {
         $sql = $this->db->log();
         $cache = $this->cache->log();
         $time = microtime(true) - $request->getServerParams()['REQUEST_TIME_FLOAT'];
         $files = get_included_files();
 
-        $this->trace = [
+        return [
             'TimeUsage'                => $this->timeFormat($time),
             'MemoryUsage'              => $this->memoryFormat(memory_get_usage()),
             'ThroughputRate'           => number_format(1 / $time, 2) . ' req/s',
@@ -106,28 +115,37 @@ class Trace extends ContainerAbstracts
     /**
      * 把 Trace 添加到 json 中
      *
-     * @param Response $response
-     * @return Response
+     * @param  ResponseInterface $response
+     * @param  array             $trace
+     * @return ResponseInterface
      */
-    protected function renderJsonMessage(Response $response): Response
+    protected function renderJsonMessage(ResponseInterface $response, array $trace): ResponseInterface
     {
-        $body = json_decode($response->getBody()->__toString(), false);
+        $body = json_decode($response->getBody()->__toString(), true);
+        $body['trace'] = $trace;
 
-        $body->trace = $this->trace;
+        $json = (string) json_encode($body);
 
-        return $response->withJson($body);
+        $response = $response
+            ->withHeader('Content-Type', 'application/json;charset=utf-8')
+            ->withBody((new StreamFactory())->createStream($json));
+
+        return $response;
     }
 
     /**
      * 把 Trace 添加到 html 中
      *
-     * @param Response $response
-     * @return Response
+     * @param  ResponseInterface $response
+     * @param  array             $trace
+     * @return ResponseInterface
      */
-    protected function renderHtmlMessage(Response $response): Response
+    protected function renderHtmlMessage(ResponseInterface $response, array $trace): ResponseInterface
     {
-        $html = '<script type="text/javascript">console.log(' . json_encode($this->trace) . ');</script>';
+        $html = '<script type="text/javascript">console.log(' . json_encode($trace) . ');</script>';
 
-        return $response->write($html);
+        $response->getBody()->write($html);
+
+        return $response;
     }
 }

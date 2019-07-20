@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
+use MDClub\Observer\Token as TokenObserver;
 
 /**
  * Token 模型
  */
-class Token extends ModelAbstracts
+class Token extends Abstracts
 {
     public $table = 'token';
     public $primaryKey = 'token';
     protected $timestamps = true;
-
-    protected const UPDATE_TIME = false;
+    protected $observe = TokenObserver::class;
 
     public $columns = [
         'token',
         'user_id',
         'device',
         'create_time',
+        'update_time',
         'expire_time',
     ];
 }

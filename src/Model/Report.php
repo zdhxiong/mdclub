@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace MDClub\Model;
 
-use App\Abstracts\ModelAbstracts;
+use MDClub\Observer\Report as ReportObserver;
 
 /**
  * 举报模型
  */
-class Report extends ModelAbstracts
+class Report extends Abstracts
 {
     public $table = 'report';
     public $primaryKey = 'report_id';
     protected $timestamps = true;
+    protected $observe = ReportObserver::class;
 
     protected const UPDATE_TIME = false;
 
@@ -24,5 +25,9 @@ class Report extends ModelAbstracts
         'user_id',
         'reason',
         'create_time',
+    ];
+
+    public $allowFilterFields = [
+        'reportable_type'
     ];
 }
