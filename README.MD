@@ -1,3 +1,8 @@
+## 安装步骤
+
+1. 执行 `composer install --no-dev` 安装依赖
+2. 复制 `config.example.php`，并重命名为 `config.php`，修改其中的数据库配置信息
+
 ## PSR 接口
 
 ### psr/container
