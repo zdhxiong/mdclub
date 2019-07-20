@@ -18,6 +18,7 @@ class Api extends Abstracts
      */
     public function pageIndex(): ResponseInterface
     {
+        $this->response = $this->response->withHeader('Content-Type', 'text/html; charset=utf-8');
         $this->response->getBody()->write(<<<END
 <!DOCTYPE html>
 <html lang="en">

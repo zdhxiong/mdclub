@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MDClub\Library;
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Slim\Views\PhpRenderer;
 
 /**
@@ -50,5 +51,20 @@ class View extends PhpRenderer
             : $this->defaultTheme;
 
         return parent::fetch('/' . $theme . $template, $data);
+    }
+
+    /**
+     * 渲染模板
+     *
+     * @param  ResponseInterface $response
+     * @param  string            $template
+     * @param  array             $data
+     * @return ResponseInterface
+     */
+    public function render(ResponseInterface $response, $template, array $data = []): ResponseInterface
+    {
+        $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
+
+        return parent::render($response, $template, $data);
     }
 }

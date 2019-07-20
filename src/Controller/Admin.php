@@ -53,6 +53,7 @@ class Admin extends Abstracts
         $userInfo = $this->userService->get($this->auth->userId());
         $userInfo = json_encode($userInfo);
 
+        $this->response = $this->response->withHeader('Content-Type', 'text/html; charset=utf-8');
         $this->response->getBody()->write(<<<END
 <!DOCTYPE html>
 <html>
