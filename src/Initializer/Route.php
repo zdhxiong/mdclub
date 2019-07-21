@@ -31,10 +31,11 @@ class Route
         $container = $app->getContainer();
         $routeCollector = $app->getRouteCollector();
         $debug = $container->get('settings')['debug'];
+        $runtime = $container->get('settings')['runtime'];
 
         // 生产模式启用路由缓存
         if (!$debug) {
-            $routeCollector->setCacheFile(__DIR__ . '/../../var/cache/CompiledRoute.php');
+            $routeCollector->setCacheFile($runtime . '/CompiledRoute.php');
         }
 
         // 设置路由回调策略

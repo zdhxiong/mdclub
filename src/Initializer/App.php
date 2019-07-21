@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * 应用入口
@@ -23,10 +24,18 @@ class App
 
     /**
      * @param ServerRequestInterface|null $request
+     * @param array                       $focusConfig
      */
-    public function __construct(ServerRequestInterface $request = null)
+    public function __construct(ServerRequestInterface $request = null, array $focusConfig = [])
     {
-        $container = new Container();
+        $config = $this->getConfig($focusConfig);
+
+        // 确保临时文件目录存在（Fast-Route 不会自动创建缓存文件目录）
+        if (!is_dir($config['APP_RUNTIME'])) {
+            (new Filesystem())->mkdir($config['APP_RUNTIME']);
+        }
+
+        $container = new Container($config);
 
         if (!$request) {
             $serverRequestCreator = ServerRequestCreatorFactory::create();
@@ -45,7 +54,23 @@ class App
         new Dependencies($this->app);
         new Middleware($this->app);
         new Route($this->app);
-        // new EventListener();
+    }
+
+    /**
+     * 获取配置信息
+     *
+     * @param  array $focusConfig
+     * @return array
+     */
+    protected function getConfig(array $focusConfig): array
+    {
+        $config = require __DIR__ . '/../../config.default.php';
+
+        if (is_file(__DIR__ . '/../../config.php')) {
+            $config = array_merge($config, require __DIR__ . '/../../config.php');
+        }
+
+        return array_merge($config, $focusConfig);
     }
 
     /**

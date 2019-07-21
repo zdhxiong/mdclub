@@ -7,18 +7,23 @@ namespace MDClub\Library;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\UidProcessor;
+use Psr\Container\ContainerInterface;
 
 /**
  * 实现了 PSR3 接口的日志
  */
 class Log extends MonologLogger
 {
-    public function __construct()
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
     {
+        $runtime = $container->get('settings')['runtime'];
         $name = 'mdclub';
         $processors[] = new UidProcessor();
         $handlers[] = new StreamHandler(
-            __DIR__ . '/../../var/logs/' . date('Y-m') . '/' . date('d') . '.log',
+            $runtime . '/logs/' . date('Y-m') . '/' . date('d') . '.log',
             MonologLogger::DEBUG
         );
 

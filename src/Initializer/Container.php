@@ -6,19 +6,23 @@ namespace MDClub\Initializer;
 
 use Pimple\Container as PimpleContainer;
 use Psr\Container\ContainerInterface;
-use Slim\Factory\ServerRequestCreatorFactory;
 
 /**
  * 容器
  */
 class Container extends PimpleContainer implements ContainerInterface
 {
-    public function __construct()
+    /**
+     * @param array $config 由入口文件 index.php 传入的配置参数，优先级最高
+     */
+    public function __construct(array $config)
     {
-        $config = require __DIR__ . '/../../config.php';
         $settings = [
             // 是否是调试模式。调试模式将显示详细错误信息
             'debug' => $config['APP_DEBUG'],
+
+            // 临时文件目录
+            'runtime' => $config['APP_RUNTIME'],
 
             // 数据库信息
             'database' => [
