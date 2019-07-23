@@ -28,12 +28,17 @@ class Report extends Abstracts
         $this->model = $this->reportModel;
     }
 
+    /**
+     * 获取举报列表
+     *
+     * @return array
+     */
     public function getList(): array
     {
-        // TODO: Implement getList() method.
+        return $this->reportModel->getList();
     }
 
-    public function getDetailList(string $reportableType, int $reportableId): array
+    public function getReasons(string $reportableType, int $reportableId): array
     {
         // TODO: Implement getDetailList() method.
     }

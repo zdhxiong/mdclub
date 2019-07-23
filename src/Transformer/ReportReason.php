@@ -7,7 +7,7 @@ namespace MDClub\Transformer;
 /**
  * 举报详情转换器
  */
-class ReportDetail extends Abstracts
+class ReportReason extends Abstracts
 {
 
 }

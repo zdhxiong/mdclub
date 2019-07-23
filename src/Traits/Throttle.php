@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Traits;
 
+use MDClub\Helper\Request;
 use MDClub\Library\Cache;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -28,7 +29,7 @@ trait Throttle
      */
     public function getActLimit(string $id, string $action, int $max_count, int $period): int
     {
-        $time = (int) $this->request->getServerParams()['REQUEST_TIME'];
+        $time = Request::time($this->request);
         $ttl = (int) (($time / $period) * $period + $period - $time);
         $key = "throttle_{$action}_{$id}";
         $currentCount = (int) $this->cache->get($key, 0) + 1;

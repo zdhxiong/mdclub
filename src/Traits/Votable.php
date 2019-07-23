@@ -6,6 +6,7 @@ namespace MDClub\Traits;
 
 use MDClub\Constant\ApiError;
 use MDClub\Exception\ApiException;
+use MDClub\Helper\Request;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -60,7 +61,7 @@ trait Votable
         elseif ($type !== $vote['type']) {
             $this->voteModel->where($voteWhere)->update([
                 'type' => $type,
-                'create_time' => $this->request->getServerParams()['REQUEST_TIME'] ?? time(),
+                'create_time' => Request::time($this->request),
             ]);
 
             $type === 'up'

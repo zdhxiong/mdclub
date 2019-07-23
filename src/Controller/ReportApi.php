@@ -48,7 +48,7 @@ class ReportApi extends Abstracts
      */
     public function getReasons(string $reportable_type, int $reportable_id): array
     {
-        return $this->reportService->getDetailList($reportable_type, $reportable_id);
+        return $this->reportService->getReasons($reportable_type, $reportable_id);
     }
 
     /**
@@ -61,7 +61,7 @@ class ReportApi extends Abstracts
     public function create(string $reportable_type, int $reportable_id): array
     {
         $reason = $this->request->getParsedBody()['reason'] ?? '';
-        $reportId = $this->reportService->create($reportable_type, $reportable_id, $reason);
+        $reportId = $this->reportCreateService->create($reportable_type, $reportable_id, $reason);
 
         return $this->reportService->get($reportId);
     }

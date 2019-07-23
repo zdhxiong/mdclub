@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
  * @property-read \MDClub\Transformer\Image        $imageTransformer
  * @property-read \MDClub\Transformer\Question     $questionTransformer
  * @property-read \MDClub\Transformer\Report       $reportTransformer
- * @property-read \MDClub\Transformer\ReportDetail $reportDetailTransformer
+ * @property-read \MDClub\Transformer\ReportReason $reportReasonTransformer
  * @property-read \MDClub\Transformer\Topic        $topicTransformer
  * @property-read \MDClub\Transformer\User         $userTransformer
  * @property-read \MDClub\Transformer\Vote         $voteTransformer

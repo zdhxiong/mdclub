@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
+use MDClub\Helper\Request;
 use MDClub\Library\Db;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -627,11 +628,11 @@ abstract class Abstracts
             $data = $this->beforeInsert($data);
 
             if ($this->timestamps && static::CREATE_TIME) {
-                $data[static::CREATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+                $data[static::CREATE_TIME] = Request::time($this->request);
             }
 
             if ($this->timestamps && static::UPDATE_TIME) {
-                $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+                $data[static::UPDATE_TIME] = Request::time($this->request);
             }
 
             if ($this->softDelete && static::DELETE_TIME) {
@@ -675,7 +676,7 @@ abstract class Abstracts
         $data = $this->beforeUpdate($data);
 
         if ($this->timestamps && static::UPDATE_TIME) {
-            $data[static::UPDATE_TIME] = $this->request->getServerParams()['REQUEST_TIME'];
+            $data[static::UPDATE_TIME] = Request::time($this->request);
         }
 
         $where = $this->getWhere();
@@ -714,7 +715,7 @@ abstract class Abstracts
                 : static::DELETE_TIME;
 
             $query = $this->db->update($this->table, [
-                $deleteTimeField => $this->request->getServerParams()['REQUEST_TIME']
+                $deleteTimeField => Request::time($this->request)
             ], $where);
         } else {
             $query = $this->db->delete($this->table, $where);

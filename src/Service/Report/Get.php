@@ -16,27 +16,6 @@ class Get extends Abstracts
     use Getable;
 
     /**
-     * 获取允许搜索的字段
-     *
-     * @return array
-     */
-    public function getAllowFilterFields(): array
-    {
-        return ['reportable_type'];
-    }
-
-    /**
-     * 对结果中的内容进行处理
-     *
-     * @param  array $reports
-     * @return array
-     */
-    public function addFormatted(array $reports): array
-    {
-        return $reports;
-    }
-
-    /**
      * 为结果添加相关信息
      * {
      *     reporter: {},
@@ -82,28 +61,6 @@ class Get extends Abstracts
         unset($report);
 
         return $reports;
-    }
-
-    /**
-     * 获取被举报的内容列表
-     *
-     * @return array
-     */
-    public function getList()
-    {
-        return $this->model
-            ->where($this->getWhere())
-            ->field([
-                'reporter_count' => Medoo::raw('COUNT(<report_id>)'),
-                'reportable_id',
-                'reportable_type',
-            ])
-            ->order('reporter_count', 'DESC')
-            ->group([
-                'reportable_id',
-                'reportable_type',
-            ])
-            ->paginate();
     }
 
     /**

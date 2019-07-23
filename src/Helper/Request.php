@@ -19,7 +19,18 @@ class Request
      */
     public static function time(ServerRequestInterface $request): int
     {
-        return $request->getServerParams()['REQUEST_TIME'] ?? time();
+        return (int) ($request->getServerParams()['REQUEST_TIME'] ?? time());
+    }
+
+    /**
+     * 获取微秒精度的请求时间
+     *
+     * @param  ServerRequestInterface $request
+     * @return float
+     */
+    public static function microtime(ServerRequestInterface $request): float
+    {
+        return (float) ($request->getServerParams()['REQUEST_TIME_FLOAT'] ?? microtime(true));
     }
 
     /**
@@ -30,7 +41,13 @@ class Request
      */
     public static function isSupportWebp(ServerRequestInterface $request): bool
     {
-        return strpos($request->getServerParams()['HTTP_ACCEPT'], 'image/webp') > -1;
+        $serverParams = $request->getServerParams();
+
+        if (!isset($serverParams['HTTP_ACCEPT'])) {
+            return false;
+        }
+
+        return strpos($serverParams['HTTP_ACCEPT'], 'image/webp') > -1;
     }
 
     /**

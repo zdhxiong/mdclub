@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
+use MDClub\Helper\Request;
 use MDClub\Model\Token;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -120,7 +121,7 @@ class Auth
         }
 
         // token 已过期，删除该 token
-        $requestTime = (int) $this->request->getServerParams()['REQUEST_TIME'];
+        $requestTime = Request::time($this->request);
         if ($tokenInfo['expire_time'] < $requestTime) {
             $this->tokenModel->delete($token);
             $this->tokenInfo = false;

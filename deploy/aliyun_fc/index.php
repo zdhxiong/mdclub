@@ -24,12 +24,12 @@ function getConfig(): array
 }
 
 /**
- * 对 request 做处理
+ * 从 HTTP 触发器获取请求对象
  *
  * @param  ServerRequestInterface $request
  * @return ServerRequestInterface
  */
-function handleRequest(ServerRequestInterface $request): ServerRequestInterface
+function getRequestFromHttpTrigger(ServerRequestInterface $request): ServerRequestInterface
 {
     // 默认的 uri 有错误，这里重新处理
     $query = collect($request->getQueryParams())
@@ -47,16 +47,38 @@ function handleRequest(ServerRequestInterface $request): ServerRequestInterface
 }
 
 /**
+ * 从 API 网关触发器创建请求对象
+ *
+ * @param  string                 $event
+ * @return ServerRequestInterface
+ */
+function getRequestFromApiGatewayTrigger(string $event): ServerRequestInterface
+{
+
+}
+
+/**
  * 函数入口
  *
- * @param  ServerRequestInterface $request https://github.com/reactphp/http/blob/master/src/Io/ServerRequest.php
+ * @param  ServerRequestInterface|string $event
+ *
+ * 使用 HTTP 触发器时，参数为实现了 ServerRequestInterface 的实例，使用的库为：
+ * https://github.com/reactphp/http/blob/master/src/Io/ServerRequest.php
+ *
+ * 使用 API 网关触发器时，参数为字符串
+ *
  * @param  array                  $context
  * @return Response                        https://github.com/ringcentral/psr7/blob/master/src/Response.php
  */
-function handler(ServerRequestInterface $request, array $context): Response {
+function handler($event, array $context): Response {
     require __DIR__ . '/vendor/autoload.php';
 
-    $request = handleRequest($request);
+    if ($event instanceof ServerRequestInterface) {
+        $request = getRequestFromHttpTrigger($event);
+    } else {
+        $request = getRequestFromApiGatewayTrigger($event);
+    }
+
     $config = getConfig();
 
     $app = new App($request, $config);

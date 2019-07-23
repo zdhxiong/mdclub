@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Middleware;
 
+use MDClub\Helper\Request;
 use MDClub\Library\Cache;
 use MDClub\Library\Db;
 use Psr\Http\Message\ResponseInterface;
@@ -99,7 +100,7 @@ class Trace extends Abstracts implements MiddlewareInterface
     {
         $sql = $this->db->log();
         $cache = $this->cache->log();
-        $time = microtime(true) - $request->getServerParams()['REQUEST_TIME_FLOAT'];
+        $time = microtime(true) - Request::microtime($request);
         $files = get_included_files();
 
         return [

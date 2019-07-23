@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MDClub\Service\Report;
+namespace MDClub\Service;
 
 use MDClub\Constant\ApiError;
 use MDClub\Exception\ApiException;
@@ -10,9 +10,9 @@ use MDClub\Exception\ValidationException;
 use MDClub\Helper\Validator;
 
 /**
- * 更新举报
+ * 创建举报
  */
-class Update extends Abstracts
+class ReportCreate extends Abstracts
 {
     /**
      * 创建举报
@@ -24,14 +24,13 @@ class Update extends Abstracts
      */
     public function create(string $reportableType, int $reportableId, string $reason): int
     {
-        $userId = $this->roleService->userIdOrFail();
-        $this->createValidator($reportableType, $reportableId, $reason);
+        $this->validation($reportableType, $reportableId, $reason);
 
-        return (int) $this->model->insert([
+        return (int) $this->reportModel->insert([
             'reportable_type' => $reportableType,
-            'reportable_id'   => $reportableId,
-            'user_id'         => $userId,
-            'reason'          => $reason,
+            'reportable_id' => $reportableId,
+            'user_id' => $this->auth->userId(),
+            'reason' => $reason,
         ]);
     }
 
@@ -42,7 +41,7 @@ class Update extends Abstracts
      * @param int    $reportableId
      * @param string $reason
      */
-    private function createValidator(string $reportableType, int $reportableId, string $reason): void
+    protected function validation(string $reportableType, int $reportableId, string $reason): void
     {
         $errors = [];
 
@@ -76,11 +75,11 @@ class Update extends Abstracts
         }
 
         // 验证是否已举报过
-        $isExist = $this->model
+        $isExist = $this->reportModel
             ->where([
                 'reportable_type' => $reportableType,
                 'reportable_id' => $reportableId,
-                'user_id' => $this->roleService->userId(),
+                'user_id' => $this->auth->userId(),
             ])
             ->has();
 

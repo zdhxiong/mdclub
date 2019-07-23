@@ -56,6 +56,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @property-read QuestionFollow             $questionFollowService
  * @property-read QuestionVote               $questionVoteService
  * @property-read Report                     $reportService
+ * @property-read ReportCreate               $reportCreateService
  * @property-read Token                      $tokenService
  * @property-read TokenCreate                $tokenCreateService
  * @property-read Topic                      $topicService

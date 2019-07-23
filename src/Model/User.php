@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MDClub\Model;
 
 use MDClub\Helper\Ip;
+use MDClub\Helper\Request;
 use MDClub\Library\Auth;
 use MDClub\Observer\User as UserObserver;
 use Psr\Container\ContainerInterface;
@@ -93,7 +94,7 @@ class User extends Abstracts
             'cover' => '',
             'create_ip' => Ip::getIp(),
             'create_location' => Ip::getLocation(),
-            'last_login_time' => $this->request->getServerParams()['REQUEST_TIME'] ?? time(),
+            'last_login_time' => Request::time($this->request),
             'last_login_ip' => Ip::getIp(),
             'last_login_location' => Ip::getLocation(),
             'follower_count' => 0,

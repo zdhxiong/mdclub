@@ -37,6 +37,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @property-read \MDClub\Service\QuestionFollow     $questionFollowService
  * @property-read \MDClub\Service\QuestionVote       $questionVoteService
  * @property-read \MDClub\Service\Report             $reportService
+ * @property-read \MDClub\Service\ReportCreate       $reportCreateService
  * @property-read \MDClub\Service\Token              $tokenService
  * @property-read \MDClub\Service\TokenCreate        $tokenCreateService
  * @property-read \MDClub\Service\Topic              $topicService

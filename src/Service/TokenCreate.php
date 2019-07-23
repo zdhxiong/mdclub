@@ -7,6 +7,7 @@ namespace MDClub\Service;
 use MDClub\Exception\ValidationException;
 use MDClub\Helper\Guid;
 use MDClub\Helper\Ip;
+use MDClub\Helper\Request;
 use MDClub\Helper\Validator;
 
 /**
@@ -80,12 +81,12 @@ class TokenCreate extends Abstracts
     public function create(string $name, string $password, string $device = ''): string
     {
         if (!$device) {
-            $device = $this->request->getServerParams()['HTTP_USER_AGENT'];
+            $device = $this->request->getServerParams()['HTTP_USER_AGENT'] ?? '';
         }
 
         $userId = $this->validation($name, $password, $device);
         $token = Guid::generate();
-        $requestTime = $this->request->getServerParams()['REQUEST_TIME'];
+        $requestTime = Request::time($this->request);
 
         $this->tokenModel->insert([
             'token' => $token,

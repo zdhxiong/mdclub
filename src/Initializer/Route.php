@@ -13,6 +13,8 @@ use MDClub\Middleware\TransformArticle;
 use MDClub\Middleware\TransformComment;
 use MDClub\Middleware\TransformImage;
 use MDClub\Middleware\TransformQuestion;
+use MDClub\Middleware\TransformReport;
+use MDClub\Middleware\TransformReportReason;
 use MDClub\Middleware\TransformTopic;
 use MDClub\Middleware\TransformUser;
 use Slim\App;
@@ -1345,7 +1347,8 @@ class Route
          * @see ReportApi::getList()
          */
         $group->get('/reports', 'ReportApi/getList')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformReport::class);
 
         /**
          * 批量删除举报
@@ -1361,14 +1364,17 @@ class Route
          * @see ReportApi::getReasons()
          */
         $group->get('/reports/{reportable_type}/{reportable_id:\d+}', 'ReportApi/getReasons')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformReportReason::class);
 
         /**
          * 添加举报
          *
          * @see ReportApi::create()
          */
-        $group->post('/reports/{reportable_type}/{reportable_id:\d+}', 'ReportApi/create');
+        $group->post('/reports/{reportable_type}/{reportable_id:\d+}', 'ReportApi/create')
+            ->add(NeedLogin::class)
+            ->add(TransformReportReason::class);
 
         /**
          * 删除举报
