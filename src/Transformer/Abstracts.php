@@ -12,11 +12,12 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @property-read ServerRequestInterface     $request
  * @property-read \MDClub\Library\Auth       $auth
- * @property-read User                       $userTransformer
+ * @property-read Article                    $articleTransformer
  * @property-read Question                   $questionTransformer
  * @property-read Vote                       $voteTransformer
  * @property-read Topic                      $topicTransformer
  * @property-read Follow                     $followTransformer
+ * @property-read User                       $userTransformer
  */
 abstract class Abstracts
 {
@@ -95,7 +96,9 @@ abstract class Abstracts
         $users = $this->userTransformer->getInRelationship($userIds);
 
         foreach ($items as &$item) {
-            $item['relationships']['user'] = $users[$item['user_id']];
+            if (isset($item['user_id'])) {
+                $item['relationships']['user'] = $users[$item['user_id']];
+            }
         }
 
         return $items;
@@ -113,7 +116,29 @@ abstract class Abstracts
         $questions = $this->questionTransformer->getInRelationship($questionIds);
 
         foreach ($items as &$item) {
-            $item['relationships']['question'] = $questions[$item['question_id']];
+            if (isset($item['question_id'])) {
+                $item['relationships']['question'] = $questions[$item['question_id']];
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * 获取 article 子资源
+     *
+     * @param  array $items
+     * @return array
+     */
+    protected function article(array $items): array
+    {
+        $articleIds = array_unique(array_column($items, 'article_id'));
+        $articles = $this->articleTransformer->getInRelationship($articleIds);
+
+        foreach ($items as &$item) {
+            if (isset($item['article_id'])) {
+                $item['relationships']['article'] = $articles[$item['article_id']];
+            }
         }
 
         return $items;
@@ -131,7 +156,9 @@ abstract class Abstracts
         $votings = $this->voteTransformer->getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
-            $item['relationships']['voting'] = $votings[$item[$this->primaryKey]];
+            if (isset($item[$this->primaryKey])) {
+                $item['relationships']['voting'] = $votings[$item[$this->primaryKey]];
+            }
         }
 
         return $items;
@@ -149,7 +176,9 @@ abstract class Abstracts
         $topics = $this->topicTransformer->getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
-            $item['relationships']['topics'] = $topics[$item[$this->primaryKey]];
+            if (isset($item[$this->primaryKey])) {
+                $item['relationships']['topics'] = $topics[$item[$this->primaryKey]];
+            }
         }
 
         return $items;
@@ -173,7 +202,9 @@ abstract class Abstracts
         }
 
         foreach ($items as &$item) {
-            $item['relationships']['is_following'] = in_array($item[$this->primaryKey], $followingKeys, true);
+            if (isset($item[$this->primaryKey])) {
+                $item['relationships']['is_following'] = in_array($item[$this->primaryKey], $followingKeys, true);
+            }
         }
 
         return $items;
@@ -209,7 +240,9 @@ abstract class Abstracts
 
         // 添加 relationships
         foreach ($this->includes as $include) {
-            $items = $this->{$include}($items, $knownRelationship);
+            if (method_exists($this, $include)) {
+                $items = $this->{$include}($items, $knownRelationship);
+            }
         }
 
         return $isSingleItem ? $items[0] : $items;

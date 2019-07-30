@@ -183,7 +183,7 @@ class Option
 
         $options = $this->options;
 
-        if ($this->onlyAuthorized && !$this->auth->isManager()) {
+        if ($this->onlyAuthorized && $this->auth->isNotManager()) {
             $this->onlyAuthorized = false;
             $options = collect($options)->only(self::$publicNames)->all();
         }

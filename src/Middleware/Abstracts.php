@@ -8,18 +8,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * 中间件抽象类
- *
- * @property-read \MDClub\Transformer\Answer       $answerTransformer
- * @property-read \MDClub\Transformer\Article      $articleTransformer
- * @property-read \MDClub\Transformer\Comment      $commentTransformer
- * @property-read \MDClub\Transformer\Follow       $followTransformer
- * @property-read \MDClub\Transformer\Image        $imageTransformer
- * @property-read \MDClub\Transformer\Question     $questionTransformer
- * @property-read \MDClub\Transformer\Report       $reportTransformer
- * @property-read \MDClub\Transformer\ReportReason $reportReasonTransformer
- * @property-read \MDClub\Transformer\Topic        $topicTransformer
- * @property-read \MDClub\Transformer\User         $userTransformer
- * @property-read \MDClub\Transformer\Vote         $voteTransformer
  */
 abstract class Abstracts
 {

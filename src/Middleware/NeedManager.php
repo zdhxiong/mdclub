@@ -24,7 +24,7 @@ class NeedManager extends Abstracts implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!$this->auth->isManager()) {
+        if ($this->auth->isNotManager()) {
             throw new ApiException(ApiError::USER_NEED_MANAGE_PERMISSION);
         }
 

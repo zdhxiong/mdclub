@@ -4,50 +4,28 @@ declare(strict_types=1);
 
 namespace MDClub\Service\Article;
 
-use MDClub\Library\Collection;
 use MDClub\Traits\Getable;
 
 /**
  * 获取文章
+ *
+ * @property-read \MDClub\Model\Article $model
  */
 class Get extends Abstracts
 {
     use Getable;
 
     /**
-     * 获取允许排序的字段
-     *
-     * @return array
-     */
-    public function getAllowOrderFields(): array
-    {
-        return ['vote_count', 'create_time', 'update_time'];
-    }
-
-    /**
-     * 获取允许搜索的字段
-     *
-     * @return array
-     */
-    public function getAllowFilterFields(): array
-    {
-        return ['article_id', 'user_id', 'topic_id']; // topic_id 需要另外写逻辑
-    }
-
-    /**
      * 根据 user_id 获取文章列表
      *
-     * @param  int              $userId
+     * @param  int   $userId
      * @return array
      */
-    public function getByUserId(int $userId)
+    public function getByUserId(int $userId): array
     {
         $this->userGetService->hasOrFail($userId);
 
-        return $this->model
-            ->where('user_id', $userId)
-            ->order($this->getOrder(['update_time' => 'DESC']))
-            ->paginate();
+        return $this->model->getByUserId($userId);
     }
 
     /**
@@ -56,7 +34,7 @@ class Get extends Abstracts
      * @param  int              $topicId
      * @return array
      */
-    public function getByTopicId(int $topicId)
+    /*public function getByTopicId(int $topicId)
     {
         $this->topicGetService->hasOrFail($topicId);
 
@@ -66,14 +44,14 @@ class Get extends Abstracts
             ->where('topicable.topic_id', $topicId)
             ->order($this->getOrder(['update_time' => 'DESC']))
             ->paginate();
-    }
+    }*/
 
     /**
      * 获取 where
      *
      * @return array
      */
-    protected function getWhereFromQuery(): array
+    /*protected function getWhereFromQuery(): array
     {
         $where = $this->getWhere();
 
@@ -96,14 +74,14 @@ class Get extends Abstracts
         }
 
         return $where;
-    }
+    }*/
 
     /**
      * 获取已删除的文章列表
      *
      * @return array
      */
-    public function getDeleted()
+    /*public function getDeleted()
     {
         $defaultOrder = ['delete_time' => 'DESC'];
         $allowOrderFields = collect($this->getAllowOrderFields())->push('delete_time')->unique()->all();
@@ -114,18 +92,15 @@ class Get extends Abstracts
             ->where($this->getWhereFromQuery())
             ->order($order)
             ->paginate();
-    }
+    }*/
 
     /**
      * 获取文章列表
      *
      * @return array
      */
-    public function getList()
+    public function getList(): array
     {
-        return $this->model
-            ->where($this->getWhereFromQuery())
-            ->order($this->getOrder(['update_time' => 'DESC']))
-            ->paginate();
+        return $this->model->getList();
     }
 }

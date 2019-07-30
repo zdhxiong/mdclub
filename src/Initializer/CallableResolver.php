@@ -11,7 +11,7 @@ use Slim\Interfaces\CallableResolverInterface;
 /**
  * 路由回调解析器
  *
- * 路由仅支持 Controller/method 这一种方式
+ * 路由仅支持 Module/Controller/method 这一种方式
  */
 class CallableResolver implements CallableResolverInterface
 {
@@ -37,8 +37,8 @@ class CallableResolver implements CallableResolverInterface
             return $toResolve->bindTo($this->container);
         }
 
-        [$class, $method] = explode('/', $toResolve);
-        $class = '\MDClub\Controller\\' . $class;
+        [$module, $class, $method] = explode('/', $toResolve);
+        $class = "\MDClub\Controller\\${module}\\${class}";
 
         $instance = new $class($this->container);
 

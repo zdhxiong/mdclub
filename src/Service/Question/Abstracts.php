@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Service\Question;
 
-use MDClub\Abstracts\ContainerProperty;
+use MDClub\Service\Abstracts as ServiceAbstracts;
 use Psr\Container\ContainerInterface;
 
-abstract class Abstracts extends ContainerProperty
+/**
+ * 提问抽象类
+ */
+abstract class Abstracts extends ServiceAbstracts
 {
     /**
      * @var \MDClub\Model\Question
@@ -15,7 +18,7 @@ abstract class Abstracts extends ContainerProperty
     protected $model;
 
     /**
-     * @param ContainerInterface $container
+     * @inheritDoc
      */
     public function __construct(ContainerInterface $container)
     {

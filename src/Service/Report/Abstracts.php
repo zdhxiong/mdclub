@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Service\Report;
 
-use MDClub\Abstracts\ContainerProperty;
+use MDClub\Service\Abstracts as ServiceAbstracts;
 use Psr\Container\ContainerInterface;
 
 /**
  * 举报抽象类
  */
-abstract class Abstracts extends ContainerProperty
+abstract class Abstracts extends ServiceAbstracts
 {
     /**
      * @var \MDClub\Model\Report

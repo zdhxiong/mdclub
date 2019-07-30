@@ -17,8 +17,6 @@ class Delete extends Abstracts
      */
     public function delete(string $reportableType, int $reportableId): void
     {
-        $this->roleService->managerIdOrFail();
-
         $this->model
             ->where('reportable_type', $reportableType)
             ->where('reportable_id', $reportableId)
@@ -32,8 +30,6 @@ class Delete extends Abstracts
      */
     public function deleteMultiple(array $targets): void
     {
-        $this->roleService->managerIdOrFail();
-
         if (!$targets) {
             return;
         }

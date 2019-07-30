@@ -22,45 +22,14 @@ use MDClub\Helper\Validator;
 class Update extends Abstracts
 {
     /**
-     * 更新评论
-     *
-     * @param  int    $commentId 评论ID
-     * @param  string $content   评论内容
+     * @var int 当前用户ID
      */
-    public function update(int $commentId, string $content = null): void
-    {
-        $userId = $this->roleService->userIdOrFail();
-        $comment = $this->commentGetService->getOrFail($commentId);
+    protected $userId;
 
-        // 检查编辑权限
-        if (!$this->roleService->managerId()) {
-            if ($comment['user_id'] !== $userId) {
-                throw new ApiException(ApiError::COMMENT_CANT_EDIT_NOT_AUTHOR);
-            }
-
-            $canEdit = $this->optionService->comment_can_edit;
-            $canEditBefore = $this->optionService->comment_can_edit_before;
-            $requestTime = Request::time($this->request);
-
-            if (!$canEdit) {
-                throw new ApiException(ApiError::COMMENT_CANT_EDIT);
-            }
-
-            if ($canEditBefore && $comment['create_time'] + (int) $canEditBefore < $requestTime) {
-                throw new ApiException(ApiError::COMMENT_CANT_EDIT_TIMEOUT);
-            }
-        }
-
-        if ($content === null) {
-            return;
-        }
-
-        $content = $this->validContent($content);
-
-        $this->model
-            ->where('comment_id', $commentId)
-            ->update('content', $content);
-    }
+    /**
+     * @var array 评论信息数组
+     */
+    protected $comment;
 
     /**
      * 验证评论内容
@@ -68,7 +37,7 @@ class Update extends Abstracts
      * @param  string $content
      * @return string
      */
-    public function validContent(string $content): string
+    protected function validContent(string $content): string
     {
         $content = strip_tags($content);
         $errors = [];
@@ -84,5 +53,53 @@ class Update extends Abstracts
         }
 
         return $content;
+    }
+
+    /**
+     * 检查编辑权限
+     */
+    protected function checkPermission(): void
+    {
+        if ($this->comment['user_id'] !== $this->userId) {
+            throw new ApiException(ApiError::COMMENT_CANT_EDIT_NOT_AUTHOR);
+        }
+
+        $canEdit = $this->option->comment_can_edit;
+        $canEditBefore = (int) $this->option->comment_can_edit_before;
+        $requestTime = Request::time($this->request);
+
+        if (!$canEdit) {
+            throw new ApiException(ApiError::COMMENT_CANT_EDIT);
+        }
+
+        if ($canEditBefore && $this->comment['create_time'] + $canEditBefore < $requestTime) {
+            throw new ApiException(ApiError::COMMENT_CANT_EDIT_TIMEOUT);
+        }
+    }
+
+    /**
+     * 更新评论
+     *
+     * @param  int    $commentId 评论ID
+     * @param  string $content   评论内容
+     */
+    public function update(int $commentId, string $content = null): void
+    {
+        $this->userId = $this->auth->userId();
+        $this->comment = $this->commentGetService->getOrFail($commentId);
+
+        if ($this->auth->isNotManager()) {
+            $this->checkPermission();
+        }
+
+        if ($content === null) {
+            return;
+        }
+
+        $content = $this->validContent($content);
+
+        $this->model
+            ->where('comment_id', $commentId)
+            ->update('content', $content);
     }
 }

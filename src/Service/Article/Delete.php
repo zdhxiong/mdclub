@@ -81,9 +81,7 @@ class Delete extends Abstracts
             return;
         }
 
-        $isManager = $this->roleService->managerId();
-
-        if (!$isManager && collect($posts)->pluck('user_id')->diff([$userId])->count()) {
+        if ($this->auth->isNotManager() && collect($posts)->pluck('user_id')->diff([$userId])->count()) {
             $this->throwOnlyAuthorCanDeleteException();
         }
 

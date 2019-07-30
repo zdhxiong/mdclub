@@ -159,4 +159,14 @@ class Auth
     {
         return $this->userId() === 1;
     }
+
+    /**
+     * 当前登录用户是否不是管理员
+     *
+     * @return bool
+     */
+    public function isNotManager(): bool
+    {
+        return !$this->isManager();
+    }
 }

@@ -7,8 +7,8 @@ namespace MDClub\Transformer;
 /**
  * 图片转换器
  *
- * @property-read \MDClub\Model\Image   $imageModel
- * @property-read \MDClub\Service\Image $imageService
+ * @property-read \MDClub\Model\Image       $imageModel
+ * @property-read \MDClub\Service\Image\Get $imageGetService
  */
 class Image extends Abstracts
 {
@@ -25,7 +25,7 @@ class Image extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['key'], $item['create_time'])) {
-            $item['urls'] = $this->imageService->getUrls($item['key'], $item['create_time']);
+            $item['urls'] = $this->imageGetService->getUrls($item['key'], $item['create_time']);
         }
 
         return $item;
@@ -109,7 +109,7 @@ class Image extends Abstracts
         return collect($images)
             ->keyBy('key')
             ->map(function ($item) {
-                $item['urls'] = $this->imageService->getUrls($item['key'], $item['create_time']);
+                $item['urls'] = $this->imageGetService->getUrls($item['key'], $item['create_time']);
 
                 return $item;
             })
