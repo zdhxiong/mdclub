@@ -26,7 +26,7 @@ class Create extends Abstracts
     protected function validation(string $name, string $password, string $device): int
     {
         $isNeedCaptcha = $this->captcha->isNextTimeNeed(
-            Ip::getIp(),
+            Ip::getIpSign(),
             'create_token',
             3,
             3600*24

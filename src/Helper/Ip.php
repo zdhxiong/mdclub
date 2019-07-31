@@ -42,4 +42,18 @@ class Ip
 
         return '';
     }
+
+    /**
+     * 获取 IP 地址，并将其中的特殊字符替换成“.”，并返回。
+     *
+     * NOTE: 因为缓存键名中不能出现某些特殊符号
+     *
+     * @return string
+     */
+    public static function getIpSign(): string
+    {
+        preg_match_all('/[a-z0-9A-Z]*?/', self::getIp(), $matches);
+
+        return join('.', $matches[0]);
+    }
 }

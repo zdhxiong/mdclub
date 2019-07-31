@@ -21,7 +21,7 @@ class PasswordReset extends Abstracts
     protected function sendEmailValidation(string $email): void
     {
         $needCaptcha = $this->captcha->isNextTimeNeed(
-            Ip::getIp(),
+            Ip::getIpSign(),
             'send_password_reset_email',
             3,
             3600*24

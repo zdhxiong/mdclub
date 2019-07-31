@@ -43,7 +43,7 @@ class Register extends Abstracts
     protected function sendEmailValidation(string $email): void
     {
         $needCaptcha = $this->captcha->isNextTimeNeed(
-            Ip::getIp(),
+            Ip::getIpSign(),
             'send_register_email',
             3,
             3600*24
