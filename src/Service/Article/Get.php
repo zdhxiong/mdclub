@@ -34,47 +34,12 @@ class Get extends Abstracts
      * @param  int              $topicId
      * @return array
      */
-    /*public function getByTopicId(int $topicId)
+    public function getByTopicId(int $topicId)
     {
         $this->topicGetService->hasOrFail($topicId);
 
-        return $this->model
-            ->join(['[><]topicable' => ['article_id' => 'topicable_id']])
-            ->where('topicable.topicable_type', 'article')
-            ->where('topicable.topic_id', $topicId)
-            ->order($this->getOrder(['update_time' => 'DESC']))
-            ->paginate();
-    }*/
-
-    /**
-     * 获取 where
-     *
-     * @return array
-     */
-    /*protected function getWhereFromQuery(): array
-    {
-        $where = $this->getWhere();
-
-        if (isset($where['topic_id'])) {
-            $this->model->join(['[><]topicable' => ['article_id' => 'topicable_id']]);
-
-            $where['topicable.topic_id'] = $where['topic_id'];
-            $where['topicable.topicable_type'] = 'article';
-            unset($where['topic_id']);
-        }
-
-        if (isset($where['user_id'])) {
-            $where['article.user_id'] = $where['user_id'];
-            unset($where['user_id']);
-        }
-
-        if (isset($where['article_id'])) {
-            $where['article.article_id'] = $where['article_id'];
-            unset($where['article_id']);
-        }
-
-        return $where;
-    }*/
+        return $this->articleModel->getByTopicId($topicId);
+    }
 
     /**
      * 获取已删除的文章列表

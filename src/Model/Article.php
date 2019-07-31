@@ -58,6 +58,34 @@ class Article extends Abstracts
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getWhereFromRequest(array $defaultFilter = [], array $allowFilterFields = null): array
+    {
+        $where = parent::getWhereFromRequest($defaultFilter, $allowFilterFields);
+
+        if (isset($where['topic_id'])) {
+            $this->join(['[><]topicable' => ['article_id' => 'topicable_id']]);
+
+            $where['topicable.topic_id'] = $where['topic_id'];
+            $where['topicable.topicable_type'] = 'article';
+            unset($where['topic_id']);
+        }
+
+        if (isset($where['user_id'])) {
+            $where['article.user_id'] = $where['user_id'];
+            unset($where['user_id']);
+        }
+
+        if (isset($where['article_id'])) {
+            $where['article.article_id'] = $where['article_id'];
+            unset($where['article_id']);
+        }
+
+        return $where;
+    }
+
+    /**
      * 根据 user_id 获取文章列表
      *
      * @param  int   $userId
@@ -68,6 +96,22 @@ class Article extends Abstracts
         return $this
             ->where('user_id', $userId)
             ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
+            ->paginate();
+    }
+
+    /**
+     * 根据 topic_id 获取文章列表
+     *
+     * @param  int   $topicId
+     * @return array
+     */
+    public function getByTopicId(int $topicId): array
+    {
+        return $this
+            ->join(['[><]topicable' => ['article_id' => 'topicable_id']])
+            ->where('topicable.topicable_type', 'article')
+            ->where('topicable.topic_id', $topicId)
+            ->order($this->getOrderFromRequest(['update_time' => 'DESC']))
             ->paginate();
     }
 

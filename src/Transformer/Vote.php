@@ -21,7 +21,7 @@ class Vote extends Abstracts
     public function getInRelationship(array $targetIds, string $targetType): array
     {
         $userId = $this->auth->userId();
-        $emptyVotings = collect()->unionFill($targetIds)->all();
+        $emptyVotings = collect()->unionFill($targetIds, '')->all();
 
         if (!$userId) {
             return $emptyVotings;

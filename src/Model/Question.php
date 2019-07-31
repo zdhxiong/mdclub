@@ -61,6 +61,34 @@ class Question extends Abstracts
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getWhereFromRequest(array $defaultFilter = [], array $allowFilterFields = null): array
+    {
+        $where = parent::getWhereFromRequest($defaultFilter, $allowFilterFields);
+
+        if (isset($where['topic_id'])) {
+            $this->join(['[><]topicable' => ['question_id' => 'topicable_id']]);
+
+            $where['topicable.topic_id'] = $where['topic_id'];
+            $where['topicable.topicable_type'] = 'question';
+            unset($where['topic_id']);
+        }
+
+        if (isset($where['user_id'])) {
+            $where['question.user_id'] = $where['user_id'];
+            unset($where['user_id']);
+        }
+
+        if (isset($where['question_id'])) {
+            $where['question.question_id'] = $where['question_id'];
+            unset($where['question_id']);
+        }
+
+        return $where;
+    }
+
+    /**
      * 根据 user_id 获取提问列表
      *
      * @param  int   $userId
@@ -82,7 +110,12 @@ class Question extends Abstracts
      */
     public function getByTopicId(int $topicId): array
     {
-
+        return $this
+            ->join(['[><]topicable' => ['question_id' => 'topicable_id']])
+            ->where('topicable.topicable_type', 'question')
+            ->where('topicable.topic_id', $topicId)
+            ->order($this->getOrderFromRequest(['update_time' => 'DESC']))
+            ->paginate();
     }
 
     /**

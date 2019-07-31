@@ -542,7 +542,8 @@ class RestApi
          *
          * @see Topic::getArticles()
          */
-        $group->get('/topics/{topic_id:\d+}/articles', 'RestApi/Topic/getArticles');
+        $group->get('/topics/{topic_id:\d+}/articles', 'RestApi/Topic/getArticles')
+            ->add(TransformArticle::class);
 
         /**
          * 获取回收站中的话题

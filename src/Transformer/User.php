@@ -7,10 +7,10 @@ namespace MDClub\Transformer;
 /**
  * 用户转换器
  *
- * @property-read \MDClub\Model\Follow       $followModel
- * @property-read \MDClub\Model\User         $userModel
- * @property-read \MDClub\Service\UserAvatar $userAvatarService
- * @property-read \MDClub\Service\UserCover  $userCoverService
+ * @property-read \MDClub\Model\Follow        $followModel
+ * @property-read \MDClub\Model\User          $userModel
+ * @property-read \MDClub\Service\User\Avatar $userAvatarService
+ * @property-read \MDClub\Service\User\Cover  $userCoverService
  */
 class User extends Abstracts
 {

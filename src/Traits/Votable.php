@@ -15,7 +15,6 @@ use Psr\Http\Message\ServerRequestInterface;
  * @property-read ServerRequestInterface  $request
  * @property-read \MDClub\Library\Auth    $auth
  * @property-read \MDClub\Model\Abstracts $model
- * @property-read \MDClub\Service\User    $userService
  * @property-read \MDClub\Model\Vote      $voteModel
  * @property-read \MDClub\Model\User      $userModel
  */
@@ -36,7 +35,7 @@ trait Votable
         $table = $this->model->table;
         $userId = $this->auth->userId();
 
-        $this->{"${table}Service"}->hasOrFail($votableId);
+        $this->{"${table}GetService"}->hasOrFail($votableId);
 
         $voteWhere = [
             'user_id'      => $userId,
@@ -82,7 +81,7 @@ trait Votable
         $userId = $this->auth->userId();
         $table = $this->model->table;
 
-        $this->{"${table}Service"}->hasOrFail($votableId);
+        $this->{"${table}GetService"}->hasOrFail($votableId);
 
         $voteWhere = [
             'user_id'      => $userId,
@@ -126,7 +125,7 @@ trait Votable
     public function getVoters(int $votableId, string $type = null): array
     {
         $table = $this->model->table;
-        $this->{"${table}Service"}->hasOrFail($votableId);
+        $this->{"${table}GetService"}->hasOrFail($votableId);
 
         if (in_array($type, ['up', 'down'])) {
             $this->userModel->where('vote.type', $type);
