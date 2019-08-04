@@ -46,7 +46,7 @@ class Question extends Abstracts
      */
     public function deleteMultiple(): array
     {
-        $questionIds = Request::getQueryParamToArray($this->request, 'question_id', 100);
+        $questionIds = Request::getQueryParamToArray($this->request, 'question_id', 100) ?? [];
 
         $this->questionDeleteService->deleteMultiple($questionIds);
 

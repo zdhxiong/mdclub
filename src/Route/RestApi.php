@@ -503,7 +503,8 @@ class RestApi
          *
          * @see Topic::delete()
          */
-        $group->delete('/topics/{topic_id:\d+}', 'RestApi/Topic/delete');
+        $group->delete('/topics/{topic_id:\d+}', 'RestApi/Topic/delete')
+            ->add(NeedManager::class);
 
         /**
          * 获取指定话题的关注者
@@ -551,7 +552,8 @@ class RestApi
          * @see Topic::getDeleted()
          */
         $group->get('/trash/topics', 'RestApi/Topic/getDeleted')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformTopic::class);
 
         /**
          * 批量恢复话题
@@ -575,7 +577,8 @@ class RestApi
          * @see Topic::restore()
          */
         $group->post('/trash/topics/{topic_id:\d+}', 'RestApi/Topic/restore')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformTopic::class);
 
         /**
          * 删除话题
@@ -616,7 +619,8 @@ class RestApi
          *
          * @see Question::deleteMultiple()
          */
-        $group->delete('/questions', 'RestApi/Question/deleteMultiple');
+        $group->delete('/questions', 'RestApi/Question/deleteMultiple')
+            ->add(NeedLogin::class);
 
         /**
          * 获取提问
@@ -638,7 +642,8 @@ class RestApi
          *
          * @see Question::delete()
          */
-        $group->delete('/questions/{question_id:\d+}', 'RestApi/Question/delete');
+        $group->delete('/questions/{question_id:\d+}', 'RestApi/Question/delete')
+            ->add(NeedLogin::class);
 
         /**
          * 获取指定提问的投票者

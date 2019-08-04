@@ -167,7 +167,7 @@ class Topic extends Abstracts
      */
     public function getDeleted(): array
     {
-        return  $this->topicGetService->getDeleted();
+        return $this->topicGetService->getDeleted();
     }
 
     /**
@@ -178,7 +178,7 @@ class Topic extends Abstracts
      */
     public function restoreMultiple(): array
     {
-        $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100);
+        $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100) ?? [];
 
         $this->topicDeleteService->restoreMultiple($topicIds);
 
@@ -193,7 +193,7 @@ class Topic extends Abstracts
      */
     public function destroyMultiple(): array
     {
-        $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100);
+        $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100) ?? [];
 
         $this->topicDeleteService->destroyMultiple($topicIds);
 
@@ -211,7 +211,7 @@ class Topic extends Abstracts
     {
         $this->topicDeleteService->restore($topic_id);
 
-        return [];
+        return $this->topicGetService->get($topic_id);
     }
 
     /**

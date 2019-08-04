@@ -698,7 +698,7 @@ abstract class Abstracts
      *
      * NOTE: 仅通过主键作为唯一条件删除时会触发 Observer 方法，通过其他条件删除不触发 todo 未完成
      *
-     * @param  int|string|array  $primaryValues 若传入该参数，则根据主键删除，否则根据前面的 where 条件删除；可传入多个主键组成的数组
+     * @param  int|string|array  $primaryValues 若传入该参数，则根据主键删除；否则根据前面的 where 条件删除；可传入多个主键组成的数组
      * @return int
      */
     public function delete($primaryValues = null): int
@@ -720,6 +720,35 @@ abstract class Abstracts
         } else {
             $query = $this->db->delete($this->table, $where);
         }
+
+        return $query->rowCount();
+    }
+
+    /**
+     * 恢复处于软删除状态的数据
+     *
+     * @param  int|string|array $primaryValues 若传入该参数，则根据主键恢复；否则根据前面的 where 条件恢复；可传入多个主键组成的数组
+     * @return int
+     */
+    public function restore($primaryValues = null): int
+    {
+        if (!$this->softDelete) {
+            $this->reset();
+            return 0;
+        }
+
+        $this->force();
+
+        $join = $this->joinData;
+        $where = $this->getWhere($primaryValues ? [$this->primaryKey => $primaryValues] : null);
+
+        $this->reset();
+
+        $deleteTimeField = $join
+            ? $this->table . '.' . static::DELETE_TIME
+            : static::DELETE_TIME;
+
+        $query = $this->db->update($this->table, [$deleteTimeField => 0], $where);
 
         return $query->rowCount();
     }
