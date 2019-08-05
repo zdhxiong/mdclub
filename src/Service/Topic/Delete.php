@@ -64,26 +64,33 @@ class Delete extends Abstracts
     /**
      * 硬删除话题
      *
-     * @param int $topicId
+     * @param int  $topicId
+     * @param bool $force   是否强制删除。为 true 时，无论话题是否在回收站中，都直接删除；为 false 时，只删除在回收站中的话题。
      */
-    public function destroy(int $topicId): void
+    public function destroy(int $topicId, bool $force = false): void
     {
-        $this->destroyMultiple([$topicId]);
+        $this->destroyMultiple([$topicId], $force);
     }
 
     /**
      * 批量硬删除话题
      *
      * @param array $topicIds
+     * @param bool  $force    是否强制删除。为 true 时，无论话题是否在回收站中，都直接删除；为 false 时，只删除在回收站中的话题。
      */
-    public function destroyMultiple(array $topicIds): void
+    public function destroyMultiple(array $topicIds, bool $force = false): void
     {
         if (!$topicIds) {
             return;
         }
 
+        if ($force) {
+            $this->model->force();
+        } else {
+            $this->model->onlyTrashed();
+        }
+
         $topics = $this->model
-            ->onlyTrashed()
             ->field(['topic_id', 'cover'])
             ->select($topicIds);
 

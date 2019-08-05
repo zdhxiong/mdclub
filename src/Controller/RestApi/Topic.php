@@ -50,8 +50,13 @@ class Topic extends Abstracts
     public function deleteMultiple(): array
     {
         $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100) ?? [];
+        $force = !!$this->request->getQueryParams()['force'];
 
-        $this->topicDeleteService->deleteMultiple($topicIds);
+        if ($force) {
+            $this->topicDeleteService->destroyMultiple($topicIds, true);
+        } else {
+            $this->topicDeleteService->deleteMultiple($topicIds);
+        }
 
         return [];
     }
@@ -88,12 +93,18 @@ class Topic extends Abstracts
     /**
      * 删除话题
      *
-     * @param  int      $topic_id
+     * @param  int    $topic_id
      * @return array
      */
     public function delete(int $topic_id): array
     {
-        $this->topicDeleteService->delete($topic_id);
+        $force = !!$this->request->getQueryParams()['force'];
+
+        if ($force) {
+            $this->topicDeleteService->destroy($topic_id, true);
+        } else {
+            $this->topicDeleteService->delete($topic_id);
+        }
 
         return [];
     }

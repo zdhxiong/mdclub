@@ -581,7 +581,7 @@ class RestApi
             ->add(TransformTopic::class);
 
         /**
-         * 删除话题
+         * 销毁话题
          *
          * @see Topic::destroy()
          */
@@ -1079,7 +1079,8 @@ class RestApi
          *
          * @see Comment::deleteMultiple()
          */
-        $group->delete('/comments', 'RestApi/Comment/deleteMultiple');
+        $group->delete('/comments', 'RestApi/Comment/deleteMultiple')
+            ->add(NeedManager::class);
 
         /**
          * 获取评论
@@ -1103,7 +1104,8 @@ class RestApi
          *
          * @see Comment::delete()
          */
-        $group->delete('/comments/{comment_id:\d+}', 'RestApi/Comment/delete');
+        $group->delete('/comments/{comment_id:\d+}', 'RestApi/Comment/delete')
+            ->add(NeedLogin::class);
 
         /**
          * 获取指定评论的投票者
@@ -1130,12 +1132,13 @@ class RestApi
             ->add(NeedLogin::class);
 
         /**
-         * 获取已删除的评论
+         * 获取回收站中的评论
          *
          * @see Comment::getDeleted()
          */
         $group->get('/trash/comments', 'RestApi/Comment/getDeleted')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformComment::class);
 
         /**
          * 批量恢复评论
@@ -1159,7 +1162,8 @@ class RestApi
          * @see Comment::restore()
          */
         $group->post('/trash/comments/{comment_id:\d+}', 'RestApi/Comment/restore')
-            ->add(NeedManager::class);
+            ->add(NeedManager::class)
+            ->add(TransformComment::class);
 
         /**
          * 销毁评论
