@@ -43,17 +43,8 @@ class Get extends Abstracts
      *
      * @return array
      */
-    /*public function getDeleted()
+    public function getDeleted()
     {
-        $defaultOrder = ['delete_time' => 'DESC'];
-        $allowOrderFields = collect($this->getAllowOrderFields())->push('delete_time')->unique()->all();
-        $order = $this->getOrder($defaultOrder, $allowOrderFields);
-
-        $this->model
-            ->onlyTrashed()
-            ->where($this->getWhere())
-            ->order($order);
-
-        return $this->doGetList();
-    }*/
+        return $this->model->getDeleted();
+    }
 }

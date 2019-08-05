@@ -93,4 +93,22 @@ class Comment extends Abstracts
             ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
             ->paginate();
     }
+
+    /**
+     * 根据 url 参数获取回收站中的评论列表
+     *
+     * @return array
+     */
+    public function getDeleted(): array
+    {
+        $defaultOrder = ['delete_time' => 'DESC'];
+        $allowOrderFields = collect($this->allowOrderFields)->push('delete_time')->unique()->all();
+        $order = $this->getOrderFromRequest($defaultOrder, $allowOrderFields);
+
+        return $this
+            ->onlyTrashed()
+            ->where($this->getWhereFromRequest())
+            ->order($order)
+            ->paginate();
+    }
 }

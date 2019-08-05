@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
+use MDClub\Constant\ApiError;
 use MDClub\Controller\Abstracts;
+use MDClub\Exception\ApiException;
 use MDClub\Helper\Request;
 use MDClub\Middleware\NeedManager;
+use MDClub\Middleware\Transform\Comment as TransformComment;
 
 /**
  * 评论
@@ -26,13 +29,19 @@ class Comment extends Abstracts
     /**
      * 批量删除评论
      *
+     * @uses   NeedManager
      * @return array
      */
     public function deleteMultiple(): array
     {
-        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100);
+        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100) ?? [];
+        $force = !!($this->request->getQueryParams()['force'] ?? false);
 
-        $this->commentDeleteService->deleteMultiple($commentIds);
+        if ($force) {
+            $this->commentDeleteService->destroyMultiple($commentIds, true);
+        } else {
+            $this->commentDeleteService->deleteMultiple($commentIds);
+        }
 
         return [];
     }
@@ -67,12 +76,23 @@ class Comment extends Abstracts
     /**
      * 删除评论
      *
+     * @uses   NeedLogin
      * @param  int      $comment_id
      * @return array
      */
     public function delete(int $comment_id): array
     {
-        $this->commentDeleteService->delete($comment_id);
+        if ($this->auth->isManager()) {
+            $force = !!($this->request->getQueryParams()['force'] ?? false);
+
+            if ($force) {
+                $this->commentDeleteService->destroy($comment_id, true);
+            } else {
+                $this->commentDeleteService->delete($comment_id);
+            }
+        } else {
+            $this->commentDeleteService->destroy($comment_id, true);
+        }
 
         return [];
     }
@@ -122,23 +142,24 @@ class Comment extends Abstracts
     /**
      * 获取回收站中的评论列表
      *
-     * @uses NeedManager
+     * @uses   NeedManager
+     * @uses   TransformComment
      * @return array
      */
     public function getDeleted(): array
     {
-        return $this->commentDeleteService->getDeleted();
+        return $this->commentGetService->getDeleted();
     }
 
     /**
      * 批量恢复评论
      *
-     * @uses NeedManager
+     * @uses   NeedManager
      * @return array
      */
     public function restoreMultiple(): array
     {
-        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100);
+        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100) ?? [];
 
         $this->commentDeleteService->restoreMultiple($commentIds);
 
@@ -148,12 +169,12 @@ class Comment extends Abstracts
     /**
      * 批量删除回收站中的评论
      *
-     * @uses NeedManager
+     * @uses   NeedManager
      * @return array
      */
     public function destroyMultiple(): array
     {
-        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100);
+        $commentIds = Request::getQueryParamToArray($this->request, 'comment_id', 100) ?? [];
 
         $this->commentDeleteService->destroyMultiple($commentIds);
 
@@ -163,27 +184,32 @@ class Comment extends Abstracts
     /**
      * 恢复指定评论
      *
-     * @uses NeedManager
+     * @uses   NeedManager
+     * @uses   TransformComment
      * @param  int      $comment_id
      * @return array
      */
     public function restore(int $comment_id): array
     {
-        $this->commentDeleteService->restore($comment_id);
+        $rowCount = $this->commentDeleteService->restore($comment_id);
 
-        return [];
+        if (!$rowCount) {
+            throw new ApiException(ApiError::COMMENT_NOT_FOUND);
+        }
+
+        return $this->commentGetService->get($comment_id);
     }
 
     /**
-     * 删除指定评论
+     * 销毁指定评论
      *
-     * @uses NeedManager
+     * @uses   NeedManager
      * @param  int      $comment_id
      * @return array
      */
     public function destroy(int $comment_id): array
     {
-        $this->answerDeleteService->destroy($comment_id);
+        $this->commentDeleteService->destroy($comment_id);
 
         return [];
     }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
+use MDClub\Constant\ApiError;
 use MDClub\Controller\Abstracts;
+use MDClub\Exception\ApiException;
 use MDClub\Helper\Request;
 
 /**
@@ -50,7 +52,7 @@ class Topic extends Abstracts
     public function deleteMultiple(): array
     {
         $topicIds = Request::getQueryParamToArray($this->request, 'topic_id', 100) ?? [];
-        $force = !!$this->request->getQueryParams()['force'];
+        $force = !!($this->request->getQueryParams()['force'] ?? false);
 
         if ($force) {
             $this->topicDeleteService->destroyMultiple($topicIds, true);
@@ -98,7 +100,7 @@ class Topic extends Abstracts
      */
     public function delete(int $topic_id): array
     {
-        $force = !!$this->request->getQueryParams()['force'];
+        $force = !!($this->request->getQueryParams()['force'] ?? false);
 
         if ($force) {
             $this->topicDeleteService->destroy($topic_id, true);
@@ -220,7 +222,11 @@ class Topic extends Abstracts
      */
     public function restore(int $topic_id): array
     {
-        $this->topicDeleteService->restore($topic_id);
+        $rowCount = $this->topicDeleteService->restore($topic_id);
+
+        if (!$rowCount) {
+            throw new ApiException(ApiError::TOPIC_NOT_FOUND);
+        }
 
         return $this->topicGetService->get($topic_id);
     }

@@ -40,11 +40,12 @@ class Delete extends Abstracts
     /**
      * 恢复话题
      *
-     * @param  int  $topicId
+     * @param  int $topicId
+     * @return int          恢复的行数
      */
-    public function restore(int $topicId): void
+    public function restore(int $topicId): int
     {
-        $this->model->restore($topicId);
+        return $this->model->restore($topicId);
     }
 
     /**
