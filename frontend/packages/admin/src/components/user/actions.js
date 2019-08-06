@@ -24,9 +24,10 @@ export default $.extend({}, actionsAbstract, {
   open: user => (state, actions) => {
     const isComplete = typeof user === 'object';
 
-    isComplete
-      ? actions.setState({ user, loading: false })
-      : actions.setState({ user: false, loading: true });
+    actions.setState({
+      user: isComplete ? user : false,
+      loading: !isComplete,
+    });
 
     dialog.open();
 
@@ -36,25 +37,26 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
-    User.getOne(user, (response) => {
-      actions.setState({ loading: false });
+    User
+      .getOne(user)
+      .then(({ data }) => {
+        actions.setState({ loading: false, user: data });
 
-      if (response.code) {
+        setTimeout(() => dialog.handleUpdate());
+      })
+      .catch(({ message }) => {
+        actions.setState({ loading: false });
         dialog.close();
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({ user: response.data });
-
-      setTimeout(() => dialog.handleUpdate());
-    });
+        mdui.snackbar(message);
+      });
   },
 
   /**
    * 关闭对话框
    */
-  close: () => dialog.close(),
+  close: () => {
+    dialog.close();
+  },
 
   /**
    * 禁用该账号
@@ -78,10 +80,9 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * 重置 header 部分滚动条位置
+   * 重置 header 部分滚动条位置（向下滚动一段距离）
    */
   headerReset: () => {
-    // 向下滚动一段距离
     $dialog[0].scrollTo(0, $dialog.width() * 0.56 * 0.58);
   },
 
@@ -92,11 +93,9 @@ export default $.extend({}, actionsAbstract, {
     const headerElem = $dialog.find('.header')[0];
     const dialogElem = $dialog[0];
 
-    $dialog.on('scroll', () => {
-      window.requestAnimationFrame(() => {
-        headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
-      });
-    });
+    $dialog.on('scroll', () => window.requestAnimationFrame(() => {
+      headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
+    }));
 
     actions.headerReset();
   },

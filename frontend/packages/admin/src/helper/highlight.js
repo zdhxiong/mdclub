@@ -1,5 +1,3 @@
-import { JQ as $ } from 'mdui';
-
 const hljs = require('../../node_modules/highlight.js/lib/highlight');
 
 /* eslint-disable */
@@ -182,7 +180,5 @@ hljs.registerLanguage('scss', require('../../node_modules/highlight.js/lib/langu
 /* eslint-enable */
 
 export default (element) => {
-  $(element).find('pre').each((i, block) => {
-    hljs.highlightBlock(block);
-  });
+  element.querySelectorAll('pre').forEach(block => hljs.highlightBlock(block));
 };

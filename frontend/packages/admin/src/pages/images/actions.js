@@ -1,4 +1,5 @@
 import mdui, { JQ as $ } from 'mdui';
+import R from 'ramda';
 import { location } from '@hyperapp/router';
 import 'photoswipe/dist/photoswipe.css';
 import 'photoswipe/dist/default-skin/default-skin.css';
@@ -6,7 +7,7 @@ import PhotoSwipe from 'photoswipe';
 import PhotoSwipeUi_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { Image } from 'mdclub-sdk-js';
 import resizeImage from './helper';
-import ObjectHelper from '../../helper/obj';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
@@ -16,7 +17,7 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: props => (state, actions) => {
-    actions.routeChange();
+    actions.routeChange('图片管理 - MDClub 控制台');
     global_actions = props.global_actions;
     const $element = $(props.element);
 
@@ -24,36 +25,18 @@ export default $.extend({}, actionsAbstract, {
 
     const searchBarState = {
       fields: [
-        {
-          name: 'user_id',
-          label: '用户ID',
-        },
+        { name: 'user_id', label: '用户ID' },
         {
           name: 'item_type',
           label: '类型',
           enum: [
-            {
-              name: '全部',
-              value: '',
-            },
-            {
-              name: '文章',
-              value: 'article',
-            },
-            {
-              name: '提问',
-              value: 'question',
-            },
-            {
-              name: '回答',
-              value: 'answer',
-            },
+            { name: '全部', value: '' },
+            { name: '文章', value: 'article' },
+            { name: '提问', value: 'question' },
+            { name: '回答', value: 'answer' },
           ],
         },
-        {
-          name: 'item_id',
-          label: '类型ID',
-        },
+        { name: 'item_id', label: '类型ID' },
       ],
       data: {
         hash: '',
@@ -135,12 +118,17 @@ export default $.extend({}, actionsAbstract, {
 
     actions.loadStart();
 
-    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
+    const searchData = R.filter(n => n, searchBar.getState().data);
+    const paginationData = {
       page: pagination.getState().page,
       per_page: pagination.getState().per_page,
-    });
+    };
+    const data = $.extend({}, searchData, paginationData);
 
-    Image.getList(data, actions.loadEnd);
+    Image
+      .getList(data)
+      .then(actions.loadSuccess)
+      .catch(actions.loadFail);
   },
 
   /**
@@ -154,21 +142,24 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * 数据加载完成
+   * 数据加载失败
    */
-  loadEnd: response => (state, actions) => {
+  loadFail: ({ message }) => (state, actions) => {
     actions.setState({ loading: false });
+    mdui.snackbar(message);
+  },
 
-    if (response.code) {
-      mdui.snackbar(response.message);
-      return;
-    }
+  /**
+   * 数据加载成功
+   */
+  loadSuccess: ({ data, pagination }) => (state, actions) => {
+    actions.setState({ loading: false });
 
     const isCheckedRows = {};
     const photoSwipeItems = [];
-    const thumbData = resizeImage(response.data);
+    const thumbData = resizeImage(data);
 
-    response.data.map((item) => {
+    data.map((item) => {
       // 取消选中所有图片
       isCheckedRows[item.hash] = false;
 
@@ -187,12 +178,12 @@ export default $.extend({}, actionsAbstract, {
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,
-      data: response.data,
+      data: data,
       photoSwipeItems,
       thumbData,
     });
 
-    global_actions.components.pagination.setState(response.pagination);
+    global_actions.components.pagination.setState(pagination);
   },
 
   /**
@@ -287,20 +278,20 @@ export default $.extend({}, actionsAbstract, {
     });
 
     const confirm = () => {
-      $.loadStart();
+      loading.start();
 
       const hashArr = [];
       items.map((item) => {
         hashArr.push(item.hash);
       });
 
-      Image.deleteMultiple(hashArr.join(','), actions.deleteSuccess);
+      Image
+        .deleteMultiple(hashArr.join(','))
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
-    };
+    const options = { confirmText: '确认', cancelText: '取消' };
 
     mdui.confirm('删除后，将无法恢复', `确认删除这 ${items.length} 张图片`, confirm, false, options);
   },

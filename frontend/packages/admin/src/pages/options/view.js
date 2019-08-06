@@ -4,19 +4,6 @@ import './index.less';
 
 import Loading from '../../elements/loading';
 
-const languageObject = {
-  en: 'English',
-  'zh-CN': '简体中文',
-  'zh-TW': '繁体中文',
-  ja: '日本語',
-};
-
-const smtpSecureObject = {
-  '': '无',
-  tls: 'TLS',
-  ssl: 'SSL',
-};
-
 const cacheTypeObject = {
   pdo: 'PDO',
   redis: 'Redis',
@@ -25,7 +12,8 @@ const cacheTypeObject = {
 
 const storageTypeObject = {
   local: '本地文件系统',
-  ftp: 'FTP(s) 服务器',
+  ftp: 'FTP 服务器',
+  sftp: 'SFTP 服务器',
   aliyun: '阿里云 OSS',
   upyun: '又拍云',
   qiniu: '七牛云',
@@ -141,7 +129,7 @@ export default (global_state, global_actions) => {
                 label="语言"
                 name="language"
                 value={state.data.language}
-                data={languageObject}
+                data={{ en: 'English', 'zh-CN': '简体中文', 'zh-TW': '繁体中文', ja: '日本語' }}
                 onchange={actions.data.input}
               />
               <Input
@@ -194,7 +182,7 @@ export default (global_state, global_actions) => {
                 label="加密连接类型"
                 name="smtp_secure"
                 value={state.data.smtp_secure}
-                data={smtpSecureObject}
+                data={{ '': '无', tls: 'TLS', ssl: 'SSL' }}
                 onchange={actions.data.input}
               />
               <Input
@@ -299,6 +287,7 @@ export default (global_state, global_actions) => {
                 name="storage_url"
                 value={state.data.storage_url}
                 oninput={actions.data.input}
+                helper="留空时将使用 /public/static/upload 目录下的资源"
               />
               <Select
                 label="存储类型"
@@ -318,8 +307,8 @@ export default (global_state, global_actions) => {
               <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'ftp' }])}>
                 <Select
                   label="协议"
-                  name="storage_ftp_ftps"
-                  value={state.data.storage_ftp_ftps}
+                  name="storage_ftp_ssl"
+                  value={state.data.storage_ftp_ssl}
                   data={{ 1: 'FTPS', 0: 'FTP' }}
                   onchange={actions.data.input}
                 />
@@ -327,6 +316,12 @@ export default (global_state, global_actions) => {
                   label="FTP 服务器地址"
                   name="storage_ftp_host"
                   value={state.data.storage_ftp_host}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="端口"
+                  name="storage_ftp_port"
+                  value={state.data.storage_ftp_port}
                   oninput={actions.data.input}
                 />
                 <Input
@@ -342,17 +337,51 @@ export default (global_state, global_actions) => {
                   oninput={actions.data.input}
                 />
                 <Input
-                  label="端口"
-                  name="storage_ftp_port"
-                  value={state.data.storage_ftp_port}
-                  oninput={actions.data.input}
-                />
-                <Input
                   label="上传目录"
                   name="storage_ftp_root"
                   value={state.data.storage_ftp_root}
                   oninput={actions.data.input}
-                  helper="/path/to/root"
+                  helper="例如：/path/to/root"
+                />
+                <Select
+                  label="传输模式"
+                  name="storage_ftp_passive"
+                  value={state.data.storage_ftp_passive}
+                  data={{ 1: '被动模式', 0: '主动模式' }}
+                  onchange={actions.data.input}
+                />
+              </div>
+              <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'sftp' }])}>
+                <Input
+                  label="SFTP 服务器地址"
+                  name="storage_sftp_host"
+                  value={state.data.storage_sftp_host}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="端口"
+                  name="storage_sftp_port"
+                  value={state.data.storage_sftp_port}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="用户名"
+                  name="storage_sftp_username"
+                  value={state.data.storage_sftp_username}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="密码"
+                  name="storage_sftp_password"
+                  value={state.data.storage_sftp_password}
+                  oninput={actions.data.input}
+                />
+                <Input
+                  label="上传目录"
+                  name="storage_sftp_root"
+                  value={state.data.storage_sftp_root}
+                  oninput={actions.data.input}
+                  helper="例如：/path/to/root"
                 />
               </div>
               <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'aliyun' }])}>
@@ -400,12 +429,6 @@ export default (global_state, global_actions) => {
                   value={state.data.storage_upyun_password}
                   oninput={actions.data.input}
                 />
-                <Input
-                  label="加速域名"
-                  name="storage_upyun_endpoint"
-                  value={state.data.storage_upyun_endpoint}
-                  oninput={actions.data.input}
-                />
               </div>
               <div class={cc([{ 'mdui-hidden': state.data.storage_type !== 'qiniu' }])}>
                 <Input
@@ -426,11 +449,12 @@ export default (global_state, global_actions) => {
                   value={state.data.storage_qiniu_bucket}
                   oninput={actions.data.input}
                 />
-                <Input
-                  label="加速域名"
-                  name="storage_qiniu_endpoint"
-                  value={state.data.storage_qiniu_endpoint}
-                  oninput={actions.data.input}
+                <Select
+                  label="存储区域"
+                  name="storage_qiniu_zone"
+                  value={state.data.storage_qiniu_zone}
+                  data={{ z0: '华东', z1: '华北', z2: '华南', na0: '北美', as0: '东南亚' }}
+                  onchange={actions.data.input}
                 />
               </div>
               <div class="mdui-panel-item-actions">

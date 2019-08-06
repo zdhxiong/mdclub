@@ -149,7 +149,10 @@ export default ({ loadData }) => (global_state, global_actions) => {
 
   return () => (
     <div
-      class="mc-datatable"
+      class={cc([
+        'mc-datatable',
+        { 'is-top': !state.isScrollTop },
+      ])}
       oncreate={element => actions.init({ element, global_actions })}
       ondestroy={actions.destroy}
     >

@@ -5,7 +5,6 @@ import Datatable from '../../components/datatable/view';
 
 export default (global_state, global_actions) => {
   const actions = global_actions.answers;
-  const state = global_state.answers;
 
   return ({ match }) => (
     <div

@@ -65,4 +65,6 @@ export default {
 
   data: [], // 接口返回的原始数据
   loading: false, // 是否正在加载
+
+  isScrollTop: true, // 表格是否滚动到了顶部
 };

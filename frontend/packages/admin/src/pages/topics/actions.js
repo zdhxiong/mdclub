@@ -1,7 +1,8 @@
 import mdui, { JQ as $ } from 'mdui';
+import R from 'ramda';
 import { location } from '@hyperapp/router';
 import { Topic } from 'mdclub-sdk-js';
-import ObjectHelper from '../../helper/obj';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
@@ -11,20 +12,15 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: props => (state, actions) => {
-    actions.routeChange();
+    actions.routeChange('话题管理 - MDClub 控制台');
     global_actions = props.global_actions;
 
-    const { components } = global_actions;
-    const searchBarState = {
+    const { topic, searchBar, datatable } = global_actions.components;
+
+    searchBar.setState({
       fields: [
-        {
-          name: 'topic_id',
-          label: '话题ID',
-        },
-        {
-          name: 'name',
-          label: '话题名称',
-        },
+        { name: 'topic_id', label: '话题ID' },
+        { name: 'name', label: '话题名称' },
       ],
       data: {
         topic_id: '',
@@ -32,80 +28,61 @@ export default $.extend({}, actionsAbstract, {
       },
       isDataEmpty: true,
       isNeedRender: true,
-    };
+    });
 
-    const columns = [
-      {
-        title: '名称',
-        field: 'name',
-        type: 'string',
-        width: 208,
-      },
-      {
-        title: '描述',
-        field: 'description',
-        type: 'string',
-      },
-      {
-        title: '关注者数量',
-        field: 'follower_count',
-        type: 'handler',
-        handler: row => `${row.follower_count} 人关注`,
-        width: 154,
-      },
-    ];
-
-    const buttons = [
-      {
-        type: 'target',
-        getTargetLink: topic => `${window.G_ROOT}/topics/${topic.topic_id}`,
-      },
-      {
-        type: 'btn',
-        onClick: actions.editOne,
-        label: '编辑',
-        icon: 'edit',
-      },
-      {
-        type: 'btn',
-        onClick: actions.deleteOne,
-        label: '删除',
-        icon: 'delete',
-      },
-    ];
-
-    const batchButtons = [
-      {
-        label: '批量删除',
-        icon: 'delete',
-        onClick: actions.batchDelete,
-      },
-    ];
-
-    const orders = [
-      {
-        name: '话题ID',
-        value: 'topic_id',
-      },
-      {
-        name: '关注者数量',
-        value: '-follower_count',
-      },
-    ];
-
-    const order = 'topic_id';
-    const primaryKey = 'topic_id';
-    const onRowClick = components.topic.open;
-
-    components.searchBar.setState(searchBarState);
-    components.datatable.setState({
-      columns,
-      buttons,
-      batchButtons,
-      orders,
-      order,
-      primaryKey,
-      onRowClick,
+    datatable.setState({
+      columns: [
+        {
+          title: '名称',
+          field: 'name',
+          type: 'string',
+          width: 208,
+        },
+        {
+          title: '描述',
+          field: 'description',
+          type: 'string',
+        },
+        {
+          title: '关注者数量',
+          field: 'follower_count',
+          type: 'handler',
+          handler: row => `${row.follower_count} 人关注`,
+          width: 154,
+        },
+      ],
+      buttons: [
+        {
+          type: 'target',
+          getTargetLink: ({ topic_id }) => `${window.G_ROOT}/topics/${topic_id}`,
+        },
+        {
+          type: 'btn',
+          onClick: actions.editOne,
+          label: '编辑',
+          icon: 'edit',
+        },
+        {
+          type: 'btn',
+          onClick: actions.deleteOne,
+          label: '删除',
+          icon: 'delete',
+        },
+      ],
+      batchButtons: [
+        {
+          label: '批量删除',
+          icon: 'delete',
+          onClick: actions.batchDelete,
+        },
+      ],
+      orders: [
+        { name: '话题ID', value: 'topic_id' },
+        { name: '关注者数量', value: '-follower_count' },
+      ],
+      order: 'topic_id',
+      primaryKey: 'topic_id',
+      onRowClick: topic.open,
     });
 
     $(document).on('search-submit', actions.loadData);
@@ -124,16 +101,20 @@ export default $.extend({}, actionsAbstract, {
    */
   loadData: () => {
     const { datatable, pagination, searchBar } = global_actions.components;
+    const { page, per_page } = pagination.getState();
+    const { order } = datatable.getState();
+
+    const searchData = R.pipe(
+      R.filter(n => n),
+      R.mergeDeepLeft({ page, per_page, order }),
+    )(searchBar.getState().data);
 
     datatable.loadStart();
 
-    const data = $.extend({}, ObjectHelper.filter(searchBar.getState().data), {
-      page: pagination.getState().page,
-      per_page: pagination.getState().per_page,
-      order: datatable.getState().order,
-    });
-
-    Topic.getList(data, datatable.loadEnd);
+    Topic
+      .getList(searchData)
+      .then(datatable.loadSuccess)
+      .catch(datatable.loadFail);
   },
 
   /**
@@ -148,14 +129,15 @@ export default $.extend({}, actionsAbstract, {
    */
   deleteOne: ({ topic_id }) => (state, actions) => {
     const confirm = () => {
-      $.loadStart();
-      Topic.deleteOne(topic_id, actions.deleteSuccess);
+      loading.start();
+
+      Topic
+        .deleteOne(topic_id)
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
-    };
+    const options = { confirmText: '确认', cancelText: '取消' };
 
     mdui.confirm('删除后，你仍可以在回收站中恢复该话题', '确认删除该话题', confirm, false, options);
   },
@@ -164,20 +146,20 @@ export default $.extend({}, actionsAbstract, {
    * 批量删除话题
    */
   batchDelete: topics => (state, actions) => {
+    const options = { confirmText: '确认', cancelText: '取消' };
+
     const confirm = () => {
-      $.loadStart();
+      loading.start();
 
-      const topic_ids = [];
-      topics.map((topic) => {
-        topic_ids.push(topic.topic_id);
-      });
+      const topic_ids = R.pipe(
+        R.pluck('topic_id'),
+        R.join(','),
+      )(topics);
 
-      Topic.deleteMultiple(topic_ids.join(','), actions.deleteSuccess);
-    };
-
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
+      Topic
+        .deleteMultiple(topic_ids)
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
     mdui.confirm('删除后，你仍可以在回收站中恢复这些话题', `确认删除这 ${topics.length} 个话题`, confirm, false, options);

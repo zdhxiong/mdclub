@@ -1,6 +1,6 @@
 import { h } from 'hyperapp';
 import { Route } from '@hyperapp/router';
-import { JQ as $ } from 'mdui';
+import path from '../helper/path';
 
 import Index from '../pages/index/view';
 import Answers from '../pages/answers/view';
@@ -24,15 +24,15 @@ export default (global_state, global_actions) => (
     <Appbar/>
     <Drawer/>
 
-    <Route path={$.path('')} render={Index(global_state, global_actions)}/>
-    <Route path={$.path('/answers')} render={Answers(global_state, global_actions)}/>
-    <Route path={$.path('/articles')} render={Articles(global_state, global_actions)}/>
-    <Route path={$.path('/comments')} render={Comments(global_state, global_actions)}/>
-    <Route path={$.path('/options')} render={Options(global_state, global_actions)}/>
-    <Route path={$.path('/questions')} render={Questions(global_state, global_actions)}/>
-    <Route path={$.path('/reports')} render={Reports(global_state, global_actions)}/>
-    <Route path={$.path('/topics')} render={Topics(global_state, global_actions)}/>
-    <Route path={$.path('/users')} render={Users(global_state, global_actions)}/>
+    <Route path={path.addPrefix('')} render={Index(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/answers')} render={Answers(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/articles')} render={Articles(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/comments')} render={Comments(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/options')} render={Options(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/questions')} render={Questions(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/reports')} render={Reports(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/topics')} render={Topics(global_state, global_actions)}/>
+    <Route path={path.addPrefix('/users')} render={Users(global_state, global_actions)}/>
 
     <Reporters/>
     <Topic/>

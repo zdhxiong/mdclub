@@ -2,69 +2,42 @@
   max-width: 408px;
   max-height: 95%;
   min-height: 404px;
+  overflow-y: auto;
 
-  .header {
+  .mdui-card-media {
     width: 100%;
     position: relative;
-    padding-bottom: 56%;
+    height: 0;
+    padding-bottom: 56.1111%;
+  }
 
-    .gradient {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 60px;
-      background: linear-gradient(to top, rgba(0, 0, 0, .46), rgba(0, 0, 0, 0));
-    }
+  .actions {
+    position: absolute;
+    right: 28px;
+    bottom: -20px;
+    z-index: 99;
 
-    .name {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      padding-left: 24px;
-      font-size: 30px;
-      color: #fff;
-      height: 60px;
-      line-height: 60px;
-    }
-
-    .actions {
-      position: absolute;
-      right: 28px;
-      bottom: -20px;
-
-      button {
-        margin-left: 16px;
-      }
+    button + button {
+      margin-left: 16px;
     }
   }
 
-  .content {
-    padding: 36px 24px 16px 24px;
+  .mdui-card-primary,
+  .mdui-card-content {
+    padding: 24px;
   }
 
-  .item {
-    padding-bottom: 24px;
-    line-height: 24px;
-
-    &:last-child {
-      padding-bottom: 0;
-    }
+  .mdui-card-content {
+    padding-top: 0;
+    padding-bottom: 20px;
   }
 
-  .item-delete {
-    font-size: 13px;
+  .mdui-list {
+    padding: 0 0 16px 0;
   }
 
-  .chip-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    .mdui-chip {
-      display: block;
-      margin-bottom: 8px;
-      width: ~'calc(50% - 8px)';
-    }
+  .mdui-list-item {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }

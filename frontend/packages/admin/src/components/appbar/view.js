@@ -2,6 +2,7 @@ import { h } from 'hyperapp';
 import { JQ as $ } from 'mdui';
 import cc from 'classcat';
 import { Link } from '@hyperapp/router';
+import path from '../../helper/path';
 import './index.less';
 
 import SearchBar from '../../components/searchbar/view';
@@ -16,7 +17,7 @@ const DrawerBtn = () => (
 );
 
 const HomeLink = () => (
-  <Link to={$.path('')} class="logo mdui-typo-title-opacity">
+  <Link to={path.addPrefix('')} class="logo mdui-typo-title-opacity">
     <i class="mdui-icon material-icons">dashboard</i>控制台
   </Link>
 );
@@ -43,9 +44,7 @@ const UserMenuItem = ({ icon, name, href, onClick }) => (
       target={href ? '_blank' : false}
       onclick={onClick}
     >
-      <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">
-        {icon}
-      </i>{name}
+      <i class="mdui-menu-item-icon mdui-icon material-icons mdui-text-color-theme-icon">{icon}</i>{name}
     </a>
   </li>
 );

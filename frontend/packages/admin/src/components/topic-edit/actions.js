@@ -1,5 +1,6 @@
 import mdui, { JQ as $ } from 'mdui';
 import { Topic } from 'mdclub-sdk-js';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/component';
 
 let global_actions;
@@ -28,7 +29,10 @@ export default $.extend({}, actionsAbstract, {
 
   /**
    * 打开对话框
-   * @param topic 若topic为null，表示添加数据；若topic为整型，则需要先根据该参数获取话题信息；若topic为对象，则不需要再获取话题信息
+   * @param topic
+   * 若topic为null，表示添加数据；
+   * 若topic为整型，则需要先根据该参数获取话题信息；
+   * 若topic为对象，则不需要再获取话题信息
    */
   open: (topic = null) => (state, actions) => {
     actions.setState({
@@ -68,30 +72,32 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
-    Topic.getOne(topic, (response) => {
-      actions.setState({ loading: false });
+    Topic
+      .getOne(topic)
+      .then(({ data }) => {
+        actions.setState({
+          loading: false,
+          topic_id: data.topic_id,
+          name: data.name,
+          description: data.description,
+          cover: data.cover.s,
+        });
 
-      if (response.code) {
+        setTimeout(() => dialog.handleUpdate());
+      })
+      .catch(({ message }) => {
+        actions.setState({ loading: false });
         dialog.close();
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        topic_id: response.data.topic_id,
-        name: response.data.name,
-        description: response.data.description,
-        cover: response.data.cover.s,
+        mdui.snackbar(message);
       });
-
-      setTimeout(() => dialog.handleUpdate());
-    });
   },
 
   /**
    * 关闭对话框
    */
-  close: () => dialog.close(),
+  close: () => {
+    dialog.close();
+  },
 
   /**
    * 响应输入框输入事件
@@ -124,10 +130,7 @@ export default $.extend({}, actionsAbstract, {
 
     const fr = new FileReader();
 
-    fr.onload = (frEvent) => {
-      actions.setState({ cover: frEvent.target.result });
-    };
-
+    fr.onload = frEvent => actions.setState({ cover: frEvent.target.result });
     fr.readAsDataURL(e.target.files[0]);
   },
 
@@ -135,43 +138,33 @@ export default $.extend({}, actionsAbstract, {
    * 添加话题
    */
   submit: () => (state, actions) => {
-    $.loadStart();
+    loading.start();
 
-    const handleValidationError = (response) => {
-      const errors = {};
+    const handleValidationError = (errors) => {
+      const errorsMsg = {};
 
-      Object.keys(response.errors).forEach((key) => {
-        errors[`${key}_msg`] = response.errors[key];
+      Object.keys(errors).forEach((key) => {
+        errorsMsg[`${key}_msg`] = errors[key];
       });
 
-      actions.setState(errors);
+      actions.setState(errorsMsg);
 
       // 光标聚焦到错误字段
-      if (typeof errors.name_msg !== 'undefined') {
+      if (typeof errorsMsg.name_msg !== 'undefined') {
         $name[0].focus();
-      } else if (typeof errors.description_msg !== 'undefined') {
+      } else if (typeof errorsMsg.description_msg !== 'undefined') {
         $description[0].focus();
       }
     };
 
-    const success = (response, handler) => {
-      $.loadEnd();
+    const submitFail = ({ code, message, errors }) => {
+      loading.end();
 
-      // 字段验证失败
-      if (response.code === 100002) {
-        handleValidationError(response);
-
-        return;
+      if (code === 100002) {
+        handleValidationError(errors);
+      } else {
+        mdui.snackbar(message);
       }
-
-      // 其他错误
-      if (response.code) {
-        mdui.snackbar(response.message);
-
-        return;
-      }
-
-      handler();
     };
 
     if (state.topic_id) { // 修改
@@ -182,24 +175,32 @@ export default $.extend({}, actionsAbstract, {
         params.cover = $cover[0].files[0];
       }
 
-      Topic.updateOne(state.topic_id, params, response => success(response, () => {
-        // 修改成功，直接修改列表中的数据，不刷新
-        actions.close();
-        mdui.snackbar('修改成功');
+      Topic
+        .updateOne(state.topic_id, params)
+        .then(({ data }) => {
+          // 修改成功，直接修改列表中的数据，不刷新
+          loading.end();
+          actions.close();
+          mdui.snackbar('修改成功');
 
-        global_actions.components.datatable.updateOne(response.data);
-      }));
+          global_actions.components.datatable.updateOne(data);
+        })
+        .catch(submitFail);
     } else { // 新增
       const { name, description } = state;
       const file = $cover[0].files[0];
 
-      Topic.create(name, description, file, response => success(response, () => {
-        // 添加成功，刷新列表
-        actions.close();
-        mdui.snackbar('添加成功');
+      Topic
+        .create(name, description, file)
+        .then(() => {
+          // 添加成功，刷新列表
+          loading.end();
+          actions.close();
+          mdui.snackbar('添加成功');
 
-        global_actions.topics.loadData();
-      }));
+          global_actions.topics.loadData();
+        })
+        .catch(submitFail);
     }
   },
 });

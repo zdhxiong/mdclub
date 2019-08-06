@@ -10,29 +10,22 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: props => (state, actions) => {
-    actions.routeChange();
+    actions.routeChange('系统设置 - MDClub 控制台');
     global_actions = props.global_actions;
-    global_actions.components.searchBar.setState({ isNeedRender: false });
+
+    const { searchBar, appbar } = global_actions.components;
 
     // 滚动时，应用栏添加阴影
-    $(props.element).on('scroll', (e) => {
-      global_actions.components.appbar.setState({ shadow: !!e.target.scrollTop });
-    });
+    $(props.element).on('scroll', e => appbar.setState({ shadow: !!e.target.scrollTop }));
 
+    searchBar.setState({ isNeedRender: false });
     actions.setState({ loading: true });
 
     // 加载初始数据
-    Option.getAll((response) => {
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        data: response.data,
-        loading: false,
-      });
-    });
+    Option
+      .getAll()
+      .then(({ data }) => actions.setState({ data, loading: false }))
+      .catch(({ message }) => mdui.snackbar(message));
   },
 
   /**
@@ -104,21 +97,21 @@ export default $.extend({}, actionsAbstract, {
 
       const waitAlert = mdui.alert('正在发送邮件，请稍候…');
 
-      Email.send(emailData, (response) => {
-        waitAlert.close();
+      Email
+        .send(emailData)
+        .then(() => {
+          waitAlert.close();
+          mdui.alert(`请登录邮箱：${email}，查看是否收到了测试邮件`);
+        })
+        .catch(({ code, message, extra_message, errors }) => {
+          waitAlert.close();
 
-        if (response.code === 100002) {
-          mdui.alert(Object.values(response.errors).join('<br/>'), response.message);
-          return;
-        }
-
-        if (response.code) {
-          mdui.alert(response.extra_message, response.message);
-          return;
-        }
-
-        mdui.alert(`请登录邮箱：${email}，查看是否收到了测试邮件`);
-      });
+          if (code === 100002) {
+            mdui.alert(Object.values(errors).join('<br/>'), message);
+          } else {
+            mdui.alert(extra_message, message);
+          }
+        });
     });
   },
 
@@ -130,15 +123,15 @@ export default $.extend({}, actionsAbstract, {
 
     actions.setState({ submitting: true });
 
-    Option.updateMultiple(state.data, (response) => {
-      actions.setState({ submitting: false });
-
-      if (response.code) {
-        mdui.alert(response.message);
-        return;
-      }
-
-      mdui.snackbar('保存成功');
-    });
+    Option
+      .updateMultiple(state.data)
+      .then(() => {
+        actions.setState({ submitting: false });
+        mdui.snackbar('保存成功');
+      })
+      .catch(({ message }) => {
+        actions.setState({ submitting: false });
+        mdui.alert(message);
+      });
   },
 });

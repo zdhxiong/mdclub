@@ -1,5 +1,6 @@
 import mdui, { JQ as $ } from 'mdui';
 import { Topic } from 'mdclub-sdk-js';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/component';
 
 let global_actions;
@@ -22,9 +23,10 @@ export default $.extend({}, actionsAbstract, {
   open: topic => (state, actions) => {
     const isComplete = typeof topic === 'object';
 
-    isComplete
-      ? actions.setState({ topic, loading: false})
-      : actions.setState({ topic: false, loading: true });
+    actions.setState({
+      topic: isComplete ? topic : false,
+      loading: !isComplete,
+    });
 
     setTimeout(() => dialog.open());
 
@@ -32,25 +34,26 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
-    Topic.getOne(topic, (response) => {
-      actions.setState({ loading: false });
+    Topic
+      .getOne(topic)
+      .then(({ data }) => {
+        actions.setState({ loading: false, topic: data });
 
-      if (response.code) {
+        setTimeout(() => dialog.handleUpdate());
+      })
+      .catch(({ message }) => {
+        actions.setState({ loading: false });
         dialog.close();
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({ topic: response.data });
-
-      setTimeout(() => dialog.handleUpdate());
-    });
+        mdui.snackbar(message);
+      });
   },
 
   /**
    * 关闭对话框
    */
-  close: () => dialog.close(),
+  close: () => {
+    dialog.close();
+  },
 
   /**
    * 删除该话题
@@ -62,9 +65,13 @@ export default $.extend({}, actionsAbstract, {
     }
     /* eslint-enable */
 
-    $.loadStart();
+    loading.start();
     actions.close();
-    Topic.deleteOne(state.topic.topic_id, global_actions.topics.deleteSuccess);
+
+    Topic
+      .deleteOne(state.topic.topic_id)
+      .then(global_actions.topics.deleteSuccess)
+      .catch(global_actions.topics.deleteFail);
   },
 
   /**

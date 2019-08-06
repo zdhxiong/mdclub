@@ -17,10 +17,9 @@ const themeReverse = (theme) => {
  * 设置主题颜色
  * @param theme
  */
-const setTheme = (theme) => {
-  $body.removeClass(`mdui-theme-layout-${themeReverse(theme)}`);
-  $body.addClass(`mdui-theme-layout-${theme}`);
-};
+const setTheme = theme => $body
+  .removeClass(`mdui-theme-layout-${themeReverse(theme)}`)
+  .addClass(`mdui-theme-layout-${theme}`);
 
 export {
   themeReverse,

@@ -1,7 +1,8 @@
 import mdui, { JQ as $ } from 'mdui';
+import R from 'ramda';
 import { location } from '@hyperapp/router';
 import { User } from 'mdclub-sdk-js';
-import ObjectHelper from '../../helper/obj';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
@@ -11,24 +12,16 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: props => (state, actions) => {
-    actions.routeChange();
+    actions.routeChange('用户管理 - MDClub 控制台');
     global_actions = props.global_actions;
 
-    const { components } = global_actions;
-    const searchBarState = {
+    const { user, searchBar, datatable } = global_actions.components;
+
+    searchBar.setState({
       fields: [
-        {
-          name: 'user_id',
-          label: '用户ID',
-        },
-        {
-          name: 'username',
-          label: '用户名',
-        },
-        {
-          name: 'email',
-          label: '邮箱',
-        },
+        { name: 'user_id', label: '用户ID' },
+        { name: 'username', label: '用户名' },
+        { name: 'email', label: '邮箱' },
       ],
       data: {
         user_id: '',
@@ -37,79 +30,60 @@ export default $.extend({}, actionsAbstract, {
       },
       isDataEmpty: true,
       isNeedRender: true,
-    };
+    });
 
-    const columns = [
-      {
-        title: '用户名',
-        field: 'username',
-        type: 'html',
-        width: 208,
-      },
-      {
-        title: '一句话介绍',
-        field: 'headline',
-        type: 'string',
-      },
-      {
-        title: '注册时间',
-        field: 'create_time',
-        type: 'time',
-        width: 154,
-      },
-    ];
-
-    const buttons = [
-      {
-        type: 'target',
-        getTargetLink: user => `${window.G_ROOT}/users/${user.user_id}`,
-      },
-      {
-        type: 'btn',
-        onClick: actions.editOne,
-        label: '编辑',
-        icon: 'edit',
-      },
-      {
-        type: 'btn',
-        onClick: actions.disableOne,
-        label: '禁用',
-        icon: 'lock',
-      },
-    ];
-
-    const batchButtons = [
-      {
-        label: '批量禁用',
-        icon: 'lock',
-        onClick: actions.batchDisable,
-      },
-    ];
-
-    const orders = [
-      {
-        name: '注册时间',
-        value: '-create_time',
-      },
-      {
-        name: '关注者数量',
-        value: '-follower_count',
-      },
-    ];
-
-    const order = '-create_time';
-    const primaryKey = 'user_id';
-    const onRowClick = components.user.open;
-
-    components.searchBar.setState(searchBarState);
-    components.datatable.setState({
-      columns,
-      buttons,
-      batchButtons,
-      orders,
-      order,
-      primaryKey,
-      onRowClick,
+    datatable.setState({
+      columns: [
+        {
+          title: '用户名',
+          field: 'username',
+          type: 'html',
+          width: 208,
+        },
+        {
+          title: '一句话介绍',
+          field: 'headline',
+          type: 'string',
+        },
+        {
+          title: '注册时间',
+          field: 'create_time',
+          type: 'time',
+          width: 154,
+        },
+      ],
+      buttons: [
+        {
+          type: 'target',
+          getTargetLink: ({ user_id }) => `${window.G_ROOT}/users/${user_id}`,
+        },
+        {
+          type: 'btn',
+          onClick: actions.editOne,
+          label: '编辑',
+          icon: 'edit',
+        },
+        {
+          type: 'btn',
+          onClick: actions.disableOne,
+          label: '禁用',
+          icon: 'lock',
+        },
+      ],
+      batchButtons: [
+        {
+          label: '批量禁用',
+          icon: 'lock',
+          onClick: actions.batchDisable,
+        },
+      ],
+      orders: [
+        { name: '注册时间', value: '-create_time' },
+        { name: '关注者数量', value: '-follower_count' },
+      ],
+      order: '-create_time',
+      primaryKey: 'user_id',
+      onRowClick: user.open,
     });
 
     $(document).on('search-submit', actions.loadData);
@@ -127,17 +101,21 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => {
-    const { components } = global_actions;
+    const { datatable, pagination, searchBar } = global_actions.components;
+    const { page, per_page } = pagination.getState();
+    const { order } = datatable.getState();
 
-    components.datatable.loadStart();
+    const searchData = R.pipe(
+      R.filter(n => n),
+      R.mergeDeepLeft({ page, per_page, order }),
+    )(searchBar.getState().data);
 
-    const data = $.extend({}, ObjectHelper.filter(components.searchBar.getState().data), {
-      page: components.pagination.getState().page,
-      per_page: components.pagination.getState().per_page,
-      order: components.datatable.getState().order,
-    });
+    datatable.loadStart();
 
-    User.getList(data, components.datatable.loadEnd);
+    User
+      .getList(searchData)
+      .then(datatable.loadSuccess)
+      .catch(datatable.loadFail);
   },
 
   /**
@@ -151,14 +129,15 @@ export default $.extend({}, actionsAbstract, {
    * 禁用指定用户
    */
   disableOne: ({ user_id }) => (state, actions) => {
-    const confirm = () => {
-      $.loadStart();
-      User.disableOne(user_id, actions.deleteSuccess);
-    };
+    const options = { confirmText: '确认', cancelText: '取消' };
 
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
+    const confirm = () => {
+      loading.start();
+
+      User
+        .disableOne(user_id)
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
     mdui.confirm('确认禁用该账号？', confirm, false, options);
@@ -168,20 +147,20 @@ export default $.extend({}, actionsAbstract, {
    * 批量禁用用户
    */
   batchDisable: users => (state, actions) => {
+    const options = { confirmText: '确认', cancelText: '取消' };
+
     const confirm = () => {
-      $.loadStart();
+      loading.start();
 
-      const user_ids = [];
-      users.map((user) => {
-        user_ids.push(user.user_id);
-      });
+      const user_ids = R.pipe(
+        R.pluck('user_id'),
+        R.join(','),
+      )(users);
 
-      User.disableMultiple(user_ids.join(','), actions.deleteSuccess);
-    };
-
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
+      User
+        .disableMultiple(user_ids)
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
     mdui.confirm(`确认禁用这 ${users.length} 个账号`, confirm, false, options);

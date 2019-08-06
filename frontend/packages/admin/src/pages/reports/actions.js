@@ -1,7 +1,8 @@
 import mdui, { JQ as $ } from 'mdui';
+import R from 'ramda';
 import { location } from '@hyperapp/router';
 import { Report } from 'mdclub-sdk-js';
-import ObjectHelper from '../../helper/obj';
+import loading from '../../helper/loading';
 import actionsAbstract from '../../abstracts/actions/page';
 
 let global_actions;
@@ -12,25 +13,15 @@ let global_actions;
 const getExtraFields = (report) => {
   report.key = `${report.reportable_type}:${report.reportable_id}`;
 
-  switch (report.reportable_type) {
-    case 'question':
-      report.reportable_title = `提问：${report.relationship.question.title}`;
-      break;
-    case 'article':
-      report.reportable_title = `文章：${report.relationship.article.title}`;
-      break;
-    case 'answer':
-      report.reportable_title = `回答：${report.relationship.answer.content_summary}`;
-      break;
-    case 'comment':
-      report.reportable_title = `评论：${report.relationship.comment.content_summary}`;
-      break;
-    case 'user':
-      report.reportable_title = `用户：${report.relationship.user.username}`;
-      break;
-    default:
-      break;
-  }
+  const map = {
+    question: () => `提问：${report.relationship.question.title}`,
+    article: () => `文章：${report.relationship.article.title}`,
+    answer: () => `回答：${report.relationship.answer.content_summary}`,
+    comment: () => `评论：${report.relationship.comment.content_summary}`,
+    user: () => `用户：${report.relationship.user.username}`,
+  };
+
+  report.reportable_title = map[report.reportable_type]();
 
   return report;
 };
@@ -40,40 +31,23 @@ export default $.extend({}, actionsAbstract, {
    * 初始化
    */
   init: props => (state, actions) => {
-    actions.routeChange();
+    actions.routeChange('举报管理 - MDClub 控制台');
     global_actions = props.global_actions;
 
-    const { components } = global_actions;
-    const searchBarState = {
+    const { user, reporters, searchBar, datatable } = global_actions.components;
+
+    searchBar.setState({
       fields: [
         {
           name: 'reportable_type',
           label: '类型',
           enum: [
-            {
-              name: '全部',
-              value: '',
-            },
-            {
-              name: '文章',
-              value: 'article',
-            },
-            {
-              name: '提问',
-              value: 'question',
-            },
-            {
-              name: '回答',
-              value: 'answer',
-            },
-            {
-              name: '评论',
-              value: 'comment',
-            },
-            {
-              name: '用户',
-              value: 'user',
-            },
+            { name: '全部', value: '' },
+            { name: '文章', value: 'article' },
+            { name: '提问', value: 'question' },
+            { name: '回答', value: 'answer' },
+            { name: '评论', value: 'comment' },
+            { name: '用户', value: 'user' },
           ],
         },
       ],
@@ -82,88 +56,78 @@ export default $.extend({}, actionsAbstract, {
       },
       isDataEmpty: true,
       isNeedRender: true,
-    };
+    });
 
-    const columns = [
-      {
-        title: '内容',
-        field: 'reportable_title',
-        type: 'relation',
-        onClick: ({ e, row }) => {
-          e.preventDefault();
+    datatable.setState({
+      columns: [
+        {
+          title: '内容',
+          field: 'reportable_title',
+          type: 'relation',
+          onClick: ({ e, row }) => {
+            e.preventDefault();
 
-          switch (row.reportable_type) {
-            case 'question':
-              break;
-            case 'article':
-              break;
-            case 'answer':
-              break;
-            case 'comment':
-              break;
-            case 'user':
-              components.user.open(row.relationship.user.user_id);
-              break;
-            default:
-              break;
-          }
+            switch (row.reportable_type) {
+              case 'question':
+                break;
+              case 'article':
+                break;
+              case 'answer':
+                break;
+              case 'comment':
+                break;
+              case 'user':
+                user.open(row.relationship.user.user_id);
+                break;
+              default:
+                break;
+            }
+          },
         },
-      },
-      {
-        title: '举报人数',
-        field: 'reporter_count',
-        type: 'handler',
-        handler: row => `${row.reporter_count} 人举报`,
-        width: 154,
-      },
-    ];
-
-    const buttons = [
-      {
-        type: 'target',
-        getTargetLink: (row) => {
-          switch (row.reportable_type) {
-            case 'question':
-              return `${window.G_ROOT}/questions/${row.reportable_id}`;
-            case 'article':
-              return `${window.G_ROOT}/articles/${row.reportable_id}`;
-            case 'answer':
-              return '';
-            case 'comment':
-              return '';
-            case 'user':
-              return `${window.G_ROOT}/users/${row.reportable_id}`;
-            default:
-              return '';
-          }
+        {
+          title: '举报人数',
+          field: 'reporter_count',
+          type: 'handler',
+          handler: row => `${row.reporter_count} 人举报`,
+          width: 154,
         },
-      },
-      {
-        type: 'btn',
-        onClick: actions.deleteOne,
-        label: '处理完成',
-        icon: 'done',
-      },
-    ];
-
-    const batchButtons = [
-      {
-        label: '批量处理完成',
-        icon: 'done_all',
-        onClick: actions.batchDelete,
-      },
-    ];
-
-    const primaryKey = 'key';
-    const onRowClick = components.reporters.open;
-
-    components.searchBar.setState(searchBarState);
-    components.datatable.setState({
-      columns,
-      buttons,
-      batchButtons,
-      primaryKey,
-      onRowClick,
+      ],
+      buttons: [
+        {
+          type: 'target',
+          getTargetLink: (row) => {
+            switch (row.reportable_type) {
+              case 'question':
+                return `${window.G_ROOT}/questions/${row.reportable_id}`;
+              case 'article':
+                return `${window.G_ROOT}/articles/${row.reportable_id}`;
+              case 'answer':
+                return '';
+              case 'comment':
+                return '';
+              case 'user':
+                return `${window.G_ROOT}/users/${row.reportable_id}`;
+              default:
+                return '';
+            }
+          },
+        },
+        {
+          type: 'btn',
+          onClick: actions.deleteOne,
+          label: '处理完成',
+          icon: 'done',
+        },
+      ],
+      batchButtons: [
+        {
+          label: '批量处理完成',
+          icon: 'done_all',
+          onClick: actions.batchDelete,
+        },
+      ],
+      primaryKey: 'key',
+      onRowClick: reporters.open,
     });
 
     $(document).on('search-submit', actions.loadData);
@@ -181,36 +145,41 @@ export default $.extend({}, actionsAbstract, {
    * 加载数据
    */
   loadData: () => {
-    const { components } = global_actions;
+    const { datatable, pagination, searchBar } = global_actions.components;
+    const { page, per_page } = pagination.getState();
 
-    components.datatable.loadStart();
+    const searchData = R.pipe(
+      R.filter(n => n),
+      R.mergeDeepLeft({ page, per_page }),
+    )(searchBar.getState().data);
 
-    const data = $.extend({}, ObjectHelper.filter(components.searchBar.getState().data), {
-      page: components.pagination.getState().page,
-      per_page: components.pagination.getState().per_page,
-    });
+    datatable.loadStart();
 
-    Report.getList(data, (response) => {
-      response.data.map((item, index) => {
-        response.data[index] = getExtraFields(item);
-      });
+    Report
+      .getList(searchData)
+      .then((response) => {
+        response.data.map((item, index) => {
+          response.data[index] = getExtraFields(item);
+        });
 
-      components.datatable.loadEnd(response);
-    });
+        datatable.loadSuccess(response);
+      })
+      .catch(datatable.loadFail);
   },
 
   /**
    * 删除一个举报
    */
   deleteOne: ({ reportable_type, reportable_id }) => (state, actions) => {
-    const confirm = () => {
-      $.loadStart();
-      Report.deleteOne(reportable_type, reportable_id, actions.deleteSuccess);
-    };
+    const options = { confirmText: '确认', cancelText: '取消' };
 
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
+    const confirm = () => {
+      loading.start();
+
+      Report
+        .deleteOne(reportable_type, reportable_id)
+        .then(actions.deleteSuccess)
+        .then(actions.deleteFail);
     };
 
     mdui.confirm('确认已处理完该举报？', confirm, false, options);
@@ -220,20 +189,20 @@ export default $.extend({}, actionsAbstract, {
    * 批量删除举报
    */
   batchDelete: reports => (state, actions) => {
+    const options = { confirmText: '确认', cancelText: '取消' };
+
     const confirm = () => {
-      $.loadStart();
+      loading.start();
 
-      const targets = [];
-      reports.map(({ reportable_type, reportable_id }) => {
-        targets.push(`${reportable_type}:${reportable_id}`);
-      });
+      const targets = R.pipe(
+        R.map(n => `${n.reportable_type}:${n.reportable_id}`),
+        R.join(','),
+      )(reports);
 
-      Report.deleteMultiple(targets.join(','), actions.deleteSuccess);
-    };
-
-    const options = {
-      confirmText: '确认',
-      cancelText: '取消',
+      Report
+        .deleteMultiple(targets)
+        .then(actions.deleteSuccess)
+        .catch(actions.deleteFail);
     };
 
     mdui.confirm(`确认已处理完这 ${reports.length} 个举报？`, confirm, false, options);

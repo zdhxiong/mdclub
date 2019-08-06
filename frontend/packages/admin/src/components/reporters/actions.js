@@ -4,7 +4,7 @@ import actionsAbstract from '../../abstracts/actions/component';
 
 let dialog; // 对话框实例
 let $dialog;
-let $content;
+let $dialogContent;
 
 export default $.extend({}, actionsAbstract, {
   /**
@@ -12,7 +12,7 @@ export default $.extend({}, actionsAbstract, {
    */
   init: (element) => {
     $dialog = $(element);
-    $content = $dialog.find('.mdui-dialog-content');
+    $dialogContent = $dialog.find('.mdui-dialog-content');
     dialog = new mdui.Dialog($dialog);
   },
 
@@ -30,18 +30,15 @@ export default $.extend({}, actionsAbstract, {
 
     dialog.open();
 
-    const loaded = (response) => {
+    const loadSuccess = ({ data, pagination }) => actions.setState({
+      loading: false,
+      data: actions.getState().data.concat(data),
+      pagination,
+    });
+
+    const loadFail = ({ message }) => {
       actions.setState({ loading: false });
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        data: actions.getState().data.concat(response.data),
-        pagination: response.pagination,
-      });
+      mdui.snackbar(message);
     };
 
     const infiniteLoad = () => {
@@ -59,23 +56,35 @@ export default $.extend({}, actionsAbstract, {
         return;
       }
 
-      if ($content[0].scrollHeight - $content[0].scrollTop - $content[0].offsetHeight > 100) {
+      if (
+          $dialogContent[0].scrollHeight
+        - $dialogContent[0].scrollTop
+        - $dialogContent[0].offsetHeight > 100
+      ) {
         return;
       }
 
       actions.setState({ loading: true });
 
-      Report.getDetailList(reportable_type, reportable_id, { page: pagination.page + 1 }, loaded);
+      Report
+        .getDetailList(reportable_type, reportable_id, { page: pagination.page + 1 })
+        .then(loadSuccess)
+        .catch(loadFail);
     };
 
-    Report.getDetailList(reportable_type, reportable_id, {}, loaded);
+    Report
+      .getDetailList(reportable_type, reportable_id, {})
+      .then(loadSuccess)
+      .catch(loadFail);
 
-    $content.on('scroll', infiniteLoad);
-    $dialog.on('close.mdui.dialog', () => $content.off('scroll', infiniteLoad));
+    $dialogContent.on('scroll', infiniteLoad);
+    $dialog.on('close.mdui.dialog', () => $dialogContent.off('scroll', infiniteLoad));
   },
 
   /**
    * 关闭对话框
    */
-  close: () => dialog.close(),
+  close: () => {
+    dialog.close();
+  },
 });

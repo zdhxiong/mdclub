@@ -2,6 +2,7 @@ import { h } from 'hyperapp';
 import cc from 'classcat';
 import { Link } from '@hyperapp/router';
 import { JQ as $ } from 'mdui';
+import path from '../../helper/path';
 import './index.less';
 
 const $body = $('body');
@@ -16,11 +17,11 @@ const Divider = () => (
 
 const Item = ({ url, icon, title }) => (
   <Link
-    to={$.path(url)}
+    to={path.addPrefix(url)}
     class={cc([
       'mdui-list-item',
       'mdui-ripple',
-      { 'mdui-list-item-active': $.isPathMatched(url, !url) },
+      { 'mdui-list-item-active': path.isMatched(url, !url) },
     ])}
   >
     <i class="mdui-list-item-icon mdui-icon material-icons">{icon}</i>

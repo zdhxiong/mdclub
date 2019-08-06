@@ -1,25 +1,21 @@
 import mdui, { JQ as $ } from 'mdui';
+import R from 'ramda';
 import actionsAbstract from '../../abstracts/actions/component';
 
 let global_actions;
-let $element;
 
 export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
-  init: (props) => {
+  init: props => (state, actions) => {
     global_actions = props.global_actions;
-    $element = $(props.element);
 
     // 表格滚动时，表头阴影变化
-    $element.find('tbody').on('scroll', (e) => {
-      if (e.target.scrollTop) {
-        $element.addClass('is-top');
-      } else {
-        $element.removeClass('is-top');
-      }
-    });
+    const $tbody = $(props.element).find('tbody');
+    const onScroll = e => actions.setState({ isScrollTop: !e.target.scrollTop });
+
+    $tbody.on('scroll', onScroll);
   },
 
   /**
@@ -46,6 +42,7 @@ export default $.extend({}, actionsAbstract, {
       checkedCount: 0,
       data: [],
       loading: false,
+      isScrollTop: true,
     });
   },
 
@@ -53,36 +50,36 @@ export default $.extend({}, actionsAbstract, {
    * 开始加载数据
    */
   loadStart: () => (state, actions) => {
-    actions.setState({
-      data: [],
-      loading: true,
-    });
+    actions.setState({ data: [], loading: true });
   },
 
   /**
-   * 数据加载完成
+   * 数据加载失败
    */
-  loadEnd: response => (state, actions) => {
+  loadFail: ({ message }) => (state, actions) => {
     actions.setState({ loading: false });
+    mdui.snackbar(message);
+  },
 
-    if (response.code) {
-      mdui.snackbar(response.message);
-      return;
-    }
-
+  /**
+   * 数据加载成功
+   */
+  loadSuccess: ({ data, pagination }) => (state, actions) => {
+    // todo 用 ramda 优化
     const isCheckedRows = {};
-    response.data.map((item) => {
+    data.map((item) => {
       isCheckedRows[item[state.primaryKey]] = false;
     });
 
     actions.setState({
+      loading: false,
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,
-      data: response.data,
+      data,
     });
 
-    global_actions.components.pagination.setState(response.pagination);
+    global_actions.components.pagination.setState(pagination);
   },
 
   /**
@@ -91,6 +88,7 @@ export default $.extend({}, actionsAbstract, {
   updateOne: row => (state, actions) => {
     const data = state.data;
 
+    // todo 用 ramda 优化
     data.forEach((item, index) => {
       if (item[state.primaryKey] === row[state.primaryKey]) {
         data[index] = row;
@@ -110,6 +108,7 @@ export default $.extend({}, actionsAbstract, {
     let checkedCount = 0;
     let isCheckedAll = true;
 
+    // todo 用 ramda 优化
     Object.keys(isCheckedRows).map((_rowId) => {
       if (!isCheckedRows[_rowId]) {
         isCheckedAll = false;
@@ -129,6 +128,7 @@ export default $.extend({}, actionsAbstract, {
     const isCheckedAll = e.target.checked;
     const { isCheckedRows } = state;
 
+    // todo 用 ramda 优化
     Object.keys(isCheckedRows).map((_rowId) => {
       isCheckedRows[_rowId] = isCheckedAll;
 

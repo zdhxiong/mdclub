@@ -40,9 +40,7 @@ export default $.extend({}, actionsAbstract, {
    * 点击纸片事件
    */
   onChipClick: () => {
-    setTimeout(() => {
-      Menu.close();
-    });
+    setTimeout(() => Menu.close());
   },
 
   /**
