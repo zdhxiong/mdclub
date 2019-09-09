@@ -4,3 +4,5 @@ properties:
     type: integer
   data:
     $ref: '#/components/schemas/UserCover'
+required:
+  - code

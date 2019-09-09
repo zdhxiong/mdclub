@@ -1,7 +1,4 @@
 type: object
-required:
-  - code
-  - message
 properties:
   code:
     type: integer
@@ -22,3 +19,5 @@ properties:
     type: array
     items:
       $ref: '#/components/schemas/ErrorField'
+required:
+  - code

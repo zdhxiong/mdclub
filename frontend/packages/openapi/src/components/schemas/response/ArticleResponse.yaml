@@ -4,3 +4,5 @@ properties:
     type: integer
   data:
     $ref: '#/components/schemas/Article'
+required:
+  - code

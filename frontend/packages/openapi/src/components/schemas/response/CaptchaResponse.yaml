@@ -11,3 +11,5 @@ properties:
       captcha_image:
         type: string
         description: base64格式的图形验证码图片
+required:
+  - code

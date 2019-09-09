@@ -8,3 +8,5 @@ properties:
       $ref: '#/components/schemas/Answer'
   pagination:
     $ref: '#/components/schemas/Pagination'
+required:
+  - code

@@ -8,3 +8,5 @@ properties:
       $ref: '#/components/schemas/User'
   pagination:
     $ref: '#/components/schemas/Pagination'
+required:
+  - code
