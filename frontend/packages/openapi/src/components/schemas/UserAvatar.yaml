@@ -1,5 +1,8 @@
 type: object
 properties:
+  o:
+    type: string
+    description: 头像原图地址
   s:
     type: string
     description: 小头像地址
@@ -10,6 +13,7 @@ properties:
     type: string
     description: 大头像地址
 required:
+  - o
   - s
   - m
   - l

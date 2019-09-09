@@ -1,5 +1,89 @@
 type: object
 properties:
+  answer_can_delete:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      回答作者是否可删除回答。
+
+      为 `0` 时，不允许删除；
+      为 `1` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
+  answer_can_delete_before:
+    type: string
+    description: |
+      在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `1` 时该参数才有效。
+  answer_can_delete_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `1` 时该参数才有效。
+  answer_can_edit:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      回答作者是否可编辑回答。
+
+      为 `0` 时，不允许编辑；
+      为 `1` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
+  answer_can_edit_before:
+    type: string
+    description: |
+      在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `1` 时该参数才有效。
+  answer_can_edit_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `1` 时该参数才有效。
+  article_can_delete:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      文章作者是否可删除文章。
+
+      为 `0` 时，不允许删除；
+      为 `1` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
+  article_can_delete_before:
+    type: string
+    description: |
+      在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `1` 时该参数才有效。
+  article_can_delete_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `1` 时该参数才有效。
+  article_can_edit:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      文章作者是否可编辑文章。
+
+      为 `0` 时，不允许编辑；
+      为 `1` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
+  article_can_edit_before:
+    type: string
+    description: |
+      在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `1` 时该参数才有效。
+  article_can_edit_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `1` 时该参数才有效。
   cache_memcached_host:
     type: string
     description: 🔐Memcached 服务器地址
@@ -33,6 +117,34 @@ properties:
       - redis
       - memcached
     description: 🔐缓存类型
+  comment_can_delete:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      评论作者是否可删除评论。
+
+      为 `0` 时，不允许删除；
+      为 `1` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+  comment_can_delete_before:
+    type: string
+    description: |
+      在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `1` 时该参数才有效。
+  comment_can_edit:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      评论作者是否可编辑评论。
+
+      为 `0` 时，不允许编辑；
+      为 `1` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+  comment_can_edit_before:
+    type: string
+    description: |
+      在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `1` 时该参数才有效。
   language:
     type: string
     enum:
@@ -42,6 +154,62 @@ properties:
       - zh-CN
       - zh-TW
     description: 系统语言
+  question_can_delete:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      提问作者是否可删除提问。
+
+      为 `0` 时，不允许删除；
+      为 `1` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
+  question_can_delete_before:
+    type: string
+    description: |
+      在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `1` 时该参数才有效。
+  question_can_delete_only_no_answer:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
+  question_can_delete_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
+  question_can_edit:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      提问作者是否可编辑提问。
+
+      为 `0` 时，不允许编辑；
+      为 `1` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
+  question_can_edit_before:
+    type: string
+    description: |
+      在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `1` 时该参数才有效。
+  question_can_edit_only_no_answer:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
+  question_can_edit_only_no_comment:
+    type: string
+    enum:
+      - 0
+      - 1
+    description: |
+      仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
   site_description:
     type: string
     description: 站点简介
@@ -179,7 +347,31 @@ properties:
     type: string
     description: 🔐主题名称
 required:
+  - answer_can_delete
+  - answer_can_delete_before
+  - answer_can_delete_only_no_comment
+  - answer_can_edit
+  - answer_can_edit_before
+  - answer_can_edit_only_no_comment
+  - article_can_delete
+  - article_can_delete_before
+  - article_can_delete_only_no_comment
+  - article_can_edit
+  - article_can_edit_before
+  - article_can_edit_only_no_comment
+  - comment_can_delete
+  - comment_can_delete_before
+  - comment_can_edit
+  - comment_can_edit_before
   - language
+  - question_can_delete
+  - question_can_delete_before
+  - question_can_delete_only_no_answer
+  - question_can_delete_only_no_comment
+  - question_can_edit
+  - question_can_edit_before
+  - question_can_edit_only_no_answer
+  - question_can_edit_only_no_comment
   - site_description
   - site_gongan_beian
   - site_icp_beian

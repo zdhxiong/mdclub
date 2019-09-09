@@ -12,3 +12,8 @@ properties:
   update_time:
     type: integer
     description: 更新时间
+required:
+  - answer_id
+  - content_summary
+  - create_time
+  - update_time

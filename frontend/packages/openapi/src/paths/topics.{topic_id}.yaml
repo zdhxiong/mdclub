@@ -39,9 +39,14 @@ post:
 delete:
   operationId: delete
   summary: 🔐删除话题
-  description: 仅管理员可调用该接口
+  description: |
+    仅管理员可调用该接口
+    只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+
+    删除后，话题默认进入回收站，可在回收站中恢复该话题。
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
+    - $ref: '#/components/parameters/force'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

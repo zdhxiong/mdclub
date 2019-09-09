@@ -1,6 +1,8 @@
 post:
   operationId: restore
-  summary: todo - 🔐恢复指定回答
+  summary: 🔐恢复指定回答
+  description: |
+    仅管理员可调用该接口。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
   responses:
@@ -13,7 +15,9 @@ post:
 
 delete:
   operationId: destroy
-  summary: todo - 🔐删除指定回答
+  summary: 🔐删除指定回答
+  description: |
+    仅管理员可调用该接口。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
   responses:

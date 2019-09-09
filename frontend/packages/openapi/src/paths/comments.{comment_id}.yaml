@@ -1,8 +1,11 @@
 get:
   operationId: get
   summary: 获取评论详情
+  description: |
+    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
+    - $ref: '#/components/parameters/include'
   responses:
     '200':
       $ref: '#/components/responses/Comment'
@@ -14,9 +17,13 @@ get:
 patch:
   operationId: update
   summary: 修改评论
-  description: 仅评论的作者和管理员可以修改评论。
+  description: |
+    管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
+
+    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
+    - $ref: '#/components/parameters/include'
   requestBody:
     $ref: '#/components/requestBodies/Comment'
   responses:
@@ -30,9 +37,15 @@ patch:
 delete:
   operationId: delete
   summary: 删除评论
-  description: 仅评论作者和管理员可删除评论
+  description: |
+    只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+
+    管理员可删除评论，默认为软删除，指定 force=1 为硬删除。评论被删除后，进入回收站。管理员可在后台恢复评论。
+
+    评论作者是否可删除评论，由管理员在后台的设置决定。评论作者删除评论时只能硬删除，删除后不可恢复。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
+    - $ref: '#/components/parameters/force'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

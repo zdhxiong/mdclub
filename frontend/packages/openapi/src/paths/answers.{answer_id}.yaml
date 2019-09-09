@@ -18,7 +18,7 @@ patch:
   operationId: update
   summary: 修改回答信息
   description: |
-    仅回答的作者和管理员可以修改文章信息。
+    管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。
 
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
@@ -40,7 +40,12 @@ patch:
 delete:
   operationId: delete
   summary: 删除指定回答
-  description: 仅回答作者和管理员可以删除文章
+  description: |
+    只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+
+    管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
+
+    回答被删除后，进入回收站。管理员可在后台恢复回答。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
   responses:

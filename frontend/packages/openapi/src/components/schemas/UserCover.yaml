@@ -1,5 +1,8 @@
 type: object
 properties:
+  o:
+    type: string
+    description: 封面原图地址
   s:
     type: string
     description: 小型封面地址
@@ -10,6 +13,7 @@ properties:
     type: string
     description: 大型封面地址
 required:
+  - o
   - s
   - m
   - l

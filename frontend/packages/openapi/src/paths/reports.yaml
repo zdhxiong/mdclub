@@ -1,10 +1,14 @@
 get:
   operationId: getList
   summary: 🔐获取被举报的内容列表
-  description: 仅管理员可调用该接口
+  description: |
+    仅管理员可调用该接口
+
+    `include` 参数取值包括：`question`、`answer`、`article`、`comment`、`user`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include'
     - $ref: '#/components/parameters/reportable_type.query'
   responses:
     '200':

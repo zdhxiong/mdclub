@@ -25,14 +25,17 @@ comment_id.query:
 comment_ids:
   $ref: ./comment_ids.yaml
 
-commentable_type.query:
-  $ref: ./commentable_type.query.yaml
-
 commentable_id.query:
   $ref: ./commentable_id.query.yaml
 
+commentable_type.query:
+  $ref: ./commentable_type.query.yaml
+
 email.query:
   $ref: ./email.query.yaml
+
+force:
+  $ref: ./force.yaml
 
 image_key.path:
   $ref: ./image_key.path.yaml
