@@ -5309,7 +5309,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ArticleResponse": {
         "type": "object",
@@ -5320,7 +5323,10 @@
           "data": {
             "$ref": "#/components/schemas/Article"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ArticlesResponse": {
         "type": "object",
@@ -5337,7 +5343,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "CaptchaResponse": {
         "type": "object",
@@ -5358,7 +5367,10 @@
               }
             }
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "CommentResponse": {
         "type": "object",
@@ -5369,7 +5381,10 @@
           "data": {
             "$ref": "#/components/schemas/Comment"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "CommentsResponse": {
         "type": "object",
@@ -5386,7 +5401,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "EmailResponse": {
         "type": "object",
@@ -5397,7 +5415,10 @@
           "data": {
             "$ref": "#/components/schemas/Email"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "EmptyResponse": {
         "type": "object",
@@ -5408,14 +5429,13 @@
           "data": {
             "type": "object"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ErrorResponse": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
         "properties": {
           "code": {
             "type": "integer",
@@ -5443,7 +5463,10 @@
               "$ref": "#/components/schemas/ErrorField"
             }
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "FollowerCountResponse": {
         "type": "object",
@@ -5454,7 +5477,10 @@
           "data": {
             "$ref": "#/components/schemas/FollowerCount"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ImageResponse": {
         "type": "object",
@@ -5465,7 +5491,10 @@
           "data": {
             "$ref": "#/components/schemas/Image"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ImagesResponse": {
         "type": "object",
@@ -5482,7 +5511,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "OptionResponse": {
         "type": "object",
@@ -5493,7 +5525,10 @@
           "data": {
             "$ref": "#/components/schemas/Option"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "QuestionResponse": {
         "type": "object",
@@ -5504,7 +5539,10 @@
           "data": {
             "$ref": "#/components/schemas/Question"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "QuestionsResponse": {
         "type": "object",
@@ -5521,7 +5559,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ReportGroupsResponse": {
         "type": "object",
@@ -5538,7 +5579,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ReportResponse": {
         "type": "object",
@@ -5549,7 +5593,10 @@
           "data": {
             "$ref": "#/components/schemas/Report"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "ReportsResponse": {
         "type": "object",
@@ -5566,7 +5613,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "TokenResponse": {
         "type": "object",
@@ -5577,7 +5627,10 @@
           "data": {
             "$ref": "#/components/schemas/Token"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "TopicResponse": {
         "type": "object",
@@ -5588,7 +5641,10 @@
           "data": {
             "$ref": "#/components/schemas/Topic"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "TopicsResponse": {
         "type": "object",
@@ -5605,7 +5661,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "UserAvatarResponse": {
         "type": "object",
@@ -5616,7 +5675,10 @@
           "data": {
             "$ref": "#/components/schemas/UserAvatar"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "UserCoverResponse": {
         "type": "object",
@@ -5627,7 +5689,10 @@
           "data": {
             "$ref": "#/components/schemas/UserCover"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "UserResponse": {
         "type": "object",
@@ -5638,7 +5703,10 @@
           "data": {
             "$ref": "#/components/schemas/User"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "UsersResponse": {
         "type": "object",
@@ -5655,7 +5723,10 @@
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "VoteCountResponse": {
         "type": "object",
@@ -5666,7 +5737,10 @@
           "data": {
             "$ref": "#/components/schemas/VoteCount"
           }
-        }
+        },
+        "required": [
+          "code"
+        ]
       },
       "AnswerRelationship": {
         "type": "object",

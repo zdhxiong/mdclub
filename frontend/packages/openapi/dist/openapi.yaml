@@ -3679,6 +3679,8 @@ components:
             $ref: '#/components/schemas/Answer'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     ArticleResponse:
       type: object
       properties:
@@ -3686,6 +3688,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Article'
+      required:
+        - code
     ArticlesResponse:
       type: object
       properties:
@@ -3697,6 +3701,8 @@ components:
             $ref: '#/components/schemas/Article'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     CaptchaResponse:
       type: object
       properties:
@@ -3711,6 +3717,8 @@ components:
             captcha_image:
               type: string
               description: base64格式的图形验证码图片
+      required:
+        - code
     CommentResponse:
       type: object
       properties:
@@ -3718,6 +3726,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Comment'
+      required:
+        - code
     CommentsResponse:
       type: object
       properties:
@@ -3729,6 +3739,8 @@ components:
             $ref: '#/components/schemas/Comment'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     EmailResponse:
       type: object
       properties:
@@ -3736,6 +3748,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Email'
+      required:
+        - code
     EmptyResponse:
       type: object
       properties:
@@ -3743,11 +3757,10 @@ components:
           type: integer
         data:
           type: object
-    ErrorResponse:
-      type: object
       required:
         - code
-        - message
+    ErrorResponse:
+      type: object
       properties:
         code:
           type: integer
@@ -3768,6 +3781,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorField'
+      required:
+        - code
     FollowerCountResponse:
       type: object
       properties:
@@ -3775,6 +3790,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/FollowerCount'
+      required:
+        - code
     ImageResponse:
       type: object
       properties:
@@ -3782,6 +3799,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Image'
+      required:
+        - code
     ImagesResponse:
       type: object
       properties:
@@ -3793,6 +3812,8 @@ components:
             $ref: '#/components/schemas/Image'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     OptionResponse:
       type: object
       properties:
@@ -3800,6 +3821,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Option'
+      required:
+        - code
     QuestionResponse:
       type: object
       properties:
@@ -3807,6 +3830,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Question'
+      required:
+        - code
     QuestionsResponse:
       type: object
       properties:
@@ -3818,6 +3843,8 @@ components:
             $ref: '#/components/schemas/Question'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     ReportGroupsResponse:
       type: object
       properties:
@@ -3829,6 +3856,8 @@ components:
             $ref: '#/components/schemas/ReportGroup'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     ReportResponse:
       type: object
       properties:
@@ -3836,6 +3865,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Report'
+      required:
+        - code
     ReportsResponse:
       type: object
       properties:
@@ -3847,6 +3878,8 @@ components:
             $ref: '#/components/schemas/Report'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     TokenResponse:
       type: object
       properties:
@@ -3854,6 +3887,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Token'
+      required:
+        - code
     TopicResponse:
       type: object
       properties:
@@ -3861,6 +3896,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/Topic'
+      required:
+        - code
     TopicsResponse:
       type: object
       properties:
@@ -3872,6 +3909,8 @@ components:
             $ref: '#/components/schemas/Topic'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     UserAvatarResponse:
       type: object
       properties:
@@ -3879,6 +3918,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/UserAvatar'
+      required:
+        - code
     UserCoverResponse:
       type: object
       properties:
@@ -3886,6 +3927,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/UserCover'
+      required:
+        - code
     UserResponse:
       type: object
       properties:
@@ -3893,6 +3936,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/User'
+      required:
+        - code
     UsersResponse:
       type: object
       properties:
@@ -3904,6 +3949,8 @@ components:
             $ref: '#/components/schemas/User'
         pagination:
           $ref: '#/components/schemas/Pagination'
+      required:
+        - code
     VoteCountResponse:
       type: object
       properties:
@@ -3911,6 +3958,8 @@ components:
           type: integer
         data:
           $ref: '#/components/schemas/VoteCount'
+      required:
+        - code
     AnswerRelationship:
       type: object
       properties:
