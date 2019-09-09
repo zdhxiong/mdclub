@@ -9,7 +9,7 @@
     "url": "https://github.com/zdhxiong/mdclub-openapi"
   },
   "scripts": {
-    "build": "node index.js",
+    "build": "node index.js"
   },
   "bugs": {
     "url": "https://github.com/zdhxiong/mdclub-openapi/issues",
