@@ -1,47 +1,75 @@
 const gulp = require('gulp');
-const rollup = require('gulp-better-rollup');
 const header = require('gulp-header');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
+const rollup = require('rollup');
 const buble = require('rollup-plugin-buble');
 const { eslint } = require('rollup-plugin-eslint');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const typescript = require('rollup-plugin-typescript');
+const polyfill = require('rollup-plugin-polyfill');
 const pkg = require('./package.json');
-
 
 const banner = `
 /*!
- * mdclub-sdk-js ${pkg.version} (${pkg.homepage})
+ * mdclub-sdk ${pkg.version} (${pkg.homepage})
  * Copyright 2018-${new Date().getFullYear()} ${pkg.author}
  * Licensed under ${pkg.license}
  */
 `.trim();
 
-function compile(cb) {
-  gulp.src('./src/index.js')
-    .pipe(rollup({
-      plugins: [resolve(), commonjs(), eslint(), buble()],
-    }, {
-      name: 'mdclubSDK',
-      format: 'umd',
-      file: 'mdclub-sdk.js',
-      banner,
-    }))
-    .pipe(gulp.dest('./dist/'))
-    .on('end', cb);
-}
+async function umd() {
+  const bundle = await rollup.rollup({
+    input: './src/index.ts',
+    plugins: [
+      eslint({
+        fix: true,
+      }),
+      typescript(),
+      buble(),
+      polyfill([
+        'mdn-polyfills/MouseEvent',
+        'mdn-polyfills/CustomEvent',
+        'promise-polyfill/src/polyfill',
+      ]),
+    ],
+  });
 
-function compress(cb) {
-  gulp.src('./dist/mdclub-sdk.js')
+  await bundle.write({
+    strict: true,
+    name: 'mdclubSDK',
+    format: 'umd',
+    file: './dist/mdclub-sdk.js',
+    banner,
+  });
+
+  await gulp.src('./dist/mdclub-sdk.js')
     .pipe(sourcemaps.init())
     .pipe(uglify())
     .pipe(header(banner))
     .pipe(rename('mdclub-sdk.min.js'))
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('./dist/'))
-    .on('end', cb);
+    .pipe(gulp.dest('./dist/'));
 }
 
-gulp.task('build', gulp.series(compile, compress));
+async function esm() {
+  const bundle = await rollup.rollup({
+    input: './src/index.ts',
+    plugins: [
+      eslint({
+        fix: true,
+      }),
+      typescript(),
+    ],
+  });
+
+  await bundle.write({
+    strict: true,
+    name: 'mdclubSDK',
+    format: 'es',
+    file: './dist/mdclub-sdk.esm.js',
+    banner,
+  });
+}
+
+gulp.task('build', gulp.parallel(umd, esm));

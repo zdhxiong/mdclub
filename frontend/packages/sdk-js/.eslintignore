@@ -1,0 +1,7 @@
+.vscode/
+.idea/
+dist/
+node_modules/
+openapi-generator/
+test/
+tmp/

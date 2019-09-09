@@ -1,0 +1,52 @@
+import defaults from './defaults';
+import { get, post, put, patch, del } from './util/requestAlias';
+import { urlParamReplace } from './util/url';
+import {
+{{#modelImports}}  {{this}},
+{{/modelImports}}
+} from './models';
+
+{{#operations}}
+{{#operation}}
+interface {{operationIdCamelCase}}Params {
+{{#allParams}}  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
+{{/allParams}}
+}
+
+{{/operation}}
+/**
+ * {{classname}}
+ */
+export default {
+{{#operation}}
+  /**
+  {{#summary}}
+   * {{summary}}
+  {{/summary}}
+  {{#notes}}
+   * {{notes}}
+  {{/notes}}
+  {{#allParams}}
+   * @param params.{{paramName}} {{description}}
+  {{/allParams}}
+   */
+  {{nickname}}: ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> => {
+    const url = defaults.apiPath + urlParamReplace(
+      '{{classname}}.{{nickname}}',
+      '{{path}}',
+      {{#hasParams}}params{{/hasParams}}{{^hasParams}}{}{{/hasParams}},
+      [ {{#hasQueryParams}}{{#queryParams}}'{{baseName}}', {{/queryParams}}{{/hasQueryParams}}],
+    );
+
+    return {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(
+      url,
+      {{#hasBodyParam}}
+        {{#bodyParam}} params.{{paramName}} || {} {{/bodyParam}}
+      {{/hasBodyParam}}
+    );
+  },
+
+{{/operation}}
+}
+
+{{/operations}}
