@@ -1,13 +1,6 @@
-import defaults from './defaults';
-import { get, post, put, patch, del } from './util/requestAlias';
-import { urlParamReplace } from './util/url';
-import {
-  ImageUpdateRequestBody,
-  ImageResponse,
-  ImageUploadRequestBody,
-  EmptyResponse,
-  ImagesResponse,
-} from './models';
+import { get, post, patch, del } from './util/requestAlias';
+import { buildURL, buildRequestBody } from './util/requestHandler';
+import { ImageResponse, EmptyResponse, ImagesResponse } from './models';
 
 interface DeleteParams {
   key: string;
@@ -24,24 +17,34 @@ interface GetParams {
 
 interface GetListParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
   key?: string;
-  itemType?: 'question' | 'answer' | 'article';
-  itemId?: string;
-  userId?: number;
+  item_type?: 'question' | 'answer' | 'article';
+  item_id?: string;
+  user_id?: number;
 }
 
 interface UpdateParams {
   key: string;
-  imageUpdateRequestBody: ImageUpdateRequestBody;
   include?: Array<string>;
+
+  /**
+   * 图片文件名
+   */
+  filename?: string;
 }
 
 interface UploadParams {
-  imageUploadRequestBody: ImageUploadRequestBody;
   include?: Array<string>;
+
+  /**
+   * 图片
+   */
+  image?: any;
 }
+
+const className = 'ImageApi';
 
 /**
  * ImageApi
@@ -53,11 +56,7 @@ export default {
    * @param params.key 图片key
    */
   del: (params: DeleteParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.del', '/images/{key}', params, []);
-
-    return del(url);
+    return del(buildURL(`${className}.del`, '/images/{key}', params));
   },
 
   /**
@@ -66,11 +65,9 @@ export default {
    * @param params.key 用“,”分隔的图片key，最多可提供 40 个 key（IE 的 query 参数最长为 2k，为了不超过这个数值，限制最多可以提交 40 个 key）
    */
   deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.deleteMultiple', '/images', params, ['key']);
-
-    return del(url);
+    return del(
+      buildURL(`${className}.deleteMultiple`, '/images', params, ['key']),
+    );
   },
 
   /**
@@ -80,28 +77,25 @@ export default {
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   get: (params: GetParams): Promise<ImageResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.get', '/images/{key}', params, ['include']);
-
-    return get(url);
+    return get(
+      buildURL(`${className}.get`, '/images/{key}', params, ['include']),
+    );
   },
 
   /**
    * 🔐获取图片列表
    * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    * @param params.key 图片key
-   * @param params.itemType 图片关联对象的类型
-   * @param params.itemId 图片关联对象的ID
-   * @param params.userId 用户ID
+   * @param params.item_type 图片关联对象的类型
+   * @param params.item_id 图片关联对象的ID
+   * @param params.user_id 用户ID
    */
   getList: (params: GetListParams): Promise<ImagesResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.getList', '/images', params, [
+    return get(
+      buildURL(`${className}.getList`, '/images', params, [
         'page',
         'per_page',
         'include',
@@ -109,37 +103,34 @@ export default {
         'item_type',
         'item_id',
         'user_id',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 🔐更新指定图片信息
    * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
    * @param params.key 图片key
-   * @param params.imageUpdateRequestBody
+   * @param params.ImageUpdateRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   update: (params: UpdateParams): Promise<ImageResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.update', '/images/{key}', params, ['include']);
-
-    return patch(url, params.imageUpdateRequestBody || {});
+    return patch(
+      buildURL(`${className}.update`, '/images/{key}', params, ['include']),
+      buildRequestBody(params, ['filename']),
+    );
   },
 
   /**
    * 上传图片
    * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
-   * @param params.imageUploadRequestBody
+   * @param params.ImageUploadRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   upload: (params: UploadParams): Promise<ImageResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('ImageApi.upload', '/images', params, ['include']);
-
-    return post(url, params.imageUploadRequestBody || {});
+    return post(
+      buildURL(`${className}.upload`, '/images', params, ['include']),
+      buildRequestBody(params, ['image']),
+    );
   },
 };

@@ -6,8 +6,8 @@ import {
 import globalOptions from '../defaults';
 import ajaxSetup from 'mdui.jq/src/functions/ajaxSetup';
 import ajax from 'mdui.jq/src/functions/ajax';
-import { isUndefined } from "../../types/mdui.jq/src/utils";
-import { PlainObject } from "../util/misc";
+import { isUndefined } from 'mdui.jq/src/utils';
+import { PlainObject } from '../util/misc';
 
 /**
  * 浏览器适配器

@@ -1,9 +1,8 @@
-import defaults from './defaults';
-import { get, post, put, patch, del } from './util/requestAlias';
-import { urlParamReplace } from './util/url';
+import { post } from './util/requestAlias';
+import { buildURL } from './util/requestHandler';
 import { CaptchaResponse } from './models';
 
-interface GenerateParams {}
+const className = 'CaptchaApi';
 
 /**
  * CaptchaApi
@@ -13,10 +12,6 @@ export default {
    * 生成新的图形验证码
    */
   generate: (): Promise<CaptchaResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('CaptchaApi.generate', '/captchas', {}, []);
-
-    return post(url);
+    return post(buildURL(`${className}.generate`, '/captchas', {}));
   },
 };

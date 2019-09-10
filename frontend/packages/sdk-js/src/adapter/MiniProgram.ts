@@ -5,7 +5,7 @@ import {
 } from './AdapterInterface';
 import globalOptions from '../defaults';
 import { PlainObject } from '../util/misc';
-import { isUndefined } from "../../types/mdui.jq/src/utils";
+import { isUndefined } from 'mdui.jq/src/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace wx {
@@ -104,16 +104,14 @@ declare namespace wx {
      * @version 1.4.0
      */
     onProgressUpdate(
-      callback?: (
-        res: {
-          /** 上传进度百分比 */
-          progress: number;
-          /** 已经上传的数据长度，单位 Bytes */
-          totalBytesSent: number;
-          /** 预期需要上传的数据总长度，单位 Bytes */
-          totalBytesExpectedToSend: number;
-        }
-      ) => void
+      callback?: (res: {
+        /** 上传进度百分比 */
+        progress: number;
+        /** 已经上传的数据长度，单位 Bytes */
+        totalBytesSent: number;
+        /** 预期需要上传的数据总长度，单位 Bytes */
+        totalBytesExpectedToSend: number;
+      }) => void,
     ): void;
     /**
      * 中断下载任务
@@ -215,7 +213,7 @@ export default class MiniProgram implements RequestAdapterInterface {
           filePath: '',
           name: '',
           formData: data,
-        })
+        });
       } else {
         wx.request({
           method: options.method || 'GET',

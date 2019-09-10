@@ -1,6 +1,5 @@
-import defaults from './defaults';
 import { get, post, put, patch, del } from './util/requestAlias';
-import { urlParamReplace } from './util/url';
+import { buildURL, buildRequestBody } from './util/requestHandler';
 import {
 {{#modelImports}}  {{this}},
 {{/modelImports}}
@@ -14,6 +13,9 @@ interface {{operationIdCamelCase}}Params {
 }
 
 {{/operation}}
+
+const className = '{{classname}}';
+
 /**
  * {{classname}}
  */
@@ -31,17 +33,18 @@ export default {
   {{/allParams}}
    */
   {{nickname}}: ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> => {
-    const url = defaults.apiPath + urlParamReplace(
-      '{{classname}}.{{nickname}}',
-      '{{path}}',
-      {{#hasParams}}params{{/hasParams}}{{^hasParams}}{}{{/hasParams}},
-      [ {{#hasQueryParams}}{{#queryParams}}'{{baseName}}', {{/queryParams}}{{/hasQueryParams}}],
-    );
-
     return {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(
-      url,
+      buildURL(
+        `${className}.{{nickname}}`,
+        '{{path}}',
+        {{#hasParams}}params{{/hasParams}}{{^hasParams}}{}{{/hasParams}},
+        {{#hasQueryParams}}[ {{#queryParams}}'{{baseName}}', {{/queryParams}}],{{/hasQueryParams}}
+      ),
       {{#hasBodyParam}}
-        {{#bodyParam}} params.{{paramName}} || {} {{/bodyParam}}
+      buildRequestBody(
+        params,
+        [// todo],
+      ),
       {{/hasBodyParam}}
     );
   },

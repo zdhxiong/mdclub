@@ -1,68 +1,65 @@
-
 export interface Answer {
   /**
    * 回答ID
    */
-  answerId: number;
+  answer_id: number;
   /**
    * 提问ID
    */
-  questionId: number;
+  question_id: number;
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * markdown 格式的内容
    */
-  contentMarkdown: string;
+  content_markdown: string;
   /**
    * html 格式的内容
    */
-  contentRendered: string;
+  content_rendered: string;
   /**
    * 评论数量
    */
-  commentCount: number;
+  comment_count: number;
   /**
    * 投票数（赞成票 - 反对票，可能为负数）
    */
-  voteCount: number;
+  vote_count: number;
   /**
    * 创建时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 🔐更新时间
    */
-  updateTime?: number;
+  update_time?: number;
   /**
    * 🔐删除时间
    */
-  deleteTime?: number;
+  delete_time?: number;
   relationships?: AnswerRelationship;
 }
-
 
 export interface AnswerInRelationship {
   /**
    * 回答ID
    */
-  answerId: number;
+  answer_id: number;
   /**
    * 内容摘要
    */
-  contentSummary: string;
+  content_summary: string;
   /**
    * 发布时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 更新时间
    */
-  updateTime: number;
+  update_time: number;
 }
-
 
 export interface AnswerRelationship {
   user?: UserInRelationship;
@@ -73,24 +70,21 @@ export interface AnswerRelationship {
   voting?: string;
 }
 
-
 export interface AnswerRequestBody {
   /**
    * Markdown 格式的正文
    */
-  contentMarkdown?: string;
+  content_markdown?: string;
   /**
    * HTML 格式的正文
    */
-  contentRendered?: string;
+  content_rendered?: string;
 }
-
 
 export interface AnswerResponse {
   code: number;
   data?: Answer;
 }
-
 
 export interface AnswersResponse {
   code: number;
@@ -98,16 +92,15 @@ export interface AnswersResponse {
   pagination?: Pagination;
 }
 
-
 export interface Article {
   /**
    * 文章ID
    */
-  articleId: number;
+  article_id: number;
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 文章标题
    */
@@ -115,48 +108,47 @@ export interface Article {
   /**
    * Markdown 格式的文章内容
    */
-  contentMarkdown: string;
+  content_markdown: string;
   /**
    * HTML 格式的文章内容
    */
-  contentRendered: string;
+  content_rendered: string;
   /**
    * 评论数量
    */
-  commentCount: number;
+  comment_count: number;
   /**
    * 浏览量
    */
-  viewCount: number;
+  view_count: number;
   /**
    * 关注者数量
    */
-  followerCount: number;
+  follower_count: number;
   /**
    * 投票数（赞成票 - 反对票，可能为负数）
    */
-  voteCount: number;
+  vote_count: number;
   /**
    * 创建时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 更新时间（用户可以更新自己的文章）
    */
-  updateTime: number;
+  update_time: number;
   /**
    * 🔐删除时间
    */
-  deleteTime?: number;
+  delete_time?: number;
   relationships?: ArticleRelationship;
 }
-
 
 export interface ArticleInRelationship {
   /**
    * 文章ID
    */
-  articleId?: number;
+  article_id?: number;
   /**
    * 文章标题
    */
@@ -164,13 +156,12 @@ export interface ArticleInRelationship {
   /**
    * 发布时间
    */
-  createTime?: number;
+  create_time?: number;
   /**
    * 更新时间
    */
-  updateTime?: number;
+  update_time?: number;
 }
-
 
 export interface ArticleRelationship {
   user?: UserInRelationship;
@@ -178,13 +169,12 @@ export interface ArticleRelationship {
   /**
    * 当前登录用户是否已关注该文章
    */
-  isFollowing?: boolean;
+  is_following?: boolean;
   /**
    * 当前登录用户的投票类型（up、down），未投过票则为空字符串
    */
   voting?: string;
 }
-
 
 export interface ArticleRequestBody {
   /**
@@ -194,23 +184,21 @@ export interface ArticleRequestBody {
   /**
    * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
    */
-  topicId?: string;
+  topic_id?: string;
   /**
    * Markdown 格式的正文
    */
-  contentMarkdown?: string;
+  content_markdown?: string;
   /**
    * HTML 格式的正文
    */
-  contentRendered?: string;
+  content_rendered?: string;
 }
-
 
 export interface ArticleResponse {
   code: number;
   data?: Article;
 }
-
 
 export interface ArticlesResponse {
   code: number;
@@ -218,42 +206,39 @@ export interface ArticlesResponse {
   pagination?: Pagination;
 }
 
-
 export interface CaptchaResponse {
   code: number;
   data?: CaptchaResponseData;
 }
 
-
 export interface CaptchaResponseData {
   /**
    * 图形验证码token
    */
-  captchaToken?: string;
+  captcha_token?: string;
   /**
    * base64格式的图形验证码图片
    */
-  captchaImage?: string;
+  captcha_image?: string;
 }
-
 
 export interface Comment {
   /**
    * 评论ID
    */
-  commentId: number;
+  comment_id: number;
   /**
    * 评论目标的ID
    */
-  commentableId: number;
+  commentable_id: number;
   /**
    * 评论目标类型
    */
-  commentableType: CommentCommentableTypeEnum;
+  commentable_type: CommentCommentableTypeEnum;
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 评论内容
    */
@@ -261,47 +246,45 @@ export interface Comment {
   /**
    * 投票数（赞成票 - 反对票，可能为负数）
    */
-  voteCount: number;
+  vote_count: number;
   /**
    * 发表时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 修改时间
    */
-  updateTime: number;
+  update_time: number;
   /**
    * 🔐删除时间
    */
-  deleteTime?: number;
+  delete_time?: number;
   relationships?: CommentRelationship;
 }
 
 /**
- * Enum for the commentableType property.
+ * Enum for the commentable_type property.
  */
 export type CommentCommentableTypeEnum = 'article' | 'question' | 'answer';
-
 
 export interface CommentInRelationship {
   /**
    * 评论ID
    */
-  commentId?: number;
+  comment_id?: number;
   /**
    * 内容摘要
    */
-  contentSummary?: string;
+  content_summary?: string;
   /**
    * 发布时间
    */
-  createTime?: number;
+  create_time?: number;
   /**
    * 更新时间
    */
-  updateTime?: number;
+  update_time?: number;
 }
-
 
 export interface CommentRelationship {
   user?: UserInRelationship;
@@ -311,7 +294,6 @@ export interface CommentRelationship {
   voting?: string;
 }
 
-
 export interface CommentRequestBody {
   /**
    * 评论内容
@@ -319,19 +301,16 @@ export interface CommentRequestBody {
   content: string;
 }
 
-
 export interface CommentResponse {
   code: number;
   data?: Comment;
 }
-
 
 export interface CommentsResponse {
   code: number;
   data?: Array<Comment>;
   pagination?: Pagination;
 }
-
 
 export interface Email {
   /**
@@ -348,18 +327,15 @@ export interface Email {
   content: string;
 }
 
-
 export interface EmailResponse {
   code: number;
   data?: Email;
 }
 
-
 export interface EmptyResponse {
   code: number;
   data?: object;
 }
-
 
 export interface ErrorField {
   /**
@@ -371,7 +347,6 @@ export interface ErrorField {
    */
   message: string;
 }
-
 
 export interface ErrorResponse {
   /**
@@ -385,18 +360,17 @@ export interface ErrorResponse {
   /**
    * 额外的错误描述
    */
-  extraMessage?: string;
+  extra_message?: string;
   /**
    * 图形验证码token。若返回了该参数，表示下次调用该接口需要输入图形验证码
    */
-  captchaToken?: string;
+  captcha_token?: string;
   /**
    * 图形验证码的base64格式图片
    */
-  captchaImage?: string;
+  captcha_image?: string;
   errors?: Array<ErrorField>;
 }
-
 
 /**
  * 关注者数量
@@ -405,15 +379,13 @@ export interface FollowerCount {
   /**
    * 关注者数量
    */
-  followerCount: number;
+  follower_count: number;
 }
-
 
 export interface FollowerCountResponse {
   code: number;
   data?: FollowerCount;
 }
-
 
 export interface Image {
   /**
@@ -435,23 +407,22 @@ export interface Image {
   /**
    * 图片上传时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 图片关联对象类型
    */
-  itemType: string;
+  item_type: string;
   /**
    * 图片管理对象ID
    */
-  itemId: number;
+  item_id: number;
   /**
    * 图片上传者ID
    */
-  userId: number;
+  user_id: number;
   urls: ImageUrls;
   relationships?: ImageRelationship;
 }
-
 
 export interface ImageRelationship {
   user?: UserInRelationship;
@@ -460,12 +431,10 @@ export interface ImageRelationship {
   answer?: AnswerInRelationship;
 }
 
-
 export interface ImageResponse {
   code: number;
   data?: Image;
 }
-
 
 export interface ImageUpdateRequestBody {
   /**
@@ -474,14 +443,12 @@ export interface ImageUpdateRequestBody {
   filename?: string;
 }
 
-
 export interface ImageUploadRequestBody {
   /**
    * 图片
    */
   image?: any;
 }
-
 
 export interface ImageUrls {
   /**
@@ -498,307 +465,305 @@ export interface ImageUrls {
   t?: string;
 }
 
-
 export interface ImagesResponse {
   code: number;
   data?: Array<Image>;
   pagination?: Pagination;
 }
 
-
 export interface Option {
   /**
-   * 回答作者是否可删除回答。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。 
+   * 回答作者是否可删除回答。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
    */
-  answerCanDelete: OptionAnswerCanDeleteEnum;
+  answer_can_delete: OptionAnswerCanDeleteEnum;
   /**
-   * 在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `1` 时该参数才有效。 
+   * 在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `1` 时该参数才有效。
    */
-  answerCanDeleteBefore: string;
+  answer_can_delete_before: string;
   /**
-   * 仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `1` 时该参数才有效。
    */
-  answerCanDeleteOnlyNoComment: OptionAnswerCanDeleteOnlyNoCommentEnum;
+  answer_can_delete_only_no_comment: OptionAnswerCanDeleteOnlyNoCommentEnum;
   /**
-   * 回答作者是否可编辑回答。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。 
+   * 回答作者是否可编辑回答。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
    */
-  answerCanEdit: OptionAnswerCanEditEnum;
+  answer_can_edit: OptionAnswerCanEditEnum;
   /**
-   * 在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `1` 时该参数才有效。 
+   * 在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `1` 时该参数才有效。
    */
-  answerCanEditBefore: string;
+  answer_can_edit_before: string;
   /**
-   * 仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `1` 时该参数才有效。
    */
-  answerCanEditOnlyNoComment: OptionAnswerCanEditOnlyNoCommentEnum;
+  answer_can_edit_only_no_comment: OptionAnswerCanEditOnlyNoCommentEnum;
   /**
-   * 文章作者是否可删除文章。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。 
+   * 文章作者是否可删除文章。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
    */
-  articleCanDelete: OptionArticleCanDeleteEnum;
+  article_can_delete: OptionArticleCanDeleteEnum;
   /**
-   * 在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `1` 时该参数才有效。 
+   * 在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `1` 时该参数才有效。
    */
-  articleCanDeleteBefore: string;
+  article_can_delete_before: string;
   /**
-   * 仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `1` 时该参数才有效。
    */
-  articleCanDeleteOnlyNoComment: OptionArticleCanDeleteOnlyNoCommentEnum;
+  article_can_delete_only_no_comment: OptionArticleCanDeleteOnlyNoCommentEnum;
   /**
-   * 文章作者是否可编辑文章。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。 
+   * 文章作者是否可编辑文章。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
    */
-  articleCanEdit: OptionArticleCanEditEnum;
+  article_can_edit: OptionArticleCanEditEnum;
   /**
-   * 在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `1` 时该参数才有效。 
+   * 在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `1` 时该参数才有效。
    */
-  articleCanEditBefore: string;
+  article_can_edit_before: string;
   /**
-   * 仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `1` 时该参数才有效。
    */
-  articleCanEditOnlyNoComment: OptionArticleCanEditOnlyNoCommentEnum;
+  article_can_edit_only_no_comment: OptionArticleCanEditOnlyNoCommentEnum;
   /**
    * 🔐Memcached 服务器地址
    */
-  cacheMemcachedHost?: string;
+  cache_memcached_host?: string;
   /**
    * 🔐Memcached 密码
    */
-  cacheMemcachedPassword?: string;
+  cache_memcached_password?: string;
   /**
    * 🔐Memcached 端口号
    */
-  cacheMemcachedPort?: string;
+  cache_memcached_port?: string;
   /**
    * 🔐Memcached 用户名
    */
-  cacheMemcachedUsername?: string;
+  cache_memcached_username?: string;
   /**
    * 🔐缓存键名前缀（只能包含字符 -+.A-Za-z0-9）
    */
-  cachePrefix?: string;
+  cache_prefix?: string;
   /**
    * 🔐Redis 服务器地址
    */
-  cacheRedisHost?: string;
+  cache_redis_host?: string;
   /**
    * 🔐Redis 密码
    */
-  cacheRedisPassword?: string;
+  cache_redis_password?: string;
   /**
    * 🔐Redis 端口号
    */
-  cacheRedisPort?: string;
+  cache_redis_port?: string;
   /**
    * 🔐Redis 用户名
    */
-  cacheRedisUsername?: string;
+  cache_redis_username?: string;
   /**
    * 🔐缓存类型
    */
-  cacheType?: OptionCacheTypeEnum;
+  cache_type?: OptionCacheTypeEnum;
   /**
-   * 评论作者是否可删除评论。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `comment_can_delete_before` 的条件时可删除。 
+   * 评论作者是否可删除评论。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `comment_can_delete_before` 的条件时可删除。
    */
-  commentCanDelete: OptionCommentCanDeleteEnum;
+  comment_can_delete: OptionCommentCanDeleteEnum;
   /**
-   * 在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `1` 时该参数才有效。 
+   * 在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `1` 时该参数才有效。
    */
-  commentCanDeleteBefore: string;
+  comment_can_delete_before: string;
   /**
-   * 评论作者是否可编辑评论。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `comment_can_edit_before` 的条件时可编辑。 
+   * 评论作者是否可编辑评论。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
    */
-  commentCanEdit: OptionCommentCanEditEnum;
+  comment_can_edit: OptionCommentCanEditEnum;
   /**
-   * 在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `1` 时该参数才有效。 
+   * 在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `1` 时该参数才有效。
    */
-  commentCanEditBefore: string;
+  comment_can_edit_before: string;
   /**
    * 系统语言
    */
   language: OptionLanguageEnum;
   /**
-   * 提问作者是否可删除提问。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。 
+   * 提问作者是否可删除提问。  为 `0` 时，不允许删除； 为 `1` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
    */
-  questionCanDelete: OptionQuestionCanDeleteEnum;
+  question_can_delete: OptionQuestionCanDeleteEnum;
   /**
-   * 在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `1` 时该参数才有效。 
+   * 在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `1` 时该参数才有效。
    */
-  questionCanDeleteBefore: string;
+  question_can_delete_before: string;
   /**
-   * 仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。 
+   * 仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
    */
-  questionCanDeleteOnlyNoAnswer: OptionQuestionCanDeleteOnlyNoAnswerEnum;
+  question_can_delete_only_no_answer: OptionQuestionCanDeleteOnlyNoAnswerEnum;
   /**
-   * 仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
    */
-  questionCanDeleteOnlyNoComment: OptionQuestionCanDeleteOnlyNoCommentEnum;
+  question_can_delete_only_no_comment: OptionQuestionCanDeleteOnlyNoCommentEnum;
   /**
-   * 提问作者是否可编辑提问。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。 
+   * 提问作者是否可编辑提问。  为 `0` 时，不允许编辑； 为 `1` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
    */
-  questionCanEdit: OptionQuestionCanEditEnum;
+  question_can_edit: OptionQuestionCanEditEnum;
   /**
-   * 在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `1` 时该参数才有效。 
+   * 在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `1` 时该参数才有效。
    */
-  questionCanEditBefore: string;
+  question_can_edit_before: string;
   /**
-   * 仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。 
+   * 仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
    */
-  questionCanEditOnlyNoAnswer: OptionQuestionCanEditOnlyNoAnswerEnum;
+  question_can_edit_only_no_answer: OptionQuestionCanEditOnlyNoAnswerEnum;
   /**
-   * 仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。 
+   * 仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
    */
-  questionCanEditOnlyNoComment: OptionQuestionCanEditOnlyNoCommentEnum;
+  question_can_edit_only_no_comment: OptionQuestionCanEditOnlyNoCommentEnum;
   /**
    * 站点简介
    */
-  siteDescription: string;
+  site_description: string;
   /**
    * 站点公安备案号
    */
-  siteGonganBeian: string;
+  site_gongan_beian: string;
   /**
    * 站点 ICP 备案号
    */
-  siteIcpBeian: string;
+  site_icp_beian: string;
   /**
    * 站点关键词
    */
-  siteKeywords: string;
+  site_keywords: string;
   /**
    * 站点名称
    */
-  siteName: string;
+  site_name: string;
   /**
    * 🔐静态资源 URL 地址
    */
-  siteStaticUrl?: string;
+  site_static_url?: string;
   /**
    * 🔐SMTP 服务器地址
    */
-  smtpHost?: string;
+  smtp_host?: string;
   /**
    * 🔐SMTP 密码
    */
-  smtpPassword?: string;
+  smtp_password?: string;
   /**
    * 🔐SMTP 端口
    */
-  smtpPort?: number;
+  smtp_port?: number;
   /**
    * 🔐SMTP 回信地址
    */
-  smtpReplyTo?: string;
+  smtp_reply_to?: string;
   /**
    * 🔐SMTP 加密方式
    */
-  smtpSecure?: string;
+  smtp_secure?: string;
   /**
    * 🔐SMTP 账户
    */
-  smtpUsername?: string;
+  smtp_username?: string;
   /**
    * 🔐阿里云 AccessKey ID
    */
-  storageAliyunAccessId?: string;
+  storage_aliyun_access_id?: string;
   /**
    * 🔐阿里云 Access Key Secret
    */
-  storageAliyunAccessSecret?: string;
+  storage_aliyun_access_secret?: string;
   /**
    * 🔐阿里云 OSS 的 Bucket 名称
    */
-  storageAliyunBucket?: string;
+  storage_aliyun_bucket?: string;
   /**
    * 🔐阿里云 OSS 的 EndPoint
    */
-  storageAliyunEndpoint?: string;
+  storage_aliyun_endpoint?: string;
   /**
    * 🔐FTP 服务器地址
    */
-  storageFtpHost?: string;
+  storage_ftp_host?: string;
   /**
    * 🔐是否使用被动传输模式。1（被动模式）；0（主动模式）
    */
-  storageFtpPassive?: OptionStorageFtpPassiveEnum;
+  storage_ftp_passive?: OptionStorageFtpPassiveEnum;
   /**
    * 🔐FTP 密码
    */
-  storageFtpPassword?: string;
+  storage_ftp_password?: string;
   /**
    * 🔐FTP 端口号
    */
-  storageFtpPort?: number;
+  storage_ftp_port?: number;
   /**
    * 🔐FTP 存储目录
    */
-  storageFtpRoot?: string;
+  storage_ftp_root?: string;
   /**
    * 🔐FTP 是否启用 SSL。1（启用）；0（不启用）
    */
-  storageFtpSsl?: OptionStorageFtpSslEnum;
+  storage_ftp_ssl?: OptionStorageFtpSslEnum;
   /**
    * 🔐FTP 用户名
    */
-  storageFtpUsername?: string;
+  storage_ftp_username?: string;
   /**
    * 🔐本地文件存储目录
    */
-  storageLocalDir?: string;
+  storage_local_dir?: string;
   /**
    * 🔐七牛云 AccessKey
    */
-  storageQiniuAccessId?: string;
+  storage_qiniu_access_id?: string;
   /**
    * 🔐七牛云 SecretKey
    */
-  storageQiniuAccessSecret?: string;
+  storage_qiniu_access_secret?: string;
   /**
    * 🔐七牛云 Bucket
    */
-  storageQiniuBucket?: string;
+  storage_qiniu_bucket?: string;
   /**
    * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
    */
-  storageQiniuZone?: OptionStorageQiniuZoneEnum;
+  storage_qiniu_zone?: OptionStorageQiniuZoneEnum;
   /**
    * 🔐SFTP 服务器地址
    */
-  storageSftpHost?: string;
+  storage_sftp_host?: string;
   /**
    * 🔐SFTP 密码
    */
-  storageSftpPassword?: string;
+  storage_sftp_password?: string;
   /**
    * 🔐SFTP 端口号
    */
-  storageSftpPort?: number;
+  storage_sftp_port?: number;
   /**
    * 🔐SFTP 存储目录
    */
-  storageSftpRoot?: string;
+  storage_sftp_root?: string;
   /**
    * 🔐SFTP 用户名
    */
-  storageSftpUsername?: string;
+  storage_sftp_username?: string;
   /**
    * 🔐存储类型
    */
-  storageType?: OptionStorageTypeEnum;
+  storage_type?: OptionStorageTypeEnum;
   /**
    * 🔐又拍云 Bucket
    */
-  storageUpyunBucket?: string;
+  storage_upyun_bucket?: string;
   /**
    * 🔐又拍云操作员账号
    */
-  storageUpyunOperator?: string;
+  storage_upyun_operator?: string;
   /**
    * 🔐又拍云操作员密码
    */
-  storageUpyunPassword?: string;
+  storage_upyun_password?: string;
   /**
    * 🔐本地文件访问链接
    */
-  storageUrl?: string;
+  storage_url?: string;
   /**
    * 🔐主题名称
    */
@@ -806,57 +771,57 @@ export interface Option {
 }
 
 /**
- * Enum for the answerCanDelete property.
+ * Enum for the answer_can_delete property.
  */
 export type OptionAnswerCanDeleteEnum = '0' | '1';
 
 /**
- * Enum for the answerCanDeleteOnlyNoComment property.
+ * Enum for the answer_can_delete_only_no_comment property.
  */
 export type OptionAnswerCanDeleteOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the answerCanEdit property.
+ * Enum for the answer_can_edit property.
  */
 export type OptionAnswerCanEditEnum = '0' | '1';
 
 /**
- * Enum for the answerCanEditOnlyNoComment property.
+ * Enum for the answer_can_edit_only_no_comment property.
  */
 export type OptionAnswerCanEditOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the articleCanDelete property.
+ * Enum for the article_can_delete property.
  */
 export type OptionArticleCanDeleteEnum = '0' | '1';
 
 /**
- * Enum for the articleCanDeleteOnlyNoComment property.
+ * Enum for the article_can_delete_only_no_comment property.
  */
 export type OptionArticleCanDeleteOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the articleCanEdit property.
+ * Enum for the article_can_edit property.
  */
 export type OptionArticleCanEditEnum = '0' | '1';
 
 /**
- * Enum for the articleCanEditOnlyNoComment property.
+ * Enum for the article_can_edit_only_no_comment property.
  */
 export type OptionArticleCanEditOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the cacheType property.
+ * Enum for the cache_type property.
  */
 export type OptionCacheTypeEnum = 'redis' | 'memcached';
 
 /**
- * Enum for the commentCanDelete property.
+ * Enum for the comment_can_delete property.
  */
 export type OptionCommentCanDeleteEnum = '0' | '1';
 
 /**
- * Enum for the commentCanEdit property.
+ * Enum for the comment_can_edit property.
  */
 export type OptionCommentCanEditEnum = '0' | '1';
 
@@ -866,61 +831,65 @@ export type OptionCommentCanEditEnum = '0' | '1';
 export type OptionLanguageEnum = 'en' | 'pl' | 'ru' | 'zh-CN' | 'zh-TW';
 
 /**
- * Enum for the questionCanDelete property.
+ * Enum for the question_can_delete property.
  */
 export type OptionQuestionCanDeleteEnum = '0' | '1';
 
 /**
- * Enum for the questionCanDeleteOnlyNoAnswer property.
+ * Enum for the question_can_delete_only_no_answer property.
  */
 export type OptionQuestionCanDeleteOnlyNoAnswerEnum = '0' | '1';
 
 /**
- * Enum for the questionCanDeleteOnlyNoComment property.
+ * Enum for the question_can_delete_only_no_comment property.
  */
 export type OptionQuestionCanDeleteOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the questionCanEdit property.
+ * Enum for the question_can_edit property.
  */
 export type OptionQuestionCanEditEnum = '0' | '1';
 
 /**
- * Enum for the questionCanEditOnlyNoAnswer property.
+ * Enum for the question_can_edit_only_no_answer property.
  */
 export type OptionQuestionCanEditOnlyNoAnswerEnum = '0' | '1';
 
 /**
- * Enum for the questionCanEditOnlyNoComment property.
+ * Enum for the question_can_edit_only_no_comment property.
  */
 export type OptionQuestionCanEditOnlyNoCommentEnum = '0' | '1';
 
 /**
- * Enum for the storageFtpPassive property.
+ * Enum for the storage_ftp_passive property.
  */
 export type OptionStorageFtpPassiveEnum = '1' | '0';
 
 /**
- * Enum for the storageFtpSsl property.
+ * Enum for the storage_ftp_ssl property.
  */
 export type OptionStorageFtpSslEnum = '1' | '0';
 
 /**
- * Enum for the storageQiniuZone property.
+ * Enum for the storage_qiniu_zone property.
  */
 export type OptionStorageQiniuZoneEnum = 'z0' | 'z1' | 'z2' | 'na0' | 'as0';
 
 /**
- * Enum for the storageType property.
+ * Enum for the storage_type property.
  */
-export type OptionStorageTypeEnum = 'local' | 'ftp' | 'sftp' | 'aliyun' | 'upyun' | 'qiniu';
-
+export type OptionStorageTypeEnum =
+  | 'local'
+  | 'ftp'
+  | 'sftp'
+  | 'aliyun'
+  | 'upyun'
+  | 'qiniu';
 
 export interface OptionResponse {
   code: number;
   data?: Option;
 }
-
 
 export interface Pagination {
   /**
@@ -930,7 +899,7 @@ export interface Pagination {
   /**
    * 每页条数
    */
-  perPage: number;
+  per_page: number;
   /**
    * 上一页页码，为 `null` 表示没有上一页
    */
@@ -949,16 +918,15 @@ export interface Pagination {
   pages: number;
 }
 
-
 export interface Question {
   /**
    * 提问ID
    */
-  questionId: number;
+  question_id: number;
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 提问标题
    */
@@ -966,56 +934,55 @@ export interface Question {
   /**
    * Markdown 格式的提问内容
    */
-  contentMarkdown: string;
+  content_markdown: string;
   /**
    * HTML 格式的提问内容
    */
-  contentRendered: string;
+  content_rendered: string;
   /**
    * 评论数量
    */
-  commentCount: number;
+  comment_count: number;
   /**
    * 回答数量
    */
-  answerCount: number;
+  answer_count: number;
   /**
    * 浏览量
    */
-  viewCount: number;
+  view_count: number;
   /**
    * 关注者数量
    */
-  followerCount: number;
+  follower_count: number;
   /**
    * 投票数（赞成票 - 反对票，可能为负数）
    */
-  voteCount: number;
+  vote_count: number;
   /**
    * 最后回答时间
    */
-  lastAnswerTime: number;
+  last_answer_time: number;
   /**
    * 创建时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）
    */
-  updateTime: number;
+  update_time: number;
   /**
    * 🔐删除时间
    */
-  deleteTime?: number;
+  delete_time?: number;
   relationships?: QuestionRelationship;
 }
-
 
 export interface QuestionInRelationship {
   /**
    * 提问ID
    */
-  questionId?: number;
+  question_id?: number;
   /**
    * 提问标题
    */
@@ -1023,13 +990,12 @@ export interface QuestionInRelationship {
   /**
    * 发布时间
    */
-  createTime?: number;
+  create_time?: number;
   /**
    * 更新时间
    */
-  updateTime?: number;
+  update_time?: number;
 }
-
 
 export interface QuestionRelationship {
   user?: UserInRelationship;
@@ -1037,13 +1003,12 @@ export interface QuestionRelationship {
   /**
    * 当前登录用户是否已关注该提问
    */
-  isFollowing?: boolean;
+  is_following?: boolean;
   /**
    * 当前登录用户的投票类型（up、down），未投过票则为空字符串
    */
   voting?: string;
 }
-
 
 export interface QuestionRequestBody {
   /**
@@ -1053,30 +1018,27 @@ export interface QuestionRequestBody {
   /**
    * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
    */
-  topicId?: string;
+  topic_id?: string;
   /**
    * Markdown 格式的正文
    */
-  contentMarkdown?: string;
+  content_markdown?: string;
   /**
    * HTML 格式的正文
    */
-  contentRendered?: string;
+  content_rendered?: string;
 }
-
 
 export interface QuestionResponse {
   code: number;
   data?: Question;
 }
 
-
 export interface QuestionsResponse {
   code: number;
   data?: Array<Question>;
   pagination?: Pagination;
 }
-
 
 /**
  * 举报
@@ -1085,19 +1047,19 @@ export interface Report {
   /**
    * 举报ID
    */
-  reportId: number;
+  report_id: number;
   /**
    * 举报目标的ID
    */
-  reportableId: number;
+  reportable_id: number;
   /**
    * 举报目标类型
    */
-  reportableType: ReportReportableTypeEnum;
+  reportable_type: ReportReportableTypeEnum;
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 举报理由
    */
@@ -1105,15 +1067,19 @@ export interface Report {
   /**
    * 举报时间
    */
-  createTime: string;
+  create_time: string;
   relationships?: ReportRelationship;
 }
 
 /**
- * Enum for the reportableType property.
+ * Enum for the reportable_type property.
  */
-export type ReportReportableTypeEnum = 'question' | 'answer' | 'article' | 'comment' | 'user';
-
+export type ReportReportableTypeEnum =
+  | 'question'
+  | 'answer'
+  | 'article'
+  | 'comment'
+  | 'user';
 
 /**
  * 举报集合
@@ -1122,23 +1088,27 @@ export interface ReportGroup {
   /**
    * 举报目标的ID
    */
-  reportableId: number;
+  reportable_id: number;
   /**
    * 举报目标类型
    */
-  reportableType: ReportGroupReportableTypeEnum;
+  reportable_type: ReportGroupReportableTypeEnum;
   /**
    * 指定对象的被举报数量
    */
-  reporterCount: number;
+  reporter_count: number;
   relationships?: ReportGroupRelationship;
 }
 
 /**
- * Enum for the reportableType property.
+ * Enum for the reportable_type property.
  */
-export type ReportGroupReportableTypeEnum = 'question' | 'answer' | 'article' | 'comment' | 'user';
-
+export type ReportGroupReportableTypeEnum =
+  | 'question'
+  | 'answer'
+  | 'article'
+  | 'comment'
+  | 'user';
 
 export interface ReportGroupRelationship {
   question?: QuestionInRelationship;
@@ -1148,13 +1118,11 @@ export interface ReportGroupRelationship {
   user?: UserInRelationship;
 }
 
-
 export interface ReportGroupsResponse {
   code: number;
   data?: Array<ReportGroup>;
   pagination?: Pagination;
 }
-
 
 export interface ReportRelationship {
   reporter?: UserInRelationship;
@@ -1165,7 +1133,6 @@ export interface ReportRelationship {
   user?: UserInRelationship;
 }
 
-
 export interface ReportRequestBody {
   /**
    * 举报理由
@@ -1173,19 +1140,16 @@ export interface ReportRequestBody {
   reason: string;
 }
 
-
 export interface ReportResponse {
   code: number;
   data?: Report;
 }
-
 
 export interface ReportsResponse {
   code: number;
   data?: Array<Report>;
   pagination?: Pagination;
 }
-
 
 export interface Token {
   /**
@@ -1195,7 +1159,7 @@ export interface Token {
   /**
    * 用户ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 设备信息
    */
@@ -1203,29 +1167,27 @@ export interface Token {
   /**
    * 创建时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 更新时间
    */
-  updateTime: number;
+  update_time: number;
   /**
    * 过期时间
    */
-  expireTime: number;
+  expire_time: number;
 }
-
 
 export interface TokenResponse {
   code: number;
   data?: Token;
 }
 
-
 export interface Topic {
   /**
    * 话题ID
    */
-  topicId: number;
+  topic_id: number;
   /**
    * 话题名称
    */
@@ -1238,22 +1200,21 @@ export interface Topic {
   /**
    * 文章数量
    */
-  articleCount: number;
+  article_count: number;
   /**
    * 提问数量
    */
-  questionCount: number;
+  question_count: number;
   /**
    * 关注者数量
    */
-  followerCount: number;
+  follower_count: number;
   /**
    * 🔐删除时间
    */
-  deleteTime?: number;
+  delete_time?: number;
   relationships?: TopicRelationship;
 }
-
 
 export interface TopicCover {
   /**
@@ -1274,14 +1235,12 @@ export interface TopicCover {
   l: string;
 }
 
-
 export interface TopicRelationship {
   /**
    * 当前登录用户是否已关注该话题
    */
-  isFollowing?: boolean;
+  is_following?: boolean;
 }
-
 
 export interface TopicRequestBody {
   /**
@@ -1298,12 +1257,10 @@ export interface TopicRequestBody {
   cover?: any;
 }
 
-
 export interface TopicResponse {
   code: number;
   data?: Topic;
 }
-
 
 export interface TopicsResponse {
   code: number;
@@ -1311,12 +1268,11 @@ export interface TopicsResponse {
   pagination?: Pagination;
 }
 
-
 export interface User {
   /**
    * 用户 ID
    */
-  userId: number;
+  user_id: number;
   /**
    * 用户名
    */
@@ -1330,63 +1286,63 @@ export interface User {
   /**
    * 🔐注册 IP
    */
-  createIp?: string;
+  create_ip?: string;
   /**
    * 🔐注册地
    */
-  createLocation?: string;
+  create_location?: string;
   /**
    * 🔐最后登陆时间
    */
-  lastLoginTime?: number;
+  last_login_time?: number;
   /**
    * 🔐最后登陆 IP
    */
-  lastLoginIp?: string;
+  last_login_ip?: string;
   /**
    * 🔐最后登录地
    */
-  lastLoginLocation?: string;
+  last_login_location?: string;
   /**
    * 关注者数量
    */
-  followerCount: number;
+  follower_count: number;
   /**
    * 关注的用户数量
    */
-  followeeCount: number;
+  followee_count: number;
   /**
    * 关注的文章数量
    */
-  followingArticleCount: number;
+  following_article_count: number;
   /**
    * 关注的提问数量
    */
-  followingQuestionCount: number;
+  following_question_count: number;
   /**
    * 关注的话题数量
    */
-  followingTopicCount: number;
+  following_topic_count: number;
   /**
    * 发表的文章数量
    */
-  articleCount: number;
+  article_count: number;
   /**
    * 发表的提问数量
    */
-  questionCount: number;
+  question_count: number;
   /**
    * 发表的提问回答数量
    */
-  answerCount: number;
+  answer_count: number;
   /**
    * 🔐未读消息数量
    */
-  notificationUnread?: number;
+  notification_unread?: number;
   /**
    * 🔐未读私信数量
    */
-  inboxUnread?: number;
+  inbox_unread?: number;
   /**
    * 一句话介绍自己
    */
@@ -1410,18 +1366,17 @@ export interface User {
   /**
    * 注册时间
    */
-  createTime: number;
+  create_time: number;
   /**
    * 🔐更新时间
    */
-  updateTime?: number;
+  update_time?: number;
   /**
    * 🔐禁用时间
    */
-  disableTime?: number;
+  disable_time?: number;
   relationships?: UserRelationship;
 }
-
 
 export interface UserAvatar {
   /**
@@ -1442,7 +1397,6 @@ export interface UserAvatar {
   l: string;
 }
 
-
 export interface UserAvatarRequestBody {
   /**
    * 用户头像
@@ -1450,12 +1404,10 @@ export interface UserAvatarRequestBody {
   avatar?: any;
 }
 
-
 export interface UserAvatarResponse {
   code: number;
   data?: UserAvatar;
 }
-
 
 export interface UserCover {
   /**
@@ -1476,7 +1428,6 @@ export interface UserCover {
   l: string;
 }
 
-
 export interface UserCoverRequestBody {
   /**
    * 用户封面
@@ -1484,18 +1435,16 @@ export interface UserCoverRequestBody {
   cover?: any;
 }
 
-
 export interface UserCoverResponse {
   code: number;
   data?: UserCover;
 }
 
-
 export interface UserInRelationship {
   /**
    * 用户ID
    */
-  userId?: number;
+  user_id?: number;
   /**
    * 用户名
    */
@@ -1506,7 +1455,6 @@ export interface UserInRelationship {
   headline?: string;
   avatar?: UserAvatar;
 }
-
 
 export interface UserLoginRequestBody {
   /**
@@ -1524,13 +1472,12 @@ export interface UserLoginRequestBody {
   /**
    * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
    */
-  captchaToken?: string;
+  captcha_token?: string;
   /**
    * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
    */
-  captchaCode?: string;
+  captcha_code?: string;
 }
-
 
 export interface UserPasswordResetRequestBody {
   /**
@@ -1540,13 +1487,12 @@ export interface UserPasswordResetRequestBody {
   /**
    * 邮箱验证码
    */
-  emailCode: string;
+  email_code: string;
   /**
    * hash1 加密后的密码
    */
   password: string;
 }
-
 
 export interface UserRegisterRequestBody {
   /**
@@ -1556,7 +1502,7 @@ export interface UserRegisterRequestBody {
   /**
    * 邮箱验证码
    */
-  emailCode: string;
+  email_code: string;
   /**
    * 用户名
    */
@@ -1571,22 +1517,20 @@ export interface UserRegisterRequestBody {
   device?: string;
 }
 
-
 export interface UserRelationship {
   /**
    * 该用户是否是当前登录用户
    */
-  isMe?: boolean;
+  is_me?: boolean;
   /**
    * 当前登录用户是否已关注该用户
    */
-  isFollowing?: boolean;
+  is_following?: boolean;
   /**
    * 该用户是否已关注当前登录用户
    */
-  isFollowed?: boolean;
+  is_followed?: boolean;
 }
-
 
 export interface UserRequestBody {
   /**
@@ -1611,12 +1555,10 @@ export interface UserRequestBody {
   location?: string;
 }
 
-
 export interface UserResponse {
   code: number;
   data?: User;
 }
-
 
 export interface UserSendEmailRequestBody {
   /**
@@ -1626,20 +1568,18 @@ export interface UserSendEmailRequestBody {
   /**
    * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
    */
-  captchaToken?: string;
+  captcha_token?: string;
   /**
    * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
    */
-  captchaCode?: string;
+  captcha_code?: string;
 }
-
 
 export interface UsersResponse {
   code: number;
   data?: Array<User>;
   pagination?: Pagination;
 }
-
 
 /**
  * 投票数量
@@ -1648,15 +1588,13 @@ export interface VoteCount {
   /**
    * 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
    */
-  voteCount: number;
+  vote_count: number;
 }
-
 
 export interface VoteCountResponse {
   code: number;
   data?: VoteCount;
 }
-
 
 export interface VoteRequestBody {
   /**
@@ -1669,4 +1607,3 @@ export interface VoteRequestBody {
  * Enum for the type property.
  */
 export type VoteRequestBodyTypeEnum = 'up' | 'down';
-

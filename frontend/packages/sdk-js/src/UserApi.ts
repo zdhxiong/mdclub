@@ -1,142 +1,131 @@
-import defaults from './defaults';
 import { get, post, put, patch, del } from './util/requestAlias';
-import { urlParamReplace } from './util/url';
+import { buildURL, buildRequestBody } from './util/requestHandler';
 import {
   UserAvatarResponse,
-  UserSendEmailRequestBody,
   UsersResponse,
   AnswersResponse,
   ArticlesResponse,
-  UserRegisterRequestBody,
   UserCoverResponse,
   CommentsResponse,
   UserResponse,
   QuestionsResponse,
-  UserRequestBody,
-  UserPasswordResetRequestBody,
   TopicsResponse,
-  UserAvatarRequestBody,
-  UserCoverRequestBody,
   FollowerCountResponse,
   EmptyResponse,
 } from './models';
 
 interface AddFollowParams {
-  userId: number;
+  user_id: number;
 }
 
 interface DeleteAvatarParams {
-  userId: number;
+  user_id: number;
 }
 
 interface DeleteCoverParams {
-  userId: number;
+  user_id: number;
 }
 
 interface DeleteFollowParams {
-  userId: number;
+  user_id: number;
 }
 
-interface DeleteMyAvatarParams {}
-
-interface DeleteMyCoverParams {}
-
 interface DisableParams {
-  userId: number;
+  user_id: number;
 }
 
 interface DisableMultipleParams {
-  userId?: Array<number>;
+  user_id?: Array<number>;
 }
 
 interface EnableParams {
-  userId: number;
+  user_id: number;
 }
 
 interface EnableMultipleParams {
-  userId?: Array<number>;
+  user_id?: Array<number>;
 }
 
 interface GetParams {
-  userId: number;
+  user_id: number;
   include?: Array<string>;
 }
 
 interface GetAnswersParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetArticlesParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetCommentsParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetDisabledParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
   order?: string;
-  userId?: number;
+  user_id?: number;
   username?: string;
   email?: string;
 }
 
 interface GetFolloweesParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetFollowersParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetFollowingArticlesParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetFollowingQuestionsParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetFollowingTopicsParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetListParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
-  userId?: number;
+  user_id?: number;
   username?: string;
   email?: string;
 }
@@ -147,104 +136,204 @@ interface GetMineParams {
 
 interface GetMyAnswersParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetMyArticlesParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetMyCommentsParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetMyFolloweesParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetMyFollowersParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetMyFollowingArticlesParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetMyFollowingQuestionsParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetMyFollowingTopicsParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   include?: Array<string>;
 }
 
 interface GetMyQuestionsParams {
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface GetQuestionsParams {
-  userId: number;
+  user_id: number;
   page?: number;
-  perPage?: number;
+  per_page?: number;
   order?: string;
   include?: Array<string>;
 }
 
 interface RegisterParams {
-  userRegisterRequestBody: UserRegisterRequestBody;
+  /**
+   * 邮箱
+   */
+  email: string;
+  /**
+   * 邮箱验证码
+   */
+  email_code: string;
+  /**
+   * 用户名
+   */
+  username: string;
+  /**
+   * hash1 加密后的密码
+   */
+  password: string;
+  /**
+   * 设备信息
+   */
+  device?: string;
 }
 
 interface SendPasswordResetEmailParams {
-  userSendEmailRequestBody: UserSendEmailRequestBody;
+  /**
+   * 邮箱
+   */
+  email: string;
+  /**
+   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   */
+  captcha_token?: string;
+  /**
+   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   */
+  captcha_code?: string;
 }
 
 interface SendRegisterEmailParams {
-  userSendEmailRequestBody: UserSendEmailRequestBody;
+  /**
+   * 邮箱
+   */
+  email: string;
+  /**
+   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   */
+  captcha_token?: string;
+  /**
+   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   */
+  captcha_code?: string;
 }
 
 interface UpdateParams {
-  userId: number;
-  userRequestBody: UserRequestBody;
+  user_id: number;
   include?: Array<string>;
+
+  /**
+   * 一句话介绍
+   */
+  headline?: string;
+  /**
+   * 个人简介
+   */
+  bio?: string;
+  /**
+   * 个人主页
+   */
+  blog?: string;
+  /**
+   * 所属企业
+   */
+  company?: string;
+  /**
+   * 所属地区
+   */
+  location?: string;
 }
 
 interface UpdateMineParams {
-  userRequestBody: UserRequestBody;
   include?: Array<string>;
+
+  /**
+   * 一句话介绍
+   */
+  headline?: string;
+  /**
+   * 个人简介
+   */
+  bio?: string;
+  /**
+   * 个人主页
+   */
+  blog?: string;
+  /**
+   * 所属企业
+   */
+  company?: string;
+  /**
+   * 所属地区
+   */
+  location?: string;
 }
 
 interface UpdatePasswordParams {
-  userPasswordResetRequestBody: UserPasswordResetRequestBody;
+  /**
+   * 邮箱
+   */
+  email: string;
+  /**
+   * 邮箱验证码
+   */
+  email_code: string;
+  /**
+   * hash1 加密后的密码
+   */
+  password: string;
 }
 
 interface UploadMyAvatarParams {
-  userAvatarRequestBody: UserAvatarRequestBody;
+  /**
+   * 用户头像
+   */
+  avatar?: any;
 }
 
 interface UploadMyCoverParams {
-  userCoverRequestBody: UserCoverRequestBody;
+  /**
+   * 用户封面
+   */
+  cover?: any;
 }
+
+const className = 'UserApi';
 
 /**
  * UserApi
@@ -252,247 +341,196 @@ interface UploadMyCoverParams {
 export default {
   /**
    * 添加关注
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   addFollow: (params: AddFollowParams): Promise<FollowerCountResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.addFollow',
-        '/users/{user_id}/followers',
-        params,
-        [],
-      );
-
-    return post(url);
+    return post(
+      buildURL(`${className}.addFollow`, '/users/{user_id}/followers', params),
+    );
   },
 
   /**
    * 🔐删除指定用户的头像，并重置为默认头像
    * 仅管理员可调用该接口
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   deleteAvatar: (params: DeleteAvatarParams): Promise<UserAvatarResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.deleteAvatar',
-        '/users/{user_id}/avatar',
-        params,
-        [],
-      );
-
-    return del(url);
+    return del(
+      buildURL(`${className}.deleteAvatar`, '/users/{user_id}/avatar', params),
+    );
   },
 
   /**
    * 🔐删除指定用户的封面，并重置为默认封面
    * 仅管理员可调用该接口
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   deleteCover: (params: DeleteCoverParams): Promise<UserCoverResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.deleteCover',
-        '/users/{user_id}/cover',
-        params,
-        [],
-      );
-
-    return del(url);
+    return del(
+      buildURL(`${className}.deleteCover`, '/users/{user_id}/cover', params),
+    );
   },
 
   /**
    * 取消关注
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   deleteFollow: (
     params: DeleteFollowParams,
   ): Promise<FollowerCountResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.deleteFollow',
+    return del(
+      buildURL(
+        `${className}.deleteFollow`,
         '/users/{user_id}/followers',
         params,
-        [],
-      );
-
-    return del(url);
+      ),
+    );
   },
 
   /**
    * 删除当前登录用户的头像，并重置为默认头像
    */
   deleteMyAvatar: (): Promise<UserAvatarResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.deleteMyAvatar', '/user/avatar', {}, []);
-
-    return del(url);
+    return del(buildURL(`${className}.deleteMyAvatar`, '/user/avatar', {}));
   },
 
   /**
    * 删除当前登录用户的封面，并重置为默认封面
    */
   deleteMyCover: (): Promise<UserCoverResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.deleteMyCover', '/user/cover', {}, []);
-
-    return del(url);
+    return del(buildURL(`${className}.deleteMyCover`, '/user/cover', {}));
   },
 
   /**
    * 🔐禁用指定用户
    * 仅管理员可调用该接口
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   disable: (params: DisableParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.disable', '/users/{user_id}', params, []);
-
-    return del(url);
+    return del(buildURL(`${className}.disable`, '/users/{user_id}', params));
   },
 
   /**
    * 🔐批量禁用用户
    * 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-   * @param params.userId 用“,”分隔的用户ID，最多可提供100个ID
+   * @param params.user_id 用“,”分隔的用户ID，最多可提供100个ID
    */
   disableMultiple: (params: DisableMultipleParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.disableMultiple', '/users', params, ['user_id']);
-
-    return del(url);
+    return del(
+      buildURL(`${className}.disableMultiple`, '/users', params, ['user_id']),
+    );
   },
 
   /**
    * 🔐恢复指定用户
    * 仅管理员可调用该接口。
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    */
   enable: (params: EnableParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.enable', '/trash/users/{user_id}', params, []);
-
-    return post(url);
+    return post(
+      buildURL(`${className}.enable`, '/trash/users/{user_id}', params),
+    );
   },
 
   /**
    * 🔐批量恢复用户
    * 仅管理员可调用该接口。  只要没有异常错误，无论是否有用户被启用，该接口都会返回成功。
-   * @param params.userId 用“,”分隔的用户ID，最多可提供100个ID
+   * @param params.user_id 用“,”分隔的用户ID，最多可提供100个ID
    */
   enableMultiple: (params: EnableMultipleParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.enableMultiple', '/trash/users', params, [
+    return post(
+      buildURL(`${className}.enableMultiple`, '/trash/users', params, [
         'user_id',
-      ]);
-
-    return post(url);
+      ]),
+    );
   },
 
   /**
    * 获取指定用户信息
    * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。 其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   get: (params: GetParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.get', '/users/{user_id}', params, ['include']);
-
-    return get(url);
+    return get(
+      buildURL(`${className}.get`, '/users/{user_id}', params, ['include']),
+    );
   },
 
   /**
    * 获取指定用户发表的回答
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getAnswers: (params: GetAnswersParams): Promise<AnswersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getAnswers',
-        '/users/{user_id}/answers',
-        params,
-        ['page', 'per_page', 'order', 'include'],
-      );
-
-    return get(url);
+    return get(
+      buildURL(`${className}.getAnswers`, '/users/{user_id}/answers', params, [
+        'page',
+        'per_page',
+        'order',
+        'include',
+      ]),
+    );
   },
 
   /**
    * 获取指定用户发表的文章
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getArticles: (params: GetArticlesParams): Promise<ArticlesResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getArticles',
+    return get(
+      buildURL(
+        `${className}.getArticles`,
         '/users/{user_id}/articles',
         params,
         ['page', 'per_page', 'order', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取指定用户发表的评论
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getComments: (params: GetCommentsParams): Promise<CommentsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getComments',
+    return get(
+      buildURL(
+        `${className}.getComments`,
         '/users/{user_id}/comments',
         params,
         ['page', 'per_page', 'order', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 🔐获取已禁用用户列表
    * 仅管理员可调用该接口。  可排序字段包括 &#x60;create_time&#x60;、&#x60;delete_time&#x60;、&#x60;follower_count&#x60;，默认为 &#x60;-delete_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.username 用户名
    * @param params.email 邮箱
    */
   getDisabled: (params: GetDisabledParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getDisabled', '/trash/users', params, [
+    return get(
+      buildURL(`${className}.getDisabled`, '/trash/users', params, [
         'page',
         'per_page',
         'include',
@@ -500,137 +538,125 @@ export default {
         'user_id',
         'username',
         'email',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取指定用户关注的用户列表
    * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getFollowees: (params: GetFolloweesParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getFollowees',
+    return get(
+      buildURL(
+        `${className}.getFollowees`,
         '/users/{user_id}/followees',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取指定用户的关注者
    * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getFollowers: (params: GetFollowersParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getFollowers',
+    return get(
+      buildURL(
+        `${className}.getFollowers`,
         '/users/{user_id}/followers',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取指定用户关注的文章列表
    * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getFollowingArticles: (
     params: GetFollowingArticlesParams,
   ): Promise<ArticlesResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getFollowingArticles',
+    return get(
+      buildURL(
+        `${className}.getFollowingArticles`,
         '/users/{user_id}/following_articles',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取指定用户关注的提问列表
    * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getFollowingQuestions: (
     params: GetFollowingQuestionsParams,
   ): Promise<QuestionsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getFollowingQuestions',
+    return get(
+      buildURL(
+        `${className}.getFollowingQuestions`,
         '/users/{user_id}/following_questions',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取指定用户关注的话题列表
    * &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getFollowingTopics: (
     params: GetFollowingTopicsParams,
   ): Promise<TopicsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getFollowingTopics',
+    return get(
+      buildURL(
+        `${className}.getFollowingTopics`,
         '/users/{user_id}/following_topics',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取用户列表
    * 不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。  可排序字段包括 &#x60;create_time&#x60;、&#x60;follower_count&#x60;，默认为 &#x60;create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_followed&#x60;、&#x60;is_following&#x60;、&#x60;is_me&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.username 用户名
    * @param params.email 邮箱
    */
   getList: (params: GetListParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getList', '/users', params, [
+    return get(
+      buildURL(`${className}.getList`, '/users', params, [
         'page',
         'per_page',
         'order',
@@ -638,9 +664,8 @@ export default {
         'user_id',
         'username',
         'email',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
@@ -649,344 +674,326 @@ export default {
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMine: (params: GetMineParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMine', '/user', params, ['include']);
-
-    return get(url);
+    return get(buildURL(`${className}.getMine`, '/user', params, ['include']));
   },
 
   /**
    * 获取当前登录用户发表的回答
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyAnswers: (params: GetMyAnswersParams): Promise<AnswersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyAnswers', '/user/answers', params, [
+    return get(
+      buildURL(`${className}.getMyAnswers`, '/user/answers', params, [
         'page',
         'per_page',
         'order',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取当前登录用户发表的文章
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyArticles: (params: GetMyArticlesParams): Promise<ArticlesResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyArticles', '/user/articles', params, [
+    return get(
+      buildURL(`${className}.getMyArticles`, '/user/articles', params, [
         'page',
         'per_page',
         'order',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取当前登录用户发表的评论
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyComments: (params: GetMyCommentsParams): Promise<CommentsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyComments', '/user/comments', params, [
+    return get(
+      buildURL(`${className}.getMyComments`, '/user/comments', params, [
         'page',
         'per_page',
         'order',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取当前登录用户关注的用户
    * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyFollowees: (params: GetMyFolloweesParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyFollowees', '/user/followees', params, [
+    return get(
+      buildURL(`${className}.getMyFollowees`, '/user/followees', params, [
         'page',
         'per_page',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取当前登录用户的关注者
    * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyFollowers: (params: GetMyFollowersParams): Promise<UsersResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyFollowers', '/user/followers', params, [
+    return get(
+      buildURL(`${className}.getMyFollowers`, '/user/followers', params, [
         'page',
         'per_page',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取登录用户关注的文章
    * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyFollowingArticles: (
     params: GetMyFollowingArticlesParams,
   ): Promise<ArticlesResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getMyFollowingArticles',
+    return get(
+      buildURL(
+        `${className}.getMyFollowingArticles`,
         '/user/following_articles',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取登录用户关注的提问
    * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyFollowingQuestions: (
     params: GetMyFollowingQuestionsParams,
   ): Promise<QuestionsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getMyFollowingQuestions',
+    return get(
+      buildURL(
+        `${className}.getMyFollowingQuestions`,
         '/user/following_questions',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取登录用户关注的话题
    * &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyFollowingTopics: (
     params: GetMyFollowingTopicsParams,
   ): Promise<TopicsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getMyFollowingTopics',
+    return get(
+      buildURL(
+        `${className}.getMyFollowingTopics`,
         '/user/following_topics',
         params,
         ['page', 'per_page', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 获取登录用户发表的提问
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getMyQuestions: (
     params: GetMyQuestionsParams,
   ): Promise<QuestionsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.getMyQuestions', '/user/questions', params, [
+    return get(
+      buildURL(`${className}.getMyQuestions`, '/user/questions', params, [
         'page',
         'per_page',
         'order',
         'include',
-      ]);
-
-    return get(url);
+      ]),
+    );
   },
 
   /**
    * 获取指定用户发表的提问
    * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
-   * @param params.userId 用户ID
+   * @param params.user_id 用户ID
    * @param params.page 当前页数
-   * @param params.perPage 每页条数（最大为 100）
+   * @param params.per_page 每页条数（最大为 100）
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   getQuestions: (params: GetQuestionsParams): Promise<QuestionsResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.getQuestions',
+    return get(
+      buildURL(
+        `${className}.getQuestions`,
         '/users/{user_id}/questions',
         params,
         ['page', 'per_page', 'order', 'include'],
-      );
-
-    return get(url);
+      ),
+    );
   },
 
   /**
    * 验证邮箱并创建账号
    * 返回用户信息
-   * @param params.userRegisterRequestBody
+   * @param params.UserRegisterRequestBody
    */
   register: (params: RegisterParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.register', '/users', params, []);
-
-    return post(url, params.userRegisterRequestBody || {});
+    return post(
+      buildURL(`${className}.register`, '/users', params),
+      buildRequestBody(params, [
+        'email',
+        'email_code',
+        'username',
+        'password',
+        'device',
+      ]),
+    );
   },
 
   /**
    * 发送重置密码邮箱验证码
    * 若返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
-   * @param params.userSendEmailRequestBody
+   * @param params.UserSendEmailRequestBody
    */
   sendPasswordResetEmail: (
     params: SendPasswordResetEmailParams,
   ): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.sendPasswordResetEmail',
+    return post(
+      buildURL(
+        `${className}.sendPasswordResetEmail`,
         '/user/password/email',
         params,
-        [],
-      );
-
-    return post(url, params.userSendEmailRequestBody || {});
+      ),
+      buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
+    );
   },
 
   /**
    * 发送注册邮箱验证码
    * 若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
-   * @param params.userSendEmailRequestBody
+   * @param params.UserSendEmailRequestBody
    */
   sendRegisterEmail: (
     params: SendRegisterEmailParams,
   ): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace(
-        'UserApi.sendRegisterEmail',
+    return post(
+      buildURL(
+        `${className}.sendRegisterEmail`,
         '/user/register/email',
         params,
-        [],
-      );
-
-    return post(url, params.userSendEmailRequestBody || {});
+      ),
+      buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
+    );
   },
 
   /**
    * 🔐更新指定用户信息
    * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.userId 用户ID
-   * @param params.userRequestBody
+   * @param params.user_id 用户ID
+   * @param params.UserRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   update: (params: UpdateParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.update', '/users/{user_id}', params, [
-        'include',
-      ]);
-
-    return patch(url, params.userRequestBody || {});
+    return patch(
+      buildURL(`${className}.update`, '/users/{user_id}', params, ['include']),
+      buildRequestBody(params, [
+        'headline',
+        'bio',
+        'blog',
+        'company',
+        'location',
+      ]),
+    );
   },
 
   /**
    * 更新当前登录用户信息
    * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.userRequestBody
+   * @param params.UserRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。
    */
   updateMine: (params: UpdateMineParams): Promise<UserResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.updateMine', '/user', params, ['include']);
-
-    return patch(url, params.userRequestBody || {});
+    return patch(
+      buildURL(`${className}.updateMine`, '/user', params, ['include']),
+      buildRequestBody(params, [
+        'headline',
+        'bio',
+        'blog',
+        'company',
+        'location',
+      ]),
+    );
   },
 
   /**
    * 验证邮箱并更新密码
-   * @param params.userPasswordResetRequestBody
+   * @param params.UserPasswordResetRequestBody
    */
   updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.updatePassword', '/user/password', params, []);
-
-    return put(url, params.userPasswordResetRequestBody || {});
+    return put(
+      buildURL(`${className}.updatePassword`, '/user/password', params),
+      buildRequestBody(params, ['email', 'email_code', 'password']),
+    );
   },
 
   /**
    * 上传当前登录用户的头像
-   * @param params.userAvatarRequestBody
+   * @param params.UserAvatarRequestBody
    */
   uploadMyAvatar: (
     params: UploadMyAvatarParams,
   ): Promise<UserAvatarResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.uploadMyAvatar', '/user/avatar', params, []);
-
-    return post(url, params.userAvatarRequestBody || {});
+    return post(
+      buildURL(`${className}.uploadMyAvatar`, '/user/avatar', params),
+      buildRequestBody(params, ['avatar']),
+    );
   },
 
   /**
    * 上传当前登录用户的封面
-   * @param params.userCoverRequestBody
+   * @param params.UserCoverRequestBody
    */
   uploadMyCover: (params: UploadMyCoverParams): Promise<UserCoverResponse> => {
-    const url =
-      defaults.apiPath +
-      urlParamReplace('UserApi.uploadMyCover', '/user/cover', params, []);
-
-    return post(url, params.userCoverRequestBody || {});
+    return post(
+      buildURL(`${className}.uploadMyCover`, '/user/cover', params),
+      buildRequestBody(params, ['cover']),
+    );
   },
 };
