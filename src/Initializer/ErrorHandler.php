@@ -26,6 +26,8 @@ use Whoops\Run;
 /**
  * 错误处理
  *
+ * todo 错误处理改用 Slim 自带的 ErrorMiddleware
+ *
  * @property-read \MDClub\Library\Log     $log
  * @property-read \MDClub\Library\View    $view
  * @property-read \MDClub\Library\Captcha $captcha
@@ -75,6 +77,14 @@ class ErrorHandler
         } else {
             $response = $this->handleUndefinedException($exception);
         }
+
+        $response = $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, PUT, DELETE')
+            ->withHeader(
+                'Access-Control-Allow-Headers',
+                'Token, Origin, X-Requested-With, Accept, Content-Type, Connection, User-Agent'
+            );
 
         $responseEmitter = new ResponseEmitter();
         $responseEmitter->emit($response);

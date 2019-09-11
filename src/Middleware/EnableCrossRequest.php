@@ -23,7 +23,10 @@ class EnableCrossRequest implements MiddlewareInterface
 
         return $response
             ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'Token, Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie')
-            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, DELETE');
+            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, PUT, DELETE')
+            ->withHeader(
+                'Access-Control-Allow-Headers',
+                'Token, Origin, X-Requested-With, Accept, Content-Type, Connection, User-Agent'
+            );
     }
 }

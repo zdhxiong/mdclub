@@ -39,7 +39,7 @@ class Middleware
         $app->add(new TrailingSlash());
 
         // 路由中间件必须在错误处理中间件前面
-        $app->add(new RoutingMiddleware($app->getRouteResolver()));
+        $app->add(new RoutingMiddleware($app->getRouteResolver(), $app->getRouteCollector()->getRouteParser()));
 
         // 方法重写，必须位于路由中间件后面
         $app->add(new MethodOverrideMiddleware());
