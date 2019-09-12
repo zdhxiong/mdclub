@@ -28,7 +28,7 @@ properties:
     description: 举报理由
     example: 恶意打广告
   create_time:
-    type: string
+    type: integer
     description: 举报时间
     example: 1563512214
   relationships:

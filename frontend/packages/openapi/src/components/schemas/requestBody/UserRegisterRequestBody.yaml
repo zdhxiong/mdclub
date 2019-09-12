@@ -12,7 +12,7 @@ properties:
   email_code:
     type: string
     description: 邮箱验证码
-    example: 874028
+    example: hg8d3d
   username:
     type: string
     description: 用户名

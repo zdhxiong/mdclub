@@ -1,6 +1,7 @@
 post:
   operationId: uploadMyCover
   summary: 上传当前登录用户的封面
+  description: 上传当前登录用户的封面
   requestBody:
     $ref: '#/components/requestBodies/UserCover'
   responses:
@@ -14,6 +15,7 @@ post:
 delete:
   operationId: deleteMyCover
   summary: 删除当前登录用户的封面，并重置为默认封面
+  description: 删除当前登录用户的封面，并重置为默认封面
   responses:
     '200':
       $ref: '#/components/responses/UserCover'

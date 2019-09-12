@@ -9,7 +9,15 @@
     "url": "https://github.com/zdhxiong/mdclub-openapi"
   },
   "scripts": {
-    "build": "node index.js"
+    "build": "node index.js",
+    "validate": "npm run build && spectral lint -s=operation-operationId-unique dist/openapi.yaml",
+    "mock": "npm run build && prism mock dist/openapi.yaml",
+    "build-php-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g php -o dist/php --skip-validate-spec",
+    "build-android-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g android -o dist/android --skip-validate-spec",
+    "build-dart-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g dart -o dist/dart --skip-validate-spec",
+    "build-objc-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g objc -o dist/objc --skip-validate-spec",
+    "build-swift4-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g swift4 -o dist/swift4 --skip-validate-spec",
+    "build-aurelia-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o dist/aurelia --skip-validate-spec"
   },
   "bugs": {
     "url": "https://github.com/zdhxiong/mdclub-openapi/issues",
@@ -22,6 +30,9 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "0.0.16-4.1.0",
+    "@stoplight/prism-cli": "3.1.0",
+    "@stoplight/spectral": "4.1.1",
+    "fp-ts": "^2.0.5",
     "js-yaml": "^3.13.1",
     "json-refs": "^3.0.13"
   }

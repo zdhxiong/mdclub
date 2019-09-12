@@ -199,6 +199,7 @@
       "post": {
         "operationId": "addVote",
         "summary": "为回答投票",
+        "description": "为回答投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
@@ -222,6 +223,7 @@
       "delete": {
         "operationId": "deleteVote",
         "summary": "取消为回答的投票",
+        "description": "取消为回答的投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
@@ -496,6 +498,7 @@
       "post": {
         "operationId": "addFollow",
         "summary": "添加关注",
+        "description": "添加关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -516,6 +519,7 @@
       "delete": {
         "operationId": "deleteFollow",
         "summary": "取消关注",
+        "description": "取消关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -571,6 +575,7 @@
       "post": {
         "operationId": "addVote",
         "summary": "为文章投票",
+        "description": "为文章投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -594,6 +599,7 @@
       "delete": {
         "operationId": "deleteVote",
         "summary": "取消为文章的投票",
+        "description": "取消为文章的投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -616,6 +622,7 @@
       "get": {
         "operationId": "get",
         "summary": "获取指定文章信息",
+        "description": "获取指定文章信息",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -683,6 +690,7 @@
       "post": {
         "operationId": "generate",
         "summary": "生成新的图形验证码",
+        "description": "生成新的图形验证码",
         "responses": {
           "200": {
             "$ref": "#/components/responses/Captcha"
@@ -801,6 +809,7 @@
       "post": {
         "operationId": "addVote",
         "summary": "为评论投票",
+        "description": "为评论投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
@@ -824,6 +833,7 @@
       "delete": {
         "operationId": "deleteVote",
         "summary": "取消为评论的投票",
+        "description": "取消为评论的投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
@@ -1104,6 +1114,7 @@
       "get": {
         "operationId": "get",
         "summary": "获取站点全局设置参数",
+        "description": "获取站点全局设置参数",
         "responses": {
           "200": {
             "$ref": "#/components/responses/Option"
@@ -1375,6 +1386,7 @@
       "post": {
         "operationId": "addFollow",
         "summary": "添加关注",
+        "description": "添加关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1395,6 +1407,7 @@
       "delete": {
         "operationId": "deleteFollow",
         "summary": "取消关注",
+        "description": "取消关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1450,6 +1463,7 @@
       "post": {
         "operationId": "addVote",
         "summary": "为提问投票",
+        "description": "为提问投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1473,6 +1487,7 @@
       "delete": {
         "operationId": "deleteVote",
         "summary": "取消为提问的投票",
+        "description": "取消为提问的投票",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1875,6 +1890,7 @@
       "post": {
         "operationId": "addFollow",
         "summary": "关注指定话题",
+        "description": "关注指定话题",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1895,6 +1911,7 @@
       "delete": {
         "operationId": "deleteFollow",
         "summary": "取消关注指定话题",
+        "description": "取消关注指定话题",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -2810,6 +2827,7 @@
       "post": {
         "operationId": "uploadMyAvatar",
         "summary": "上传当前登录用户的头像",
+        "description": "上传当前登录用户的头像",
         "requestBody": {
           "$ref": "#/components/requestBodies/UserAvatar"
         },
@@ -2828,6 +2846,7 @@
       "delete": {
         "operationId": "deleteMyAvatar",
         "summary": "删除当前登录用户的头像，并重置为默认头像",
+        "description": "删除当前登录用户的头像，并重置为默认头像",
         "responses": {
           "200": {
             "$ref": "#/components/responses/UserAvatar"
@@ -2877,6 +2896,7 @@
       "post": {
         "operationId": "uploadMyCover",
         "summary": "上传当前登录用户的封面",
+        "description": "上传当前登录用户的封面",
         "requestBody": {
           "$ref": "#/components/requestBodies/UserCover"
         },
@@ -2895,6 +2915,7 @@
       "delete": {
         "operationId": "deleteMyCover",
         "summary": "删除当前登录用户的封面，并重置为默认封面",
+        "description": "删除当前登录用户的封面，并重置为默认封面",
         "responses": {
           "200": {
             "$ref": "#/components/responses/UserCover"
@@ -3078,6 +3099,7 @@
       "put": {
         "operationId": "updatePassword",
         "summary": "验证邮箱并更新密码",
+        "description": "验证邮箱并更新密码",
         "requestBody": {
           "$ref": "#/components/requestBodies/UserPasswordReset"
         },
@@ -3492,6 +3514,7 @@
       "post": {
         "operationId": "addFollow",
         "summary": "添加关注",
+        "description": "添加关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3512,6 +3535,7 @@
       "delete": {
         "operationId": "deleteFollow",
         "summary": "取消关注",
+        "description": "取消关注",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3743,43 +3767,53 @@
         "properties": {
           "answer_id": {
             "type": "integer",
-            "description": "回答ID"
+            "description": "回答ID",
+            "example": 1
           },
           "question_id": {
             "type": "integer",
-            "description": "提问ID"
+            "description": "提问ID",
+            "example": 1
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "content_markdown": {
             "type": "string",
-            "description": "markdown 格式的内容"
+            "description": "markdown 格式的内容",
+            "example": "**mdui** [https://mdui.org](https://mdui.org)\nmdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。\n**MDClub** [https://mdclub.org](https://mdclub.org)\nMDClub 是使用 mdui 作为前端框架的开源社区应用。\n"
           },
           "content_rendered": {
             "type": "string",
-            "description": "html 格式的内容"
+            "description": "html 格式的内容",
+            "example": "<p><strong>mdui</strong> <a href=\"https://mdui.org\" target=\"_blank\">https://mdui.org</a> <br>mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。</p><p><strong>MDClub</strong> <a href=\"https://mdclub.org\" target=\"_blank\">https://mdclub.org</a> <br>MDClub 是使用 mdui 作为前端框架的开源社区应用。</p>"
           },
           "comment_count": {
             "type": "integer",
-            "description": "评论数量"
+            "description": "评论数量",
+            "example": 23
           },
           "vote_count": {
             "type": "integer",
-            "description": "投票数（赞成票 - 反对票，可能为负数）"
+            "description": "投票数（赞成票 - 反对票，可能为负数）",
+            "example": 44
           },
           "create_time": {
             "type": "integer",
-            "description": "创建时间"
+            "description": "创建时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "🔐更新时间"
+            "description": "🔐更新时间",
+            "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
-            "description": "🔐删除时间"
+            "description": "🔐删除时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/AnswerRelationship"
@@ -3794,70 +3828,70 @@
           "comment_count",
           "vote_count",
           "create_time"
-        ],
-        "example": {
-          "answer_id": 124,
-          "question_id": 11,
-          "user_id": 45332,
-          "content_markdown": "#标题\n##二级标题\n",
-          "content_rendered": "<h1>标题</h1><h2>二级标题</h2>",
-          "comment_count": 23,
-          "vote_count": 44,
-          "create_time": 1563512214,
-          "update_time": 1563512214,
-          "delete_time": 0
-        }
+        ]
       },
       "Article": {
         "type": "object",
         "properties": {
           "article_id": {
             "type": "integer",
-            "description": "文章ID"
+            "description": "文章ID",
+            "example": 1
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "title": {
             "type": "string",
-            "description": "文章标题"
+            "description": "文章标题",
+            "example": "欢迎使用 MDClub 开源社区系统"
           },
           "content_markdown": {
             "type": "string",
-            "description": "Markdown 格式的文章内容"
+            "description": "Markdown 格式的文章内容",
+            "example": "MDClub 是一个开源社区系统，使用 [mdui](https://mdui.org) 作为前端框架。\n\n系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。\n"
           },
           "content_rendered": {
             "type": "string",
-            "description": "HTML 格式的文章内容"
+            "description": "HTML 格式的文章内容",
+            "example": "<p>MDClub 是一个开源社区系统，使用 <a href=\"https://mdui.org\" target=\"_blank\">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>"
           },
           "comment_count": {
             "type": "integer",
-            "description": "评论数量"
+            "description": "评论数量",
+            "example": 22
           },
           "view_count": {
             "type": "integer",
-            "description": "浏览量"
+            "description": "浏览量",
+            "example": 487
           },
           "follower_count": {
             "type": "integer",
-            "description": "关注者数量"
+            "description": "关注者数量",
+            "example": 12
           },
           "vote_count": {
             "type": "integer",
-            "description": "投票数（赞成票 - 反对票，可能为负数）"
+            "description": "投票数（赞成票 - 反对票，可能为负数）",
+            "example": 8
           },
           "create_time": {
             "type": "integer",
-            "description": "创建时间"
+            "description": "创建时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间（用户可以更新自己的文章）"
+            "description": "更新时间（用户可以更新自己的文章）",
+            "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
-            "description": "🔐删除时间"
+            "description": "🔐删除时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/ArticleRelationship"
@@ -3877,16 +3911,24 @@
           "update_time"
         ]
       },
+      "CodeSuccess": {
+        "type": "integer",
+        "description": "无任务错误时，状态码为 0",
+        "default": 0,
+        "example": 0
+      },
       "Comment": {
         "type": "object",
         "properties": {
           "comment_id": {
             "type": "integer",
-            "description": "评论ID"
+            "description": "评论ID",
+            "example": 1
           },
           "commentable_id": {
             "type": "integer",
-            "description": "评论目标的ID"
+            "description": "评论目标的ID",
+            "example": 1
           },
           "commentable_type": {
             "type": "string",
@@ -3895,31 +3937,38 @@
               "article",
               "question",
               "answer"
-            ]
+            ],
+            "example": "question"
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "content": {
             "type": "string",
-            "description": "评论内容"
+            "description": "评论内容",
+            "example": "mdui 是我见过的 Web 框架里对规范实现最好的一版了"
           },
           "vote_count": {
             "type": "integer",
-            "description": "投票数（赞成票 - 反对票，可能为负数）"
+            "description": "投票数（赞成票 - 反对票，可能为负数）",
+            "example": 8
           },
           "create_time": {
             "type": "integer",
-            "description": "发表时间"
+            "description": "发表时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "修改时间"
+            "description": "修改时间",
+            "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
-            "description": "🔐删除时间"
+            "description": "🔐删除时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/CommentRelationship"
@@ -3941,15 +3990,18 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "邮箱地址，多个地址间用“,”分隔，最多支持100个"
+            "description": "邮箱地址，多个地址间用“,”分隔，最多支持100个",
+            "example": "zdhxiong@gmail.com,example@example.com"
           },
           "subject": {
             "type": "string",
-            "description": "邮件标题"
+            "description": "邮件标题",
+            "example": "这是一封测试邮件"
           },
           "content": {
             "type": "string",
-            "description": "邮件内容"
+            "description": "邮件内容",
+            "example": "如果你收到了这封邮件，说明你的邮件服务器已配置成功"
           }
         },
         "required": [
@@ -3963,11 +4015,13 @@
         "properties": {
           "field": {
             "type": "string",
-            "description": "错误字段名"
+            "description": "错误字段名",
+            "example": "email"
           },
           "message": {
             "type": "string",
-            "description": "错误描述"
+            "description": "错误描述",
+            "example": "邮箱格式错误"
           }
         },
         "required": [
@@ -3981,7 +4035,8 @@
         "properties": {
           "follower_count": {
             "type": "integer",
-            "description": "关注者数量"
+            "description": "关注者数量",
+            "example": 112
           }
         },
         "required": [
@@ -3993,52 +4048,51 @@
         "properties": {
           "key": {
             "type": "string",
-            "description": "图片的 key"
+            "description": "图片的 key",
+            "example": "4c018974e3cf4e1d8c174d82adba0c43.jpg"
           },
           "filename": {
             "type": "string",
-            "description": "图片原始文件名"
+            "description": "图片原始文件名",
+            "example": "Material Design Logo.png"
           },
           "width": {
             "type": "integer",
-            "description": "原始图片宽度"
+            "description": "原始图片宽度",
+            "example": 1280
           },
           "height": {
             "type": "integer",
-            "description": "原始图片高度"
+            "description": "原始图片高度",
+            "example": 720
           },
           "create_time": {
             "type": "integer",
-            "description": "图片上传时间"
+            "description": "图片上传时间",
+            "example": 1563512214
           },
           "item_type": {
             "type": "string",
-            "description": "图片关联对象类型"
+            "description": "图片关联对象类型",
+            "enum": [
+              "question",
+              "answer",
+              "article"
+            ],
+            "example": "question"
           },
           "item_id": {
             "type": "integer",
-            "description": "图片管理对象ID"
+            "description": "图片关联对象ID",
+            "example": 1
           },
           "user_id": {
             "type": "integer",
-            "description": "图片上传者ID"
+            "description": "图片上传者ID",
+            "example": 1
           },
           "urls": {
-            "type": "object",
-            "properties": {
-              "o": {
-                "type": "string",
-                "description": "原图地址"
-              },
-              "r": {
-                "type": "string",
-                "description": "宽度固定，高度自适应的图片地址"
-              },
-              "t": {
-                "type": "string",
-                "description": "固定宽高的缩略图地址"
-              }
-            }
+            "$ref": "#/components/schemas/ImageUrls"
           },
           "relationships": {
             "$ref": "#/components/schemas/ImageRelationship"
@@ -4054,6 +4108,28 @@
           "item_id",
           "user_id",
           "urls"
+        ]
+      },
+      "ImageUrls": {
+        "type": "object",
+        "properties": {
+          "o": {
+            "type": "string",
+            "description": "原图地址"
+          },
+          "r": {
+            "type": "string",
+            "description": "宽度固定，高度自适应的图片地址"
+          },
+          "t": {
+            "type": "string",
+            "description": "固定宽高的缩略图地址"
+          }
+        },
+        "required": [
+          "o",
+          "r",
+          "t"
         ]
       },
       "Option": {
@@ -4492,27 +4568,33 @@
         "properties": {
           "page": {
             "type": "integer",
-            "description": "当前页码"
+            "description": "当前页码",
+            "example": 1
           },
           "per_page": {
             "type": "integer",
-            "description": "每页条数"
+            "description": "每页条数",
+            "example": 15
           },
           "previous": {
             "type": "integer",
-            "description": "上一页页码，为 `null` 表示没有上一页"
+            "description": "上一页页码，为 `null` 表示没有上一页",
+            "example": null
           },
           "next": {
             "type": "integer",
-            "description": "下一页页码，为 `null` 表示没有下一页"
+            "description": "下一页页码，为 `null` 表示没有下一页",
+            "example": 2
           },
           "total": {
             "type": "integer",
-            "description": "数据总数"
+            "description": "数据总数",
+            "example": 124
           },
           "pages": {
             "type": "integer",
-            "description": "总页数"
+            "description": "总页数",
+            "example": 9
           }
         },
         "required": [
@@ -4529,59 +4611,73 @@
         "properties": {
           "question_id": {
             "type": "integer",
-            "description": "提问ID"
+            "description": "提问ID",
+            "example": 1
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "title": {
             "type": "string",
-            "description": "提问标题"
+            "description": "提问标题",
+            "example": "请问作者开发了哪些软件？"
           },
           "content_markdown": {
             "type": "string",
-            "description": "Markdown 格式的提问内容"
+            "description": "Markdown 格式的提问内容",
+            "example": "如题"
           },
           "content_rendered": {
             "type": "string",
-            "description": "HTML 格式的提问内容"
+            "description": "HTML 格式的提问内容",
+            "example": "<p>如题</p>"
           },
           "comment_count": {
             "type": "integer",
-            "description": "评论数量"
+            "description": "评论数量",
+            "example": 6
           },
           "answer_count": {
             "type": "integer",
-            "description": "回答数量"
+            "description": "回答数量",
+            "example": 18
           },
           "view_count": {
             "type": "integer",
-            "description": "浏览量"
+            "description": "浏览量",
+            "example": 168
           },
           "follower_count": {
             "type": "integer",
-            "description": "关注者数量"
+            "description": "关注者数量",
+            "example": 12
           },
           "vote_count": {
             "type": "integer",
-            "description": "投票数（赞成票 - 反对票，可能为负数）"
+            "description": "投票数（赞成票 - 反对票，可能为负数）",
+            "example": 8
           },
           "last_answer_time": {
             "type": "integer",
-            "description": "最后回答时间"
+            "description": "最后回答时间",
+            "example": 1563512214
           },
           "create_time": {
             "type": "integer",
-            "description": "创建时间"
+            "description": "创建时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）"
+            "description": "更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）",
+            "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
-            "description": "🔐删除时间"
+            "description": "🔐删除时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/QuestionRelationship"
@@ -4609,11 +4705,13 @@
         "properties": {
           "report_id": {
             "type": "integer",
-            "description": "举报ID"
+            "description": "举报ID",
+            "example": 1
           },
           "reportable_id": {
             "type": "integer",
-            "description": "举报目标的ID"
+            "description": "举报目标的ID",
+            "example": 1
           },
           "reportable_type": {
             "type": "string",
@@ -4624,19 +4722,23 @@
               "article",
               "comment",
               "user"
-            ]
+            ],
+            "example": "question"
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "reason": {
             "type": "string",
-            "description": "举报理由"
+            "description": "举报理由",
+            "example": "恶意打广告"
           },
           "create_time": {
-            "type": "string",
-            "description": "举报时间"
+            "type": "integer",
+            "description": "举报时间",
+            "example": 1563512214
           },
           "relationships": {
             "$ref": "#/components/schemas/ReportRelationship"
@@ -4657,7 +4759,8 @@
         "properties": {
           "reportable_id": {
             "type": "integer",
-            "description": "举报目标的ID"
+            "description": "举报目标的ID",
+            "example": 1
           },
           "reportable_type": {
             "type": "string",
@@ -4668,11 +4771,13 @@
               "article",
               "comment",
               "user"
-            ]
+            ],
+            "example": "question"
           },
           "reporter_count": {
             "type": "integer",
-            "description": "指定对象的被举报数量"
+            "description": "指定对象的被举报数量",
+            "example": 12
           },
           "relationships": {
             "$ref": "#/components/schemas/ReportGroupRelationship"
@@ -4689,27 +4794,33 @@
         "properties": {
           "token": {
             "type": "string",
-            "description": "Token 字符串"
+            "description": "Token 字符串",
+            "example": "13180944453b7d052125486eefabedf9"
           },
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "device": {
             "type": "string",
-            "description": "设备信息"
+            "description": "设备信息",
+            "example": "Xiaomi6"
           },
           "create_time": {
             "type": "integer",
-            "description": "创建时间"
+            "description": "创建时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间"
+            "description": "更新时间",
+            "example": 1563512214
           },
           "expire_time": {
             "type": "integer",
-            "description": "过期时间"
+            "description": "过期时间",
+            "example": 2063512214
           }
         },
         "required": [
@@ -4726,34 +4837,41 @@
         "properties": {
           "topic_id": {
             "type": "integer",
-            "description": "话题ID"
+            "description": "话题ID",
+            "example": 1
           },
           "name": {
             "type": "string",
-            "description": "话题名称"
+            "description": "话题名称",
+            "example": "MDClub"
           },
           "cover": {
             "$ref": "#/components/schemas/TopicCover"
           },
           "description": {
             "type": "string",
-            "description": "话题描述"
+            "description": "话题描述",
+            "example": "一个漂亮强大的开源社区系统"
           },
           "article_count": {
             "type": "integer",
-            "description": "文章数量"
+            "description": "文章数量",
+            "example": 12
           },
           "question_count": {
             "type": "integer",
-            "description": "提问数量"
+            "description": "提问数量",
+            "example": 16
           },
           "follower_count": {
             "type": "integer",
-            "description": "关注者数量"
+            "description": "关注者数量",
+            "example": 42
           },
           "delete_time": {
             "type": "integer",
-            "description": "🔐删除时间"
+            "description": "🔐删除时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/TopicRelationship"
@@ -4774,19 +4892,23 @@
         "properties": {
           "o": {
             "type": "string",
-            "description": "封面原图地址"
+            "description": "封面原图地址",
+            "example": "https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg"
           },
           "s": {
             "type": "string",
-            "description": "小型封面地址"
+            "description": "小型封面地址",
+            "example": "https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg"
           },
           "m": {
             "type": "string",
-            "description": "中型封面地址"
+            "description": "中型封面地址",
+            "example": "https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg"
           },
           "l": {
             "type": "string",
-            "description": "大型封面地址"
+            "description": "大型封面地址",
+            "example": "https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg"
           }
         },
         "required": [
@@ -4801,15 +4923,18 @@
         "properties": {
           "user_id": {
             "type": "integer",
-            "description": "用户 ID"
+            "description": "用户 ID",
+            "example": 1
           },
           "username": {
             "type": "string",
-            "description": "用户名"
+            "description": "用户名",
+            "example": "zdhxiong"
           },
           "email": {
             "type": "string",
-            "description": "🔐邮箱"
+            "description": "🔐邮箱",
+            "example": "zdhxiong@gmail.com"
           },
           "avatar": {
             "$ref": "#/components/schemas/UserAvatar"
@@ -4819,95 +4944,118 @@
           },
           "create_ip": {
             "type": "string",
-            "description": "🔐注册 IP"
+            "description": "🔐注册 IP",
+            "example": "210.23.121.44"
           },
           "create_location": {
             "type": "string",
-            "description": "🔐注册地"
+            "description": "🔐注册地",
+            "example": "中国 浙江 杭州"
           },
           "last_login_time": {
             "type": "integer",
-            "description": "🔐最后登陆时间"
+            "description": "🔐最后登陆时间",
+            "example": 1563512214
           },
           "last_login_ip": {
             "type": "string",
-            "description": "🔐最后登陆 IP"
+            "description": "🔐最后登陆 IP",
+            "example": "210.23.121.44"
           },
           "last_login_location": {
             "type": "string",
-            "description": "🔐最后登录地"
+            "description": "🔐最后登录地",
+            "example": "中国 浙江 杭州"
           },
           "follower_count": {
             "type": "integer",
-            "description": "关注者数量"
+            "description": "关注者数量",
+            "example": 112
           },
           "followee_count": {
             "type": "integer",
-            "description": "关注的用户数量"
+            "description": "关注的用户数量",
+            "example": 8
           },
           "following_article_count": {
             "type": "integer",
-            "description": "关注的文章数量"
+            "description": "关注的文章数量",
+            "example": 12
           },
           "following_question_count": {
             "type": "integer",
-            "description": "关注的提问数量"
+            "description": "关注的提问数量",
+            "example": 14
           },
           "following_topic_count": {
             "type": "integer",
-            "description": "关注的话题数量"
+            "description": "关注的话题数量",
+            "example": 4
           },
           "article_count": {
             "type": "integer",
-            "description": "发表的文章数量"
+            "description": "发表的文章数量",
+            "example": 6
           },
           "question_count": {
             "type": "integer",
-            "description": "发表的提问数量"
+            "description": "发表的提问数量",
+            "example": 11
           },
           "answer_count": {
             "type": "integer",
-            "description": "发表的提问回答数量"
+            "description": "发表的提问回答数量",
+            "example": 28
           },
           "notification_unread": {
             "type": "integer",
-            "description": "🔐未读消息数量"
+            "description": "🔐未读消息数量",
+            "example": 4
           },
           "inbox_unread": {
             "type": "integer",
-            "description": "🔐未读私信数量"
+            "description": "🔐未读私信数量",
+            "example": 2
           },
           "headline": {
             "type": "string",
-            "description": "一句话介绍自己"
+            "description": "一句话介绍自己",
+            "example": "mdui 作者"
           },
           "bio": {
             "type": "string",
-            "description": "个人简介"
+            "description": "个人简介",
+            "example": "独立全栈开发者"
           },
           "blog": {
             "type": "string",
-            "description": "个人主页链接"
+            "description": "个人主页链接",
+            "example": "https://mdui.org"
           },
           "company": {
             "type": "string",
-            "description": "所属企业"
+            "description": "所属企业",
+            "example": "无"
           },
           "location": {
             "type": "string",
-            "description": "所在地区"
+            "description": "所在地区",
+            "example": "杭州"
           },
           "create_time": {
             "type": "integer",
-            "description": "注册时间"
+            "description": "注册时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "🔐更新时间"
+            "description": "🔐更新时间",
+            "example": 1563512214
           },
           "disable_time": {
             "type": "integer",
-            "description": "🔐禁用时间"
+            "description": "🔐禁用时间",
+            "example": 0
           },
           "relationships": {
             "$ref": "#/components/schemas/UserRelationship"
@@ -4939,19 +5087,23 @@
         "properties": {
           "o": {
             "type": "string",
-            "description": "头像原图地址"
+            "description": "头像原图地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg"
           },
           "s": {
             "type": "string",
-            "description": "小头像地址"
+            "description": "小头像地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg"
           },
           "m": {
             "type": "string",
-            "description": "中头像地址"
+            "description": "中头像地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg"
           },
           "l": {
             "type": "string",
-            "description": "大头像地址"
+            "description": "大头像地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg"
           }
         },
         "required": [
@@ -4966,19 +5118,23 @@
         "properties": {
           "o": {
             "type": "string",
-            "description": "封面原图地址"
+            "description": "封面原图地址",
+            "example": "https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg"
           },
           "s": {
             "type": "string",
-            "description": "小型封面地址"
+            "description": "小型封面地址",
+            "example": "https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg"
           },
           "m": {
             "type": "string",
-            "description": "中型封面地址"
+            "description": "中型封面地址",
+            "example": "https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg"
           },
           "l": {
             "type": "string",
-            "description": "大型封面地址"
+            "description": "大型封面地址",
+            "example": "https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg"
           }
         },
         "required": [
@@ -4994,7 +5150,8 @@
         "properties": {
           "vote_count": {
             "type": "integer",
-            "description": "投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数"
+            "description": "投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数",
+            "example": 8
           }
         },
         "required": [
@@ -5006,11 +5163,13 @@
         "properties": {
           "content_markdown": {
             "type": "string",
-            "description": "Markdown 格式的正文"
+            "description": "Markdown 格式的正文",
+            "example": "**mdui** [https://mdui.org](https://mdui.org)\nmdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。\n**MDClub** [https://mdclub.org](https://mdclub.org)\nMDClub 是使用 mdui 作为前端框架的开源社区应用。\n"
           },
           "content_rendered": {
             "type": "string",
-            "description": "HTML 格式的正文"
+            "description": "HTML 格式的正文",
+            "example": "<p><strong>mdui</strong> <a href=\"https://mdui.org\" target=\"_blank\">https://mdui.org</a> <br>mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。</p><p><strong>MDClub</strong> <a href=\"https://mdclub.org\" target=\"_blank\">https://mdclub.org</a> <br>MDClub 是使用 mdui 作为前端框架的开源社区应用。</p>"
           }
         }
       },
@@ -5019,40 +5178,46 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "标题"
+            "description": "标题",
+            "example": "欢迎使用 MDClub 开源社区系统"
           },
           "topic_id": {
-            "type": "string",
-            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID"
+            "type": "integer",
+            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
+            "example": 1
           },
           "content_markdown": {
             "type": "string",
-            "description": "Markdown 格式的正文"
+            "description": "Markdown 格式的正文",
+            "example": "MDClub 是一个开源社区系统，使用 [mdui](https://mdui.org) 作为前端框架。\n\n系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。\n"
           },
           "content_rendered": {
             "type": "string",
-            "description": "HTML 格式的正文"
+            "description": "HTML 格式的正文",
+            "example": "<p>MDClub 是一个开源社区系统，使用 <a href=\"https://mdui.org\" target=\"_blank\">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>"
           }
         }
       },
       "CommentRequestBody": {
         "type": "object",
-        "required": [
-          "content"
-        ],
         "properties": {
           "content": {
             "type": "string",
-            "description": "评论内容"
+            "description": "评论内容",
+            "example": "mdui 是我见过的 Web 框架里对规范实现最好的一版了"
           }
-        }
+        },
+        "required": [
+          "content"
+        ]
       },
       "ImageUpdateRequestBody": {
         "type": "object",
         "properties": {
           "filename": {
             "type": "string",
-            "description": "图片文件名"
+            "description": "图片文件名",
+            "example": "Material Design Logo.png"
           }
         }
       },
@@ -5071,44 +5236,51 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "标题"
+            "description": "标题",
+            "example": "请问作者开发了哪些软件？"
           },
           "topic_id": {
-            "type": "string",
-            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID"
+            "type": "integer",
+            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
+            "example": 1
           },
           "content_markdown": {
             "type": "string",
-            "description": "Markdown 格式的正文"
+            "description": "Markdown 格式的正文",
+            "example": "如题"
           },
           "content_rendered": {
             "type": "string",
-            "description": "HTML 格式的正文"
+            "description": "HTML 格式的正文",
+            "example": "<p>如题</p>"
           }
         }
       },
       "ReportRequestBody": {
         "type": "object",
-        "required": [
-          "reason"
-        ],
         "properties": {
           "reason": {
             "type": "string",
-            "description": "举报理由"
+            "description": "举报理由",
+            "example": "恶意打广告"
           }
-        }
+        },
+        "required": [
+          "reason"
+        ]
       },
       "TopicRequestBody": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "话题名称"
+            "description": "话题名称",
+            "example": "MDClub"
           },
           "description": {
             "type": "string",
-            "description": "话题描述"
+            "description": "话题描述",
+            "example": "一个漂亮强大的开源社区系统"
           },
           "cover": {
             "type": "string",
@@ -5146,23 +5318,28 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "用户名或邮箱"
+            "description": "用户名或邮箱",
+            "example": "zdhxiong"
           },
           "password": {
             "type": "string",
-            "description": "经过 hash1 加密后的密码"
+            "description": "经过 hash1 加密后的密码",
+            "example": "7c4a8d09ca3762af61e59520943dc26494f8941b"
           },
           "device": {
             "type": "string",
-            "description": "设备信息"
+            "description": "设备信息",
+            "example": "Xiaomi6"
           },
           "captcha_token": {
             "type": "string",
-            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数"
+            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数",
+            "example": "73687e77c8314821a8a301d96c776f01"
           },
           "captcha_code": {
             "type": "string",
-            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数"
+            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数",
+            "example": "f8h4d"
           }
         }
       },
@@ -5176,15 +5353,18 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "邮箱"
+            "description": "邮箱",
+            "example": "zdhxiong@gmail.com"
           },
           "email_code": {
             "type": "string",
-            "description": "邮箱验证码"
+            "description": "邮箱验证码",
+            "example": "hg8d3d"
           },
           "password": {
             "type": "string",
-            "description": "hash1 加密后的密码"
+            "description": "hash1 加密后的密码",
+            "example": "7c4a8d09ca3762af61e59520943dc26494f8941b"
           }
         }
       },
@@ -5199,23 +5379,28 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "邮箱"
+            "description": "邮箱",
+            "example": "zdhxiong@gmail.com"
           },
           "email_code": {
             "type": "string",
-            "description": "邮箱验证码"
+            "description": "邮箱验证码",
+            "example": "hg8d3d"
           },
           "username": {
             "type": "string",
-            "description": "用户名"
+            "description": "用户名",
+            "example": "zdhxiong"
           },
           "password": {
             "type": "string",
-            "description": "hash1 加密后的密码"
+            "description": "hash1 加密后的密码",
+            "example": "7c4a8d09ca3762af61e59520943dc26494f8941b"
           },
           "device": {
             "type": "string",
-            "description": "设备信息"
+            "description": "设备信息",
+            "example": "Xiaomi6"
           }
         }
       },
@@ -5224,23 +5409,28 @@
         "properties": {
           "headline": {
             "type": "string",
-            "description": "一句话介绍"
+            "description": "一句话介绍",
+            "example": "mdui 作者"
           },
           "bio": {
             "type": "string",
-            "description": "个人简介"
+            "description": "个人简介",
+            "example": "独立全栈开发者"
           },
           "blog": {
             "type": "string",
-            "description": "个人主页"
+            "description": "个人主页",
+            "example": "https://mdui.org"
           },
           "company": {
             "type": "string",
-            "description": "所属企业"
+            "description": "所属企业",
+            "example": "无"
           },
           "location": {
             "type": "string",
-            "description": "所属地区"
+            "description": "所属地区",
+            "example": "杭州"
           }
         }
       },
@@ -5252,15 +5442,18 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "邮箱"
+            "description": "邮箱",
+            "example": "zdhxiong@gmail.com"
           },
           "captcha_token": {
             "type": "string",
-            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数"
+            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数",
+            "example": "73687e77c8314821a8a301d96c776f01"
           },
           "captcha_code": {
             "type": "string",
-            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数"
+            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数",
+            "example": "f8h4d"
           }
         }
       },
@@ -5276,7 +5469,8 @@
               "up",
               "down"
             ],
-            "description": "投票类型"
+            "description": "投票类型",
+            "example": "up"
           }
         }
       },
@@ -5284,7 +5478,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Answer"
@@ -5298,7 +5492,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5318,7 +5512,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Article"
@@ -5332,7 +5526,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5352,7 +5546,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "object",
@@ -5376,7 +5570,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Comment"
@@ -5390,7 +5584,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5410,7 +5604,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Email"
@@ -5424,7 +5618,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "object"
@@ -5439,7 +5633,9 @@
         "properties": {
           "code": {
             "type": "integer",
-            "description": "错误代码"
+            "description": "错误代码",
+            "minimum": 100000,
+            "maximum": 999999
           },
           "message": {
             "type": "string",
@@ -5472,7 +5668,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/FollowerCount"
@@ -5486,7 +5682,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Image"
@@ -5500,7 +5696,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5520,7 +5716,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Option"
@@ -5534,7 +5730,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Question"
@@ -5548,7 +5744,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5568,7 +5764,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5588,7 +5784,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Report"
@@ -5602,7 +5798,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5622,7 +5818,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Token"
@@ -5636,7 +5832,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/Topic"
@@ -5650,7 +5846,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5670,7 +5866,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/UserAvatar"
@@ -5684,7 +5880,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/UserCover"
@@ -5698,7 +5894,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/User"
@@ -5712,7 +5908,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "type": "array",
@@ -5732,7 +5928,7 @@
         "type": "object",
         "properties": {
           "code": {
-            "type": "integer"
+            "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
             "$ref": "#/components/schemas/VoteCount"
@@ -5753,7 +5949,8 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串"
+            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "example": "up"
           }
         }
       },
@@ -5768,11 +5965,13 @@
           },
           "is_following": {
             "type": "boolean",
-            "description": "当前登录用户是否已关注该文章"
+            "description": "当前登录用户是否已关注该文章",
+            "example": true
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串"
+            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "example": "up"
           }
         }
       },
@@ -5784,7 +5983,8 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串"
+            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "example": "up"
           }
         }
       },
@@ -5816,11 +6016,13 @@
           },
           "is_following": {
             "type": "boolean",
-            "description": "当前登录用户是否已关注该提问"
+            "description": "当前登录用户是否已关注该提问",
+            "example": true
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串"
+            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "example": "up"
           }
         }
       },
@@ -5872,7 +6074,8 @@
         "properties": {
           "is_following": {
             "type": "boolean",
-            "description": "当前登录用户是否已关注该话题"
+            "description": "当前登录用户是否已关注该话题",
+            "example": true
           }
         }
       },
@@ -5881,15 +6084,18 @@
         "properties": {
           "is_me": {
             "type": "boolean",
-            "description": "该用户是否是当前登录用户"
+            "description": "该用户是否是当前登录用户",
+            "example": false
           },
           "is_following": {
             "type": "boolean",
-            "description": "当前登录用户是否已关注该用户"
+            "description": "当前登录用户是否已关注该用户",
+            "example": true
           },
           "is_followed": {
             "type": "boolean",
-            "description": "该用户是否已关注当前登录用户"
+            "description": "该用户是否已关注当前登录用户",
+            "example": true
           }
         }
       },
@@ -5898,19 +6104,23 @@
         "properties": {
           "answer_id": {
             "type": "integer",
-            "description": "回答ID"
+            "description": "回答ID",
+            "example": 1
           },
           "content_summary": {
             "type": "string",
-            "description": "内容摘要"
+            "description": "内容摘要",
+            "example": "mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。"
           },
           "create_time": {
             "type": "integer",
-            "description": "发布时间"
+            "description": "发布时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间"
+            "description": "更新时间",
+            "example": 1563512214
           }
         },
         "required": [
@@ -5925,19 +6135,23 @@
         "properties": {
           "article_id": {
             "type": "integer",
-            "description": "文章ID"
+            "description": "文章ID",
+            "example": 1
           },
           "title": {
             "type": "string",
-            "description": "文章标题"
+            "description": "文章标题",
+            "example": "欢迎使用 MDClub 开源社区系统"
           },
           "create_time": {
             "type": "integer",
-            "description": "发布时间"
+            "description": "发布时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间"
+            "description": "更新时间",
+            "example": 1563512214
           }
         }
       },
@@ -5946,19 +6160,23 @@
         "properties": {
           "comment_id": {
             "type": "integer",
-            "description": "评论ID"
+            "description": "评论ID",
+            "example": 1
           },
           "content_summary": {
             "type": "string",
-            "description": "内容摘要"
+            "description": "内容摘要",
+            "example": "mdui 是我见过的 Web 框架里对规范实现最好的一版了"
           },
           "create_time": {
             "type": "integer",
-            "description": "发布时间"
+            "description": "发布时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间"
+            "description": "更新时间",
+            "example": 1563512214
           }
         }
       },
@@ -5967,19 +6185,23 @@
         "properties": {
           "question_id": {
             "type": "integer",
-            "description": "提问ID"
+            "description": "提问ID",
+            "example": 1
           },
           "title": {
             "type": "string",
-            "description": "提问标题"
+            "description": "提问标题",
+            "example": "请问作者开发了哪些软件？"
           },
           "create_time": {
             "type": "integer",
-            "description": "发布时间"
+            "description": "发布时间",
+            "example": 1563512214
           },
           "update_time": {
             "type": "integer",
-            "description": "更新时间"
+            "description": "更新时间",
+            "example": 1563512214
           }
         }
       },
@@ -5990,11 +6212,13 @@
           "properties": {
             "topic_id": {
               "type": "integer",
-              "description": "话题 ID"
+              "description": "话题 ID",
+              "example": 1
             },
             "name": {
               "type": "string",
-              "description": "话题名称"
+              "description": "话题名称",
+              "example": "MDClub"
             },
             "cover": {
               "$ref": "#/components/schemas/TopicCover"
@@ -6007,15 +6231,18 @@
         "properties": {
           "user_id": {
             "type": "integer",
-            "description": "用户ID"
+            "description": "用户ID",
+            "example": 1
           },
           "username": {
             "type": "string",
-            "description": "用户名"
+            "description": "用户名",
+            "example": "zdhxiong"
           },
           "headline": {
             "type": "string",
-            "description": "一句话介绍"
+            "description": "一句话介绍",
+            "example": "mdui作者"
           },
           "avatar": {
             "$ref": "#/components/schemas/UserAvatar"
@@ -6304,7 +6531,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "answer_id.query": {
         "name": "answer_id",
@@ -6313,7 +6541,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "answer_ids": {
         "name": "answer_id",
@@ -6329,7 +6558,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "article_id.path": {
         "name": "article_id",
@@ -6339,7 +6573,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "article_id.query": {
         "name": "article_id",
@@ -6348,7 +6583,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "article_ids": {
         "name": "article_id",
@@ -6364,7 +6600,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "comment_id.path": {
         "name": "comment_id",
@@ -6374,7 +6615,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "comment_id.query": {
         "name": "comment_id",
@@ -6383,7 +6625,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "comment_ids": {
         "name": "comment_id",
@@ -6399,7 +6642,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "commentable_id.query": {
         "name": "commentable_id",
@@ -6408,7 +6656,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "commentable_type.query": {
         "name": "commentable_type",
@@ -6421,7 +6670,8 @@
             "question",
             "answer"
           ]
-        }
+        },
+        "example": "article"
       },
       "email.query": {
         "name": "email",
@@ -6429,7 +6679,8 @@
         "description": "邮箱",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "zdhxiong@gmail.com"
       },
       "force": {
         "name": "force",
@@ -6438,9 +6689,12 @@
         "schema": {
           "type": "string",
           "enum": [
+            0,
             1
-          ]
-        }
+          ],
+          "default": 0
+        },
+        "example": 0
       },
       "image_key.path": {
         "name": "key",
@@ -6449,7 +6703,8 @@
         "required": true,
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "4c018974e3cf4e1d8c174d82adba0c43.jpg"
       },
       "image_key.query": {
         "name": "key",
@@ -6457,7 +6712,8 @@
         "description": "图片key",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "4c018974e3cf4e1d8c174d82adba0c43.jpg"
       },
       "image_keys": {
         "name": "key",
@@ -6472,15 +6728,21 @@
           "maxItems": 40
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          "4c018974e3cf4e1d8c174d82adba0c43.jpg",
+          "5178883f06a34b748dd166b0a7c913b0.jpg",
+          "92b3a5c64ba04812bc41ab7400961a16.jpg"
+        ]
       },
       "image_item_id.query": {
         "name": "item_id",
         "in": "query",
         "description": "图片关联对象的ID",
         "schema": {
-          "type": "string"
-        }
+          "type": "integer"
+        },
+        "example": 1
       },
       "image_item_type.query": {
         "name": "item_type",
@@ -6493,7 +6755,8 @@
             "answer",
             "article"
           ]
-        }
+        },
+        "example": "question"
       },
       "include": {
         "name": "include",
@@ -6506,7 +6769,11 @@
           }
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          "user",
+          "question"
+        ]
       },
       "order": {
         "name": "order",
@@ -6514,7 +6781,8 @@
         "description": "排序方式。在字段前加 `-` 表示倒序排列。例如 `create_time` 表示按时间顺序排列，`-create_time` 则表示按时间倒序排列。",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "-create_time"
       },
       "page": {
         "name": "page",
@@ -6524,7 +6792,8 @@
           "type": "integer",
           "minimum": 1,
           "default": 1
-        }
+        },
+        "example": 1
       },
       "per_page": {
         "name": "per_page",
@@ -6535,7 +6804,8 @@
           "minimum": 1,
           "maximum": 100,
           "default": 15
-        }
+        },
+        "example": 15
       },
       "question_id.path": {
         "name": "question_id",
@@ -6545,7 +6815,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "question_id.query": {
         "name": "question_id",
@@ -6554,7 +6825,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "question_ids": {
         "name": "question_id",
@@ -6570,7 +6842,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "report_target": {
         "name": "target",
@@ -6585,7 +6862,11 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          "question:12",
+          "comment:34"
+        ]
       },
       "reportable_id.path": {
         "name": "reportable_id",
@@ -6595,7 +6876,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "reportable_type.path": {
         "name": "reportable_type",
@@ -6611,7 +6893,8 @@
             "comment",
             "user"
           ]
-        }
+        },
+        "example": "question"
       },
       "reportable_type.query": {
         "name": "reportable_type",
@@ -6626,7 +6909,8 @@
             "comment",
             "user"
           ]
-        }
+        },
+        "example": "question"
       },
       "token": {
         "name": "token",
@@ -6634,7 +6918,8 @@
         "description": "token",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "13180944453b7d052125486eefabedf9"
       },
       "topic_id.path": {
         "name": "topic_id",
@@ -6644,7 +6929,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "topic_id.query": {
         "name": "topic_id",
@@ -6653,7 +6939,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "topic_ids": {
         "name": "topic_id",
@@ -6669,7 +6956,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "topic_name.query": {
         "name": "name",
@@ -6677,7 +6969,8 @@
         "description": "话题名称",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "MDClub"
       },
       "user_id.path": {
         "name": "user_id",
@@ -6687,7 +6980,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "user_id.query": {
         "name": "user_id",
@@ -6696,7 +6990,8 @@
         "schema": {
           "type": "integer",
           "minimum": 1
-        }
+        },
+        "example": 1
       },
       "user_ids": {
         "name": "user_id",
@@ -6712,7 +7007,12 @@
           "maxItems": 100
         },
         "style": "form",
-        "explode": false
+        "explode": false,
+        "example": [
+          1,
+          2,
+          3
+        ]
       },
       "username.query": {
         "name": "username",
@@ -6720,7 +7020,8 @@
         "description": "用户名",
         "schema": {
           "type": "string"
-        }
+        },
+        "example": "zdhxiong"
       },
       "vote_type.query": {
         "name": "type",
@@ -6732,7 +7033,8 @@
             "up",
             "down"
           ]
-        }
+        },
+        "example": "up"
       }
     },
     "requestBodies": {

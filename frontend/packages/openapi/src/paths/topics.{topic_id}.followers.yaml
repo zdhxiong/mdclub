@@ -21,6 +21,7 @@ get:
 post:
   operationId: addFollow
   summary: 关注指定话题
+  description: 关注指定话题
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
   responses:
@@ -34,6 +35,7 @@ post:
 delete:
   operationId: deleteFollow
   summary: 取消关注指定话题
+  description: 取消关注指定话题
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
   responses:
