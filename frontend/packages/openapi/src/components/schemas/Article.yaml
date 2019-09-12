@@ -3,10 +3,12 @@ properties:
   article_id:
     type: integer
     description: 文章ID
+    minimum: 1
     example: 1
   user_id:
     type: integer
     description: 用户ID
+    minimum: 1
     example: 1
   title:
     type: string
@@ -26,14 +28,17 @@ properties:
   comment_count:
     type: integer
     description: 评论数量
+    minimum: 0
     example: 22
   view_count:
     type: integer
     description: 浏览量
+    minimum: 0
     example: 487
   follower_count:
     type: integer
     description: 关注者数量
+    minimum: 0
     example: 12
   vote_count:
     type: integer
@@ -42,14 +47,17 @@ properties:
   create_time:
     type: integer
     description: 创建时间
+    minimum: 1
     example: 1563512214
   update_time:
     type: integer
     description: 更新时间（用户可以更新自己的文章）
+    minimum: 1
     example: 1563512214
   delete_time:
     type: integer
     description: 🔐删除时间
+    minimum: 0
     example: 0
   relationships:
     $ref: '#/components/schemas/ArticleRelationship'

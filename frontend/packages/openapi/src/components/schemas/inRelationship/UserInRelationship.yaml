@@ -3,6 +3,7 @@ properties:
   user_id:
     type: integer
     description: 用户ID
+    minimum: 1
     example: 1
   username:
     type: string

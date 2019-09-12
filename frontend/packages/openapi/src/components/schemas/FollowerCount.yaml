@@ -4,6 +4,7 @@ properties:
   follower_count:
     type: integer
     description: 关注者数量
+    minimum: 0
     example: 112
 required:
   - follower_count

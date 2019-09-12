@@ -21,7 +21,7 @@
       "description": "当前服务器"
     },
     {
-      "url": "{scheme}://{host}/api",
+      "url": "{scheme}://{host}{path}",
       "description": "指定的服务器",
       "variables": {
         "scheme": {
@@ -29,10 +29,16 @@
             "http",
             "https"
           ],
-          "default": "http"
+          "default": "http",
+          "description": "协议"
         },
         "host": {
-          "default": "mdclub.test"
+          "default": "mdclub.test",
+          "description": "服务器域名"
+        },
+        "path": {
+          "default": "/api",
+          "description": "服务器接口根路径"
         }
       }
     }
@@ -3768,16 +3774,19 @@
           "answer_id": {
             "type": "integer",
             "description": "回答ID",
+            "minimum": 1,
             "example": 1
           },
           "question_id": {
             "type": "integer",
             "description": "提问ID",
+            "minimum": 1,
             "example": 1
           },
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "content_markdown": {
@@ -3793,6 +3802,7 @@
           "comment_count": {
             "type": "integer",
             "description": "评论数量",
+            "minimum": 0,
             "example": 23
           },
           "vote_count": {
@@ -3803,16 +3813,19 @@
           "create_time": {
             "type": "integer",
             "description": "创建时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "🔐更新时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
             "description": "🔐删除时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -3836,11 +3849,13 @@
           "article_id": {
             "type": "integer",
             "description": "文章ID",
+            "minimum": 1,
             "example": 1
           },
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "title": {
@@ -3861,16 +3876,19 @@
           "comment_count": {
             "type": "integer",
             "description": "评论数量",
+            "minimum": 0,
             "example": 22
           },
           "view_count": {
             "type": "integer",
             "description": "浏览量",
+            "minimum": 0,
             "example": 487
           },
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
+            "minimum": 0,
             "example": 12
           },
           "vote_count": {
@@ -3881,16 +3899,19 @@
           "create_time": {
             "type": "integer",
             "description": "创建时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间（用户可以更新自己的文章）",
+            "minimum": 1,
             "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
             "description": "🔐删除时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -3923,11 +3944,13 @@
           "comment_id": {
             "type": "integer",
             "description": "评论ID",
+            "minimum": 1,
             "example": 1
           },
           "commentable_id": {
             "type": "integer",
             "description": "评论目标的ID",
+            "minimum": 1,
             "example": 1
           },
           "commentable_type": {
@@ -3943,6 +3966,7 @@
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "content": {
@@ -3953,21 +3977,25 @@
           "vote_count": {
             "type": "integer",
             "description": "投票数（赞成票 - 反对票，可能为负数）",
+            "minimum": 0,
             "example": 8
           },
           "create_time": {
             "type": "integer",
             "description": "发表时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "修改时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
             "description": "🔐删除时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -4036,6 +4064,7 @@
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
+            "minimum": 0,
             "example": 112
           }
         },
@@ -4059,16 +4088,19 @@
           "width": {
             "type": "integer",
             "description": "原始图片宽度",
+            "minimum": 1,
             "example": 1280
           },
           "height": {
             "type": "integer",
             "description": "原始图片高度",
+            "minimum": 1,
             "example": 720
           },
           "create_time": {
             "type": "integer",
             "description": "图片上传时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "item_type": {
@@ -4084,11 +4116,13 @@
           "item_id": {
             "type": "integer",
             "description": "图片关联对象ID",
+            "minimum": 1,
             "example": 1
           },
           "user_id": {
             "type": "integer",
             "description": "图片上传者ID",
+            "minimum": 1,
             "example": 1
           },
           "urls": {
@@ -4569,31 +4603,38 @@
           "page": {
             "type": "integer",
             "description": "当前页码",
+            "minimum": 1,
             "example": 1
           },
           "per_page": {
             "type": "integer",
             "description": "每页条数",
+            "minimum": 1,
+            "maximum": 100,
             "example": 15
           },
           "previous": {
             "type": "integer",
             "description": "上一页页码，为 `null` 表示没有上一页",
+            "minimum": 1,
             "example": null
           },
           "next": {
             "type": "integer",
             "description": "下一页页码，为 `null` 表示没有下一页",
+            "minimum": 2,
             "example": 2
           },
           "total": {
             "type": "integer",
             "description": "数据总数",
+            "minimum": 0,
             "example": 124
           },
           "pages": {
             "type": "integer",
             "description": "总页数",
+            "minimum": 1,
             "example": 9
           }
         },
@@ -4612,11 +4653,13 @@
           "question_id": {
             "type": "integer",
             "description": "提问ID",
+            "minimum": 1,
             "example": 1
           },
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "title": {
@@ -4637,21 +4680,25 @@
           "comment_count": {
             "type": "integer",
             "description": "评论数量",
+            "minimum": 0,
             "example": 6
           },
           "answer_count": {
             "type": "integer",
             "description": "回答数量",
+            "minimum": 0,
             "example": 18
           },
           "view_count": {
             "type": "integer",
             "description": "浏览量",
+            "minimum": 0,
             "example": 168
           },
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
+            "minimum": 0,
             "example": 12
           },
           "vote_count": {
@@ -4662,21 +4709,25 @@
           "last_answer_time": {
             "type": "integer",
             "description": "最后回答时间",
+            "minimum": 0,
             "example": 1563512214
           },
           "create_time": {
             "type": "integer",
             "description": "创建时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）",
+            "minimum": 1,
             "example": 1563512214
           },
           "delete_time": {
             "type": "integer",
             "description": "🔐删除时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -4706,11 +4757,13 @@
           "report_id": {
             "type": "integer",
             "description": "举报ID",
+            "minimum": 1,
             "example": 1
           },
           "reportable_id": {
             "type": "integer",
             "description": "举报目标的ID",
+            "minimum": 1,
             "example": 1
           },
           "reportable_type": {
@@ -4728,6 +4781,7 @@
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "reason": {
@@ -4738,6 +4792,7 @@
           "create_time": {
             "type": "integer",
             "description": "举报时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "relationships": {
@@ -4760,6 +4815,7 @@
           "reportable_id": {
             "type": "integer",
             "description": "举报目标的ID",
+            "minimum": 1,
             "example": 1
           },
           "reportable_type": {
@@ -4777,6 +4833,7 @@
           "reporter_count": {
             "type": "integer",
             "description": "指定对象的被举报数量",
+            "minimum": 1,
             "example": 12
           },
           "relationships": {
@@ -4800,6 +4857,7 @@
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "device": {
@@ -4810,16 +4868,19 @@
           "create_time": {
             "type": "integer",
             "description": "创建时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "expire_time": {
             "type": "integer",
             "description": "过期时间",
+            "minimum": 1,
             "example": 2063512214
           }
         },
@@ -4838,6 +4899,7 @@
           "topic_id": {
             "type": "integer",
             "description": "话题ID",
+            "minimum": 1,
             "example": 1
           },
           "name": {
@@ -4856,21 +4918,25 @@
           "article_count": {
             "type": "integer",
             "description": "文章数量",
+            "minimum": 0,
             "example": 12
           },
           "question_count": {
             "type": "integer",
             "description": "提问数量",
+            "minimum": 0,
             "example": 16
           },
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
+            "minimum": 0,
             "example": 42
           },
           "delete_time": {
             "type": "integer",
             "description": "🔐删除时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -4924,6 +4990,7 @@
           "user_id": {
             "type": "integer",
             "description": "用户 ID",
+            "minimum": 1,
             "example": 1
           },
           "username": {
@@ -4934,6 +5001,7 @@
           "email": {
             "type": "string",
             "description": "🔐邮箱",
+            "format": "email",
             "example": "zdhxiong@gmail.com"
           },
           "avatar": {
@@ -4955,6 +5023,7 @@
           "last_login_time": {
             "type": "integer",
             "description": "🔐最后登陆时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "last_login_ip": {
@@ -4970,51 +5039,61 @@
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
+            "minimum": 0,
             "example": 112
           },
           "followee_count": {
             "type": "integer",
             "description": "关注的用户数量",
+            "minimum": 0,
             "example": 8
           },
           "following_article_count": {
             "type": "integer",
             "description": "关注的文章数量",
+            "minimum": 0,
             "example": 12
           },
           "following_question_count": {
             "type": "integer",
             "description": "关注的提问数量",
+            "minimum": 0,
             "example": 14
           },
           "following_topic_count": {
             "type": "integer",
             "description": "关注的话题数量",
+            "minimum": 0,
             "example": 4
           },
           "article_count": {
             "type": "integer",
             "description": "发表的文章数量",
+            "minimum": 0,
             "example": 6
           },
           "question_count": {
             "type": "integer",
             "description": "发表的提问数量",
+            "minimum": 0,
             "example": 11
           },
           "answer_count": {
             "type": "integer",
             "description": "发表的提问回答数量",
+            "minimum": 0,
             "example": 28
           },
           "notification_unread": {
             "type": "integer",
             "description": "🔐未读消息数量",
+            "minimum": 0,
             "example": 4
           },
           "inbox_unread": {
             "type": "integer",
             "description": "🔐未读私信数量",
+            "minimum": 0,
             "example": 2
           },
           "headline": {
@@ -5045,16 +5124,19 @@
           "create_time": {
             "type": "integer",
             "description": "注册时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "🔐更新时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "disable_time": {
             "type": "integer",
             "description": "🔐禁用时间",
+            "minimum": 0,
             "example": 0
           },
           "relationships": {
@@ -5182,9 +5264,9 @@
             "example": "欢迎使用 MDClub 开源社区系统"
           },
           "topic_id": {
-            "type": "integer",
+            "type": "string",
             "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
-            "example": 1
+            "example": "1,2,3"
           },
           "content_markdown": {
             "type": "string",
@@ -5240,9 +5322,9 @@
             "example": "请问作者开发了哪些软件？"
           },
           "topic_id": {
-            "type": "integer",
+            "type": "string",
             "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
-            "example": 1
+            "example": "1,2,3"
           },
           "content_markdown": {
             "type": "string",
@@ -5311,10 +5393,6 @@
       },
       "UserLoginRequestBody": {
         "type": "object",
-        "required": [
-          "name",
-          "password"
-        ],
         "properties": {
           "name": {
             "type": "string",
@@ -5341,15 +5419,14 @@
             "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数",
             "example": "f8h4d"
           }
-        }
+        },
+        "required": [
+          "name",
+          "password"
+        ]
       },
       "UserPasswordResetRequestBody": {
         "type": "object",
-        "required": [
-          "email",
-          "email_code",
-          "password"
-        ],
         "properties": {
           "email": {
             "type": "string",
@@ -5366,20 +5443,20 @@
             "description": "hash1 加密后的密码",
             "example": "7c4a8d09ca3762af61e59520943dc26494f8941b"
           }
-        }
-      },
-      "UserRegisterRequestBody": {
-        "type": "object",
+        },
         "required": [
           "email",
           "email_code",
-          "username",
           "password"
-        ],
+        ]
+      },
+      "UserRegisterRequestBody": {
+        "type": "object",
         "properties": {
           "email": {
             "type": "string",
             "description": "邮箱",
+            "format": "email",
             "example": "zdhxiong@gmail.com"
           },
           "email_code": {
@@ -5402,7 +5479,13 @@
             "description": "设备信息",
             "example": "Xiaomi6"
           }
-        }
+        },
+        "required": [
+          "email",
+          "email_code",
+          "username",
+          "password"
+        ]
       },
       "UserRequestBody": {
         "type": "object",
@@ -5443,6 +5526,7 @@
           "email": {
             "type": "string",
             "description": "邮箱",
+            "format": "email",
             "example": "zdhxiong@gmail.com"
           },
           "captcha_token": {
@@ -5557,6 +5641,7 @@
               },
               "captcha_image": {
                 "type": "string",
+                "format": "byte",
                 "description": "base64格式的图形验证码图片"
               }
             }
@@ -5651,6 +5736,7 @@
           },
           "captcha_image": {
             "type": "string",
+            "format": "byte",
             "description": "图形验证码的base64格式图片"
           },
           "errors": {
@@ -5950,6 +6036,11 @@
           "voting": {
             "type": "string",
             "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "enum": [
+              "up",
+              "down",
+              null
+            ],
             "example": "up"
           }
         }
@@ -5971,6 +6062,11 @@
           "voting": {
             "type": "string",
             "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "enum": [
+              "up",
+              "down",
+              null
+            ],
             "example": "up"
           }
         }
@@ -5984,6 +6080,11 @@
           "voting": {
             "type": "string",
             "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "enum": [
+              "up",
+              "down",
+              null
+            ],
             "example": "up"
           }
         }
@@ -6022,6 +6123,11 @@
           "voting": {
             "type": "string",
             "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "enum": [
+              "up",
+              "down",
+              null
+            ],
             "example": "up"
           }
         }
@@ -6105,6 +6211,7 @@
           "answer_id": {
             "type": "integer",
             "description": "回答ID",
+            "minimum": 1,
             "example": 1
           },
           "content_summary": {
@@ -6115,11 +6222,13 @@
           "create_time": {
             "type": "integer",
             "description": "发布时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间",
+            "minimum": 1,
             "example": 1563512214
           }
         },
@@ -6136,6 +6245,7 @@
           "article_id": {
             "type": "integer",
             "description": "文章ID",
+            "minimum": 1,
             "example": 1
           },
           "title": {
@@ -6146,11 +6256,13 @@
           "create_time": {
             "type": "integer",
             "description": "发布时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间",
+            "minimum": 1,
             "example": 1563512214
           }
         }
@@ -6161,6 +6273,7 @@
           "comment_id": {
             "type": "integer",
             "description": "评论ID",
+            "minimum": 1,
             "example": 1
           },
           "content_summary": {
@@ -6171,11 +6284,13 @@
           "create_time": {
             "type": "integer",
             "description": "发布时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间",
+            "minimum": 1,
             "example": 1563512214
           }
         }
@@ -6186,6 +6301,7 @@
           "question_id": {
             "type": "integer",
             "description": "提问ID",
+            "minimum": 1,
             "example": 1
           },
           "title": {
@@ -6196,11 +6312,13 @@
           "create_time": {
             "type": "integer",
             "description": "发布时间",
+            "minimum": 1,
             "example": 1563512214
           },
           "update_time": {
             "type": "integer",
             "description": "更新时间",
+            "minimum": 1,
             "example": 1563512214
           }
         }
@@ -6213,6 +6331,7 @@
             "topic_id": {
               "type": "integer",
               "description": "话题 ID",
+              "minimum": 1,
               "example": 1
             },
             "name": {
@@ -6232,6 +6351,7 @@
           "user_id": {
             "type": "integer",
             "description": "用户ID",
+            "minimum": 1,
             "example": 1
           },
           "username": {
@@ -6678,7 +6798,8 @@
         "in": "query",
         "description": "邮箱",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "format": "email"
         },
         "example": "zdhxiong@gmail.com"
       },
@@ -6740,7 +6861,8 @@
         "in": "query",
         "description": "图片关联对象的ID",
         "schema": {
-          "type": "integer"
+          "type": "integer",
+          "minimum": 1
         },
         "example": 1
       },

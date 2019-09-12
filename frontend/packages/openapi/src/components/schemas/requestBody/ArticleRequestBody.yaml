@@ -5,9 +5,9 @@ properties:
     description: 标题
     example: 欢迎使用 MDClub 开源社区系统
   topic_id:
-    type: integer
+    type: string
     description: 话题ID，多个ID用“,”分隔，最多支持 10 个ID
-    example: 1
+    example: 1,2,3
   content_markdown:
     type: string
     description: Markdown 格式的正文

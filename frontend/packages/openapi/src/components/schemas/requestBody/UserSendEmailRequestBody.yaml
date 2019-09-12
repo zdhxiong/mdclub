@@ -5,6 +5,7 @@ properties:
   email:
     type: string
     description: 邮箱
+    format: email
     example: zdhxiong@gmail.com
   captcha_token:
     type: string

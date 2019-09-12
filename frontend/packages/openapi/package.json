@@ -32,7 +32,6 @@
     "@openapitools/openapi-generator-cli": "0.0.16-4.1.0",
     "@stoplight/prism-cli": "3.1.0",
     "@stoplight/spectral": "4.1.1",
-    "fp-ts": "^2.0.5",
     "js-yaml": "^3.13.1",
     "json-refs": "^3.0.13"
   }

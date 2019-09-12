@@ -1,13 +1,9 @@
 type: object
-required:
-  - email
-  - email_code
-  - username
-  - password
 properties:
   email:
     type: string
     description: 邮箱
+    format: email
     example: zdhxiong@gmail.com
   email_code:
     type: string
@@ -25,3 +21,8 @@ properties:
     type: string
     description: 设备信息
     example: Xiaomi6
+required:
+  - email
+  - email_code
+  - username
+  - password

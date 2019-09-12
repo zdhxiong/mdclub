@@ -3,6 +3,7 @@ properties:
   question_id:
     type: integer
     description: 提问ID
+    minimum: 1
     example: 1
   title:
     type: string
@@ -11,8 +12,10 @@ properties:
   create_time:
     type: integer
     description: 发布时间
+    minimum: 1
     example: 1563512214
   update_time:
     type: integer
     description: 更新时间
+    minimum: 1
     example: 1563512214

@@ -1,6 +1,6 @@
 - url: /api
   description: 当前服务器
-- url: '{scheme}://{host}/api'
+- url: '{scheme}://{host}{path}'
   description: 指定的服务器
   variables:
     scheme:
@@ -8,5 +8,10 @@
         - http
         - https
       default: http
+      description: 协议
     host:
       default: mdclub.test
+      description: 服务器域名
+    path:
+      default: /api
+      description: 服务器接口根路径

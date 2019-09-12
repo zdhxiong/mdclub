@@ -5,6 +5,7 @@ items:
     topic_id:
       type: integer
       description: 话题 ID
+      minimum: 1
       example: 1
     name:
       type: string

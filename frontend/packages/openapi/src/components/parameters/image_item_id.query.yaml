@@ -3,4 +3,5 @@ in: query
 description: 图片关联对象的ID
 schema:
   type: integer
+  minimum: 1
 example: 1

@@ -16,6 +16,7 @@ properties:
     description: 图形验证码token。若返回了该参数，表示下次调用该接口需要输入图形验证码
   captcha_image:
     type: string
+    format: byte
     description: 图形验证码的base64格式图片
   errors:
     type: array

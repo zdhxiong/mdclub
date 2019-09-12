@@ -4,10 +4,12 @@ properties:
   report_id:
     type: integer
     description: 举报ID
+    minimum: 1
     example: 1
   reportable_id:
     type: integer
     description: 举报目标的ID
+    minimum: 1
     example: 1
   reportable_type:
     type: string
@@ -22,6 +24,7 @@ properties:
   user_id:
     type: integer
     description: 用户ID
+    minimum: 1
     example: 1
   reason:
     type: string
@@ -30,6 +33,7 @@ properties:
   create_time:
     type: integer
     description: 举报时间
+    minimum: 1
     example: 1563512214
   relationships:
     $ref: '#/components/schemas/ReportRelationship'

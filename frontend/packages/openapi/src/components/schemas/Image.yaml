@@ -11,14 +11,17 @@ properties:
   width:
     type: integer
     description: 原始图片宽度
+    minimum: 1
     example: 1280
   height:
     type: integer
     description: 原始图片高度
+    minimum: 1
     example: 720
   create_time:
     type: integer
     description: 图片上传时间
+    minimum: 1
     example: 1563512214
   item_type:
     type: string
@@ -31,10 +34,12 @@ properties:
   item_id:
     type: integer
     description: 图片关联对象ID
+    minimum: 1
     example: 1
   user_id:
     type: integer
     description: 图片上传者ID
+    minimum: 1
     example: 1
   urls:
     $ref: '#/components/schemas/ImageUrls'

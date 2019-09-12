@@ -10,6 +10,7 @@ properties:
         description: 图形验证码token
       captcha_image:
         type: string
+        format: byte
         description: base64格式的图形验证码图片
 required:
   - code

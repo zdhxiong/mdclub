@@ -3,6 +3,7 @@ properties:
   topic_id:
     type: integer
     description: 话题ID
+    minimum: 1
     example: 1
   name:
     type: string
@@ -17,18 +18,22 @@ properties:
   article_count:
     type: integer
     description: 文章数量
+    minimum: 0
     example: 12
   question_count:
     type: integer
     description: 提问数量
+    minimum: 0
     example: 16
   follower_count:
     type: integer
     description: 关注者数量
+    minimum: 0
     example: 42
   delete_time:
     type: integer
     description: 🔐删除时间
+    minimum: 0
     example: 0
   relationships:
     $ref: '#/components/schemas/TopicRelationship'
