@@ -3,11 +3,14 @@ properties:
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   username:
     type: string
     description: 用户名
+    example: zdhxiong
   headline:
     type: string
     description: 一句话介绍
+    example: mdui作者
   avatar:
     $ref: '#/components/schemas/UserAvatar'

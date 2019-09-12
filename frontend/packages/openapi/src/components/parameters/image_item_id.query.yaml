@@ -3,3 +3,4 @@ in: query
 description: 图片关联对象的ID
 schema:
   type: string
+example: 1

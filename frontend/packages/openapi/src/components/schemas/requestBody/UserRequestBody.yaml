@@ -3,15 +3,20 @@ properties:
   headline:
     type: string
     description: 一句话介绍
+    example: mdui 作者
   bio:
     type: string
     description: 个人简介
+    example: 独立全栈开发者
   blog:
     type: string
     description: 个人主页
+    example: https://mdui.org
   company:
     type: string
     description: 所属企业
+    example: 无
   location:
     type: string
     description: 所属地区
+    example: 杭州

@@ -3,9 +3,11 @@ properties:
   name:
     type: string
     description: 话题名称
+    example: MDClub
   description:
     type: string
     description: 话题描述
+    example: 一个漂亮强大的开源社区系统
   cover:
     type: string
     format: binary

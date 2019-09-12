@@ -3,6 +3,8 @@ properties:
   code:
     type: integer
     description: 错误代码
+    minimum: 100000
+    maximum: 999999
   message:
     type: string
     description: 错误描述

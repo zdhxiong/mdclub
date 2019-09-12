@@ -3,45 +3,59 @@ properties:
   question_id:
     type: integer
     description: 提问ID
+    example: 1
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   title:
     type: string
     description: 提问标题
+    example: 请问作者开发了哪些软件？
   content_markdown:
     type: string
     description: Markdown 格式的提问内容
+    example: 如题
   content_rendered:
     type: string
     description: HTML 格式的提问内容
+    example: <p>如题</p>
   comment_count:
     type: integer
     description: 评论数量
+    example: 6
   answer_count:
     type: integer
     description: 回答数量
+    example: 18
   view_count:
     type: integer
     description: 浏览量
+    example: 168
   follower_count:
     type: integer
     description: 关注者数量
+    example: 12
   vote_count:
     type: integer
     description: 投票数（赞成票 - 反对票，可能为负数）
+    example: 8
   last_answer_time:
     type: integer
     description: 最后回答时间
+    example: 1563512214
   create_time:
     type: integer
     description: 创建时间
+    example: 1563512214
   update_time:
     type: integer
     description: 更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）
+    example: 1563512214
   delete_time:
     type: integer
     description: 🔐删除时间
+    example: 0
   relationships:
     $ref: '#/components/schemas/QuestionRelationship'
 required:

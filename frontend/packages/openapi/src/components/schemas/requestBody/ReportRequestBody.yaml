@@ -1,7 +1,8 @@
 type: object
-required:
-  - reason
 properties:
   reason:
     type: string
     description: 举报理由
+    example: 恶意打广告
+required:
+  - reason

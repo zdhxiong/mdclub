@@ -1,6 +1,7 @@
 get:
   operationId: get
   summary: 获取站点全局设置参数
+  description: 获取站点全局设置参数
   responses:
     '200':
       $ref: '#/components/responses/Option'

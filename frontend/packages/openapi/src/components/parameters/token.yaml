@@ -3,3 +3,4 @@ in: header
 description: token
 schema:
   type: string
+example: 13180944453b7d052125486eefabedf9

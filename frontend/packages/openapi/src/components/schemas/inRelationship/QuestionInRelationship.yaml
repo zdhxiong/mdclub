@@ -3,12 +3,16 @@ properties:
   question_id:
     type: integer
     description: 提问ID
+    example: 1
   title:
     type: string
     description: 提问标题
+    example: 请问作者开发了哪些软件？
   create_time:
     type: integer
     description: 发布时间
+    example: 1563512214
   update_time:
     type: integer
     description: 更新时间
+    example: 1563512214

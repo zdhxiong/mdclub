@@ -9,3 +9,6 @@ schema:
   maxItems: 100
 style: form
 explode: false
+example:
+  - question:12
+  - comment:34

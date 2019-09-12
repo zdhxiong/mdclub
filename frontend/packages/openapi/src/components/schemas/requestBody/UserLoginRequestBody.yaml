@@ -6,15 +6,20 @@ properties:
   name:
     type: string
     description: 用户名或邮箱
+    example: zdhxiong
   password:
     type: string
     description: 经过 hash1 加密后的密码
+    example: 7c4a8d09ca3762af61e59520943dc26494f8941b
   device:
     type: string
     description: 设备信息
+    example: Xiaomi6
   captcha_token:
     type: string
     description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+    example: 73687e77c8314821a8a301d96c776f01
   captcha_code:
     type: string
     description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+    example: f8h4d

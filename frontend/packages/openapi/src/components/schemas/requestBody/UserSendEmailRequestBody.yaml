@@ -5,9 +5,12 @@ properties:
   email:
     type: string
     description: 邮箱
+    example: zdhxiong@gmail.com
   captcha_token:
     type: string
     description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+    example: 73687e77c8314821a8a301d96c776f01
   captcha_code:
     type: string
     description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+    example: f8h4d

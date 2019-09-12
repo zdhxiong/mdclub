@@ -1,6 +1,7 @@
 get:
   operationId: get
   summary: 获取指定文章信息
+  description: 获取指定文章信息
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   responses:

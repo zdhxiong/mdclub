@@ -3,12 +3,15 @@ properties:
   email:
     type: string
     description: 邮箱地址，多个地址间用“,”分隔，最多支持100个
+    example: zdhxiong@gmail.com,example@example.com
   subject:
     type: string
     description: 邮件标题
+    example: 这是一封测试邮件
   content:
     type: string
     description: 邮件内容
+    example: 如果你收到了这封邮件，说明你的邮件服务器已配置成功
 required:
   - email
   - subject

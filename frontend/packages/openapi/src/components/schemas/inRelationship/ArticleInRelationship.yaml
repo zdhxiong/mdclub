@@ -3,12 +3,16 @@ properties:
   article_id:
     type: integer
     description: 文章ID
+    example: 1
   title:
     type: string
     description: 文章标题
+    example: 欢迎使用 MDClub 开源社区系统
   create_time:
     type: integer
     description: 发布时间
+    example: 1563512214
   update_time:
     type: integer
     description: 更新时间
+    example: 1563512214

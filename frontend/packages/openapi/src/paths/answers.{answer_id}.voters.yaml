@@ -20,6 +20,7 @@ get:
 post:
   operationId: addVote
   summary: 为回答投票
+  description: 为回答投票
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
   requestBody:
@@ -35,6 +36,7 @@ post:
 delete:
   operationId: deleteVote
   summary: 取消为回答的投票
+  description: 取消为回答的投票
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
   responses:

@@ -3,3 +3,4 @@ in: query
 description: 用户名
 schema:
   type: string
+example: zdhxiong

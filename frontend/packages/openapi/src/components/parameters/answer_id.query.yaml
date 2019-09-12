@@ -4,3 +4,4 @@ description: 回答ID
 schema:
   type: integer
   minimum: 1
+example: 1

@@ -3,6 +3,8 @@ Answer:
   $ref: ./Answer.yaml
 Article:
   $ref: ./Article.yaml
+CodeSuccess:
+  $ref: ./CodeSuccess.yaml
 Comment:
   $ref: ./Comment.yaml
 Email:
@@ -13,6 +15,8 @@ FollowerCount:
   $ref: ./FollowerCount.yaml
 Image:
   $ref: ./Image.yaml
+ImageUrls:
+  $ref: ./ImageUrls.yaml
 Option:
   $ref: ./Option.yaml
 Pagination:

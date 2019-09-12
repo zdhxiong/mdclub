@@ -3,3 +3,4 @@ in: query
 description: 邮箱
 schema:
   type: string
+example: zdhxiong@gmail.com

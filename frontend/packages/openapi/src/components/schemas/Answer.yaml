@@ -3,33 +3,47 @@ properties:
   answer_id:
     type: integer
     description: 回答ID
+    example: 1
   question_id:
     type: integer
     description: 提问ID
+    example: 1
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   content_markdown:
     type: string
     description: markdown 格式的内容
+    example: |
+      **mdui** [https://mdui.org](https://mdui.org)
+      mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。
+      **MDClub** [https://mdclub.org](https://mdclub.org)
+      MDClub 是使用 mdui 作为前端框架的开源社区应用。
   content_rendered:
     type: string
     description: html 格式的内容
+    example: <p><strong>mdui</strong> <a href="https://mdui.org" target="_blank">https://mdui.org</a> <br>mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。</p><p><strong>MDClub</strong> <a href="https://mdclub.org" target="_blank">https://mdclub.org</a> <br>MDClub 是使用 mdui 作为前端框架的开源社区应用。</p>
   comment_count:
     type: integer
     description: 评论数量
+    example: 23
   vote_count:
     type: integer
     description: 投票数（赞成票 - 反对票，可能为负数）
+    example: 44
   create_time:
     type: integer
     description: 创建时间
+    example: 1563512214
   update_time:
     type: integer
     description: 🔐更新时间
+    example: 1563512214
   delete_time:
     type: integer
     description: 🔐删除时间
+    example: 0
   relationships:
     $ref: '#/components/schemas/AnswerRelationship'
 required:
@@ -41,16 +55,3 @@ required:
   - comment_count
   - vote_count
   - create_time
-example:
-  answer_id: 124
-  question_id: 11
-  user_id: 45332
-  content_markdown: |
-    #标题
-    ##二级标题
-  content_rendered: <h1>标题</h1><h2>二级标题</h2>
-  comment_count: 23
-  vote_count: 44
-  create_time: 1563512214
-  update_time: 1563512214
-  delete_time: 0

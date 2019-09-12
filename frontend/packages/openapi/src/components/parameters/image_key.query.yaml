@@ -3,3 +3,4 @@ in: query
 description: 图片key
 schema:
   type: string
+example: 4c018974e3cf4e1d8c174d82adba0c43.jpg

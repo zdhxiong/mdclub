@@ -3,26 +3,33 @@ properties:
   topic_id:
     type: integer
     description: 话题ID
+    example: 1
   name:
     type: string
     description: 话题名称
+    example: MDClub
   cover:
     $ref: '#/components/schemas/TopicCover'
   description:
     type: string
     description: 话题描述
+    example: 一个漂亮强大的开源社区系统
   article_count:
     type: integer
     description: 文章数量
+    example: 12
   question_count:
     type: integer
     description: 提问数量
+    example: 16
   follower_count:
     type: integer
     description: 关注者数量
+    example: 42
   delete_time:
     type: integer
     description: 🔐删除时间
+    example: 0
   relationships:
     $ref: '#/components/schemas/TopicRelationship'
 required:

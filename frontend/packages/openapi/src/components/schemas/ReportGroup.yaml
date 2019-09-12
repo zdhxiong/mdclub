@@ -4,6 +4,7 @@ properties:
   reportable_id:
     type: integer
     description: 举报目标的ID
+    example: 1
   reportable_type:
     type: string
     description: 举报目标类型
@@ -13,9 +14,11 @@ properties:
       - article
       - comment
       - user
+    example: question
   reporter_count:
     type: integer
     description: 指定对象的被举报数量
+    example: 12
   relationships:
     $ref: '#/components/schemas/ReportGroupRelationship'
 required:

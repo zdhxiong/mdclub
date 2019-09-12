@@ -3,15 +3,19 @@ properties:
   o:
     type: string
     description: 头像原图地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
   s:
     type: string
     description: 小头像地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
   m:
     type: string
     description: 中头像地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
   l:
     type: string
     description: 大头像地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
 required:
   - o
   - s

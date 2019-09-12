@@ -3,21 +3,27 @@ properties:
   token:
     type: string
     description: Token 字符串
+    example: 13180944453b7d052125486eefabedf9
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   device:
     type: string
     description: 设备信息
+    example: Xiaomi6
   create_time:
     type: integer
     description: 创建时间
+    example: 1563512214
   update_time:
     type: integer
     description: 更新时间
+    example: 1563512214
   expire_time:
     type: integer
     description: 过期时间
+    example: 2063512214
 required:
   - token
   - user_id

@@ -3,15 +3,19 @@ properties:
   answer_id:
     type: integer
     description: 回答ID
+    example: 1
   content_summary:
     type: string
     description: 内容摘要
+    example: mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。
   create_time:
     type: integer
     description: 发布时间
+    example: 1563512214
   update_time:
     type: integer
     description: 更新时间
+    example: 1563512214
 required:
   - answer_id
   - content_summary

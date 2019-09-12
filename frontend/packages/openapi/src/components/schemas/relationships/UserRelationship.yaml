@@ -3,9 +3,12 @@ properties:
   is_me:
     type: boolean
     description: 该用户是否是当前登录用户
+    example: false
   is_following:
     type: boolean
     description: 当前登录用户是否已关注该用户
+    example: true
   is_followed:
     type: boolean
     description: 该用户是否已关注当前登录用户
+    example: true

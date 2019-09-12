@@ -5,8 +5,10 @@ items:
     topic_id:
       type: integer
       description: 话题 ID
+      example: 1
     name:
       type: string
       description: 话题名称
+      example: MDClub
     cover:
       $ref: '#/components/schemas/TopicCover'

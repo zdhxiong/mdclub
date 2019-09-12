@@ -3,15 +3,19 @@ properties:
   o:
     type: string
     description: 封面原图地址
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
   s:
     type: string
     description: 小型封面地址
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
   m:
     type: string
     description: 中型封面地址
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
   l:
     type: string
     description: 大型封面地址
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
 required:
   - o
   - s

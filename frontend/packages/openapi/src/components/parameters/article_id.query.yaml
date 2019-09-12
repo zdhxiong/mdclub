@@ -4,3 +4,4 @@ description: 文章ID
 schema:
   type: integer
   minimum: 1
+example: 1

@@ -19,6 +19,7 @@ get:
 post:
   operationId: addFollow
   summary: 添加关注
+  description: 添加关注
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   responses:
@@ -32,6 +33,7 @@ post:
 delete:
   operationId: deleteFollow
   summary: 取消关注
+  description: 取消关注
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   responses:

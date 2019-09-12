@@ -4,3 +4,4 @@ description: 话题ID
 schema:
   type: integer
   minimum: 1
+example: 1

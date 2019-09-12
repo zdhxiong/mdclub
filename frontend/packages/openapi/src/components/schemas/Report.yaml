@@ -4,9 +4,11 @@ properties:
   report_id:
     type: integer
     description: 举报ID
+    example: 1
   reportable_id:
     type: integer
     description: 举报目标的ID
+    example: 1
   reportable_type:
     type: string
     description: 举报目标类型
@@ -16,15 +18,19 @@ properties:
       - article
       - comment
       - user
+    example: question
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   reason:
     type: string
     description: 举报理由
+    example: 恶意打广告
   create_time:
     type: string
     description: 举报时间
+    example: 1563512214
   relationships:
     $ref: '#/components/schemas/ReportRelationship'
 required:

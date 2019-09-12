@@ -10,3 +10,4 @@ schema:
     - article
     - comment
     - user
+example: question

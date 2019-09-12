@@ -10,3 +10,7 @@ schema:
   maxItems: 100
 style: form
 explode: false
+example:
+  - 1
+  - 2
+  - 3

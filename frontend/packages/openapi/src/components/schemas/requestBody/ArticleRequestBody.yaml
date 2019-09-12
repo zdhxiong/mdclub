@@ -3,12 +3,19 @@ properties:
   title:
     type: string
     description: 标题
+    example: 欢迎使用 MDClub 开源社区系统
   topic_id:
-    type: string
+    type: integer
     description: 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+    example: 1
   content_markdown:
     type: string
     description: Markdown 格式的正文
+    example: |
+      MDClub 是一个开源社区系统，使用 [mdui](https://mdui.org) 作为前端框架。
+
+      系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。
   content_rendered:
     type: string
     description: HTML 格式的正文
+    example: <p>MDClub 是一个开源社区系统，使用 <a href="https://mdui.org" target="_blank">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>

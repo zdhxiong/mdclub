@@ -4,3 +4,4 @@ description: 评论ID
 schema:
   type: integer
   minimum: 1
+example: 1

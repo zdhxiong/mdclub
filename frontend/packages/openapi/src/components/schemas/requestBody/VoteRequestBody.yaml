@@ -8,3 +8,4 @@ properties:
       - up
       - down
     description: 投票类型
+    example: up

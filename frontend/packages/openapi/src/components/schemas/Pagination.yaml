@@ -3,21 +3,27 @@ properties:
   page:
     type: integer
     description: 当前页码
+    example: 1
   per_page:
     type: integer
     description: 每页条数
+    example: 15
   previous:
     type: integer
     description: 上一页页码，为 `null` 表示没有上一页
+    example: null
   next:
     type: integer
     description: 下一页页码，为 `null` 表示没有下一页
+    example: 2
   total:
     type: integer
     description: 数据总数
+    example: 124
   pages:
     type: integer
     description: 总页数
+    example: 9
 required:
   - page
   - per_page

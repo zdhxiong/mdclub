@@ -1,7 +1,8 @@
 type: object
-required:
-  - content
 properties:
   content:
     type: string
     description: 评论内容
+    example: mdui 是我见过的 Web 框架里对规范实现最好的一版了
+required:
+  - content

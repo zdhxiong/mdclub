@@ -7,3 +7,6 @@ schema:
     type: string
 style: form
 explode: false
+example:
+  - user
+  - question

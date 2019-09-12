@@ -3,12 +3,15 @@ properties:
   user_id:
     type: integer
     description: 用户 ID
+    example: 1
   username:
     type: string
     description: 用户名
+    example: zdhxiong
   email:
     type: string
     description: 🔐邮箱
+    example: zdhxiong@gmail.com
   avatar:
     $ref: '#/components/schemas/UserAvatar'
   cover:
@@ -16,72 +19,95 @@ properties:
   create_ip:
     type: string
     description: 🔐注册 IP
+    example: 210.23.121.44
   create_location:
     type: string
     description: 🔐注册地
+    example: 中国 浙江 杭州
   last_login_time:
     type: integer
     description: 🔐最后登陆时间
+    example: 1563512214
   last_login_ip:
     type: string
     description: 🔐最后登陆 IP
+    example: 210.23.121.44
   last_login_location:
     type: string
     description: 🔐最后登录地
+    example: 中国 浙江 杭州
   follower_count:
     type: integer
     description: 关注者数量
+    example: 112
   followee_count:
     type: integer
     description: 关注的用户数量
+    example: 8
   following_article_count:
     type: integer
     description: 关注的文章数量
+    example: 12
   following_question_count:
     type: integer
     description: 关注的提问数量
+    example: 14
   following_topic_count:
     type: integer
     description: 关注的话题数量
+    example: 4
   article_count:
     type: integer
     description: 发表的文章数量
+    example: 6
   question_count:
     type: integer
     description: 发表的提问数量
+    example: 11
   answer_count:
     type: integer
     description: 发表的提问回答数量
+    example: 28
   notification_unread:
     type: integer
     description: 🔐未读消息数量
+    example: 4
   inbox_unread:
     type: integer
     description: 🔐未读私信数量
+    example: 2
   headline:
     type: string
     description: 一句话介绍自己
+    example: mdui 作者
   bio:
     type: string
     description: 个人简介
+    example: 独立全栈开发者
   blog:
     type: string
     description: 个人主页链接
+    example: https://mdui.org
   company:
     type: string
     description: 所属企业
+    example: 无
   location:
     type: string
     description: 所在地区
+    example: 杭州
   create_time:
     type: integer
     description: 注册时间
+    example: 1563512214
   update_time:
     type: integer
     description: 🔐更新时间
+    example: 1563512214
   disable_time:
     type: integer
     description: 🔐禁用时间
+    example: 0
   relationships:
     $ref: '#/components/schemas/UserRelationship'
 required:

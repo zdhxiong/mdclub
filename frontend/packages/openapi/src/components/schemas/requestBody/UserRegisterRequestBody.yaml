@@ -8,15 +8,20 @@ properties:
   email:
     type: string
     description: 邮箱
+    example: zdhxiong@gmail.com
   email_code:
     type: string
     description: 邮箱验证码
+    example: 874028
   username:
     type: string
     description: 用户名
+    example: zdhxiong
   password:
     type: string
     description: hash1 加密后的密码
+    example: 7c4a8d09ca3762af61e59520943dc26494f8941b
   device:
     type: string
     description: 设备信息
+    example: Xiaomi6

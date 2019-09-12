@@ -1,7 +1,7 @@
 type: object
 properties:
   code:
-    type: integer
+    $ref: '#/components/schemas/CodeSuccess'
   data:
     $ref: '#/components/schemas/Question'
 required:

@@ -4,5 +4,6 @@ properties:
   vote_count:
     type: integer
     description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
+    example: 8
 required:
   - vote_count

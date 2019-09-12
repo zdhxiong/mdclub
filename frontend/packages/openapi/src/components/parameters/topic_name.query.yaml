@@ -3,3 +3,4 @@ in: query
 description: 话题名称
 schema:
   type: string
+example: MDClub

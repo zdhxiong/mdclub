@@ -3,9 +3,11 @@ properties:
   comment_id:
     type: integer
     description: 评论ID
+    example: 1
   commentable_id:
     type: integer
     description: 评论目标的ID
+    example: 1
   commentable_type:
     type: string
     description: 评论目标类型
@@ -13,24 +15,31 @@ properties:
       - article
       - question
       - answer
+    example: question
   user_id:
     type: integer
     description: 用户ID
+    example: 1
   content:
     type: string
     description: 评论内容
+    example: mdui 是我见过的 Web 框架里对规范实现最好的一版了
   vote_count:
     type: integer
     description: 投票数（赞成票 - 反对票，可能为负数）
+    example: 8
   create_time:
     type: integer
     description: 发表时间
+    example: 1563512214
   update_time:
     type: integer
     description: 修改时间
+    example: 1563512214
   delete_time:
     type: integer
     description: 🔐删除时间
+    example: 0
   relationships:
     $ref: '#/components/schemas/CommentRelationship'
 required:

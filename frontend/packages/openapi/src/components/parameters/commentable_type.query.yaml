@@ -7,3 +7,4 @@ schema:
     - article
     - question
     - answer
+example: article
