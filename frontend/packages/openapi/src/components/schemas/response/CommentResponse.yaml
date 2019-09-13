@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Comment'
 required:
   - code
+  - data

@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/FollowerCount'
 required:
   - code
+  - data

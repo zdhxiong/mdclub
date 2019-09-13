@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Option'
 required:
   - code
+  - data

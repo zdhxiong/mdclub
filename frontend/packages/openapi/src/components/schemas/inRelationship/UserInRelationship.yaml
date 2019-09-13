@@ -15,3 +15,8 @@ properties:
     example: mdui作者
   avatar:
     $ref: '#/components/schemas/UserAvatar'
+required:
+  - user_id
+  - username
+  - headline
+  - avatar

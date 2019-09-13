@@ -14,5 +14,5 @@ properties:
     enum:
       - up
       - down
-      -
+      - ''
     example: up

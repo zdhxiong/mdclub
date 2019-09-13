@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/VoteCount'
 required:
   - code
+  - data

@@ -19,3 +19,8 @@ properties:
     description: 更新时间
     minimum: 1
     example: 1563512214
+required:
+  - question_id
+  - title
+  - create_time
+  - update_time

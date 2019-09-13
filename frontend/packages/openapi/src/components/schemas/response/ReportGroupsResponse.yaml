@@ -10,3 +10,5 @@ properties:
     $ref: '#/components/schemas/Pagination'
 required:
   - code
+  - data
+  - pagination

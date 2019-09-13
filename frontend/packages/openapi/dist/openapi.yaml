@@ -2599,6 +2599,19 @@ components:
         - vote_count
         - create_time
         - update_time
+    Captcha:
+      type: object
+      properties:
+        captcha_token:
+          type: string
+          description: 图形验证码token
+        captcha_image:
+          type: string
+          format: byte
+          description: base64格式的图形验证码图片
+      required:
+        - captcha_token
+        - captcha_image
     CodeSuccess:
       type: integer
       description: 无任务错误时，状态码为 0
@@ -2787,168 +2800,175 @@ components:
       type: object
       properties:
         answer_can_delete:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             回答作者是否可删除回答。
 
 
-            为 `0` 时，不允许删除；
+            为 `false` 时，不允许删除；
 
-            为 `1` 时，在满足 `answer_can_delete_before` 和
+            为 `true` 时，在满足 `answer_can_delete_before` 和
             `answer_can_delete_only_no_comment` 的条件时可删除。
+          example: false
         answer_can_delete_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `1`
+            在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `true`
             时该参数才有效。
+          example: 0
         answer_can_delete_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `1` 时该参数才有效。
+            是否仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `true` 时该参数才有效。
+          example: false
         answer_can_edit:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             回答作者是否可编辑回答。
 
 
-            为 `0` 时，不允许编辑；
+            为 `false` 时，不允许编辑；
 
-            为 `1` 时，在满足 `answer_can_edit_before` 和
+            为 `true` 时，在满足 `answer_can_edit_before` 和
             `answer_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
         answer_can_edit_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `1`
+            在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `true`
             时该参数才有效。
+          example: 0
         answer_can_edit_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `1` 时该参数才有效。
+            是否仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `true` 时该参数才有效。
+          example: false
         article_can_delete:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             文章作者是否可删除文章。
 
 
-            为 `0` 时，不允许删除；
+            为 `false` 时，不允许删除；
 
-            为 `1` 时，在满足 `article_can_delete_before` 和
+            为 `true` 时，在满足 `article_can_delete_before` 和
             `article_can_delete_only_no_comment` 的条件时可删除。
+          example: false
         article_can_delete_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `1`
+            在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `true`
             时该参数才有效。
+          example: 0
         article_can_delete_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `1` 时该参数才有效。
+            仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `true` 时该参数才有效。
+          example: false
         article_can_edit:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             文章作者是否可编辑文章。
 
 
-            为 `0` 时，不允许编辑；
+            为 `false` 时，不允许编辑；
 
-            为 `1` 时，在满足 `article_can_edit_before` 和
+            为 `true` 时，在满足 `article_can_edit_before` 和
             `article_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
         article_can_edit_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `1`
+            在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `true`
             时该参数才有效。
+          example: 0
         article_can_edit_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `1` 时该参数才有效。
+            仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `true` 时该参数才有效。
+          example: false
         cache_memcached_host:
           type: string
           description: "\U0001F510Memcached 服务器地址"
+          example: 134.56.2.11
         cache_memcached_password:
           type: string
           description: "\U0001F510Memcached 密码"
+          example: gfdcg3234
         cache_memcached_port:
-          type: string
+          type: integer
+          minimum: 1
+          maximum: 65535
           description: "\U0001F510Memcached 端口号"
+          example: 12
         cache_memcached_username:
           type: string
           description: "\U0001F510Memcached 用户名"
+          example: username
         cache_prefix:
           type: string
           description: "\U0001F510缓存键名前缀（只能包含字符 -+.A-Za-z0-9）"
+          example: mc_
         cache_redis_host:
           type: string
           description: "\U0001F510Redis 服务器地址"
+          example: 123.33.5.11
         cache_redis_password:
           type: string
           description: "\U0001F510Redis 密码"
+          example: gdf234
         cache_redis_port:
-          type: string
+          type: integer
+          minimum: 1
+          maximum: 65535
           description: "\U0001F510Redis 端口号"
+          example: 11
         cache_redis_username:
           type: string
           description: "\U0001F510Redis 用户名"
+          example: username
         cache_type:
           type: string
           enum:
+            - pdo
             - redis
             - memcached
           description: "\U0001F510缓存类型"
+          example: redis
         comment_can_delete:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
             评论作者是否可删除评论。
 
-            为 `0` 时，不允许删除；
-            为 `1` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+            为 `false` 时，不允许删除；
+            为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+          example: false
         comment_can_delete_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `1`
+            在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `true`
             时该参数才有效。
+          example: 0
         comment_can_edit:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
             评论作者是否可编辑评论。
 
-            为 `0` 时，不允许编辑；
-            为 `1` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+            为 `false` 时，不允许编辑；
+            为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+          example: false
         comment_can_edit_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `1`
+            在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `true`
             时该参数才有效。
+          example: 0
         language:
           type: string
           enum:
@@ -2958,159 +2978,182 @@ components:
             - zh-CN
             - zh-TW
           description: 系统语言
+          example: zh-CN
         question_can_delete:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             提问作者是否可删除提问。
 
 
-            为 `0` 时，不允许删除；
+            为 `false` 时，不允许删除；
 
-            为 `1` 时，在满足
+            为 `true` 时，在满足
             `question_can_delete_before`、`question_can_delete_only_no_answer` 和
             `question_can_delete_only_no_comment` 的条件时可删除。
+          example: false
         question_can_delete_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `1`
+            在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `true`
             时该参数才有效。
+          example: 0
         question_can_delete_only_no_answer:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
+            仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+          example: false
         question_can_delete_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `1` 时该参数才有效。
+            仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+          example: false
         question_can_edit:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: >
             提问作者是否可编辑提问。
 
 
-            为 `0` 时，不允许编辑；
+            为 `false` 时，不允许编辑；
 
-            为 `1` 时，在满足
+            为 `true` 时，在满足
             `question_can_edit_before`、`question_can_edit_only_no_answer` 和
             `question_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
         question_can_edit_before:
-          type: string
+          type: integer
+          minimum: 0
           description: >
-            在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `1`
+            在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `true`
             时该参数才有效。
+          example: 0
         question_can_edit_only_no_answer:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
+            仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+          example: false
         question_can_edit_only_no_comment:
-          type: string
-          enum:
-            - 0
-            - 1
+          type: boolean
           description: |
-            仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `1` 时该参数才有效。
+            仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+          example: false
         site_description:
           type: string
           description: 站点简介
+          example: 最好的开源社区系统
         site_gongan_beian:
           type: string
           description: 站点公安备案号
+          example: 浙公网安备 653673547653475346号
         site_icp_beian:
           type: string
           description: 站点 ICP 备案号
+          example: 浙ICP备65465464号-1
         site_keywords:
           type: string
           description: 站点关键词
+          example: 'Material Design,community'
         site_name:
           type: string
           description: 站点名称
+          example: MDClub
         site_static_url:
           type: string
           description: "\U0001F510静态资源 URL 地址"
+          example: 'https://mdclub.org/static'
         smtp_host:
           type: string
           description: "\U0001F510SMTP 服务器地址"
+          example: 144.33.6.12
         smtp_password:
           type: string
           description: "\U0001F510SMTP 密码"
+          example: fsadf443
         smtp_port:
           type: integer
+          minimum: 1
+          maximum: 65535
           description: "\U0001F510SMTP 端口"
+          example: 465
         smtp_reply_to:
           type: string
           description: "\U0001F510SMTP 回信地址"
+          example: example@example.com
         smtp_secure:
           type: string
+          enum:
+            - ssl
+            - tls
+            - ''
+          default: ''
           description: "\U0001F510SMTP 加密方式"
+          example: ssl
         smtp_username:
           type: string
           description: "\U0001F510SMTP 账户"
+          example: noreply@mail.example.com
         storage_aliyun_access_id:
           type: string
           description: "\U0001F510阿里云 AccessKey ID"
+          example: fdgdfgdsfg34534
         storage_aliyun_access_secret:
           type: string
           description: "\U0001F510阿里云 Access Key Secret"
+          example: tgfdgfsdg435g
         storage_aliyun_bucket:
           type: string
           description: "\U0001F510阿里云 OSS 的 Bucket 名称"
+          example: mdclub
         storage_aliyun_endpoint:
           type: string
           description: "\U0001F510阿里云 OSS 的 EndPoint"
+          example: oss-cn-hangzhou.aliyuncs.com
         storage_ftp_host:
           type: string
           description: "\U0001F510FTP 服务器地址"
+          example: 122.33.1.76
         storage_ftp_passive:
-          type: integer
-          enum:
-            - 1
-            - 0
-          description: "\U0001F510是否使用被动传输模式。1（被动模式）；0（主动模式）"
+          type: boolean
+          description: "\U0001F510是否使用被动传输模式。true（被动模式）；false（主动模式）"
+          example: true
         storage_ftp_password:
           type: string
           description: "\U0001F510FTP 密码"
+          example: fdsgdf67
         storage_ftp_port:
           type: integer
+          minimum: 1
+          maximum: 65535
           description: "\U0001F510FTP 端口号"
+          example: 21
         storage_ftp_root:
           type: string
           description: "\U0001F510FTP 存储目录"
+          example: /mdclub
         storage_ftp_ssl:
-          type: integer
-          enum:
-            - 1
-            - 0
-          description: "\U0001F510FTP 是否启用 SSL。1（启用）；0（不启用）"
+          type: boolean
+          description: "\U0001F510FTP 是否启用 SSL。true（启用）；false（不启用）"
+          example: true
         storage_ftp_username:
           type: string
           description: "\U0001F510FTP 用户名"
+          example: username
         storage_local_dir:
           type: string
           description: "\U0001F510本地文件存储目录"
+          example: /mdclub/storage
         storage_qiniu_access_id:
           type: string
           description: "\U0001F510七牛云 AccessKey"
+          example: gfdgdfg345345
         storage_qiniu_access_secret:
           type: string
           description: "\U0001F510七牛云 SecretKey"
+          example: gffhgfdhdfghdgf456645
         storage_qiniu_bucket:
           type: string
           description: "\U0001F510七牛云 Bucket"
+          example: mdclub
         storage_qiniu_zone:
           type: string
           enum:
@@ -3120,21 +3163,29 @@ components:
             - na0
             - as0
           description: "\U0001F510FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）"
+          example: z0
         storage_sftp_host:
           type: string
           description: "\U0001F510SFTP 服务器地址"
+          example: 122.33.4.12
         storage_sftp_password:
           type: string
           description: "\U0001F510SFTP 密码"
+          example: 43fdfg
         storage_sftp_port:
           type: integer
+          minimum: 1
+          maximum: 65535
           description: "\U0001F510SFTP 端口号"
+          example: 22
         storage_sftp_root:
           type: string
           description: "\U0001F510SFTP 存储目录"
+          example: /mdclub/storage
         storage_sftp_username:
           type: string
           description: "\U0001F510SFTP 用户名"
+          example: username
         storage_type:
           type: string
           enum:
@@ -3145,21 +3196,27 @@ components:
             - upyun
             - qiniu
           description: "\U0001F510存储类型"
+          example: aliyun
         storage_upyun_bucket:
           type: string
           description: "\U0001F510又拍云 Bucket"
+          example: mdclub
         storage_upyun_operator:
           type: string
           description: "\U0001F510又拍云操作员账号"
+          example: username
         storage_upyun_password:
           type: string
           description: "\U0001F510又拍云操作员密码"
+          example: gfdg434
         storage_url:
           type: string
           description: "\U0001F510本地文件访问链接"
+          example: 'https://mdclub.org/static'
         theme:
           type: string
           description: "\U0001F510主题名称"
+          example: material
       required:
         - answer_can_delete
         - answer_can_delete_before
@@ -3209,11 +3266,13 @@ components:
           type: integer
           description: 上一页页码，为 `null` 表示没有上一页
           minimum: 1
+          nullable: true
           example: null
         next:
           type: integer
           description: 下一页页码，为 `null` 表示没有下一页
           minimum: 2
+          nullable: true
           example: 2
         total:
           type: integer
@@ -3947,8 +4006,6 @@ components:
           example: 杭州
     UserSendEmailRequestBody:
       type: object
-      required:
-        - email
       properties:
         email:
           type: string
@@ -3963,10 +4020,10 @@ components:
           type: string
           description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
           example: f8h4d
+      required:
+        - email
     VoteRequestBody:
       type: object
-      required:
-        - type
       properties:
         type:
           type: string
@@ -3975,6 +4032,8 @@ components:
             - down
           description: 投票类型
           example: up
+      required:
+        - type
     AnswerResponse:
       type: object
       properties:
@@ -3984,6 +4043,7 @@ components:
           $ref: '#/components/schemas/Answer'
       required:
         - code
+        - data
     AnswersResponse:
       type: object
       properties:
@@ -3997,6 +4057,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     ArticleResponse:
       type: object
       properties:
@@ -4006,6 +4068,7 @@ components:
           $ref: '#/components/schemas/Article'
       required:
         - code
+        - data
     ArticlesResponse:
       type: object
       properties:
@@ -4019,23 +4082,18 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     CaptchaResponse:
       type: object
       properties:
         code:
           $ref: '#/components/schemas/CodeSuccess'
         data:
-          type: object
-          properties:
-            captcha_token:
-              type: string
-              description: 图形验证码token
-            captcha_image:
-              type: string
-              format: byte
-              description: base64格式的图形验证码图片
+          $ref: '#/components/schemas/Captcha'
       required:
         - code
+        - data
     CommentResponse:
       type: object
       properties:
@@ -4045,6 +4103,7 @@ components:
           $ref: '#/components/schemas/Comment'
       required:
         - code
+        - data
     CommentsResponse:
       type: object
       properties:
@@ -4058,6 +4117,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     EmailResponse:
       type: object
       properties:
@@ -4067,6 +4128,7 @@ components:
           $ref: '#/components/schemas/Email'
       required:
         - code
+        - data
     EmptyResponse:
       type: object
       properties:
@@ -4076,6 +4138,7 @@ components:
           type: object
       required:
         - code
+        - data
     ErrorResponse:
       type: object
       properties:
@@ -4103,6 +4166,7 @@ components:
             $ref: '#/components/schemas/ErrorField'
       required:
         - code
+        - message
     FollowerCountResponse:
       type: object
       properties:
@@ -4112,6 +4176,7 @@ components:
           $ref: '#/components/schemas/FollowerCount'
       required:
         - code
+        - data
     ImageResponse:
       type: object
       properties:
@@ -4121,6 +4186,7 @@ components:
           $ref: '#/components/schemas/Image'
       required:
         - code
+        - data
     ImagesResponse:
       type: object
       properties:
@@ -4134,6 +4200,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     OptionResponse:
       type: object
       properties:
@@ -4143,6 +4211,7 @@ components:
           $ref: '#/components/schemas/Option'
       required:
         - code
+        - data
     QuestionResponse:
       type: object
       properties:
@@ -4152,6 +4221,7 @@ components:
           $ref: '#/components/schemas/Question'
       required:
         - code
+        - data
     QuestionsResponse:
       type: object
       properties:
@@ -4165,6 +4235,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     ReportGroupsResponse:
       type: object
       properties:
@@ -4178,6 +4250,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     ReportResponse:
       type: object
       properties:
@@ -4187,6 +4261,7 @@ components:
           $ref: '#/components/schemas/Report'
       required:
         - code
+        - data
     ReportsResponse:
       type: object
       properties:
@@ -4200,6 +4275,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     TokenResponse:
       type: object
       properties:
@@ -4209,6 +4286,7 @@ components:
           $ref: '#/components/schemas/Token'
       required:
         - code
+        - data
     TopicResponse:
       type: object
       properties:
@@ -4218,6 +4296,7 @@ components:
           $ref: '#/components/schemas/Topic'
       required:
         - code
+        - data
     TopicsResponse:
       type: object
       properties:
@@ -4231,6 +4310,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     UserAvatarResponse:
       type: object
       properties:
@@ -4240,6 +4321,7 @@ components:
           $ref: '#/components/schemas/UserAvatar'
       required:
         - code
+        - data
     UserCoverResponse:
       type: object
       properties:
@@ -4249,6 +4331,7 @@ components:
           $ref: '#/components/schemas/UserCover'
       required:
         - code
+        - data
     UserResponse:
       type: object
       properties:
@@ -4258,6 +4341,7 @@ components:
           $ref: '#/components/schemas/User'
       required:
         - code
+        - data
     UsersResponse:
       type: object
       properties:
@@ -4271,6 +4355,8 @@ components:
           $ref: '#/components/schemas/Pagination'
       required:
         - code
+        - data
+        - pagination
     VoteCountResponse:
       type: object
       properties:
@@ -4280,6 +4366,7 @@ components:
           $ref: '#/components/schemas/VoteCount'
       required:
         - code
+        - data
     AnswerRelationship:
       type: object
       properties:
@@ -4293,7 +4380,7 @@ components:
           enum:
             - up
             - down
-            - null
+            - ''
           example: up
     ArticleRelationship:
       type: object
@@ -4312,7 +4399,7 @@ components:
           enum:
             - up
             - down
-            - null
+            - ''
           example: up
     CommentRelationship:
       type: object
@@ -4325,7 +4412,7 @@ components:
           enum:
             - up
             - down
-            - null
+            - ''
           example: up
     ImageRelationship:
       type: object
@@ -4355,7 +4442,7 @@ components:
           enum:
             - up
             - down
-            - null
+            - ''
           example: up
     ReportGroupRelationship:
       type: object
@@ -4456,6 +4543,11 @@ components:
           description: 更新时间
           minimum: 1
           example: 1563512214
+      required:
+        - article_id
+        - title
+        - create_time
+        - update_time
     CommentInRelationship:
       type: object
       properties:
@@ -4478,6 +4570,11 @@ components:
           description: 更新时间
           minimum: 1
           example: 1563512214
+      required:
+        - comment_id
+        - content_summary
+        - create_time
+        - update_time
     QuestionInRelationship:
       type: object
       properties:
@@ -4500,22 +4597,33 @@ components:
           description: 更新时间
           minimum: 1
           example: 1563512214
+      required:
+        - question_id
+        - title
+        - create_time
+        - update_time
+    TopicInRelationship:
+      type: object
+      properties:
+        topic_id:
+          type: integer
+          description: 话题 ID
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          description: 话题名称
+          example: MDClub
+        cover:
+          $ref: '#/components/schemas/TopicCover'
+      required:
+        - topic_id
+        - name
+        - cover
     TopicsInRelationship:
       type: array
       items:
-        type: object
-        properties:
-          topic_id:
-            type: integer
-            description: 话题 ID
-            minimum: 1
-            example: 1
-          name:
-            type: string
-            description: 话题名称
-            example: MDClub
-          cover:
-            $ref: '#/components/schemas/TopicCover'
+        $ref: '#/components/schemas/TopicInRelationship'
     UserInRelationship:
       type: object
       properties:
@@ -4534,6 +4642,11 @@ components:
           example: mdui作者
         avatar:
           $ref: '#/components/schemas/UserAvatar'
+      required:
+        - user_id
+        - username
+        - headline
+        - avatar
   responses:
     Answer:
       description: 回答详情
@@ -4830,14 +4943,11 @@ components:
     force:
       name: force
       in: query
-      description: "\U0001F510 若该参数为 1，则直接删除，不放入回收站。"
+      description: "\U0001F510 若该参数为 true，则直接删除，不放入回收站。"
       schema:
-        type: string
-        enum:
-          - 0
-          - 1
-        default: 0
-      example: 0
+        type: boolean
+        default: false
+      example: false
     image_key.path:
       name: key
       in: path

@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Article'
 required:
   - code
+  - data

@@ -19,3 +19,8 @@ properties:
     description: 更新时间
     minimum: 1
     example: 1563512214
+required:
+  - comment_id
+  - content_summary
+  - create_time
+  - update_time

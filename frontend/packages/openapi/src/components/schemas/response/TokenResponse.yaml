@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Token'
 required:
   - code
+  - data

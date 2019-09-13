@@ -3,14 +3,7 @@ properties:
   code:
     $ref: '#/components/schemas/CodeSuccess'
   data:
-    type: object
-    properties:
-      captcha_token:
-        type: string
-        description: 图形验证码token
-      captcha_image:
-        type: string
-        format: byte
-        description: base64格式的图形验证码图片
+    $ref: '#/components/schemas/Captcha'
 required:
   - code
+  - data

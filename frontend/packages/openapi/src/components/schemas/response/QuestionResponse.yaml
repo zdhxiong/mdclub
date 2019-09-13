@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Question'
 required:
   - code
+  - data

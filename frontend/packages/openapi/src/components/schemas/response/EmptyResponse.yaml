@@ -6,3 +6,4 @@ properties:
     type: object
 required:
   - code
+  - data

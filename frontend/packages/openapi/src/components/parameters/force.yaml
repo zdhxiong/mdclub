@@ -1,10 +1,7 @@
 name: force
 in: query
-description: 🔐 若该参数为 1，则直接删除，不放入回收站。
+description: 🔐 若该参数为 true，则直接删除，不放入回收站。
 schema:
-  type: string
-  enum:
-    - 0
-    - 1
-  default: 0
-example: 0
+  type: boolean
+  default: false
+example: false

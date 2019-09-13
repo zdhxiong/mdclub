@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Report'
 required:
   - code
+  - data

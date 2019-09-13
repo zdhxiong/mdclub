@@ -1,6 +1,4 @@
 type: object
-required:
-  - type
 properties:
   type:
     type: string
@@ -9,3 +7,5 @@ properties:
       - down
     description: 投票类型
     example: up
+required:
+  - type

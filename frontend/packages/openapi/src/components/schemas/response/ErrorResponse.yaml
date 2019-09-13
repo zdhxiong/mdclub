@@ -24,3 +24,4 @@ properties:
       $ref: '#/components/schemas/ErrorField'
 required:
   - code
+  - message

@@ -15,11 +15,13 @@ properties:
     type: integer
     description: 上一页页码，为 `null` 表示没有上一页
     minimum: 1
+    nullable: true
     example: null
   next:
     type: integer
     description: 下一页页码，为 `null` 表示没有下一页
     minimum: 2
+    nullable: true
     example: 2
   total:
     type: integer

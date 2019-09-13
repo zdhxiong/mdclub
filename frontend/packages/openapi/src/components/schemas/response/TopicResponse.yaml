@@ -6,3 +6,4 @@ properties:
     $ref: '#/components/schemas/Topic'
 required:
   - code
+  - data

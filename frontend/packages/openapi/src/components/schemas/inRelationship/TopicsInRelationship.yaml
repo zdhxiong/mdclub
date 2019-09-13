@@ -1,15 +1,3 @@
 type: array
 items:
-  type: object
-  properties:
-    topic_id:
-      type: integer
-      description: 话题 ID
-      minimum: 1
-      example: 1
-    name:
-      type: string
-      description: 话题名称
-      example: MDClub
-    cover:
-      $ref: '#/components/schemas/TopicCover'
+  $ref: '#/components/schemas/TopicInRelationship'

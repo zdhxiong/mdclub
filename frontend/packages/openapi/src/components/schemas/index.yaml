@@ -3,6 +3,8 @@ Answer:
   $ref: ./Answer.yaml
 Article:
   $ref: ./Article.yaml
+Captcha:
+  $ref: ./Captcha.yaml
 CodeSuccess:
   $ref: ./CodeSuccess.yaml
 Comment:
@@ -161,6 +163,8 @@ CommentInRelationship:
   $ref: ./inRelationship/CommentInRelationship.yaml
 QuestionInRelationship:
   $ref: ./inRelationship/QuestionInRelationship.yaml
+TopicInRelationship:
+  $ref: ./inRelationship/TopicInRelationship.yaml
 TopicsInRelationship:
   $ref: ./inRelationship/TopicsInRelationship.yaml
 UserInRelationship:
