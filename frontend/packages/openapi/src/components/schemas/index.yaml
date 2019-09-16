@@ -46,132 +46,132 @@ VoteCount:
 
 # 请求体模型
 AnswerRequestBody:
-  $ref: ./requestBody/AnswerRequestBody.yaml
+  $ref: ./requestBody/Answer.yaml
 ArticleCreateRequestBody:
-  $ref: ./requestBody/ArticleCreateRequestBody.yaml
+  $ref: ./requestBody/ArticleCreate.yaml
 ArticleUpdateRequestBody:
-  $ref: ./requestBody/ArticleUpdateRequestBody.yaml
+  $ref: ./requestBody/ArticleUpdate.yaml
 CommentRequestBody:
-  $ref: ./requestBody/CommentRequestBody.yaml
+  $ref: ./requestBody/Comment.yaml
 ImageUpdateRequestBody:
-  $ref: ./requestBody/ImageUpdateRequestBody.yaml
+  $ref: ./requestBody/ImageUpdate.yaml
 ImageUploadRequestBody:
-  $ref: ./requestBody/ImageUploadRequestBody.yaml
+  $ref: ./requestBody/ImageUpload.yaml
 QuestionCreateRequestBody:
-  $ref: ./requestBody/QuestionCreateRequestBody.yaml
+  $ref: ./requestBody/QuestionCreate.yaml
 QuestionUpdateRequestBody:
-  $ref: ./requestBody/QuestionUpdateRequestBody.yaml
+  $ref: ./requestBody/QuestionUpdate.yaml
 ReportRequestBody:
-  $ref: ./requestBody/ReportRequestBody.yaml
+  $ref: ./requestBody/Report.yaml
 TopicCreateRequestBody:
-  $ref: ./requestBody/TopicCreateRequestBody.yaml
+  $ref: ./requestBody/TopicCreate.yaml
 TopicUpdateRequestBody:
-  $ref: ./requestBody/TopicUpdateRequestBody.yaml
+  $ref: ./requestBody/TopicUpdate.yaml
 UserAvatarRequestBody:
-  $ref: ./requestBody/UserAvatarRequestBody.yaml
+  $ref: ./requestBody/UserAvatar.yaml
 UserCoverRequestBody:
-  $ref: ./requestBody/UserCoverRequestBody.yaml
+  $ref: ./requestBody/UserCover.yaml
 UserLoginRequestBody:
-  $ref: ./requestBody/UserLoginRequestBody.yaml
+  $ref: ./requestBody/UserLogin.yaml
 UserPasswordResetRequestBody:
-  $ref: ./requestBody/UserPasswordResetRequestBody.yaml
+  $ref: ./requestBody/UserPasswordReset.yaml
 UserRegisterRequestBody:
-  $ref: ./requestBody/UserRegisterRequestBody.yaml
+  $ref: ./requestBody/UserRegister.yaml
 UserRequestBody:
-  $ref: ./requestBody/UserRequestBody.yaml
+  $ref: ./requestBody/User.yaml
 UserSendEmailRequestBody:
-  $ref: ./requestBody/UserSendEmailRequestBody.yaml
+  $ref: ./requestBody/UserSendEmail.yaml
 VoteRequestBody:
-  $ref: ./requestBody/VoteRequestBody.yaml
+  $ref: ./requestBody/Vote.yaml
 
 # 响应体模型
 AnswerResponse:
-  $ref: ./response/AnswerResponse.yaml
+  $ref: ./response/Answer.yaml
 AnswersResponse:
-  $ref: ./response/AnswersResponse.yaml
+  $ref: ./response/Answers.yaml
 ArticleResponse:
-  $ref: ./response/ArticleResponse.yaml
+  $ref: ./response/Article.yaml
 ArticlesResponse:
-  $ref: ./response/ArticlesResponse.yaml
+  $ref: ./response/Articles.yaml
 CaptchaResponse:
-  $ref: ./response/CaptchaResponse.yaml
+  $ref: ./response/Captcha.yaml
 CommentResponse:
-  $ref: ./response/CommentResponse.yaml
+  $ref: ./response/Comment.yaml
 CommentsResponse:
-  $ref: ./response/CommentsResponse.yaml
+  $ref: ./response/Comments.yaml
 EmailResponse:
-  $ref: ./response/EmailResponse.yaml
+  $ref: ./response/Email.yaml
 EmptyResponse:
-  $ref: ./response/EmptyResponse.yaml
+  $ref: ./response/Empty.yaml
 ErrorResponse:
-  $ref: ./response/ErrorResponse.yaml
+  $ref: ./response/Error.yaml
 FollowerCountResponse:
-  $ref: ./response/FollowerCountResponse.yaml
+  $ref: ./response/FollowerCount.yaml
 ImageResponse:
-  $ref: ./response/ImageResponse.yaml
+  $ref: ./response/Image.yaml
 ImagesResponse:
-  $ref: ./response/ImagesResponse.yaml
+  $ref: ./response/Images.yaml
 OptionResponse:
-  $ref: ./response/OptionResponse.yaml
+  $ref: ./response/Option.yaml
 QuestionResponse:
-  $ref: ./response/QuestionResponse.yaml
+  $ref: ./response/Question.yaml
 QuestionsResponse:
-  $ref: ./response/QuestionsResponse.yaml
+  $ref: ./response/Questions.yaml
 ReportGroupsResponse:
-  $ref: ./response/ReportGroupsResponse.yaml
+  $ref: ./response/ReportGroups.yaml
 ReportResponse:
-  $ref: ./response/ReportResponse.yaml
+  $ref: ./response/Report.yaml
 ReportsResponse:
-  $ref: ./response/ReportsResponse.yaml
+  $ref: ./response/Reports.yaml
 TokenResponse:
-  $ref: ./response/TokenResponse.yaml
+  $ref: ./response/Token.yaml
 TopicResponse:
-  $ref: ./response/TopicResponse.yaml
+  $ref: ./response/Topic.yaml
 TopicsResponse:
-  $ref: ./response/TopicsResponse.yaml
+  $ref: ./response/Topics.yaml
 UserAvatarResponse:
-  $ref: ./response/UserAvatarResponse.yaml
+  $ref: ./response/UserAvatar.yaml
 UserCoverResponse:
-  $ref: ./response/UserCoverResponse.yaml
+  $ref: ./response/UserCover.yaml
 UserResponse:
-  $ref: ./response/UserResponse.yaml
+  $ref: ./response/User.yaml
 UsersResponse:
-  $ref: ./response/UsersResponse.yaml
+  $ref: ./response/Users.yaml
 VoteCountResponse:
-  $ref: ./response/VoteCountResponse.yaml
+  $ref: ./response/VoteCount.yaml
 
 # 对象中的关联信息模型
 AnswerRelationship:
-  $ref: ./relationships/AnswerRelationship.yaml
+  $ref: ./relationships/Answer.yaml
 ArticleRelationship:
-  $ref: ./relationships/ArticleRelationship.yaml
+  $ref: ./relationships/Article.yaml
 CommentRelationship:
-  $ref: ./relationships/CommentRelationship.yaml
+  $ref: ./relationships/Comment.yaml
 ImageRelationship:
-  $ref: ./relationships/ImageRelationship.yaml
+  $ref: ./relationships/Image.yaml
 QuestionRelationship:
-  $ref: ./relationships/QuestionRelationship.yaml
+  $ref: ./relationships/Question.yaml
 ReportGroupRelationship:
-  $ref: ./relationships/ReportGroupRelationship.yaml
+  $ref: ./relationships/ReportGroup.yaml
 ReportRelationship:
-  $ref: ./relationships/ReportRelationship.yaml
+  $ref: ./relationships/Report.yaml
 TopicRelationship:
-  $ref: ./relationships/TopicRelationship.yaml
+  $ref: ./relationships/Topic.yaml
 UserRelationship:
-  $ref: ./relationships/UserRelationship.yaml
+  $ref: ./relationships/User.yaml
 
 # 关联信息中的数据模型
 AnswerInRelationship:
-  $ref: ./inRelationship/AnswerInRelationship.yaml
+  $ref: ./inRelationship/Answer.yaml
 ArticleInRelationship:
-  $ref: ./inRelationship/ArticleInRelationship.yaml
+  $ref: ./inRelationship/Article.yaml
 CommentInRelationship:
-  $ref: ./inRelationship/CommentInRelationship.yaml
+  $ref: ./inRelationship/Comment.yaml
 QuestionInRelationship:
-  $ref: ./inRelationship/QuestionInRelationship.yaml
+  $ref: ./inRelationship/Question.yaml
 TopicInRelationship:
-  $ref: ./inRelationship/TopicInRelationship.yaml
+  $ref: ./inRelationship/Topic.yaml
 TopicsInRelationship:
-  $ref: ./inRelationship/TopicsInRelationship.yaml
+  $ref: ./inRelationship/Topics.yaml
 UserInRelationship:
-  $ref: ./inRelationship/UserInRelationship.yaml
+  $ref: ./inRelationship/User.yaml
