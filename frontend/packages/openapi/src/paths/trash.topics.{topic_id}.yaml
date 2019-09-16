@@ -3,11 +3,9 @@ post:
   summary: 🔐恢复指定话题
   description: |
     仅管理员可调用该接口。
-
-    `include` 参数取值包括：`is_following`
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.topic'
   responses:
     '200':
       $ref: '#/components/responses/Topic'

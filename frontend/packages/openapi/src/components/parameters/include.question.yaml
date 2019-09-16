@@ -1,0 +1,17 @@
+name: include
+in: query
+description: 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - user
+      - topics
+      - is_following
+      - voting
+style: form
+explode: false
+example:
+  - user
+  - is_following

@@ -3,14 +3,12 @@ get:
   summary: 🔐获取被举报内容的举报详情
   description: |
     仅管理员可调用该接口
-
-    `include` 参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`
   parameters:
     - $ref: '#/components/parameters/reportable_type.path'
     - $ref: '#/components/parameters/reportable_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.reportReason'
   responses:
     '200':
       $ref: '#/components/responses/Reports'
@@ -23,11 +21,11 @@ post:
   operationId: create
   summary: 添加举报
   description: |
-    `include` 参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`
+    添加举报
   parameters:
     - $ref: '#/components/parameters/reportable_type.path'
     - $ref: '#/components/parameters/reportable_id.path'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.reportReason'
   requestBody:
     $ref: '#/components/requestBodies/Report'
   responses:

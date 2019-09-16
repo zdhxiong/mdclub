@@ -1,0 +1,13 @@
+name: include
+in: query
+description: 包含的关联数据，用“,”分隔。可以为 `is_following`
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - is_following
+style: form
+explode: false
+example:
+  - is_following

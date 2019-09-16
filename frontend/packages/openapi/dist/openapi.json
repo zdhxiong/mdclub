@@ -48,7 +48,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取回答列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "获取回答列表\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -60,7 +60,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           },
           {
             "$ref": "#/components/parameters/answer_id.query"
@@ -110,7 +110,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定回答的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
@@ -125,7 +125,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -143,13 +143,13 @@
       "post": {
         "operationId": "createComment",
         "summary": "在指定回答下发表评论",
-        "description": "`include` 参数取值包括：`user`、`voting`\n",
+        "description": "在指定回答下发表评论\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "requestBody": {
@@ -172,7 +172,7 @@
       "get": {
         "operationId": "getVoters",
         "summary": "获取回答的投票者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取回答的投票者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
@@ -184,7 +184,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/vote_type.query"
@@ -252,13 +252,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取回答详情",
-        "description": "`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "获取回答详情\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "responses": {
@@ -276,13 +276,13 @@
       "patch": {
         "operationId": "update",
         "summary": "修改回答信息",
-        "description": "管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。\n\n`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。\n\n`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "requestBody": {
@@ -326,7 +326,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取文章列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -338,7 +338,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           },
           {
             "$ref": "#/components/parameters/article_id.query"
@@ -365,10 +365,10 @@
       "post": {
         "operationId": "create",
         "summary": "发表文章",
-        "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "requestBody": {
@@ -412,7 +412,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定文章的评论列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -427,7 +427,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -445,13 +445,13 @@
       "post": {
         "operationId": "createComment",
         "summary": "在指定文章下发表评论",
-        "description": "`include` 参数取值包括：`user`、`voting`\n",
+        "description": "在指定文章下发表评论\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "requestBody": {
@@ -474,7 +474,7 @@
       "get": {
         "operationId": "getFollowers",
         "summary": "获取指定文章的关注者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取指定文章的关注者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -486,7 +486,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -548,7 +548,7 @@
       "get": {
         "operationId": "getVoters",
         "summary": "获取文章的投票者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取文章的投票者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -560,7 +560,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/vote_type.query"
@@ -714,7 +714,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取所有评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -726,7 +726,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           },
           {
             "$ref": "#/components/parameters/comment_id.query"
@@ -782,7 +782,7 @@
       "get": {
         "operationId": "getVoters",
         "summary": "获取评论的投票者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取评论的投票者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
@@ -794,7 +794,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/vote_type.query"
@@ -862,13 +862,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取评论详情",
-        "description": "`include` 参数取值包括：`user`、`voting`\n",
+        "description": "获取评论详情\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -886,13 +886,13 @@
       "patch": {
         "operationId": "update",
         "summary": "修改评论",
-        "description": "管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "requestBody": {
@@ -960,7 +960,7 @@
       "get": {
         "operationId": "getList",
         "summary": "🔐获取图片列表",
-        "description": "仅管理员可调用该接口\n\n`include` 参数取值包括：`user`、`question`、`article`、`answer`\n",
+        "description": "仅管理员可调用该接口\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -969,7 +969,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.image"
           },
           {
             "$ref": "#/components/parameters/image_key.query"
@@ -999,10 +999,10 @@
       "post": {
         "operationId": "upload",
         "summary": "上传图片",
-        "description": "`include` 参数取值包括：`user`、`question`、`article`、`answer`\n",
+        "description": "上传图片\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.image"
           }
         ],
         "requestBody": {
@@ -1046,13 +1046,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取指定图片信息",
-        "description": "`include` 参数取值包括：`user`、`question`、`article`、`answer`\n",
+        "description": "获取指定图片信息\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/image_key.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.image"
           }
         ],
         "responses": {
@@ -1070,13 +1070,13 @@
       "patch": {
         "operationId": "update",
         "summary": "🔐更新指定图片信息",
-        "description": "仅管理员可调用该接口\n\n`include` 参数取值包括：`user`、`question`、`article`、`answer`\n",
+        "description": "仅管理员可调用该接口\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/image_key.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.image"
           }
         ],
         "requestBody": {
@@ -1157,7 +1157,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取提问列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -1169,7 +1169,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           },
           {
             "$ref": "#/components/parameters/question_id.query"
@@ -1238,7 +1238,7 @@
       "get": {
         "operationId": "getAnswers",
         "summary": "获取指定提问下的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1253,7 +1253,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "responses": {
@@ -1271,13 +1271,13 @@
       "post": {
         "operationId": "createAnswer",
         "summary": "在指定提问下发表回答",
-        "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "requestBody": {
@@ -1300,7 +1300,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定提问的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1315,7 +1315,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -1333,13 +1333,13 @@
       "post": {
         "operationId": "createComment",
         "summary": "在指定提问下发表评论",
-        "description": "`include` 参数取值包括：`user`、`voting`\n",
+        "description": "在指定提问下发表评论\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "requestBody": {
@@ -1362,7 +1362,7 @@
       "get": {
         "operationId": "getFollowers",
         "summary": "获取指定提问的关注者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取指定提问的关注者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1374,7 +1374,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -1436,7 +1436,7 @@
       "get": {
         "operationId": "getVoters",
         "summary": "获取提问的投票者",
-        "description": "`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "获取提问的投票者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1448,7 +1448,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/vote_type.query"
@@ -1516,13 +1516,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取指定提问信息",
-        "description": "`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "获取指定提问信息\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -1587,7 +1587,7 @@
       "get": {
         "operationId": "getList",
         "summary": "🔐获取被举报的内容列表",
-        "description": "仅管理员可调用该接口\n\n`include` 参数取值包括：`question`、`answer`、`article`、`comment`、`user`\n",
+        "description": "仅管理员可调用该接口\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -1596,7 +1596,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.report"
           },
           {
             "$ref": "#/components/parameters/reportable_type.query"
@@ -1640,7 +1640,7 @@
       "get": {
         "operationId": "getReasons",
         "summary": "🔐获取被举报内容的举报详情",
-        "description": "仅管理员可调用该接口\n\n`include` 参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`\n",
+        "description": "仅管理员可调用该接口\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/reportable_type.path"
@@ -1655,7 +1655,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.reportReason"
           }
         ],
         "responses": {
@@ -1673,7 +1673,7 @@
       "post": {
         "operationId": "create",
         "summary": "添加举报",
-        "description": "`include` 参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`\n",
+        "description": "添加举报\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/reportable_type.path"
@@ -1682,7 +1682,7 @@
             "$ref": "#/components/parameters/reportable_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.reportReason"
           }
         ],
         "requestBody": {
@@ -1750,7 +1750,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取全部话题",
-        "description": "可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`\n\n`include` 参数取值包括：`is_following`\n",
+        "description": "可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -1759,7 +1759,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           },
           {
             "$ref": "#/components/parameters/order"
@@ -1831,7 +1831,7 @@
       "get": {
         "operationId": "getArticles",
         "summary": "获取指定话题下的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1846,7 +1846,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -1866,7 +1866,7 @@
       "get": {
         "operationId": "getFollowers",
         "summary": "获取指定话题的关注者",
-        "description": "不含已禁用的用户\n\n`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "不含已禁用的用户\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1878,7 +1878,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -1940,7 +1940,7 @@
       "get": {
         "operationId": "getQuestions",
         "summary": "获取指定话题下的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1955,7 +1955,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -1975,13 +1975,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取指定话题信息",
-        "description": "`include` 参数取值包括：`is_following`\n",
+        "description": "获取指定话题信息\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "responses": {
@@ -1999,13 +1999,13 @@
       "post": {
         "operationId": "update",
         "summary": "🔐更新话题信息",
-        "description": "**仅管理员可调用该接口**\n\n因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求\n\n`include` 参数取值包括：`is_following`\n",
+        "description": "**仅管理员可调用该接口**\n\n因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "requestBody": {
@@ -2300,7 +2300,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的评论列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2312,7 +2312,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           },
           {
             "$ref": "#/components/parameters/comment_id.query"
@@ -2386,13 +2386,13 @@
       "post": {
         "operationId": "restore",
         "summary": "🔐恢复指定评论",
-        "description": "仅管理员可调用该接口。\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/comment_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -2557,7 +2557,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的话题列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`\n\n`include` 参数取值包括：`is_following`\n",
+        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2575,7 +2575,7 @@
             "$ref": "#/components/parameters/topic_name.query"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "responses": {
@@ -2637,13 +2637,13 @@
       "post": {
         "operationId": "restore",
         "summary": "🔐恢复指定话题",
-        "description": "仅管理员可调用该接口。\n\n`include` 参数取值包括：`is_following`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "responses": {
@@ -2684,7 +2684,7 @@
       "get": {
         "operationId": "getDisabled",
         "summary": "🔐获取已禁用用户列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`\n\n`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2693,7 +2693,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/order"
@@ -2769,7 +2769,7 @@
       "get": {
         "operationId": "getMyAnswers",
         "summary": "获取当前登录用户发表的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2781,7 +2781,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "responses": {
@@ -2801,7 +2801,7 @@
       "get": {
         "operationId": "getMyArticles",
         "summary": "获取当前登录用户发表的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2813,7 +2813,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -2870,7 +2870,7 @@
       "get": {
         "operationId": "getMyComments",
         "summary": "获取当前登录用户发表的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2882,7 +2882,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -2939,7 +2939,7 @@
       "get": {
         "operationId": "getMyFollowees",
         "summary": "获取当前登录用户关注的用户",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "获取当前登录用户关注的用户\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2948,7 +2948,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -2968,7 +2968,7 @@
       "get": {
         "operationId": "getMyFollowers",
         "summary": "获取当前登录用户的关注者",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "获取当前登录用户的关注者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2977,7 +2977,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -2997,7 +2997,7 @@
       "get": {
         "operationId": "getMyFollowingArticles",
         "summary": "获取登录用户关注的文章",
-        "description": "`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "获取登录用户关注的文章\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3006,7 +3006,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -3026,7 +3026,7 @@
       "get": {
         "operationId": "getMyFollowingQuestions",
         "summary": "获取登录用户关注的提问",
-        "description": "`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "获取登录用户关注的提问\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3035,7 +3035,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -3055,7 +3055,7 @@
       "get": {
         "operationId": "getMyFollowingTopics",
         "summary": "获取登录用户关注的话题",
-        "description": "`include` 参数取值包括：`is_following`\n",
+        "description": "获取登录用户关注的话题\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3064,7 +3064,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "responses": {
@@ -3126,7 +3126,7 @@
       "get": {
         "operationId": "getMyQuestions",
         "summary": "获取登录用户发表的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3138,7 +3138,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -3179,10 +3179,10 @@
       "get": {
         "operationId": "getMine",
         "summary": "获取当前登录用户的信息",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "获取当前登录用户的信息\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -3200,10 +3200,10 @@
       "patch": {
         "operationId": "updateMine",
         "summary": "更新当前登录用户信息",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "更新当前登录用户信息\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "requestBody": {
@@ -3226,7 +3226,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取用户列表",
-        "description": "不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。\n\n可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`\n\n`include` 参数取值包括：`is_followed`、`is_following`、`is_me`\n",
+        "description": "不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。\n\n可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3238,7 +3238,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           },
           {
             "$ref": "#/components/parameters/user_id.query"
@@ -3307,7 +3307,7 @@
       "get": {
         "operationId": "getAnswers",
         "summary": "获取指定用户发表的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`, `question`, `voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3322,7 +3322,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.answer"
           }
         ],
         "responses": {
@@ -3342,7 +3342,7 @@
       "get": {
         "operationId": "getArticles",
         "summary": "获取指定用户发表的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3357,7 +3357,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -3400,7 +3400,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定用户发表的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n\n`include` 参数取值包括：`user`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3415,7 +3415,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.comment"
           }
         ],
         "responses": {
@@ -3458,7 +3458,7 @@
       "get": {
         "operationId": "getFollowees",
         "summary": "获取指定用户关注的用户列表",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "获取指定用户关注的用户列表\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3470,7 +3470,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -3490,7 +3490,7 @@
       "get": {
         "operationId": "getFollowers",
         "summary": "获取指定用户的关注者",
-        "description": "`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "获取指定用户的关注者\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3502,7 +3502,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -3564,7 +3564,7 @@
       "get": {
         "operationId": "getFollowingArticles",
         "summary": "获取指定用户关注的文章列表",
-        "description": "`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "获取指定用户关注的文章列表\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3576,7 +3576,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -3596,7 +3596,7 @@
       "get": {
         "operationId": "getFollowingQuestions",
         "summary": "获取指定用户关注的提问列表",
-        "description": "`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "获取指定用户关注的提问列表\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3608,7 +3608,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -3628,7 +3628,7 @@
       "get": {
         "operationId": "getFollowingTopics",
         "summary": "获取指定用户关注的话题列表",
-        "description": "`include` 参数取值包括：`is_following`\n",
+        "description": "获取指定用户关注的话题列表\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3640,7 +3640,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.topic"
           }
         ],
         "responses": {
@@ -3660,7 +3660,7 @@
       "get": {
         "operationId": "getQuestions",
         "summary": "获取指定用户发表的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n\n`include` 参数取值包括：`user`、`topics`、`is_following`、`voting`\n",
+        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3675,7 +3675,7 @@
             "$ref": "#/components/parameters/order"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "responses": {
@@ -3695,13 +3695,13 @@
       "get": {
         "operationId": "get",
         "summary": "获取指定用户信息",
-        "description": "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）\n\n`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -3719,13 +3719,13 @@
       "patch": {
         "operationId": "update",
         "summary": "🔐更新指定用户信息",
-        "description": "仅管理员可调用该接口\n\n`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n",
+        "description": "仅管理员可调用该接口\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
           },
           {
-            "$ref": "#/components/parameters/include"
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "requestBody": {
@@ -7026,14 +7026,19 @@
         },
         "example": "question"
       },
-      "include": {
+      "include.answer": {
         "name": "include",
         "in": "query",
-        "description": "包含的关联数据，用“,”分隔。",
+        "description": "包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`",
         "schema": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "user",
+              "question",
+              "voting"
+            ]
           }
         },
         "style": "form",
@@ -7041,6 +7046,187 @@
         "example": [
           "user",
           "question"
+        ]
+      },
+      "include.article": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "user",
+              "topics",
+              "is_following",
+              "voting"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "user",
+          "voting"
+        ]
+      },
+      "include.comment": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `user`, `voting`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "user",
+              "voting"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "user",
+          "voting"
+        ]
+      },
+      "include.image": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "user",
+              "question",
+              "article",
+              "answer"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "user",
+          "question"
+        ]
+      },
+      "include.question": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "user",
+              "topics",
+              "is_following",
+              "voting"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "user",
+          "is_following"
+        ]
+      },
+      "include.report": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`, `user`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "question",
+              "answer",
+              "article",
+              "comment",
+              "user"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "question",
+          "article"
+        ]
+      },
+      "include.reportReason": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "reporter",
+              "question",
+              "answer",
+              "article",
+              "comment",
+              "user"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "reporter",
+          "question",
+          "article"
+        ]
+      },
+      "include.topic": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `is_following`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "is_following"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "is_following"
+        ]
+      },
+      "include.user": {
+        "name": "include",
+        "in": "query",
+        "description": "包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "is_followed",
+              "is_following",
+              "is_me"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "is_followed",
+          "is_me"
         ]
       },
       "order": {

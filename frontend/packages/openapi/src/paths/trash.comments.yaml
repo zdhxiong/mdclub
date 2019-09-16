@@ -5,13 +5,11 @@ get:
     仅管理员可调用该接口。
 
     可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`
-
-    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.comment'
     - $ref: '#/components/parameters/comment_id.query'
     - $ref: '#/components/parameters/commentable_id.query'
     - $ref: '#/components/parameters/commentable_type.query'

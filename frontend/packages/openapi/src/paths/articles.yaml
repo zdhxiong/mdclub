@@ -3,13 +3,11 @@ get:
   summary: 获取文章列表
   description: |
     可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-    `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.article'
     - $ref: '#/components/parameters/article_id.query'
     - $ref: '#/components/parameters/user_id.query'
     - $ref: '#/components/parameters/topic_id.query'
@@ -27,10 +25,8 @@ post:
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
-
-    `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
   parameters:
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.article'
   requestBody:
     $ref: '#/components/requestBodies/ArticleCreate'
   responses:

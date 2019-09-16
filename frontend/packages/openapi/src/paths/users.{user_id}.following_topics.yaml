@@ -2,12 +2,12 @@ get:
   operationId: getFollowingTopics
   summary: 获取指定用户关注的话题列表
   description: |
-    `include` 参数取值包括：`is_following`
+    获取指定用户关注的话题列表
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.topic'
   responses:
     '200':
       $ref: '#/components/responses/Topics'

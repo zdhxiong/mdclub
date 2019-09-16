@@ -2,11 +2,11 @@ get:
   operationId: getMyFollowers
   summary: 获取当前登录用户的关注者
   description: |
-    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+    获取当前登录用户的关注者
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.user'
   responses:
     '200':
       $ref: '#/components/responses/Users'

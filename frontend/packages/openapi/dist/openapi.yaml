@@ -35,14 +35,14 @@ paths:
       operationId: getList
       summary: 获取回答列表
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取回答列表
 
-        `include` 参数取值包括：`user`, `question`, `voting`
+        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
         - $ref: '#/components/parameters/answer_id.query'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
@@ -77,14 +77,12 @@ paths:
       summary: 获取指定回答的评论
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -96,10 +94,10 @@ paths:
       operationId: createComment
       summary: 在指定回答下发表评论
       description: |
-        `include` 参数取值包括：`user`、`voting`
+        在指定回答下发表评论
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       requestBody:
         $ref: '#/components/requestBodies/Comment'
       responses:
@@ -114,12 +112,12 @@ paths:
       operationId: getVoters
       summary: 获取回答的投票者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取回答的投票者
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/vote_type.query'
       responses:
         '200':
@@ -161,10 +159,10 @@ paths:
       operationId: get
       summary: 获取回答详情
       description: |
-        `include` 参数取值包括：`user`, `question`, `voting`
+        获取回答详情
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answer'
@@ -180,11 +178,9 @@ paths:
 
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
-
-        `include` 参数取值包括：`user`, `question`, `voting`
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       requestBody:
         $ref: '#/components/requestBodies/Answer'
       responses:
@@ -218,13 +214,11 @@ paths:
       summary: 获取文章列表
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -241,10 +235,8 @@ paths:
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       requestBody:
         $ref: '#/components/requestBodies/ArticleCreate'
       responses:
@@ -278,14 +270,12 @@ paths:
       summary: 获取指定文章的评论列表
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -297,10 +287,10 @@ paths:
       operationId: createComment
       summary: 在指定文章下发表评论
       description: |
-        `include` 参数取值包括：`user`、`voting`
+        在指定文章下发表评论
       parameters:
         - $ref: '#/components/parameters/article_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       requestBody:
         $ref: '#/components/requestBodies/Comment'
       responses:
@@ -315,12 +305,12 @@ paths:
       operationId: getFollowers
       summary: 获取指定文章的关注者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取指定文章的关注者
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -359,12 +349,12 @@ paths:
       operationId: getVoters
       summary: 获取文章的投票者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取文章的投票者
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/vote_type.query'
       responses:
         '200':
@@ -470,13 +460,11 @@ paths:
       summary: 获取所有评论
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
         - $ref: '#/components/parameters/comment_id.query'
         - $ref: '#/components/parameters/commentable_id.query'
         - $ref: '#/components/parameters/commentable_type.query'
@@ -512,12 +500,12 @@ paths:
       operationId: getVoters
       summary: 获取评论的投票者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取评论的投票者
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/vote_type.query'
       responses:
         '200':
@@ -559,10 +547,10 @@ paths:
       operationId: get
       summary: 获取评论详情
       description: |
-        `include` 参数取值包括：`user`、`voting`
+        获取评论详情
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comment'
@@ -575,11 +563,9 @@ paths:
       summary: 修改评论
       description: |
         管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       requestBody:
         $ref: '#/components/requestBodies/Comment'
       responses:
@@ -628,12 +614,10 @@ paths:
       summary: "\U0001F510获取图片列表"
       description: |
         仅管理员可调用该接口
-
-        `include` 参数取值包括：`user`、`question`、`article`、`answer`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.image'
         - $ref: '#/components/parameters/image_key.query'
         - $ref: '#/components/parameters/image_item_type.query'
         - $ref: '#/components/parameters/image_item_id.query'
@@ -649,9 +633,9 @@ paths:
       operationId: upload
       summary: 上传图片
       description: |
-        `include` 参数取值包括：`user`、`question`、`article`、`answer`
+        上传图片
       parameters:
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.image'
       requestBody:
         $ref: '#/components/requestBodies/ImageUpload'
       responses:
@@ -681,10 +665,10 @@ paths:
       operationId: get
       summary: 获取指定图片信息
       description: |
-        `include` 参数取值包括：`user`、`question`、`article`、`answer`
+        获取指定图片信息
       parameters:
         - $ref: '#/components/parameters/image_key.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.image'
       responses:
         '200':
           $ref: '#/components/responses/Image'
@@ -697,11 +681,9 @@ paths:
       summary: "\U0001F510更新指定图片信息"
       description: |
         仅管理员可调用该接口
-
-        `include` 参数取值包括：`user`、`question`、`article`、`answer`
       parameters:
         - $ref: '#/components/parameters/image_key.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.image'
       requestBody:
         $ref: '#/components/requestBodies/ImageUpdate'
       responses:
@@ -755,13 +737,11 @@ paths:
       summary: 获取提问列表
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -811,14 +791,12 @@ paths:
       summary: 获取指定提问下的回答
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`, `question`, `voting`
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answers'
@@ -832,11 +810,9 @@ paths:
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
-
-        `include` 参数取值包括：`user`, `question`, `voting`
       parameters:
         - $ref: '#/components/parameters/question_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       requestBody:
         $ref: '#/components/requestBodies/Answer'
       responses:
@@ -852,14 +828,12 @@ paths:
       summary: 获取指定提问的评论
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -871,10 +845,10 @@ paths:
       operationId: createComment
       summary: 在指定提问下发表评论
       description: |
-        `include` 参数取值包括：`user`、`voting`
+        在指定提问下发表评论
       parameters:
         - $ref: '#/components/parameters/question_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       requestBody:
         $ref: '#/components/requestBodies/Comment'
       responses:
@@ -889,12 +863,12 @@ paths:
       operationId: getFollowers
       summary: 获取指定提问的关注者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取指定提问的关注者
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -933,12 +907,12 @@ paths:
       operationId: getVoters
       summary: 获取提问的投票者
       description: |
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+        获取提问的投票者
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/vote_type.query'
       responses:
         '200':
@@ -980,10 +954,10 @@ paths:
       operationId: get
       summary: 获取指定提问信息
       description: |
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
+        获取指定提问信息
       parameters:
         - $ref: '#/components/parameters/question_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1034,12 +1008,10 @@ paths:
       summary: "\U0001F510获取被举报的内容列表"
       description: |
         仅管理员可调用该接口
-
-        `include` 参数取值包括：`question`、`answer`、`article`、`comment`、`user`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.report'
         - $ref: '#/components/parameters/reportable_type.query'
       responses:
         '200':
@@ -1067,18 +1039,14 @@ paths:
     get:
       operationId: getReasons
       summary: "\U0001F510获取被举报内容的举报详情"
-      description: >
+      description: |
         仅管理员可调用该接口
-
-
-        `include`
-        参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`
       parameters:
         - $ref: '#/components/parameters/reportable_type.path'
         - $ref: '#/components/parameters/reportable_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.reportReason'
       responses:
         '200':
           $ref: '#/components/responses/Reports'
@@ -1089,13 +1057,12 @@ paths:
     post:
       operationId: create
       summary: 添加举报
-      description: >
-        `include`
-        参数取值包括：`reporter`、`question`、`answer`、`article`、`comment`、`user`
+      description: |
+        添加举报
       parameters:
         - $ref: '#/components/parameters/reportable_type.path'
         - $ref: '#/components/parameters/reportable_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.reportReason'
       requestBody:
         $ref: '#/components/requestBodies/Report'
       responses:
@@ -1143,12 +1110,10 @@ paths:
       summary: 获取全部话题
       description: |
         可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`
-
-        `include` 参数取值包括：`is_following`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
@@ -1196,14 +1161,12 @@ paths:
       summary: 获取指定话题下的文章
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -1217,13 +1180,11 @@ paths:
       summary: 获取指定话题的关注者
       description: |
         不含已禁用的用户
-
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -1263,14 +1224,12 @@ paths:
       summary: 获取指定话题下的提问
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -1283,10 +1242,10 @@ paths:
       operationId: get
       summary: 获取指定话题信息
       description: |
-        `include` 参数取值包括：`is_following`
+        获取指定话题信息
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -1301,11 +1260,9 @@ paths:
         **仅管理员可调用该接口**
 
         因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
-
-        `include` 参数取值包括：`is_following`
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       requestBody:
         $ref: '#/components/requestBodies/TopicUpdate'
       responses:
@@ -1514,13 +1471,11 @@ paths:
         仅管理员可调用该接口。
 
         可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
         - $ref: '#/components/parameters/comment_id.query'
         - $ref: '#/components/parameters/commentable_id.query'
         - $ref: '#/components/parameters/commentable_type.query'
@@ -1570,11 +1525,9 @@ paths:
       summary: "\U0001F510恢复指定评论"
       description: |
         仅管理员可调用该接口。
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comment'
@@ -1691,15 +1644,13 @@ paths:
         仅管理员可调用该接口。
 
         可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`
-
-        `include` 参数取值包括：`is_following`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topics'
@@ -1747,11 +1698,9 @@ paths:
       summary: "\U0001F510恢复指定话题"
       description: |
         仅管理员可调用该接口。
-
-        `include` 参数取值包括：`is_following`
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -1781,12 +1730,10 @@ paths:
         仅管理员可调用该接口。
 
         可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
-
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/order'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/username.query'
@@ -1835,13 +1782,11 @@ paths:
       summary: 获取当前登录用户发表的回答
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`, `question`, `voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answers'
@@ -1855,13 +1800,11 @@ paths:
       summary: 获取当前登录用户发表的文章
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -1900,13 +1843,11 @@ paths:
       summary: 获取当前登录用户发表的评论
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -1944,11 +1885,11 @@ paths:
       operationId: getMyFollowees
       summary: 获取当前登录用户关注的用户
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        获取当前登录用户关注的用户
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -1961,11 +1902,11 @@ paths:
       operationId: getMyFollowers
       summary: 获取当前登录用户的关注者
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        获取当前登录用户的关注者
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -1978,11 +1919,11 @@ paths:
       operationId: getMyFollowingArticles
       summary: 获取登录用户关注的文章
       description: |
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
+        获取登录用户关注的文章
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -1995,11 +1936,11 @@ paths:
       operationId: getMyFollowingQuestions
       summary: 获取登录用户关注的提问
       description: |
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
+        获取登录用户关注的提问
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -2012,11 +1953,11 @@ paths:
       operationId: getMyFollowingTopics
       summary: 获取登录用户关注的话题
       description: |
-        `include` 参数取值包括：`is_following`
+        获取登录用户关注的话题
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topics'
@@ -2060,13 +2001,11 @@ paths:
       summary: 获取登录用户发表的提问
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -2095,9 +2034,9 @@ paths:
       operationId: getMine
       summary: 获取当前登录用户的信息
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        获取当前登录用户的信息
       parameters:
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/User'
@@ -2109,9 +2048,9 @@ paths:
       operationId: updateMine
       summary: 更新当前登录用户信息
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        更新当前登录用户信息
       parameters:
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       requestBody:
         $ref: '#/components/requestBodies/User'
       responses:
@@ -2129,13 +2068,11 @@ paths:
         不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。
 
         可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`
-
-        `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/username.query'
         - $ref: '#/components/parameters/email.query'
@@ -2178,14 +2115,12 @@ paths:
       summary: 获取指定用户发表的回答
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`, `question`, `voting`
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answers'
@@ -2199,14 +2134,12 @@ paths:
       summary: 获取指定用户发表的文章
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -2234,14 +2167,12 @@ paths:
       summary: 获取指定用户发表的评论
       description: |
         可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
-
-        `include` 参数取值包括：`user`、`voting`
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -2268,12 +2199,12 @@ paths:
       operationId: getFollowees
       summary: 获取指定用户关注的用户列表
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        获取指定用户关注的用户列表
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -2286,12 +2217,12 @@ paths:
       operationId: getFollowers
       summary: 获取指定用户的关注者
       description: |
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+        获取指定用户的关注者
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -2330,12 +2261,12 @@ paths:
       operationId: getFollowingArticles
       summary: 获取指定用户关注的文章列表
       description: |
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
+        获取指定用户关注的文章列表
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -2348,12 +2279,12 @@ paths:
       operationId: getFollowingQuestions
       summary: 获取指定用户关注的提问列表
       description: |
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
+        获取指定用户关注的提问列表
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -2366,12 +2297,12 @@ paths:
       operationId: getFollowingTopics
       summary: 获取指定用户关注的话题列表
       description: |
-        `include` 参数取值包括：`is_following`
+        获取指定用户关注的话题列表
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topics'
@@ -2385,14 +2316,12 @@ paths:
       summary: 获取指定用户发表的提问
       description: |
         可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
-
-        `include` 参数取值包括：`user`、`topics`、`is_following`、`voting`
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -2404,10 +2333,10 @@ paths:
     get:
       operationId: get
       summary: 获取指定用户信息
-      description: "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 \U0001F510 标明）\n\n`include` 参数取值包括：`is_me`、`is_following`、`is_followed`\n"
+      description: "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 \U0001F510 标明）\n"
       parameters:
         - $ref: '#/components/parameters/user_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/User'
@@ -2420,11 +2349,9 @@ paths:
       summary: "\U0001F510更新指定用户信息"
       description: |
         仅管理员可调用该接口
-
-        `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
       parameters:
         - $ref: '#/components/parameters/user_id.path'
-        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/include.user'
       requestBody:
         $ref: '#/components/requestBodies/User'
       responses:
@@ -5027,19 +4954,166 @@ components:
           - answer
           - article
       example: question
-    include:
+    include.answer:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。'
+      description: '包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`'
       schema:
         type: array
         items:
           type: string
+          enum:
+            - user
+            - question
+            - voting
       style: form
       explode: false
       example:
         - user
         - question
+    include.article:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - topics
+            - is_following
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - voting
+    include.comment:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `user`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - voting
+    include.image:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - question
+            - article
+            - answer
+      style: form
+      explode: false
+      example:
+        - user
+        - question
+    include.question:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - topics
+            - is_following
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - is_following
+    include.report:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`, `user`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - question
+            - answer
+            - article
+            - comment
+            - user
+      style: form
+      explode: false
+      example:
+        - question
+        - article
+    include.reportReason:
+      name: include
+      in: query
+      description: >-
+        包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`,
+        `comment`, `user`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - reporter
+            - question
+            - answer
+            - article
+            - comment
+            - user
+      style: form
+      explode: false
+      example:
+        - reporter
+        - question
+        - article
+    include.topic:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `is_following`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - is_following
+      style: form
+      explode: false
+      example:
+        - is_following
+    include.user:
+      name: include
+      in: query
+      description: '包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - is_followed
+            - is_following
+            - is_me
+      style: form
+      explode: false
+      example:
+        - is_followed
+        - is_me
     order:
       name: order
       in: query

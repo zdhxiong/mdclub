@@ -2,12 +2,12 @@ get:
   operationId: getFollowees
   summary: 获取指定用户关注的用户列表
   description: |
-    `include` 参数取值包括：`is_me`、`is_following`、`is_followed`
+    获取指定用户关注的用户列表
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.user'
   responses:
     '200':
       $ref: '#/components/responses/Users'

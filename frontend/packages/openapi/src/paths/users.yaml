@@ -5,13 +5,11 @@ get:
     不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。
 
     可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`
-
-    `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.user'
     - $ref: '#/components/parameters/user_id.query'
     - $ref: '#/components/parameters/username.query'
     - $ref: '#/components/parameters/email.query'

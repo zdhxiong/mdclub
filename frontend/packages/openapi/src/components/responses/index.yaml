@@ -1,80 +1,54 @@
 Answer:
   $ref: ./Answer.yaml
-
 Answers:
   $ref: ./Answers.yaml
-
 Article:
   $ref: ./Article.yaml
-
 Articles:
   $ref: ./Articles.yaml
-
 Captcha:
   $ref: ./Captcha.yaml
-
 Comment:
   $ref: ./Comment.yaml
-
 Comments:
   $ref: ./Comments.yaml
-
 Email:
   $ref: ./Email.yaml
-
 Empty:
   $ref: ./Empty.yaml
-
 Error:
   $ref: ./Error.yaml
-
 FollowerCount:
   $ref: ./FollowerCount.yaml
-
 Image:
   $ref: ./Image.yaml
-
 Images:
   $ref: ./Images.yaml
-
 Option:
   $ref: ./Option.yaml
-
 Question:
   $ref: ./Question.yaml
-
 Questions:
   $ref: ./Questions.yaml
-
 Report:
   $ref: ./Report.yaml
-
 ReportGroups:
   $ref: ./ReportGroups.yaml
-
 Reports:
   $ref: ./Reports.yaml
-
 Token:
   $ref: ./Token.yaml
-
 Topic:
   $ref: ./Topic.yaml
-
 Topics:
   $ref: ./Topics.yaml
-
 User:
   $ref: ./User.yaml
-
 UserAvatar:
   $ref: ./UserAvatar.yaml
-
 UserCover:
   $ref: ./UserCover.yaml
-
 Users:
   $ref: ./Users.yaml
-
 VoteCount:
   $ref: ./VoteCount.yaml

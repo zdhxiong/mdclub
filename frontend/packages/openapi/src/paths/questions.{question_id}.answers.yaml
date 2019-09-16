@@ -3,14 +3,12 @@ get:
   summary: 获取指定提问下的回答
   description: |
     可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
-
-    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/question_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.answer'
   responses:
     '200':
       $ref: '#/components/responses/Answers'
@@ -25,11 +23,9 @@ post:
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
-
-    `include` 参数取值包括：`user`, `question`, `voting`
   parameters:
     - $ref: '#/components/parameters/question_id.path'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.answer'
   requestBody:
     $ref: '#/components/requestBodies/Answer'
   responses:

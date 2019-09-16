@@ -2,12 +2,12 @@ get:
   operationId: getVoters
   summary: 获取文章的投票者
   description: |
-    `include` 参数取值包括：`is_followed`、`is_following`、`is_me`
+    获取文章的投票者
   parameters:
     - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.user'
     - $ref: '#/components/parameters/vote_type.query'
   responses:
     '200':

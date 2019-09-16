@@ -2,10 +2,10 @@ get:
   operationId: get
   summary: 获取评论详情
   description: |
-    `include` 参数取值包括：`user`、`voting`
+    获取评论详情
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.comment'
   responses:
     '200':
       $ref: '#/components/responses/Comment'
@@ -19,11 +19,9 @@ patch:
   summary: 修改评论
   description: |
     管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
-
-    `include` 参数取值包括：`user`、`voting`
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
-    - $ref: '#/components/parameters/include'
+    - $ref: '#/components/parameters/include.comment'
   requestBody:
     $ref: '#/components/requestBodies/Comment'
   responses:
