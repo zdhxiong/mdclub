@@ -25,7 +25,7 @@ patch:
   parameters:
     - $ref: '#/components/parameters/question_id.path'
   requestBody:
-    $ref: '#/components/requestBodies/Question'
+    $ref: '#/components/requestBodies/QuestionUpdate'
   responses:
     '200':
       $ref: '#/components/responses/Question'

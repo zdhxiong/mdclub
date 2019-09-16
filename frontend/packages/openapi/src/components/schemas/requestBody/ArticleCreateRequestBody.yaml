@@ -1,0 +1,5 @@
+allOf:
+  - $ref: '#/components/schemas/ArticleUpdateRequestBody'
+required:
+  - title
+  - topic_id

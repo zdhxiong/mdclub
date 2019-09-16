@@ -25,7 +25,7 @@ post:
   summary: 🔐发布话题
   description: 仅管理员可调用该接口
   requestBody:
-    $ref: '#/components/requestBodies/Topic'
+    $ref: '#/components/requestBodies/TopicCreate'
   responses:
     '200':
       $ref: '#/components/responses/Topic'

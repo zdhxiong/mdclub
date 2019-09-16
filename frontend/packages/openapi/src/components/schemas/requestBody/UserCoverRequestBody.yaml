@@ -4,3 +4,5 @@ properties:
     type: string
     format: binary
     description: 用户封面
+required:
+  - cover

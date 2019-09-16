@@ -246,7 +246,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/include'
       requestBody:
-        $ref: '#/components/requestBodies/Article'
+        $ref: '#/components/requestBodies/ArticleCreate'
       responses:
         '200':
           $ref: '#/components/responses/Article'
@@ -426,7 +426,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       requestBody:
-        $ref: '#/components/requestBodies/Article'
+        $ref: '#/components/requestBodies/ArticleUpdate'
       responses:
         '200':
           $ref: '#/components/responses/Article'
@@ -779,7 +779,7 @@ paths:
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
       requestBody:
-        $ref: '#/components/requestBodies/Question'
+        $ref: '#/components/requestBodies/QuestionCreate'
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1002,7 +1002,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       requestBody:
-        $ref: '#/components/requestBodies/Question'
+        $ref: '#/components/requestBodies/QuestionUpdate'
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1164,7 +1164,7 @@ paths:
       summary: "\U0001F510发布话题"
       description: 仅管理员可调用该接口
       requestBody:
-        $ref: '#/components/requestBodies/Topic'
+        $ref: '#/components/requestBodies/TopicCreate'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -1307,7 +1307,7 @@ paths:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/include'
       requestBody:
-        $ref: '#/components/requestBodies/Topic'
+        $ref: '#/components/requestBodies/TopicUpdate'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -3802,7 +3802,13 @@ components:
             框架。</p><p><strong>MDClub</strong> <a href="https://mdclub.org"
             target="_blank">https://mdclub.org</a> <br>MDClub 是使用 mdui
             作为前端框架的开源社区应用。</p>
-    ArticleRequestBody:
+    ArticleCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/ArticleUpdateRequestBody'
+      required:
+        - title
+        - topic_id
+    ArticleUpdateRequestBody:
       type: object
       properties:
         title:
@@ -3843,6 +3849,8 @@ components:
           type: string
           description: 图片文件名
           example: Material Design Logo.png
+      required:
+        - filename
     ImageUploadRequestBody:
       type: object
       properties:
@@ -3850,7 +3858,15 @@ components:
           type: string
           format: binary
           description: 图片
-    QuestionRequestBody:
+      required:
+        - image
+    QuestionCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/QuestionUpdateRequestBody'
+      required:
+        - title
+        - topic_id
+    QuestionUpdateRequestBody:
       type: object
       properties:
         title:
@@ -3878,7 +3894,14 @@ components:
           example: 恶意打广告
       required:
         - reason
-    TopicRequestBody:
+    TopicCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/TopicUpdateRequestBody'
+      required:
+        - name
+        - description
+        - cover
+    TopicUpdateRequestBody:
       type: object
       properties:
         name:
@@ -3900,6 +3923,8 @@ components:
           type: string
           format: binary
           description: 用户头像
+      required:
+        - avatar
     UserCoverRequestBody:
       type: object
       properties:
@@ -3907,6 +3932,8 @@ components:
           type: string
           format: binary
           description: 用户封面
+      required:
+        - cover
     UserLoginRequestBody:
       type: object
       properties:
@@ -5235,12 +5262,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AnswerRequestBody'
-    Article:
+    ArticleCreate:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ArticleRequestBody'
+            $ref: '#/components/schemas/ArticleCreateRequestBody'
+    ArticleUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticleUpdateRequestBody'
     Comment:
       required: true
       content:
@@ -5271,24 +5304,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Option'
-    Question:
+    QuestionCreate:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/QuestionRequestBody'
+            $ref: '#/components/schemas/QuestionCreateRequestBody'
+    QuestionUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionUpdateRequestBody'
     Report:
       required: true
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ReportRequestBody'
-    Topic:
+    TopicCreate:
       required: true
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/TopicRequestBody'
+            $ref: '#/components/schemas/TopicCreateRequestBody'
+    TopicUpdate:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/TopicUpdateRequestBody'
     User:
       required: true
       content:

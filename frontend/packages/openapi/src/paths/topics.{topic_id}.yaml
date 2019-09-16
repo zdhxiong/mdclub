@@ -27,7 +27,7 @@ post:
     - $ref: '#/components/parameters/topic_id.path'
     - $ref: '#/components/parameters/include'
   requestBody:
-    $ref: '#/components/requestBodies/Topic'
+    $ref: '#/components/requestBodies/TopicUpdate'
   responses:
     '200':
       $ref: '#/components/responses/Topic'

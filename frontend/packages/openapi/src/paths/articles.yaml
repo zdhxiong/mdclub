@@ -32,7 +32,7 @@ post:
   parameters:
     - $ref: '#/components/parameters/include'
   requestBody:
-    $ref: '#/components/requestBodies/Article'
+    $ref: '#/components/requestBodies/ArticleCreate'
   responses:
     '200':
       $ref: '#/components/responses/Article'

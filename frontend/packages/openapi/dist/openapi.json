@@ -372,7 +372,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/Article"
+          "$ref": "#/components/requestBodies/ArticleCreate"
         },
         "responses": {
           "200": {
@@ -656,7 +656,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/Article"
+          "$ref": "#/components/requestBodies/ArticleUpdate"
         },
         "responses": {
           "200": {
@@ -1198,7 +1198,7 @@
         "summary": "发表提问",
         "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n",
         "requestBody": {
-          "$ref": "#/components/requestBodies/Question"
+          "$ref": "#/components/requestBodies/QuestionCreate"
         },
         "responses": {
           "200": {
@@ -1547,7 +1547,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/Question"
+          "$ref": "#/components/requestBodies/QuestionUpdate"
         },
         "responses": {
           "200": {
@@ -1788,7 +1788,7 @@
         "summary": "🔐发布话题",
         "description": "仅管理员可调用该接口",
         "requestBody": {
-          "$ref": "#/components/requestBodies/Topic"
+          "$ref": "#/components/requestBodies/TopicCreate"
         },
         "responses": {
           "200": {
@@ -2009,7 +2009,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/components/requestBodies/Topic"
+          "$ref": "#/components/requestBodies/TopicUpdate"
         },
         "responses": {
           "200": {
@@ -5302,7 +5302,18 @@
           }
         }
       },
-      "ArticleRequestBody": {
+      "ArticleCreateRequestBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ArticleUpdateRequestBody"
+          }
+        ],
+        "required": [
+          "title",
+          "topic_id"
+        ]
+      },
+      "ArticleUpdateRequestBody": {
         "type": "object",
         "properties": {
           "title": {
@@ -5348,7 +5359,10 @@
             "description": "图片文件名",
             "example": "Material Design Logo.png"
           }
-        }
+        },
+        "required": [
+          "filename"
+        ]
       },
       "ImageUploadRequestBody": {
         "type": "object",
@@ -5358,9 +5372,23 @@
             "format": "binary",
             "description": "图片"
           }
-        }
+        },
+        "required": [
+          "image"
+        ]
       },
-      "QuestionRequestBody": {
+      "QuestionCreateRequestBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/QuestionUpdateRequestBody"
+          }
+        ],
+        "required": [
+          "title",
+          "topic_id"
+        ]
+      },
+      "QuestionUpdateRequestBody": {
         "type": "object",
         "properties": {
           "title": {
@@ -5398,7 +5426,19 @@
           "reason"
         ]
       },
-      "TopicRequestBody": {
+      "TopicCreateRequestBody": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TopicUpdateRequestBody"
+          }
+        ],
+        "required": [
+          "name",
+          "description",
+          "cover"
+        ]
+      },
+      "TopicUpdateRequestBody": {
         "type": "object",
         "properties": {
           "name": {
@@ -5426,7 +5466,10 @@
             "format": "binary",
             "description": "用户头像"
           }
-        }
+        },
+        "required": [
+          "avatar"
+        ]
       },
       "UserCoverRequestBody": {
         "type": "object",
@@ -5436,7 +5479,10 @@
             "format": "binary",
             "description": "用户封面"
           }
-        }
+        },
+        "required": [
+          "cover"
+        ]
       },
       "UserLoginRequestBody": {
         "type": "object",
@@ -7270,12 +7316,22 @@
           }
         }
       },
-      "Article": {
+      "ArticleCreate": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ArticleRequestBody"
+              "$ref": "#/components/schemas/ArticleCreateRequestBody"
+            }
+          }
+        }
+      },
+      "ArticleUpdate": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ArticleUpdateRequestBody"
             }
           }
         }
@@ -7330,12 +7386,22 @@
           }
         }
       },
-      "Question": {
+      "QuestionCreate": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/QuestionRequestBody"
+              "$ref": "#/components/schemas/QuestionCreateRequestBody"
+            }
+          }
+        }
+      },
+      "QuestionUpdate": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/QuestionUpdateRequestBody"
             }
           }
         }
@@ -7350,12 +7416,22 @@
           }
         }
       },
-      "Topic": {
+      "TopicCreate": {
         "required": true,
         "content": {
           "multipart/form-data": {
             "schema": {
-              "$ref": "#/components/schemas/TopicRequestBody"
+              "$ref": "#/components/schemas/TopicCreateRequestBody"
+            }
+          }
+        }
+      },
+      "TopicUpdate": {
+        "required": true,
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "$ref": "#/components/schemas/TopicUpdateRequestBody"
             }
           }
         }

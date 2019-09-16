@@ -47,20 +47,26 @@ VoteCount:
 # 请求体模型
 AnswerRequestBody:
   $ref: ./requestBody/AnswerRequestBody.yaml
-ArticleRequestBody:
-  $ref: ./requestBody/ArticleRequestBody.yaml
+ArticleCreateRequestBody:
+  $ref: ./requestBody/ArticleCreateRequestBody.yaml
+ArticleUpdateRequestBody:
+  $ref: ./requestBody/ArticleUpdateRequestBody.yaml
 CommentRequestBody:
   $ref: ./requestBody/CommentRequestBody.yaml
 ImageUpdateRequestBody:
   $ref: ./requestBody/ImageUpdateRequestBody.yaml
 ImageUploadRequestBody:
   $ref: ./requestBody/ImageUploadRequestBody.yaml
-QuestionRequestBody:
-  $ref: ./requestBody/QuestionRequestBody.yaml
+QuestionCreateRequestBody:
+  $ref: ./requestBody/QuestionCreateRequestBody.yaml
+QuestionUpdateRequestBody:
+  $ref: ./requestBody/QuestionUpdateRequestBody.yaml
 ReportRequestBody:
   $ref: ./requestBody/ReportRequestBody.yaml
-TopicRequestBody:
-  $ref: ./requestBody/TopicRequestBody.yaml
+TopicCreateRequestBody:
+  $ref: ./requestBody/TopicCreateRequestBody.yaml
+TopicUpdateRequestBody:
+  $ref: ./requestBody/TopicUpdateRequestBody.yaml
 UserAvatarRequestBody:
   $ref: ./requestBody/UserAvatarRequestBody.yaml
 UserCoverRequestBody:

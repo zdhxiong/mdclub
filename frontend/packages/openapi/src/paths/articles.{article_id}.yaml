@@ -23,7 +23,7 @@ patch:
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   requestBody:
-    $ref: '#/components/requestBodies/Article'
+    $ref: '#/components/requestBodies/ArticleUpdate'
   responses:
     '200':
       $ref: '#/components/responses/Article'

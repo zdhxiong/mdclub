@@ -1,53 +1,42 @@
 Answer:
   $ref: ./Answer.yaml
-
-Article:
-  $ref: ./Article.yaml
-
+ArticleCreate:
+  $ref: ./ArticleCreate.yaml
+ArticleUpdate:
+  $ref: ./ArticleUpdate.yaml
 Comment:
   $ref: ./Comment.yaml
-
 Email:
   $ref: ./Email.yaml
-
 ImageUpdate:
   $ref: ./ImageUpdate.yaml
-
 ImageUpload:
   $ref: ./ImageUpload.yaml
-
 Option:
   $ref: ./Option.yaml
-
-Question:
-  $ref: ./Question.yaml
-
+QuestionCreate:
+  $ref: ./QuestionCreate.yaml
+QuestionUpdate:
+  $ref: ./QuestionUpdate.yaml
 Report:
   $ref: ./Report.yaml
-
-Topic:
-  $ref: ./Topic.yaml
-
+TopicCreate:
+  $ref: ./TopicCreate.yaml
+TopicUpdate:
+  $ref: ./TopicUpdate.yaml
 User:
   $ref: ./User.yaml
-
 UserAvatar:
   $ref: ./UserAvatar.yaml
-
 UserCover:
   $ref: ./UserCover.yaml
-
 UserLogin:
   $ref: ./UserLogin.yaml
-
 UserPasswordReset:
   $ref: ./UserPasswordReset.yaml
-
 UserRegister:
   $ref: ./UserRegister.yaml
-
 UserSendEmail:
   $ref: ./UserSendEmail.yaml
-
 Vote:
   $ref: ./Vote.yaml

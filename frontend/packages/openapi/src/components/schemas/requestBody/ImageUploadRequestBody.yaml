@@ -4,3 +4,5 @@ properties:
     type: string
     format: binary
     description: 图片
+required:
+  - image

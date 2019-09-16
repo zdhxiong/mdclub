@@ -1,0 +1,6 @@
+allOf:
+  - $ref: '#/components/schemas/TopicUpdateRequestBody'
+required:
+  - name
+  - description
+  - cover

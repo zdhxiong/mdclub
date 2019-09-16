@@ -4,3 +4,5 @@ properties:
     type: string
     description: 图片文件名
     example: Material Design Logo.png
+required:
+  - filename
