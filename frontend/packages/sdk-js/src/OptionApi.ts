@@ -10,6 +10,7 @@ const className = 'OptionApi';
 export default {
   /**
    * 获取站点全局设置参数
+   * 获取站点全局设置参数
    */
   get: (): Promise<OptionResponse> => {
     return get(buildURL(`${className}.get`, '/options', {}));

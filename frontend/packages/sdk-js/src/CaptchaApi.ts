@@ -10,6 +10,7 @@ const className = 'CaptchaApi';
 export default {
   /**
    * 生成新的图形验证码
+   * 生成新的图形验证码
    */
   generate: (): Promise<CaptchaResponse> => {
     return post(buildURL(`${className}.generate`, '/captchas', {}));

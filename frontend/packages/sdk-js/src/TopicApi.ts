@@ -12,7 +12,7 @@ import {
 
 interface DeleteParams {
   topic_id: number;
-  force?: '1';
+  force?: boolean;
 }
 
 interface AddFollowParams {
@@ -23,15 +23,15 @@ interface CreateParams {
   /**
    * 话题名称
    */
-  name?: string;
+  name: string;
   /**
    * 话题描述
    */
-  description?: string;
+  description: string;
   /**
    * 封面图片
    */
-  cover?: any;
+  cover: any;
 }
 
 interface DeleteFollowParams {
@@ -40,7 +40,7 @@ interface DeleteFollowParams {
 
 interface DeleteMultipleParams {
   topic_id?: Array<number>;
-  force?: '1';
+  force?: boolean;
 }
 
 interface DestroyParams {
@@ -53,38 +53,50 @@ interface DestroyMultipleParams {
 
 interface GetParams {
   topic_id: number;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 }
 
 interface GetArticlesParams {
   topic_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetDeletedParams {
   page?: number;
   per_page?: number;
-  order?: string;
+  order?:
+    | 'topic_id'
+    | 'follower_count'
+    | 'delete_time'
+    | '-topic_id'
+    | '-follower_count'
+    | '-delete_time';
   topic_id?: number;
   name?: string;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 }
 
 interface GetFollowersParams {
   topic_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetListParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
-  order?: string;
+  include?: Array<'is_following'>;
+  order?: 'topic_id' | 'follower_count' | '-topic_id' | '-follower_count';
   topic_id?: number;
   name?: string;
 }
@@ -93,13 +105,19 @@ interface GetQuestionsParams {
   topic_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface RestoreParams {
   topic_id: number;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 }
 
 interface RestoreMultipleParams {
@@ -108,7 +126,7 @@ interface RestoreMultipleParams {
 
 interface UpdateParams {
   topic_id: number;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 
   /**
    * 话题名称
@@ -134,7 +152,7 @@ export default {
    * 🔐删除话题
    * 仅管理员可调用该接口 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。  删除后，话题默认进入回收站，可在回收站中恢复该话题。
    * @param params.topic_id 话题ID
-   * @param params.force 🔐 若该参数为 1，则直接删除，不放入回收站。
+   * @param params.force 🔐 若该参数为 true，则直接删除，不放入回收站。
    */
   del: (params: DeleteParams): Promise<EmptyResponse> => {
     return del(
@@ -143,6 +161,7 @@ export default {
   },
 
   /**
+   * 关注指定话题
    * 关注指定话题
    * @param params.topic_id 话题ID
    */
@@ -159,7 +178,7 @@ export default {
   /**
    * 🔐发布话题
    * 仅管理员可调用该接口
-   * @param params.TopicRequestBody
+   * @param params.TopicCreateRequestBody
    */
   create: (params: CreateParams): Promise<TopicResponse> => {
     return post(
@@ -169,6 +188,7 @@ export default {
   },
 
   /**
+   * 取消关注指定话题
    * 取消关注指定话题
    * @param params.topic_id 话题ID
    */
@@ -188,7 +208,7 @@ export default {
    * 🔐批量删除话题
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。  删除后，话题默认进入回收站，可在回收站中恢复话题。
    * @param params.topic_id 用“,”分隔的话题ID，最多可提供100个ID
-   * @param params.force 🔐 若该参数为 1，则直接删除，不放入回收站。
+   * @param params.force 🔐 若该参数为 true，则直接删除，不放入回收站。
    */
   deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> => {
     return del(
@@ -225,9 +245,9 @@ export default {
 
   /**
    * 获取指定话题信息
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 获取指定话题信息
    * @param params.topic_id 话题ID
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   get: (params: GetParams): Promise<TopicResponse> => {
     return get(
@@ -237,12 +257,12 @@ export default {
 
   /**
    * 获取指定话题下的文章
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定话题下的文章。
    * @param params.topic_id 话题ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getArticles: (params: GetArticlesParams): Promise<ArticlesResponse> => {
     return get(
@@ -257,13 +277,13 @@ export default {
 
   /**
    * 🔐获取回收站中的话题列表
-   * 仅管理员可调用该接口。  可排序字段包括 &#x60;topic_id&#x60;、&#x60;follower_count&#x60;、&#x60;delete_time&#x60; 默认为 &#x60;-delete_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 仅管理员可调用该接口。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;topic_id&#x60;、&#x60;follower_count&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-delete_time&#x60;
    * @param params.topic_id 话题ID
    * @param params.name 话题名称
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   getDeleted: (params: GetDeletedParams): Promise<TopicsResponse> => {
     return get(
@@ -280,11 +300,11 @@ export default {
 
   /**
    * 获取指定话题的关注者
-   * 不含已禁用的用户  &#x60;include&#x60; 参数取值包括：&#x60;is_followed&#x60;、&#x60;is_following&#x60;、&#x60;is_me&#x60;
+   * 不含已禁用的用户
    * @param params.topic_id 话题ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getFollowers: (params: GetFollowersParams): Promise<UsersResponse> => {
     return get(
@@ -299,11 +319,11 @@ export default {
 
   /**
    * 获取全部话题
-   * 可排序字段包括 &#x60;topic_id&#x60;、&#x60;follower_count&#x60; 默认为 &#x60;topic_id&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 获取全部话题。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;topic_id&#x60;、&#x60;follower_count&#x60;。默认为 &#x60;topic_id&#x60;
    * @param params.topic_id 话题ID
    * @param params.name 话题名称
    */
@@ -322,12 +342,12 @@ export default {
 
   /**
    * 获取指定话题下的提问
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定话题下的提问。
    * @param params.topic_id 话题ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getQuestions: (params: GetQuestionsParams): Promise<QuestionsResponse> => {
     return get(
@@ -342,9 +362,9 @@ export default {
 
   /**
    * 🔐恢复指定话题
-   * 仅管理员可调用该接口。  &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 仅管理员可调用该接口。
    * @param params.topic_id 话题ID
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   restore: (params: RestoreParams): Promise<TopicResponse> => {
     return post(
@@ -369,10 +389,10 @@ export default {
 
   /**
    * 🔐更新话题信息
-   * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求  &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
    * @param params.topic_id 话题ID
-   * @param params.TopicRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.TopicUpdateRequestBody
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   update: (params: UpdateParams): Promise<TopicResponse> => {
     return post(

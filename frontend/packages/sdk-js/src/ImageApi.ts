@@ -12,36 +12,34 @@ interface DeleteMultipleParams {
 
 interface GetParams {
   key: string;
-  include?: Array<string>;
+  include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }
 
 interface GetListParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'question' | 'article' | 'answer'>;
   key?: string;
   item_type?: 'question' | 'answer' | 'article';
-  item_id?: string;
+  item_id?: number;
   user_id?: number;
 }
 
 interface UpdateParams {
   key: string;
-  include?: Array<string>;
-
+  include?: Array<'user' | 'question' | 'article' | 'answer'>;
   /**
    * 图片文件名
    */
-  filename?: string;
+  filename: string;
 }
 
 interface UploadParams {
-  include?: Array<string>;
-
+  include?: Array<'user' | 'question' | 'article' | 'answer'>;
   /**
    * 图片
    */
-  image?: any;
+  image: any;
 }
 
 const className = 'ImageApi';
@@ -72,9 +70,9 @@ export default {
 
   /**
    * 获取指定图片信息
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
+   * 获取指定图片信息
    * @param params.key 图片key
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
    */
   get: (params: GetParams): Promise<ImageResponse> => {
     return get(
@@ -84,10 +82,10 @@ export default {
 
   /**
    * 🔐获取图片列表
-   * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
+   * 仅管理员可调用该接口
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
    * @param params.key 图片key
    * @param params.item_type 图片关联对象的类型
    * @param params.item_id 图片关联对象的ID
@@ -109,10 +107,10 @@ export default {
 
   /**
    * 🔐更新指定图片信息
-   * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
+   * 仅管理员可调用该接口
    * @param params.key 图片key
    * @param params.ImageUpdateRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
    */
   update: (params: UpdateParams): Promise<ImageResponse> => {
     return patch(
@@ -123,9 +121,9 @@ export default {
 
   /**
    * 上传图片
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;question&#x60;、&#x60;article&#x60;、&#x60;answer&#x60;
+   * 上传图片
    * @param params.ImageUploadRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
    */
   upload: (params: UploadParams): Promise<ImageResponse> => {
     return post(

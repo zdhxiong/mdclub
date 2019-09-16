@@ -48,38 +48,56 @@ interface EnableMultipleParams {
 
 interface GetParams {
   user_id: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetAnswersParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetArticlesParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetCommentsParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  include?: Array<'user' | 'voting'>;
 }
 
 interface GetDisabledParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
-  order?: string;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  order?:
+    | 'create_time'
+    | 'delete_time'
+    | 'follower_count'
+    | '-create_time'
+    | '-delete_time'
+    | '-follower_count';
   user_id?: number;
   username?: string;
   email?: string;
@@ -89,115 +107,139 @@ interface GetFolloweesParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetFollowersParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetFollowingArticlesParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetFollowingQuestionsParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetFollowingTopicsParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 }
 
 interface GetListParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?: 'create_time' | 'follower_count' | '-create_time' | '-follower_count';
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   user_id?: number;
   username?: string;
   email?: string;
 }
 
 interface GetMineParams {
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyAnswersParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetMyArticlesParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyCommentsParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  include?: Array<'user' | 'voting'>;
 }
 
 interface GetMyFolloweesParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowersParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowingArticlesParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingQuestionsParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingTopicsParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_following'>;
 }
 
 interface GetMyQuestionsParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetQuestionsParams {
   user_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface RegisterParams {
@@ -255,7 +297,7 @@ interface SendRegisterEmailParams {
 
 interface UpdateParams {
   user_id: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 
   /**
    * 一句话介绍
@@ -280,8 +322,7 @@ interface UpdateParams {
 }
 
 interface UpdateMineParams {
-  include?: Array<string>;
-
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   /**
    * 一句话介绍
    */
@@ -323,14 +364,14 @@ interface UploadMyAvatarParams {
   /**
    * 用户头像
    */
-  avatar?: any;
+  avatar: any;
 }
 
 interface UploadMyCoverParams {
   /**
    * 用户封面
    */
-  cover?: any;
+  cover: any;
 }
 
 const className = 'UserApi';
@@ -340,6 +381,7 @@ const className = 'UserApi';
  */
 export default {
   /**
+   * 添加关注
    * 添加关注
    * @param params.user_id 用户ID
    */
@@ -373,6 +415,7 @@ export default {
 
   /**
    * 取消关注
+   * 取消关注
    * @param params.user_id 用户ID
    */
   deleteFollow: (
@@ -389,12 +432,14 @@ export default {
 
   /**
    * 删除当前登录用户的头像，并重置为默认头像
+   * 删除当前登录用户的头像，并重置为默认头像
    */
   deleteMyAvatar: (): Promise<UserAvatarResponse> => {
     return del(buildURL(`${className}.deleteMyAvatar`, '/user/avatar', {}));
   },
 
   /**
+   * 删除当前登录用户的封面，并重置为默认封面
    * 删除当前登录用户的封面，并重置为默认封面
    */
   deleteMyCover: (): Promise<UserCoverResponse> => {
@@ -447,9 +492,9 @@ export default {
 
   /**
    * 获取指定用户信息
-   * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。 其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。 其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
    * @param params.user_id 用户ID
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   get: (params: GetParams): Promise<UserResponse> => {
     return get(
@@ -459,12 +504,12 @@ export default {
 
   /**
    * 获取指定用户发表的回答
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+   * 获取指定用户发表的回答
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
   getAnswers: (params: GetAnswersParams): Promise<AnswersResponse> => {
     return get(
@@ -479,12 +524,12 @@ export default {
 
   /**
    * 获取指定用户发表的文章
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定用户发表的文章
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getArticles: (params: GetArticlesParams): Promise<ArticlesResponse> => {
     return get(
@@ -499,12 +544,12 @@ export default {
 
   /**
    * 获取指定用户发表的评论
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
+   * 获取指定用户发表的评论
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
   getComments: (params: GetCommentsParams): Promise<CommentsResponse> => {
     return get(
@@ -519,11 +564,11 @@ export default {
 
   /**
    * 🔐获取已禁用用户列表
-   * 仅管理员可调用该接口。  可排序字段包括 &#x60;create_time&#x60;、&#x60;delete_time&#x60;、&#x60;follower_count&#x60;，默认为 &#x60;-delete_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 仅管理员可调用该接口。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;create_time&#x60;、&#x60;delete_time&#x60;、&#x60;follower_count&#x60;。默认为 &#x60;-delete_time&#x60;
    * @param params.user_id 用户ID
    * @param params.username 用户名
    * @param params.email 邮箱
@@ -544,11 +589,11 @@ export default {
 
   /**
    * 获取指定用户关注的用户列表
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 获取指定用户关注的用户列表
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getFollowees: (params: GetFolloweesParams): Promise<UsersResponse> => {
     return get(
@@ -563,11 +608,11 @@ export default {
 
   /**
    * 获取指定用户的关注者
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 获取指定用户的关注者
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getFollowers: (params: GetFollowersParams): Promise<UsersResponse> => {
     return get(
@@ -582,11 +627,11 @@ export default {
 
   /**
    * 获取指定用户关注的文章列表
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定用户关注的文章列表
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getFollowingArticles: (
     params: GetFollowingArticlesParams,
@@ -603,11 +648,11 @@ export default {
 
   /**
    * 获取指定用户关注的提问列表
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定用户关注的提问列表
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getFollowingQuestions: (
     params: GetFollowingQuestionsParams,
@@ -624,11 +669,11 @@ export default {
 
   /**
    * 获取指定用户关注的话题列表
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 获取指定用户关注的话题列表
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   getFollowingTopics: (
     params: GetFollowingTopicsParams,
@@ -645,11 +690,11 @@ export default {
 
   /**
    * 获取用户列表
-   * 不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。  可排序字段包括 &#x60;create_time&#x60;、&#x60;follower_count&#x60;，默认为 &#x60;create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;is_followed&#x60;、&#x60;is_following&#x60;、&#x60;is_me&#x60;
+   * 不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;create_time&#x60;、&#x60;follower_count&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    * @param params.user_id 用户ID
    * @param params.username 用户名
    * @param params.email 邮箱
@@ -670,8 +715,8 @@ export default {
 
   /**
    * 获取当前登录用户的信息
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * 获取当前登录用户的信息
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getMine: (params: GetMineParams): Promise<UserResponse> => {
     return get(buildURL(`${className}.getMine`, '/user', params, ['include']));
@@ -679,11 +724,11 @@ export default {
 
   /**
    * 获取当前登录用户发表的回答
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+   * 获取当前登录用户发表的回答
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
   getMyAnswers: (params: GetMyAnswersParams): Promise<AnswersResponse> => {
     return get(
@@ -698,11 +743,11 @@ export default {
 
   /**
    * 获取当前登录用户发表的文章
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取当前登录用户发表的文章
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getMyArticles: (params: GetMyArticlesParams): Promise<ArticlesResponse> => {
     return get(
@@ -717,11 +762,11 @@ export default {
 
   /**
    * 获取当前登录用户发表的评论
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
+   * 获取当前登录用户发表的评论
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
   getMyComments: (params: GetMyCommentsParams): Promise<CommentsResponse> => {
     return get(
@@ -736,10 +781,10 @@ export default {
 
   /**
    * 获取当前登录用户关注的用户
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 获取当前登录用户关注的用户
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getMyFollowees: (params: GetMyFolloweesParams): Promise<UsersResponse> => {
     return get(
@@ -753,10 +798,10 @@ export default {
 
   /**
    * 获取当前登录用户的关注者
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 获取当前登录用户的关注者
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getMyFollowers: (params: GetMyFollowersParams): Promise<UsersResponse> => {
     return get(
@@ -770,10 +815,10 @@ export default {
 
   /**
    * 获取登录用户关注的文章
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取登录用户关注的文章
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getMyFollowingArticles: (
     params: GetMyFollowingArticlesParams,
@@ -790,10 +835,10 @@ export default {
 
   /**
    * 获取登录用户关注的提问
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取登录用户关注的提问
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getMyFollowingQuestions: (
     params: GetMyFollowingQuestionsParams,
@@ -810,10 +855,10 @@ export default {
 
   /**
    * 获取登录用户关注的话题
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_following&#x60;
+   * 获取登录用户关注的话题
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
    */
   getMyFollowingTopics: (
     params: GetMyFollowingTopicsParams,
@@ -830,11 +875,11 @@ export default {
 
   /**
    * 获取登录用户发表的提问
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取登录用户发表的提问
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getMyQuestions: (
     params: GetMyQuestionsParams,
@@ -851,12 +896,12 @@ export default {
 
   /**
    * 获取指定用户发表的提问
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定用户发表的提问
    * @param params.user_id 用户ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   getQuestions: (params: GetQuestionsParams): Promise<QuestionsResponse> => {
     return get(
@@ -925,10 +970,10 @@ export default {
 
   /**
    * 🔐更新指定用户信息
-   * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 仅管理员可调用该接口
    * @param params.user_id 用户ID
    * @param params.UserRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   update: (params: UpdateParams): Promise<UserResponse> => {
     return patch(
@@ -945,9 +990,9 @@ export default {
 
   /**
    * 更新当前登录用户信息
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_me&#x60;、&#x60;is_following&#x60;、&#x60;is_followed&#x60;
+   * 更新当前登录用户信息
    * @param params.UserRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   updateMine: (params: UpdateMineParams): Promise<UserResponse> => {
     return patch(
@@ -964,6 +1009,7 @@ export default {
 
   /**
    * 验证邮箱并更新密码
+   * 验证邮箱并更新密码
    * @param params.UserPasswordResetRequestBody
    */
   updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> => {
@@ -974,6 +1020,7 @@ export default {
   },
 
   /**
+   * 上传当前登录用户的头像
    * 上传当前登录用户的头像
    * @param params.UserAvatarRequestBody
    */
@@ -987,6 +1034,7 @@ export default {
   },
 
   /**
+   * 上传当前登录用户的封面
    * 上传当前登录用户的封面
    * @param params.UserCoverRequestBody
    */

@@ -68,11 +68,22 @@ export default class Browser implements RequestAdapterInterface {
       headers['Content-Type'] = 'multipart/form-data';
     }
 
-    return ajax({
-      method: options.method || 'GET',
-      url: (globalOptions.apiPath || '') + (options.url || ''),
-      data: options.data,
-      headers,
+    return new Promise((resolve, reject): void => {
+      ajax({
+        method: options.method || 'GET',
+        url: (globalOptions.apiPath || '') + (options.url || ''),
+        data: options.data,
+        headers,
+        success: data => {
+          data.code === 0 ? resolve(data) : reject(data);
+        },
+        error: (xhr, textStatus) => {
+          reject({
+            code: 999999,
+            message: textStatus,
+          });
+        },
+      });
     });
   }
 }

@@ -6,13 +6,8 @@ import { Pagination } from '../models';
  */
 export interface ResponseInterface {
   code: number;
-  data?: any;
-  pagination?: Pagination;
-  message?: string;
-  extra_message?: string;
-  captcha_token?: string;
-  captcha_image?: string;
-  errors?: { field: string; message: string }[];
+  data: any;
+  pagination: Pagination;
 }
 
 /**

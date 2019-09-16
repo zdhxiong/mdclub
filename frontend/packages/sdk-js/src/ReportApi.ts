@@ -15,7 +15,9 @@ interface DeleteParams {
 interface CreateParams {
   reportable_type: 'question' | 'answer' | 'article' | 'comment' | 'user';
   reportable_id: number;
-  include?: Array<string>;
+  include?: Array<
+    'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'
+  >;
 
   /**
    * 举报理由
@@ -30,7 +32,7 @@ interface DeleteMultipleParams {
 interface GetListParams {
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'question' | 'answer' | 'article' | 'comment' | 'user'>;
   reportable_type?: 'question' | 'answer' | 'article' | 'comment' | 'user';
 }
 
@@ -39,7 +41,9 @@ interface GetReasonsParams {
   reportable_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<
+    'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'
+  >;
 }
 
 const className = 'ReportApi';
@@ -66,11 +70,11 @@ export default {
 
   /**
    * 添加举报
-   * &#x60;include&#x60; 参数取值包括：&#x60;reporter&#x60;、&#x60;question&#x60;、&#x60;answer&#x60;、&#x60;article&#x60;、&#x60;comment&#x60;、&#x60;user&#x60;
+   * 添加举报
    * @param params.reportable_type 目标类型
    * @param params.reportable_id 目标ID
    * @param params.ReportRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;reporter&#x60;, &#x60;question&#x60;, &#x60;answer&#x60;, &#x60;article&#x60;, &#x60;comment&#x60;, &#x60;user&#x60;
    */
   create: (params: CreateParams): Promise<ReportResponse> => {
     return post(
@@ -97,10 +101,10 @@ export default {
 
   /**
    * 🔐获取被举报的内容列表
-   * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;question&#x60;、&#x60;answer&#x60;、&#x60;article&#x60;、&#x60;comment&#x60;、&#x60;user&#x60;
+   * 仅管理员可调用该接口
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;question&#x60;, &#x60;answer&#x60;, &#x60;article&#x60;, &#x60;comment&#x60;, &#x60;user&#x60;
    * @param params.reportable_type 目标类型
    */
   getList: (params: GetListParams): Promise<ReportGroupsResponse> => {
@@ -116,12 +120,12 @@ export default {
 
   /**
    * 🔐获取被举报内容的举报详情
-   * 仅管理员可调用该接口  &#x60;include&#x60; 参数取值包括：&#x60;reporter&#x60;、&#x60;question&#x60;、&#x60;answer&#x60;、&#x60;article&#x60;、&#x60;comment&#x60;、&#x60;user&#x60;
+   * 仅管理员可调用该接口
    * @param params.reportable_type 目标类型
    * @param params.reportable_id 目标ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;reporter&#x60;, &#x60;question&#x60;, &#x60;answer&#x60;, &#x60;article&#x60;, &#x60;comment&#x60;, &#x60;user&#x60;
    */
   getReasons: (params: GetReasonsParams): Promise<ReportsResponse> => {
     return get(

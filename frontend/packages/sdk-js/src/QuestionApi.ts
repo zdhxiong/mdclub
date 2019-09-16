@@ -24,7 +24,6 @@ interface AddFollowParams {
 
 interface AddVoteParams {
   question_id: number;
-
   /**
    * 投票类型
    */
@@ -35,11 +34,11 @@ interface CreateParams {
   /**
    * 标题
    */
-  title?: string;
+  title: string;
   /**
    * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
    */
-  topic_id?: string;
+  topic_id: string;
   /**
    * Markdown 格式的正文
    */
@@ -52,7 +51,7 @@ interface CreateParams {
 
 interface CreateAnswerParams {
   question_id: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'question' | 'voting'>;
 
   /**
    * Markdown 格式的正文
@@ -66,7 +65,7 @@ interface CreateAnswerParams {
 
 interface CreateCommentParams {
   question_id: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'voting'>;
 
   /**
    * 评论内容
@@ -96,29 +95,43 @@ interface DestroyMultipleParams {
 
 interface GetParams {
   question_id: number;
-  include?: Array<string>;
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetAnswersParams {
   question_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetCommentsParams {
   question_id: number;
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  include?: Array<'user' | 'voting'>;
 }
 
 interface GetDeletedParams {
   page?: number;
   per_page?: number;
-  order?: string;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | 'delete_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time'
+    | '-delete_time';
   question_id?: number;
   user_id?: number;
   topic_id?: number;
@@ -128,14 +141,20 @@ interface GetFollowersParams {
   question_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetListParams {
   page?: number;
   per_page?: number;
-  order?: string;
-  include?: Array<string>;
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'update_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-update_time';
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
   question_id?: number;
   user_id?: number;
   topic_id?: number;
@@ -145,7 +164,7 @@ interface GetVotersParams {
   question_id: number;
   page?: number;
   per_page?: number;
-  include?: Array<string>;
+  include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   type?: 'up' | 'down';
 }
 
@@ -159,7 +178,6 @@ interface RestoreMultipleParams {
 
 interface UpdateParams {
   question_id: number;
-
   /**
    * 标题
    */
@@ -197,6 +215,7 @@ export default {
 
   /**
    * 添加关注
+   * 添加关注
    * @param params.question_id 提问ID
    */
   addFollow: (params: AddFollowParams): Promise<FollowerCountResponse> => {
@@ -210,6 +229,7 @@ export default {
   },
 
   /**
+   * 为提问投票
    * 为提问投票
    * @param params.question_id 提问ID
    * @param params.VoteRequestBody
@@ -228,7 +248,7 @@ export default {
   /**
    * 发表提问
    * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
-   * @param params.QuestionRequestBody
+   * @param params.QuestionCreateRequestBody
    */
   create: (params: CreateParams): Promise<QuestionResponse> => {
     return post(
@@ -244,10 +264,10 @@ export default {
 
   /**
    * 在指定提问下发表回答
-   * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+   * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
    * @param params.question_id 提问ID
    * @param params.AnswerRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
   createAnswer: (params: CreateAnswerParams): Promise<AnswerResponse> => {
     return post(
@@ -263,10 +283,10 @@ export default {
 
   /**
    * 在指定提问下发表评论
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
+   * 在指定提问下发表评论
    * @param params.question_id 提问ID
    * @param params.CommentRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
   createComment: (params: CreateCommentParams): Promise<CommentResponse> => {
     return post(
@@ -281,6 +301,7 @@ export default {
   },
 
   /**
+   * 取消关注
    * 取消关注
    * @param params.question_id 提问ID
    */
@@ -310,6 +331,7 @@ export default {
   },
 
   /**
+   * 取消为提问的投票
    * 取消为提问的投票
    * @param params.question_id 提问ID
    */
@@ -353,9 +375,9 @@ export default {
 
   /**
    * 获取指定提问信息
-   * &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取指定提问信息
    * @param params.question_id 提问ID
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
   get: (params: GetParams): Promise<QuestionResponse> => {
     return get(
@@ -367,12 +389,12 @@ export default {
 
   /**
    * 获取指定提问下的回答
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+   * 获取指定提问下的回答。
    * @param params.question_id 提问ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
   getAnswers: (params: GetAnswersParams): Promise<AnswersResponse> => {
     return get(
@@ -387,12 +409,12 @@ export default {
 
   /**
    * 获取指定提问的评论
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;，默认为 &#x60;create_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;voting&#x60;
+   * 获取指定提问的评论。
    * @param params.question_id 提问ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
   getComments: (params: GetCommentsParams): Promise<CommentsResponse> => {
     return get(
@@ -407,10 +429,10 @@ export default {
 
   /**
    * 🔐获取回收站中的提问列表
-   * 仅管理员可调用该接口。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;，默认为 &#x60;-delete_time&#x60;
+   * 仅管理员可调用该接口。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-delete_time&#x60;
    * @param params.question_id 提问ID
    * @param params.user_id 用户ID
    * @param params.topic_id 话题ID
@@ -430,11 +452,11 @@ export default {
 
   /**
    * 获取指定提问的关注者
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_followed&#x60;、&#x60;is_following&#x60;、&#x60;is_me&#x60;
+   * 获取指定提问的关注者
    * @param params.question_id 提问ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
   getFollowers: (params: GetFollowersParams): Promise<UsersResponse> => {
     return get(
@@ -449,11 +471,11 @@ export default {
 
   /**
    * 获取提问列表
-   * 可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;，默认为 &#x60;-update_time&#x60;  &#x60;include&#x60; 参数取值包括：&#x60;user&#x60;、&#x60;topics&#x60;、&#x60;is_following&#x60;、&#x60;voting&#x60;
+   * 获取提问列表。
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。例如 &#x60;create_time&#x60; 表示按时间顺序排列，&#x60;-create_time&#x60; 则表示按时间倒序排列。
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    * @param params.question_id 提问ID
    * @param params.user_id 用户ID
    * @param params.topic_id 话题ID
@@ -474,11 +496,11 @@ export default {
 
   /**
    * 获取提问的投票者
-   * &#x60;include&#x60; 参数取值包括：&#x60;is_followed&#x60;、&#x60;is_following&#x60;、&#x60;is_me&#x60;
+   * 获取提问的投票者
    * @param params.question_id 提问ID
    * @param params.page 当前页数
    * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。
+   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
    */
   getVoters: (params: GetVotersParams): Promise<UsersResponse> => {
@@ -524,7 +546,7 @@ export default {
    * 更新提问信息
    * 管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
    * @param params.question_id 提问ID
-   * @param params.QuestionRequestBody
+   * @param params.QuestionUpdateRequestBody
    */
   update: (params: UpdateParams): Promise<QuestionResponse> => {
     return patch(
