@@ -35,13 +35,11 @@ paths:
       operationId: getList
       summary: 获取回答列表
       description: |
-        获取回答列表
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取回答列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.answers'
         - $ref: '#/components/parameters/include.answer'
         - $ref: '#/components/parameters/answer_id.query'
         - $ref: '#/components/parameters/question_id.query'
@@ -76,12 +74,12 @@ paths:
       operationId: getComments
       summary: 获取指定回答的评论
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+        获取指定回答的评论。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
@@ -213,11 +211,11 @@ paths:
       operationId: getList
       summary: 获取文章列表
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取文章列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.articles'
         - $ref: '#/components/parameters/include.article'
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
@@ -269,12 +267,12 @@ paths:
       operationId: getComments
       summary: 获取指定文章的评论列表
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+        获取指定文章的评论列表。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
@@ -459,11 +457,11 @@ paths:
       operationId: getList
       summary: 获取所有评论
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+        获取所有评论。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
         - $ref: '#/components/parameters/comment_id.query'
         - $ref: '#/components/parameters/commentable_id.query'
@@ -736,11 +734,11 @@ paths:
       operationId: getList
       summary: 获取提问列表
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+        获取提问列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.questions'
         - $ref: '#/components/parameters/include.question'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
@@ -790,12 +788,12 @@ paths:
       operationId: getAnswers
       summary: 获取指定提问下的回答
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取指定提问下的回答。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.answers'
         - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
@@ -827,12 +825,12 @@ paths:
       operationId: getComments
       summary: 获取指定提问的评论
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`
+        获取指定提问的评论。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
@@ -1109,12 +1107,12 @@ paths:
       operationId: getList
       summary: 获取全部话题
       description: |
-        可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`
+        获取全部话题。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/include.topic'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.topics'
         - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
       responses:
@@ -1160,12 +1158,12 @@ paths:
       operationId: getArticles
       summary: 获取指定话题下的文章
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+        获取指定话题下的文章。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.articles'
         - $ref: '#/components/parameters/include.article'
       responses:
         '200':
@@ -1223,12 +1221,12 @@ paths:
       operationId: getQuestions
       summary: 获取指定话题下的提问
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+        获取指定话题下的提问。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.questions'
         - $ref: '#/components/parameters/include.question'
       responses:
         '200':
@@ -1294,15 +1292,12 @@ paths:
     get:
       operationId: getDeleted
       summary: "\U0001F510获取回收站中的回答列表"
-      description: >
+      description: |
         仅管理员可调用该接口。
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为
-        `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedAnswers'
         - $ref: '#/components/parameters/answer_id.query'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
@@ -1380,16 +1375,12 @@ paths:
     get:
       operationId: getDeleted
       summary: "\U0001F510获取回收站中的文章列表"
-      description: >
+      description: |
         仅管理员可调用该接口。
-
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为
-        `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedArticles'
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -1469,12 +1460,10 @@ paths:
       summary: "\U0001F510获取回收站中的评论列表"
       description: |
         仅管理员可调用该接口。
-
-        可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedComments'
         - $ref: '#/components/parameters/include.comment'
         - $ref: '#/components/parameters/comment_id.query'
         - $ref: '#/components/parameters/commentable_id.query'
@@ -1553,16 +1542,12 @@ paths:
     get:
       operationId: getDeleted
       summary: "\U0001F510获取回收站中的提问列表"
-      description: >
+      description: |
         仅管理员可调用该接口。
-
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为
-        `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedQuestions'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -1642,12 +1627,10 @@ paths:
       summary: "\U0001F510获取回收站中的话题列表"
       description: |
         仅管理员可调用该接口。
-
-        可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedTopics'
         - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
         - $ref: '#/components/parameters/include.topic'
@@ -1728,13 +1711,11 @@ paths:
       summary: "\U0001F510获取已禁用用户列表"
       description: |
         仅管理员可调用该接口。
-
-        可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/include.user'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.deletedUsers'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/username.query'
         - $ref: '#/components/parameters/email.query'
@@ -1781,11 +1762,11 @@ paths:
       operationId: getMyAnswers
       summary: 获取当前登录用户发表的回答
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取当前登录用户发表的回答
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.answers'
         - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
@@ -1799,11 +1780,11 @@ paths:
       operationId: getMyArticles
       summary: 获取当前登录用户发表的文章
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取当前登录用户发表的文章
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.articles'
         - $ref: '#/components/parameters/include.article'
       responses:
         '200':
@@ -1842,11 +1823,11 @@ paths:
       operationId: getMyComments
       summary: 获取当前登录用户发表的评论
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+        获取当前登录用户发表的评论
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
@@ -2000,11 +1981,11 @@ paths:
       operationId: getMyQuestions
       summary: 获取登录用户发表的提问
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+        获取登录用户发表的提问
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.questions'
         - $ref: '#/components/parameters/include.question'
       responses:
         '200':
@@ -2066,12 +2047,10 @@ paths:
       summary: 获取用户列表
       description: |
         不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。
-
-        可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.users'
         - $ref: '#/components/parameters/include.user'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/username.query'
@@ -2114,12 +2093,12 @@ paths:
       operationId: getAnswers
       summary: 获取指定用户发表的回答
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取指定用户发表的回答
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.answers'
         - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
@@ -2133,12 +2112,12 @@ paths:
       operationId: getArticles
       summary: 获取指定用户发表的文章
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+        获取指定用户发表的文章
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.articles'
         - $ref: '#/components/parameters/include.article'
       responses:
         '200':
@@ -2166,12 +2145,12 @@ paths:
       operationId: getComments
       summary: 获取指定用户发表的评论
       description: |
-        可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+        获取指定用户发表的评论
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.comments'
         - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
@@ -2315,12 +2294,12 @@ paths:
       operationId: getQuestions
       summary: 获取指定用户发表的提问
       description: |
-        可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+        获取指定用户发表的提问
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/order.questions'
         - $ref: '#/components/parameters/include.question'
       responses:
         '200':
@@ -5114,14 +5093,227 @@ components:
       example:
         - is_followed
         - is_me
-    order:
+    order.answers:
       name: order
       in: query
-      description: >-
-        排序方式。在字段前加 `-` 表示倒序排列。例如 `create_time` 表示按时间顺序排列，`-create_time`
-        则表示按时间倒序排列。
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
       schema:
         type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.articles:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.comments:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - '-vote_count'
+          - '-create_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.deletedAnswers:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-delete_time`。
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.deletedArticles:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-delete_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.deletedComments:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-delete_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-delete_time'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.deletedQuestions:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-delete_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.deletedTopics:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `topic_id`、`follower_count`、`delete_time`。默认为 `-delete_time`
+      schema:
+        type: string
+        enum:
+          - topic_id
+          - follower_count
+          - delete_time
+          - '-topic_id'
+          - '-follower_count'
+          - '-delete_time'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.deletedUsers:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `create_time`、`delete_time`、`follower_count`。默认为 `-delete_time`
+      schema:
+        type: string
+        enum:
+          - create_time
+          - delete_time
+          - follower_count
+          - '-create_time'
+          - '-delete_time'
+          - '-follower_count'
+        default: '-delete_time'
+      example: '-delete_time'
+    order.questions:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.topics:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `topic_id`、`follower_count`。默认为 `topic_id`
+      schema:
+        type: string
+        enum:
+          - topic_id
+          - follower_count
+          - '-topic_id'
+          - '-follower_count'
+        default: topic_id
+      example: topic_id
+    order.users:
+      name: order
+      in: query
+      description: |
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+        可排序字段包括 `create_time`、`follower_count`。默认为 `-create_time`
+      schema:
+        type: string
+        enum:
+          - create_time
+          - follower_count
+          - '-create_time'
+          - '-follower_count'
+        default: '-create_time'
       example: '-create_time'
     page:
       name: page

@@ -2,11 +2,11 @@ get:
   operationId: getList
   summary: 获取所有评论
   description: |
-    可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+    获取所有评论。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.comments'
     - $ref: '#/components/parameters/include.comment'
     - $ref: '#/components/parameters/comment_id.query'
     - $ref: '#/components/parameters/commentable_id.query'

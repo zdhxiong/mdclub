@@ -2,11 +2,11 @@ get:
   operationId: getList
   summary: 获取提问列表
   description: |
-    可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`
+    获取提问列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.questions'
     - $ref: '#/components/parameters/include.question'
     - $ref: '#/components/parameters/question_id.query'
     - $ref: '#/components/parameters/user_id.query'

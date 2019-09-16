@@ -2,12 +2,12 @@ get:
   operationId: getList
   summary: 获取全部话题
   description: |
-    可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`
+    获取全部话题。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/include.topic'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.topics'
     - $ref: '#/components/parameters/topic_id.query'
     - $ref: '#/components/parameters/topic_name.query'
   responses:

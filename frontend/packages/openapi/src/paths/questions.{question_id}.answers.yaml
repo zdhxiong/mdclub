@@ -2,12 +2,12 @@ get:
   operationId: getAnswers
   summary: 获取指定提问下的回答
   description: |
-    可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+    获取指定提问下的回答。
   parameters:
     - $ref: '#/components/parameters/question_id.path'
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.answers'
     - $ref: '#/components/parameters/include.answer'
   responses:
     '200':

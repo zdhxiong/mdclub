@@ -2,11 +2,11 @@ get:
   operationId: getMyComments
   summary: 获取当前登录用户发表的评论
   description: |
-    可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`
+    获取当前登录用户发表的评论
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.comments'
     - $ref: '#/components/parameters/include.comment'
   responses:
     '200':

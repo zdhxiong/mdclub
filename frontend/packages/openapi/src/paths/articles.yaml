@@ -2,11 +2,11 @@ get:
   operationId: getList
   summary: 获取文章列表
   description: |
-    可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`
+    获取文章列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
-    - $ref: '#/components/parameters/order'
+    - $ref: '#/components/parameters/order.articles'
     - $ref: '#/components/parameters/include.article'
     - $ref: '#/components/parameters/article_id.query'
     - $ref: '#/components/parameters/user_id.query'

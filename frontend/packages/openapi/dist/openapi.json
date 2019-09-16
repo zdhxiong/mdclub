@@ -48,7 +48,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取回答列表",
-        "description": "获取回答列表\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取回答列表。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -57,7 +57,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.answers"
           },
           {
             "$ref": "#/components/parameters/include.answer"
@@ -110,7 +110,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定回答的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
+        "description": "获取指定回答的评论。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/answer_id.path"
@@ -122,7 +122,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -326,7 +326,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取文章列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取文章列表。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -335,7 +335,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.articles"
           },
           {
             "$ref": "#/components/parameters/include.article"
@@ -412,7 +412,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定文章的评论列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
+        "description": "获取指定文章的评论列表。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
@@ -424,7 +424,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -714,7 +714,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取所有评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
+        "description": "获取所有评论。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -723,7 +723,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -1157,7 +1157,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取提问列表",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
+        "description": "获取提问列表。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -1166,7 +1166,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.questions"
           },
           {
             "$ref": "#/components/parameters/include.question"
@@ -1238,7 +1238,7 @@
       "get": {
         "operationId": "getAnswers",
         "summary": "获取指定提问下的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取指定提问下的回答。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1250,7 +1250,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.answers"
           },
           {
             "$ref": "#/components/parameters/include.answer"
@@ -1300,7 +1300,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定提问的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `create_time`\n",
+        "description": "获取指定提问的评论。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
@@ -1312,7 +1312,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -1750,7 +1750,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取全部话题",
-        "description": "可排序字段包括 `topic_id`、`follower_count` 默认为 `topic_id`\n",
+        "description": "获取全部话题。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -1762,7 +1762,7 @@
             "$ref": "#/components/parameters/include.topic"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.topics"
           },
           {
             "$ref": "#/components/parameters/topic_id.query"
@@ -1831,7 +1831,7 @@
       "get": {
         "operationId": "getArticles",
         "summary": "获取指定话题下的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
+        "description": "获取指定话题下的文章。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1843,7 +1843,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.articles"
           },
           {
             "$ref": "#/components/parameters/include.article"
@@ -1940,7 +1940,7 @@
       "get": {
         "operationId": "getQuestions",
         "summary": "获取指定话题下的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
+        "description": "获取指定话题下的提问。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/topic_id.path"
@@ -1952,7 +1952,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.questions"
           },
           {
             "$ref": "#/components/parameters/include.question"
@@ -2052,7 +2052,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的回答列表",
-        "description": "仅管理员可调用该接口。\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2061,7 +2061,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedAnswers"
           },
           {
             "$ref": "#/components/parameters/answer_id.query"
@@ -2176,7 +2176,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的文章列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2185,7 +2185,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedArticles"
           },
           {
             "$ref": "#/components/parameters/article_id.query"
@@ -2300,7 +2300,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的评论列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `vote_count`、`create_time`、`delete_time`，默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2309,7 +2309,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedComments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -2433,7 +2433,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的提问列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`，默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2442,7 +2442,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedQuestions"
           },
           {
             "$ref": "#/components/parameters/question_id.query"
@@ -2557,7 +2557,7 @@
       "get": {
         "operationId": "getDeleted",
         "summary": "🔐获取回收站中的话题列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `topic_id`、`follower_count`、`delete_time` 默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2566,7 +2566,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedTopics"
           },
           {
             "$ref": "#/components/parameters/topic_id.query"
@@ -2684,7 +2684,7 @@
       "get": {
         "operationId": "getDisabled",
         "summary": "🔐获取已禁用用户列表",
-        "description": "仅管理员可调用该接口。\n\n可排序字段包括 `create_time`、`delete_time`、`follower_count`，默认为 `-delete_time`\n",
+        "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2696,7 +2696,7 @@
             "$ref": "#/components/parameters/include.user"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.deletedUsers"
           },
           {
             "$ref": "#/components/parameters/user_id.query"
@@ -2769,7 +2769,7 @@
       "get": {
         "operationId": "getMyAnswers",
         "summary": "获取当前登录用户发表的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取当前登录用户发表的回答\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2778,7 +2778,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.answers"
           },
           {
             "$ref": "#/components/parameters/include.answer"
@@ -2801,7 +2801,7 @@
       "get": {
         "operationId": "getMyArticles",
         "summary": "获取当前登录用户发表的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取当前登录用户发表的文章\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2810,7 +2810,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.articles"
           },
           {
             "$ref": "#/components/parameters/include.article"
@@ -2870,7 +2870,7 @@
       "get": {
         "operationId": "getMyComments",
         "summary": "获取当前登录用户发表的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
+        "description": "获取当前登录用户发表的评论\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -2879,7 +2879,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -3126,7 +3126,7 @@
       "get": {
         "operationId": "getMyQuestions",
         "summary": "获取登录用户发表的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
+        "description": "获取登录用户发表的提问\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3135,7 +3135,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.questions"
           },
           {
             "$ref": "#/components/parameters/include.question"
@@ -3226,7 +3226,7 @@
       "get": {
         "operationId": "getList",
         "summary": "获取用户列表",
-        "description": "不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。\n\n可排序字段包括 `create_time`、`follower_count`，默认为 `create_time`\n",
+        "description": "不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/page"
@@ -3235,7 +3235,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.users"
           },
           {
             "$ref": "#/components/parameters/include.user"
@@ -3307,7 +3307,7 @@
       "get": {
         "operationId": "getAnswers",
         "summary": "获取指定用户发表的回答",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取指定用户发表的回答\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3319,7 +3319,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.answers"
           },
           {
             "$ref": "#/components/parameters/include.answer"
@@ -3342,7 +3342,7 @@
       "get": {
         "operationId": "getArticles",
         "summary": "获取指定用户发表的文章",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-create_time`\n",
+        "description": "获取指定用户发表的文章\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3354,7 +3354,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.articles"
           },
           {
             "$ref": "#/components/parameters/include.article"
@@ -3400,7 +3400,7 @@
       "get": {
         "operationId": "getComments",
         "summary": "获取指定用户发表的评论",
-        "description": "可排序字段包括 `vote_count`、`create_time`，默认为 `-create_time`\n",
+        "description": "获取指定用户发表的评论\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3412,7 +3412,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.comments"
           },
           {
             "$ref": "#/components/parameters/include.comment"
@@ -3660,7 +3660,7 @@
       "get": {
         "operationId": "getQuestions",
         "summary": "获取指定用户发表的提问",
-        "description": "可排序字段包括 `vote_count`、`create_time`、`update_time`，默认为 `-update_time`\n",
+        "description": "获取指定用户发表的提问\n",
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
@@ -3672,7 +3672,7 @@
             "$ref": "#/components/parameters/per_page"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/order.questions"
           },
           {
             "$ref": "#/components/parameters/include.question"
@@ -7229,12 +7229,219 @@
           "is_me"
         ]
       },
-      "order": {
+      "order.answers": {
         "name": "order",
         "in": "query",
-        "description": "排序方式。在字段前加 `-` 表示倒序排列。例如 `create_time` 表示按时间顺序排列，`-create_time` 则表示按时间倒序排列。",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。\n",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time"
+          ],
+          "default": "-create_time"
+        },
+        "example": "-create_time"
+      },
+      "order.articles": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time"
+          ],
+          "default": "-create_time"
+        },
+        "example": "-create_time"
+      },
+      "order.comments": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "-vote_count",
+            "-create_time"
+          ],
+          "default": "-create_time"
+        },
+        "example": "-create_time"
+      },
+      "order.deletedAnswers": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`。\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "delete_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time",
+            "-delete_time"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.deletedArticles": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "delete_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time",
+            "-delete_time"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.deletedComments": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-delete_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "delete_time",
+            "-vote_count",
+            "-create_time",
+            "-delete_time"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.deletedQuestions": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "delete_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time",
+            "-delete_time"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.deletedTopics": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `topic_id`、`follower_count`、`delete_time`。默认为 `-delete_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "topic_id",
+            "follower_count",
+            "delete_time",
+            "-topic_id",
+            "-follower_count",
+            "-delete_time"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.deletedUsers": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `create_time`、`delete_time`、`follower_count`。默认为 `-delete_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "create_time",
+            "delete_time",
+            "follower_count",
+            "-create_time",
+            "-delete_time",
+            "-follower_count"
+          ],
+          "default": "-delete_time"
+        },
+        "example": "-delete_time"
+      },
+      "order.questions": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "vote_count",
+            "create_time",
+            "update_time",
+            "-vote_count",
+            "-create_time",
+            "-update_time"
+          ],
+          "default": "-create_time"
+        },
+        "example": "-create_time"
+      },
+      "order.topics": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `topic_id`、`follower_count`。默认为 `topic_id`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "topic_id",
+            "follower_count",
+            "-topic_id",
+            "-follower_count"
+          ],
+          "default": "topic_id"
+        },
+        "example": "topic_id"
+      },
+      "order.users": {
+        "name": "order",
+        "in": "query",
+        "description": "排序方式。在字段前加 `-` 表示倒序排列。\n\n可排序字段包括 `create_time`、`follower_count`。默认为 `-create_time`\n",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "create_time",
+            "follower_count",
+            "-create_time",
+            "-follower_count"
+          ],
+          "default": "-create_time"
         },
         "example": "-create_time"
       },

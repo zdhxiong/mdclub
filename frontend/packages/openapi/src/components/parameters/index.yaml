@@ -52,8 +52,30 @@ include.topic:
   $ref: ./include.topic.yaml
 include.user:
   $ref: ./include.user.yaml
-order:
-  $ref: ./order.yaml
+order.answers:
+  $ref: ./order.answers.yaml
+order.articles:
+  $ref: ./order.articles.yaml
+order.comments:
+  $ref: ./order.comments.yaml
+order.deletedAnswers:
+  $ref: ./order.deletedAnswers.yaml
+order.deletedArticles:
+  $ref: ./order.deletedArticles.yaml
+order.deletedComments:
+  $ref: ./order.deletedComments.yaml
+order.deletedQuestions:
+  $ref: ./order.deletedQuestions.yaml
+order.deletedTopics:
+  $ref: ./order.deletedTopics.yaml
+order.deletedUsers:
+  $ref: ./order.deletedUsers.yaml
+order.questions:
+  $ref: ./order.questions.yaml
+order.topics:
+  $ref: ./order.topics.yaml
+order.users:
+  $ref: ./order.users.yaml
 page:
   $ref: ./page.yaml
 per_page:
