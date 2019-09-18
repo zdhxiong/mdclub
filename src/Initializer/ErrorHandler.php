@@ -7,15 +7,14 @@ namespace MDClub\Initializer;
 use MDClub\Constant\ApiError;
 use MDClub\Exception\ApiException;
 use MDClub\Exception\ValidationException;
+use MDClub\Helper\Response;
 use MDClub\Middleware\Trace;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\App;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\ResponseEmitter;
 use Throwable;
@@ -29,6 +28,7 @@ use Whoops\Run;
  * @property-read \MDClub\Library\Log     $log
  * @property-read \MDClub\Library\View    $view
  * @property-read \MDClub\Library\Captcha $captcha
+ * @property-read ServerRequestInterface  $request
  * @property-read array                   $settings
  */
 class ErrorHandler
@@ -37,11 +37,6 @@ class ErrorHandler
      * @var ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var ServerRequestInterface
-     */
-    protected $request;
 
     /**
      * @var ResponseFactoryInterface
@@ -54,68 +49,83 @@ class ErrorHandler
     protected $debug;
 
     /**
-     * @param App       $app
-     * @param Throwable $exception
+     * @var Throwable
      */
-    public function __construct(App $app, Throwable $exception)
-    {
-        $this->container = $app->getContainer();
-        $this->request = (ServerRequestCreatorFactory::create())->createServerRequestFromGlobals();
-        $this->responseFactory = $app->getResponseFactory();
-        $this->debug = $this->settings['debug'];
+    protected $exception;
 
-        if ($exception instanceof ValidationException) {
-            $response = $this->handleValidationException($exception);
-        } elseif ($exception instanceof ApiException) {
-            $response = $this->handleApiException($exception);
-        } elseif ($exception instanceof HttpNotFoundException) {
-            $response = $this->handleNotFoundException();
-        } elseif ($exception instanceof HttpMethodNotAllowedException) {
-            $response = $this->handleNotAllowedException($exception);
-        } else {
-            $response = $this->handleUndefinedException($exception);
-        }
-
-        $response = $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, PUT, DELETE')
-            ->withHeader(
-                'Access-Control-Allow-Headers',
-                'Token, Origin, X-Requested-With, Accept, Content-Type, Connection, User-Agent'
-            );
-
-        $responseEmitter = new ResponseEmitter();
-        $responseEmitter->emit($response);
-    }
-
+    /**
+     * 魔术方法获取容器中的对象
+     *
+     * @param $name
+     * @return mixed
+     */
     public function __get($name)
     {
         return $this->container->get($name);
     }
 
     /**
+     * @param ContainerInterface       $container
+     * @param ResponseFactoryInterface $responseFactory
+     * @param Throwable                $exception
+     */
+    public function __construct(
+        ContainerInterface $container,
+        ResponseFactoryInterface $responseFactory,
+        Throwable $exception
+    ) {
+        $this->container = $container;
+        $this->responseFactory = $responseFactory;
+        $this->exception = $exception;
+        $this->debug = $this->settings['debug'];
+
+        switch (true) {
+            case $exception instanceof ValidationException:
+                $response = $this->handleValidationException();
+                break;
+
+            case $exception instanceof ApiException:
+                $response = $this->handleApiException();
+                break;
+
+            case $exception instanceof HttpNotFoundException:
+                $response = $this->handleNotFoundException();
+                break;
+
+            case $exception instanceof HttpMethodNotAllowedException:
+                $response = $this->handleNotAllowedException();
+                break;
+
+            default:
+                $response = $this->handleUndefinedException();
+                break;
+        }
+
+        $response = Response::withCors($response);
+
+        $responseEmitter = new ResponseEmitter();
+        $responseEmitter->emit($response);
+    }
+
+    /**
      * 处理验证异常，返回 json
      *
-     * @param  ValidationException $exception
      * @return ResponseInterface
      */
-    protected function handleValidationException(ValidationException $exception): ResponseInterface
+    protected function handleValidationException(): ResponseInterface
     {
         $output = [
-            'code' => $exception->getCode(),
-            'message' => $exception->getMessage(),
-            'errors' => $exception->getErrors(),
+            'code' => $this->exception->getCode(),
+            'message' => $this->exception->getMessage(),
+            'errors' => $this->exception->getErrors(),
         ];
 
-        if ($exception->isNeedCaptcha()) {
+        if ($this->exception->isNeedCaptcha()) {
             $output = $this->withCaptcha($output);
         }
 
         $response = $this->renderJson($output);
-
-        if ($this->debug) {
-            $response = (new Trace($this->container))->appendTraceMessage($this->request, $response);
-        }
+        $response = $this->withTrace($response);
 
         return $response;
     }
@@ -123,30 +133,26 @@ class ErrorHandler
     /**
      * 处理 API 异常，返回 json
      *
-     * @param  ApiException      $exception
      * @return ResponseInterface
      */
-    protected function handleApiException(ApiException $exception): ResponseInterface
+    protected function handleApiException(): ResponseInterface
     {
         $output = [
-            'code' => $exception->getCode(),
-            'message' => $exception->getMessage(),
+            'code' => $this->exception->getCode(),
+            'message' => $this->exception->getMessage(),
         ];
 
-        $extraMessage = $exception->getExtraMessage();
+        $extraMessage = $this->exception->getExtraMessage();
         if ($extraMessage) {
             $output['extra_message'] = $extraMessage;
         }
 
-        if ($exception->isNeedCaptcha()) {
+        if ($this->exception->isNeedCaptcha()) {
             $output = $this->withCaptcha($output);
         }
 
         $response = $this->renderJson($output);
-
-        if ($this->debug) {
-            $response = (new Trace($this->container))->appendTraceMessage($this->request, $response);
-        }
+        $response = $this->withTrace($response);
 
         return $response;
     }
@@ -175,12 +181,11 @@ class ErrorHandler
     /**
      * 处理 NotAllowed 异常
      *
-     * @param  HttpMethodNotAllowedException $exception
      * @return ResponseInterface
      */
-    protected function handleNotAllowedException(HttpMethodNotAllowedException $exception): ResponseInterface
+    protected function handleNotAllowedException(): ResponseInterface
     {
-        $allow = implode(', ', $exception->getAllowedMethods());
+        $allow = implode(', ', $this->exception->getAllowedMethods());
 
         if ($this->request->getMethod() === 'OPTIONS') {
             return $this->renderPlainText('Allowed methods: ' . $allow);
@@ -200,10 +205,9 @@ class ErrorHandler
     /**
      * 处理其他异常
      *
-     * @param  Throwable         $exception
      * @return ResponseInterface
      */
-    protected function handleUndefinedException(Throwable $exception): ResponseInterface
+    protected function handleUndefinedException(): ResponseInterface
     {
         // 调试环境交由 whoops 处理
         if ($this->debug) {
@@ -218,7 +222,7 @@ class ErrorHandler
                 $contentType = 'text/html';
             }
 
-            $output = $whoops->prependHandler($handler)->handleException($exception);
+            $output = $whoops->prependHandler($handler)->handleException($this->exception);
             $response = $this->responseFactory->createResponse();
 
             return $response
@@ -227,8 +231,7 @@ class ErrorHandler
                 ->withBody((new StreamFactory())->createStream($output));
         }
 
-        // 写入日志
-        $this->log->error($exception->getMessage(), $exception->getTrace());
+        $this->logError();
 
         if ($this->isRequestJson()) {
             return $this->renderJson([
@@ -238,6 +241,31 @@ class ErrorHandler
         }
 
         return $this->render500Html();
+    }
+
+    /**
+     * 写入异常到日志
+     */
+    protected function logError()
+    {
+        $this->log->error($this->exception->getMessage(), $this->exception->getTrace());
+    }
+
+    /**
+     * 在响应中包含 trace
+     *
+     * @param  ResponseInterface $response
+     * @return ResponseInterface
+     */
+    protected function withTrace(ResponseInterface $response): ResponseInterface
+    {
+        if (!$this->debug) {
+            return $response;
+        }
+
+        $trace = new Trace($this->container);
+
+        return $trace->appendTraceMessage($this->request, $response);
     }
 
     /**

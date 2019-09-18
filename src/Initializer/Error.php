@@ -38,7 +38,11 @@ class Error
      */
     public function appException(Throwable $exception): void
     {
-        new ErrorHandler($this->app, $exception);
+        new ErrorHandler(
+            $this->app->getContainer(),
+            $this->app->getResponseFactory(),
+            $exception
+        );
     }
 
     /**

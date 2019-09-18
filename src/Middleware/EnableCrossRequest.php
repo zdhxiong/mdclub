@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Middleware;
 
+use MDClub\Helper\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -21,12 +22,6 @@ class EnableCrossRequest implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, PUT, DELETE')
-            ->withHeader(
-                'Access-Control-Allow-Headers',
-                'Token, Origin, X-Requested-With, Accept, Content-Type, Connection, User-Agent'
-            );
+        return Response::withCors($response);
     }
 }
