@@ -111,7 +111,7 @@ class Article extends Abstracts
             ->join(['[><]topicable' => ['article_id' => 'topicable_id']])
             ->where('topicable.topicable_type', 'article')
             ->where('topicable.topic_id', $topicId)
-            ->order($this->getOrderFromRequest(['update_time' => 'DESC']))
+            ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
             ->paginate();
     }
 

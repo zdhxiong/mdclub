@@ -27,13 +27,13 @@ class Index extends Abstracts
             return $this->render('/404.php');
         }
 
-        $userId = (int) $this->auth->userId();
+        $userId = (int)$this->auth->userId();
         $siteUrl = $this->getSiteUrl();
         $staticUrl = $this->getStaticUrl();
         $rootUrl = $this->getRootUrl();
 
         if (!$assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json')) {
-            throw new SystemException('无法访问 ' . $staticUrl . 'admin/webpack-assets.json 文件');
+            throw new SystemException('Can not find file: ' . $staticUrl . 'admin/webpack-assets.json');
         }
 
         $assetsInfo = json_decode($assetsInfo, true);

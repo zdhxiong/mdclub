@@ -13,7 +13,7 @@ use Slim\Psr7\Response;
 /**
  * 如果请求 URL 以 / 结尾，则跳转到不带 / 的 URL
  *
- * @link http://dev.slimframework.com/docs/v4/cookbook/route-patterns.html
+ * @link http://www.slimframework.com/docs/v4/cookbook/route-patterns.html
  */
 class TrailingSlash implements MiddlewareInterface
 {

@@ -19,6 +19,6 @@ class Admin
          *
          * @see Index::index()
          */
-        $app->get('/admin[/{path}]', 'Admin/Index/index');
+        $app->get('/admin[/{path}]', Index::class . ':index');
     }
 }

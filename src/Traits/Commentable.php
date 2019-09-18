@@ -26,7 +26,7 @@ trait Commentable
     {
         $table = $this->model->table;
 
-        $this->{"${table}Service"}->hasOrFail($commentableId);
+        $this->{"${table}GetService"}->hasOrFail($commentableId);
 
         return $this->commentModel->getByCommentableId($this->model->table, $commentableId);
     }
@@ -44,7 +44,7 @@ trait Commentable
         $userId = $this->auth->userId();
         $table = $this->model->table;
 
-        $this->{"${table}Service"}->hasOrFail($commentableId);
+        $this->{"${table}GetService"}->hasOrFail($commentableId);
 
         // 验证 content
         $content = strip_tags($content);

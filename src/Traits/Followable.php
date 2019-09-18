@@ -10,11 +10,11 @@ use MDClub\Exception\ApiException;
 /**
  * 可关注对象。用于 article, question, topic, user
  *
- * @property-read \MDClub\Library\Auth    $auth
- * @property-read \MDClub\Model\Abstracts $model
- * @property-read \MDClub\Model\Follow    $followModel
- * @property-read \MDClub\Model\User      $userModel
- * @property-read \MDClub\Service\User    $userService
+ * @property-read \MDClub\Library\Auth     $auth
+ * @property-read \MDClub\Model\Abstracts  $model
+ * @property-read \MDClub\Model\Follow     $followModel
+ * @property-read \MDClub\Model\User       $userModel
+ * @property-read \MDClub\Service\User\Get $userGetService
  */
 trait Followable
 {
@@ -100,7 +100,7 @@ trait Followable
     {
         $table = $this->model->table;
 
-        $this->{"${table}Service"}->hasOrFail($followableId);
+        $this->{"${table}GetService"}->hasOrFail($followableId);
 
         return $this->userModel
             ->join([
@@ -125,7 +125,7 @@ trait Followable
     {
         $table = $this->model->table;
 
-        $this->userService->hasOrFail($userId);
+        $this->userGetService->hasOrFail($userId);
 
         return $this->model
             ->join([
@@ -163,7 +163,7 @@ trait Followable
         $table = $this->model->table;
         $userId = $this->auth->userId();
 
-        $this->{"${table}Service"}->hasOrFail($followableId);
+        $this->{"${table}GetService"}->hasOrFail($followableId);
 
         return $this->followModel->where([
             'user_id'         => $userId,

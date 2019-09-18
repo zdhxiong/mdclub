@@ -81,7 +81,7 @@ class RestApi
          *
          * @see Token::create()
          */
-        $group->post('/tokens', 'RestApi/Token/create');
+        $group->post('/tokens', Token::class . ':create');
 
         return $this;
     }
@@ -99,14 +99,14 @@ class RestApi
          *
          * @see Option::get()
          */
-        $group->get('/options', 'RestApi/Option/get');
+        $group->get('/options', Option::class . ':get');
 
         /**
          * 更新设置
          *
          * @see Option::update()
          */
-        $group->patch('/options', 'RestApi/Option/update')
+        $group->patch('/options', Option::class . ':update')
             ->add(NeedManager::class);
 
         return $this;
@@ -125,7 +125,7 @@ class RestApi
          *
          * @see User::getList()
          */
-        $group->get('/users', 'RestApi/User/getList')
+        $group->get('/users', User::class . ':getList')
             ->add(TransformUser::class);
 
         /**
@@ -133,14 +133,14 @@ class RestApi
          *
          * @see User::register()
          */
-        $group->post('/users', 'RestApi/User/register');
+        $group->post('/users', User::class . ':register');
 
         /**
          * 批量禁用用户
          *
          * @see User::disableMultiple()
          */
-        $group->delete('/users', 'RestApi/User/disableMultiple')
+        $group->delete('/users', User::class . ':disableMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -148,7 +148,7 @@ class RestApi
          *
          * @see User::get()
          */
-        $group->get('/users/{user_id:\d+}', 'RestApi/User/get')
+        $group->get('/users/{user_id:\d+}', User::class . ':get')
             ->add(TransformUser::class);
 
         /**
@@ -156,7 +156,7 @@ class RestApi
          *
          * @see User::update()
          */
-        $group->patch('/users/{user_id:\d+}', 'RestApi/User/update')
+        $group->patch('/users/{user_id:\d+}', User::class . ':update')
             ->add(NeedManager::class);
 
         /**
@@ -164,7 +164,7 @@ class RestApi
          *
          * @see User::disable()
          */
-        $group->delete('/users/{user_id:\d+}', 'RestApi/User/disable')
+        $group->delete('/users/{user_id:\d+}', User::class . ':disable')
             ->add(NeedManager::class);
 
         /**
@@ -172,7 +172,7 @@ class RestApi
          *
          * @see User::deleteAvatar()
          */
-        $group->delete('/users/{user_id:\d+}/avatar', 'RestApi/User/deleteAvatar')
+        $group->delete('/users/{user_id:\d+}/avatar', User::class . ':deleteAvatar')
             ->add(NeedManager::class);
 
         /**
@@ -180,7 +180,7 @@ class RestApi
          *
          * @see User::deleteCover()
          */
-        $group->delete('/users/{user_id:\d+}/cover', 'RestApi/User/deleteCover')
+        $group->delete('/users/{user_id:\d+}/cover', User::class . ':deleteCover')
             ->add(NeedManager::class);
 
         /**
@@ -188,7 +188,7 @@ class RestApi
          *
          * @see User::getFollowers()
          */
-        $group->get('/users/{user_id:\d+}/followers', 'RestApi/User/getFollowers')
+        $group->get('/users/{user_id:\d+}/followers', User::class . ':getFollowers')
             ->add(TransformUser::class);
 
         /**
@@ -196,7 +196,7 @@ class RestApi
          *
          * @see User::addFollow()
          */
-        $group->post('/users/{user_id:\d+}/followers', 'RestApi/User/addFollow')
+        $group->post('/users/{user_id:\d+}/followers', User::class . ':addFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -204,7 +204,7 @@ class RestApi
          *
          * @see User::deleteFollow()
          */
-        $group->delete('/users/{user_id:\d+}/followers', 'RestApi/User/deleteFollow')
+        $group->delete('/users/{user_id:\d+}/followers', User::class . ':deleteFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -212,7 +212,7 @@ class RestApi
          *
          * @see User::getFollowees()
          */
-        $group->get('/users/{user_id:\d+}/followees', 'RestApi/User/getFollowees')
+        $group->get('/users/{user_id:\d+}/followees', User::class . ':getFollowees')
             ->add(TransformUser::class);
 
         /**
@@ -220,7 +220,7 @@ class RestApi
          *
          * @see User::getFollowingQuestions()
          */
-        $group->get('/users/{user_id:\d+}/following_questions', 'RestApi/User/getFollowingQuestions')
+        $group->get('/users/{user_id:\d+}/following_questions', User::class . ':getFollowingQuestions')
             ->add(TransformQuestion::class);
 
         /**
@@ -228,7 +228,7 @@ class RestApi
          *
          * @see User::getFollowingArticles()
          */
-        $group->get('/users/{user_id:\d+}/following_articles', 'RestApi/User/getFollowingArticles')
+        $group->get('/users/{user_id:\d+}/following_articles', User::class . ':getFollowingArticles')
             ->add(TransformArticle::class);
 
         /**
@@ -236,7 +236,7 @@ class RestApi
          *
          * @see User::getFollowingTopics()
          */
-        $group->get('/users/{user_id:\d+}/following_topics', 'RestApi/User/getFollowingTopics')
+        $group->get('/users/{user_id:\d+}/following_topics', User::class . ':getFollowingTopics')
             ->add(TransformTopic::class);
 
         /**
@@ -244,7 +244,7 @@ class RestApi
          *
          * @see User::getQuestions()
          */
-        $group->get('/users/{user_id:\d+}/questions', 'RestApi/User/getQuestions')
+        $group->get('/users/{user_id:\d+}/questions', User::class . ':getQuestions')
             ->add(TransformQuestion::class);
 
         /**
@@ -252,7 +252,7 @@ class RestApi
          *
          * @see User::getAnswers()
          */
-        $group->get('/users/{user_id:\d+}/answers', 'RestApi/User/getAnswers')
+        $group->get('/users/{user_id:\d+}/answers', User::class . ':getAnswers')
             ->add(TransformAnswer::class);
 
         /**
@@ -260,7 +260,7 @@ class RestApi
          *
          * @see User::getArticles()
          */
-        $group->get('/users/{user_id:\d+}/articles', 'RestApi/User/getArticles')
+        $group->get('/users/{user_id:\d+}/articles', User::class . ':getArticles')
             ->add(TransformArticle::class);
 
         /**
@@ -268,7 +268,7 @@ class RestApi
          *
          * @see User::getComments()
          */
-        $group->get('/users/{user_id:\d+}/comments', 'RestApi/User/getComments')
+        $group->get('/users/{user_id:\d+}/comments', User::class . ':getComments')
             ->add(TransformComment::class);
 
         /**
@@ -276,7 +276,7 @@ class RestApi
          *
          * @see User::getMine()
          */
-        $group->get('/user', 'RestApi/User/getMine')
+        $group->get('/user', User::class . ':getMine')
             ->add(NeedLogin::class)
             ->add(TransformUser::class);
 
@@ -285,7 +285,7 @@ class RestApi
          *
          * @see User::updateMine()
          */
-        $group->patch('/user', 'RestApi/User/updateMine')
+        $group->patch('/user', User::class . ':updateMine')
             ->add(NeedLogin::class)
             ->add(TransformUser::class);
 
@@ -294,7 +294,7 @@ class RestApi
          *
          * @see User::uploadMyAvatar()
          */
-        $group->post('/user/avatar', 'RestApi/User/uploadMyAvatar')
+        $group->post('/user/avatar', User::class . ':uploadMyAvatar')
             ->add(NeedLogin::class);
 
         /**
@@ -302,7 +302,7 @@ class RestApi
          *
          * @see User::deleteMyAvatar()
          */
-        $group->delete('/user/avatar', 'RestApi/User/deleteMyAvatar')
+        $group->delete('/user/avatar', User::class . ':deleteMyAvatar')
             ->add(NeedLogin::class);
 
         /**
@@ -310,7 +310,7 @@ class RestApi
          *
          * @see User::uploadMyCover()
          */
-        $group->post('/user/cover', 'RestApi/User/uploadMyCover')
+        $group->post('/user/cover', User::class . ':uploadMyCover')
             ->add(NeedLogin::class);
 
         /**
@@ -318,7 +318,7 @@ class RestApi
          *
          * @see User::deleteMyCover()
          */
-        $group->delete('/user/cover', 'RestApi/User/deleteMyCover')
+        $group->delete('/user/cover', User::class . ':deleteMyCover')
             ->add(NeedLogin::class);
 
         /**
@@ -326,28 +326,28 @@ class RestApi
          *
          * @see User::sendRegisterEmail()
          */
-        $group->post('/user/register/email', 'RestApi/User/sendRegisterEmail');
+        $group->post('/user/register/email', User::class . ':sendRegisterEmail');
 
         /**
          * 发送重置密码验证邮件
          *
          * @see User::sendPasswordResetEmail()
          */
-        $group->post('/user/password/email', 'RestApi/User/sendPasswordResetEmail');
+        $group->post('/user/password/email', User::class . ':sendPasswordResetEmail');
 
         /**
          * 重置密码
          *
          * @see User::updatePassword()
          */
-        $group->put('/user/password', 'RestApi/User/updatePassword');
+        $group->put('/user/password', User::class . ':updatePassword');
 
         /**
          * 获取当前用户的关注者
          *
          * @see User::getMyFollowers()
          */
-        $group->get('/user/followers', 'RestApi/User/getMyFollowers')
+        $group->get('/user/followers', User::class . ':getMyFollowers')
             ->add(NeedLogin::class)
             ->add(TransformUser::class);
 
@@ -356,7 +356,7 @@ class RestApi
          *
          * @see User::getMyFollowees()
          */
-        $group->get('/user/followees', 'RestApi/User/getMyFollowees')
+        $group->get('/user/followees', User::class . ':getMyFollowees')
             ->add(NeedLogin::class)
             ->add(TransformUser::class);
 
@@ -365,7 +365,7 @@ class RestApi
          *
          * @see User::getMyFollowingQuestions()
          */
-        $group->get('/user/following_questions', 'RestApi/User/getMyFollowingQuestions')
+        $group->get('/user/following_questions', User::class . ':getMyFollowingQuestions')
             ->add(NeedLogin::class)
             ->add(TransformQuestion::class);
 
@@ -374,7 +374,7 @@ class RestApi
          *
          * @see User::getMyFollowingArticles()
          */
-        $group->get('/user/following_articles', 'RestApi/User/getMyFollowingArticles')
+        $group->get('/user/following_articles', User::class . ':getMyFollowingArticles')
             ->add(NeedLogin::class)
             ->add(TransformArticle::class);
 
@@ -383,7 +383,7 @@ class RestApi
          *
          * @see User::getMyFollowingTopics()
          */
-        $group->get('/user/following_topics', 'RestApi/User/getMyFollowingTopics')
+        $group->get('/user/following_topics', User::class . ':getMyFollowingTopics')
             ->add(NeedLogin::class)
             ->add(TransformTopic::class);
 
@@ -392,7 +392,7 @@ class RestApi
          *
          * @see User::getMyQuestions()
          */
-        $group->get('/user/questions', 'RestApi/User/getMyQuestions')
+        $group->get('/user/questions', User::class . ':getMyQuestions')
             ->add(NeedLogin::class)
             ->add(TransformQuestion::class);
 
@@ -401,7 +401,7 @@ class RestApi
          *
          * @see User::getMyAnswers()
          */
-        $group->get('/user/answers', 'RestApi/User/getMyAnswers')
+        $group->get('/user/answers', User::class . ':getMyAnswers')
             ->add(NeedLogin::class)
             ->add(TransformAnswer::class);
 
@@ -410,7 +410,7 @@ class RestApi
          *
          * @see User::getMyArticles()
          */
-        $group->get('/user/articles', 'RestApi/User/getMyArticles')
+        $group->get('/user/articles', User::class . ':getMyArticles')
             ->add(NeedLogin::class)
             ->add(TransformArticle::class);
 
@@ -419,7 +419,7 @@ class RestApi
          *
          * @see User::getMyComments()
          */
-        $group->get('/user/comments', 'RestApi/User/getMyComments')
+        $group->get('/user/comments', User::class . ':getMyComments')
             ->add(NeedLogin::class)
             ->add(TransformComment::class);
 
@@ -428,7 +428,7 @@ class RestApi
          *
          * @see User::getDisabled()
          */
-        $group->get('/trash/users', 'RestApi/User/getDisabled')
+        $group->get('/trash/users', User::class . ':getDisabled')
             ->add(NeedManager::class)
             ->add(TransformUser::class);
 
@@ -437,7 +437,7 @@ class RestApi
          *
          * @see User::enableMultiple()
          */
-        $group->post('/trash/users', 'RestApi/User/enableMultiple')
+        $group->post('/trash/users', User::class . ':enableMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -445,7 +445,7 @@ class RestApi
          *
          * @see User::enable()
          */
-        $group->post('/trash/users/{user_id:\d+}', 'RestApi/User/enable')
+        $group->post('/trash/users/{user_id:\d+}', User::class . ':enable')
             ->add(NeedManager::class);
 
         return $this;
@@ -464,7 +464,7 @@ class RestApi
          *
          * @see Topic::getList()
          */
-        $group->get('/topics', 'RestApi/Topic/getList')
+        $group->get('/topics', Topic::class . ':getList')
             ->add(TransformTopic::class);
 
         /**
@@ -472,7 +472,7 @@ class RestApi
          *
          * @see Topic::create()
          */
-        $group->post('/topics', 'RestApi/Topic/create')
+        $group->post('/topics', Topic::class . ':create')
             ->add(NeedManager::class)
             ->add(TransformTopic::class);
 
@@ -481,7 +481,7 @@ class RestApi
          *
          * @see Topic::deleteMultiple()
          */
-        $group->delete('/topics', 'RestApi/Topic/deleteMultiple')
+        $group->delete('/topics', Topic::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -489,7 +489,7 @@ class RestApi
          *
          * @see Topic::get()
          */
-        $group->get('/topics/{topic_id:\d+}', 'RestApi/Topic/get')
+        $group->get('/topics/{topic_id:\d+}', Topic::class . ':get')
             ->add(TransformTopic::class);
 
         /**
@@ -499,7 +499,7 @@ class RestApi
          *
          * @see Topic::update()
          */
-        $group->post('/topics/{topic_id:\d+}', 'RestApi/Topic/update')
+        $group->post('/topics/{topic_id:\d+}', Topic::class . ':update')
             ->add(NeedManager::class)
             ->add(TransformTopic::class);
 
@@ -508,7 +508,7 @@ class RestApi
          *
          * @see Topic::delete()
          */
-        $group->delete('/topics/{topic_id:\d+}', 'RestApi/Topic/delete')
+        $group->delete('/topics/{topic_id:\d+}', Topic::class . ':delete')
             ->add(NeedManager::class);
 
         /**
@@ -516,7 +516,7 @@ class RestApi
          *
          * @see Topic::getFollowers()
          */
-        $group->get('/topics/{topic_id:\d+}/followers', 'RestApi/Topic/getFollowers')
+        $group->get('/topics/{topic_id:\d+}/followers', Topic::class . ':getFollowers')
             ->add(TransformUser::class);
 
         /**
@@ -524,7 +524,7 @@ class RestApi
          *
          * @see Topic::addFollow()
          */
-        $group->post('/topics/{topic_id:\d+}/followers', 'RestApi/Topic/addFollow')
+        $group->post('/topics/{topic_id:\d+}/followers', Topic::class . ':addFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -532,7 +532,7 @@ class RestApi
          *
          * @see Topic::deleteFollow()
          */
-        $group->delete('/topics/{topic_id:\d+}/followers', 'RestApi/Topic/deleteFollow')
+        $group->delete('/topics/{topic_id:\d+}/followers', Topic::class . ':deleteFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -540,7 +540,7 @@ class RestApi
          *
          * @see Topic::getQuestions()
          */
-        $group->get('/topics/{topic_id:\d+}/questions', 'RestApi/Topic/getQuestions')
+        $group->get('/topics/{topic_id:\d+}/questions', Topic::class . ':getQuestions')
             ->add(TransformQuestion::class);
 
         /**
@@ -548,7 +548,7 @@ class RestApi
          *
          * @see Topic::getArticles()
          */
-        $group->get('/topics/{topic_id:\d+}/articles', 'RestApi/Topic/getArticles')
+        $group->get('/topics/{topic_id:\d+}/articles', Topic::class . ':getArticles')
             ->add(TransformArticle::class);
 
         /**
@@ -556,7 +556,7 @@ class RestApi
          *
          * @see Topic::getDeleted()
          */
-        $group->get('/trash/topics', 'RestApi/Topic/getDeleted')
+        $group->get('/trash/topics', Topic::class . ':getDeleted')
             ->add(NeedManager::class)
             ->add(TransformTopic::class);
 
@@ -565,7 +565,7 @@ class RestApi
          *
          * @see Topic::restoreMultiple()
          */
-        $group->post('/trash/topics', 'RestApi/Topic/restoreMultiple')
+        $group->post('/trash/topics', Topic::class . ':restoreMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -573,7 +573,7 @@ class RestApi
          *
          * @see Topic::destroyMultiple()
          */
-        $group->delete('/trash/topics', 'RestApi/Topic/destroyMultiple')
+        $group->delete('/trash/topics', Topic::class . ':destroyMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -581,7 +581,7 @@ class RestApi
          *
          * @see Topic::restore()
          */
-        $group->post('/trash/topics/{topic_id:\d+}', 'RestApi/Topic/restore')
+        $group->post('/trash/topics/{topic_id:\d+}', Topic::class . ':restore')
             ->add(NeedManager::class)
             ->add(TransformTopic::class);
 
@@ -590,7 +590,7 @@ class RestApi
          *
          * @see Topic::destroy()
          */
-        $group->delete('/trash/topics/{topic_id:\d+}', 'RestApi/Topic/destroy')
+        $group->delete('/trash/topics/{topic_id:\d+}', Topic::class . ':destroy')
             ->add(NeedManager::class);
 
         return $this;
@@ -609,7 +609,7 @@ class RestApi
          *
          * @see Question::getList()
          */
-        $group->get('/questions', 'RestApi/Question/getList')
+        $group->get('/questions', Question::class . ':getList')
             ->add(TransformQuestion::class);
 
         /**
@@ -617,14 +617,14 @@ class RestApi
          *
          * @see Question::create()
          */
-        $group->post('/questions', 'RestApi/Question/create');
+        $group->post('/questions', Question::class . ':create');
 
         /**
          * 批量删除提问
          *
          * @see Question::deleteMultiple()
          */
-        $group->delete('/questions', 'RestApi/Question/deleteMultiple')
+        $group->delete('/questions', Question::class . ':deleteMultiple')
             ->add(NeedLogin::class);
 
         /**
@@ -632,7 +632,7 @@ class RestApi
          *
          * @see Question::get()
          */
-        $group->get('/questions/{question_id:\d+}', 'RestApi/Question/get')
+        $group->get('/questions/{question_id:\d+}', Question::class . ':get')
             ->add(TransformQuestion::class);
 
         /**
@@ -640,14 +640,14 @@ class RestApi
          *
          * @see Question::update()
          */
-        $group->patch('/questions/{question_id:\d+}', 'RestApi/Question/update');
+        $group->patch('/questions/{question_id:\d+}', Question::class . ':update');
 
         /**
          * 删除提问
          *
          * @see Question::delete()
          */
-        $group->delete('/questions/{question_id:\d+}', 'RestApi/Question/delete')
+        $group->delete('/questions/{question_id:\d+}', Question::class . ':delete')
             ->add(NeedLogin::class);
 
         /**
@@ -655,7 +655,7 @@ class RestApi
          *
          * @see Question::getVoters()
          */
-        $group->get('/questions/{question_id:\d+}/voters', 'RestApi/Question/getVoters')
+        $group->get('/questions/{question_id:\d+}/voters', Question::class . ':getVoters')
             ->add(TransformUser::class);
 
         /**
@@ -663,7 +663,7 @@ class RestApi
          *
          * @see Question::addVote()
          */
-        $group->post('/questions/{question_id:\d+}/voters', 'RestApi/Question/addVote')
+        $group->post('/questions/{question_id:\d+}/voters', Question::class . ':addVote')
             ->add(NeedLogin::class);
 
         /**
@@ -671,7 +671,7 @@ class RestApi
          *
          * @see Question::deleteVote()
          */
-        $group->delete('/questions/{question_id:\d+}/voters', 'RestApi/Question/deleteVote')
+        $group->delete('/questions/{question_id:\d+}/voters', Question::class . ':deleteVote')
             ->add(NeedLogin::class);
 
         /**
@@ -679,7 +679,7 @@ class RestApi
          *
          * @see Question::getFollowers()
          */
-        $group->get('/questions/{question_id:\d+}/followers', 'RestApi/Question/getFollowers')
+        $group->get('/questions/{question_id:\d+}/followers', Question::class . ':getFollowers')
             ->add(TransformUser::class);
 
         /**
@@ -687,7 +687,7 @@ class RestApi
          *
          * @see Question::addFollow()
          */
-        $group->post('/questions/{question_id:\d+}/followers', 'RestApi/Question/addFollow')
+        $group->post('/questions/{question_id:\d+}/followers', Question::class . ':addFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -695,7 +695,7 @@ class RestApi
          *
          * @see Question::deleteFollow()
          */
-        $group->delete('/questions/{question_id:\d+}/followers', 'RestApi/Question/deleteFollow')
+        $group->delete('/questions/{question_id:\d+}/followers', Question::class . ':deleteFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -703,7 +703,7 @@ class RestApi
          *
          * @see Question::getComments()
          */
-        $group->get('/questions/{question_id:\d+}/comments', 'RestApi/Question/getComments')
+        $group->get('/questions/{question_id:\d+}/comments', Question::class . ':getComments')
             ->add(TransformComment::class);
 
         /**
@@ -711,7 +711,7 @@ class RestApi
          *
          * @see Question::createComment()
          */
-        $group->post('/questions/{question_id:\d+}/comments', 'RestApi/Question/createComment')
+        $group->post('/questions/{question_id:\d+}/comments', Question::class . ':createComment')
             ->add(NeedLogin::class)
             ->add(TransformComment::class);
 
@@ -720,7 +720,7 @@ class RestApi
          *
          * @see Question::getAnswers()
          */
-        $group->get('/questions/{question_id:\d+}/answers', 'RestApi/Question/getAnswers')
+        $group->get('/questions/{question_id:\d+}/answers', Question::class . ':getAnswers')
             ->add(TransformAnswer::class);
 
         /**
@@ -728,7 +728,7 @@ class RestApi
          *
          * @see Question::createAnswer()
          */
-        $group->post('/questions/{question_id:\d+}/answers', 'RestApi/Question/createAnswer')
+        $group->post('/questions/{question_id:\d+}/answers', Question::class . ':createAnswer')
             ->add(NeedLogin::class)
             ->add(TransformAnswer::class);
 
@@ -737,7 +737,7 @@ class RestApi
          *
          * @see Question::getDeleted()
          */
-        $group->get('/trash/questions', 'RestApi/Question/getDeleted')
+        $group->get('/trash/questions', Question::class . ':getDeleted')
             ->add(NeedManager::class);
 
         /**
@@ -745,7 +745,7 @@ class RestApi
          *
          * @see Question::restoreMultiple()
          */
-        $group->post('/trash/questions', 'RestApi/Question/restoreMultiple')
+        $group->post('/trash/questions', Question::class . ':restoreMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -753,7 +753,7 @@ class RestApi
          *
          * @see Question::destroyMultiple()
          */
-        $group->delete('/trash/questions', 'RestApi/Question/destroyMultiple')
+        $group->delete('/trash/questions', Question::class . ':destroyMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -761,7 +761,7 @@ class RestApi
          *
          * @see Question::restore()
          */
-        $group->post('/trash/questions/{question_id:\d+}', 'RestApi/Question/restore')
+        $group->post('/trash/questions/{question_id:\d+}', Question::class . ':restore')
             ->add(NeedManager::class);
 
         /**
@@ -769,7 +769,7 @@ class RestApi
          *
          * @see Question::destroy()
          */
-        $group->delete('/trash/questions/{question_id:\d+}', 'RestApi/Question/destroy')
+        $group->delete('/trash/questions/{question_id:\d+}', Question::class . ':destroy')
             ->add(NeedManager::class);
 
         return $this;
@@ -788,7 +788,7 @@ class RestApi
          *
          * @see Answer::getList()
          */
-        $group->get('/answers', 'RestApi/Answer/getList')
+        $group->get('/answers', Answer::class . ':getList')
             ->add(TransformAnswer::class);
 
         /**
@@ -796,14 +796,14 @@ class RestApi
          *
          * @see Answer::deleteMultiple()
          */
-        $group->delete('/answers', 'RestApi/Answer/deleteMultiple');
+        $group->delete('/answers', Answer::class . ':deleteMultiple');
 
         /**
          * 获取回答
          *
          * @see Answer::get()
          */
-        $group->get('/answers/{answer_id:\d+}', 'RestApi/Answer/get')
+        $group->get('/answers/{answer_id:\d+}', Answer::class . ':get')
             ->add(TransformAnswer::class);
 
         /**
@@ -811,21 +811,21 @@ class RestApi
          *
          * @see Answer::update()
          */
-        $group->patch('/answers/{answer_id:\d+}', 'RestApi/Answer/update');
+        $group->patch('/answers/{answer_id:\d+}', Answer::class . ':update');
 
         /**
          * 删除回答
          *
          * @see Answer::delete()
          */
-        $group->delete('/answers/{answer_id:\d+}', 'RestApi/Answer/delete');
+        $group->delete('/answers/{answer_id:\d+}', Answer::class . ':delete');
 
         /**
          * 获取指定回答的投票者
          *
          * @see Answer::getVoters()
          */
-        $group->get('/answers/{answer_id:\d+}/voters', 'RestApi/Answer/getVoters')
+        $group->get('/answers/{answer_id:\d+}/voters', Answer::class . ':getVoters')
             ->add(TransformUser::class);
 
         /**
@@ -833,7 +833,7 @@ class RestApi
          *
          * @see Answer::addVote()
          */
-        $group->post('/answers/{answer_id:\d+}/voters', 'RestApi/Answer/addVote')
+        $group->post('/answers/{answer_id:\d+}/voters', Answer::class . ':addVote')
             ->add(NeedLogin::class);
 
         /**
@@ -841,7 +841,7 @@ class RestApi
          *
          * @see Answer::deleteVote()
          */
-        $group->delete('/answers/{answer_id:\d+}/voters', 'RestApi/Answer/deleteVote')
+        $group->delete('/answers/{answer_id:\d+}/voters', Answer::class . ':deleteVote')
             ->add(NeedLogin::class);
 
         /**
@@ -849,7 +849,7 @@ class RestApi
          *
          * @see Answer::getComments()
          */
-        $group->get('/answers/{answer_id:\d+}/comments', 'RestApi/Answer/getComments')
+        $group->get('/answers/{answer_id:\d+}/comments', Answer::class . ':getComments')
             ->add(TransformComment::class);
 
         /**
@@ -857,7 +857,7 @@ class RestApi
          *
          * @see Answer::createComment()
          */
-        $group->post('/answers/{answer_id:\d+}/comments', 'RestApi/Answer/createComment')
+        $group->post('/answers/{answer_id:\d+}/comments', Answer::class . ':createComment')
             ->add(NeedLogin::class)
             ->add(TransformComment::class);
 
@@ -866,7 +866,7 @@ class RestApi
          *
          * @see Answer::getDeleted()
          */
-        $group->get('/trash/answers', 'RestApi/Answer/getDeleted')
+        $group->get('/trash/answers', Answer::class . ':getDeleted')
             ->add(NeedManager::class);
 
         /**
@@ -874,7 +874,7 @@ class RestApi
          *
          * @see Answer::restoreMultiple()
          */
-        $group->post('/trash/answers', 'RestApi/Answer/restoreMultiple')
+        $group->post('/trash/answers', Answer::class . ':restoreMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -882,7 +882,7 @@ class RestApi
          *
          * @see Answer::destroyMultiple()
          */
-        $group->delete('/trash/answers', 'RestApi/Answer/destroyMultiple')
+        $group->delete('/trash/answers', Answer::class . ':destroyMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -890,7 +890,7 @@ class RestApi
          *
          * @see Answer::restore()
          */
-        $group->post('/trash/answers/{answer_id:\d+}', 'RestApi/Answer/restore')
+        $group->post('/trash/answers/{answer_id:\d+}', Answer::class . ':restore')
             ->add(NeedManager::class);
 
         /**
@@ -898,7 +898,7 @@ class RestApi
          *
          * @see Answer::destroy()
          */
-        $group->delete('/trash/answers/{answer_id:\d+}', 'RestApi/Answer/destroy')
+        $group->delete('/trash/answers/{answer_id:\d+}', Answer::class . ':destroy')
             ->add(NeedManager::class);
 
         return $this;
@@ -917,7 +917,7 @@ class RestApi
          *
          * @see Article::getList()
          */
-        $group->get('/articles', 'RestApi/Article/getList')
+        $group->get('/articles', Article::class . ':getList')
             ->add(TransformArticle::class);
 
         /**
@@ -925,42 +925,42 @@ class RestApi
          *
          * @see Article::create()
          */
-        $group->post('/articles', 'RestApi/Article/create');
+        $group->post('/articles', Article::class . ':create');
 
         /**
          * 批量删除文章
          *
          * @see Article::deleteMultiple()
          */
-        $group->delete('/articles', 'RestApi/Article/deleteMultiple');
+        $group->delete('/articles', Article::class . ':deleteMultiple');
 
         /**
          * 获取文章
          *
          * @see Article::get()
          */
-        $group->get('/articles/{article_id:\d+}', 'RestApi/Article/get');
+        $group->get('/articles/{article_id:\d+}', Article::class . ':get');
 
         /**
          * 更新文章
          *
          * @see Article::update()
          */
-        $group->patch('/articles/{article_id:\d+}', 'RestApi/Article/update');
+        $group->patch('/articles/{article_id:\d+}', Article::class . ':update');
 
         /**
          * 删除文章
          *
          * @see Article::delete()
          */
-        $group->delete('/articles/{article_id:\d+}', 'RestApi/Article/delete');
+        $group->delete('/articles/{article_id:\d+}', Article::class . ':delete');
 
         /**
          * 获取指定文章的投票者
          *
          * @see Article::getVoters()
          */
-        $group->get('/articles/{article_id:\d+}/voters', 'RestApi/Article/getVoters')
+        $group->get('/articles/{article_id:\d+}/voters', Article::class . ':getVoters')
             ->add(TransformUser::class);
 
         /**
@@ -968,7 +968,7 @@ class RestApi
          *
          * @see Article::addVote()
          */
-        $group->post('/articles/{article_id:\d+}/voters', 'RestApi/Article/addVote')
+        $group->post('/articles/{article_id:\d+}/voters', Article::class . ':addVote')
             ->add(NeedLogin::class);
 
         /**
@@ -976,7 +976,7 @@ class RestApi
          *
          * @see Article::deleteVote()
          */
-        $group->delete('/articles/{article_id:\d+}/voters', 'RestApi/Article/deleteVote')
+        $group->delete('/articles/{article_id:\d+}/voters', Article::class . ':deleteVote')
             ->add(NeedLogin::class);
 
         /**
@@ -984,7 +984,7 @@ class RestApi
          *
          * @see Article::getFollowers()
          */
-        $group->get('/articles/{article_id:\d+}/followers', 'RestApi/Article/getFollowers')
+        $group->get('/articles/{article_id:\d+}/followers', Article::class . ':getFollowers')
             ->add(TransformUser::class);
 
         /**
@@ -992,7 +992,7 @@ class RestApi
          *
          * @see Article::addFollow()
          */
-        $group->post('/articles/{article_id:\d+}/followers', 'RestApi/Article/addFollow')
+        $group->post('/articles/{article_id:\d+}/followers', Article::class . ':addFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -1000,7 +1000,7 @@ class RestApi
          *
          * @see Article::deleteFollow()
          */
-        $group->delete('/articles/{article_id:\d+}/followers', 'RestApi/Article/deleteFollow')
+        $group->delete('/articles/{article_id:\d+}/followers', Article::class . ':deleteFollow')
             ->add(NeedLogin::class);
 
         /**
@@ -1008,7 +1008,7 @@ class RestApi
          *
          * @see Article::getComments()
          */
-        $group->get('/articles/{article_id:\d+}/comments', 'RestApi/Article/getComments')
+        $group->get('/articles/{article_id:\d+}/comments', Article::class . ':getComments')
             ->add(TransformComment::class);
 
         /**
@@ -1016,7 +1016,7 @@ class RestApi
          *
          * @see Article::createComment()
          */
-        $group->post('/articles/{article_id:\d+}/comments', 'RestApi/Article/createComment')
+        $group->post('/articles/{article_id:\d+}/comments', Article::class . ':createComment')
             ->add(NeedLogin::class)
             ->add(TransformComment::class);
 
@@ -1025,7 +1025,7 @@ class RestApi
          *
          * @see Article::getDeleted()
          */
-        $group->get('/trash/articles', 'RestApi/Article/getDeleted')
+        $group->get('/trash/articles', Article::class . ':getDeleted')
             ->add(NeedManager::class);
 
         /**
@@ -1033,7 +1033,7 @@ class RestApi
          *
          * @see Article::restoreMultiple()
          */
-        $group->post('/trash/articles', 'RestApi/Article/restoreMultiple')
+        $group->post('/trash/articles', Article::class . ':restoreMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1041,7 +1041,7 @@ class RestApi
          *
          * @see Article::destroyMultiple()
          */
-        $group->delete('/trash/articles', 'RestApi/Article/destroyMultiple')
+        $group->delete('/trash/articles', Article::class . ':destroyMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1049,7 +1049,7 @@ class RestApi
          *
          * @see Article::restore()
          */
-        $group->post('/trash/articles/{article_id:\d+}', 'RestApi/Article/restore')
+        $group->post('/trash/articles/{article_id:\d+}', Article::class . ':restore')
             ->add(NeedManager::class);
 
         /**
@@ -1057,7 +1057,7 @@ class RestApi
          *
          * @see Article::destroy()
          */
-        $group->delete('/trash/articles/{article_id:\d+}', 'RestApi/Article/destroy')
+        $group->delete('/trash/articles/{article_id:\d+}', Article::class . ':destroy')
             ->add(NeedManager::class);
 
         return $this;
@@ -1076,7 +1076,7 @@ class RestApi
          *
          * @see Comment::getList()
          */
-        $group->get('/comments', 'RestApi/Comment/getList')
+        $group->get('/comments', Comment::class . ':getList')
             ->add(TransformComment::class);
 
         /**
@@ -1084,7 +1084,7 @@ class RestApi
          *
          * @see Comment::deleteMultiple()
          */
-        $group->delete('/comments', 'RestApi/Comment/deleteMultiple')
+        $group->delete('/comments', Comment::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1092,7 +1092,7 @@ class RestApi
          *
          * @see Comment::get()
          */
-        $group->get('/comments/{comment_id:\d+}', 'RestApi/Comment/get')
+        $group->get('/comments/{comment_id:\d+}', Comment::class . ':get')
             ->add(TransformComment::class);
 
         /**
@@ -1100,7 +1100,7 @@ class RestApi
          *
          * @see Comment::update()
          */
-        $group->patch('/comments/{comment_id:\d+}', 'RestApi/Comment/update')
+        $group->patch('/comments/{comment_id:\d+}', Comment::class . ':update')
             ->add(NeedLogin::class)
             ->add(TransformComment::class);
 
@@ -1109,7 +1109,7 @@ class RestApi
          *
          * @see Comment::delete()
          */
-        $group->delete('/comments/{comment_id:\d+}', 'RestApi/Comment/delete')
+        $group->delete('/comments/{comment_id:\d+}', Comment::class . ':delete')
             ->add(NeedLogin::class);
 
         /**
@@ -1117,7 +1117,7 @@ class RestApi
          *
          * @see Comment::getVoters()
          */
-        $group->get('/comments/{comment_id:\d+}/voters', 'RestApi/Comment/getVoters')
+        $group->get('/comments/{comment_id:\d+}/voters', Comment::class . ':getVoters')
             ->add(TransformUser::class);
 
         /**
@@ -1125,7 +1125,7 @@ class RestApi
          *
          * @see Comment::addVote()
          */
-        $group->post('/comments/{comment_id:\d+}/voters', 'RestApi/Comment/addVote')
+        $group->post('/comments/{comment_id:\d+}/voters', Comment::class . ':addVote')
             ->add(NeedLogin::class);
 
         /**
@@ -1133,7 +1133,7 @@ class RestApi
          *
          * @see Comment::deleteVote()
          */
-        $group->delete('/comments/{comment_id:\d+}/voters', 'RestApi/Comment/deleteVote')
+        $group->delete('/comments/{comment_id:\d+}/voters', Comment::class . ':deleteVote')
             ->add(NeedLogin::class);
 
         /**
@@ -1141,7 +1141,7 @@ class RestApi
          *
          * @see Comment::getDeleted()
          */
-        $group->get('/trash/comments', 'RestApi/Comment/getDeleted')
+        $group->get('/trash/comments', Comment::class . ':getDeleted')
             ->add(NeedManager::class)
             ->add(TransformComment::class);
 
@@ -1150,7 +1150,7 @@ class RestApi
          *
          * @see Comment::restoreMultiple()
          */
-        $group->post('/trash/comments', 'RestApi/Comment/restoreMultiple')
+        $group->post('/trash/comments', Comment::class . ':restoreMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1158,7 +1158,7 @@ class RestApi
          *
          * @see Comment::destroyMultiple()
          */
-        $group->delete('/trash/comments', 'RestApi/Comment/destroyMultiple')
+        $group->delete('/trash/comments', Comment::class . ':destroyMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1166,7 +1166,7 @@ class RestApi
          *
          * @see Comment::restore()
          */
-        $group->post('/trash/comments/{comment_id:\d+}', 'RestApi/Comment/restore')
+        $group->post('/trash/comments/{comment_id:\d+}', Comment::class . ':restore')
             ->add(NeedManager::class)
             ->add(TransformComment::class);
 
@@ -1175,7 +1175,7 @@ class RestApi
          *
          * @see Comment::destroy()
          */
-        $group->delete('/trash/comments/{comment_id:\d+}', 'RestApi/Comment/destroy')
+        $group->delete('/trash/comments/{comment_id:\d+}', Comment::class . ':destroy')
             ->add(NeedManager::class);
 
         return $this;
@@ -1194,7 +1194,7 @@ class RestApi
          *
          * @see Report::getList()
          */
-        $group->get('/reports', 'RestApi/Report/getList')
+        $group->get('/reports', Report::class . ':getList')
             ->add(NeedManager::class)
             ->add(TransformReport::class);
 
@@ -1203,7 +1203,7 @@ class RestApi
          *
          * @see Report::deleteMultiple()
          */
-        $group->delete('/reports', 'RestApi/Report/deleteMultiple')
+        $group->delete('/reports', Report::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1211,7 +1211,7 @@ class RestApi
          *
          * @see Report::getReasons()
          */
-        $group->get('/reports/{reportable_type}/{reportable_id:\d+}', 'RestApi/Report/getReasons')
+        $group->get('/reports/{reportable_type}/{reportable_id:\d+}', Report::class . ':getReasons')
             ->add(NeedManager::class)
             ->add(TransformReportReason::class);
 
@@ -1220,7 +1220,7 @@ class RestApi
          *
          * @see Report::create()
          */
-        $group->post('/reports/{reportable_type}/{reportable_id:\d+}', 'RestApi/Report/create')
+        $group->post('/reports/{reportable_type}/{reportable_id:\d+}', Report::class . ':create')
             ->add(NeedLogin::class)
             ->add(TransformReportReason::class);
 
@@ -1229,7 +1229,7 @@ class RestApi
          *
          * @see Report::delete()
          */
-        $group->delete('/reports/{reportable_type}/{reportable_id:\d+}', 'RestApi/Report/delete')
+        $group->delete('/reports/{reportable_type}/{reportable_id:\d+}', Report::class . ':delete')
             ->add(NeedManager::class);
 
         return $this;
@@ -1272,7 +1272,7 @@ class RestApi
          *
          * @see Captcha::create()
          */
-        $group->post('/captchas', 'RestApi/Captcha/create');
+        $group->post('/captchas', Captcha::class . ':create');
 
         return $this;
     }
@@ -1290,7 +1290,7 @@ class RestApi
          *
          * @see Email::send()
          */
-        $group->post('/emails', 'RestApi/Email/send')
+        $group->post('/emails', Email::class . ':send')
             ->add(NeedManager::class);
 
         return $this;
@@ -1309,7 +1309,7 @@ class RestApi
          *
          * @see Image::getList()
          */
-        $group->get('/images', 'RestApi/Image/getList')
+        $group->get('/images', Image::class . ':getList')
             ->add(NeedManager::class)
             ->add(TransformImage::class);
 
@@ -1318,7 +1318,7 @@ class RestApi
          *
          * @see Image::upload()
          */
-        $group->post('/images', 'RestApi/Image/upload')
+        $group->post('/images', Image::class . ':upload')
             ->add(NeedLogin::class)
             ->add(TransformImage::class);
 
@@ -1327,7 +1327,7 @@ class RestApi
          *
          * @see Image::deleteMultiple()
          */
-        $group->delete('/images', 'RestApi/Image/deleteMultiple')
+        $group->delete('/images', Image::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         /**
@@ -1335,7 +1335,7 @@ class RestApi
          *
          * @see Image::get()
          */
-        $group->get('/images/{key}', 'RestApi/Image/get')
+        $group->get('/images/{key}', Image::class . ':get')
             ->add(TransformImage::class);
 
         /**
@@ -1343,7 +1343,7 @@ class RestApi
          *
          * @see Image::update()
          */
-        $group->patch('/images/{key}', 'RestApi/Image/update')
+        $group->patch('/images/{key}', Image::class . ':update')
             ->add(NeedManager::class)
             ->add(TransformImage::class);
 
@@ -1352,7 +1352,7 @@ class RestApi
          *
          * @see Image::delete()
          */
-        $group->delete('/images/{key}', 'RestApi/Image/delete')
+        $group->delete('/images/{key}', Image::class . ':delete')
             ->add(NeedManager::class);
 
         return $this;

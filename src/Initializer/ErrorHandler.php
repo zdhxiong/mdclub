@@ -26,8 +26,6 @@ use Whoops\Run;
 /**
  * 错误处理
  *
- * todo 错误处理改用 Slim 自带的 ErrorMiddleware
- *
  * @property-read \MDClub\Library\Log     $log
  * @property-read \MDClub\Library\View    $view
  * @property-read \MDClub\Library\Captcha $captcha

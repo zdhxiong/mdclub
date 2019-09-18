@@ -7,7 +7,8 @@ namespace MDClub\Initializer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
-use Slim\Factory\ServerRequestCreatorFactory;
+use Slim\Psr7\Factory\ResponseFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -35,18 +36,19 @@ class App
             (new Filesystem())->mkdir($config['APP_RUNTIME']);
         }
 
+        // 手动指定响应工厂，无需再自动检测，提升性能
+        AppFactory::setResponseFactory(new ResponseFactory());
+
         $container = new Container($config);
 
         if (!$request) {
-            $serverRequestCreator = ServerRequestCreatorFactory::create();
-            $request = $serverRequestCreator->createServerRequestFromGlobals();
+            $request = ServerRequestFactory::createFromGlobals();
         }
 
         $this->request = $request;
         $container->offsetSet('request', $request);
 
         AppFactory::setContainer($container);
-        AppFactory::setCallableResolver(new CallableResolver($container));
 
         $this->app = AppFactory::create();
 
