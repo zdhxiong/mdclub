@@ -134,9 +134,8 @@ export default {
    * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。  回答被删除后，进入回收站。管理员可在后台恢复回答。
    * @param params.answer_id 回答ID
    */
-  del: (params: DeleteParams): Promise<EmptyResponse> => {
-    return del(buildURL(`${className}.del`, '/answers/{answer_id}', params));
-  },
+  del: (params: DeleteParams): Promise<EmptyResponse> =>
+    del(buildURL(`${className}.del`, '/answers/{answer_id}', params)),
 
   /**
    * 为回答投票
@@ -144,12 +143,11 @@ export default {
    * @param params.answer_id 回答ID
    * @param params.VoteRequestBody
    */
-  addVote: (params: AddVoteParams): Promise<VoteCountResponse> => {
-    return post(
+  addVote: (params: AddVoteParams): Promise<VoteCountResponse> =>
+    post(
       buildURL(`${className}.addVote`, '/answers/{answer_id}/voters', params),
       buildRequestBody(params, ['type']),
-    );
-  },
+    ),
 
   /**
    * 在指定回答下发表评论
@@ -158,8 +156,8 @@ export default {
    * @param params.CommentRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  createComment: (params: CreateCommentParams): Promise<CommentResponse> => {
-    return post(
+  createComment: (params: CreateCommentParams): Promise<CommentResponse> =>
+    post(
       buildURL(
         `${className}.createComment`,
         '/answers/{answer_id}/comments',
@@ -167,60 +165,53 @@ export default {
         ['include'],
       ),
       buildRequestBody(params, ['content']),
-    );
-  },
+    ),
 
   /**
    * 🔐批量删除回答
    * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。  回答被删除后，进入回收站。管理员可在后台恢复回答。
    * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
    */
-  deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> => {
-    return del(
+  deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.deleteMultiple`, '/answers', params, [
         'answer_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 取消为回答的投票
    * 取消为回答的投票
    * @param params.answer_id 回答ID
    */
-  deleteVote: (params: DeleteVoteParams): Promise<VoteCountResponse> => {
-    return del(
+  deleteVote: (params: DeleteVoteParams): Promise<VoteCountResponse> =>
+    del(
       buildURL(
         `${className}.deleteVote`,
         '/answers/{answer_id}/voters',
         params,
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐删除指定回答
    * 仅管理员可调用该接口。
    * @param params.answer_id 回答ID
    */
-  destroy: (params: DestroyParams): Promise<EmptyResponse> => {
-    return del(
-      buildURL(`${className}.destroy`, '/trash/answers/{answer_id}', params),
-    );
-  },
+  destroy: (params: DestroyParams): Promise<EmptyResponse> =>
+    del(buildURL(`${className}.destroy`, '/trash/answers/{answer_id}', params)),
 
   /**
    * 🔐批量删除回收站中的回答
    * 仅管理员可调用该接口  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。  若没有提供 answer_id 参数，则将清空回收站中的所有回答。
    * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
    */
-  destroyMultiple: (params: DestroyMultipleParams): Promise<EmptyResponse> => {
-    return del(
+  destroyMultiple: (params: DestroyMultipleParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.destroyMultiple`, '/trash/answers', params, [
         'answer_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取回答详情
@@ -228,11 +219,10 @@ export default {
    * @param params.answer_id 回答ID
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
-  get: (params: GetParams): Promise<AnswerResponse> => {
-    return get(
+  get: (params: GetParams): Promise<AnswerResponse> =>
+    get(
       buildURL(`${className}.get`, '/answers/{answer_id}', params, ['include']),
-    );
-  },
+    ),
 
   /**
    * 获取指定回答的评论
@@ -243,16 +233,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  getComments: (params: GetCommentsParams): Promise<CommentsResponse> => {
-    return get(
+  getComments: (params: GetCommentsParams): Promise<CommentsResponse> =>
+    get(
       buildURL(
         `${className}.getComments`,
         '/answers/{answer_id}/comments',
         params,
         ['page', 'per_page', 'order', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐获取回收站中的回答列表
@@ -264,8 +253,8 @@ export default {
    * @param params.question_id 提问ID
    * @param params.user_id 用户ID
    */
-  getDeleted: (params: GetDeletedParams): Promise<AnswersResponse> => {
-    return get(
+  getDeleted: (params: GetDeletedParams): Promise<AnswersResponse> =>
+    get(
       buildURL(`${className}.getDeleted`, '/trash/answers', params, [
         'page',
         'per_page',
@@ -274,8 +263,7 @@ export default {
         'question_id',
         'user_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取回答列表
@@ -288,8 +276,8 @@ export default {
    * @param params.question_id 提问ID
    * @param params.user_id 用户ID
    */
-  getList: (params: GetListParams): Promise<AnswersResponse> => {
-    return get(
+  getList: (params: GetListParams): Promise<AnswersResponse> =>
+    get(
       buildURL(`${className}.getList`, '/answers', params, [
         'page',
         'per_page',
@@ -299,8 +287,7 @@ export default {
         'question_id',
         'user_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取回答的投票者
@@ -311,40 +298,37 @@ export default {
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
    */
-  getVoters: (params: GetVotersParams): Promise<UsersResponse> => {
-    return get(
+  getVoters: (params: GetVotersParams): Promise<UsersResponse> =>
+    get(
       buildURL(
         `${className}.getVoters`,
         '/answers/{answer_id}/voters',
         params,
         ['page', 'per_page', 'include', 'type'],
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐恢复指定回答
    * 仅管理员可调用该接口。
    * @param params.answer_id 回答ID
    */
-  restore: (params: RestoreParams): Promise<AnswerResponse> => {
-    return post(
+  restore: (params: RestoreParams): Promise<AnswerResponse> =>
+    post(
       buildURL(`${className}.restore`, '/trash/answers/{answer_id}', params),
-    );
-  },
+    ),
 
   /**
    * 🔐批量恢复回答
    * 仅管理员可调用该接口。  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
    * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
    */
-  restoreMultiple: (params: RestoreMultipleParams): Promise<EmptyResponse> => {
-    return post(
+  restoreMultiple: (params: RestoreMultipleParams): Promise<EmptyResponse> =>
+    post(
       buildURL(`${className}.restoreMultiple`, '/trash/answers', params, [
         'answer_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 修改回答信息
@@ -353,12 +337,11 @@ export default {
    * @param params.AnswerRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
-  update: (params: UpdateParams): Promise<AnswerResponse> => {
-    return patch(
+  update: (params: UpdateParams): Promise<AnswerResponse> =>
+    patch(
       buildURL(`${className}.update`, '/answers/{answer_id}', params, [
         'include',
       ]),
       buildRequestBody(params, ['content_markdown', 'content_rendered']),
-    );
-  },
+    ),
 };

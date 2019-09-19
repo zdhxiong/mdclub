@@ -385,110 +385,94 @@ export default {
    * 添加关注
    * @param params.user_id 用户ID
    */
-  addFollow: (params: AddFollowParams): Promise<FollowerCountResponse> => {
-    return post(
+  addFollow: (params: AddFollowParams): Promise<FollowerCountResponse> =>
+    post(
       buildURL(`${className}.addFollow`, '/users/{user_id}/followers', params),
-    );
-  },
+    ),
 
   /**
    * 🔐删除指定用户的头像，并重置为默认头像
    * 仅管理员可调用该接口
    * @param params.user_id 用户ID
    */
-  deleteAvatar: (params: DeleteAvatarParams): Promise<UserAvatarResponse> => {
-    return del(
+  deleteAvatar: (params: DeleteAvatarParams): Promise<UserAvatarResponse> =>
+    del(
       buildURL(`${className}.deleteAvatar`, '/users/{user_id}/avatar', params),
-    );
-  },
+    ),
 
   /**
    * 🔐删除指定用户的封面，并重置为默认封面
    * 仅管理员可调用该接口
    * @param params.user_id 用户ID
    */
-  deleteCover: (params: DeleteCoverParams): Promise<UserCoverResponse> => {
-    return del(
-      buildURL(`${className}.deleteCover`, '/users/{user_id}/cover', params),
-    );
-  },
+  deleteCover: (params: DeleteCoverParams): Promise<UserCoverResponse> =>
+    del(buildURL(`${className}.deleteCover`, '/users/{user_id}/cover', params)),
 
   /**
    * 取消关注
    * 取消关注
    * @param params.user_id 用户ID
    */
-  deleteFollow: (
-    params: DeleteFollowParams,
-  ): Promise<FollowerCountResponse> => {
-    return del(
+  deleteFollow: (params: DeleteFollowParams): Promise<FollowerCountResponse> =>
+    del(
       buildURL(
         `${className}.deleteFollow`,
         '/users/{user_id}/followers',
         params,
       ),
-    );
-  },
+    ),
 
   /**
    * 删除当前登录用户的头像，并重置为默认头像
    * 删除当前登录用户的头像，并重置为默认头像
    */
-  deleteMyAvatar: (): Promise<UserAvatarResponse> => {
-    return del(buildURL(`${className}.deleteMyAvatar`, '/user/avatar', {}));
-  },
+  deleteMyAvatar: (): Promise<UserAvatarResponse> =>
+    del(buildURL(`${className}.deleteMyAvatar`, '/user/avatar', {})),
 
   /**
    * 删除当前登录用户的封面，并重置为默认封面
    * 删除当前登录用户的封面，并重置为默认封面
    */
-  deleteMyCover: (): Promise<UserCoverResponse> => {
-    return del(buildURL(`${className}.deleteMyCover`, '/user/cover', {}));
-  },
+  deleteMyCover: (): Promise<UserCoverResponse> =>
+    del(buildURL(`${className}.deleteMyCover`, '/user/cover', {})),
 
   /**
    * 🔐禁用指定用户
    * 仅管理员可调用该接口
    * @param params.user_id 用户ID
    */
-  disable: (params: DisableParams): Promise<EmptyResponse> => {
-    return del(buildURL(`${className}.disable`, '/users/{user_id}', params));
-  },
+  disable: (params: DisableParams): Promise<EmptyResponse> =>
+    del(buildURL(`${className}.disable`, '/users/{user_id}', params)),
 
   /**
    * 🔐批量禁用用户
    * 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
    * @param params.user_id 用“,”分隔的用户ID，最多可提供100个ID
    */
-  disableMultiple: (params: DisableMultipleParams): Promise<EmptyResponse> => {
-    return del(
+  disableMultiple: (params: DisableMultipleParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.disableMultiple`, '/users', params, ['user_id']),
-    );
-  },
+    ),
 
   /**
    * 🔐恢复指定用户
    * 仅管理员可调用该接口。
    * @param params.user_id 用户ID
    */
-  enable: (params: EnableParams): Promise<UserResponse> => {
-    return post(
-      buildURL(`${className}.enable`, '/trash/users/{user_id}', params),
-    );
-  },
+  enable: (params: EnableParams): Promise<UserResponse> =>
+    post(buildURL(`${className}.enable`, '/trash/users/{user_id}', params)),
 
   /**
    * 🔐批量恢复用户
    * 仅管理员可调用该接口。  只要没有异常错误，无论是否有用户被启用，该接口都会返回成功。
    * @param params.user_id 用“,”分隔的用户ID，最多可提供100个ID
    */
-  enableMultiple: (params: EnableMultipleParams): Promise<EmptyResponse> => {
-    return post(
+  enableMultiple: (params: EnableMultipleParams): Promise<EmptyResponse> =>
+    post(
       buildURL(`${className}.enableMultiple`, '/trash/users', params, [
         'user_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户信息
@@ -496,11 +480,8 @@ export default {
    * @param params.user_id 用户ID
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  get: (params: GetParams): Promise<UserResponse> => {
-    return get(
-      buildURL(`${className}.get`, '/users/{user_id}', params, ['include']),
-    );
-  },
+  get: (params: GetParams): Promise<UserResponse> =>
+    get(buildURL(`${className}.get`, '/users/{user_id}', params, ['include'])),
 
   /**
    * 获取指定用户发表的回答
@@ -511,16 +492,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
-  getAnswers: (params: GetAnswersParams): Promise<AnswersResponse> => {
-    return get(
+  getAnswers: (params: GetAnswersParams): Promise<AnswersResponse> =>
+    get(
       buildURL(`${className}.getAnswers`, '/users/{user_id}/answers', params, [
         'page',
         'per_page',
         'order',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户发表的文章
@@ -531,16 +511,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
-  getArticles: (params: GetArticlesParams): Promise<ArticlesResponse> => {
-    return get(
+  getArticles: (params: GetArticlesParams): Promise<ArticlesResponse> =>
+    get(
       buildURL(
         `${className}.getArticles`,
         '/users/{user_id}/articles',
         params,
         ['page', 'per_page', 'order', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户发表的评论
@@ -551,16 +530,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  getComments: (params: GetCommentsParams): Promise<CommentsResponse> => {
-    return get(
+  getComments: (params: GetCommentsParams): Promise<CommentsResponse> =>
+    get(
       buildURL(
         `${className}.getComments`,
         '/users/{user_id}/comments',
         params,
         ['page', 'per_page', 'order', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐获取已禁用用户列表
@@ -573,8 +551,8 @@ export default {
    * @param params.username 用户名
    * @param params.email 邮箱
    */
-  getDisabled: (params: GetDisabledParams): Promise<UsersResponse> => {
-    return get(
+  getDisabled: (params: GetDisabledParams): Promise<UsersResponse> =>
+    get(
       buildURL(`${className}.getDisabled`, '/trash/users', params, [
         'page',
         'per_page',
@@ -584,8 +562,7 @@ export default {
         'username',
         'email',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户关注的用户列表
@@ -595,16 +572,15 @@ export default {
    * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  getFollowees: (params: GetFolloweesParams): Promise<UsersResponse> => {
-    return get(
+  getFollowees: (params: GetFolloweesParams): Promise<UsersResponse> =>
+    get(
       buildURL(
         `${className}.getFollowees`,
         '/users/{user_id}/followees',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户的关注者
@@ -614,16 +590,15 @@ export default {
    * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  getFollowers: (params: GetFollowersParams): Promise<UsersResponse> => {
-    return get(
+  getFollowers: (params: GetFollowersParams): Promise<UsersResponse> =>
+    get(
       buildURL(
         `${className}.getFollowers`,
         '/users/{user_id}/followers',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户关注的文章列表
@@ -635,16 +610,15 @@ export default {
    */
   getFollowingArticles: (
     params: GetFollowingArticlesParams,
-  ): Promise<ArticlesResponse> => {
-    return get(
+  ): Promise<ArticlesResponse> =>
+    get(
       buildURL(
         `${className}.getFollowingArticles`,
         '/users/{user_id}/following_articles',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户关注的提问列表
@@ -656,16 +630,15 @@ export default {
    */
   getFollowingQuestions: (
     params: GetFollowingQuestionsParams,
-  ): Promise<QuestionsResponse> => {
-    return get(
+  ): Promise<QuestionsResponse> =>
+    get(
       buildURL(
         `${className}.getFollowingQuestions`,
         '/users/{user_id}/following_questions',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户关注的话题列表
@@ -677,16 +650,15 @@ export default {
    */
   getFollowingTopics: (
     params: GetFollowingTopicsParams,
-  ): Promise<TopicsResponse> => {
-    return get(
+  ): Promise<TopicsResponse> =>
+    get(
       buildURL(
         `${className}.getFollowingTopics`,
         '/users/{user_id}/following_topics',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取用户列表
@@ -699,8 +671,8 @@ export default {
    * @param params.username 用户名
    * @param params.email 邮箱
    */
-  getList: (params: GetListParams): Promise<UsersResponse> => {
-    return get(
+  getList: (params: GetListParams): Promise<UsersResponse> =>
+    get(
       buildURL(`${className}.getList`, '/users', params, [
         'page',
         'per_page',
@@ -710,17 +682,15 @@ export default {
         'username',
         'email',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取当前登录用户的信息
    * 获取当前登录用户的信息
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  getMine: (params: GetMineParams): Promise<UserResponse> => {
-    return get(buildURL(`${className}.getMine`, '/user', params, ['include']));
-  },
+  getMine: (params: GetMineParams): Promise<UserResponse> =>
+    get(buildURL(`${className}.getMine`, '/user', params, ['include'])),
 
   /**
    * 获取当前登录用户发表的回答
@@ -730,16 +700,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
    */
-  getMyAnswers: (params: GetMyAnswersParams): Promise<AnswersResponse> => {
-    return get(
+  getMyAnswers: (params: GetMyAnswersParams): Promise<AnswersResponse> =>
+    get(
       buildURL(`${className}.getMyAnswers`, '/user/answers', params, [
         'page',
         'per_page',
         'order',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取当前登录用户发表的文章
@@ -749,16 +718,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
-  getMyArticles: (params: GetMyArticlesParams): Promise<ArticlesResponse> => {
-    return get(
+  getMyArticles: (params: GetMyArticlesParams): Promise<ArticlesResponse> =>
+    get(
       buildURL(`${className}.getMyArticles`, '/user/articles', params, [
         'page',
         'per_page',
         'order',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取当前登录用户发表的评论
@@ -768,16 +736,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  getMyComments: (params: GetMyCommentsParams): Promise<CommentsResponse> => {
-    return get(
+  getMyComments: (params: GetMyCommentsParams): Promise<CommentsResponse> =>
+    get(
       buildURL(`${className}.getMyComments`, '/user/comments', params, [
         'page',
         'per_page',
         'order',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取当前登录用户关注的用户
@@ -786,15 +753,14 @@ export default {
    * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  getMyFollowees: (params: GetMyFolloweesParams): Promise<UsersResponse> => {
-    return get(
+  getMyFollowees: (params: GetMyFolloweesParams): Promise<UsersResponse> =>
+    get(
       buildURL(`${className}.getMyFollowees`, '/user/followees', params, [
         'page',
         'per_page',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取当前登录用户的关注者
@@ -803,15 +769,14 @@ export default {
    * @param params.per_page 每页条数（最大为 100）
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  getMyFollowers: (params: GetMyFollowersParams): Promise<UsersResponse> => {
-    return get(
+  getMyFollowers: (params: GetMyFollowersParams): Promise<UsersResponse> =>
+    get(
       buildURL(`${className}.getMyFollowers`, '/user/followers', params, [
         'page',
         'per_page',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取登录用户关注的文章
@@ -822,16 +787,15 @@ export default {
    */
   getMyFollowingArticles: (
     params: GetMyFollowingArticlesParams,
-  ): Promise<ArticlesResponse> => {
-    return get(
+  ): Promise<ArticlesResponse> =>
+    get(
       buildURL(
         `${className}.getMyFollowingArticles`,
         '/user/following_articles',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取登录用户关注的提问
@@ -842,16 +806,15 @@ export default {
    */
   getMyFollowingQuestions: (
     params: GetMyFollowingQuestionsParams,
-  ): Promise<QuestionsResponse> => {
-    return get(
+  ): Promise<QuestionsResponse> =>
+    get(
       buildURL(
         `${className}.getMyFollowingQuestions`,
         '/user/following_questions',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取登录用户关注的话题
@@ -862,16 +825,15 @@ export default {
    */
   getMyFollowingTopics: (
     params: GetMyFollowingTopicsParams,
-  ): Promise<TopicsResponse> => {
-    return get(
+  ): Promise<TopicsResponse> =>
+    get(
       buildURL(
         `${className}.getMyFollowingTopics`,
         '/user/following_topics',
         params,
         ['page', 'per_page', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 获取登录用户发表的提问
@@ -881,18 +843,15 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
-  getMyQuestions: (
-    params: GetMyQuestionsParams,
-  ): Promise<QuestionsResponse> => {
-    return get(
+  getMyQuestions: (params: GetMyQuestionsParams): Promise<QuestionsResponse> =>
+    get(
       buildURL(`${className}.getMyQuestions`, '/user/questions', params, [
         'page',
         'per_page',
         'order',
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取指定用户发表的提问
@@ -903,24 +862,23 @@ export default {
    * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
    */
-  getQuestions: (params: GetQuestionsParams): Promise<QuestionsResponse> => {
-    return get(
+  getQuestions: (params: GetQuestionsParams): Promise<QuestionsResponse> =>
+    get(
       buildURL(
         `${className}.getQuestions`,
         '/users/{user_id}/questions',
         params,
         ['page', 'per_page', 'order', 'include'],
       ),
-    );
-  },
+    ),
 
   /**
    * 验证邮箱并创建账号
    * 返回用户信息
    * @param params.UserRegisterRequestBody
    */
-  register: (params: RegisterParams): Promise<UserResponse> => {
-    return post(
+  register: (params: RegisterParams): Promise<UserResponse> =>
+    post(
       buildURL(`${className}.register`, '/users', params),
       buildRequestBody(params, [
         'email',
@@ -929,8 +887,7 @@ export default {
         'password',
         'device',
       ]),
-    );
-  },
+    ),
 
   /**
    * 发送重置密码邮箱验证码
@@ -939,16 +896,15 @@ export default {
    */
   sendPasswordResetEmail: (
     params: SendPasswordResetEmailParams,
-  ): Promise<EmptyResponse> => {
-    return post(
+  ): Promise<EmptyResponse> =>
+    post(
       buildURL(
         `${className}.sendPasswordResetEmail`,
         '/user/password/email',
         params,
       ),
       buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
-    );
-  },
+    ),
 
   /**
    * 发送注册邮箱验证码
@@ -957,16 +913,15 @@ export default {
    */
   sendRegisterEmail: (
     params: SendRegisterEmailParams,
-  ): Promise<EmptyResponse> => {
-    return post(
+  ): Promise<EmptyResponse> =>
+    post(
       buildURL(
         `${className}.sendRegisterEmail`,
         '/user/register/email',
         params,
       ),
       buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
-    );
-  },
+    ),
 
   /**
    * 🔐更新指定用户信息
@@ -975,8 +930,8 @@ export default {
    * @param params.UserRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  update: (params: UpdateParams): Promise<UserResponse> => {
-    return patch(
+  update: (params: UpdateParams): Promise<UserResponse> =>
+    patch(
       buildURL(`${className}.update`, '/users/{user_id}', params, ['include']),
       buildRequestBody(params, [
         'headline',
@@ -985,8 +940,7 @@ export default {
         'company',
         'location',
       ]),
-    );
-  },
+    ),
 
   /**
    * 更新当前登录用户信息
@@ -994,8 +948,8 @@ export default {
    * @param params.UserRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    */
-  updateMine: (params: UpdateMineParams): Promise<UserResponse> => {
-    return patch(
+  updateMine: (params: UpdateMineParams): Promise<UserResponse> =>
+    patch(
       buildURL(`${className}.updateMine`, '/user', params, ['include']),
       buildRequestBody(params, [
         'headline',
@@ -1004,44 +958,38 @@ export default {
         'company',
         'location',
       ]),
-    );
-  },
+    ),
 
   /**
    * 验证邮箱并更新密码
    * 验证邮箱并更新密码
    * @param params.UserPasswordResetRequestBody
    */
-  updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> => {
-    return put(
+  updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> =>
+    put(
       buildURL(`${className}.updatePassword`, '/user/password', params),
       buildRequestBody(params, ['email', 'email_code', 'password']),
-    );
-  },
+    ),
 
   /**
    * 上传当前登录用户的头像
    * 上传当前登录用户的头像
    * @param params.UserAvatarRequestBody
    */
-  uploadMyAvatar: (
-    params: UploadMyAvatarParams,
-  ): Promise<UserAvatarResponse> => {
-    return post(
+  uploadMyAvatar: (params: UploadMyAvatarParams): Promise<UserAvatarResponse> =>
+    post(
       buildURL(`${className}.uploadMyAvatar`, '/user/avatar', params),
       buildRequestBody(params, ['avatar']),
-    );
-  },
+    ),
 
   /**
    * 上传当前登录用户的封面
    * 上传当前登录用户的封面
    * @param params.UserCoverRequestBody
    */
-  uploadMyCover: (params: UploadMyCoverParams): Promise<UserCoverResponse> => {
-    return post(
+  uploadMyCover: (params: UploadMyCoverParams): Promise<UserCoverResponse> =>
+    post(
       buildURL(`${className}.uploadMyCover`, '/user/cover', params),
       buildRequestBody(params, ['cover']),
-    );
-  },
+    ),
 };

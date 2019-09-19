@@ -12,17 +12,16 @@ export default {
    * 获取站点全局设置参数
    * 获取站点全局设置参数
    */
-  get: (): Promise<OptionResponse> => {
-    return get(buildURL(`${className}.get`, '/options', {}));
-  },
+  get: (): Promise<OptionResponse> =>
+    get(buildURL(`${className}.get`, '/options', {})),
 
   /**
    * 🔐更新站点全局设置
    * 仅管理员可调用该接口
    * @param params.Option
    */
-  update: (params: Option): Promise<OptionResponse> => {
-    return patch(
+  update: (params: Option): Promise<OptionResponse> =>
+    patch(
       buildURL(`${className}.update`, '/options', params),
       buildRequestBody(params, [
         'answer_can_delete',
@@ -100,6 +99,5 @@ export default {
         'storage_url',
         'theme',
       ]),
-    );
-  },
+    ),
 };

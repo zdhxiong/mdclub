@@ -1,7 +1,7 @@
 import defaults from '../defaults';
 import { PlainObject } from './misc';
 import { ResponseInterface } from '../adapter/AdapterInterface';
-import { isUndefined } from 'mdui.jq/src/utils';
+import { isUndefined } from 'mdui.jq/es/utils';
 
 if (isUndefined(defaults.adapter)) {
   throw new Error(

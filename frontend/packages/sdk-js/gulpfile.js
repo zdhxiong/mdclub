@@ -8,6 +8,7 @@ const buble = require('rollup-plugin-buble');
 const { eslint } = require('rollup-plugin-eslint');
 const typescript = require('rollup-plugin-typescript');
 const polyfill = require('rollup-plugin-polyfill');
+const resolve = require('rollup-plugin-node-resolve');
 const pkg = require('./package.json');
 
 const banner = `
@@ -22,6 +23,7 @@ async function umd() {
   const bundle = await rollup.rollup({
     input: './src/index.ts',
     plugins: [
+      resolve(),
       eslint({
         fix: true,
       }),
@@ -56,6 +58,7 @@ async function esm() {
   const bundle = await rollup.rollup({
     input: './src/index.ts',
     plugins: [
+      resolve(),
       eslint({
         fix: true,
       }),
@@ -72,4 +75,10 @@ async function esm() {
   });
 }
 
+async function test() {
+
+}
+
 gulp.task('build', gulp.parallel(umd, esm));
+
+gulp.task('test', test);

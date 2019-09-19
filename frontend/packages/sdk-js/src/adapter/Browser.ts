@@ -4,9 +4,9 @@ import {
   ResponseInterface,
 } from './AdapterInterface';
 import globalOptions from '../defaults';
-import ajaxSetup from 'mdui.jq/src/functions/ajaxSetup';
-import ajax from 'mdui.jq/src/functions/ajax';
-import { isUndefined } from 'mdui.jq/src/utils';
+import ajaxSetup from 'mdui.jq/es/functions/ajaxSetup';
+import ajax from 'mdui.jq/es/functions/ajax';
+import { isUndefined } from 'mdui.jq/es/utils';
 import { PlainObject } from '../util/misc';
 
 /**

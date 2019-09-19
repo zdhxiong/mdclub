@@ -1,7 +1,7 @@
 import { PlainObject } from './misc';
-import param from 'mdui.jq/src/functions/param';
+import param from 'mdui.jq/es/functions/param';
 import defaults from '../defaults';
-import { isNull, isUndefined } from 'mdui.jq/src/utils';
+import { isNull, isUndefined } from 'mdui.jq/es/utils';
 
 /**
  * 下划线转驼峰

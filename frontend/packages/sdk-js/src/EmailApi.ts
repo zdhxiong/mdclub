@@ -28,10 +28,9 @@ export default {
    * 用于后台管理员发送邮件，需要管理员权限
    * @param params.Email
    */
-  send: (params: SendParams): Promise<EmailResponse> => {
-    return post(
+  send: (params: SendParams): Promise<EmailResponse> =>
+    post(
       buildURL(`${className}.send`, '/emails', params),
       buildRequestBody(params, ['email', 'subject', 'content']),
-    );
-  },
+    ),
 };

@@ -110,11 +110,10 @@ export default {
    * @param params.comment_id 评论ID
    * @param params.force 🔐 若该参数为 true，则直接删除，不放入回收站。
    */
-  del: (params: DeleteParams): Promise<EmptyResponse> => {
-    return del(
+  del: (params: DeleteParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.del`, '/comments/{comment_id}', params, ['force']),
-    );
-  },
+    ),
 
   /**
    * 为评论投票
@@ -122,12 +121,11 @@ export default {
    * @param params.comment_id 评论ID
    * @param params.VoteRequestBody
    */
-  addVote: (params: AddVoteParams): Promise<VoteCountResponse> => {
-    return post(
+  addVote: (params: AddVoteParams): Promise<VoteCountResponse> =>
+    post(
       buildURL(`${className}.addVote`, '/comments/{comment_id}/voters', params),
       buildRequestBody(params, ['type']),
-    );
-  },
+    ),
 
   /**
    * 🔐批量删除评论
@@ -135,53 +133,49 @@ export default {
    * @param params.comment_id 用“,”分隔的提问ID，最多可提供100个ID
    * @param params.force 🔐 若该参数为 true，则直接删除，不放入回收站。
    */
-  deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> => {
-    return del(
+  deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.deleteMultiple`, '/comments', params, [
         'comment_id',
         'force',
       ]),
-    );
-  },
+    ),
 
   /**
    * 取消为评论的投票
    * 取消为评论的投票
    * @param params.comment_id 评论ID
    */
-  deleteVote: (params: DeleteVoteParams): Promise<VoteCountResponse> => {
-    return del(
+  deleteVote: (params: DeleteVoteParams): Promise<VoteCountResponse> =>
+    del(
       buildURL(
         `${className}.deleteVote`,
         '/comments/{comment_id}/voters',
         params,
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐删除回收站中的指定评论
    * 仅管理员可调用该接口。
    * @param params.comment_id 评论ID
    */
-  destroy: (params: DestroyParams): Promise<EmptyResponse> => {
-    return del(
+  destroy: (params: DestroyParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.destroy`, '/trash/comments/{comment_id}', params),
-    );
-  },
+    ),
 
   /**
    * 🔐批量删除回收站中的评论
    * 仅管理员可调用该接口  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
    * @param params.comment_id 用“,”分隔的提问ID，最多可提供100个ID
    */
-  destroyMultiple: (params: DestroyMultipleParams): Promise<EmptyResponse> => {
-    return del(
+  destroyMultiple: (params: DestroyMultipleParams): Promise<EmptyResponse> =>
+    del(
       buildURL(`${className}.destroyMultiple`, '/trash/comments', params, [
         'comment_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取评论详情
@@ -189,13 +183,12 @@ export default {
    * @param params.comment_id 评论ID
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  get: (params: GetParams): Promise<CommentResponse> => {
-    return get(
+  get: (params: GetParams): Promise<CommentResponse> =>
+    get(
       buildURL(`${className}.get`, '/comments/{comment_id}', params, [
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 🔐获取回收站中的评论列表
@@ -209,8 +202,8 @@ export default {
    * @param params.commentable_type 评论目标类型
    * @param params.user_id 用户ID
    */
-  getDeleted: (params: GetDeletedParams): Promise<CommentsResponse> => {
-    return get(
+  getDeleted: (params: GetDeletedParams): Promise<CommentsResponse> =>
+    get(
       buildURL(`${className}.getDeleted`, '/trash/comments', params, [
         'page',
         'per_page',
@@ -221,8 +214,7 @@ export default {
         'commentable_type',
         'user_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取所有评论
@@ -236,8 +228,8 @@ export default {
    * @param params.commentable_type 评论目标类型
    * @param params.user_id 用户ID
    */
-  getList: (params: GetListParams): Promise<CommentsResponse> => {
-    return get(
+  getList: (params: GetListParams): Promise<CommentsResponse> =>
+    get(
       buildURL(`${className}.getList`, '/comments', params, [
         'page',
         'per_page',
@@ -248,8 +240,7 @@ export default {
         'commentable_type',
         'user_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 获取评论的投票者
@@ -260,16 +251,15 @@ export default {
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
    * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
    */
-  getVoters: (params: GetVotersParams): Promise<UsersResponse> => {
-    return get(
+  getVoters: (params: GetVotersParams): Promise<UsersResponse> =>
+    get(
       buildURL(
         `${className}.getVoters`,
         '/comments/{comment_id}/voters',
         params,
         ['page', 'per_page', 'include', 'type'],
       ),
-    );
-  },
+    ),
 
   /**
    * 🔐恢复指定评论
@@ -277,26 +267,24 @@ export default {
    * @param params.comment_id 评论ID
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  restore: (params: RestoreParams): Promise<CommentResponse> => {
-    return post(
+  restore: (params: RestoreParams): Promise<CommentResponse> =>
+    post(
       buildURL(`${className}.restore`, '/trash/comments/{comment_id}', params, [
         'include',
       ]),
-    );
-  },
+    ),
 
   /**
    * 🔐批量恢复评论
    * 仅管理员可调用该接口。  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
    * @param params.comment_id 用“,”分隔的提问ID，最多可提供100个ID
    */
-  restoreMultiple: (params: RestoreMultipleParams): Promise<EmptyResponse> => {
-    return post(
+  restoreMultiple: (params: RestoreMultipleParams): Promise<EmptyResponse> =>
+    post(
       buildURL(`${className}.restoreMultiple`, '/trash/comments', params, [
         'comment_id',
       ]),
-    );
-  },
+    ),
 
   /**
    * 修改评论
@@ -305,12 +293,11 @@ export default {
    * @param params.CommentRequestBody
    * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
    */
-  update: (params: UpdateParams): Promise<CommentResponse> => {
-    return patch(
+  update: (params: UpdateParams): Promise<CommentResponse> =>
+    patch(
       buildURL(`${className}.update`, '/comments/{comment_id}', params, [
         'include',
       ]),
       buildRequestBody(params, ['content']),
-    );
-  },
+    ),
 };

@@ -5,7 +5,7 @@ import {
 } from './AdapterInterface';
 import globalOptions from '../defaults';
 import { PlainObject } from '../util/misc';
-import { isUndefined } from 'mdui.jq/src/utils';
+import { isUndefined } from 'mdui.jq/es/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace wx {

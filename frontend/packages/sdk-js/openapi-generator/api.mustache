@@ -32,8 +32,8 @@ export default {
    * @param params.{{paramName}} {{description}}
   {{/allParams}}
    */
-  {{nickname}}: ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> => {
-    return {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(
+  {{nickname}}: ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> =>
+    {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(
       buildURL(
         `${className}.{{nickname}}`,
         '{{path}}',
@@ -46,8 +46,7 @@ export default {
         [// todo],
       ),
       {{/hasBodyParam}}
-    );
-  },
+    ),
 
 {{/operation}}
 }
