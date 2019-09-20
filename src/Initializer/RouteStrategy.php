@@ -53,7 +53,7 @@ class RouteStrategy implements InvocationStrategyInterface
 
     /**
      * 回调函数的参数仅包含路由参数，去掉了 Slim 自带回调策略的 ServerRequestInterface 和 ResponseInterface 参数，
-     * 并将这两个参数放入容器，控制其中要使用这两个参数，可从容器中获取
+     * 并将这两个参数放入容器，控制器中要使用这两个参数，可从容器中获取
      *
      * 回调函数允许返回 ResponseInterface 或数组
      * 若返回数组，则组织成 restful api 的格式，并返回 ResponseInterface

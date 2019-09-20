@@ -165,7 +165,7 @@ class ErrorHandler
     protected function handleNotFoundException(): ResponseInterface
     {
         if ($this->request->getMethod() === 'OPTIONS') {
-            return $this->renderPlainText('Not found');
+            return $this->renderPlainText();
         }
 
         if ($this->isRequestJson()) {
@@ -188,7 +188,7 @@ class ErrorHandler
         $allow = implode(', ', $this->exception->getAllowedMethods());
 
         if ($this->request->getMethod() === 'OPTIONS') {
-            return $this->renderPlainText('Allowed methods: ' . $allow);
+            return $this->renderPlainText();
         }
 
         if ($this->isRequestJson()) {
@@ -338,7 +338,7 @@ class ErrorHandler
      * @param  string            $output
      * @return ResponseInterface
      */
-    protected function renderPlainText(string $output): ResponseInterface
+    protected function renderPlainText(string $output = ''): ResponseInterface
     {
         $response = $this->responseFactory->createResponse();
 

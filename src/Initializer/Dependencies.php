@@ -21,6 +21,8 @@ class Dependencies
         // 'request'               => ServerRequestInterface::class
         // 'response'              => ResponseInterface::class,
         // 'httpCache'             => \Slim\HttpCache\CacheProvider::class,
+        // 'responseFactory',
+        // 'callableResolver'
         'auth'                     => \MDClub\Library\Auth::class,
         'cache'                    => \MDClub\Library\Cache::class,
         'captcha'                  => \MDClub\Library\Captcha::class,
@@ -113,6 +115,9 @@ class Dependencies
     {
         /** @var Container $container */
         $container = $app->getContainer();
+
+        $container->offsetSet('responseFactory', $app->getResponseFactory());
+        $container->offsetSet('callableResolver', $app->getCallableResolver());
 
         // 将其他对象放入容器
         foreach ($this->values as $id => $className) {

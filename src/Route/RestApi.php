@@ -43,11 +43,6 @@ class RestApi
 
         $app
             ->group('/api', function (RouteCollectorProxy $group) use ($route) {
-                // 处理 options 预请求
-                $group->options('/{routes:.+}', function () {
-                    return;
-                });
-
                 $route
                     ->token($group)
                     ->option($group)
