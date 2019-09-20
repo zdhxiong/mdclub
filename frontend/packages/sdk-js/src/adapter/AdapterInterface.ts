@@ -37,6 +37,12 @@ export interface RequestAdapterInterface {
   setStorage(key: string, data: string): void;
 
   /**
+   * 删除数据存储
+   * @param key
+   */
+  removeStorage(key: string): void;
+
+  /**
    * 发送请求
    * @param options
    */

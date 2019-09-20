@@ -1,3 +1,5 @@
+// @ts-ignore
+import sha1 from 'sha-1';
 import { get, post, put, patch, del } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import {
@@ -877,8 +879,10 @@ export default {
    * 返回用户信息
    * @param params.UserRegisterRequestBody
    */
-  register: (params: RegisterParams): Promise<UserResponse> =>
-    post(
+  register: (params: RegisterParams): Promise<UserResponse> => {
+    params.password = sha1(params.password);
+
+    return post(
       buildURL(`${className}.register`, '/users', params),
       buildRequestBody(params, [
         'email',
@@ -887,7 +891,8 @@ export default {
         'password',
         'device',
       ]),
-    ),
+    );
+  },
 
   /**
    * 发送重置密码邮箱验证码
@@ -965,11 +970,14 @@ export default {
    * 验证邮箱并更新密码
    * @param params.UserPasswordResetRequestBody
    */
-  updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> =>
-    put(
+  updatePassword: (params: UpdatePasswordParams): Promise<EmptyResponse> => {
+    params.password = sha1(params.password);
+
+    return put(
       buildURL(`${className}.updatePassword`, '/user/password', params),
       buildRequestBody(params, ['email', 'email_code', 'password']),
-    ),
+    );
+  },
 
   /**
    * 上传当前登录用户的头像

@@ -58,6 +58,14 @@ export default class Browser implements RequestAdapterInterface {
   }
 
   /**
+   * 删除数据存储
+   * @param key
+   */
+  removeStorage(key: string): void {
+    window.localStorage.removeItem(key);
+  }
+
+  /**
    * 发送请求
    * @param options
    */
@@ -72,7 +80,7 @@ export default class Browser implements RequestAdapterInterface {
       ajax({
         method: options.method || 'GET',
         url: (globalOptions.apiPath || '') + (options.url || ''),
-        data: options.data,
+        data: JSON.stringify(options.data),
         headers,
         success: data => {
           data.code === 0 ? resolve(data) : reject(data);

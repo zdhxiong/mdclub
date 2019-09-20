@@ -1,6 +1,5 @@
 import { PlainObject } from './misc';
 import param from 'mdui.jq/es/functions/param';
-import defaults from '../defaults';
 import { isNull, isUndefined } from 'mdui.jq/es/utils';
 
 /**
@@ -25,21 +24,17 @@ export function buildURL(
   queryParamNames: string[] = [],
 ): string {
   // 替换 path 参数
-  const url =
-    defaults.apiPath +
-    path.replace(/({.*?})/g, function(match): string {
-      const pathParamName = underscoreToCamel(
-        match.substr(1, match.length - 2),
+  const url = path.replace(/({.*?})/g, function(match): string {
+    const pathParamName = underscoreToCamel(match.substr(1, match.length - 2));
+
+    if (isUndefined(params[pathParamName]) || isNull(params[pathParamName])) {
+      throw new Error(
+        `Missing required parameter ${pathParamName} when calling ${name}`,
       );
+    }
 
-      if (isUndefined(params[pathParamName]) || isNull(params[pathParamName])) {
-        throw new Error(
-          `Missing required parameter ${pathParamName} when calling ${name}`,
-        );
-      }
-
-      return String(params[pathParamName]);
-    });
+    return String(params[pathParamName]);
+  });
 
   // 添加 query 参数
   const queryObj: PlainObject<string> = {};
@@ -67,7 +62,7 @@ export function buildRequestBody(
 
   requestBodyNames.forEach(name => {
     if (!isUndefined(params[name]) && !isNull(params[name])) {
-      requestBody[name] = params;
+      requestBody[name] = params[name];
     }
   });
 

@@ -9,6 +9,9 @@ const { eslint } = require('rollup-plugin-eslint');
 const typescript = require('rollup-plugin-typescript');
 const polyfill = require('rollup-plugin-polyfill');
 const resolve = require('rollup-plugin-node-resolve');
+const json = require('rollup-plugin-json');
+const commonjs = require('rollup-plugin-commonjs');
+const serverFactory = require('spa-server');
 const pkg = require('./package.json');
 
 const banner = `
@@ -24,6 +27,7 @@ async function umd() {
     input: './src/index.ts',
     plugins: [
       resolve(),
+      commonjs(),
       eslint({
         fix: true,
       }),
@@ -59,6 +63,7 @@ async function esm() {
     input: './src/index.ts',
     plugins: [
       resolve(),
+      commonjs(),
       eslint({
         fix: true,
       }),
@@ -76,7 +81,33 @@ async function esm() {
 }
 
 async function test() {
+  const bundle = await rollup.rollup({
+    input: './test/index.ts',
+    plugins: [
+      resolve(),
+      commonjs(),
+      json(),
+      eslint({
+        fix: true,
+      }),
+      typescript(),
+    ],
+  });
 
+  await bundle.write({
+    strict: true,
+    name: 'mdclubTest',
+    format: 'es',
+    file: './test/dist.js',
+  });
+
+  const server = serverFactory.create({
+    path: './',
+  });
+
+  server.start();
+
+  console.log('打开 http://127.0.0.1:8888/test/index.html 开始测试');
 }
 
 gulp.task('build', gulp.parallel(umd, esm));

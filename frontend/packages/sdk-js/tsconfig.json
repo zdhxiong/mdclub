@@ -6,16 +6,10 @@
     "strict": true, // noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization
     "noImplicitReturns": true,
     "declaration": true,
-    "declarationDir": "types",
+    "declarationDir": "./es",
     "module": "ES6",
     "newLine": "lf",
     "outDir": "./es",
-    "target": "ES6",
-    "baseUrl": "./",
-    "paths": {
-      "mdui.jq/es/*": [
-        "node_modules/mdui.jq/types/*"
-      ]
-    }
+    "target": "ES6"
   }
 }
