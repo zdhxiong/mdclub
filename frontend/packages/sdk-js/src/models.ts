@@ -884,6 +884,349 @@ export interface OptionResponse {
   data: Option;
 }
 
+export interface OptionUpdateRequestBody {
+  /**
+   * 回答作者是否可删除回答。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
+   */
+  answer_can_delete?: boolean;
+  /**
+   * 在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `true` 时该参数才有效。
+   */
+  answer_can_delete_before?: number;
+  /**
+   * 是否仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `true` 时该参数才有效。
+   */
+  answer_can_delete_only_no_comment?: boolean;
+  /**
+   * 回答作者是否可编辑回答。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
+   */
+  answer_can_edit?: boolean;
+  /**
+   * 在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `true` 时该参数才有效。
+   */
+  answer_can_edit_before?: number;
+  /**
+   * 是否仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `true` 时该参数才有效。
+   */
+  answer_can_edit_only_no_comment?: boolean;
+  /**
+   * 文章作者是否可删除文章。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
+   */
+  article_can_delete?: boolean;
+  /**
+   * 在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `true` 时该参数才有效。
+   */
+  article_can_delete_before?: number;
+  /**
+   * 仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `true` 时该参数才有效。
+   */
+  article_can_delete_only_no_comment?: boolean;
+  /**
+   * 文章作者是否可编辑文章。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
+   */
+  article_can_edit?: boolean;
+  /**
+   * 在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `true` 时该参数才有效。
+   */
+  article_can_edit_before?: number;
+  /**
+   * 仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `true` 时该参数才有效。
+   */
+  article_can_edit_only_no_comment?: boolean;
+  /**
+   * 🔐Memcached 服务器地址
+   */
+  cache_memcached_host?: string;
+  /**
+   * 🔐Memcached 密码
+   */
+  cache_memcached_password?: string;
+  /**
+   * 🔐Memcached 端口号
+   */
+  cache_memcached_port?: number;
+  /**
+   * 🔐Memcached 用户名
+   */
+  cache_memcached_username?: string;
+  /**
+   * 🔐缓存键名前缀（只能包含字符 -+.A-Za-z0-9）
+   */
+  cache_prefix?: string;
+  /**
+   * 🔐Redis 服务器地址
+   */
+  cache_redis_host?: string;
+  /**
+   * 🔐Redis 密码
+   */
+  cache_redis_password?: string;
+  /**
+   * 🔐Redis 端口号
+   */
+  cache_redis_port?: number;
+  /**
+   * 🔐Redis 用户名
+   */
+  cache_redis_username?: string;
+  /**
+   * 🔐缓存类型
+   */
+  cache_type?: OptionUpdateRequestBodyCacheTypeEnum;
+  /**
+   * 评论作者是否可删除评论。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+   */
+  comment_can_delete?: boolean;
+  /**
+   * 在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `true` 时该参数才有效。
+   */
+  comment_can_delete_before?: number;
+  /**
+   * 评论作者是否可编辑评论。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+   */
+  comment_can_edit?: boolean;
+  /**
+   * 在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `true` 时该参数才有效。
+   */
+  comment_can_edit_before?: number;
+  /**
+   * 系统语言
+   */
+  language?: OptionUpdateRequestBodyLanguageEnum;
+  /**
+   * 提问作者是否可删除提问。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
+   */
+  question_can_delete?: boolean;
+  /**
+   * 在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+   */
+  question_can_delete_before?: number;
+  /**
+   * 仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+   */
+  question_can_delete_only_no_answer?: boolean;
+  /**
+   * 仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+   */
+  question_can_delete_only_no_comment?: boolean;
+  /**
+   * 提问作者是否可编辑提问。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
+   */
+  question_can_edit?: boolean;
+  /**
+   * 在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+   */
+  question_can_edit_before?: number;
+  /**
+   * 仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+   */
+  question_can_edit_only_no_answer?: boolean;
+  /**
+   * 仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+   */
+  question_can_edit_only_no_comment?: boolean;
+  /**
+   * 站点简介
+   */
+  site_description?: string;
+  /**
+   * 站点公安备案号
+   */
+  site_gongan_beian?: string;
+  /**
+   * 站点 ICP 备案号
+   */
+  site_icp_beian?: string;
+  /**
+   * 站点关键词
+   */
+  site_keywords?: string;
+  /**
+   * 站点名称
+   */
+  site_name?: string;
+  /**
+   * 🔐静态资源 URL 地址
+   */
+  site_static_url?: string;
+  /**
+   * 🔐SMTP 服务器地址
+   */
+  smtp_host?: string;
+  /**
+   * 🔐SMTP 密码
+   */
+  smtp_password?: string;
+  /**
+   * 🔐SMTP 端口
+   */
+  smtp_port?: number;
+  /**
+   * 🔐SMTP 回信地址
+   */
+  smtp_reply_to?: string;
+  /**
+   * 🔐SMTP 加密方式
+   */
+  smtp_secure?: OptionUpdateRequestBodySmtpSecureEnum;
+  /**
+   * 🔐SMTP 账户
+   */
+  smtp_username?: string;
+  /**
+   * 🔐阿里云 AccessKey ID
+   */
+  storage_aliyun_access_id?: string;
+  /**
+   * 🔐阿里云 Access Key Secret
+   */
+  storage_aliyun_access_secret?: string;
+  /**
+   * 🔐阿里云 OSS 的 Bucket 名称
+   */
+  storage_aliyun_bucket?: string;
+  /**
+   * 🔐阿里云 OSS 的 EndPoint
+   */
+  storage_aliyun_endpoint?: string;
+  /**
+   * 🔐FTP 服务器地址
+   */
+  storage_ftp_host?: string;
+  /**
+   * 🔐是否使用被动传输模式。true（被动模式）；false（主动模式）
+   */
+  storage_ftp_passive?: boolean;
+  /**
+   * 🔐FTP 密码
+   */
+  storage_ftp_password?: string;
+  /**
+   * 🔐FTP 端口号
+   */
+  storage_ftp_port?: number;
+  /**
+   * 🔐FTP 存储目录
+   */
+  storage_ftp_root?: string;
+  /**
+   * 🔐FTP 是否启用 SSL。true（启用）；false（不启用）
+   */
+  storage_ftp_ssl?: boolean;
+  /**
+   * 🔐FTP 用户名
+   */
+  storage_ftp_username?: string;
+  /**
+   * 🔐本地文件存储目录
+   */
+  storage_local_dir?: string;
+  /**
+   * 🔐七牛云 AccessKey
+   */
+  storage_qiniu_access_id?: string;
+  /**
+   * 🔐七牛云 SecretKey
+   */
+  storage_qiniu_access_secret?: string;
+  /**
+   * 🔐七牛云 Bucket
+   */
+  storage_qiniu_bucket?: string;
+  /**
+   * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
+   */
+  storage_qiniu_zone?: OptionUpdateRequestBodyStorageQiniuZoneEnum;
+  /**
+   * 🔐SFTP 服务器地址
+   */
+  storage_sftp_host?: string;
+  /**
+   * 🔐SFTP 密码
+   */
+  storage_sftp_password?: string;
+  /**
+   * 🔐SFTP 端口号
+   */
+  storage_sftp_port?: number;
+  /**
+   * 🔐SFTP 存储目录
+   */
+  storage_sftp_root?: string;
+  /**
+   * 🔐SFTP 用户名
+   */
+  storage_sftp_username?: string;
+  /**
+   * 🔐存储类型
+   */
+  storage_type?: OptionUpdateRequestBodyStorageTypeEnum;
+  /**
+   * 🔐又拍云 Bucket
+   */
+  storage_upyun_bucket?: string;
+  /**
+   * 🔐又拍云操作员账号
+   */
+  storage_upyun_operator?: string;
+  /**
+   * 🔐又拍云操作员密码
+   */
+  storage_upyun_password?: string;
+  /**
+   * 🔐本地文件访问链接
+   */
+  storage_url?: string;
+  /**
+   * 🔐主题名称
+   */
+  theme?: string;
+}
+
+/**
+ * Enum for the cache_type property.
+ */
+export type OptionUpdateRequestBodyCacheTypeEnum =
+  | 'pdo'
+  | 'redis'
+  | 'memcached';
+
+/**
+ * Enum for the language property.
+ */
+export type OptionUpdateRequestBodyLanguageEnum =
+  | 'en'
+  | 'pl'
+  | 'ru'
+  | 'zh-CN'
+  | 'zh-TW';
+
+/**
+ * Enum for the smtp_secure property.
+ */
+export type OptionUpdateRequestBodySmtpSecureEnum = 'ssl' | 'tls' | '';
+
+/**
+ * Enum for the storage_qiniu_zone property.
+ */
+export type OptionUpdateRequestBodyStorageQiniuZoneEnum =
+  | 'z0'
+  | 'z1'
+  | 'z2'
+  | 'na0'
+  | 'as0';
+
+/**
+ * Enum for the storage_type property.
+ */
+export type OptionUpdateRequestBodyStorageTypeEnum =
+  | 'local'
+  | 'ftp'
+  | 'sftp'
+  | 'aliyun'
+  | 'upyun'
+  | 'qiniu';
+
 export interface Pagination {
   /**
    * 当前页码

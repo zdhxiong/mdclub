@@ -1,6 +1,6 @@
 import { get, patch } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
-import { OptionResponse, Option } from './models';
+import { OptionResponse, OptionUpdateRequestBody } from "./models";
 
 const className = 'OptionApi';
 
@@ -20,7 +20,7 @@ export default {
    * 仅管理员可调用该接口
    * @param params.Option
    */
-  update: (params: Option): Promise<OptionResponse> =>
+  update: (params: OptionUpdateRequestBody): Promise<OptionResponse> =>
     patch(
       buildURL(`${className}.update`, '/options', params),
       buildRequestBody(params, [
