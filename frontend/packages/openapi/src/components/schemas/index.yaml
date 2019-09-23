@@ -57,6 +57,8 @@ ImageUpdateRequestBody:
   $ref: ./requestBody/ImageUpdate.yaml
 ImageUploadRequestBody:
   $ref: ./requestBody/ImageUpload.yaml
+OptionUpdateRequestBody:
+  $ref: ./requestBody/OptionUpdate.yaml
 QuestionCreateRequestBody:
   $ref: ./requestBody/QuestionCreate.yaml
 QuestionUpdateRequestBody:
