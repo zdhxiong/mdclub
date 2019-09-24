@@ -7,8 +7,8 @@
   "types": "es/index.d.ts",
   "scripts": {
     "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
-    "build": "tsc && gulp build",
-    "test": "gulp test"
+    "build": "tsc && node build.js",
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "0.0.16-4.1.0",
+    "@types/chai": "^4.2.3",
     "@types/mocha": "^5.2.7",
     "@types/weixin-app": "^2.2.27",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
@@ -39,11 +40,6 @@
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.1",
-    "gulp": "^4.0.2",
-    "gulp-header": "^2.0.9",
-    "gulp-rename": "^1.4.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2",
     "mdclub-openapi": "github:zdhxiong/mdclub-openapi",
     "mocha": "^6.2.0",
     "prettier": "^1.18.2",
@@ -55,6 +51,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-polyfill": "^3.0.0",
     "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-uglify": "^6.0.3",
     "spa-server": "^1.0.0",
     "swagger-model-validator": "^3.0.11",
     "tslib": "^1.10.0",

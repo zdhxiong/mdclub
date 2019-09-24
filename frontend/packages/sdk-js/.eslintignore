@@ -1,6 +1,7 @@
 .vscode/
 .idea/
 dist/
+es/
 node_modules/
 openapi-generator/
 tmp/
