@@ -7,7 +7,7 @@
   "types": "es/index.d.ts",
   "scripts": {
     "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
-    "build": "tsc && node build.js",
+    "build": "tsc -p src/tsconfig.json && node build.js",
     "test": "node test.js"
   },
   "repository": {

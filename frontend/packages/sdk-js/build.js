@@ -6,6 +6,7 @@ const typescript = require('rollup-plugin-typescript');
 const polyfill = require('rollup-plugin-polyfill');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
+const tsconfig = require('./src/tsconfig.json');
 const pkg = require('./package.json');
 
 const banner = `
@@ -24,7 +25,7 @@ const plugins = [
   eslint({
     fix: true,
   }),
-  typescript(),
+  typescript(tsconfig.compilerOptions),
 ];
 
 const outputOptions = {
