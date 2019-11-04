@@ -17,46 +17,88 @@ import {
 } from './models';
 
 interface AddFollowParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface DeleteAvatarParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface DeleteCoverParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface DeleteFollowParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface DisableParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface DisableMultipleParams {
+  /**
+   * 用“,”分隔的用户ID，最多可提供100个ID
+   */
   user_id?: Array<number>;
 }
 
 interface EnableParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
 }
 
 interface EnableMultipleParams {
+  /**
+   * 用“,”分隔的用户ID，最多可提供100个ID
+   */
   user_id?: Array<number>;
 }
 
 interface GetParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetAnswersParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -64,13 +106,28 @@ interface GetAnswersParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetArticlesParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -78,21 +135,51 @@ interface GetArticlesParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetCommentsParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+   */
   order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetDisabledParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `create_time`、`delete_time`、`follower_count`。默认为 `-delete_time`
+   */
   order?:
     | 'create_time'
     | 'delete_time'
@@ -100,63 +187,165 @@ interface GetDisabledParams {
     | '-create_time'
     | '-delete_time'
     | '-follower_count';
+  /**
+   * 用户ID
+   */
   user_id?: number;
+  /**
+   * 用户名
+   */
   username?: string;
+  /**
+   * 邮箱
+   */
   email?: string;
 }
 
 interface GetFolloweesParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetFollowersParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetFollowingArticlesParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetFollowingQuestionsParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetFollowingTopicsParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_following`
+   */
   include?: Array<'is_following'>;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `create_time`、`follower_count`。默认为 `-create_time`
+   */
   order?: 'create_time' | 'follower_count' | '-create_time' | '-follower_count';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  /**
+   * 用户ID
+   */
   user_id?: number;
+  /**
+   * 用户名
+   */
   username?: string;
+  /**
+   * 邮箱
+   */
   email?: string;
 }
 
 interface GetMineParams {
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyAnswersParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -164,12 +353,24 @@ interface GetMyAnswersParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetMyArticlesParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -177,49 +378,118 @@ interface GetMyArticlesParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyCommentsParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+   */
   order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetMyFolloweesParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowersParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowingArticlesParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingQuestionsParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingTopicsParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_following`
+   */
   include?: Array<'is_following'>;
 }
 
 interface GetMyQuestionsParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -227,13 +497,28 @@ interface GetMyQuestionsParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetQuestionsParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -241,6 +526,9 @@ interface GetQuestionsParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
@@ -298,7 +586,13 @@ interface SendRegisterEmailParams {
 }
 
 interface UpdateParams {
+  /**
+   * 用户ID
+   */
   user_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 
   /**
@@ -324,6 +618,9 @@ interface UpdateParams {
 }
 
 interface UpdateMineParams {
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   /**
    * 一句话介绍

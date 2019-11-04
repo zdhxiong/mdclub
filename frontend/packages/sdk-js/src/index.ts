@@ -1,4 +1,4 @@
-import Browser from './adapter/Browser';
+import BrowserAdapter from './adapter/BrowserAdapter';
 import defaults from './defaults';
 import AnswerApi from './AnswerApi';
 import ArticleApi from './ArticleApi';
@@ -13,7 +13,7 @@ import TokenApi from './TokenApi';
 import TopicApi from './TopicApi';
 import UserApi from './UserApi';
 
-defaults.adapter = new Browser();
+defaults.adapter = new BrowserAdapter();
 
 export {
   defaults,

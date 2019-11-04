@@ -15,14 +15,23 @@ import {
 } from './models';
 
 interface DeleteParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface AddFollowParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface AddVoteParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
   /**
    * 投票类型
@@ -50,7 +59,13 @@ interface CreateParams {
 }
 
 interface CreateAnswerParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
 
   /**
@@ -64,7 +79,13 @@ interface CreateAnswerParams {
 }
 
 interface CreateCommentParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 
   /**
@@ -74,34 +95,67 @@ interface CreateCommentParams {
 }
 
 interface DeleteFollowParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface DeleteMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   question_id?: Array<number>;
 }
 
 interface DeleteVoteParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface DestroyParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface DestroyMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   question_id?: Array<number>;
 }
 
 interface GetParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetAnswersParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -109,20 +163,47 @@ interface GetAnswersParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetCommentsParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+   */
   order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetDeletedParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -132,21 +213,51 @@ interface GetDeletedParams {
     | '-create_time'
     | '-update_time'
     | '-delete_time';
+  /**
+   * 提问ID
+   */
   question_id?: number;
+  /**
+   * 用户ID
+   */
   user_id?: number;
+  /**
+   * 话题ID
+   */
   topic_id?: number;
 }
 
 interface GetFollowersParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -154,29 +265,65 @@ interface GetListParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
+  /**
+   * 提问ID
+   */
   question_id?: number;
+  /**
+   * 用户ID
+   */
   user_id?: number;
+  /**
+   * 话题ID
+   */
   topic_id?: number;
 }
 
 interface GetVotersParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  /**
+   * 默认获取全部投票类型的用户 `up` 表示仅获取投赞成票的用户 `down` 表示仅获取投反对票的用户
+   */
   type?: 'up' | 'down';
 }
 
 interface RestoreParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
 }
 
 interface RestoreMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   question_id?: Array<number>;
 }
 
 interface UpdateParams {
+  /**
+   * 提问ID
+   */
   question_id: number;
   /**
    * 标题

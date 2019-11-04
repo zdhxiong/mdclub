@@ -8,7 +8,13 @@ import {
 {{#operations}}
 {{#operation}}
 interface {{operationIdCamelCase}}Params {
-{{#allParams}}  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
+{{#allParams}}
+{{#description}}
+  /**
+   * {{{description}}}
+   */
+{{/description}}
+  {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};
 {{/allParams}}
 }
 

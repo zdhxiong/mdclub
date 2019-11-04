@@ -3,30 +3,69 @@ import { buildURL, buildRequestBody } from './util/requestHandler';
 import { ImageResponse, EmptyResponse, ImagesResponse } from './models';
 
 interface DeleteParams {
+  /**
+   * 图片key
+   */
   key: string;
 }
 
 interface DeleteMultipleParams {
+  /**
+   * 用“,”分隔的图片key，最多可提供 40 个 key（IE 的 query 参数最长为 2k，为了不超过这个数值，限制最多可以提交 40 个 key）
+   */
   key?: Array<string>;
 }
 
 interface GetParams {
+  /**
+   * 图片key
+   */
   key: string;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
+  /**
+   * 图片key
+   */
   key?: string;
+  /**
+   * 图片关联对象的类型
+   */
   item_type?: 'question' | 'answer' | 'article';
+  /**
+   * 图片关联对象的ID
+   */
   item_id?: number;
+  /**
+   * 用户ID
+   */
   user_id?: number;
 }
 
 interface UpdateParams {
+  /**
+   * 图片key
+   */
   key: string;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
   /**
    * 图片文件名
@@ -35,6 +74,9 @@ interface UpdateParams {
 }
 
 interface UploadParams {
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
   /**
    * 图片

@@ -8,17 +8,31 @@ import {
 } from './models';
 
 interface DeleteParams {
+  /**
+   * 目标类型
+   */
   reportable_type: 'question' | 'answer' | 'article' | 'comment' | 'user';
+  /**
+   * 目标ID
+   */
   reportable_id: number;
 }
 
 interface CreateParams {
+  /**
+   * 目标类型
+   */
   reportable_type: 'question' | 'answer' | 'article' | 'comment' | 'user';
+  /**
+   * 目标ID
+   */
   reportable_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
+   */
   include?: Array<
     'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'
   >;
-
   /**
    * 举报理由
    */
@@ -26,21 +40,51 @@ interface CreateParams {
 }
 
 interface DeleteMultipleParams {
+  /**
+   * 类型和ID之间用“:”分隔，多个记录之间用“,”分隔，最多可提供100个。例如 question:12,comment:34
+   */
   target?: Array<string>;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`, `user`
+   */
   include?: Array<'question' | 'answer' | 'article' | 'comment' | 'user'>;
+  /**
+   * 目标类型
+   */
   reportable_type?: 'question' | 'answer' | 'article' | 'comment' | 'user';
 }
 
 interface GetReasonsParams {
+  /**
+   * 目标类型
+   */
   reportable_type: 'question' | 'answer' | 'article' | 'comment' | 'user';
+  /**
+   * 目标ID
+   */
   reportable_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
+   */
   include?: Array<
     'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'
   >;

@@ -1,6 +1,6 @@
 import { get, patch } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
-import { OptionResponse, OptionUpdateRequestBody } from "./models";
+import { OptionResponse, OptionUpdateRequestBody } from './models';
 
 const className = 'OptionApi';
 

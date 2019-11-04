@@ -1,9 +1,9 @@
-import { RequestAdapterInterface } from './adapter/AdapterInterface';
 import {
   BeforeSendCallback,
   SuccessCallback,
   ErrorCallback,
   CompleteCallback,
+  RequestAdapterInterface,
 } from './util/misc';
 
 /**

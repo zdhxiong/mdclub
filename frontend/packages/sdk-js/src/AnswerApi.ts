@@ -12,10 +12,16 @@ import {
 } from './models';
 
 interface DeleteParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
 }
 
 interface AddVoteParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
   /**
    * 投票类型
@@ -24,7 +30,13 @@ interface AddVoteParams {
 }
 
 interface CreateCommentParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
   /**
    * 评论内容
@@ -33,37 +45,79 @@ interface CreateCommentParams {
 }
 
 interface DeleteMultipleParams {
+  /**
+   * 用“,”分隔的回答ID，最多可提供100个ID
+   */
   answer_id?: Array<number>;
 }
 
 interface DeleteVoteParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
 }
 
 interface DestroyParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
 }
 
 interface DestroyMultipleParams {
+  /**
+   * 用“,”分隔的回答ID，最多可提供100个ID
+   */
   answer_id?: Array<number>;
 }
 
 interface GetParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetCommentsParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+   */
   order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetDeletedParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`。
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -73,14 +127,32 @@ interface GetDeletedParams {
     | '-create_time'
     | '-update_time'
     | '-delete_time';
+  /**
+   * 回答ID
+   */
   answer_id?: number;
+  /**
+   * 提问ID
+   */
   question_id?: number;
+  /**
+   * 用户ID
+   */
   user_id?: number;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -88,30 +160,69 @@ interface GetListParams {
     | '-vote_count'
     | '-create_time'
     | '-update_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
+  /**
+   * 回答ID
+   */
   answer_id?: number;
+  /**
+   * 提问ID
+   */
   question_id?: number;
+  /**
+   * 用户ID
+   */
   user_id?: number;
 }
 
 interface GetVotersParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  /**
+   * 默认获取全部投票类型的用户 `up` 表示仅获取投赞成票的用户 `down` 表示仅获取投反对票的用户
+   */
   type?: 'up' | 'down';
 }
 
 interface RestoreParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
 }
 
 interface RestoreMultipleParams {
+  /**
+   * 用“,”分隔的回答ID，最多可提供100个ID
+   */
   answer_id?: Array<number>;
 }
 
 interface UpdateParams {
+  /**
+   * 回答ID
+   */
   answer_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
   include?: Array<'user' | 'question' | 'voting'>;
   /**
    * Markdown 格式的正文

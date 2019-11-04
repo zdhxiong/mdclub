@@ -10,11 +10,20 @@ import {
 } from './models';
 
 interface DeleteParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
+  /**
+   * 🔐 若该参数为 true，则直接删除，不放入回收站。
+   */
   force?: boolean;
 }
 
 interface AddVoteParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
   /**
    * 投票类型
@@ -23,30 +32,60 @@ interface AddVoteParams {
 }
 
 interface DeleteMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   comment_id?: Array<number>;
+  /**
+   * 🔐 若该参数为 true，则直接删除，不放入回收站。
+   */
   force?: boolean;
 }
 
 interface DeleteVoteParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
 }
 
 interface DestroyParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
 }
 
 interface DestroyMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   comment_id?: Array<number>;
 }
 
 interface GetParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetDeletedParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-delete_time`
+   */
   order?:
     | 'vote_count'
     | 'create_time'
@@ -54,43 +93,112 @@ interface GetDeletedParams {
     | '-vote_count'
     | '-create_time'
     | '-delete_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
+  /**
+   * 评论ID
+   */
   comment_id?: number;
+  /**
+   * 评论目标的ID
+   */
   commentable_id?: number;
+  /**
+   * 评论目标类型
+   */
   commentable_type?: 'article' | 'question' | 'answer';
+  /**
+   * 用户ID
+   */
   user_id?: number;
 }
 
 interface GetListParams {
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+   */
   order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
+  /**
+   * 评论ID
+   */
   comment_id?: number;
+  /**
+   * 评论目标的ID
+   */
   commentable_id?: number;
+  /**
+   * 评论目标类型
+   */
   commentable_type?: 'article' | 'question' | 'answer';
+  /**
+   * 用户ID
+   */
   user_id?: number;
 }
 
 interface GetVotersParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
+  /**
+   * 当前页数
+   */
   page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
   per_page?: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
+  /**
+   * 默认获取全部投票类型的用户 `up` 表示仅获取投赞成票的用户 `down` 表示仅获取投反对票的用户
+   */
   type?: 'up' | 'down';
 }
 
 interface RestoreParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
 }
 
 interface RestoreMultipleParams {
+  /**
+   * 用“,”分隔的提问ID，最多可提供100个ID
+   */
   comment_id?: Array<number>;
 }
 
 interface UpdateParams {
+  /**
+   * 评论ID
+   */
   comment_id: number;
+  /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
   include?: Array<'user' | 'voting'>;
   /**
    * 评论内容
