@@ -225,9 +225,9 @@ export interface ArticleUpdateRequestBody {
    */
   title?: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id?: string;
+  topic_id?: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -369,9 +369,9 @@ export interface CommentsResponse {
 
 export interface Email {
   /**
-   * 邮箱地址，多个地址间用“,”分隔，最多支持100个
+   * 邮箱地址
    */
-  email: string;
+  email: Array<string>;
   /**
    * 邮件标题
    */
@@ -1384,9 +1384,9 @@ export interface QuestionUpdateRequestBody {
    */
   title?: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id?: string;
+  topic_id?: Array<number>;
   /**
    * Markdown 格式的正文
    */

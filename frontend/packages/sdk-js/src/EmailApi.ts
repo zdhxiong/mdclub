@@ -4,9 +4,9 @@ import { EmailResponse } from './models';
 
 interface SendParams {
   /**
-   * 邮箱地址，多个地址间用“,”分隔，最多支持100个
+   * 邮箱地址
    */
-  email: string;
+  email: Array<string>;
   /**
    * 邮件标题
    */

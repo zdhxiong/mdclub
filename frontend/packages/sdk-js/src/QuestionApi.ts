@@ -41,13 +41,17 @@ interface AddVoteParams {
 
 interface CreateParams {
   /**
+   * 包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   */
+  include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
+  /**
    * 标题
    */
   title: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id: string;
+  topic_id: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -330,9 +334,9 @@ interface UpdateParams {
    */
   title?: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id?: string;
+  topic_id?: Array<number>;
   /**
    * Markdown 格式的正文
    */

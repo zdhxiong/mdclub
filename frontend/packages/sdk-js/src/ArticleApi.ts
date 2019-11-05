@@ -47,9 +47,9 @@ interface CreateParams {
    */
   title: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id: string;
+  topic_id: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -278,9 +278,9 @@ interface UpdateParams {
    */
   title?: string;
   /**
-   * 话题ID，多个ID用“,”分隔，最多支持 10 个ID
+   * 话题ID
    */
-  topic_id?: string;
+  topic_id?: Array<number>;
   /**
    * Markdown 格式的正文
    */
