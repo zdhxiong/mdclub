@@ -1,9 +1,15 @@
 type: object
 properties:
   email:
-    type: string
-    description: 邮箱地址，多个地址间用“,”分隔，最多支持100个
-    example: zdhxiong@gmail.com,example@example.com
+    type: array
+    items:
+      type: string
+    minItems: 1
+    maxItems: 100
+    description: 邮箱地址
+    example:
+      - zdhxiong@gmail.com
+      - example@example.com
   subject:
     type: string
     description: 邮件标题

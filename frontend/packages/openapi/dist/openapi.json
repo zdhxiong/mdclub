@@ -1197,6 +1197,11 @@
         "operationId": "create",
         "summary": "发表提问",
         "description": "`content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，\n若两个参数都传入，则以 `content_markdown` 为准。\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include.question"
+          }
+        ],
         "requestBody": {
           "$ref": "#/components/requestBodies/QuestionCreate"
         },
@@ -4035,9 +4040,17 @@
         "type": "object",
         "properties": {
           "email": {
-            "type": "string",
-            "description": "邮箱地址，多个地址间用“,”分隔，最多支持100个",
-            "example": "zdhxiong@gmail.com,example@example.com"
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "邮箱地址",
+            "example": [
+              "zdhxiong@gmail.com",
+              "example@example.com"
+            ]
           },
           "subject": {
             "type": "string",
@@ -4903,9 +4916,18 @@
             "example": "欢迎使用 MDClub 开源社区系统"
           },
           "topic_id": {
-            "type": "string",
-            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
-            "example": "1,2,3"
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "maxItems": 10,
+            "description": "话题ID",
+            "example": [
+              1,
+              2,
+              3
+            ]
           },
           "content_markdown": {
             "type": "string",
@@ -5404,9 +5426,18 @@
             "example": "请问作者开发了哪些软件？"
           },
           "topic_id": {
-            "type": "string",
-            "description": "话题ID，多个ID用“,”分隔，最多支持 10 个ID",
-            "example": "1,2,3"
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "话题ID",
+            "example": [
+              1,
+              2,
+              3
+            ]
           },
           "content_markdown": {
             "type": "string",

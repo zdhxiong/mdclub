@@ -25,6 +25,8 @@ post:
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。
+  parameters:
+    - $ref: '#/components/parameters/include.question'
   requestBody:
     $ref: '#/components/requestBodies/QuestionCreate'
   responses:

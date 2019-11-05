@@ -29,7 +29,7 @@
     "node": ">=10"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "0.0.16-4.1.0",
+    "@openapitools/openapi-generator-cli": "1.0.2-4.2.0",
     "@stoplight/prism-cli": "3.1.0",
     "@stoplight/spectral": "4.1.1",
     "js-yaml": "^3.13.1",
