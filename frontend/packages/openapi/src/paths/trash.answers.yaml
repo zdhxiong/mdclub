@@ -7,6 +7,7 @@ get:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
     - $ref: '#/components/parameters/order.deletedAnswers'
+    - $ref: '#/components/parameters/include.answer'
     - $ref: '#/components/parameters/answer_id.query'
     - $ref: '#/components/parameters/question_id.query'
     - $ref: '#/components/parameters/user_id.query'

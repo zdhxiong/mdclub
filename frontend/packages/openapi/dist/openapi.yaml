@@ -396,6 +396,7 @@ paths:
       description: 获取指定文章信息
       parameters:
         - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Article'
@@ -413,6 +414,7 @@ paths:
         若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
       requestBody:
         $ref: '#/components/requestBodies/ArticleUpdate'
       responses:
@@ -975,6 +977,7 @@ paths:
         若两个参数都传入，则以 `content_markdown` 为准。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
       requestBody:
         $ref: '#/components/requestBodies/QuestionUpdate'
       responses:
@@ -1128,6 +1131,8 @@ paths:
       operationId: create
       summary: "\U0001F510发布话题"
       description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/include.topic'
       requestBody:
         $ref: '#/components/requestBodies/TopicCreate'
       responses:
@@ -1300,6 +1305,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order.deletedAnswers'
+        - $ref: '#/components/parameters/include.answer'
         - $ref: '#/components/parameters/answer_id.query'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
@@ -1351,6 +1357,7 @@ paths:
       description: |
         仅管理员可调用该接口。
       parameters:
+        - $ref: '#/components/parameters/include.answer'
         - $ref: '#/components/parameters/answer_id.path'
       responses:
         '200':
@@ -1383,6 +1390,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order.deletedArticles'
+        - $ref: '#/components/parameters/include.article'
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -1434,6 +1442,7 @@ paths:
       description: |
         仅管理员可调用该接口。
       parameters:
+        - $ref: '#/components/parameters/include.article'
         - $ref: '#/components/parameters/article_id.path'
       responses:
         '200':
@@ -1550,6 +1559,7 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
         - $ref: '#/components/parameters/order.deletedQuestions'
+        - $ref: '#/components/parameters/include.question'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
@@ -1601,6 +1611,7 @@ paths:
       description: |
         仅管理员可调用该接口。
       parameters:
+        - $ref: '#/components/parameters/include.question'
         - $ref: '#/components/parameters/question_id.path'
       responses:
         '200':
@@ -1752,6 +1763,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
           $ref: '#/components/responses/User'
@@ -2068,6 +2080,8 @@ paths:
       operationId: register
       summary: 验证邮箱并创建账号
       description: 返回用户信息
+      parameters:
+        - $ref: '#/components/parameters/include.user'
       requestBody:
         $ref: '#/components/requestBodies/UserRegister'
       responses:

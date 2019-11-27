@@ -632,6 +632,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "responses": {
@@ -653,6 +656,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/article_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/include.article"
           }
         ],
         "requestBody": {
@@ -1549,6 +1555,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/question_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/include.question"
           }
         ],
         "requestBody": {
@@ -1792,6 +1801,11 @@
         "operationId": "create",
         "summary": "🔐发布话题",
         "description": "仅管理员可调用该接口",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include.topic"
+          }
+        ],
         "requestBody": {
           "$ref": "#/components/requestBodies/TopicCreate"
         },
@@ -2069,6 +2083,9 @@
             "$ref": "#/components/parameters/order.deletedAnswers"
           },
           {
+            "$ref": "#/components/parameters/include.answer"
+          },
+          {
             "$ref": "#/components/parameters/answer_id.query"
           },
           {
@@ -2140,6 +2157,9 @@
         "description": "仅管理员可调用该接口。\n",
         "parameters": [
           {
+            "$ref": "#/components/parameters/include.answer"
+          },
+          {
             "$ref": "#/components/parameters/answer_id.path"
           }
         ],
@@ -2191,6 +2211,9 @@
           },
           {
             "$ref": "#/components/parameters/order.deletedArticles"
+          },
+          {
+            "$ref": "#/components/parameters/include.article"
           },
           {
             "$ref": "#/components/parameters/article_id.query"
@@ -2263,6 +2286,9 @@
         "summary": "🔐恢复指定文章",
         "description": "仅管理员可调用该接口。\n",
         "parameters": [
+          {
+            "$ref": "#/components/parameters/include.article"
+          },
           {
             "$ref": "#/components/parameters/article_id.path"
           }
@@ -2450,6 +2476,9 @@
             "$ref": "#/components/parameters/order.deletedQuestions"
           },
           {
+            "$ref": "#/components/parameters/include.question"
+          },
+          {
             "$ref": "#/components/parameters/question_id.query"
           },
           {
@@ -2520,6 +2549,9 @@
         "summary": "🔐恢复指定提问",
         "description": "仅管理员可调用该接口。\n",
         "parameters": [
+          {
+            "$ref": "#/components/parameters/include.question"
+          },
           {
             "$ref": "#/components/parameters/question_id.path"
           }
@@ -2755,6 +2787,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/user_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/include.user"
           }
         ],
         "responses": {
@@ -3271,6 +3306,11 @@
         "operationId": "register",
         "summary": "验证邮箱并创建账号",
         "description": "返回用户信息",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include.user"
+          }
+        ],
         "requestBody": {
           "$ref": "#/components/requestBodies/UserRegister"
         },

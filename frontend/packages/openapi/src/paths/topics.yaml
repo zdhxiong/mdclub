@@ -22,6 +22,8 @@ post:
   operationId: create
   summary: 🔐发布话题
   description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/include.topic'
   requestBody:
     $ref: '#/components/requestBodies/TopicCreate'
   responses:

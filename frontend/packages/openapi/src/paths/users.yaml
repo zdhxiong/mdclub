@@ -23,6 +23,8 @@ post:
   operationId: register
   summary: 验证邮箱并创建账号
   description: 返回用户信息
+  parameters:
+    - $ref: '#/components/parameters/include.user'
   requestBody:
     $ref: '#/components/requestBodies/UserRegister'
   responses:

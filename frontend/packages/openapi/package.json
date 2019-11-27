@@ -26,12 +26,12 @@
   "license": "MIT",
   "dependencies": {},
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "1.0.2-4.2.0",
-    "@stoplight/prism-cli": "3.1.0",
-    "@stoplight/spectral": "4.1.1",
+    "@openapitools/openapi-generator-cli": "1.0.7-4.2.1",
+    "@stoplight/prism-cli": "3.2.0",
+    "@stoplight/spectral": "4.2.0",
     "js-yaml": "^3.13.1",
     "json-refs": "^3.0.13"
   }

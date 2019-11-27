@@ -24,6 +24,7 @@ patch:
     若两个参数都传入，则以 `content_markdown` 为准。
   parameters:
     - $ref: '#/components/parameters/question_id.path'
+    - $ref: '#/components/parameters/include.question'
   requestBody:
     $ref: '#/components/requestBodies/QuestionUpdate'
   responses:

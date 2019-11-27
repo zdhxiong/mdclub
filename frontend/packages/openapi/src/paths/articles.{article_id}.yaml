@@ -4,6 +4,7 @@ get:
   description: 获取指定文章信息
   parameters:
     - $ref: '#/components/parameters/article_id.path'
+    - $ref: '#/components/parameters/include.article'
   responses:
     '200':
       $ref: '#/components/responses/Article'
@@ -22,6 +23,7 @@ patch:
     若两个参数都传入，则以 `content_markdown` 为准。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
+    - $ref: '#/components/parameters/include.article'
   requestBody:
     $ref: '#/components/requestBodies/ArticleUpdate'
   responses:
