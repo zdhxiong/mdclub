@@ -17,10 +17,6 @@ properties:
     type: string
     description: hash1 加密后的密码
     example: 7c4a8d09ca3762af61e59520943dc26494f8941b
-  device:
-    type: string
-    description: 设备信息
-    example: Xiaomi6
 required:
   - email
   - email_code

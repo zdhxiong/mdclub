@@ -1,6 +1,6 @@
 name: include
 in: query
-description: 包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
+description: 响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
 schema:
   type: array
   items:
