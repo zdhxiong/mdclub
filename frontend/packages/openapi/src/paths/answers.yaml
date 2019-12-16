@@ -11,6 +11,7 @@ get:
     - $ref: '#/components/parameters/answer_id.query'
     - $ref: '#/components/parameters/question_id.query'
     - $ref: '#/components/parameters/user_id.query'
+    - $ref: '#/components/parameters/trashed.query'
   responses:
     '200':
       $ref: '#/components/responses/Answers'
@@ -23,11 +24,8 @@ delete:
   operationId: deleteMultiple
   summary: 🔐批量删除回答
   description: |
+    仅管理员可调用该接口。
     只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
-
-    管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
-
-    回答被删除后，进入回收站。管理员可在后台恢复回答。
   parameters:
     - $ref: '#/components/parameters/answer_ids'
   responses:

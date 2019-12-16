@@ -1,14 +1,32 @@
+/answers/trash:
+  $ref: ./answers.trash.yaml
+
+/answers/untrash:
+  $ref: ./answers.untrash.yaml
+
 /answers:
   $ref: ./answers.yaml
 
 /answers/{answer_id}/comments:
   $ref: ./answers.{answer_id}.comments.yaml
 
+/answers/{answer_id}/trash:
+  $ref: ./answers.{answer_id}.trash.yaml
+
+/answers/{answer_id}/untrash:
+  $ref: ./answers.{answer_id}.untrash.yaml
+
 /answers/{answer_id}/voters:
   $ref: ./answers.{answer_id}.voters.yaml
 
 /answers/{answer_id}:
   $ref: ./answers.{answer_id}.yaml
+
+/articles/trash:
+  $ref: ./articles.trash.yaml
+
+/articles/untrash:
+  $ref: ./articles.untrash.yaml
 
 /articles:
   $ref: ./articles.yaml
@@ -19,6 +37,12 @@
 /articles/{article_id}/followers:
   $ref: ./articles.{article_id}.followers.yaml
 
+/articles/{article_id}/trash:
+  $ref: ./articles.{article_id}.trash.yaml
+
+/articles/{article_id}/untrash:
+  $ref: ./articles.{article_id}.untrash.yaml
+
 /articles/{article_id}/voters:
   $ref: ./articles.{article_id}.voters.yaml
 
@@ -28,8 +52,20 @@
 /captchas:
   $ref: ./captchas.yaml
 
+/comments/trash:
+  $ref: ./comments.trash.yaml
+
+/comments/untrash:
+  $ref: ./comments.untrash.yaml
+
 /comments:
   $ref: ./comments.yaml
+
+/comments/{comment_id}/trash:
+  $ref: ./comments.{comment_id}.trash.yaml
+
+/comments/{comment_id}/untrash:
+  $ref: ./comments.{comment_id}.untrash.yaml
 
 /comments/{comment_id}/voters:
   $ref: ./comments.{comment_id}.voters.yaml
@@ -49,6 +85,12 @@
 /options:
   $ref: ./options.yaml
 
+/questions/trash:
+  $ref: ./questions.trash.yaml
+
+/questions/untrash:
+  $ref: ./questions.untrash.yaml
+
 /questions:
   $ref: ./questions.yaml
 
@@ -60,6 +102,12 @@
 
 /questions/{question_id}/followers:
   $ref: ./questions.{question_id}.followers.yaml
+
+/questions/{question_id}/trash:
+  $ref: ./questions.{question_id}.trash.yaml
+
+/questions/{question_id}/untrash:
+  $ref: ./questions.{question_id}.untrash.yaml
 
 /questions/{question_id}/voters:
   $ref: ./questions.{question_id}.voters.yaml
@@ -76,6 +124,12 @@
 /tokens:
   $ref: ./tokens.yaml
 
+/topics/trash:
+  $ref: ./topics.trash.yaml
+
+/topics/untrash:
+  $ref: ./topics.untrash.yaml
+
 /topics:
   $ref: ./topics.yaml
 
@@ -88,38 +142,14 @@
 /topics/{topic_id}/questions:
   $ref: ./topics.{topic_id}.questions.yaml
 
+/topics/{topic_id}/trash:
+  $ref: ./topics.{topic_id}.trash.yaml
+
+/topics/{topic_id}/untrash:
+  $ref: ./topics.{topic_id}.untrash.yaml
+
 /topics/{topic_id}:
   $ref: ./topics.{topic_id}.yaml
-
-/trash/answers:
-  $ref: ./trash.answers.yaml
-
-/trash/answers/{answer_id}:
-  $ref: ./trash.answers.{answer_id}.yaml
-
-/trash/articles:
-  $ref: ./trash.articles.yaml
-
-/trash/articles/{article_id}:
-  $ref: ./trash.articles.{article_id}.yaml
-
-/trash/comments:
-  $ref: ./trash.comments.yaml
-
-/trash/comments/{comment_id}:
-  $ref: ./trash.comments.{comment_id}.yaml
-
-/trash/questions:
-  $ref: ./trash.questions.yaml
-
-/trash/questions/{question_id}:
-  $ref: ./trash.questions.{question_id}.yaml
-
-/trash/topics:
-  $ref: ./trash.topics.yaml
-
-/trash/topics/{topic_id}:
-  $ref: ./trash.topics.{topic_id}.yaml
 
 /trash/users:
   $ref: ./trash.users.yaml

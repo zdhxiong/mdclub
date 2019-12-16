@@ -37,13 +37,11 @@ patch:
 
 delete:
   operationId: delete
-  summary: 删除指定提问
+  summary: 删除提问
   description: |
     只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
     管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
-
-    提问被删除后，进入回收站。管理员可在后台恢复提问。
   parameters:
     - $ref: '#/components/parameters/question_id.path'
   responses:

@@ -1,0 +1,14 @@
+post:
+  operationId: untrash
+  summary: 🔐把回答移出回收站
+  description: |
+    仅管理员可调用该接口。
+  parameters:
+    - $ref: '#/components/parameters/answer_id.path'
+  responses:
+    '200':
+      $ref: '#/components/responses/Answer'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Answer

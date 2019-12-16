@@ -3,15 +3,17 @@ in: query
 description: |
   排序方式。在字段前加 `-` 表示倒序排列。
 
-  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+  可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-create_time`。其中 `delete_time` 值仅管理员使用有效。
 schema:
   type: string
   enum:
     - vote_count
     - create_time
     - update_time
+    - delete_time
     - '-vote_count'
     - '-create_time'
     - '-update_time'
+    - '-delete_time'
   default: -create_time
 example: -create_time

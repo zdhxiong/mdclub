@@ -11,6 +11,7 @@ get:
     - $ref: '#/components/parameters/article_id.query'
     - $ref: '#/components/parameters/user_id.query'
     - $ref: '#/components/parameters/topic_id.query'
+    - $ref: '#/components/parameters/trashed.query'
   responses:
     '200':
       $ref: '#/components/responses/Articles'
@@ -41,11 +42,8 @@ delete:
   operationId: deleteMultiple
   summary: 🔐批量删除文章
   description: |
+    仅管理员可调用该接口。
     只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
-
-    管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
-
-    文章被删除后，进入回收站。管理员可在后台恢复文章。
   parameters:
     - $ref: '#/components/parameters/article_ids'
   responses:

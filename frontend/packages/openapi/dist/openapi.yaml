@@ -30,6 +30,36 @@ servers:
         default: /api
         description: 服务器接口根路径
 paths:
+  /answers/trash:
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把回答放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  /answers/untrash:
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把回答移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
   /answers:
     get:
       operationId: getList
@@ -44,6 +74,7 @@ paths:
         - $ref: '#/components/parameters/answer_id.query'
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/trashed.query'
       responses:
         '200':
           $ref: '#/components/responses/Answers'
@@ -55,11 +86,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除回答"
       description: |
+        仅管理员可调用该接口。
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
-
-        管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
-
-        回答被删除后，进入回收站。管理员可在后台恢复回答。
       parameters:
         - $ref: '#/components/parameters/answer_ids'
       responses:
@@ -101,6 +129,35 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把回答放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把回答移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -190,13 +247,11 @@ paths:
         - Answer
     delete:
       operationId: delete
-      summary: 删除指定回答
+      summary: 删除回答
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
         管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
-
-        回答被删除后，进入回收站。管理员可在后台恢复回答。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
       responses:
@@ -206,6 +261,36 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Answer
+  /articles/trash:
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把文章放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  /articles/untrash:
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把文章移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
   /articles:
     get:
       operationId: getList
@@ -220,6 +305,7 @@ paths:
         - $ref: '#/components/parameters/article_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
+        - $ref: '#/components/parameters/trashed.query'
       responses:
         '200':
           $ref: '#/components/responses/Articles'
@@ -248,11 +334,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除文章"
       description: |
+        仅管理员可调用该接口。
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
-
-        管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
-
-        文章被删除后，进入回收站。管理员可在后台恢复文章。
       parameters:
         - $ref: '#/components/parameters/article_ids'
       responses:
@@ -342,6 +425,35 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Article
+  '/articles/{article_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把文章放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把文章移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
   '/articles/{article_id}/voters':
     get:
       operationId: getVoters
@@ -426,13 +538,11 @@ paths:
         - Article
     delete:
       operationId: delete
-      summary: 删除指定文章
+      summary: 删除文章
       description: |
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
 
         管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
-
-        文章被删除后，进入回收站。管理员可在后台恢复文章。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       responses:
@@ -454,6 +564,36 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Captcha
+  /comments/trash:
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把评论放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  /comments/untrash:
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把评论移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
   /comments:
     get:
       operationId: getList
@@ -469,6 +609,7 @@ paths:
         - $ref: '#/components/parameters/commentable_id.query'
         - $ref: '#/components/parameters/commentable_type.query'
         - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/trashed.query'
       responses:
         '200':
           $ref: '#/components/responses/Comments'
@@ -480,17 +621,42 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除评论"
       description: |
-        仅管理员可批量删除评论。
-
+        仅管理员可调用该接口。
         只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
-
-        评论被删除后，默认进入回收站。管理员可在后台恢复评论。
       parameters:
         - $ref: '#/components/parameters/comment_ids'
-        - $ref: '#/components/parameters/force'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把评论放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把评论移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -581,12 +747,9 @@ paths:
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
-        管理员可删除评论，默认为软删除，指定 force=1 为硬删除。评论被删除后，进入回收站。管理员可在后台恢复评论。
-
-        评论作者是否可删除评论，由管理员在后台的设置决定。评论作者删除评论时只能硬删除，删除后不可恢复。
+        管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
-        - $ref: '#/components/parameters/force'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -731,6 +894,36 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Option
+  /questions/trash:
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把提问放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  /questions/untrash:
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把提问移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
   /questions:
     get:
       operationId: getList
@@ -745,6 +938,7 @@ paths:
         - $ref: '#/components/parameters/question_id.query'
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/topic_id.query'
+        - $ref: '#/components/parameters/trashed.query'
       responses:
         '200':
           $ref: '#/components/responses/Questions'
@@ -773,11 +967,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除提问"
       description: |
+        仅管理员可调用该接口。
         只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
-
-        管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
-
-        提问被删除后，进入回收站。管理员可在后台恢复提问。
       parameters:
         - $ref: '#/components/parameters/question_ids'
       responses:
@@ -904,6 +1095,35 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Question
+  '/questions/{question_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把提问放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把提问移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
   '/questions/{question_id}/voters':
     get:
       operationId: getVoters
@@ -989,13 +1209,11 @@ paths:
         - Question
     delete:
       operationId: delete
-      summary: 删除指定提问
+      summary: 删除提问
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
         管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
-
-        提问被删除后，进入回收站。管理员可在后台恢复提问。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       responses:
@@ -1107,6 +1325,36 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Token
+  /topics/trash:
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把话题放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  /topics/untrash:
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把话题移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
   /topics:
     get:
       operationId: getList
@@ -1120,6 +1368,7 @@ paths:
         - $ref: '#/components/parameters/order.topics'
         - $ref: '#/components/parameters/topic_id.query'
         - $ref: '#/components/parameters/topic_name.query'
+        - $ref: '#/components/parameters/trashed.query'
       responses:
         '200':
           $ref: '#/components/responses/Topics'
@@ -1148,11 +1397,8 @@ paths:
       description: |
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
-
-        删除后，话题默认进入回收站，可在回收站中恢复话题。
       parameters:
         - $ref: '#/components/parameters/topic_ids'
-        - $ref: '#/components/parameters/force'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -1242,6 +1488,35 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Topic
+  '/topics/{topic_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把话题放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把话题移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
   '/topics/{topic_id}':
     get:
       operationId: get
@@ -1281,434 +1556,8 @@ paths:
       operationId: delete
       summary: "\U0001F510删除话题"
       description: |
-        仅管理员可调用该接口
+        仅管理员可调用该接口。
         只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
-
-        删除后，话题默认进入回收站，可在回收站中恢复该话题。
-      parameters:
-        - $ref: '#/components/parameters/topic_id.path'
-        - $ref: '#/components/parameters/force'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-  /trash/answers:
-    get:
-      operationId: getDeleted
-      summary: "\U0001F510获取回收站中的回答列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order.deletedAnswers'
-        - $ref: '#/components/parameters/include.answer'
-        - $ref: '#/components/parameters/answer_id.query'
-        - $ref: '#/components/parameters/question_id.query'
-        - $ref: '#/components/parameters/user_id.query'
-      responses:
-        '200':
-          $ref: '#/components/responses/Answers'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-    post:
-      operationId: restoreMultiple
-      summary: "\U0001F510批量恢复回答"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/answer_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-    delete:
-      operationId: destroyMultiple
-      summary: "\U0001F510批量删除回收站中的回答"
-      description: |
-        仅管理员可调用该接口
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-
-        若没有提供 answer_id 参数，则将清空回收站中的所有回答。
-      parameters:
-        - $ref: '#/components/parameters/answer_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-  '/trash/answers/{answer_id}':
-    post:
-      operationId: restore
-      summary: "\U0001F510恢复指定回答"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/include.answer'
-        - $ref: '#/components/parameters/answer_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Answer'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-    delete:
-      operationId: destroy
-      summary: "\U0001F510删除指定回答"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/answer_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-  /trash/articles:
-    get:
-      operationId: getDeleted
-      summary: "\U0001F510获取回收站中的文章列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order.deletedArticles'
-        - $ref: '#/components/parameters/include.article'
-        - $ref: '#/components/parameters/article_id.query'
-        - $ref: '#/components/parameters/user_id.query'
-        - $ref: '#/components/parameters/topic_id.query'
-      responses:
-        '200':
-          $ref: '#/components/responses/Articles'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-    post:
-      operationId: restoreMultiple
-      summary: "\U0001F510批量恢复文章"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/article_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-    delete:
-      operationId: destroyMultiple
-      summary: "\U0001F510批量删除回收站中的话题"
-      description: |
-        仅管理员可调用该接口
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-
-        若没有提供 topic_id 参数，则将清空回收站中的所有文章。
-      parameters:
-        - $ref: '#/components/parameters/topic_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-  '/trash/articles/{article_id}':
-    post:
-      operationId: restore
-      summary: "\U0001F510恢复指定文章"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/include.article'
-        - $ref: '#/components/parameters/article_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Article'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-    delete:
-      operationId: destroy
-      summary: "\U0001F510删除指定文章"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/article_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-  /trash/comments:
-    get:
-      operationId: getDeleted
-      summary: "\U0001F510获取回收站中的评论列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order.deletedComments'
-        - $ref: '#/components/parameters/include.comment'
-        - $ref: '#/components/parameters/comment_id.query'
-        - $ref: '#/components/parameters/commentable_id.query'
-        - $ref: '#/components/parameters/commentable_type.query'
-        - $ref: '#/components/parameters/user_id.query'
-      responses:
-        '200':
-          $ref: '#/components/responses/Comments'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-    post:
-      operationId: restoreMultiple
-      summary: "\U0001F510批量恢复评论"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/comment_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-    delete:
-      operationId: destroyMultiple
-      summary: "\U0001F510批量删除回收站中的评论"
-      description: |
-        仅管理员可调用该接口
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/comment_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-  '/trash/comments/{comment_id}':
-    post:
-      operationId: restore
-      summary: "\U0001F510恢复指定评论"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/comment_id.path'
-        - $ref: '#/components/parameters/include.comment'
-      responses:
-        '200':
-          $ref: '#/components/responses/Comment'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-    delete:
-      operationId: destroy
-      summary: "\U0001F510删除回收站中的指定评论"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/comment_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-  /trash/questions:
-    get:
-      operationId: getDeleted
-      summary: "\U0001F510获取回收站中的提问列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order.deletedQuestions'
-        - $ref: '#/components/parameters/include.question'
-        - $ref: '#/components/parameters/question_id.query'
-        - $ref: '#/components/parameters/user_id.query'
-        - $ref: '#/components/parameters/topic_id.query'
-      responses:
-        '200':
-          $ref: '#/components/responses/Questions'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-    post:
-      operationId: restoreMultiple
-      summary: "\U0001F510批量恢复提问"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/question_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-    delete:
-      operationId: destroyMultiple
-      summary: "\U0001F510批量删除回收站中的提问"
-      description: |
-        仅管理员可调用该接口
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-
-        若没有提供 question_id 参数，则将清空回收站中的所有提问。
-      parameters:
-        - $ref: '#/components/parameters/question_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-  '/trash/questions/{question_id}':
-    post:
-      operationId: restore
-      summary: "\U0001F510恢复指定提问"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/include.question'
-        - $ref: '#/components/parameters/question_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Question'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-    delete:
-      operationId: destroy
-      summary: "\U0001F510删除指定提问"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/question_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-  /trash/topics:
-    get:
-      operationId: getDeleted
-      summary: "\U0001F510获取回收站中的话题列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/order.deletedTopics'
-        - $ref: '#/components/parameters/topic_id.query'
-        - $ref: '#/components/parameters/topic_name.query'
-        - $ref: '#/components/parameters/include.topic'
-      responses:
-        '200':
-          $ref: '#/components/responses/Topics'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-    post:
-      operationId: restoreMultiple
-      summary: "\U0001F510批量恢复话题"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/topic_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-    delete:
-      operationId: destroyMultiple
-      summary: "\U0001F510批量删除回收站中的话题"
-      description: |
-        仅管理员可调用该接口
-
-        只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-
-        若没有提供 topic_id 参数，则将清空回收站中的所有话题。
-      parameters:
-        - $ref: '#/components/parameters/topic_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-  '/trash/topics/{topic_id}':
-    post:
-      operationId: restore
-      summary: "\U0001F510恢复指定话题"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/topic_id.path'
-        - $ref: '#/components/parameters/include.topic'
-      responses:
-        '200':
-          $ref: '#/components/responses/Topic'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-    delete:
-      operationId: destroy
-      summary: "\U0001F510删除指定话题"
-      description: |
-        仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
       responses:
@@ -3944,10 +3793,6 @@ components:
           type: string
           description: hash1 加密后的密码
           example: 7c4a8d09ca3762af61e59520943dc26494f8941b
-        device:
-          type: string
-          description: 设备信息
-          example: Xiaomi6
       required:
         - email
         - email_code
@@ -4975,7 +4820,7 @@ components:
     include.answer:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`'
       schema:
         type: array
         items:
@@ -4992,7 +4837,7 @@ components:
     include.article:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
       schema:
         type: array
         items:
@@ -5010,7 +4855,7 @@ components:
     include.comment:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `user`, `voting`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`'
       schema:
         type: array
         items:
@@ -5026,7 +4871,7 @@ components:
     include.image:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`'
       schema:
         type: array
         items:
@@ -5044,7 +4889,7 @@ components:
     include.question:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
       schema:
         type: array
         items:
@@ -5062,7 +4907,9 @@ components:
     include.report:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`, `user`'
+      description: >-
+        响应中需要包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`,
+        `user`
       schema:
         type: array
         items:
@@ -5082,7 +4929,7 @@ components:
       name: include
       in: query
       description: >-
-        包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`,
+        响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`,
         `comment`, `user`
       schema:
         type: array
@@ -5104,7 +4951,7 @@ components:
     include.topic:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `is_following`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`'
       schema:
         type: array
         items:
@@ -5118,7 +4965,7 @@ components:
     include.user:
       name: include
       in: query
-      description: '包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`'
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`'
       schema:
         type: array
         items:
@@ -5135,157 +4982,67 @@ components:
     order.answers:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - vote_count
           - create_time
           - update_time
+          - delete_time
           - '-vote_count'
           - '-create_time'
           - '-update_time'
+          - '-delete_time'
         default: '-create_time'
       example: '-create_time'
     order.articles:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - vote_count
           - create_time
           - update_time
+          - delete_time
           - '-vote_count'
           - '-create_time'
           - '-update_time'
+          - '-delete_time'
         default: '-create_time'
       example: '-create_time'
     order.comments:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
+
+        可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-create_time`。其中
+        `delete_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - vote_count
           - create_time
+          - delete_time
           - '-vote_count'
           - '-create_time'
+          - '-delete_time'
         default: '-create_time'
       example: '-create_time'
-    order.deletedAnswers:
-      name: order
-      in: query
-      description: >
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
-        `-delete_time`。
-      schema:
-        type: string
-        enum:
-          - vote_count
-          - create_time
-          - update_time
-          - delete_time
-          - '-vote_count'
-          - '-create_time'
-          - '-update_time'
-          - '-delete_time'
-        default: '-delete_time'
-      example: '-delete_time'
-    order.deletedArticles:
-      name: order
-      in: query
-      description: >
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
-        `-delete_time`
-      schema:
-        type: string
-        enum:
-          - vote_count
-          - create_time
-          - update_time
-          - delete_time
-          - '-vote_count'
-          - '-create_time'
-          - '-update_time'
-          - '-delete_time'
-        default: '-delete_time'
-      example: '-delete_time'
-    order.deletedComments:
-      name: order
-      in: query
-      description: |
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-        可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-delete_time`
-      schema:
-        type: string
-        enum:
-          - vote_count
-          - create_time
-          - delete_time
-          - '-vote_count'
-          - '-create_time'
-          - '-delete_time'
-        default: '-delete_time'
-      example: '-delete_time'
-    order.deletedQuestions:
-      name: order
-      in: query
-      description: >
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-
-        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
-        `-delete_time`
-      schema:
-        type: string
-        enum:
-          - vote_count
-          - create_time
-          - update_time
-          - delete_time
-          - '-vote_count'
-          - '-create_time'
-          - '-update_time'
-          - '-delete_time'
-        default: '-delete_time'
-      example: '-delete_time'
-    order.deletedTopics:
-      name: order
-      in: query
-      description: |
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-        可排序字段包括 `topic_id`、`follower_count`、`delete_time`。默认为 `-delete_time`
-      schema:
-        type: string
-        enum:
-          - topic_id
-          - follower_count
-          - delete_time
-          - '-topic_id'
-          - '-follower_count'
-          - '-delete_time'
-        default: '-delete_time'
-      example: '-delete_time'
     order.deletedUsers:
       name: order
       in: query
@@ -5307,35 +5064,43 @@ components:
     order.questions:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - vote_count
           - create_time
           - update_time
+          - delete_time
           - '-vote_count'
           - '-create_time'
           - '-update_time'
+          - '-delete_time'
         default: '-create_time'
       example: '-create_time'
     order.topics:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `topic_id`、`follower_count`。默认为 `topic_id`
+
+        可排序字段包括 `topic_id`、`follower_count`、`delete_time`。默认为 `topic_id`。其中
+        `delete_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - topic_id
           - follower_count
+          - delete_time
           - '-topic_id'
           - '-follower_count'
+          - '-delete_time'
         default: topic_id
       example: topic_id
     order.users:
@@ -5506,6 +5271,14 @@ components:
       schema:
         type: string
       example: MDClub
+    trashed.query:
+      name: trashed
+      in: query
+      description: 是否获取回收站中的数据
+      schema:
+        type: boolean
+        default: false
+      example: false
     user_id.path:
       name: user_id
       in: path

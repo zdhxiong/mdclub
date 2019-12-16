@@ -10,6 +10,7 @@ get:
     - $ref: '#/components/parameters/order.topics'
     - $ref: '#/components/parameters/topic_id.query'
     - $ref: '#/components/parameters/topic_name.query'
+    - $ref: '#/components/parameters/trashed.query'
   responses:
     '200':
       $ref: '#/components/responses/Topics'
@@ -40,11 +41,8 @@ delete:
   description: |
     仅管理员可调用该接口。
     只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
-
-    删除后，话题默认进入回收站，可在回收站中恢复话题。
   parameters:
     - $ref: '#/components/parameters/topic_ids'
-    - $ref: '#/components/parameters/force'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

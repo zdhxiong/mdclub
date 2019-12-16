@@ -12,6 +12,7 @@ get:
     - $ref: '#/components/parameters/commentable_id.query'
     - $ref: '#/components/parameters/commentable_type.query'
     - $ref: '#/components/parameters/user_id.query'
+    - $ref: '#/components/parameters/trashed.query'
   responses:
     '200':
       $ref: '#/components/responses/Comments'
@@ -24,14 +25,10 @@ delete:
   operationId: deleteMultiple
   summary: 🔐批量删除评论
   description: |
-    仅管理员可批量删除评论。
-
+    仅管理员可调用该接口。
     只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
-
-    评论被删除后，默认进入回收站。管理员可在后台恢复评论。
   parameters:
     - $ref: '#/components/parameters/comment_ids'
-    - $ref: '#/components/parameters/force'
   responses:
     '200':
       $ref: '#/components/responses/Empty'

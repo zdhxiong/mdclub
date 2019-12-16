@@ -1,0 +1,14 @@
+post:
+  operationId: untrashMultiple
+  summary: 🔐批量把文章移出回收站
+  description: |
+    仅管理员可调用该接口。
+  parameters:
+    - $ref: '#/components/parameters/article_ids'
+  responses:
+    '200':
+      $ref: '#/components/responses/Articles'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article

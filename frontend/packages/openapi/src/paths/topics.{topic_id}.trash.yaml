@@ -1,0 +1,13 @@
+post:
+  operationId: trash
+  summary: 🔐把话题放入回收站
+  description: 仅管理员可调用该接口
+  parameters:
+    - $ref: '#/components/parameters/topic_id.path'
+  responses:
+    '200':
+      $ref: '#/components/responses/Topic'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Topic

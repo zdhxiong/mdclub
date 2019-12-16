@@ -1,0 +1,7 @@
+name: trashed
+in: query
+description: 是否获取回收站中的数据
+schema:
+  type: boolean
+  default: false
+example: false
