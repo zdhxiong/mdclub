@@ -1,0 +1,15 @@
+delete:
+  operationId: deleteMultiple
+  summary: 🔐批量删除文章
+  description: |
+    仅管理员可调用该接口。
+    只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/article_ids.path'
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Article

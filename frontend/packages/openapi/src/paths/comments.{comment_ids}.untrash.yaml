@@ -1,10 +1,11 @@
 post:
-  operationId: trashMultiple
-  summary: 🔐批量把评论放入回收站
+  operationId: untrashMultiple
+  summary: 🔐批量把评论移出回收站
   description: |
     仅管理员可调用该接口。
   parameters:
-    - $ref: '#/components/parameters/comment_ids'
+    - $ref: '#/components/parameters/comment_ids.path'
+    - $ref: '#/components/parameters/include.comment'
   responses:
     '200':
       $ref: '#/components/responses/Comments'

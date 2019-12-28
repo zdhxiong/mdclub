@@ -4,7 +4,8 @@ post:
   description: |
     仅管理员可调用该接口。
   parameters:
-    - $ref: '#/components/parameters/topic_ids'
+    - $ref: '#/components/parameters/topic_ids.path'
+    - $ref: '#/components/parameters/include.topic'
   responses:
     '200':
       $ref: '#/components/responses/Topics'

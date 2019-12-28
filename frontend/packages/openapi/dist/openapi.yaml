@@ -30,36 +30,6 @@ servers:
         default: /api
         description: 服务器接口根路径
 paths:
-  /answers/trash:
-    post:
-      operationId: trashMultiple
-      summary: "\U0001F510批量把回答放入回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/answer_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Answers'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
-  /answers/untrash:
-    post:
-      operationId: untrashMultiple
-      summary: "\U0001F510批量把回答移出回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/answer_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Answers'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Answer
   /answers:
     get:
       operationId: getList
@@ -82,6 +52,39 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Answer
+  '/answers/{answer_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把回答放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把回答移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_ids}':
     delete:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除回答"
@@ -89,7 +92,7 @@ paths:
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
       parameters:
-        - $ref: '#/components/parameters/answer_ids'
+        - $ref: '#/components/parameters/answer_ids.path'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -137,9 +140,11 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把回答放入回收站"
-      description: 仅管理员可调用该接口
+      description: |
+        仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answer'
@@ -155,6 +160,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
       responses:
         '200':
           $ref: '#/components/responses/Answer'
@@ -261,36 +267,6 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Answer
-  /articles/trash:
-    post:
-      operationId: trashMultiple
-      summary: "\U0001F510批量把文章放入回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/article_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Articles'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
-  /articles/untrash:
-    post:
-      operationId: untrashMultiple
-      summary: "\U0001F510批量把文章移出回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/article_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Articles'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Article
   /articles:
     get:
       operationId: getList
@@ -330,6 +306,39 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Article
+  '/articles/{article_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把文章放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把文章移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_ids}':
     delete:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除文章"
@@ -337,7 +346,7 @@ paths:
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
       parameters:
-        - $ref: '#/components/parameters/article_ids'
+        - $ref: '#/components/parameters/article_ids.path'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -432,6 +441,7 @@ paths:
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Article'
@@ -447,6 +457,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
       responses:
         '200':
           $ref: '#/components/responses/Article'
@@ -564,36 +575,6 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Captcha
-  /comments/trash:
-    post:
-      operationId: trashMultiple
-      summary: "\U0001F510批量把评论放入回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/comment_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Comments'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
-  /comments/untrash:
-    post:
-      operationId: untrashMultiple
-      summary: "\U0001F510批量把评论移出回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/comment_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Comments'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Comment
   /comments:
     get:
       operationId: getList
@@ -617,6 +598,39 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Comment
+  '/comments/{comment_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把评论放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把评论移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_ids}':
     delete:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除评论"
@@ -624,7 +638,7 @@ paths:
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
       parameters:
-        - $ref: '#/components/parameters/comment_ids'
+        - $ref: '#/components/parameters/comment_ids.path'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -639,6 +653,7 @@ paths:
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comment'
@@ -654,6 +669,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
       responses:
         '200':
           $ref: '#/components/responses/Comment'
@@ -894,36 +910,6 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Option
-  /questions/trash:
-    post:
-      operationId: trashMultiple
-      summary: "\U0001F510批量把提问放入回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/question_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Questions'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
-  /questions/untrash:
-    post:
-      operationId: untrashMultiple
-      summary: "\U0001F510批量把提问移出回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/question_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Questions'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Question
   /questions:
     get:
       operationId: getList
@@ -963,6 +949,39 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Question
+  '/questions/{question_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把提问放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把提问移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_ids}':
     delete:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除提问"
@@ -970,7 +989,7 @@ paths:
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
       parameters:
-        - $ref: '#/components/parameters/question_ids'
+        - $ref: '#/components/parameters/question_ids.path'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -1102,6 +1121,7 @@ paths:
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1117,6 +1137,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
       responses:
         '200':
           $ref: '#/components/responses/Question'
@@ -1325,36 +1346,6 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Token
-  /topics/trash:
-    post:
-      operationId: trashMultiple
-      summary: "\U0001F510批量把话题放入回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/topic_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Topics'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
-  /topics/untrash:
-    post:
-      operationId: untrashMultiple
-      summary: "\U0001F510批量把话题移出回收站"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/topic_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Topics'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - Topic
   /topics:
     get:
       operationId: getList
@@ -1391,6 +1382,39 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Topic
+  '/topics/{topic_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把话题放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把话题移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_ids}':
     delete:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除话题"
@@ -1398,7 +1422,7 @@ paths:
         仅管理员可调用该接口。
         只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
       parameters:
-        - $ref: '#/components/parameters/topic_ids'
+        - $ref: '#/components/parameters/topic_ids.path'
       responses:
         '200':
           $ref: '#/components/responses/Empty'
@@ -1495,6 +1519,7 @@ paths:
       description: 仅管理员可调用该接口
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -1510,6 +1535,7 @@ paths:
         仅管理员可调用该接口。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
       responses:
         '200':
           $ref: '#/components/responses/Topic'
@@ -1567,59 +1593,6 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Topic
-  /trash/users:
-    get:
-      operationId: getDisabled
-      summary: "\U0001F510获取已禁用用户列表"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
-        - $ref: '#/components/parameters/include.user'
-        - $ref: '#/components/parameters/order.deletedUsers'
-        - $ref: '#/components/parameters/user_id.query'
-        - $ref: '#/components/parameters/username.query'
-        - $ref: '#/components/parameters/email.query'
-      responses:
-        '200':
-          $ref: '#/components/responses/Users'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - User
-    post:
-      operationId: enableMultiple
-      summary: "\U0001F510批量恢复用户"
-      description: |
-        仅管理员可调用该接口。
-
-        只要没有异常错误，无论是否有用户被启用，该接口都会返回成功。
-      parameters:
-        - $ref: '#/components/parameters/user_ids'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - User
-  '/trash/users/{user_id}':
-    post:
-      operationId: enable
-      summary: "\U0001F510恢复指定用户"
-      description: |
-        仅管理员可调用该接口。
-      parameters:
-        - $ref: '#/components/parameters/user_id.path'
-        - $ref: '#/components/parameters/include.user'
-      responses:
-        '200':
-          $ref: '#/components/responses/User'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - User
   /user/answers:
     get:
       operationId: getMyAnswers
@@ -1909,7 +1882,9 @@ paths:
       operationId: getList
       summary: 获取用户列表
       description: |
-        不包含已禁用的用户。仅管理员可使用 email 参数进行搜索。
+        仅管理员可使用 email 参数进行搜索
+
+        仅管理员可获取已禁用的用户列表
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1918,6 +1893,7 @@ paths:
         - $ref: '#/components/parameters/user_id.query'
         - $ref: '#/components/parameters/username.query'
         - $ref: '#/components/parameters/email.query'
+        - $ref: '#/components/parameters/disabled.query'
       responses:
         '200':
           $ref: '#/components/responses/Users'
@@ -1940,15 +1916,34 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - User
-    delete:
+  '/users/{user_ids}/disable':
+    post:
       operationId: disableMultiple
       summary: "\U0001F510批量禁用用户"
-      description: 仅管理员可调用该接口。只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
+      description: |
+        仅管理员可调用该接口。
       parameters:
-        - $ref: '#/components/parameters/user_ids'
+        - $ref: '#/components/parameters/user_ids.path'
+        - $ref: '#/components/parameters/include.user'
       responses:
         '200':
-          $ref: '#/components/responses/Empty'
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_ids}/enable':
+    post:
+      operationId: enableMultiple
+      summary: "\U0001F510批量恢复用户"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/user_ids.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -2034,6 +2029,38 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/UserCover'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/disable':
+    post:
+      operationId: disable
+      summary: "\U0001F510禁用指定用户"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/enable':
+    post:
+      operationId: enable
+      summary: "\U0001F510恢复指定用户"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -2201,19 +2228,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/User'
-        default:
-          $ref: '#/components/responses/Error'
-      tags:
-        - User
-    delete:
-      operationId: disable
-      summary: "\U0001F510禁用指定用户"
-      description: 仅管理员可调用该接口
-      parameters:
-        - $ref: '#/components/parameters/user_id.path'
-      responses:
-        '200':
-          $ref: '#/components/responses/Empty'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -4645,6 +4659,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    answer_ids.path:
+      name: answer_ids
+      in: path
+      description: '多个用 `,` 分隔的回答ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     answer_ids:
       name: answer_id
       in: query
@@ -4679,6 +4701,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    article_ids.path:
+      name: article_ids
+      in: path
+      description: '多个用 `,` 分隔的文章ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     article_ids:
       name: article_id
       in: query
@@ -4713,6 +4743,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    comment_ids.path:
+      name: comment_ids
+      in: path
+      description: '多个用 `,` 分隔的评论ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     comment_ids:
       name: comment_id
       in: query
@@ -4749,6 +4787,14 @@ components:
           - question
           - answer
       example: article
+    disabled.query:
+      name: disabled
+      in: query
+      description: 是否仅获取已禁用的用户
+      schema:
+        type: boolean
+        default: false
+      example: false
     email.query:
       name: email
       in: query
@@ -4783,9 +4829,10 @@ components:
     image_keys:
       name: key
       in: query
-      description: >-
-        用“,”分隔的图片key，最多可提供 40 个 key（IE 的 query 参数最长为 2k，为了不超过这个数值，限制最多可以提交 40 个
-        key）
+      description: |
+        用“,”分隔的图片key，最多可提供 100 个 key。
+
+        注意：IE浏览器 的 query 参数最长为 2k，若提供的 key 数量过多，可能会超过浏览器的限制。
       schema:
         type: array
         items:
@@ -5043,24 +5090,6 @@ components:
           - '-delete_time'
         default: '-create_time'
       example: '-create_time'
-    order.deletedUsers:
-      name: order
-      in: query
-      description: |
-        排序方式。在字段前加 `-` 表示倒序排列。
-
-        可排序字段包括 `create_time`、`delete_time`、`follower_count`。默认为 `-delete_time`
-      schema:
-        type: string
-        enum:
-          - create_time
-          - delete_time
-          - follower_count
-          - '-create_time'
-          - '-delete_time'
-          - '-follower_count'
-        default: '-delete_time'
-      example: '-delete_time'
     order.questions:
       name: order
       in: query
@@ -5106,16 +5135,20 @@ components:
     order.users:
       name: order
       in: query
-      description: |
+      description: >
         排序方式。在字段前加 `-` 表示倒序排列。
 
-        可排序字段包括 `create_time`、`follower_count`。默认为 `-create_time`
+
+        可排序字段包括 `create_time`、`disable_time`、`follower_count`。默认为
+        `-create_time`。其中 `disable_time` 值仅管理员使用有效。
       schema:
         type: string
         enum:
           - create_time
+          - disable_time
           - follower_count
           - '-create_time'
+          - '-disable_time'
           - '-follower_count'
         default: '-create_time'
       example: '-create_time'
@@ -5155,6 +5188,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    question_ids.path:
+      name: question_ids
+      in: path
+      description: '多个用 `,` 分隔的提问ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     question_ids:
       name: question_id
       in: query
@@ -5247,6 +5288,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    topic_ids.path:
+      name: topic_ids
+      in: path
+      description: '多个用 `,` 分隔的话题ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     topic_ids:
       name: topic_id
       in: query
@@ -5274,7 +5323,7 @@ components:
     trashed.query:
       name: trashed
       in: query
-      description: 是否获取回收站中的数据
+      description: 是否仅获取回收站中的数据
       schema:
         type: boolean
         default: false
@@ -5296,6 +5345,14 @@ components:
         type: integer
         minimum: 1
       example: 1
+    user_ids.path:
+      name: user_ids
+      in: path
+      description: '多个用 `,` 分隔的用户ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
     user_ids:
       name: user_id
       in: query

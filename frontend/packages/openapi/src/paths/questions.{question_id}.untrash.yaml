@@ -5,6 +5,7 @@ post:
     仅管理员可调用该接口。
   parameters:
     - $ref: '#/components/parameters/question_id.path'
+    - $ref: '#/components/parameters/include.question'
   responses:
     '200':
       $ref: '#/components/responses/Question'

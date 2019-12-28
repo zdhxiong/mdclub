@@ -2,24 +2,32 @@ answer_id.path:
   $ref: ./answer_id.path.yaml
 answer_id.query:
   $ref: ./answer_id.query.yaml
+answer_ids.path:
+  $ref: ./answer_ids.path.yaml
 answer_ids:
   $ref: ./answer_ids.yaml
 article_id.path:
   $ref: ./article_id.path.yaml
 article_id.query:
   $ref: ./article_id.query.yaml
+article_ids.path:
+  $ref: ./article_ids.path.yaml
 article_ids:
   $ref: ./article_ids.yaml
 comment_id.path:
   $ref: ./comment_id.path.yaml
 comment_id.query:
   $ref: ./comment_id.query.yaml
+comment_ids.path:
+  $ref: ./comment_ids.path.yaml
 comment_ids:
   $ref: ./comment_ids.yaml
 commentable_id.query:
   $ref: ./commentable_id.query.yaml
 commentable_type.query:
   $ref: ./commentable_type.query.yaml
+disabled.query:
+  $ref: ./disabled.query.yaml
 email.query:
   $ref: ./email.query.yaml
 force:
@@ -58,8 +66,6 @@ order.articles:
   $ref: ./order.articles.yaml
 order.comments:
   $ref: ./order.comments.yaml
-order.deletedUsers:
-  $ref: ./order.deletedUsers.yaml
 order.questions:
   $ref: ./order.questions.yaml
 order.topics:
@@ -74,6 +80,8 @@ question_id.path:
   $ref: ./question_id.path.yaml
 question_id.query:
   $ref: ./question_id.query.yaml
+question_ids.path:
+  $ref: ./question_ids.path.yaml
 question_ids:
   $ref: ./question_ids.yaml
 report_target:
@@ -90,6 +98,8 @@ topic_id.path:
   $ref: ./topic_id.path.yaml
 topic_id.query:
   $ref: ./topic_id.query.yaml
+topic_ids.path:
+  $ref: ./topic_ids.path.yaml
 topic_ids:
   $ref: ./topic_ids.yaml
 topic_name.query:
@@ -100,6 +110,8 @@ user_id.path:
   $ref: ./user_id.path.yaml
 user_id.query:
   $ref: ./user_id.query.yaml
+user_ids.path:
+  $ref: ./user_ids.path.yaml
 user_ids:
   $ref: ./user_ids.yaml
 username.query:

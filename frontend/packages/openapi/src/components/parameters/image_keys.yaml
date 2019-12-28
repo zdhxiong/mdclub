@@ -1,6 +1,9 @@
 name: key
 in: query
-description: 用“,”分隔的图片key，最多可提供 40 个 key（IE 的 query 参数最长为 2k，为了不超过这个数值，限制最多可以提交 40 个 key）
+description: |
+  用“,”分隔的图片key，最多可提供 100 个 key。
+
+  注意：IE浏览器 的 query 参数最长为 2k，若提供的 key 数量过多，可能会超过浏览器的限制。
 schema:
   type: array
   items:

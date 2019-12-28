@@ -1,0 +1,7 @@
+name: topic_ids
+in: path
+description: 多个用 `,` 分隔的话题ID，最多可提供 100 个 ID
+required: true
+schema:
+  type: string
+example: 1,2,3
