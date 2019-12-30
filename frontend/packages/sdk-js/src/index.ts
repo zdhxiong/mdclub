@@ -1,17 +1,17 @@
 import BrowserAdapter from './adapter/BrowserAdapter';
 import defaults from './defaults';
-import AnswerApi from './AnswerApi';
-import ArticleApi from './ArticleApi';
-import CaptchaApi from './CaptchaApi';
-import CommentApi from './CommentApi';
-import EmailApi from './EmailApi';
-import ImageApi from './ImageApi';
-import OptionApi from './OptionApi';
-import QuestionApi from './QuestionApi';
-import ReportApi from './ReportApi';
-import TokenApi from './TokenApi';
-import TopicApi from './TopicApi';
-import UserApi from './UserApi';
+import * as AnswerApi from './AnswerApi';
+import * as ArticleApi from './ArticleApi';
+import * as CaptchaApi from './CaptchaApi';
+import * as CommentApi from './CommentApi';
+import * as EmailApi from './EmailApi';
+import * as ImageApi from './ImageApi';
+import * as OptionApi from './OptionApi';
+import * as QuestionApi from './QuestionApi';
+import * as ReportApi from './ReportApi';
+import * as TokenApi from './TokenApi';
+import * as TopicApi from './TopicApi';
+import * as UserApi from './UserApi';
 
 defaults.adapter = new BrowserAdapter();
 

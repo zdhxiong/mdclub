@@ -1,6 +1,8 @@
 .github
 .idea
 .vscode/
+.vs/
+.idea/
 node_modules
 openapi-generator
 test

@@ -1,4 +1,9 @@
-import { get, post, patch, del } from './util/requestAlias';
+import {
+  getRequest,
+  postRequest,
+  patchRequest,
+  deleteRequest,
+} from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import {
   CommentResponse,
@@ -35,7 +40,7 @@ interface CreateCommentParams {
    */
   answer_id: number;
   /**
-   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
   /**
@@ -46,9 +51,9 @@ interface CreateCommentParams {
 
 interface DeleteMultipleParams {
   /**
-   * 用“,”分隔的回答ID，最多可提供100个ID
+   * 多个用 `,` 分隔的回答ID，最多可提供 100 个 ID
    */
-  answer_id?: Array<number>;
+  answer_ids: string;
 }
 
 interface DeleteVoteParams {
@@ -58,27 +63,13 @@ interface DeleteVoteParams {
   answer_id: number;
 }
 
-interface DestroyParams {
-  /**
-   * 回答ID
-   */
-  answer_id: number;
-}
-
-interface DestroyMultipleParams {
-  /**
-   * 用“,”分隔的回答ID，最多可提供100个ID
-   */
-  answer_id?: Array<number>;
-}
-
 interface GetParams {
   /**
    * 回答ID
    */
   answer_id: number;
   /**
-   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
    */
   include?: Array<'user' | 'question' | 'voting'>;
 }
@@ -97,48 +88,19 @@ interface GetCommentsParams {
    */
   per_page?: number;
   /**
-   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`。默认为 `-create_time`
-   */
-  order?: 'vote_count' | 'create_time' | '-vote_count' | '-create_time';
-  /**
-   * 包含的关联数据，用“,”分隔。可以为 `user`, `voting`
-   */
-  include?: Array<'user' | 'voting'>;
-}
-
-interface GetDeletedParams {
-  /**
-   * 当前页数
-   */
-  page?: number;
-  /**
-   * 每页条数（最大为 100）
-   */
-  per_page?: number;
-  /**
-   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-delete_time`。
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-create_time`。其中 `delete_time` 值仅管理员使用有效。
    */
   order?:
     | 'vote_count'
     | 'create_time'
-    | 'update_time'
     | 'delete_time'
     | '-vote_count'
     | '-create_time'
-    | '-update_time'
     | '-delete_time';
   /**
-   * 回答ID
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
    */
-  answer_id?: number;
-  /**
-   * 提问ID
-   */
-  question_id?: number;
-  /**
-   * 用户ID
-   */
-  user_id?: number;
+  include?: Array<'user' | 'voting'>;
 }
 
 interface GetListParams {
@@ -151,17 +113,19 @@ interface GetListParams {
    */
   per_page?: number;
   /**
-   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`。默认为 `-create_time`。
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为 `-create_time`。其中 `delete_time` 值仅管理员使用有效。
    */
   order?:
     | 'vote_count'
     | 'create_time'
     | 'update_time'
+    | 'delete_time'
     | '-vote_count'
     | '-create_time'
-    | '-update_time';
+    | '-update_time'
+    | '-delete_time';
   /**
-   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
    */
   include?: Array<'user' | 'question' | 'voting'>;
   /**
@@ -176,6 +140,10 @@ interface GetListParams {
    * 用户ID
    */
   user_id?: number;
+  /**
+   * 是否仅获取回收站中的数据
+   */
+  trashed?: boolean;
 }
 
 interface GetVotersParams {
@@ -192,7 +160,7 @@ interface GetVotersParams {
    */
   per_page?: number;
   /**
-   * 包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   /**
@@ -201,18 +169,48 @@ interface GetVotersParams {
   type?: 'up' | 'down';
 }
 
-interface RestoreParams {
+interface TrashParams {
   /**
    * 回答ID
    */
   answer_id: number;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
-interface RestoreMultipleParams {
+interface TrashMultipleParams {
   /**
-   * 用“,”分隔的回答ID，最多可提供100个ID
+   * 多个用 `,` 分隔的回答ID，最多可提供 100 个 ID
    */
-  answer_id?: Array<number>;
+  answer_ids: string;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
+  include?: Array<'user' | 'question' | 'voting'>;
+}
+
+interface UntrashParams {
+  /**
+   * 回答ID
+   */
+  answer_id: number;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
+  include?: Array<'user' | 'question' | 'voting'>;
+}
+
+interface UntrashMultipleParams {
+  /**
+   * 多个用 `,` 分隔的回答ID，最多可提供 100 个 ID
+   */
+  answer_ids: string;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface UpdateParams {
@@ -221,10 +219,6 @@ interface UpdateParams {
    */
   answer_id: number;
   /**
-   * 包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
-   */
-  include?: Array<'user' | 'question' | 'voting'>;
-  /**
    * Markdown 格式的正文
    */
   content_markdown?: string;
@@ -232,227 +226,228 @@ interface UpdateParams {
    * HTML 格式的正文
    */
   content_rendered?: string;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   */
+  include?: Array<'user' | 'question' | 'voting'>;
 }
 
 const className = 'AnswerApi';
 
 /**
- * AnswerApi
+ * 删除回答
+ * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
+ * @param params.answer_id 回答ID
  */
-export default {
-  /**
-   * 删除指定回答
-   * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。  回答被删除后，进入回收站。管理员可在后台恢复回答。
-   * @param params.answer_id 回答ID
-   */
-  del: (params: DeleteParams): Promise<EmptyResponse> =>
-    del(buildURL(`${className}.del`, '/answers/{answer_id}', params)),
+export const del = (params: DeleteParams): Promise<EmptyResponse> =>
+  deleteRequest(buildURL(`${className}.del`, '/answers/{answer_id}', params));
 
-  /**
-   * 为回答投票
-   * 为回答投票
-   * @param params.answer_id 回答ID
-   * @param params.VoteRequestBody
-   */
-  addVote: (params: AddVoteParams): Promise<VoteCountResponse> =>
-    post(
-      buildURL(`${className}.addVote`, '/answers/{answer_id}/voters', params),
-      buildRequestBody(params, ['type']),
+/**
+ * 为回答投票
+ * 为回答投票
+ * @param params.answer_id 回答ID
+ * @param params.VoteRequestBody
+ */
+export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
+  postRequest(
+    buildURL(`${className}.addVote`, '/answers/{answer_id}/voters', params),
+    buildRequestBody(params, ['type']),
+  );
+
+/**
+ * 在指定回答下发表评论
+ * 在指定回答下发表评论
+ * @param params.answer_id 回答ID
+ * @param params.CommentRequestBody
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
+ */
+export const createComment = (
+  params: CreateCommentParams,
+): Promise<CommentResponse> =>
+  postRequest(
+    buildURL(
+      `${className}.createComment`,
+      '/answers/{answer_id}/comments',
+      params,
+      ['include'],
     ),
+    buildRequestBody(params, ['content']),
+  );
 
-  /**
-   * 在指定回答下发表评论
-   * 在指定回答下发表评论
-   * @param params.answer_id 回答ID
-   * @param params.CommentRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
-   */
-  createComment: (params: CreateCommentParams): Promise<CommentResponse> =>
-    post(
-      buildURL(
-        `${className}.createComment`,
-        '/answers/{answer_id}/comments',
-        params,
-        ['include'],
-      ),
-      buildRequestBody(params, ['content']),
+/**
+ * 🔐批量删除回答
+ * 仅管理员可调用该接口。 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+ * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
+ */
+export const deleteMultiple = (
+  params: DeleteMultipleParams,
+): Promise<EmptyResponse> =>
+  deleteRequest(
+    buildURL(`${className}.deleteMultiple`, '/answers/{answer_ids}', params),
+  );
+
+/**
+ * 取消为回答的投票
+ * 取消为回答的投票
+ * @param params.answer_id 回答ID
+ */
+export const deleteVote = (
+  params: DeleteVoteParams,
+): Promise<VoteCountResponse> =>
+  deleteRequest(
+    buildURL(`${className}.deleteVote`, '/answers/{answer_id}/voters', params),
+  );
+
+/**
+ * 获取回答详情
+ * 获取回答详情
+ * @param params.answer_id 回答ID
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const get = (params: GetParams): Promise<AnswerResponse> =>
+  getRequest(
+    buildURL(`${className}.get`, '/answers/{answer_id}', params, ['include']),
+  );
+
+/**
+ * 获取指定回答的评论
+ * 获取指定回答的评论。
+ * @param params.answer_id 回答ID
+ * @param params.page 当前页数
+ * @param params.per_page 每页条数（最大为 100）
+ * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
+ */
+export const getComments = (
+  params: GetCommentsParams,
+): Promise<CommentsResponse> =>
+  getRequest(
+    buildURL(
+      `${className}.getComments`,
+      '/answers/{answer_id}/comments',
+      params,
+      ['page', 'per_page', 'order', 'include'],
     ),
+  );
 
-  /**
-   * 🔐批量删除回答
-   * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。  回答被删除后，进入回收站。管理员可在后台恢复回答。
-   * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
-   */
-  deleteMultiple: (params: DeleteMultipleParams): Promise<EmptyResponse> =>
-    del(
-      buildURL(`${className}.deleteMultiple`, '/answers', params, [
-        'answer_id',
-      ]),
+/**
+ * 获取回答列表
+ * 获取回答列表。
+ * @param params.page 当前页数
+ * @param params.per_page 每页条数（最大为 100）
+ * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ * @param params.answer_id 回答ID
+ * @param params.question_id 提问ID
+ * @param params.user_id 用户ID
+ * @param params.trashed 是否仅获取回收站中的数据
+ */
+export const getList = (params: GetListParams): Promise<AnswersResponse> =>
+  getRequest(
+    buildURL(`${className}.getList`, '/answers', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
+      'answer_id',
+      'question_id',
+      'user_id',
+      'trashed',
+    ]),
+  );
+
+/**
+ * 获取回答的投票者
+ * 获取回答的投票者
+ * @param params.answer_id 回答ID
+ * @param params.page 当前页数
+ * @param params.per_page 每页条数（最大为 100）
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
+ * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
+ */
+export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
+  getRequest(
+    buildURL(`${className}.getVoters`, '/answers/{answer_id}/voters', params, [
+      'page',
+      'per_page',
+      'include',
+      'type',
+    ]),
+  );
+
+/**
+ * 🔐把回答放入回收站
+ * 仅管理员可调用该接口
+ * @param params.answer_id 回答ID
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const trash = (params: TrashParams): Promise<AnswerResponse> =>
+  postRequest(
+    buildURL(`${className}.trash`, '/answers/{answer_id}/trash', params, [
+      'include',
+    ]),
+  );
+
+/**
+ * 🔐批量把回答放入回收站
+ * 仅管理员可调用该接口。
+ * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const trashMultiple = (
+  params: TrashMultipleParams,
+): Promise<AnswersResponse> =>
+  postRequest(
+    buildURL(
+      `${className}.trashMultiple`,
+      '/answers/{answer_ids}/trash',
+      params,
+      ['include'],
     ),
+  );
 
-  /**
-   * 取消为回答的投票
-   * 取消为回答的投票
-   * @param params.answer_id 回答ID
-   */
-  deleteVote: (params: DeleteVoteParams): Promise<VoteCountResponse> =>
-    del(
-      buildURL(
-        `${className}.deleteVote`,
-        '/answers/{answer_id}/voters',
-        params,
-      ),
+/**
+ * 🔐把回答移出回收站
+ * 仅管理员可调用该接口。
+ * @param params.answer_id 回答ID
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
+  postRequest(
+    buildURL(`${className}.untrash`, '/answers/{answer_id}/untrash', params, [
+      'include',
+    ]),
+  );
+
+/**
+ * 🔐批量把回答移出回收站
+ * 仅管理员可调用该接口。
+ * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const untrashMultiple = (
+  params: UntrashMultipleParams,
+): Promise<AnswersResponse> =>
+  postRequest(
+    buildURL(
+      `${className}.untrashMultiple`,
+      '/answers/{answer_ids}/untrash',
+      params,
+      ['include'],
     ),
+  );
 
-  /**
-   * 🔐删除指定回答
-   * 仅管理员可调用该接口。
-   * @param params.answer_id 回答ID
-   */
-  destroy: (params: DestroyParams): Promise<EmptyResponse> =>
-    del(buildURL(`${className}.destroy`, '/trash/answers/{answer_id}', params)),
-
-  /**
-   * 🔐批量删除回收站中的回答
-   * 仅管理员可调用该接口  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。  若没有提供 answer_id 参数，则将清空回收站中的所有回答。
-   * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
-   */
-  destroyMultiple: (params: DestroyMultipleParams): Promise<EmptyResponse> =>
-    del(
-      buildURL(`${className}.destroyMultiple`, '/trash/answers', params, [
-        'answer_id',
-      ]),
-    ),
-
-  /**
-   * 获取回答详情
-   * 获取回答详情
-   * @param params.answer_id 回答ID
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
-   */
-  get: (params: GetParams): Promise<AnswerResponse> =>
-    get(
-      buildURL(`${className}.get`, '/answers/{answer_id}', params, ['include']),
-    ),
-
-  /**
-   * 获取指定回答的评论
-   * 获取指定回答的评论。
-   * @param params.answer_id 回答ID
-   * @param params.page 当前页数
-   * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;。默认为 &#x60;-create_time&#x60;
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
-   */
-  getComments: (params: GetCommentsParams): Promise<CommentsResponse> =>
-    get(
-      buildURL(
-        `${className}.getComments`,
-        '/answers/{answer_id}/comments',
-        params,
-        ['page', 'per_page', 'order', 'include'],
-      ),
-    ),
-
-  /**
-   * 🔐获取回收站中的回答列表
-   * 仅管理员可调用该接口。
-   * @param params.page 当前页数
-   * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-delete_time&#x60;。
-   * @param params.answer_id 回答ID
-   * @param params.question_id 提问ID
-   * @param params.user_id 用户ID
-   */
-  getDeleted: (params: GetDeletedParams): Promise<AnswersResponse> =>
-    get(
-      buildURL(`${className}.getDeleted`, '/trash/answers', params, [
-        'page',
-        'per_page',
-        'order',
-        'answer_id',
-        'question_id',
-        'user_id',
-      ]),
-    ),
-
-  /**
-   * 获取回答列表
-   * 获取回答列表。
-   * @param params.page 当前页数
-   * @param params.per_page 每页条数（最大为 100）
-   * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;。默认为 &#x60;-create_time&#x60;。
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
-   * @param params.answer_id 回答ID
-   * @param params.question_id 提问ID
-   * @param params.user_id 用户ID
-   */
-  getList: (params: GetListParams): Promise<AnswersResponse> =>
-    get(
-      buildURL(`${className}.getList`, '/answers', params, [
-        'page',
-        'per_page',
-        'order',
-        'include',
-        'answer_id',
-        'question_id',
-        'user_id',
-      ]),
-    ),
-
-  /**
-   * 获取回答的投票者
-   * 获取回答的投票者
-   * @param params.answer_id 回答ID
-   * @param params.page 当前页数
-   * @param params.per_page 每页条数（最大为 100）
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
-   * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
-   */
-  getVoters: (params: GetVotersParams): Promise<UsersResponse> =>
-    get(
-      buildURL(
-        `${className}.getVoters`,
-        '/answers/{answer_id}/voters',
-        params,
-        ['page', 'per_page', 'include', 'type'],
-      ),
-    ),
-
-  /**
-   * 🔐恢复指定回答
-   * 仅管理员可调用该接口。
-   * @param params.answer_id 回答ID
-   */
-  restore: (params: RestoreParams): Promise<AnswerResponse> =>
-    post(
-      buildURL(`${className}.restore`, '/trash/answers/{answer_id}', params),
-    ),
-
-  /**
-   * 🔐批量恢复回答
-   * 仅管理员可调用该接口。  只要没有异常错误，无论是否有用户被禁用，该接口都会返回成功。
-   * @param params.answer_id 用“,”分隔的回答ID，最多可提供100个ID
-   */
-  restoreMultiple: (params: RestoreMultipleParams): Promise<EmptyResponse> =>
-    post(
-      buildURL(`${className}.restoreMultiple`, '/trash/answers', params, [
-        'answer_id',
-      ]),
-    ),
-
-  /**
-   * 修改回答信息
-   * 管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
-   * @param params.answer_id 回答ID
-   * @param params.AnswerRequestBody
-   * @param params.include 包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
-   */
-  update: (params: UpdateParams): Promise<AnswerResponse> =>
-    patch(
-      buildURL(`${className}.update`, '/answers/{answer_id}', params, [
-        'include',
-      ]),
-      buildRequestBody(params, ['content_markdown', 'content_rendered']),
-    ),
-};
+/**
+ * 修改回答信息
+ * 管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
+ * @param params.answer_id 回答ID
+ * @param params.AnswerRequestBody
+ * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
+ */
+export const update = (params: UpdateParams): Promise<AnswerResponse> =>
+  patchRequest(
+    buildURL(`${className}.update`, '/answers/{answer_id}', params, [
+      'include',
+    ]),
+    buildRequestBody(params, ['content_markdown', 'content_rendered']),
+  );

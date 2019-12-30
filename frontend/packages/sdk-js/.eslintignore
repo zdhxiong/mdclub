@@ -6,3 +6,4 @@ node_modules/
 openapi-generator/
 tmp/
 test/dist.js
+build.js

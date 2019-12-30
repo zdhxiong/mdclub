@@ -1,13 +1,17 @@
 const rollup = require('rollup');
 const { eslint } = require('rollup-plugin-eslint');
 const { uglify } = require('rollup-plugin-uglify');
-const buble = require('rollup-plugin-buble');
+const buble = require('@rollup/plugin-buble');
 const typescript = require('rollup-plugin-typescript');
 const polyfill = require('rollup-plugin-polyfill');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
+const json = require('rollup-plugin-json');
 const tsconfig = require('./src/tsconfig.json');
 const pkg = require('./package.json');
+const serverFactory = require('spa-server');
+
+const arguments = process.argv.splice(2);
 
 const banner = `
 /*!
@@ -49,6 +53,7 @@ async function buildUmd() {
   plugins.push(
     buble(),
     polyfill([
+      // 等把 mdui.jq 的 ajax 的 core, event, jsonp 拆分后，不需要在引入事件 polyfill
       'mdn-polyfills/MouseEvent',
       'mdn-polyfills/CustomEvent',
       'promise-polyfill/src/polyfill',
@@ -88,4 +93,43 @@ async function build() {
   await buildUmdUglify();
 }
 
-build();
+async function test() {
+  const bundle = await rollup.rollup({
+    input: './test/index.ts',
+    plugins: [
+      resolve(),
+      commonjs(),
+      json(),
+      eslint({
+        fix: true,
+      }),
+      typescript({
+        module: "ES6",
+        target: "ES6"
+      }),
+      buble(),
+    ],
+  });
+
+  await bundle.write({
+    strict: true,
+    name: 'MDClubSDKTest',
+    format: 'umd',
+    file: './test/dist.js',
+  });
+
+  const server = serverFactory.create({
+    path: './',
+    port: 8889
+  });
+
+  server.start();
+
+  console.log('打开 http://127.0.0.1:8889/test/index.html 开始测试');
+}
+
+if (arguments.indexOf('--build') > -1) {
+  build();
+} else if (arguments.indexOf('--test') > -1) {
+  test();
+}

@@ -1,6 +1,6 @@
 // @ts-ignore
 import sha1 from 'sha-1';
-import { post } from './util/requestAlias';
+import { postRequest } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import { TokenResponse } from './models';
 
@@ -30,26 +30,21 @@ interface LoginParams {
 const className = 'TokenApi';
 
 /**
- * TokenApi
+ * 生成 Token
+ * 通过账号密码登陆，返回 Token 信息。  若登录失败，且返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;， 表示下次调用该接口时，需要用户输入图形验证码，并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
+ * @param params.UserLoginRequestBody
  */
-export default {
-  /**
-   * 生成 Token
-   * 通过账号密码登陆，返回 Token 信息。  若登录失败，且返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;， 表示下次调用该接口时，需要用户输入图形验证码，并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
-   * @param params.UserLoginRequestBody
-   */
-  login: (params: LoginParams): Promise<TokenResponse> => {
-    params.password = sha1(params.password);
+export const login = (params: LoginParams): Promise<TokenResponse> => {
+  params.password = sha1(params.password);
 
-    return post(
-      buildURL(`${className}.login`, '/tokens', params),
-      buildRequestBody(params, [
-        'name',
-        'password',
-        'device',
-        'captcha_token',
-        'captcha_code',
-      ]),
-    );
-  },
+  return postRequest(
+    buildURL(`${className}.login`, '/tokens', params),
+    buildRequestBody(params, [
+      'name',
+      'password',
+      'device',
+      'captcha_token',
+      'captcha_code',
+    ]),
+  );
 };

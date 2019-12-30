@@ -1,11 +1,11 @@
 import defaults from '../defaults';
-import { PlainObject } from './misc';
-import { ResponseInterface } from '../adapter/AdapterInterface';
+import { ResponseInterface } from './misc';
 import { isUndefined } from 'mdui.jq/es/utils';
+import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 
 if (isUndefined(defaults.adapter)) {
   throw new Error(
-    'adapter must be set. e.g. new Browser() or new MiniProgram()',
+    'adapter must be set. e.g. new BrowserAdapter() or new MiniProgramAdapter()',
   );
 }
 
@@ -16,27 +16,27 @@ const requestHandle = (
 ): Promise<ResponseInterface> =>
   defaults.adapter!.request({ method, url, data });
 
-export const get = (
+export const getRequest = (
   url: string,
   data?: PlainObject,
 ): Promise<ResponseInterface> => requestHandle('GET', url, data);
 
-export const post = (
+export const postRequest = (
   url: string,
   data?: PlainObject | FormData,
 ): Promise<ResponseInterface> => requestHandle('POST', url, data);
 
-export const patch = (
+export const patchRequest = (
   url: string,
-  data?: PlainObject | FormData,
+  data?: PlainObject,
 ): Promise<ResponseInterface> => requestHandle('PATCH', url, data);
 
-export const put = (
+export const putRequest = (
   url: string,
-  data?: PlainObject | FormData,
+  data?: PlainObject,
 ): Promise<ResponseInterface> => requestHandle('PUT', url, data);
 
-export const del = (
+export const deleteRequest = (
   url: string,
   data?: PlainObject,
 ): Promise<ResponseInterface> => requestHandle('DELETE', url, data);

@@ -1,17 +1,13 @@
-import {
-  RequestAdapterInterface,
-  RequestOptionsInterface,
-  ResponseInterface,
-} from './AdapterInterface';
-import globalOptions from '../defaults';
 import { isUndefined } from 'mdui.jq/es/utils';
+import globalOptions from '../defaults';
+import { RequestAdapterInterface, RequestOptionsInterface, ResponseInterface } from '../util/misc';
 
 /**
  * 小程序适配器
  *
  * 支持 微信小程序、支付宝小程序、钉钉小程序、百度小程序
  */
-export default class MiniProgram implements RequestAdapterInterface {
+export default class implements RequestAdapterInterface {
   /**
    * 获取数据存储
    * @param key

@@ -1,5 +1,7 @@
 .vscode/
+.vs/
 .idea/
 es/
 node_modules/
 tmp/
+test/dist.js

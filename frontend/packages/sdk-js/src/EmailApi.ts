@@ -1,4 +1,4 @@
-import { post } from './util/requestAlias';
+import { postRequest } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import { EmailResponse } from './models';
 
@@ -20,17 +20,12 @@ interface SendParams {
 const className = 'EmailApi';
 
 /**
- * EmailApi
+ * 🔐发送邮件
+ * 用于后台管理员发送邮件，需要管理员权限
+ * @param params.Email
  */
-export default {
-  /**
-   * 🔐发送邮件
-   * 用于后台管理员发送邮件，需要管理员权限
-   * @param params.Email
-   */
-  send: (params: SendParams): Promise<EmailResponse> =>
-    post(
-      buildURL(`${className}.send`, '/emails', params),
-      buildRequestBody(params, ['email', 'subject', 'content']),
-    ),
-};
+export const send = (params: SendParams): Promise<EmailResponse> =>
+  postRequest(
+    buildURL(`${className}.send`, '/emails', params),
+    buildRequestBody(params, ['email', 'subject', 'content']),
+  );

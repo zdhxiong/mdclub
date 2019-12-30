@@ -7,8 +7,13 @@
   "types": "es/index.d.ts",
   "scripts": {
     "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
-    "build": "tsc -p src/tsconfig.json && node build.js",
-    "test": "node test.js"
+    "build": "tsc -p src/tsconfig.json && node build.js --build",
+    "test": "cd test && node reset_mysql.js && cd ../ && node build.js --test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run build"
+    }
   },
   "repository": {
     "type": "git",
@@ -26,38 +31,45 @@
   },
   "homepage": "https://github.com/zdhxiong/mdclub-sdk-js#readme",
   "dependencies": {
+    "axios": "^0.19.0",
+    "jquery": "^3.4.1",
     "mdui.jq": "github:zdhxiong/mdui.jq",
+    "mithril": "^2.0.4",
     "sha-1": "^0.1.1"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "0.0.16-4.1.0",
-    "@types/chai": "^4.2.3",
+    "@openapitools/openapi-generator-cli": "^1.0.8-4.2.2",
+    "@rollup/plugin-buble": "^0.21.0",
+    "@types/chai": "^4.2.7",
+    "@types/jquery": "^3.3.31",
+    "@types/mithril": "^2.0.2",
     "@types/mocha": "^5.2.7",
-    "@types/weixin-app": "^2.2.27",
-    "@typescript-eslint/eslint-plugin": "^2.3.0",
-    "@typescript-eslint/parser": "^2.3.0",
+    "@types/weixin-app": "^2.2.28",
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
     "chai": "^4.2.0",
-    "eslint-config-prettier": "^6.3.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^3.1.0",
     "mdclub-openapi": "github:zdhxiong/mdclub-openapi",
-    "mocha": "^6.2.0",
-    "prettier": "^1.18.2",
-    "rollup": "^1.21.4",
-    "rollup-plugin-buble": "^0.19.8",
+    "mocha": "^6.2.2",
+    "mysql-import": "^3.0.6",
+    "prettier": "^1.19.1",
+    "rollup": "^1.27.14",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-polyfill": "^3.0.0",
     "rollup-plugin-typescript": "^1.0.1",
-    "rollup-plugin-uglify": "^6.0.3",
+    "rollup-plugin-uglify": "^6.0.4",
     "spa-server": "^1.0.0",
-    "swagger-model-validator": "^3.0.11",
+    "swagger-model-validator": "^3.0.12",
     "tslib": "^1.10.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.4"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   }
 }

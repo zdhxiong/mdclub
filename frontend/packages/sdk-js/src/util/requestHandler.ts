@@ -1,14 +1,5 @@
-import { PlainObject } from './misc';
+import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 import param from 'mdui.jq/es/functions/param';
-import { isNull, isUndefined } from 'mdui.jq/es/utils';
-
-/**
- * 下划线转驼峰
- * @param str
- */
-function underscoreToCamel(str: string): string {
-  return str.replace(/_(\w)/g, (_, letter) => letter.toUpperCase());
-}
 
 /**
  * 替换 url 中的变量占位符，并添加 queryParam
@@ -24,10 +15,10 @@ export function buildURL(
   queryParamNames: string[] = [],
 ): string {
   // 替换 path 参数
-  const url = path.replace(/({.*?})/g, function(match): string {
-    const pathParamName = underscoreToCamel(match.substr(1, match.length - 2));
+  const url = path.replace(/({.*?})/g, (match): string => {
+    const pathParamName = match.substr(1, match.length - 2);
 
-    if (isUndefined(params[pathParamName]) || isNull(params[pathParamName])) {
+    if (params[pathParamName] == null) {
       throw new Error(
         `Missing required parameter ${pathParamName} when calling ${name}`,
       );
@@ -39,14 +30,17 @@ export function buildURL(
   // 添加 query 参数
   const queryObj: PlainObject<string> = {};
   queryParamNames.forEach(name => {
-    if (!isUndefined(params[name]) && !isNull(params[name])) {
-      queryObj[name] = String(params[underscoreToCamel(name)]);
+    if (Array.isArray(params[name])) {
+      // query 参数值为数组时，转为用 , 分隔的字符串
+      queryObj[name] = params[name].join(',');
+    } else if (params[name] != null) {
+      queryObj[name] = String(params[name]);
     }
   });
 
   const queryString = param(queryObj);
 
-  return queryString ? url + `?${queryString}` : url;
+  return queryString ? `${url}?${queryString}` : url;
 }
 
 /**
@@ -61,7 +55,7 @@ export function buildRequestBody(
   const requestBody: PlainObject = {};
 
   requestBodyNames.forEach(name => {
-    if (!isUndefined(params[name]) && !isNull(params[name])) {
+    if (params[name] != null) {
       requestBody[name] = params[name];
     }
   });
