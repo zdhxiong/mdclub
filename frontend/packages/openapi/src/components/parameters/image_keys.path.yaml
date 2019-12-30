@@ -1,0 +1,8 @@
+name: keys
+in: path
+description: 多个用 `,` 分隔的评论ID，最多可提供 100 个 ID
+required: true
+schema:
+  type: string
+example: >-
+  4c018974e3cf4e1d8c174d82adba0c43.jpg,5178883f06a34b748dd166b0a7c913b0.jpg,92b3a5c64ba04812bc41ab7400961a16.jpg

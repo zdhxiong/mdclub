@@ -1346,14 +1346,16 @@
         "tags": [
           "Image"
         ]
-      },
+      }
+    },
+    "/images/{keys}": {
       "delete": {
         "operationId": "deleteMultiple",
         "summary": "🔐批量删除图片",
         "description": "仅管理员可调用该接口。\n只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/image_keys"
+            "$ref": "#/components/parameters/image_keys.path"
           }
         ],
         "responses": {
@@ -2057,14 +2059,16 @@
         "tags": [
           "Report"
         ]
-      },
+      }
+    },
+    "/reports/{report_targets}": {
       "delete": {
         "operationId": "deleteMultiple",
         "summary": "🔐批量删除举报",
         "description": "仅管理员可调用该接口。\n只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。\n",
         "parameters": [
           {
-            "$ref": "#/components/parameters/report_target"
+            "$ref": "#/components/parameters/report_targets"
           }
         ],
         "responses": {
@@ -2080,7 +2084,7 @@
         ]
       }
     },
-    "/reports/{reportable_type}/{reportable_id}": {
+    "/reports/{reportable_type}:{reportable_id}": {
       "get": {
         "operationId": "getReasons",
         "summary": "🔐获取被举报内容的举报详情",
@@ -6809,27 +6813,6 @@
         },
         "example": "1,2,3"
       },
-      "article_ids": {
-        "name": "article_id",
-        "in": "query",
-        "description": "用“,”分隔的文章ID，最多可提供100个ID",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "style": "form",
-        "explode": false,
-        "example": [
-          1,
-          2,
-          3
-        ]
-      },
       "comment_id.path": {
         "name": "comment_id",
         "in": "path",
@@ -6860,27 +6843,6 @@
           "type": "string"
         },
         "example": "1,2,3"
-      },
-      "comment_ids": {
-        "name": "comment_id",
-        "in": "query",
-        "description": "用“,”分隔的提问ID，最多可提供100个ID",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "style": "form",
-        "explode": false,
-        "example": [
-          1,
-          2,
-          3
-        ]
       },
       "commentable_id.query": {
         "name": "commentable_id",
@@ -6926,16 +6888,6 @@
         },
         "example": "zdhxiong@gmail.com"
       },
-      "force": {
-        "name": "force",
-        "in": "query",
-        "description": "🔐 若该参数为 true，则直接删除，不放入回收站。",
-        "schema": {
-          "type": "boolean",
-          "default": false
-        },
-        "example": false
-      },
       "image_key.path": {
         "name": "key",
         "in": "path",
@@ -6955,25 +6907,15 @@
         },
         "example": "4c018974e3cf4e1d8c174d82adba0c43.jpg"
       },
-      "image_keys": {
-        "name": "key",
-        "in": "query",
-        "description": "用“,”分隔的图片key，最多可提供 100 个 key。\n\n注意：IE浏览器 的 query 参数最长为 2k，若提供的 key 数量过多，可能会超过浏览器的限制。\n",
+      "image_keys.path": {
+        "name": "keys",
+        "in": "path",
+        "description": "多个用 `,` 分隔的评论ID，最多可提供 100 个 ID",
+        "required": true,
         "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "maxItems": 40
+          "type": "string"
         },
-        "style": "form",
-        "explode": false,
-        "example": [
-          "4c018974e3cf4e1d8c174d82adba0c43.jpg",
-          "5178883f06a34b748dd166b0a7c913b0.jpg",
-          "92b3a5c64ba04812bc41ab7400961a16.jpg"
-        ]
+        "example": "4c018974e3cf4e1d8c174d82adba0c43.jpg,5178883f06a34b748dd166b0a7c913b0.jpg,92b3a5c64ba04812bc41ab7400961a16.jpg"
       },
       "image_item_id.query": {
         "name": "item_id",
@@ -7370,45 +7312,15 @@
         },
         "example": "1,2,3"
       },
-      "question_ids": {
-        "name": "question_id",
-        "in": "query",
-        "description": "用“,”分隔的提问ID，最多可提供100个ID",
+      "report_targets": {
+        "name": "report_targets",
+        "in": "path",
+        "description": "类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。\n\n例如 question:12,comment:34\n",
+        "required": true,
         "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "minItems": 1,
-          "maxItems": 100
+          "type": "string"
         },
-        "style": "form",
-        "explode": false,
-        "example": [
-          1,
-          2,
-          3
-        ]
-      },
-      "report_target": {
-        "name": "target",
-        "in": "query",
-        "description": "类型和ID之间用“:”分隔，多个记录之间用“,”分隔，最多可提供100个。例如 question:12,comment:34",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "style": "form",
-        "explode": false,
-        "example": [
-          "question:12",
-          "comment:34"
-        ]
+        "example": "question:12,comment:34"
       },
       "reportable_id.path": {
         "name": "reportable_id",
@@ -7494,27 +7406,6 @@
         },
         "example": "1,2,3"
       },
-      "topic_ids": {
-        "name": "topic_id",
-        "in": "query",
-        "description": "用“,”分隔的话题ID，最多可提供100个ID",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "style": "form",
-        "explode": false,
-        "example": [
-          1,
-          2,
-          3
-        ]
-      },
       "topic_name.query": {
         "name": "name",
         "in": "query",
@@ -7564,27 +7455,6 @@
           "type": "string"
         },
         "example": "1,2,3"
-      },
-      "user_ids": {
-        "name": "user_id",
-        "in": "query",
-        "description": "用“,”分隔的用户ID，最多可提供100个ID",
-        "schema": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "style": "form",
-        "explode": false,
-        "example": [
-          1,
-          2,
-          3
-        ]
       },
       "username.query": {
         "name": "username",

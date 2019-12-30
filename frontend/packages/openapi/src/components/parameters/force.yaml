@@ -1,7 +1,0 @@
-name: force
-in: query
-description: 🔐 若该参数为 true，则直接删除，不放入回收站。
-schema:
-  type: boolean
-  default: false
-example: false

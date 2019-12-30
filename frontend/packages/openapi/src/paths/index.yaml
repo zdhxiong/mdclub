@@ -88,6 +88,9 @@
 /images:
   $ref: ./images.yaml
 
+/images/{keys}:
+  $ref: ./images.{keys}.yaml
+
 /images/{key}:
   $ref: ./images.{key}.yaml
 
@@ -130,8 +133,11 @@
 /reports:
   $ref: ./reports.yaml
 
-/reports/{reportable_type}/{reportable_id}:
-  $ref: ./reports.{reportable_type}.{reportable_id}.yaml
+/reports/{report_targets}:
+  $ref: ./reports.{report_targets}.yaml
+
+/reports/{reportable_type}:{reportable_id}:
+  $ref: ./reports.{reportable_type}-{reportable_id}.yaml
 
 /tokens:
   $ref: ./tokens.yaml
