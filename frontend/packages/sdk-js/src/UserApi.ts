@@ -691,8 +691,6 @@ interface UploadMyCoverParams {
   cover: any;
 }
 
-const className = 'UserApi';
-
 /**
  * 添加关注
  * 添加关注
@@ -701,9 +699,7 @@ const className = 'UserApi';
 export const addFollow = (
   params: AddFollowParams,
 ): Promise<FollowerCountResponse> =>
-  postRequest(
-    buildURL(`${className}.addFollow`, '/users/{user_id}/followers', params),
-  );
+  postRequest(buildURL('/users/{user_id}/followers', params));
 
 /**
  * 🔐删除指定用户的头像，并重置为默认头像
@@ -713,9 +709,7 @@ export const addFollow = (
 export const deleteAvatar = (
   params: DeleteAvatarParams,
 ): Promise<UserAvatarResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteAvatar`, '/users/{user_id}/avatar', params),
-  );
+  deleteRequest(buildURL('/users/{user_id}/avatar', params));
 
 /**
  * 🔐删除指定用户的封面，并重置为默认封面
@@ -725,9 +719,7 @@ export const deleteAvatar = (
 export const deleteCover = (
   params: DeleteCoverParams,
 ): Promise<UserCoverResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteCover`, '/users/{user_id}/cover', params),
-  );
+  deleteRequest(buildURL('/users/{user_id}/cover', params));
 
 /**
  * 取消关注
@@ -737,23 +729,21 @@ export const deleteCover = (
 export const deleteFollow = (
   params: DeleteFollowParams,
 ): Promise<FollowerCountResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteFollow`, '/users/{user_id}/followers', params),
-  );
+  deleteRequest(buildURL('/users/{user_id}/followers', params));
 
 /**
  * 删除当前登录用户的头像，并重置为默认头像
  * 删除当前登录用户的头像，并重置为默认头像
  */
 export const deleteMyAvatar = (): Promise<UserAvatarResponse> =>
-  deleteRequest(buildURL(`${className}.deleteMyAvatar`, '/user/avatar', {}));
+  deleteRequest(buildURL('/user/avatar', {}));
 
 /**
  * 删除当前登录用户的封面，并重置为默认封面
  * 删除当前登录用户的封面，并重置为默认封面
  */
 export const deleteMyCover = (): Promise<UserCoverResponse> =>
-  deleteRequest(buildURL(`${className}.deleteMyCover`, '/user/cover', {}));
+  deleteRequest(buildURL('/user/cover', {}));
 
 /**
  * 🔐禁用指定用户
@@ -762,11 +752,7 @@ export const deleteMyCover = (): Promise<UserCoverResponse> =>
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const disable = (params: DisableParams): Promise<UserResponse> =>
-  postRequest(
-    buildURL(`${className}.disable`, '/users/{user_id}/disable', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/users/{user_id}/disable', params, ['include']));
 
 /**
  * 🔐批量禁用用户
@@ -777,14 +763,7 @@ export const disable = (params: DisableParams): Promise<UserResponse> =>
 export const disableMultiple = (
   params: DisableMultipleParams,
 ): Promise<UsersResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.disableMultiple`,
-      '/users/{user_ids}/disable',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/users/{user_ids}/disable', params, ['include']));
 
 /**
  * 🔐恢复指定用户
@@ -793,11 +772,7 @@ export const disableMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const enable = (params: EnableParams): Promise<UserResponse> =>
-  postRequest(
-    buildURL(`${className}.enable`, '/users/{user_id}/enable', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/users/{user_id}/enable', params, ['include']));
 
 /**
  * 🔐批量恢复用户
@@ -808,14 +783,7 @@ export const enable = (params: EnableParams): Promise<UserResponse> =>
 export const enableMultiple = (
   params: EnableMultipleParams,
 ): Promise<UsersResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.enableMultiple`,
-      '/users/{user_ids}/enable',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/users/{user_ids}/enable', params, ['include']));
 
 /**
  * 获取指定用户信息
@@ -824,9 +792,7 @@ export const enableMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const get = (params: GetParams): Promise<UserResponse> =>
-  getRequest(
-    buildURL(`${className}.get`, '/users/{user_id}', params, ['include']),
-  );
+  getRequest(buildURL('/users/{user_id}', params, ['include']));
 
 /**
  * 获取指定用户发表的回答
@@ -841,7 +807,7 @@ export const getAnswers = (
   params: GetAnswersParams,
 ): Promise<AnswersResponse> =>
   getRequest(
-    buildURL(`${className}.getAnswers`, '/users/{user_id}/answers', params, [
+    buildURL('/users/{user_id}/answers', params, [
       'page',
       'per_page',
       'order',
@@ -862,7 +828,7 @@ export const getArticles = (
   params: GetArticlesParams,
 ): Promise<ArticlesResponse> =>
   getRequest(
-    buildURL(`${className}.getArticles`, '/users/{user_id}/articles', params, [
+    buildURL('/users/{user_id}/articles', params, [
       'page',
       'per_page',
       'order',
@@ -883,7 +849,7 @@ export const getComments = (
   params: GetCommentsParams,
 ): Promise<CommentsResponse> =>
   getRequest(
-    buildURL(`${className}.getComments`, '/users/{user_id}/comments', params, [
+    buildURL('/users/{user_id}/comments', params, [
       'page',
       'per_page',
       'order',
@@ -903,12 +869,11 @@ export const getFollowees = (
   params: GetFolloweesParams,
 ): Promise<UsersResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowees`,
-      '/users/{user_id}/followees',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/users/{user_id}/followees', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -923,12 +888,11 @@ export const getFollowers = (
   params: GetFollowersParams,
 ): Promise<UsersResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowers`,
-      '/users/{user_id}/followers',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/users/{user_id}/followers', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -943,12 +907,11 @@ export const getFollowingArticles = (
   params: GetFollowingArticlesParams,
 ): Promise<ArticlesResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowingArticles`,
-      '/users/{user_id}/following_articles',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/users/{user_id}/following_articles', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -963,12 +926,11 @@ export const getFollowingQuestions = (
   params: GetFollowingQuestionsParams,
 ): Promise<QuestionsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowingQuestions`,
-      '/users/{user_id}/following_questions',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/users/{user_id}/following_questions', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -983,12 +945,11 @@ export const getFollowingTopics = (
   params: GetFollowingTopicsParams,
 ): Promise<TopicsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowingTopics`,
-      '/users/{user_id}/following_topics',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/users/{user_id}/following_topics', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -1005,7 +966,7 @@ export const getFollowingTopics = (
  */
 export const getList = (params: GetListParams): Promise<UsersResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/users', params, [
+    buildURL('/users', params, [
       'page',
       'per_page',
       'order',
@@ -1023,7 +984,7 @@ export const getList = (params: GetListParams): Promise<UsersResponse> =>
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const getMine = (params: GetMineParams): Promise<UserResponse> =>
-  getRequest(buildURL(`${className}.getMine`, '/user', params, ['include']));
+  getRequest(buildURL('/user', params, ['include']));
 
 /**
  * 获取当前登录用户发表的回答
@@ -1037,12 +998,7 @@ export const getMyAnswers = (
   params: GetMyAnswersParams,
 ): Promise<AnswersResponse> =>
   getRequest(
-    buildURL(`${className}.getMyAnswers`, '/user/answers', params, [
-      'page',
-      'per_page',
-      'order',
-      'include',
-    ]),
+    buildURL('/user/answers', params, ['page', 'per_page', 'order', 'include']),
   );
 
 /**
@@ -1057,7 +1013,7 @@ export const getMyArticles = (
   params: GetMyArticlesParams,
 ): Promise<ArticlesResponse> =>
   getRequest(
-    buildURL(`${className}.getMyArticles`, '/user/articles', params, [
+    buildURL('/user/articles', params, [
       'page',
       'per_page',
       'order',
@@ -1077,7 +1033,7 @@ export const getMyComments = (
   params: GetMyCommentsParams,
 ): Promise<CommentsResponse> =>
   getRequest(
-    buildURL(`${className}.getMyComments`, '/user/comments', params, [
+    buildURL('/user/comments', params, [
       'page',
       'per_page',
       'order',
@@ -1096,11 +1052,7 @@ export const getMyFollowees = (
   params: GetMyFolloweesParams,
 ): Promise<UsersResponse> =>
   getRequest(
-    buildURL(`${className}.getMyFollowees`, '/user/followees', params, [
-      'page',
-      'per_page',
-      'include',
-    ]),
+    buildURL('/user/followees', params, ['page', 'per_page', 'include']),
   );
 
 /**
@@ -1114,11 +1066,7 @@ export const getMyFollowers = (
   params: GetMyFollowersParams,
 ): Promise<UsersResponse> =>
   getRequest(
-    buildURL(`${className}.getMyFollowers`, '/user/followers', params, [
-      'page',
-      'per_page',
-      'include',
-    ]),
+    buildURL('/user/followers', params, ['page', 'per_page', 'include']),
   );
 
 /**
@@ -1132,12 +1080,11 @@ export const getMyFollowingArticles = (
   params: GetMyFollowingArticlesParams,
 ): Promise<ArticlesResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getMyFollowingArticles`,
-      '/user/following_articles',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/user/following_articles', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -1151,12 +1098,11 @@ export const getMyFollowingQuestions = (
   params: GetMyFollowingQuestionsParams,
 ): Promise<QuestionsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getMyFollowingQuestions`,
-      '/user/following_questions',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/user/following_questions', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -1170,12 +1116,7 @@ export const getMyFollowingTopics = (
   params: GetMyFollowingTopicsParams,
 ): Promise<TopicsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getMyFollowingTopics`,
-      '/user/following_topics',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/user/following_topics', params, ['page', 'per_page', 'include']),
   );
 
 /**
@@ -1190,7 +1131,7 @@ export const getMyQuestions = (
   params: GetMyQuestionsParams,
 ): Promise<QuestionsResponse> =>
   getRequest(
-    buildURL(`${className}.getMyQuestions`, '/user/questions', params, [
+    buildURL('/user/questions', params, [
       'page',
       'per_page',
       'order',
@@ -1211,12 +1152,12 @@ export const getQuestions = (
   params: GetQuestionsParams,
 ): Promise<QuestionsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getQuestions`,
-      '/users/{user_id}/questions',
-      params,
-      ['page', 'per_page', 'order', 'include'],
-    ),
+    buildURL('/users/{user_id}/questions', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
+    ]),
   );
 
 /**
@@ -1229,7 +1170,7 @@ export const register = (params: RegisterParams): Promise<UserResponse> => {
   params.password = sha1(params.password);
 
   return postRequest(
-    buildURL(`${className}.register`, '/users', params, ['include']),
+    buildURL('/users', params, ['include']),
     buildRequestBody(params, ['email', 'email_code', 'username', 'password']),
   );
 };
@@ -1243,11 +1184,7 @@ export const sendPasswordResetEmail = (
   params: SendPasswordResetEmailParams,
 ): Promise<EmptyResponse> =>
   postRequest(
-    buildURL(
-      `${className}.sendPasswordResetEmail`,
-      '/user/password/email',
-      params,
-    ),
+    buildURL('/user/password/email', params),
     buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
   );
 
@@ -1260,7 +1197,7 @@ export const sendRegisterEmail = (
   params: SendRegisterEmailParams,
 ): Promise<EmptyResponse> =>
   postRequest(
-    buildURL(`${className}.sendRegisterEmail`, '/user/register/email', params),
+    buildURL('/user/register/email', params),
     buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']),
   );
 
@@ -1273,7 +1210,7 @@ export const sendRegisterEmail = (
  */
 export const update = (params: UpdateParams): Promise<UserResponse> =>
   patchRequest(
-    buildURL(`${className}.update`, '/users/{user_id}', params, ['include']),
+    buildURL('/users/{user_id}', params, ['include']),
     buildRequestBody(params, [
       'headline',
       'bio',
@@ -1291,7 +1228,7 @@ export const update = (params: UpdateParams): Promise<UserResponse> =>
  */
 export const updateMine = (params: UpdateMineParams): Promise<UserResponse> =>
   patchRequest(
-    buildURL(`${className}.updateMine`, '/user', params, ['include']),
+    buildURL('/user', params, ['include']),
     buildRequestBody(params, [
       'headline',
       'bio',
@@ -1312,7 +1249,7 @@ export const updatePassword = (
   params.password = sha1(params.password);
 
   return putRequest(
-    buildURL(`${className}.updatePassword`, '/user/password', params),
+    buildURL('/user/password', params),
     buildRequestBody(params, ['email', 'email_code', 'password']),
   );
 };
@@ -1326,7 +1263,7 @@ export const uploadMyAvatar = (
   params: UploadMyAvatarParams,
 ): Promise<UserAvatarResponse> =>
   postRequest(
-    buildURL(`${className}.uploadMyAvatar`, '/user/avatar', params),
+    buildURL('/user/avatar', params),
     buildRequestBody(params, ['avatar']),
   );
 
@@ -1339,6 +1276,6 @@ export const uploadMyCover = (
   params: UploadMyCoverParams,
 ): Promise<UserCoverResponse> =>
   postRequest(
-    buildURL(`${className}.uploadMyCover`, '/user/cover', params),
+    buildURL('/user/cover', params),
     buildRequestBody(params, ['cover']),
   );

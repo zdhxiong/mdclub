@@ -253,15 +253,13 @@ interface UpdateParams {
   include?: Array<'is_following'>;
 }
 
-const className = 'TopicApi';
-
 /**
  * 🔐删除话题
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  * @param params.topic_id 话题ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
-  deleteRequest(buildURL(`${className}.del`, '/topics/{topic_id}', params));
+  deleteRequest(buildURL('/topics/{topic_id}', params));
 
 /**
  * 关注指定话题
@@ -271,9 +269,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 export const addFollow = (
   params: AddFollowParams,
 ): Promise<FollowerCountResponse> =>
-  postRequest(
-    buildURL(`${className}.addFollow`, '/topics/{topic_id}/followers', params),
-  );
+  postRequest(buildURL('/topics/{topic_id}/followers', params));
 
 /**
  * 🔐发布话题
@@ -283,7 +279,7 @@ export const addFollow = (
  */
 export const create = (params: CreateParams): Promise<TopicResponse> =>
   postRequest(
-    buildURL(`${className}.create`, '/topics', params, ['include']),
+    buildURL('/topics', params, ['include']),
     buildRequestBody(params, ['name', 'description', 'cover']),
   );
 
@@ -295,13 +291,7 @@ export const create = (params: CreateParams): Promise<TopicResponse> =>
 export const deleteFollow = (
   params: DeleteFollowParams,
 ): Promise<FollowerCountResponse> =>
-  deleteRequest(
-    buildURL(
-      `${className}.deleteFollow`,
-      '/topics/{topic_id}/followers',
-      params,
-    ),
-  );
+  deleteRequest(buildURL('/topics/{topic_id}/followers', params));
 
 /**
  * 🔐批量删除话题
@@ -311,9 +301,7 @@ export const deleteFollow = (
 export const deleteMultiple = (
   params: DeleteMultipleParams,
 ): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteMultiple`, '/topics/{topic_ids}', params),
-  );
+  deleteRequest(buildURL('/topics/{topic_ids}', params));
 
 /**
  * 获取指定话题信息
@@ -322,9 +310,7 @@ export const deleteMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const get = (params: GetParams): Promise<TopicResponse> =>
-  getRequest(
-    buildURL(`${className}.get`, '/topics/{topic_id}', params, ['include']),
-  );
+  getRequest(buildURL('/topics/{topic_id}', params, ['include']));
 
 /**
  * 获取指定话题下的文章
@@ -339,12 +325,12 @@ export const getArticles = (
   params: GetArticlesParams,
 ): Promise<ArticlesResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getArticles`,
-      '/topics/{topic_id}/articles',
-      params,
-      ['page', 'per_page', 'order', 'include'],
-    ),
+    buildURL('/topics/{topic_id}/articles', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
+    ]),
   );
 
 /**
@@ -359,12 +345,11 @@ export const getFollowers = (
   params: GetFollowersParams,
 ): Promise<UsersResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getFollowers`,
-      '/topics/{topic_id}/followers',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/topics/{topic_id}/followers', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );
 
 /**
@@ -380,7 +365,7 @@ export const getFollowers = (
  */
 export const getList = (params: GetListParams): Promise<TopicsResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/topics', params, [
+    buildURL('/topics', params, [
       'page',
       'per_page',
       'include',
@@ -404,12 +389,12 @@ export const getQuestions = (
   params: GetQuestionsParams,
 ): Promise<QuestionsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getQuestions`,
-      '/topics/{topic_id}/questions',
-      params,
-      ['page', 'per_page', 'order', 'include'],
-    ),
+    buildURL('/topics/{topic_id}/questions', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
+    ]),
   );
 
 /**
@@ -419,11 +404,7 @@ export const getQuestions = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const trash = (params: TrashParams): Promise<TopicResponse> =>
-  postRequest(
-    buildURL(`${className}.trash`, '/topics/{topic_id}/trash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/topics/{topic_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把话题放入回收站
@@ -434,14 +415,7 @@ export const trash = (params: TrashParams): Promise<TopicResponse> =>
 export const trashMultiple = (
   params: TrashMultipleParams,
 ): Promise<TopicsResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.trashMultiple`,
-      '/topics/{topic_ids}/trash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/topics/{topic_ids}/trash', params, ['include']));
 
 /**
  * 🔐把话题移出回收站
@@ -450,11 +424,7 @@ export const trashMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
-  postRequest(
-    buildURL(`${className}.untrash`, '/topics/{topic_id}/untrash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/topics/{topic_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把话题移出回收站
@@ -465,14 +435,7 @@ export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
 export const untrashMultiple = (
   params: UntrashMultipleParams,
 ): Promise<TopicsResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.untrashMultiple`,
-      '/topics/{topic_ids}/untrash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/topics/{topic_ids}/untrash', params, ['include']));
 
 /**
  * 🔐更新话题信息
@@ -483,6 +446,6 @@ export const untrashMultiple = (
  */
 export const update = (params: UpdateParams): Promise<TopicResponse> =>
   postRequest(
-    buildURL(`${className}.update`, '/topics/{topic_id}', params, ['include']),
+    buildURL('/topics/{topic_id}', params, ['include']),
     buildRequestBody(params, ['name', 'description', 'cover']),
   );

@@ -89,15 +89,13 @@ interface UploadParams {
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }
 
-const className = 'ImageApi';
-
 /**
  * 🔐删除指定图片
  * 仅管理员可调用该接口
  * @param params.key 图片key
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
-  deleteRequest(buildURL(`${className}.del`, '/images/{key}', params));
+  deleteRequest(buildURL('/images/{key}', params));
 
 /**
  * 🔐批量删除图片
@@ -106,10 +104,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
-): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteMultiple`, '/images/{keys}', params),
-  );
+): Promise<EmptyResponse> => deleteRequest(buildURL('/images/{keys}', params));
 
 /**
  * 获取指定图片信息
@@ -118,9 +113,7 @@ export const deleteMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
  */
 export const get = (params: GetParams): Promise<ImageResponse> =>
-  getRequest(
-    buildURL(`${className}.get`, '/images/{key}', params, ['include']),
-  );
+  getRequest(buildURL('/images/{key}', params, ['include']));
 
 /**
  * 🔐获取图片列表
@@ -135,7 +128,7 @@ export const get = (params: GetParams): Promise<ImageResponse> =>
  */
 export const getList = (params: GetListParams): Promise<ImagesResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/images', params, [
+    buildURL('/images', params, [
       'page',
       'per_page',
       'include',
@@ -155,7 +148,7 @@ export const getList = (params: GetListParams): Promise<ImagesResponse> =>
  */
 export const update = (params: UpdateParams): Promise<ImageResponse> =>
   patchRequest(
-    buildURL(`${className}.update`, '/images/{key}', params, ['include']),
+    buildURL('/images/{key}', params, ['include']),
     buildRequestBody(params, ['filename']),
   );
 
@@ -167,6 +160,6 @@ export const update = (params: UpdateParams): Promise<ImageResponse> =>
  */
 export const upload = (params: UploadParams): Promise<ImageResponse> =>
   postRequest(
-    buildURL(`${className}.upload`, '/images', params, ['include']),
+    buildURL('/images', params, ['include']),
     buildRequestBody(params, ['image']),
   );

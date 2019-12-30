@@ -2,14 +2,12 @@ import { getRequest, patchRequest } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import { OptionResponse, OptionUpdateRequestBody } from './models';
 
-const className = 'OptionApi';
-
 /**
  * 获取站点全局设置参数
  * 获取站点全局设置参数
  */
 export const get = (): Promise<OptionResponse> =>
-  getRequest(buildURL(`${className}.get`, '/options', {}));
+  getRequest(buildURL('/options', {}));
 
 /**
  * 🔐更新站点全局设置
@@ -20,7 +18,7 @@ export const update = (
   params: OptionUpdateRequestBody,
 ): Promise<OptionResponse> =>
   patchRequest(
-    buildURL(`${className}.update`, '/options', params),
+    buildURL('/options', params),
     buildRequestBody(params, [
       'answer_can_delete',
       'answer_can_delete_before',

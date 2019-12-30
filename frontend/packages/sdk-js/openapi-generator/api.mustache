@@ -20,8 +20,6 @@ interface {{operationIdCamelCase}}Params {
 
 {{/operation}}
 
-const className = '{{classname}}';
-
 {{#operation}}
 /**
 {{#summary}}
@@ -37,7 +35,6 @@ const className = '{{classname}}';
 export const {{nickname}} = ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> =>
   {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}Request(
     buildURL(
-      `${className}.{{nickname}}`,
       '{{path}}',
       {{#hasParams}}params{{/hasParams}}{{^hasParams}}{}{{/hasParams}},
       {{#hasQueryParams}}[ {{#queryParams}}'{{baseName}}', {{/queryParams}}],{{/hasQueryParams}}

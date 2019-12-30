@@ -184,15 +184,13 @@ interface UpdateParams {
   include?: Array<'user' | 'voting'>;
 }
 
-const className = 'CommentApi';
-
 /**
  * 删除评论
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
  * @param params.comment_id 评论ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
-  deleteRequest(buildURL(`${className}.del`, '/comments/{comment_id}', params));
+  deleteRequest(buildURL('/comments/{comment_id}', params));
 
 /**
  * 为评论投票
@@ -202,7 +200,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
-    buildURL(`${className}.addVote`, '/comments/{comment_id}/voters', params),
+    buildURL('/comments/{comment_id}/voters', params),
     buildRequestBody(params, ['type']),
   );
 
@@ -214,9 +212,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 export const deleteMultiple = (
   params: DeleteMultipleParams,
 ): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteMultiple`, '/comments/{comment_ids}', params),
-  );
+  deleteRequest(buildURL('/comments/{comment_ids}', params));
 
 /**
  * 取消为评论的投票
@@ -226,13 +222,7 @@ export const deleteMultiple = (
 export const deleteVote = (
   params: DeleteVoteParams,
 ): Promise<VoteCountResponse> =>
-  deleteRequest(
-    buildURL(
-      `${className}.deleteVote`,
-      '/comments/{comment_id}/voters',
-      params,
-    ),
-  );
+  deleteRequest(buildURL('/comments/{comment_id}/voters', params));
 
 /**
  * 获取评论详情
@@ -241,9 +231,7 @@ export const deleteVote = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<CommentResponse> =>
-  getRequest(
-    buildURL(`${className}.get`, '/comments/{comment_id}', params, ['include']),
-  );
+  getRequest(buildURL('/comments/{comment_id}', params, ['include']));
 
 /**
  * 获取所有评论
@@ -260,7 +248,7 @@ export const get = (params: GetParams): Promise<CommentResponse> =>
  */
 export const getList = (params: GetListParams): Promise<CommentsResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/comments', params, [
+    buildURL('/comments', params, [
       'page',
       'per_page',
       'order',
@@ -284,12 +272,12 @@ export const getList = (params: GetListParams): Promise<CommentsResponse> =>
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getVoters`,
-      '/comments/{comment_id}/voters',
-      params,
-      ['page', 'per_page', 'include', 'type'],
-    ),
+    buildURL('/comments/{comment_id}/voters', params, [
+      'page',
+      'per_page',
+      'include',
+      'type',
+    ]),
   );
 
 /**
@@ -299,11 +287,7 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<CommentResponse> =>
-  postRequest(
-    buildURL(`${className}.trash`, '/comments/{comment_id}/trash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/comments/{comment_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把评论放入回收站
@@ -314,14 +298,7 @@ export const trash = (params: TrashParams): Promise<CommentResponse> =>
 export const trashMultiple = (
   params: TrashMultipleParams,
 ): Promise<CommentsResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.trashMultiple`,
-      '/comments/{comment_ids}/trash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/comments/{comment_ids}/trash', params, ['include']));
 
 /**
  * 🔐把评论移出回收站
@@ -330,11 +307,7 @@ export const trashMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
-  postRequest(
-    buildURL(`${className}.untrash`, '/comments/{comment_id}/untrash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/comments/{comment_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把评论移出回收站
@@ -345,14 +318,7 @@ export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
 export const untrashMultiple = (
   params: UntrashMultipleParams,
 ): Promise<CommentsResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.untrashMultiple`,
-      '/comments/{comment_ids}/untrash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/comments/{comment_ids}/untrash', params, ['include']));
 
 /**
  * 修改评论
@@ -363,8 +329,6 @@ export const untrashMultiple = (
  */
 export const update = (params: UpdateParams): Promise<CommentResponse> =>
   patchRequest(
-    buildURL(`${className}.update`, '/comments/{comment_id}', params, [
-      'include',
-    ]),
+    buildURL('/comments/{comment_id}', params, ['include']),
     buildRequestBody(params, ['content']),
   );

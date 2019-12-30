@@ -90,8 +90,6 @@ interface GetReasonsParams {
   >;
 }
 
-const className = 'ReportApi';
-
 /**
  * 🔐删除举报
  * 仅管理员可调用该接口
@@ -99,13 +97,7 @@ const className = 'ReportApi';
  * @param params.reportable_id 目标ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(
-      `${className}.del`,
-      '/reports/{reportable_type}:{reportable_id}',
-      params,
-    ),
-  );
+  deleteRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params));
 
 /**
  * 添加举报
@@ -117,12 +109,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
  */
 export const create = (params: CreateParams): Promise<ReportResponse> =>
   postRequest(
-    buildURL(
-      `${className}.create`,
-      '/reports/{reportable_type}:{reportable_id}',
-      params,
-      ['include'],
-    ),
+    buildURL('/reports/{reportable_type}:{reportable_id}', params, ['include']),
     buildRequestBody(params, ['reason']),
   );
 
@@ -134,13 +121,7 @@ export const create = (params: CreateParams): Promise<ReportResponse> =>
 export const deleteMultiple = (
   params: DeleteMultipleParams,
 ): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(
-      `${className}.deleteMultiple`,
-      '/reports/{report_targets}',
-      params,
-    ),
-  );
+  deleteRequest(buildURL('/reports/{report_targets}', params));
 
 /**
  * 🔐获取被举报的内容列表
@@ -152,7 +133,7 @@ export const deleteMultiple = (
  */
 export const getList = (params: GetListParams): Promise<ReportGroupsResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/reports', params, [
+    buildURL('/reports', params, [
       'page',
       'per_page',
       'include',
@@ -173,10 +154,9 @@ export const getReasons = (
   params: GetReasonsParams,
 ): Promise<ReportsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getReasons`,
-      '/reports/{reportable_type}:{reportable_id}',
-      params,
-      ['page', 'per_page', 'include'],
-    ),
+    buildURL('/reports/{reportable_type}:{reportable_id}', params, [
+      'page',
+      'per_page',
+      'include',
+    ]),
   );

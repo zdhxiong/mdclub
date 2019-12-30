@@ -232,15 +232,13 @@ interface UpdateParams {
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
-const className = 'AnswerApi';
-
 /**
  * 删除回答
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
  * @param params.answer_id 回答ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
-  deleteRequest(buildURL(`${className}.del`, '/answers/{answer_id}', params));
+  deleteRequest(buildURL('/answers/{answer_id}', params));
 
 /**
  * 为回答投票
@@ -250,7 +248,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
-    buildURL(`${className}.addVote`, '/answers/{answer_id}/voters', params),
+    buildURL('/answers/{answer_id}/voters', params),
     buildRequestBody(params, ['type']),
   );
 
@@ -265,12 +263,7 @@ export const createComment = (
   params: CreateCommentParams,
 ): Promise<CommentResponse> =>
   postRequest(
-    buildURL(
-      `${className}.createComment`,
-      '/answers/{answer_id}/comments',
-      params,
-      ['include'],
-    ),
+    buildURL('/answers/{answer_id}/comments', params, ['include']),
     buildRequestBody(params, ['content']),
   );
 
@@ -282,9 +275,7 @@ export const createComment = (
 export const deleteMultiple = (
   params: DeleteMultipleParams,
 ): Promise<EmptyResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteMultiple`, '/answers/{answer_ids}', params),
-  );
+  deleteRequest(buildURL('/answers/{answer_ids}', params));
 
 /**
  * 取消为回答的投票
@@ -294,9 +285,7 @@ export const deleteMultiple = (
 export const deleteVote = (
   params: DeleteVoteParams,
 ): Promise<VoteCountResponse> =>
-  deleteRequest(
-    buildURL(`${className}.deleteVote`, '/answers/{answer_id}/voters', params),
-  );
+  deleteRequest(buildURL('/answers/{answer_id}/voters', params));
 
 /**
  * 获取回答详情
@@ -305,9 +294,7 @@ export const deleteVote = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<AnswerResponse> =>
-  getRequest(
-    buildURL(`${className}.get`, '/answers/{answer_id}', params, ['include']),
-  );
+  getRequest(buildURL('/answers/{answer_id}', params, ['include']));
 
 /**
  * 获取指定回答的评论
@@ -322,12 +309,12 @@ export const getComments = (
   params: GetCommentsParams,
 ): Promise<CommentsResponse> =>
   getRequest(
-    buildURL(
-      `${className}.getComments`,
-      '/answers/{answer_id}/comments',
-      params,
-      ['page', 'per_page', 'order', 'include'],
-    ),
+    buildURL('/answers/{answer_id}/comments', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
+    ]),
   );
 
 /**
@@ -344,7 +331,7 @@ export const getComments = (
  */
 export const getList = (params: GetListParams): Promise<AnswersResponse> =>
   getRequest(
-    buildURL(`${className}.getList`, '/answers', params, [
+    buildURL('/answers', params, [
       'page',
       'per_page',
       'order',
@@ -367,7 +354,7 @@ export const getList = (params: GetListParams): Promise<AnswersResponse> =>
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
-    buildURL(`${className}.getVoters`, '/answers/{answer_id}/voters', params, [
+    buildURL('/answers/{answer_id}/voters', params, [
       'page',
       'per_page',
       'include',
@@ -382,11 +369,7 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<AnswerResponse> =>
-  postRequest(
-    buildURL(`${className}.trash`, '/answers/{answer_id}/trash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/answers/{answer_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把回答放入回收站
@@ -397,14 +380,7 @@ export const trash = (params: TrashParams): Promise<AnswerResponse> =>
 export const trashMultiple = (
   params: TrashMultipleParams,
 ): Promise<AnswersResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.trashMultiple`,
-      '/answers/{answer_ids}/trash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/answers/{answer_ids}/trash', params, ['include']));
 
 /**
  * 🔐把回答移出回收站
@@ -413,11 +389,7 @@ export const trashMultiple = (
  * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
-  postRequest(
-    buildURL(`${className}.untrash`, '/answers/{answer_id}/untrash', params, [
-      'include',
-    ]),
-  );
+  postRequest(buildURL('/answers/{answer_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把回答移出回收站
@@ -428,14 +400,7 @@ export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
 export const untrashMultiple = (
   params: UntrashMultipleParams,
 ): Promise<AnswersResponse> =>
-  postRequest(
-    buildURL(
-      `${className}.untrashMultiple`,
-      '/answers/{answer_ids}/untrash',
-      params,
-      ['include'],
-    ),
-  );
+  postRequest(buildURL('/answers/{answer_ids}/untrash', params, ['include']));
 
 /**
  * 修改回答信息
@@ -446,8 +411,6 @@ export const untrashMultiple = (
  */
 export const update = (params: UpdateParams): Promise<AnswerResponse> =>
   patchRequest(
-    buildURL(`${className}.update`, '/answers/{answer_id}', params, [
-      'include',
-    ]),
+    buildURL('/answers/{answer_id}', params, ['include']),
     buildRequestBody(params, ['content_markdown', 'content_rendered']),
   );

@@ -3,13 +3,11 @@ import param from 'mdui.jq/es/functions/param';
 
 /**
  * 替换 url 中的变量占位符，并添加 queryParam
- * @param name             当前调用的方法名称
  * @param path             含变量占位符的 url
  * @param params           含 path 参数、 query 参数、requestBody 参数的对象
  * @param queryParamNames  query 参数名数组
  */
 export function buildURL(
-  name: string,
   path: string,
   params: PlainObject,
   queryParamNames: string[] = [],
@@ -19,9 +17,7 @@ export function buildURL(
     const pathParamName = match.substr(1, match.length - 2);
 
     if (params[pathParamName] == null) {
-      throw new Error(
-        `Missing required parameter ${pathParamName} when calling ${name}`,
-      );
+      throw new Error(`Missing required parameter ${pathParamName}`);
     }
 
     return String(params[pathParamName]);
@@ -30,10 +26,7 @@ export function buildURL(
   // 添加 query 参数
   const queryObj: PlainObject<string> = {};
   queryParamNames.forEach(name => {
-    if (Array.isArray(params[name])) {
-      // query 参数值为数组时，转为用 , 分隔的字符串
-      queryObj[name] = params[name].join(',');
-    } else if (params[name] != null) {
+    if (params[name] != null) {
       queryObj[name] = String(params[name]);
     }
   });

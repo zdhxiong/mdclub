@@ -17,8 +17,6 @@ interface SendParams {
   content: string;
 }
 
-const className = 'EmailApi';
-
 /**
  * 🔐发送邮件
  * 用于后台管理员发送邮件，需要管理员权限
@@ -26,6 +24,6 @@ const className = 'EmailApi';
  */
 export const send = (params: SendParams): Promise<EmailResponse> =>
   postRequest(
-    buildURL(`${className}.send`, '/emails', params),
+    buildURL('/emails', params),
     buildRequestBody(params, ['email', 'subject', 'content']),
   );
