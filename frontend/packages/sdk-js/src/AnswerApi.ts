@@ -235,7 +235,6 @@ interface UpdateParams {
 /**
  * 删除回答
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
- * @param params.answer_id 回答ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/answers/{answer_id}', params));
@@ -243,8 +242,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 为回答投票
  * 为回答投票
- * @param params.answer_id 回答ID
- * @param params.VoteRequestBody
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -255,9 +252,6 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 /**
  * 在指定回答下发表评论
  * 在指定回答下发表评论
- * @param params.answer_id 回答ID
- * @param params.CommentRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const createComment = (
   params: CreateCommentParams,
@@ -270,7 +264,6 @@ export const createComment = (
 /**
  * 🔐批量删除回答
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
- * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -280,7 +273,6 @@ export const deleteMultiple = (
 /**
  * 取消为回答的投票
  * 取消为回答的投票
- * @param params.answer_id 回答ID
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -290,8 +282,6 @@ export const deleteVote = (
 /**
  * 获取回答详情
  * 获取回答详情
- * @param params.answer_id 回答ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<AnswerResponse> =>
   getRequest(buildURL('/answers/{answer_id}', params, ['include']));
@@ -299,11 +289,6 @@ export const get = (params: GetParams): Promise<AnswerResponse> =>
 /**
  * 获取指定回答的评论
  * 获取指定回答的评论。
- * @param params.answer_id 回答ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const getComments = (
   params: GetCommentsParams,
@@ -320,16 +305,8 @@ export const getComments = (
 /**
  * 获取回答列表
  * 获取回答列表。
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
- * @param params.answer_id 回答ID
- * @param params.question_id 提问ID
- * @param params.user_id 用户ID
- * @param params.trashed 是否仅获取回收站中的数据
  */
-export const getList = (params: GetListParams): Promise<AnswersResponse> =>
+export const getList = (params: GetListParams = {}): Promise<AnswersResponse> =>
   getRequest(
     buildURL('/answers', params, [
       'page',
@@ -346,11 +323,6 @@ export const getList = (params: GetListParams): Promise<AnswersResponse> =>
 /**
  * 获取回答的投票者
  * 获取回答的投票者
- * @param params.answer_id 回答ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
- * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -365,8 +337,6 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 /**
  * 🔐把回答放入回收站
  * 仅管理员可调用该接口
- * @param params.answer_id 回答ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<AnswerResponse> =>
   postRequest(buildURL('/answers/{answer_id}/trash', params, ['include']));
@@ -374,8 +344,6 @@ export const trash = (params: TrashParams): Promise<AnswerResponse> =>
 /**
  * 🔐批量把回答放入回收站
  * 仅管理员可调用该接口。
- * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -385,8 +353,6 @@ export const trashMultiple = (
 /**
  * 🔐把回答移出回收站
  * 仅管理员可调用该接口。
- * @param params.answer_id 回答ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
   postRequest(buildURL('/answers/{answer_id}/untrash', params, ['include']));
@@ -394,8 +360,6 @@ export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
 /**
  * 🔐批量把回答移出回收站
  * 仅管理员可调用该接口。
- * @param params.answer_ids 多个用 &#x60;,&#x60; 分隔的回答ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -405,9 +369,6 @@ export const untrashMultiple = (
 /**
  * 修改回答信息
  * 管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.answer_id 回答ID
- * @param params.AnswerRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const update = (params: UpdateParams): Promise<AnswerResponse> =>
   patchRequest(

@@ -352,7 +352,6 @@ interface UpdateParams {
 /**
  * 删除提问
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
- * @param params.question_id 提问ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/questions/{question_id}', params));
@@ -360,7 +359,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 添加关注
  * 添加关注
- * @param params.question_id 提问ID
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -370,8 +368,6 @@ export const addFollow = (
 /**
  * 为提问投票
  * 为提问投票
- * @param params.question_id 提问ID
- * @param params.VoteRequestBody
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -382,8 +378,6 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 /**
  * 发表提问
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.QuestionCreateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const create = (params: CreateParams): Promise<QuestionResponse> =>
   postRequest(
@@ -399,9 +393,6 @@ export const create = (params: CreateParams): Promise<QuestionResponse> =>
 /**
  * 在指定提问下发表回答
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.question_id 提问ID
- * @param params.AnswerRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const createAnswer = (
   params: CreateAnswerParams,
@@ -414,9 +405,6 @@ export const createAnswer = (
 /**
  * 在指定提问下发表评论
  * 在指定提问下发表评论
- * @param params.question_id 提问ID
- * @param params.CommentRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const createComment = (
   params: CreateCommentParams,
@@ -429,7 +417,6 @@ export const createComment = (
 /**
  * 取消关注
  * 取消关注
- * @param params.question_id 提问ID
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -439,7 +426,6 @@ export const deleteFollow = (
 /**
  * 🔐批量删除提问
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
- * @param params.question_ids 多个用 &#x60;,&#x60; 分隔的提问ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -449,7 +435,6 @@ export const deleteMultiple = (
 /**
  * 取消为提问的投票
  * 取消为提问的投票
- * @param params.question_id 提问ID
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -459,8 +444,6 @@ export const deleteVote = (
 /**
  * 获取指定提问信息
  * 获取指定提问信息
- * @param params.question_id 提问ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<QuestionResponse> =>
   getRequest(buildURL('/questions/{question_id}', params, ['include']));
@@ -468,11 +451,6 @@ export const get = (params: GetParams): Promise<QuestionResponse> =>
 /**
  * 获取指定提问下的回答
  * 获取指定提问下的回答。
- * @param params.question_id 提问ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;voting&#x60;
  */
 export const getAnswers = (
   params: GetAnswersParams,
@@ -489,11 +467,6 @@ export const getAnswers = (
 /**
  * 获取指定提问的评论
  * 获取指定提问的评论。
- * @param params.question_id 提问ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const getComments = (
   params: GetCommentsParams,
@@ -510,10 +483,6 @@ export const getComments = (
 /**
  * 获取指定提问的关注者
  * 获取指定提问的关注者
- * @param params.question_id 提问ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -529,16 +498,10 @@ export const getFollowers = (
 /**
  * 获取提问列表
  * 获取提问列表。
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
- * @param params.question_id 提问ID
- * @param params.user_id 用户ID
- * @param params.topic_id 话题ID
- * @param params.trashed 是否仅获取回收站中的数据
  */
-export const getList = (params: GetListParams): Promise<QuestionsResponse> =>
+export const getList = (
+  params: GetListParams = {},
+): Promise<QuestionsResponse> =>
   getRequest(
     buildURL('/questions', params, [
       'page',
@@ -555,11 +518,6 @@ export const getList = (params: GetListParams): Promise<QuestionsResponse> =>
 /**
  * 获取提问的投票者
  * 获取提问的投票者
- * @param params.question_id 提问ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
- * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -574,8 +532,6 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 /**
  * 🔐把提问放入回收站
  * 仅管理员可调用该接口
- * @param params.question_id 提问ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<QuestionResponse> =>
   postRequest(buildURL('/questions/{question_id}/trash', params, ['include']));
@@ -583,8 +539,6 @@ export const trash = (params: TrashParams): Promise<QuestionResponse> =>
 /**
  * 🔐批量把提问放入回收站
  * 仅管理员可调用该接口。
- * @param params.question_ids 多个用 &#x60;,&#x60; 分隔的提问ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -594,8 +548,6 @@ export const trashMultiple = (
 /**
  * 🔐把提问移出回收站
  * 仅管理员可调用该接口。
- * @param params.question_id 提问ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
   postRequest(
@@ -605,8 +557,6 @@ export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
 /**
  * 🔐批量把提问移出回收站
  * 仅管理员可调用该接口。
- * @param params.question_ids 多个用 &#x60;,&#x60; 分隔的提问ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -618,9 +568,6 @@ export const untrashMultiple = (
 /**
  * 更新提问信息
  * 管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.question_id 提问ID
- * @param params.QuestionUpdateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const update = (params: UpdateParams): Promise<QuestionResponse> =>
   patchRequest(

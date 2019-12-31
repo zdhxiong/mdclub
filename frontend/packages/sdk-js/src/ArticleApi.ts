@@ -300,7 +300,6 @@ interface UpdateParams {
 /**
  * 删除文章
  * 只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。  管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
- * @param params.article_id 文章ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/articles/{article_id}', params));
@@ -308,7 +307,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 添加关注
  * 添加关注
- * @param params.article_id 文章ID
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -318,8 +316,6 @@ export const addFollow = (
 /**
  * 为文章投票
  * 为文章投票
- * @param params.article_id 文章ID
- * @param params.VoteRequestBody
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -330,8 +326,6 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 /**
  * 发表文章
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.ArticleCreateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const create = (params: CreateParams): Promise<ArticleResponse> =>
   postRequest(
@@ -347,9 +341,6 @@ export const create = (params: CreateParams): Promise<ArticleResponse> =>
 /**
  * 在指定文章下发表评论
  * 在指定文章下发表评论
- * @param params.article_id 文章ID
- * @param params.CommentRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const createComment = (
   params: CreateCommentParams,
@@ -362,7 +353,6 @@ export const createComment = (
 /**
  * 取消关注
  * 取消关注
- * @param params.article_id 文章ID
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -372,7 +362,6 @@ export const deleteFollow = (
 /**
  * 🔐批量删除文章
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
- * @param params.article_ids 多个用 &#x60;,&#x60; 分隔的文章ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -382,7 +371,6 @@ export const deleteMultiple = (
 /**
  * 取消为文章的投票
  * 取消为文章的投票
- * @param params.article_id 文章ID
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -392,8 +380,6 @@ export const deleteVote = (
 /**
  * 获取指定文章信息
  * 获取指定文章信息
- * @param params.article_id 文章ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<ArticleResponse> =>
   getRequest(buildURL('/articles/{article_id}', params, ['include']));
@@ -401,11 +387,6 @@ export const get = (params: GetParams): Promise<ArticleResponse> =>
 /**
  * 获取指定文章的评论列表
  * 获取指定文章的评论列表。
- * @param params.article_id 文章ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const getComments = (
   params: GetCommentsParams,
@@ -422,10 +403,6 @@ export const getComments = (
 /**
  * 获取指定文章的关注者
  * 获取指定文章的关注者
- * @param params.article_id 文章ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -441,16 +418,10 @@ export const getFollowers = (
 /**
  * 获取文章列表
  * 获取文章列表。
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
- * @param params.article_id 文章ID
- * @param params.user_id 用户ID
- * @param params.topic_id 话题ID
- * @param params.trashed 是否仅获取回收站中的数据
  */
-export const getList = (params: GetListParams): Promise<ArticlesResponse> =>
+export const getList = (
+  params: GetListParams = {},
+): Promise<ArticlesResponse> =>
   getRequest(
     buildURL('/articles', params, [
       'page',
@@ -467,11 +438,6 @@ export const getList = (params: GetListParams): Promise<ArticlesResponse> =>
 /**
  * 获取文章的投票者
  * 获取文章的投票者
- * @param params.article_id 文章ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
- * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -486,8 +452,6 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 /**
  * 🔐把文章放入回收站
  * 仅管理员可调用该接口
- * @param params.article_id 文章ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<ArticleResponse> =>
   postRequest(buildURL('/articles/{article_id}/trash', params, ['include']));
@@ -495,8 +459,6 @@ export const trash = (params: TrashParams): Promise<ArticleResponse> =>
 /**
  * 🔐批量把文章放入回收站
  * 仅管理员可调用该接口。
- * @param params.article_ids 多个用 &#x60;,&#x60; 分隔的文章ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -506,8 +468,6 @@ export const trashMultiple = (
 /**
  * 🔐把文章移出回收站
  * 仅管理员可调用该接口。
- * @param params.article_id 文章ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<ArticleResponse> =>
   postRequest(buildURL('/articles/{article_id}/untrash', params, ['include']));
@@ -515,8 +475,6 @@ export const untrash = (params: UntrashParams): Promise<ArticleResponse> =>
 /**
  * 🔐批量把文章移出回收站
  * 仅管理员可调用该接口。
- * @param params.article_ids 多个用 &#x60;,&#x60; 分隔的文章ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -526,9 +484,6 @@ export const untrashMultiple = (
 /**
  * 更新文章信息
  * 管理员可修改文章。文章作者是否可修改文章，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
- * @param params.article_id 文章ID
- * @param params.ArticleUpdateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const update = (params: UpdateParams): Promise<ArticleResponse> =>
   patchRequest(

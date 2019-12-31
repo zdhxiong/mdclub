@@ -187,7 +187,6 @@ interface UpdateParams {
 /**
  * 删除评论
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
- * @param params.comment_id 评论ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/comments/{comment_id}', params));
@@ -195,8 +194,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 为评论投票
  * 为评论投票
- * @param params.comment_id 评论ID
- * @param params.VoteRequestBody
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -207,7 +204,6 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 /**
  * 🔐批量删除评论
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
- * @param params.comment_ids 多个用 &#x60;,&#x60; 分隔的评论ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -217,7 +213,6 @@ export const deleteMultiple = (
 /**
  * 取消为评论的投票
  * 取消为评论的投票
- * @param params.comment_id 评论ID
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -227,8 +222,6 @@ export const deleteVote = (
 /**
  * 获取评论详情
  * 获取评论详情
- * @param params.comment_id 评论ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const get = (params: GetParams): Promise<CommentResponse> =>
   getRequest(buildURL('/comments/{comment_id}', params, ['include']));
@@ -236,17 +229,10 @@ export const get = (params: GetParams): Promise<CommentResponse> =>
 /**
  * 获取所有评论
  * 获取所有评论。
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
- * @param params.comment_id 评论ID
- * @param params.commentable_id 评论目标的ID
- * @param params.commentable_type 评论目标类型
- * @param params.user_id 用户ID
- * @param params.trashed 是否仅获取回收站中的数据
  */
-export const getList = (params: GetListParams): Promise<CommentsResponse> =>
+export const getList = (
+  params: GetListParams = {},
+): Promise<CommentsResponse> =>
   getRequest(
     buildURL('/comments', params, [
       'page',
@@ -264,11 +250,6 @@ export const getList = (params: GetListParams): Promise<CommentsResponse> =>
 /**
  * 获取评论的投票者
  * 获取评论的投票者
- * @param params.comment_id 评论ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
- * @param params.type 默认获取全部投票类型的用户 &#x60;up&#x60; 表示仅获取投赞成票的用户 &#x60;down&#x60; 表示仅获取投反对票的用户
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -283,8 +264,6 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 /**
  * 🔐把评论放入回收站
  * 仅管理员可调用该接口
- * @param params.comment_id 评论ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const trash = (params: TrashParams): Promise<CommentResponse> =>
   postRequest(buildURL('/comments/{comment_id}/trash', params, ['include']));
@@ -292,8 +271,6 @@ export const trash = (params: TrashParams): Promise<CommentResponse> =>
 /**
  * 🔐批量把评论放入回收站
  * 仅管理员可调用该接口。
- * @param params.comment_ids 多个用 &#x60;,&#x60; 分隔的评论ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -303,8 +280,6 @@ export const trashMultiple = (
 /**
  * 🔐把评论移出回收站
  * 仅管理员可调用该接口。
- * @param params.comment_id 评论ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
   postRequest(buildURL('/comments/{comment_id}/untrash', params, ['include']));
@@ -312,8 +287,6 @@ export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
 /**
  * 🔐批量把评论移出回收站
  * 仅管理员可调用该接口。
- * @param params.comment_ids 多个用 &#x60;,&#x60; 分隔的评论ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -323,9 +296,6 @@ export const untrashMultiple = (
 /**
  * 修改评论
  * 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
- * @param params.comment_id 评论ID
- * @param params.CommentRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;voting&#x60;
  */
 export const update = (params: UpdateParams): Promise<CommentResponse> =>
   patchRequest(

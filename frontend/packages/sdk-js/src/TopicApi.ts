@@ -256,7 +256,6 @@ interface UpdateParams {
 /**
  * 🔐删除话题
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
- * @param params.topic_id 话题ID
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/topics/{topic_id}', params));
@@ -264,7 +263,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 关注指定话题
  * 关注指定话题
- * @param params.topic_id 话题ID
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -274,8 +272,6 @@ export const addFollow = (
 /**
  * 🔐发布话题
  * 仅管理员可调用该接口
- * @param params.TopicCreateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const create = (params: CreateParams): Promise<TopicResponse> =>
   postRequest(
@@ -286,7 +282,6 @@ export const create = (params: CreateParams): Promise<TopicResponse> =>
 /**
  * 取消关注指定话题
  * 取消关注指定话题
- * @param params.topic_id 话题ID
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -296,7 +291,6 @@ export const deleteFollow = (
 /**
  * 🔐批量删除话题
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
- * @param params.topic_ids 多个用 &#x60;,&#x60; 分隔的话题ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -306,8 +300,6 @@ export const deleteMultiple = (
 /**
  * 获取指定话题信息
  * 获取指定话题信息
- * @param params.topic_id 话题ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const get = (params: GetParams): Promise<TopicResponse> =>
   getRequest(buildURL('/topics/{topic_id}', params, ['include']));
@@ -315,11 +307,6 @@ export const get = (params: GetParams): Promise<TopicResponse> =>
 /**
  * 获取指定话题下的文章
  * 获取指定话题下的文章。
- * @param params.topic_id 话题ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const getArticles = (
   params: GetArticlesParams,
@@ -336,10 +323,6 @@ export const getArticles = (
 /**
  * 获取指定话题的关注者
  * 不含已禁用的用户
- * @param params.topic_id 话题ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_followed&#x60;, &#x60;is_following&#x60;, &#x60;is_me&#x60;
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -355,15 +338,8 @@ export const getFollowers = (
 /**
  * 获取全部话题
  * 获取全部话题。
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;topic_id&#x60;、&#x60;follower_count&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;topic_id&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.topic_id 话题ID
- * @param params.name 话题名称
- * @param params.trashed 是否仅获取回收站中的数据
  */
-export const getList = (params: GetListParams): Promise<TopicsResponse> =>
+export const getList = (params: GetListParams = {}): Promise<TopicsResponse> =>
   getRequest(
     buildURL('/topics', params, [
       'page',
@@ -379,11 +355,6 @@ export const getList = (params: GetListParams): Promise<TopicsResponse> =>
 /**
  * 获取指定话题下的提问
  * 获取指定话题下的提问。
- * @param params.topic_id 话题ID
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.order 排序方式。在字段前加 &#x60;-&#x60; 表示倒序排列。  可排序字段包括 &#x60;vote_count&#x60;、&#x60;create_time&#x60;、&#x60;update_time&#x60;、&#x60;delete_time&#x60;。默认为 &#x60;-create_time&#x60;。其中 &#x60;delete_time&#x60; 值仅管理员使用有效。
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;topics&#x60;, &#x60;is_following&#x60;, &#x60;voting&#x60;
  */
 export const getQuestions = (
   params: GetQuestionsParams,
@@ -400,8 +371,6 @@ export const getQuestions = (
 /**
  * 🔐把话题放入回收站
  * 仅管理员可调用该接口
- * @param params.topic_id 话题ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const trash = (params: TrashParams): Promise<TopicResponse> =>
   postRequest(buildURL('/topics/{topic_id}/trash', params, ['include']));
@@ -409,8 +378,6 @@ export const trash = (params: TrashParams): Promise<TopicResponse> =>
 /**
  * 🔐批量把话题放入回收站
  * 仅管理员可调用该接口。
- * @param params.topic_ids 多个用 &#x60;,&#x60; 分隔的话题ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -420,8 +387,6 @@ export const trashMultiple = (
 /**
  * 🔐把话题移出回收站
  * 仅管理员可调用该接口。
- * @param params.topic_id 话题ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
   postRequest(buildURL('/topics/{topic_id}/untrash', params, ['include']));
@@ -429,8 +394,6 @@ export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
 /**
  * 🔐批量把话题移出回收站
  * 仅管理员可调用该接口。
- * @param params.topic_ids 多个用 &#x60;,&#x60; 分隔的话题ID，最多可提供 100 个 ID
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -440,9 +403,6 @@ export const untrashMultiple = (
 /**
  * 🔐更新话题信息
  * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
- * @param params.topic_id 话题ID
- * @param params.TopicUpdateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;is_following&#x60;
  */
 export const update = (params: UpdateParams): Promise<TopicResponse> =>
   postRequest(

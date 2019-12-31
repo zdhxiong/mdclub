@@ -12,7 +12,6 @@ export const get = (): Promise<OptionResponse> =>
 /**
  * 🔐更新站点全局设置
  * 仅管理员可调用该接口
- * @param params.Option
  */
 export const update = (
   params: OptionUpdateRequestBody,

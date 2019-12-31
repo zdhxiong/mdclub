@@ -92,7 +92,6 @@ interface UploadParams {
 /**
  * 🔐删除指定图片
  * 仅管理员可调用该接口
- * @param params.key 图片key
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/images/{key}', params));
@@ -100,7 +99,6 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 /**
  * 🔐批量删除图片
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
- * @param params.keys 多个用 &#x60;,&#x60; 分隔的评论ID，最多可提供 100 个 ID
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -109,8 +107,6 @@ export const deleteMultiple = (
 /**
  * 获取指定图片信息
  * 获取指定图片信息
- * @param params.key 图片key
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
  */
 export const get = (params: GetParams): Promise<ImageResponse> =>
   getRequest(buildURL('/images/{key}', params, ['include']));
@@ -118,15 +114,8 @@ export const get = (params: GetParams): Promise<ImageResponse> =>
 /**
  * 🔐获取图片列表
  * 仅管理员可调用该接口
- * @param params.page 当前页数
- * @param params.per_page 每页条数（最大为 100）
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
- * @param params.key 图片key
- * @param params.item_type 图片关联对象的类型
- * @param params.item_id 图片关联对象的ID
- * @param params.user_id 用户ID
  */
-export const getList = (params: GetListParams): Promise<ImagesResponse> =>
+export const getList = (params: GetListParams = {}): Promise<ImagesResponse> =>
   getRequest(
     buildURL('/images', params, [
       'page',
@@ -142,9 +131,6 @@ export const getList = (params: GetListParams): Promise<ImagesResponse> =>
 /**
  * 🔐更新指定图片信息
  * 仅管理员可调用该接口
- * @param params.key 图片key
- * @param params.ImageUpdateRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
  */
 export const update = (params: UpdateParams): Promise<ImageResponse> =>
   patchRequest(
@@ -155,8 +141,6 @@ export const update = (params: UpdateParams): Promise<ImageResponse> =>
 /**
  * 上传图片
  * 上传图片
- * @param params.ImageUploadRequestBody
- * @param params.include 响应中需要包含的关联数据，用“,”分隔。可以为 &#x60;user&#x60;, &#x60;question&#x60;, &#x60;article&#x60;, &#x60;answer&#x60;
  */
 export const upload = (params: UploadParams): Promise<ImageResponse> =>
   postRequest(

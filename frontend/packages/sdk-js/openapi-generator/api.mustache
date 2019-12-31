@@ -28,9 +28,6 @@ interface {{operationIdCamelCase}}Params {
 {{#notes}}
  * {{notes}}
 {{/notes}}
-{{#allParams}}
- * @param params.{{paramName}} {{description}}
-{{/allParams}}
  */
 export const {{nickname}} = ({{#hasParams}}params: {{operationIdCamelCase}}Params{{/hasParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> =>
   {{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}Request(
