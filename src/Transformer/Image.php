@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Service\ImageService;
+
 /**
  * 图片转换器
- *
- * @property-read \MDClub\Model\Image       $imageModel
- * @property-read \MDClub\Service\Image\Get $imageGetService
  */
 class Image extends Abstracts
 {
@@ -25,7 +24,7 @@ class Image extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['key'], $item['create_time'])) {
-            $item['urls'] = $this->imageGetService->getUrls($item['key'], $item['create_time']);
+            $item['urls'] = ImageService::getUrls($item['key'], $item['create_time']);
         }
 
         return $item;
@@ -98,18 +97,18 @@ class Image extends Abstracts
      * @param array $keys
      * @return array
      */
-    protected function getInRelationship(array $keys): array
+    public function getInRelationship(array $keys): array
     {
         if (!$keys) {
             return [];
         }
 
-        $images = $this->imageModel->select($keys);
+        $images = $this->container->imageModel->select($keys);
 
         return collect($images)
             ->keyBy('key')
             ->map(function ($item) {
-                $item['urls'] = $this->imageGetService->getUrls($item['key'], $item['create_time']);
+                $item['urls'] = $this->container->imageGetService->getUrls($item['key'], $item['create_time']);
 
                 return $item;
             })

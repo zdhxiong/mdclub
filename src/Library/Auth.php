@@ -4,30 +4,20 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
-use MDClub\Helper\Request;
-use MDClub\Model\Token;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Model\TokenModel;
 
 /**
  * 处理用户 Token 有关逻辑，及用户登录状态
- *
- * @property-read ServerRequestInterface $request
- * @property-read Token                  $tokenModel
  */
 class Auth
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     /**
      * Token 的有效期，默认为 15天（3600*24*15）
      *
      * @var int
      */
-    public $lifeTime = 1296000;
+    protected $lifeTime = 1296000;
 
     /**
      * 当前请求的 Token
@@ -44,16 +34,13 @@ class Auth
     protected $tokenInfo;
 
     /**
-     * @param ContainerInterface $container
+     * 获取 Token 有效期
+     *
+     * @return int
      */
-    public function __construct(ContainerInterface $container)
+    public function getLifeTime(): int
     {
-        $this->container = $container;
-    }
-
-    public function __get(string $name)
-    {
-        return $this->container->get($name);
+        return $this->lifeTime;
     }
 
     /**
@@ -73,8 +60,8 @@ class Auth
             return $this->token;
         }
 
-        $this->token = $this->request->getServerParams()['HTTP_TOKEN']
-            ?? $this->request->getCookieParams()['token']
+        $this->token = Request::getServerParams()['HTTP_TOKEN']
+            ?? Request::getCookieParams()['token']
             ?? false;
 
         return $this->getToken();
@@ -114,24 +101,23 @@ class Auth
         }
 
         // token 对应的数据不存在
-        $tokenInfo = $this->tokenModel->get($token);
+        $tokenInfo = TokenModel::get($token);
         if (!$tokenInfo) {
             $this->tokenInfo = false;
             return null;
         }
 
         // token 已过期，删除该 token
-        $requestTime = Request::time($this->request);
+        $requestTime = Request::time();
         if ($tokenInfo['expire_time'] < $requestTime) {
-            $this->tokenModel->delete($token);
+            TokenModel::delete($token);
             $this->tokenInfo = false;
             return null;
         }
 
         // token 有效，自动续期
         if ($this->lifeTime - ($tokenInfo['expire_time'] - $requestTime) > 86400) {
-            $this->tokenModel
-                ->where('token', $token)
+            TokenModel::where('token', $token)
                 ->update('expire_time', $requestTime + $this->lifeTime);
         }
 

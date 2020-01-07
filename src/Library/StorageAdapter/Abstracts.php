@@ -7,10 +7,7 @@ namespace MDClub\Library\StorageAdapter;
 use Buzz\Browser;
 use Buzz\Client\Curl;
 use Intervention\Image\ImageManagerStatic;
-use MDClub\Helper\Guid;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use MDClub\Helper\Str;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriFactoryInterface;
@@ -18,21 +15,12 @@ use Slim\Psr7\Factory\RequestFactory;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\Factory\UriFactory;
-use Slim\Psr7\Request as Psr7Request;
 
 /**
  * 存储适配器抽象类
- *
- * @property-read ServerRequestInterface $request
- * @property-read \MDClub\Library\Option $option
  */
 abstract class Abstracts
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     /**
      * @var StreamFactoryInterface
      */
@@ -47,19 +35,6 @@ abstract class Abstracts
      * @var Browser
      */
     private $browser;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    public function __get($name)
-    {
-        return $this->container->get($name);
-    }
 
     /**
      * 获取 Buzz 的 Browser 对象
@@ -141,7 +116,7 @@ abstract class Abstracts
         $originalHeight = $image->getHeight();
 
         foreach ($thumbs as $size => [$width, $height]) {
-            $tmpName = Guid::generate() . '.' . $suffix;
+            $tmpName = Str::guid() . '.' . $suffix;
             $newImage = clone $image;
 
             // 未指定高度时，等比例生成缩略图

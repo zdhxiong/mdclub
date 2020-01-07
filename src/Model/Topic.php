@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Topic as TopicObserver;
+use MDClub\Facade\Library\Auth;
 
 /**
  * 话题模型
@@ -14,7 +14,6 @@ class Topic extends Abstracts
     public $table = 'topic';
     public $primaryKey = 'topic_id';
     protected $softDelete = true;
-    protected $observe = TopicObserver::class;
 
     public $columns = [
         'topic_id',
@@ -36,6 +35,15 @@ class Topic extends Abstracts
         'topic_id',
         'name',
     ];
+
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowOrderFields[] = 'delete_time';
+        }
+
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -63,20 +71,30 @@ class Topic extends Abstracts
     }
 
     /**
-     * 根据 url 参数获取已删除的话题列表
+     * 减少指定话题的文章数量
      *
-     * @return array
+     * @param int $topicId
+     * @param int $count
      */
-    public function getDeleted(): array
+    public function decArticleCount(int $topicId, int $count = 1): void
     {
-        $defaultOrder = ['delete_time' => 'DESC'];
-        $allowOrderFields = collect($this->allowOrderFields)->push('delete_time')->unique()->all();
-        $order = $this->getOrderFromRequest($defaultOrder, $allowOrderFields);
+        $this
+            ->where('topic_id', $topicId)
+            ->dec('article_count', $count)
+            ->update();
+    }
 
-        return $this
-            ->onlyTrashed()
-            ->where($this->getWhereFromRequest())
-            ->order($order)
-            ->paginate();
+    /**
+     * 减少指定话题的提问数量
+     *
+     * @param int $topicId
+     * @param int $count
+     */
+    public function decQuestionCount(int $topicId, int $count = 1): void
+    {
+        $this
+            ->where('topic_id', $topicId)
+            ->dec('question_count', $count)
+            ->update();
     }
 }

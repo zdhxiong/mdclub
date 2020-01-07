@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Image as ImageObserver;
-
 /**
  * 图片模型
  */
@@ -14,7 +12,6 @@ class Image extends Abstracts
     public $table = 'image';
     public $primaryKey = 'key';
     protected $timestamps = true;
-    protected $observe = ImageObserver::class;
 
     protected const UPDATE_TIME = false;
 

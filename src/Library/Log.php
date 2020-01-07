@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
+use MDClub\Initializer\App;
 use Monolog\Logger as MonologLogger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Processor\UidProcessor;
-use Psr\Container\ContainerInterface;
 
 /**
  * 实现了 PSR3 接口的日志
  */
 class Log extends MonologLogger
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $runtime = $container->get('settings')['runtime'];
+        $runtime = App::$config['APP_RUNTIME'];
         $name = 'mdclub';
         $processors[] = new UidProcessor();
         $handlers[] = new StreamHandler(

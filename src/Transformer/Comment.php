@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\CommentModel;
+
 /**
  * 评论转换器
- *
- * @property-read \MDClub\Model\Comment $commentModel
  */
 class Comment extends Abstracts
 {
@@ -28,8 +28,7 @@ class Comment extends Abstracts
             return [];
         }
 
-        $comments = $this->commentModel
-            ->field(['comment_id', 'content', 'create_time', 'update_time'])
+        $comments = CommentModel::field(['comment_id', 'content', 'create_time', 'update_time'])
             ->select($commentIds);
 
         return collect($comments)

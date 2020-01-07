@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Question as QuestionObserver;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Request;
 
 /**
  * 提问模型
@@ -15,7 +16,6 @@ class Question extends Abstracts
     public $primaryKey = 'question_id';
     protected $timestamps = true;
     protected $softDelete = true;
-    protected $observe = QuestionObserver::class;
 
     public $columns = [
         'question_id',
@@ -28,6 +28,7 @@ class Question extends Abstracts
         'view_count',
         'follower_count',
         'vote_count',
+        'last_answer_time',
         'create_time',
         'update_time',
         'delete_time',
@@ -44,6 +45,15 @@ class Question extends Abstracts
         'user_id',
         'topic_id', // topic_id 需要另外写逻辑
     ];
+
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowOrderFields[] = 'delete_time';
+        }
+
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -63,9 +73,9 @@ class Question extends Abstracts
     /**
      * @inheritDoc
      */
-    public function getWhereFromRequest(array $defaultFilter = [], array $allowFilterFields = null): array
+    public function getWhereFromRequest(array $defaultFilter = []): array
     {
-        $where = parent::getWhereFromRequest($defaultFilter, $allowFilterFields);
+        $where = parent::getWhereFromRequest($defaultFilter);
 
         if (isset($where['topic_id'])) {
             $this->join(['[><]topicable' => ['question_id' => 'topicable_id']]);
@@ -129,5 +139,48 @@ class Question extends Abstracts
             ->where($this->getWhereFromRequest())
             ->order($this->getOrderFromRequest(['update_time' => 'DESC']))
             ->paginate();
+    }
+
+    /**
+     * 增加指定提问的回答数量
+     *
+     * @param int $questionId
+     * @param int $count
+     */
+    public function incAnswerCount(int $questionId, int $count = 1): void
+    {
+        $this
+            ->where('question_id', $questionId)
+            ->inc('answer_count', $count)
+            ->set('last_answer_time', Request::time())
+            ->update();
+    }
+
+    /**
+     * 减少指定提问的回答数量
+     *
+     * @param int $questionId
+     * @param int $count
+     */
+    public function decAnswerCount(int $questionId, int $count = 1): void
+    {
+        $this
+            ->where('question_id', $questionId)
+            ->dec('answer_count', $count)
+            ->update();
+    }
+
+    /**
+     * 减少指定提问的评论数量
+     *
+     * @param int $questionId
+     * @param int $count
+     */
+    public function decCommentCount(int $questionId, int $count = 1): void
+    {
+        $this
+            ->where('question_id', $questionId)
+            ->dec('comment_count', $count)
+            ->update();
     }
 }

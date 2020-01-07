@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Request;
 use MDClub\Helper\Ip;
-use MDClub\Helper\Request;
-use MDClub\Library\Auth;
-use MDClub\Observer\User as UserObserver;
-use Psr\Container\ContainerInterface;
 
 /**
  * 用户模型
- *
- * @property-read Auth $auth
  */
 class User extends Abstracts
 {
     public $table = 'user';
     public $primaryKey = 'user_id';
     protected $timestamps = true;
-    protected $observe = UserObserver::class;
 
     // 被禁用的用户也是真实用户，不作为软删除字段处理
 
@@ -61,16 +56,18 @@ class User extends Abstracts
         'create_time',
     ];
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        parent::__construct($container);
+    public $allowFilterFields = [
+        'user_id',
+        'username',
+    ];
 
-        $this->allowFilterFields = $this->auth->isManager()
-            ? ['user_id', 'username', 'email']
-            : ['user_id', 'username'];
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowFilterFields[] = 'email';
+        }
+
+        parent::__construct();
     }
 
     /**
@@ -94,7 +91,7 @@ class User extends Abstracts
             'cover' => '',
             'create_ip' => Ip::getIp(),
             'create_location' => Ip::getLocation(),
-            'last_login_time' => Request::time($this->request),
+            'last_login_time' => Request::time(),
             'last_login_ip' => Ip::getIp(),
             'last_login_location' => Ip::getLocation(),
             'follower_count' => 0,
@@ -142,7 +139,6 @@ class User extends Abstracts
         return $this
             ->where($this->getWhereFromRequest(['disable_time' => 0]))
             ->order($this->getOrderFromRequest(['create_time' => 'ASC']))
-            ->field('password', true)
             ->paginate();
     }
 
@@ -156,7 +152,104 @@ class User extends Abstracts
         return $this
             ->where($this->getWhereFromRequest(['disable_time[>]' => 0]))
             ->order($this->getOrderFromRequest(['disable_time' => 'DESC']))
-            ->field('password', true)
             ->paginate();
+    }
+
+    /**
+     * 增加指定用户的回答数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function incAnswerCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->inc('answer_count', $count)
+            ->update();
+    }
+
+    /**
+     * 减少指定用户的回答数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function decAnswerCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->dec('answer_count', $count)
+            ->update();
+    }
+
+    /**
+     * 增加指定用户的文章数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function incArticleCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->inc('article_count', $count)
+            ->update();
+    }
+
+    /**
+     * 减少指定用户的文章数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function decArticleCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->dec('article_count', $count)
+            ->update();
+    }
+
+    /**
+     * 增加指定用户的提问数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function incQuestionCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->inc('question_count', $count)
+            ->update();
+    }
+
+    /**
+     * 减少指定用户的提问数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function decQuestionCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->dec('question_count', $count)
+            ->update();
+    }
+
+    /**
+     * 减少指定用户关注的话题数量
+     *
+     * @param int $userId
+     * @param int $count
+     */
+    public function decFollowingTopicCount(int $userId, int $count = 1): void
+    {
+        $this
+            ->where('user_id', $userId)
+            ->dec('following_topic_count', $count)
+            ->update();
     }
 }

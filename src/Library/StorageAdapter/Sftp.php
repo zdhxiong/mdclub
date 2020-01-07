@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Library\StorageAdapter;
 
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
-use MDClub\Traits\Url;
-use Psr\Container\ContainerInterface;
+use MDClub\Facade\Library\Option;
+use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -16,8 +17,6 @@ use Psr\Http\Message\StreamInterface;
  */
 class Sftp extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * SSH2 连接 resource
      *
@@ -38,23 +37,18 @@ class Sftp extends Abstracts implements Interfaces
      */
     protected $pathPrefix;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
         if (!extension_loaded('ssh2')) {
             throw new SystemException('PHP extension ssh2 is not loaded');
         }
 
         $this->setPathPrefix();
 
-        $username = $this->option->storage_sftp_username;
-        $password = $this->option->storage_sftp_password;
-        $host = $this->option->storage_sftp_host;
-        $port = $this->option->storage_sftp_port;
+        $username = Option::get(OptionConstant::STORAGE_SFTP_USERNAME);
+        $password = Option::get(OptionConstant::STORAGE_SFTP_PASSWORD);
+        $host = Option::get(OptionConstant::STORAGE_SFTP_HOST);
+        $port = Option::get(OptionConstant::STORAGE_SFTP_PORT);
 
         if (!$this->connection = @ssh2_connect($host, (int)$port)) {
             throw new SystemException("Could not connect to SSH2 Server");
@@ -74,7 +68,7 @@ class Sftp extends Abstracts implements Interfaces
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->option->storage_sftp_root;
+        $prefix = Option::get(OptionConstant::STORAGE_SFTP_ROOT);
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -109,11 +103,11 @@ class Sftp extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $data['o'] = $storagePath . $path;
 
         foreach (array_keys($thumbs) as $size) {
-            $data[$size] = $url . $this->getThumbLocation($path, $size);
+            $data[$size] = $storagePath . $this->getThumbLocation($path, $size);
         }
 
         return $data;

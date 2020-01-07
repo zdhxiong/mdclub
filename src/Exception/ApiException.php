@@ -26,9 +26,9 @@ class ApiException extends Exception
     protected $extraMessage;
 
     /**
-     * @param array  $error         错误代码和错误描述 [code, message]
-     * @param bool   $needCaptcha   下一次调用该接口是否需要输入图形验证码
-     * @param string $extraMessage  额外的错误说明
+     * @param array  $error        错误代码和错误描述 [code, message]
+     * @param bool   $needCaptcha  下一次调用该接口是否需要输入图形验证码
+     * @param string $extraMessage 额外的错误说明
      */
     public function __construct(array $error, bool $needCaptcha = false, string $extraMessage = '')
     {

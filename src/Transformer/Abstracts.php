@@ -4,28 +4,21 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Transformer\ArticleTransformer;
+use MDClub\Facade\Transformer\FollowTransformer;
+use MDClub\Facade\Transformer\QuestionTransformer;
+use MDClub\Facade\Transformer\TopicTransformer;
+use MDClub\Facade\Transformer\UserTransformer;
+use MDClub\Facade\Transformer\VoteTransformer;
+use MDClub\Helper\Str;
 
 /**
  * 转换器抽象类
- *
- * @property-read ServerRequestInterface     $request
- * @property-read \MDClub\Library\Auth       $auth
- * @property-read Article                    $articleTransformer
- * @property-read Question                   $questionTransformer
- * @property-read Vote                       $voteTransformer
- * @property-read Topic                      $topicTransformer
- * @property-read Follow                     $followTransformer
- * @property-read User                       $userTransformer
  */
 abstract class Abstracts
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     /**
      * @var string 表名
      */
@@ -56,21 +49,11 @@ abstract class Abstracts
      */
     protected $managerExcept = [];
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
-
-        $includes = $this->request->getQueryParams()['include'] ?? '';
+        $includes = Request::getQueryParams()['include'] ?? '';
         $includes = explode(',', $includes);
         $this->includes = array_intersect($this->availableIncludes, $includes);
-    }
-
-    public function __get($name)
-    {
-        return $this->container->get($name);
     }
 
     /**
@@ -93,7 +76,7 @@ abstract class Abstracts
     protected function user(array $items): array
     {
         $userIds = array_unique(array_column($items, 'user_id'));
-        $users = $this->userTransformer->getInRelationship($userIds);
+        $users = UserTransformer::getInRelationship($userIds);
 
         foreach ($items as &$item) {
             if (isset($item['user_id'])) {
@@ -113,7 +96,7 @@ abstract class Abstracts
     protected function question(array $items): array
     {
         $questionIds = array_unique(array_column($items, 'question_id'));
-        $questions = $this->questionTransformer->getInRelationship($questionIds);
+        $questions = QuestionTransformer::getInRelationship($questionIds);
 
         foreach ($items as &$item) {
             if (isset($item['question_id'])) {
@@ -133,7 +116,7 @@ abstract class Abstracts
     protected function article(array $items): array
     {
         $articleIds = array_unique(array_column($items, 'article_id'));
-        $articles = $this->articleTransformer->getInRelationship($articleIds);
+        $articles = ArticleTransformer::getInRelationship($articleIds);
 
         foreach ($items as &$item) {
             if (isset($item['article_id'])) {
@@ -153,7 +136,7 @@ abstract class Abstracts
     protected function voting(array $items): array
     {
         $keys = array_unique(array_column($items, $this->primaryKey));
-        $votings = $this->voteTransformer->getInRelationship($keys, $this->table);
+        $votings = VoteTransformer::getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
             if (isset($item[$this->primaryKey])) {
@@ -173,7 +156,7 @@ abstract class Abstracts
     protected function topics(array $items): array
     {
         $keys = array_unique(array_column($items, $this->primaryKey));
-        $topics = $this->topicTransformer->getInRelationship($keys, $this->table);
+        $topics = TopicTransformer::getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
             if (isset($item[$this->primaryKey])) {
@@ -191,14 +174,14 @@ abstract class Abstracts
      * @param  array $knownRelationship ['is_following' => true]
      * @return array
      */
-    protected function is_following(array $items, array $knownRelationship): array
+    protected function isFollowing(array $items, array $knownRelationship): array
     {
         $keys = array_unique(array_column($items, $this->primaryKey));
 
         if (isset($knownRelationship['is_following'])) {
             $followingKeys = $knownRelationship['is_following'] ? $keys : [];
         } else {
-            $followingKeys = $this->followTransformer->getInRelationship($keys, $this->table);
+            $followingKeys = FollowTransformer::getInRelationship($keys, $this->table);
         }
 
         foreach ($items as &$item) {
@@ -230,7 +213,7 @@ abstract class Abstracts
         }
 
         // 移除字段
-        $except = $this->auth->isManager() ? $this->managerExcept : $this->userExcept;
+        $except = Auth::isManager() ? $this->managerExcept : $this->userExcept;
         $items = collect($items)->exceptSpread($except);
 
         // 格式化
@@ -240,8 +223,10 @@ abstract class Abstracts
 
         // 添加 relationships
         foreach ($this->includes as $include) {
-            if (method_exists($this, $include)) {
-                $items = $this->{$include}($items, $knownRelationship);
+            $method = Str::toCamelize($include);
+
+            if (method_exists($this, $method)) {
+                $items = $this->{$method}($items, $knownRelationship);
             }
         }
 

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
-use MDClub\Middleware\NeedManager;
+use MDClub\Facade\Library\Option as OptionLibrary;
+use MDClub\Facade\Library\Request;
 
 /**
- * 系统设置
+ * 系统设置 API
  */
-class Option extends Abstracts
+class Option
 {
     /**
      * 获取所有设置项
@@ -19,19 +19,19 @@ class Option extends Abstracts
      */
     public function get(): array
     {
-        return $this->option->onlyAuthorized()->all();
+        return OptionLibrary::onlyAuthorized()->getAll();
     }
 
     /**
      * 更新设置，仅管理员可操作
      *
-     * @uses NeedManager
      * @return array
      */
     public function update(): array
     {
-        $this->option->set($this->request->getParsedBody());
+        $requestBody = Request::getParsedBody();
+        OptionLibrary::setMultiple($requestBody);
 
-        return $this->option->all();
+        return OptionLibrary::getAll();
     }
 }

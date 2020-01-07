@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Rss;
 
-use MDClub\Controller\Abstracts;
 use Psr\Http\Message\ResponseInterface;
 
-class Article extends Abstracts
+/**
+ * 文章 RSS
+ */
+class Article
 {
     /**
-     * 获取文章列表
+     * 文章列表 RSS
      *
      * @return ResponseInterface
      */
     public function getList(): ResponseInterface
     {
-
     }
 }

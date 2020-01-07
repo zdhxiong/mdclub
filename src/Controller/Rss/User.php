@@ -4,41 +4,43 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Rss;
 
-use MDClub\Controller\Abstracts;
 use Psr\Http\Message\ResponseInterface;
 
-class User extends Abstracts
+/**
+ * 用户 RSS
+ */
+class User
 {
     /**
-     * 根据 user_id 获取提问列表
+     * 指定用户的提问列表 RSS
      *
-     * @param  int               $user_id
+     * @param int $userId
+     *
      * @return ResponseInterface
      */
-    public function getQuestions(int $user_id): ResponseInterface
+    public function getQuestions(int $userId): ResponseInterface
     {
-
     }
 
     /**
-     * 根据 user_id 获取文章列表
+     * 指定用户的文章列表 RSS
      *
-     * @param  int               $user_id
+     * @param int $userId
+     *
      * @return ResponseInterface
      */
-    public function getArticles(int $user_id): ResponseInterface
+    public function getArticles(int $userId): ResponseInterface
     {
-
     }
 
     /**
-     * 根据 user_id 获取回答列表
+     * 根据用户的回答列表 RSS
      *
-     * @param  int               $user_id
+     * @param int $userId
+     *
      * @return ResponseInterface
      */
-    public function getAnswers(int $user_id): ResponseInterface
+    public function getAnswers(int $userId): ResponseInterface
     {
-
     }
 }

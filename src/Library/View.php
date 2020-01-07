@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
-use Psr\Container\ContainerInterface;
+use MDClub\Constant\OptionConstant;
+use MDClub\Facade\Library\Option as OptionFacade;
+use MDClub\Initializer\App;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Views\PhpRenderer;
 
 /**
- * PhpRenderer 重写，使其具有主题功能
+ * 模板渲染
  */
-class View extends PhpRenderer
+class View
 {
     /**
-     * 当前使用的主题
-     *
-     * @var string
+     * @var PhpRenderer
      */
-    protected $theme;
+    protected $phpRenderer;
 
     /**
      * 默认主题
@@ -27,14 +27,9 @@ class View extends PhpRenderer
      */
     protected $defaultTheme = 'default';
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct(__DIR__ . '/../../templates/');
-
-        $this->theme = $container->get('option')->theme;
+        $this->phpRenderer = new PhpRenderer(__DIR__ . '/../../templates/');
     }
 
     /**
@@ -44,27 +39,33 @@ class View extends PhpRenderer
      * @param  array  $data
      * @return mixed
      */
-    public function fetch($template, array $data = [])
+    public function fetch(string $template, array $data = [])
     {
-        $theme = is_file($this->templatePath . $this->theme. $template)
-            ? $this->theme
+        $customTheme = OptionFacade::get(OptionConstant::THEME);
+
+        $theme = is_file($this->phpRenderer->getTemplatePath() . $customTheme . $template)
+            ? $customTheme
             : $this->defaultTheme;
 
-        return parent::fetch('/' . $theme . $template, $data);
+        return $this->phpRenderer->fetch("/{$theme}{$template}", $data);
     }
 
     /**
      * 渲染模板
      *
-     * @param  ResponseInterface $response
-     * @param  string            $template
-     * @param  array             $data
+     * @param  string $template
+     * @param  array  $data
      * @return ResponseInterface
      */
-    public function render(ResponseInterface $response, $template, array $data = []): ResponseInterface
+    public function render(string $template, array $data = []): ResponseInterface
     {
-        $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
+        $output = $this->fetch($template, $data);
 
-        return parent::render($response, $template, $data);
+        /** @var $response ResponseInterface */
+        $response = App::$container->get(ResponseInterface::class);
+        $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
+        $response->getBody()->write($output);
+
+        return $response;
     }
 }

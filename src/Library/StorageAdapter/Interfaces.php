@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MDClub\Library\StorageAdapter;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -15,11 +14,6 @@ use Psr\Http\Message\StreamInterface;
  */
 interface Interfaces
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container);
-
     /**
      * 获取文件的访问路径
      *

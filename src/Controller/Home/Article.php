@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Constant\ApiError;
-use MDClub\Controller\Abstracts;
-use MDClub\Exception\ApiException;
-use MDClub\Exception\SystemException;
+use MDClub\Facade\Library\View;
+use MDClub\Facade\Service\ArticleService;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 文章
+ * 文章页面
  */
-class Article extends Abstracts
+class Article
 {
     /**
      * 文章列表页面
@@ -22,29 +20,25 @@ class Article extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/article/index.php');
+        return View::render('/article/index.php');
     }
 
     /**
      * 文章详情页面
      *
-     * @param  int               $article_id
+     * todo 修改中间件，非 api 模块抛出异常时，显示 HTML 页面
+     *
+     * @param int $articleId
+     *
      * @return ResponseInterface
      */
-    public function info(int $article_id): ResponseInterface
+    public function info(int $articleId): ResponseInterface
     {
-        try {
-            $article = $this->articleGetService->getOrFail($article_id);
-        } catch (ApiException $e) {
-            if ($e->getCode() === ApiError::ARTICLE_NOT_FOUND) {
-                // todo  抛出 404
-                throw new SystemException();
-            } else {
-                // todo 抛出500
-                throw new SystemException();
-            }
-        }
-
-        return $this->render('/article/info.php', ['article' => $article]);
+        return View::render(
+            '/article/info.php',
+            [
+                'article' => ArticleService::getOrFail($articleId),
+            ]
+        );
     }
 }

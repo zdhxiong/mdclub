@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Helper\Request;
-use MDClub\Library\Db;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use BadMethodCallException;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Db;
+use MDClub\Facade\Library\Request;
 
 /**
  * 数据库操作封装，支持链式调用操作数据库
- *
- * @property-read Db                      $db
- * @property-read ServerRequestInterface  $request
  *
  * @method int max()
  * @method int min()
@@ -22,11 +19,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 abstract class Abstracts
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     /**
      * 自动维护的 create_time 字段名
      */
@@ -91,20 +83,6 @@ abstract class Abstracts
      */
     protected $timestamps = false;
 
-    /**
-     * 观察者类名
-     *
-     * @var string
-     */
-    protected $observe;
-
-    /**
-     * 观察者实例
-     *
-     * @var \MDClub\Observer\Abstracts
-     */
-    protected $observer;
-
     private $isForce;         // 删除时是否强制删除
     private $isWithTrashed;   // 查询结果包含软删除值
     private $isOnlyTrashed;   // 查询结果仅含软删除值
@@ -139,23 +117,9 @@ abstract class Abstracts
         $this->updateData = [];
     }
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $this->container = $container;
-
-        if ($this->observe) {
-            $this->observer = new $this->observe($container);
-        }
-
         $this->reset();
-    }
-
-    public function __get(string $name)
-    {
-        return $this->container->get($name);
     }
 
     /**
@@ -539,7 +503,7 @@ abstract class Abstracts
 
         $args = $join ? [$join, $columns, $where] : [$columns, $where];
 
-        return $this->db->select($this->table, ...$args);
+        return Db::select($this->table, ...$args);
     }
 
     /**
@@ -571,13 +535,13 @@ abstract class Abstracts
         }
 
         // page 参数
-        $page = (int) ($this->request->getQueryParams()['page'] ?? 1);
+        $page = (int) (Request::getQueryParams()['page'] ?? 1);
         if ($page < 1) {
             $page = 1;
         }
 
         // per_page 参数
-        $perPage = (int) ($this->request->getQueryParams()['per_page'] ?? 15);
+        $perPage = (int) (Request::getQueryParams()['per_page'] ?? 15);
         if ($perPage > 100) {
             $perPage = 100;
         } elseif ($perPage < 1) {
@@ -611,13 +575,15 @@ abstract class Abstracts
     /**
      * 插入数据
      *
-     * NOTE: 仅插入单条数据会触发 Observer 方法，插入多条数据时不触发
-     *
-     * @param  array   $data_array 数据数组、或多个数据组成的二维数组
-     * @return string              最后一条记录的ID
+     * @param  array   $data_array 数据数组、或多个数据组成的二维数组。若没有传入该参数，则插入 $this->updateData 中的数据
+     * @return string|null         最后一条记录的ID，若主键是字符串，则返回 null
      */
-    public function insert(array $data_array): string
+    public function insert(array $data_array = null)
     {
+        if (is_null($data_array)) {
+            $data_array = $this->updateData;
+        }
+
         $isNestedArray = isset($data_array[0]);
 
         if (!$isNestedArray) {
@@ -628,11 +594,11 @@ abstract class Abstracts
             $data = $this->beforeInsert($data);
 
             if ($this->timestamps && static::CREATE_TIME) {
-                $data[static::CREATE_TIME] = Request::time($this->request);
+                $data[static::CREATE_TIME] = Request::time();
             }
 
             if ($this->timestamps && static::UPDATE_TIME) {
-                $data[static::UPDATE_TIME] = Request::time($this->request);
+                $data[static::UPDATE_TIME] = Request::time();
             }
 
             if ($this->softDelete && static::DELETE_TIME) {
@@ -641,16 +607,11 @@ abstract class Abstracts
         }
 
         unset($data);
+        $this->reset();
 
-        $this->db->insert($this->table, $data_array);
-        $id = $this->db->id();
+        Db::insert($this->table, $data_array);
 
-        if ($this->observer && !$isNestedArray) {
-            $data_array[0][$this->primaryKey] = $id;
-            $this->observer->created($data_array[0]);
-        }
-
-        return $id;
+        return Db::id();
     }
 
     /**
@@ -658,9 +619,6 @@ abstract class Abstracts
      *
      * ->update(['id' => 'value']) // 传入数组
      * ->update('id', 'value')     // 传入两个参数
-     *
-     * NOTE: 仅通过主键作为唯一查询条件更新时会触发 Observer 方法，通过其他条件更新时不触发 todo 可能存在软删除查询条件
-     * 例如：
      *
      * @param  string|array $data  需要更新的数据
      * @param  mixed        $value
@@ -676,27 +634,18 @@ abstract class Abstracts
         $data = $this->beforeUpdate($data);
 
         if ($this->timestamps && static::UPDATE_TIME) {
-            $data[static::UPDATE_TIME] = Request::time($this->request);
+            $data[static::UPDATE_TIME] = Request::time();
         }
 
         $where = $this->getWhere();
         $this->reset();
-        $query = $this->db->update($this->table, $data, $where);
-
-        // 触发 Observer 方法
-        if ($this->observer && isset($where[$this->primaryKey]) && count($where) === 1) {
-            is_array($where[$this->primaryKey])
-                ? $this->observer->updatedMultiple($where[$this->primaryKey])
-                : $this->observer->updated($where[$this->primaryKey]);
-        }
+        $query = Db::update($this->table, $data, $where);
 
         return $query->rowCount();
     }
 
     /**
      * 根据条件删除数据
-     *
-     * NOTE: 仅通过主键作为唯一条件删除时会触发 Observer 方法，通过其他条件删除不触发 todo 未完成
      *
      * @param  int|string|array  $primaryValues 若传入该参数，则根据主键删除；否则根据前面的 where 条件删除；可传入多个主键组成的数组
      * @return int
@@ -714,11 +663,11 @@ abstract class Abstracts
                 ? $this->table . '.' . static::DELETE_TIME
                 : static::DELETE_TIME;
 
-            $query = $this->db->update($this->table, [
-                $deleteTimeField => Request::time($this->request)
+            $query = Db::update($this->table, [
+                $deleteTimeField => Request::time()
             ], $where);
         } else {
-            $query = $this->db->delete($this->table, $where);
+            $query = Db::delete($this->table, $where);
         }
 
         return $query->rowCount();
@@ -748,7 +697,7 @@ abstract class Abstracts
             ? $this->table . '.' . static::DELETE_TIME
             : static::DELETE_TIME;
 
-        $query = $this->db->update($this->table, [$deleteTimeField => 0], $where);
+        $query = Db::update($this->table, [$deleteTimeField => 0], $where);
 
         return $query->rowCount();
     }
@@ -757,7 +706,7 @@ abstract class Abstracts
      * 根据条件获取一条数据
      *
      * @param  int|string  $primaryValue 若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
-     * @return null|array
+     * @return array|null
      */
     public function get($primaryValue = null): ?array
     {
@@ -769,7 +718,7 @@ abstract class Abstracts
 
         $args = $join ? [$join, $columns, $where] : [$columns, $where];
 
-        return $this->db->get($this->table, ...$args);
+        return Db::get($this->table, ...$args);
     }
 
     /**
@@ -787,7 +736,7 @@ abstract class Abstracts
 
         $args = $join ? [$join, $where] : [$where];
 
-        return $this->db->has($this->table, ...$args);
+        return Db::has($this->table, ...$args);
     }
 
     /**
@@ -809,7 +758,7 @@ abstract class Abstracts
 
         $args = $join ? [$join, '*', $where] : [$where];
 
-        return $this->db->count($this->table, ...$args);
+        return Db::count($this->table, ...$args);
     }
 
     /**
@@ -822,7 +771,7 @@ abstract class Abstracts
         $aggregation = ['avg', 'max', 'min', 'sum'];
 
         if (!in_array($name, $aggregation, true)) {
-            throw new \BadMethodCallException('Call to undefined method ' . self::class . '::' . $name);
+            throw new BadMethodCallException('Call to undefined method ' . self::class . '::' . $name);
         }
 
         $join = $this->joinData;
@@ -843,17 +792,12 @@ abstract class Abstracts
      * order=-field 表示 field DESC
      *
      * @param  array $defaultOrder     默认排序；query 参数不存在时，该参数才生效
-     * @param  array $allowOrderFields 允许排序的字段，为 null 时，通过 getAllowOrderFields 方法获取
      * @return array
      */
-    public function getOrderFromRequest(array $defaultOrder = [], array $allowOrderFields = null): array
+    public function getOrderFromRequest(array $defaultOrder = []): array
     {
         $result = [];
-        $order = $this->request->getQueryParams()['order'] ?? '';
-
-        if ($allowOrderFields === null) {
-            $allowOrderFields = $this->allowOrderFields;
-        }
+        $order = Request::getQueryParams()['order'] ?? '';
 
         if ($order) {
             if (strpos($order, '-') === 0) {
@@ -862,7 +806,7 @@ abstract class Abstracts
                 $result[$order] = 'ASC';
             }
 
-            $result = collect($result)->only($allowOrderFields)->all();
+            $result = collect($result)->only($this->allowOrderFields)->all();
         }
 
         if (!$result) {
@@ -875,18 +819,25 @@ abstract class Abstracts
     /**
      * 查询列表时的条件
      *
+     * 若启用了软删除，可通过 query 参数传入 trashed，用于仅获取回收站中的数据。仅管理员可添加该参数
+     *
      * @param  array $defaultFilter     默认条件。该条件将覆盖 query 中的同名参数
-     * @param  array $allowFilterFields 允许作为条件的字段，为 null 时，通过 getAllowFilterFields 方法获取
      * @return array
      */
-    public function getWhereFromRequest(array $defaultFilter = [], array $allowFilterFields = null): array
+    public function getWhereFromRequest(array $defaultFilter = []): array
     {
-        if ($allowFilterFields === null) {
-            $allowFilterFields = $this->allowFilterFields;
+        $result = Request::getQueryParams();
+
+        if (
+            isset($result['trashed']) &&
+            $result['trashed'] === 'true' &&
+            $this->softDelete &&
+            Auth::isManager()
+        ) {
+            $this->onlyTrashed();
         }
 
-        $result = $this->request->getQueryParams();
-        $result = collect($result)->only($allowFilterFields)->merge($defaultFilter)->all();
+        $result = collect($result)->only($this->allowFilterFields)->merge($defaultFilter)->all();
 
         return $result;
     }

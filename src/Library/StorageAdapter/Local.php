@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace MDClub\Library\StorageAdapter;
 
-use MDClub\Traits\Url;
-use Psr\Container\ContainerInterface;
+use MDClub\Constant\OptionConstant;
+use MDClub\Facade\Library\Option;
+use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -14,8 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class Local extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * 存储路径
      *
@@ -28,13 +27,8 @@ class Local extends Abstracts implements Interfaces
      */
     protected $filesystem;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
         $this->setPathPrefix();
     }
 
@@ -57,7 +51,7 @@ class Local extends Abstracts implements Interfaces
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->option->storage_local_dir;
+        $prefix = Option::get(OptionConstant::STORAGE_LOCAL_DIR);
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -86,11 +80,11 @@ class Local extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $data['o'] = $storagePath . $path;
 
         foreach (array_keys($thumbs) as $size) {
-            $data[$size] = $url . $this->getThumbLocation($path, $size);
+            $data[$size] = $storagePath . $this->getThumbLocation($path, $size);
         }
 
         return $data;
@@ -106,14 +100,18 @@ class Local extends Abstracts implements Interfaces
 
         $filesystem->copy((string) $stream->getMetadata('uri'), $location);
 
-        $this->crop($stream, $thumbs, $location,
+        $this->crop(
+            $stream,
+            $thumbs,
+            $location,
             /**
              * @param string $pathTmp      缩略图临时文件路径
              * @param string $cropLocation 缩略图将要保存的路径
              */
             function (string $pathTmp, string $cropLocation) use ($filesystem) {
                 $filesystem->copy($pathTmp, $cropLocation);
-            });
+            }
+        );
     }
 
     /**

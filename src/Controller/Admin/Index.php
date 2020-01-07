@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Admin;
 
-use MDClub\Controller\Abstracts;
 use MDClub\Exception\SystemException;
-use MDClub\Traits\Url;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\View;
+use MDClub\Facade\Service\UserService;
+use MDClub\Helper\Url;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * 管理后台首页
  */
-class Index extends Abstracts
+class Index
 {
-    use Url;
-
     /**
      * 后台管理控制台页面
      *
@@ -23,65 +23,42 @@ class Index extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        if ($this->auth->isNotManager()) {
-            return $this->render('/404.php');
+        $staticUrl = Url::staticPath();
+        $webpackAssetsPath = "{$staticUrl}admin/webpack-assets.json";
+
+        if (!$assetsInfo = file_get_contents($webpackAssetsPath)) {
+            throw new SystemException("Can not find file: {$webpackAssetsPath}");
         }
 
-        $userId = (int)$this->auth->userId();
-        $siteUrl = $this->getSiteUrl();
-        $staticUrl = $this->getStaticUrl();
-        $rootUrl = $this->getRootUrl();
+        collect(json_decode($assetsInfo, true))
+            ->flatten()
+            ->each(
+                static function ($item) use ($staticUrl, &$css, &$js) {
+                    if ($item === 'bundle.js') {
+                        $js .= "<script src='http://localhost:8080/${item}'></script>";
 
-        if (!$assetsInfo = file_get_contents($staticUrl . 'admin/webpack-assets.json')) {
-            throw new SystemException('Can not find file: ' . $staticUrl . 'admin/webpack-assets.json');
-        }
+                        return;
+                    }
 
-        $assetsInfo = json_decode($assetsInfo, true);
-        $css = $js = [];
+                    $assets = "${staticUrl}admin/${item}";
 
-        collect($assetsInfo)->flatten()->each(static function ($item) use ($staticUrl, &$css, &$js) {
-            if ($item === 'bundle.js') {
-                $js[] = "<script src='http://localhost:8080/${item}'></script>";
-            } elseif (strpos($item, 'css') === 0) {
-                $css[] = "<link rel='stylesheet' href='${staticUrl}admin/${item}'/>";
-            } elseif (strpos($item, 'js') === 0) {
-                $js[] = "<script src='${staticUrl}admin/${item}'></script>";
-            }
-        });
+                    if (strpos($item, 'css') === 0) {
+                        $css .= "<link rel='stylesheet' href='${assets}'/>";
+                    } elseif (strpos($item, 'js') === 0) {
+                        $js .= "<script src='${assets}'></script>";
+                    }
+                }
+            );
 
-        $cssString = implode('', $css);
-        $jsString = implode('', $js);
-
-        $userInfo = $this->userGetService->get($userId);
-        $userInfo = json_encode($userInfo);
-
-        $this->response = $this->response->withHeader('Content-Type', 'text/html; charset=utf-8');
-        $this->response->getBody()->write(<<<END
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <title></title>
-    $cssString
-</head>
-<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-blue mdui-theme-accent-blue">
-    <script>
-        window.G_API = "$rootUrl/api"; // api 地址
-        window.G_ROOT = "$rootUrl"; // 网站根目录相对路径
-        window.G_ADMIN_ROOT = "$rootUrl/admin"; // 网站后台根目录相对路径
-        window.G_SITE = "$siteUrl"; // 网址（含域名）
-        window.G_USER = $userInfo;
-    </script>
-    $jsString
-</body>
-</html>
-END
+        return View::render(
+            '/admin.php',
+            [
+                'css' => $css,
+                'js' => $js,
+                'root' => Url::rootPath(),
+                'host' => Url::hostPath(),
+                'user' => UserService::get(Auth::userId()),
+            ]
         );
-
-        return $this->response;
     }
 }

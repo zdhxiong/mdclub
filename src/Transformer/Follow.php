@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Model\FollowModel;
+
 /**
  * 关注转换器
- *
- * @property-read \MDClub\Model\Follow $followModel
  */
 class Follow extends Abstracts
 {
@@ -20,9 +21,7 @@ class Follow extends Abstracts
      */
     public function getInRelationship(array $targetIds, string $targetType): array
     {
-        $userId = $this->auth->userId();
-
-        if (!$userId) {
+        if (!Auth::userId()) {
             return [];
         }
 
@@ -30,14 +29,11 @@ class Follow extends Abstracts
             return [];
         }
 
-        $followingIds = $this->followModel
-            ->where([
-                'user_id'         => $userId,
+        return FollowModel::where([
+                'user_id'         => Auth::userId(),
                 'followable_id'   => $targetIds,
                 'followable_type' => $targetType,
             ])
             ->pluck('followable_id');
-
-        return $followingIds;
     }
 }

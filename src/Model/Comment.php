@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Comment as CommentObserver;
+use MDClub\Facade\Library\Auth;
 
 /**
  * 评论模型
@@ -15,7 +15,6 @@ class Comment extends Abstracts
     public $primaryKey = 'comment_id';
     protected $timestamps = true;
     protected $softDelete = true;
-    protected $observe = CommentObserver::class;
 
     public $columns = [
         'comment_id',
@@ -40,6 +39,15 @@ class Comment extends Abstracts
         'commentable_type',
         'user_id'
     ];
+
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowOrderFields[] = 'delete_time';
+        }
+
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -95,20 +103,47 @@ class Comment extends Abstracts
     }
 
     /**
-     * 根据 url 参数获取回收站中的评论列表
+     * 根据关联ID删除评论
      *
-     * @return array
+     * @param string $type
+     * @param array  $ids
      */
-    public function getDeleted(): array
+    protected function deleteByIds(string $type, array $ids): void
     {
-        $defaultOrder = ['delete_time' => 'DESC'];
-        $allowOrderFields = collect($this->allowOrderFields)->push('delete_time')->unique()->all();
-        $order = $this->getOrderFromRequest($defaultOrder, $allowOrderFields);
+        $this
+            ->force()
+            ->where('commentable_type', $type)
+            ->where('commentable_id', $ids)
+            ->delete();
+    }
 
-        return $this
-            ->onlyTrashed()
-            ->where($this->getWhereFromRequest())
-            ->order($order)
-            ->paginate();
+    /**
+     * 根据回答ID删除评论
+     *
+     * @param array $answerIds
+     */
+    public function deleteByAnswerIds(array $answerIds): void
+    {
+        $this->deleteByIds('answer', $answerIds);
+    }
+
+    /**
+     * 根据文章ID删除评论
+     *
+     * @param array $articleIds
+     */
+    public function deleteByArticleIds(array $articleIds): void
+    {
+        $this->deleteByIds('article', $articleIds);
+    }
+
+    /**
+     * 根据提问ID删除评论
+     *
+     * @param array $questionIds
+     */
+    public function deleteByQuestionIds(array $questionIds): void
+    {
+        $this->deleteByIds('question', $questionIds);
     }
 }

@@ -4,31 +4,28 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
+use MDClub\Initializer\App;
 use Medoo\Medoo;
 use PDO;
-use Psr\Container\ContainerInterface;
 
 /**
  * ORM
  */
 class Db extends Medoo
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $config = $container->get('settings')['database'];
+        $config = App::$config;
         $options = [
-            'database_type' => $config['driver'],
-            'server'        => $config['host'],
-            'database_name' => $config['database'],
-            'username'      => $config['username'],
-            'password'      => $config['password'],
-            'charset'       => $config['charset'],
-            'port'          => $config['port'],
-            'prefix'        => $config['prefix'],
-            'logging'       => $container->get('settings')['debug'],
+            'database_type' => $config['DB_CONNECTION'],
+            'server'        => $config['DB_HOST'],
+            'database_name' => $config['DB_DATABASE'],
+            'username'      => $config['DB_USERNAME'],
+            'password'      => $config['DB_PASSWORD'],
+            'charset'       => $config['DB_CHARSET'],
+            'port'          => $config['DB_PORT'],
+            'prefix'        => $config['DB_PREFIX'],
+            'logging'       => $config['APP_DEBUG'],
             'option'        => [
                 PDO::ATTR_CASE               => PDO::CASE_NATURAL,
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

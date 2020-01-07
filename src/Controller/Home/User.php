@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\View;
+use MDClub\Facade\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 用户
+ * 用户页面
  */
-class User extends Abstracts
+class User
 {
     /**
      * 用户列表页
@@ -19,17 +20,23 @@ class User extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/user/index.php');
+        return View::render('/user/index.php');
     }
 
     /**
      * 用户详情页
      *
-     * @param  int      $user_id
+     * @param int $userId
+     *
      * @return ResponseInterface
      */
-    public function info(int $user_id): ResponseInterface
+    public function info(int $userId): ResponseInterface
     {
-        return $this->render('/user/info.php');
+        return View::render(
+            '/user/info.php',
+            [
+                'user' => UserService::getOrFail($userId),
+            ]
+        );
     }
 }

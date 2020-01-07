@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MDClub\Initializer;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
@@ -15,26 +14,14 @@ use Slim\Interfaces\InvocationStrategyInterface;
 class RouteStrategy implements InvocationStrategyInterface
 {
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * 根据控制器返回的数组构建响应
      *
      * @param  ResponseInterface $response
      * @param  array             $data
      * @return ResponseInterface
      */
-    protected function withArray(ResponseInterface $response, array $data): ResponseInterface {
+    protected function withArray(ResponseInterface $response, array $data): ResponseInterface
+    {
         $result = ['code' => 0];
 
         if (isset($data['data'], $data['pagination'])) {
@@ -70,13 +57,23 @@ class RouteStrategy implements InvocationStrategyInterface
         ResponseInterface $response,
         array $routeArguments
     ): ResponseInterface {
-        $this->container->offsetSet('request', $request);
-        $this->container->offsetSet('response', $response);
+        // 经过中间件处理后的请求和响应实例
+        App::$container->offsetSet(ServerRequestInterface::class, $request);
+        App::$container->offsetSet(ResponseInterface::class, $response);
 
-        // 将整数参数转化为整型，其他参数保持字符串型
         foreach ($routeArguments as &$arg) {
             if (is_numeric($arg)) {
+                // 将整数参数转化为整型
                 $arg = (int) $arg;
+            } elseif (strpos($arg, ',') > -1) {
+                // 将逗号分隔的字符串转换为数组，并取前100个元素
+                $arg = array_slice(explode(',', $arg), 0, 100);
+
+                foreach ($arg as &$argTmp) {
+                    if (is_numeric($argTmp)) {
+                        $argTmp = (int) $argTmp;
+                    }
+                }
             }
         }
 

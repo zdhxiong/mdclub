@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Library\CacheAdapter;
 
-use Psr\Container\ContainerInterface;
+use MDClub\Constant\OptionConstant;
+use MDClub\Facade\Library\Db;
+use MDClub\Facade\Library\Option;
+use MDClub\Initializer\App;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 
 /**
@@ -12,17 +15,13 @@ use Symfony\Component\Cache\Adapter\PdoAdapter;
  */
 class Pdo extends PdoAdapter
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        $databaseConfig = $container->get('settings')['database'];
-        $pdo = $container->get('db')->pdo;
-        $namespace = $container->get('option')->cache_prefix;
+        $pdo = Db::getInstance()->pdo;
+        $namespace = Option::get(OptionConstant::CACHE_PREFIX);
         $defaultLifetime = 0;
         $config = [
-            'db_table'        => $databaseConfig['prefix'] . 'cache',
+            'db_table'        => App::$config['DB_PREFIX'] . 'cache',
             'db_id_col'       => 'name',
             'db_data_col'     => 'value',
             'db_lifetime_col' => 'life_time',

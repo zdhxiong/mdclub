@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Token as TokenObserver;
-
 /**
  * Token 模型
  */
@@ -14,7 +12,6 @@ class Token extends Abstracts
     public $table = 'token';
     public $primaryKey = 'token';
     protected $timestamps = true;
-    protected $observe = TokenObserver::class;
 
     public $columns = [
         'token',

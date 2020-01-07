@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Library\StorageAdapter;
 
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
-use MDClub\Traits\Url;
-use Psr\Container\ContainerInterface;
+use MDClub\Facade\Library\Option;
+use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -16,8 +17,6 @@ use Psr\Http\Message\StreamInterface;
  */
 class Ftp extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * FTP 连接 resource
      *
@@ -32,25 +31,20 @@ class Ftp extends Abstracts implements Interfaces
      */
     protected $pathPrefix;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
         if (!extension_loaded('ftp')) {
             throw new SystemException('PHP extension FTP is not loaded.');
         }
 
         $this->setPathPrefix();
 
-        $username = $this->option->storage_ftp_username;
-        $password = $this->option->storage_ftp_password;
-        $host = $this->option->storage_ftp_host;
-        $port = $this->option->storage_ftp_port;
-        $ssl = $this->option->storage_ftp_ssl;
-        $passive = $this->option->storage_ftp_passive;
+        $username = Option::get(OptionConstant::STORAGE_FTP_USERNAME);
+        $password = Option::get(OptionConstant::STORAGE_FTP_PASSWORD);
+        $host = Option::get(OptionConstant::STORAGE_FTP_HOST);
+        $port = Option::get(OptionConstant::STORAGE_FTP_PORT);
+        $ssl = Option::get(OptionConstant::STORAGE_FTP_SSL);
+        $passive = Option::get(OptionConstant::STORAGE_FTP_PASSIVE);
 
         $this->connection = $ssl
             ? ftp_ssl_connect($host, (int) $port)
@@ -69,7 +63,7 @@ class Ftp extends Abstracts implements Interfaces
      */
     protected function setPathPrefix(): void
     {
-        $prefix = $this->option->storage_ftp_root;
+        $prefix = Option::get(OptionConstant::STORAGE_FTP_ROOT);
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
@@ -118,11 +112,11 @@ class Ftp extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $data['o'] = $storagePath . $path;
 
         foreach (array_keys($thumbs) as $size) {
-            $data[$size] = $url . $this->getThumbLocation($path, $size);
+            $data[$size] = $storagePath . $this->getThumbLocation($path, $size);
         }
 
         return $data;
@@ -138,14 +132,18 @@ class Ftp extends Abstracts implements Interfaces
 
         ftp_put($this->connection, $location, $stream->getMetadata('uri'), FTP_BINARY);
 
-        $this->crop($stream, $thumbs, $location,
+        $this->crop(
+            $stream,
+            $thumbs,
+            $location,
             /**
              * @param string $pathTmp      缩略图临时文件路径
              * @param string $cropLocation 缩略图将要保存的路径
              */
             function ($pathTmp, $cropLocation) {
                 ftp_put($this->connection, $cropLocation, $pathTmp, FTP_BINARY);
-            });
+            }
+        );
     }
 
     /**

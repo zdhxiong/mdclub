@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace MDClub\Route;
 
 use MDClub\Controller\Admin\Index;
-use Slim\App;
+use MDClub\Initializer\App;
+use MDClub\Middleware\ManagerOr404;
 
 /**
  * 管理后台路由
  */
 class Admin
 {
-    public function __construct(App $app)
+    public function __construct()
     {
-        /**
-         * 后台管理首页
-         *
-         * @see Index::index()
-         */
-        $app->get('/admin[/{path}]', Index::class . ':index');
+        $slim = App::$slim;
+
+        $slim
+            ->get('/admin[/{path}]', Index::class . ':index')
+            ->add(ManagerOr404::class);
     }
 }

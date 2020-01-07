@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace MDClub\Library\CacheAdapter;
 
-use Psr\Container\ContainerInterface;
+use MDClub\Constant\OptionConstant;
+use MDClub\Facade\Library\Option;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 /**
@@ -12,18 +13,13 @@ use Symfony\Component\Cache\Adapter\RedisAdapter;
  */
 class Redis extends RedisAdapter
 {
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        [
-            'cache_redis_username' => $username,
-            'cache_redis_password' => $password,
-            'cache_redis_host' => $host,
-            'cache_redis_port' => $port,
-            'cache_prefix' => $namespace,
-        ] = $container->get('option')->all();
+        $username = Option::get(OptionConstant::CACHE_REDIS_USERNAME);
+        $password = Option::get(OptionConstant::CACHE_REDIS_PASSWORD);
+        $host = Option::get(OptionConstant::CACHE_REDIS_HOST);
+        $port = Option::get(OptionConstant::CACHE_REDIS_PORT);
+        $namespace = Option::get(OptionConstant::CACHE_PREFIX);
 
         $client = RedisAdapter::createConnection("redis://${username}:${password}@${host}:${port}");
 

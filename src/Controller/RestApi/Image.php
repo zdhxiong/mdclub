@@ -4,66 +4,36 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
-use MDClub\Helper\Request;
-use MDClub\Middleware\NeedManager;
-use Psr\Http\Message\UploadedFileInterface;
+use MDClub\Controller\RestApi\Traits\Getable;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Service\ImageService;
 
 /**
- * 图片
+ * 图片 API
  */
 class Image extends Abstracts
 {
+    use Getable;
+
     /**
-     * 获取图片列表
-     *
-     * @uses NeedManager
-     * @return array
+     * @inheritDoc
      */
-    public function getList(): array
+    protected function getService(): string
     {
-        return $this->imageGetService->getList();
+        return \MDClub\Service\Image::class;
     }
 
     /**
-     * 上传图片
+     * 上传单张图片
      *
      * @return array
      */
     public function upload(): array
     {
-        /** @var UploadedFileInterface $file */
-        $file = $this->request->getUploadedFiles()['image'] ?? null;
+        $files = Request::getUploadedFiles();
+        $key = ImageService::upload($files);
 
-        $key = $this->imageUploadService->upload($file);
-
-        return $this->imageGetService->get($key);
-    }
-
-    /**
-     * 批量删除图片
-     *
-     * @uses NeedManager
-     * @return array
-     */
-    public function deleteMultiple(): array
-    {
-        $keys = Request::getQueryParamToArray($this->request, 'key', 40);
-
-        $this->imageDeleteService->deleteMultiple($keys);
-
-        return [];
-    }
-
-    /**
-     * 获取图片信息
-     *
-     * @param  string  $key
-     * @return array
-     */
-    public function get(string $key): array
-    {
-        return $this->imageGetService->get($key);
+        return ImageService::get($key);
     }
 
     /**
@@ -71,14 +41,27 @@ class Image extends Abstracts
      *
      * @param  string   $key
      * @return array
-     * @uses NeedManager
      */
     public function update(string $key): array
     {
-        $filename = $this->request->getParsedBody()['filename'] ?? '';
-        $this->imageUpdateService->update($key, ['filename' => $filename]);
+        $requestBody = Request::getParsedBody();
+        ImageService::update($key, $requestBody);
 
-        return $this->imageGetService->get($key);
+        return ImageService::get($key);
+    }
+
+    /**
+     * 批量删除图片
+     *
+     * @param array $keys
+     *
+     * @return array
+     */
+    public function deleteMultiple(array $keys): array
+    {
+        ImageService::deleteMultiple($keys);
+
+        return [];
     }
 
     /**
@@ -86,11 +69,10 @@ class Image extends Abstracts
      *
      * @param  string   $key
      * @return array
-     * @uses NeedManager
      */
     public function delete(string $key): array
     {
-        $this->imageDeleteService->delete($key);
+        ImageService::delete($key);
 
         return [];
     }

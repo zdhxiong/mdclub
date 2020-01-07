@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\Captcha as CaptchaLibrary;
 
 /**
- * 验证码
+ * 验证码 API
  */
-class Captcha extends Abstracts
+class Captcha
 {
     /**
      * 生成图形验证码
@@ -18,7 +18,7 @@ class Captcha extends Abstracts
      */
     public function create(): array
     {
-        $captcha = $this->captcha->generate(100, 36);
+        $captcha = CaptchaLibrary::generate(100, 36);
 
         return [
             'captcha_token' => $captcha['token'],

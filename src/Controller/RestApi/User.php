@@ -4,25 +4,33 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
-use MDClub\Helper\Request;
-use MDClub\Middleware\Transform\Answer;
-use Psr\Http\Message\UploadedFileInterface;
+use MDClub\Controller\RestApi\Traits\Followable;
+use MDClub\Controller\RestApi\Traits\Getable;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Service\AnswerService;
+use MDClub\Facade\Service\ArticleService;
+use MDClub\Facade\Service\CommentService;
+use MDClub\Facade\Service\QuestionService;
+use MDClub\Facade\Service\TopicService;
+use MDClub\Facade\Service\UserAvatarService;
+use MDClub\Facade\Service\UserCoverService;
+use MDClub\Facade\Service\UserService;
 
 /**
- * 用户 restful api
+ * 用户 API
  */
 class User extends Abstracts
 {
+    use Followable;
+    use Getable;
+
     /**
-     * 获取用户列表
-     *
-     * @uses \MDClub\Middleware\Transform\User
-     * @return array
+     * @inheritDoc
      */
-    public function getList(): array
+    protected function getService(): string
     {
-        return $this->userGetService->getList();
+        return \MDClub\Service\User::class;
     }
 
     /**
@@ -32,243 +40,144 @@ class User extends Abstracts
      */
     public function register(): array
     {
-        return $this->userRegisterService
-            ->register(
-                $this->request->getParsedBody()['email'] ?? '',
-                $this->request->getParsedBody()['email_code'] ?? '',
-                $this->request->getParsedBody()['username'] ?? '',
-                $this->request->getParsedBody()['password'] ?? '',
-                $this->request->getParsedBody()['device'] ?? ''
-            );
-    }
-
-    /**
-     * 批量禁用用户
-     *
-     * @uses NeedManager
-     * @return array
-     */
-    public function disableMultiple(): array
-    {
-        $userIds = Request::getQueryParamToArray($this->request, 'user_id', 100) ?? [];
-
-        $this->userDisableService->disableMultiple($userIds);
-
-        return [];
-    }
-
-    /**
-     * 获取指定用户的信息
-     *
-     * @uses   \MDClub\Middleware\Transform\User
-     * @param  int      $user_id
-     * @return array
-     */
-    public function get(int $user_id): array
-    {
-        return $this->userGetService->getOrFail($user_id);
+        return UserService::register(Request::getParsedBody());
     }
 
     /**
      * 更新指定用户信息
      *
-     * @uses NeedManager
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function update(int $user_id): array
+    public function update(int $userId): array
     {
-        $this->userUpdateService->update($user_id, $this->request->getParsedBody());
+        UserService::update($userId, Request::getParsedBody());
 
-        return $this->userGetService->get($user_id);
-    }
-
-    /**
-     * 禁用指定用户，实质上是软删除用户，用户不能物理删除
-     *
-     * @uses NeedManager
-     * @param  int      $user_id
-     * @return array
-     */
-    public function disable(int $user_id): array
-    {
-        $this->userDisableService->disable($user_id);
-
-        return [];
+        return UserService::get($userId);
     }
 
     /**
      * 删除指定用户的头像
      *
-     * @uses NeedManager
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function deleteAvatar(int $user_id): array
+    public function deleteAvatar(int $userId): array
     {
-        $filename = $this->userAvatarService->delete($user_id);
+        $filename = UserAvatarService::delete($userId);
 
-        return $this->userAvatarService->getBrandUrls($user_id, $filename);
+        return UserAvatarService::getBrandUrls($userId, $filename);
     }
 
     /**
      * 删除指定用户的封面
      *
-     * @uses NeedManager
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function deleteCover(int $user_id): array
+    public function deleteCover(int $userId): array
     {
-        $this->userCoverService->delete($user_id);
+        UserCoverService::delete($userId);
 
-        return $this->userCoverService->getBrandUrls($user_id);
-    }
-
-    /**
-     * 获取指定用户的关注者
-     *
-     * @uses   \MDClub\Middleware\Transform\User
-     * @param  int      $user_id
-     * @return array
-     */
-    public function getFollowers(int $user_id): array
-    {
-        return $this->userFollowService->getFollowers($user_id);
-    }
-
-    /**
-     * 添加关注
-     *
-     * @uses NeedLogin
-     * @param  int      $user_id
-     * @return array
-     */
-    public function addFollow(int $user_id): array
-    {
-        $this->userFollowService->addFollow($user_id);
-        $followerCount = $this->userFollowService->getFollowerCount($user_id);
-
-        return ['follower_count' => $followerCount];
-    }
-
-    /**
-     * 取消关注
-     *
-     * @uses NeedLogin
-     * @param  int      $user_id
-     * @return array
-     */
-    public function deleteFollow(int $user_id): array
-    {
-        $this->userFollowService->deleteFollow($user_id);
-        $followerCount = $this->userFollowService->getFollowerCount($user_id);
-
-        return ['follower_count' => $followerCount];
+        return UserCoverService::getBrandUrls($userId);
     }
 
     /**
      * 获取指定用户关注的人
      *
-     * @uses   \MDClub\Middleware\Transform\User
-     * @param  int $user_id
+     * @param  int $userId
      * @return array
      */
-    public function getFollowees(int $user_id): array
+    public function getFollowees(int $userId): array
     {
-        return $this->userFollowService->getFollowing($user_id);
+        return UserService::getFollowing($userId);
     }
 
     /**
      * 获取指定用户关注的提问
      *
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function getFollowingQuestions(int $user_id): array
+    public function getFollowingQuestions(int $userId): array
     {
-        return $this->questionFollowService->getFollowing($user_id);
+        return QuestionService::getFollowing($userId);
     }
 
     /**
      * 获取指定用户关注的文章列表
      *
-     * @param  int   $user_id
+     * @param  int   $userId
      * @return array
      */
-    public function getFollowingArticles(int $user_id): array
+    public function getFollowingArticles(int $userId): array
     {
-        return $this->articleFollowService->getFollowing($user_id);
+        return ArticleService::getFollowing($userId);
     }
 
     /**
      * 获取指定用户关注的话题列表
      *
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function getFollowingTopics(int $user_id): array
+    public function getFollowingTopics(int $userId): array
     {
-        return $this->topicFollowService->getFollowing($user_id);
+        return TopicService::getFollowing($userId);
     }
 
     /**
      * 获取指定用户发表的提问列表
      *
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function getQuestions(int $user_id): array
+    public function getQuestions(int $userId): array
     {
-        return $this->questionGetService->getByUserId($user_id);
+        return QuestionService::getByUserId($userId);
     }
 
     /**
      * 获取指定用户发表的回答列表
      *
-     * @uses   Answer
-     * @param  int    $user_id
+     * @param  int    $userId
      * @return array
      */
-    public function getAnswers(int $user_id): array
+    public function getAnswers(int $userId): array
     {
-        return $this->answerGetService->getByUserId($user_id);
+        return AnswerService::getByUserId($userId);
     }
 
     /**
      * 获取指定用户发表的文章列表
      *
-     * @param  int   $user_id
+     * @param  int   $userId
      * @return array
      */
-    public function getArticles(int $user_id): array
+    public function getArticles(int $userId): array
     {
-        return $this->articleGetService->getByUserId($user_id);
+        return ArticleService::getByUserId($userId);
     }
 
     /**
      * 获取指定用户发表的评论列表
      *
-     * @param  int      $user_id
+     * @param  int      $userId
      * @return array
      */
-    public function getComments(int $user_id): array
+    public function getComments(int $userId): array
     {
-        return $this->commentGetService->getByUserId($user_id);
+        return CommentService::getByUserId($userId);
     }
 
     /**
      * 获取我的用户信息
      *
      * @return array
-     *@uses User
-     * @uses NeedLogin
      */
     public function getMine(): array
     {
-        $userId = $this->auth->userId();
-
-        return $this->userGetService->get($userId);
+        return UserService::get(Auth::userId());
     }
 
     /**
@@ -278,72 +187,64 @@ class User extends Abstracts
      */
     public function updateMine(): array
     {
-        $userId = $this->auth->userId();
-        $this->userUpdateService->update($userId, $this->request->getParsedBody());
+        $userId = Auth::userId();
 
-        return $this->userGetService->get($userId);
+        UserService::update($userId, Request::getParsedBody());
+
+        return UserService::get($userId);
     }
 
     /**
      * 上传我的头像
      *
-     * @uses NeedLogin
      * @return array
      */
     public function uploadMyAvatar(): array
     {
-        /** @var UploadedFileInterface $avatar */
-        $avatar = $this->request->getUploadedFiles()['avatar'] ?? null;
+        $userId = Auth::userId();
+        $filename = UserAvatarService::upload($userId, Request::getUploadedFiles());
 
-        $userId = $this->auth->userId();
-        $filename = $this->userAvatarService->upload($userId, $avatar);
-
-        return $this->userAvatarService->getBrandUrls($userId, $filename);
+        return UserAvatarService::getBrandUrls($userId, $filename);
     }
 
     /**
      * 删除我的的头像
      *
-     * @uses NeedLogin
      * @return array
      */
     public function deleteMyAvatar(): array
     {
-        $userId = $this->auth->userId();
-        $filename = $this->userAvatarService->delete($userId);
+        $userId = Auth::userId();
+        $filename = UserAvatarService::delete($userId);
 
-        return $this->userAvatarService->getBrandUrls($userId, $filename);
+        return UserAvatarService::getBrandUrls($userId, $filename);
     }
 
     /**
      * 上传我的封面
      *
-     * @uses NeedLogin
      * @return array
      */
     public function uploadMyCover(): array
     {
-        /** @var UploadedFileInterface $cover */
-        $cover = $this->request->getUploadedFiles()['cover'] ?? null;
+        $userId = Auth::userId();
+        $filename = UserCoverService::upload($userId, Request::getUploadedFiles());
 
-        $userId = $this->auth->userId();
-        $filename = $this->userCoverService->upload($userId, $cover);
-
-        return $this->userCoverService->getBrandUrls($userId, $filename);
+        return UserCoverService::getBrandUrls($userId, $filename);
     }
 
     /**
      * 删除我的封面
      *
-     * @uses NeedLogin
      * @return array
      */
     public function deleteMyCover(): array
     {
-        $userId = $this->auth->userId();
-        $this->userCoverService->delete($userId);
+        $userId = Auth::userId();
 
-        return $this->userCoverService->getBrandUrls($userId);
+        UserCoverService::delete($userId);
+
+        return UserCoverService::getBrandUrls($userId);
     }
 
     /**
@@ -353,9 +254,7 @@ class User extends Abstracts
      */
     public function sendRegisterEmail(): array
     {
-        $this->userRegisterService->sendEmail(
-            $this->request->getParsedBody()['email'] ?? ''
-        );
+        UserService::sendRegisterEmail(Request::getParsedBody());
 
         return [];
     }
@@ -367,9 +266,7 @@ class User extends Abstracts
      */
     public function sendPasswordResetEmail(): array
     {
-        $this->userPasswordResetService->sendEmail(
-            $this->request->getParsedBody()['email'] ?? ''
-        );
+        UserService::sendPasswordResetEmail(Request::getParsedBody());
 
         return [];
     }
@@ -381,11 +278,7 @@ class User extends Abstracts
      */
     public function updatePassword(): array
     {
-        $this->userPasswordResetService->reset(
-            $this->request->getParsedBody()['email'] ?? '',
-            $this->request->getParsedBody()['email_code'] ?? '',
-            $this->request->getParsedBody()['password'] ?? ''
-        );
+        UserService::updatePassword(Request::getParsedBody());
 
         return [];
     }
@@ -394,28 +287,20 @@ class User extends Abstracts
      * 获取我的关注者
      *
      * @return array
-     *@uses User
-     * @uses NeedLogin
      */
     public function getMyFollowers(): array
     {
-        $userId = $this->auth->userId();
-
-        return $this->userFollowService->getFollowers($userId);
+        return UserService::getFollowers(Auth::userId());
     }
 
     /**
      * 获取我关注的人
      *
      * @return array
-     *@uses User
-     * @uses NeedLogin
      */
     public function getMyFollowees(): array
     {
-        $userId = $this->auth->userId();
-
-        return $this->userFollowService->getFollowing($userId);
+        return UserService::getFollowing(Auth::userId());
     }
 
     /**
@@ -425,7 +310,7 @@ class User extends Abstracts
      */
     public function getMyFollowingQuestions(): array
     {
-        return $this->questionFollowService->getFollowing($this->auth->userId());
+        return QuestionService::getFollowing(Auth::userId());
     }
 
     /**
@@ -435,7 +320,7 @@ class User extends Abstracts
      */
     public function getMyFollowingArticles(): array
     {
-        return $this->articleFollowService->getFollowing($this->auth->userId());
+        return ArticleService::getFollowing(Auth::userId());
     }
 
     /**
@@ -445,7 +330,7 @@ class User extends Abstracts
      */
     public function getMyFollowingTopics(): array
     {
-        return $this->topicFollowService->getFollowing($this->auth->userId());
+        return TopicService::getFollowing(Auth::userId());
     }
 
     /**
@@ -455,18 +340,17 @@ class User extends Abstracts
      */
     public function getMyQuestions(): array
     {
-        return $this->questionGetService->getByUserId($this->auth->userId());
+        return QuestionService::getByUserId(Auth::userId());
     }
 
     /**
      * 获取当前用户发表的回答列表
      *
-     * @uses NeedLogin
      * @return array
      */
     public function getMyAnswers(): array
     {
-        return $this->answerGetService->getByUserId($this->auth->userId());
+        return AnswerService::getByUserId(Auth::userId());
     }
 
     /**
@@ -476,7 +360,7 @@ class User extends Abstracts
      */
     public function getMyArticles(): array
     {
-        return $this->articleGetService->getByUserId($this->auth->userId());
+        return ArticleService::getByUserId(Auth::userId());
     }
 
     /**
@@ -486,47 +370,60 @@ class User extends Abstracts
      */
     public function getMyComments(): array
     {
-        return $this->commentGetService->getByUserId($this->auth->userId());
+        return CommentService::getByUserId(Auth::userId());
     }
 
     /**
-     * 获取已禁用用户列表
+     * 批量禁用用户
+     *
+     * @param array $userIds
      *
      * @return array
-     *@uses User
-     * @uses NeedManager
      */
-    public function getDisabled(): array
+    public function disableMultiple(array $userIds): array
     {
-        return $this->userGetService->getDisabled();
+        UserService::disableMultiple($userIds);
+
+        return UserService::getMultiple($userIds);
+    }
+
+    /**
+     * 禁用指定用户，实质上是软删除用户，用户不能物理删除
+     *
+     * @param  int      $userId
+     * @return array
+     */
+    public function disable(int $userId): array
+    {
+        UserService::disable($userId);
+
+        return UserService::get($userId);
     }
 
     /**
      * 批量恢复用户
      *
-     * @uses NeedManager
+     * @param array $userIds
+     *
      * @return array
      */
-    public function enableMultiple(): array
+    public function enableMultiple(array $userIds): array
     {
-        $userIds = Request::getQueryParamToArray($this->request, 'user_id', 100) ?? [];
+        UserService::enableMultiple($userIds);
 
-        $this->userDisableService->enableMultiple($userIds);
-
-        return [];
+        return UserService::getMultiple($userIds);
     }
 
     /**
      * 恢复指定用户
      *
-     * @uses NeedManager
-     * @param  int      $user_id
+     * @param  int   $userId
      * @return array
      */
-    public function enable(int $user_id): array
+    public function enable(int $userId): array
     {
-        $this->userDisableService->enable($user_id);
+        UserService::enable($userId);
 
-        return [];
+        return UserService::get($userId);
     }
 }

@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\Db;
+use MDClub\Facade\Library\View;
+use MDClub\Initializer\App;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * 首页
  */
-class Index extends Abstracts
+class Index
 {
     /**
      * @return ResponseInterface
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/index.php');
+        return View::render('/index.php');
     }
 
     /**
@@ -30,15 +32,15 @@ class Index extends Abstracts
     public function migration(): ResponseInterface
     {
         // answer 表迁移
-        $answers = $this->db->select('md_answer', '*');
+        $answers = Db::select('md_answer', '*');
         foreach ($answers as &$answer) {
             unset($answer['status']);
             $answer['delete_time'] = 0;
         }
-        $this->db->insert('mc_answer', $answers);
+        Db::insert('mc_answer', $answers);
 
         // question 表迁移
-        $questions = $this->db->select('md_question', '*');
+        $questions = Db::select('md_question', '*');
         foreach ($questions as &$question) {
             $question['last_answer_time'] = $question['answer_time'];
             $question['delete_time'] = 0;
@@ -46,11 +48,11 @@ class Index extends Abstracts
             unset($question['status']);
             unset($question['topic_id']);
         }
-        $this->db->insert('mc_question', $questions);
+        Db::insert('mc_question', $questions);
 
         // question_follow 和 user_follow 表迁移
-        $questionFollows = $this->db->select('md_question_follow', '*');
-        $userFollows = $this->db->select('md_user_follow', '*');
+        $questionFollows = Db::select('md_question_follow', '*');
+        $userFollows = Db::select('md_user_follow', '*');
 
         foreach ($questionFollows as &$questionFollow) {
             $questionFollow['followable_id'] = $questionFollow['question_id'];
@@ -66,11 +68,11 @@ class Index extends Abstracts
             unset($userFollow['target_user_id']);
         }
 
-        $this->db->insert('mc_followable', $questionFollows);
-        $this->db->insert('mc_followable', $userFollows);
+        Db::insert('mc_followable', $questionFollows);
+        Db::insert('mc_followable', $userFollows);
 
         // user 表迁移
-        $users = $this->db->select('md_user', '*');
+        $users = Db::select('md_user', '*');
         foreach ($users as &$user) {
             unset($user['mobile']);
             $user['last_login_time'] = $user['login_time'];
@@ -92,9 +94,9 @@ class Index extends Abstracts
             $user['update_time'] = $user['create_time'];
             $user['delete_time'] = 0;
         }
-        $this->db->insert('mc_user', $users);
+        Db::insert('mc_user', $users);
 
 
-        return $this->response;
+        return App::$container->get(ResponseInterface::class);
     }
 }

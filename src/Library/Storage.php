@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MDClub\Library;
 
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
+use MDClub\Facade\Library\Option as OptionFacade;
 use MDClub\Library\StorageAdapter\Aliyun;
 use MDClub\Library\StorageAdapter\Ftp;
 use MDClub\Library\StorageAdapter\Interfaces;
@@ -12,7 +14,6 @@ use MDClub\Library\StorageAdapter\Local;
 use MDClub\Library\StorageAdapter\Qiniu;
 use MDClub\Library\StorageAdapter\Sftp;
 use MDClub\Library\StorageAdapter\Upyun;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -41,21 +42,15 @@ class Storage implements Interfaces
      */
     protected $adapter;
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        /** @var Option $option */
-        $option = $container->get('option');
-
-        $storageType = $option->storage_type;
+        $storageType = OptionFacade::get(OptionConstant::STORAGE_TYPE);
 
         if (!isset($this->adapterMap[$storageType])) {
             throw new SystemException('不存在指定的存储类型：' . $storageType);
         }
 
-        $this->adapter = new $this->adapterMap[$storageType]($container);
+        $this->adapter = new $this->adapterMap[$storageType]();
     }
 
     /**

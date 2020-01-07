@@ -10,6 +10,7 @@ use MDClub\Initializer\Collection;
  * @param  mixed      $value
  * @return Collection
  */
-function collect($value = null) {
+function collect($value = null)
+{
     return new Collection($value);
 }

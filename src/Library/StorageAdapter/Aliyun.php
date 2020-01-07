@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace MDClub\Library\StorageAdapter;
 
 use Buzz\Client\Curl;
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
-use MDClub\Helper\Request;
-use MDClub\Traits\Url;
+use MDClub\Facade\Library\Option;
+use MDClub\Facade\Library\Request;
+use MDClub\Helper\Url;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request as Psr7Request;
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -19,8 +20,6 @@ use Psr\Http\Message\StreamInterface;
  */
 class Aliyun extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * AccessKey ID
      *
@@ -49,17 +48,12 @@ class Aliyun extends Abstracts implements Interfaces
      */
     protected $endpoint;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
-        $this->accessKeyId = $this->option->storage_aliyun_access_id;
-        $this->accessKeySecret = $this->option->storage_aliyun_access_secret;
-        $this->bucket = $this->option->storage_aliyun_bucket;
-        $this->endpoint = $this->option->storage_aliyun_endpoint;
+        $this->accessKeyId = Option::get(OptionConstant::STORAGE_ALIYUN_ACCESS_ID);
+        $this->accessKeySecret = Option::get(OptionConstant::STORAGE_ALIYUN_ACCESS_SECRET);
+        $this->bucket = Option::get(OptionConstant::STORAGE_ALIYUN_BUCKET);
+        $this->endpoint = Option::get(OptionConstant::STORAGE_ALIYUN_ENDPOINT);
     }
 
     /**
@@ -127,15 +121,15 @@ class Aliyun extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = Request::isSupportWebp($this->request);
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $isSupportWebp = Request::isSupportWebp();
+        $data['o'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
             $params = "?x-oss-process=image/resize,m_fill,w_{$width},h_{$height},limit_0";
             $params .= $isSupportWebp ? '/format,webp' : '';
 
-            $data[$size] = "{$url}{$path}{$params}";
+            $data[$size] = "{$storagePath}{$path}{$params}";
         }
 
         return $data;

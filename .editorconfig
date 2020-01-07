@@ -8,21 +8,3 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
-
-## HTML、CSS、JS files
-[{*.js,*.css,*.less,*.json,*.yaml,*babelrc}]
-indent_size = 2
-
-[composer.json]
-indent_size = 4
-
-# Makefiles always use tabs for indentation
-[Makefile]
-indent_style = tab
-
-# Batch files use tabs for indentation
-[*.bat]
-indent_style = tab
-
-[*.md]
-trim_trailing_whitespace = false

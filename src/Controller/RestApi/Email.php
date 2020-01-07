@@ -4,33 +4,30 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
-use MDClub\Helper\Request;
-use MDClub\Middleware\NeedManager;
+use MDClub\Facade\Library\Email as EmailLibrary;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Validator\EmailValidator;
 
 /**
- * 邮件
+ * 邮件 API
  */
-class Email extends Abstracts
+class Email
 {
     /**
      * 发送邮件
      *
-     * @uses NeedManager
      * @return array
      */
     public function send(): array
     {
-        $email = Request::getBodyParamToArray($this->request, 'email', 100);
-        $subject = $this->request->getParsedBody()['subject'] ?? '';
-        $content = $this->request->getParsedBody()['content'] ?? '';
+        $parsedBody = EmailValidator::send(Request::getParsedBody());
 
-        $this->email->send($email, $subject, $content);
+        EmailLibrary::send($parsedBody['email'], $parsedBody['subject'], $parsedBody['content']);
 
         return [
-            'email'   => implode(',', $email),
-            'subject' => $subject,
-            'content' => $content,
+            'email'   => $parsedBody['email'],
+            'subject' => $parsedBody['subject'],
+            'content' => $parsedBody['content'],
         ];
     }
 }

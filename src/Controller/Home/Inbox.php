@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\View;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 私信
+ * 私信页面
  */
-class Inbox extends Abstracts
+class Inbox
 {
     /**
      * 私信列表页
@@ -19,6 +19,6 @@ class Inbox extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/inbox/index.php');
+        return View::render('/inbox/index.php');
     }
 }

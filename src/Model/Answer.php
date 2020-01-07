@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Answer as AnswerObserver;
+use MDClub\Facade\Library\Auth;
 
 /**
  * 回答模型
@@ -15,7 +15,6 @@ class Answer extends Abstracts
     public $primaryKey = 'answer_id';
     protected $timestamps = true;
     protected $softDelete = true;
-    protected $observe = AnswerObserver::class;
 
     public $columns = [
         'answer_id',
@@ -42,6 +41,15 @@ class Answer extends Abstracts
         'user_id',
     ];
 
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowOrderFields[] = 'delete_time';
+        }
+
+        parent::__construct();
+    }
+
     /**
      * @inheritDoc
      */
@@ -54,6 +62,22 @@ class Answer extends Abstracts
     }
 
     /**
+     * 根据指定字段的值获取回答列表
+     *
+     * @param string $field
+     * @param int    $value
+     *
+     * @return array
+     */
+    private function getBy(string $field, int $value): array
+    {
+        return $this
+            ->where($field, $value)
+            ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
+            ->paginate();
+    }
+
+    /**
      * 根据 user_id 获取回答列表
      *
      * @param  int   $userId
@@ -61,10 +85,7 @@ class Answer extends Abstracts
      */
     public function getByUserId(int $userId): array
     {
-        return $this
-            ->where('user_id', $userId)
-            ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
-            ->paginate();
+        return $this->getBy('user_id', $userId);
     }
 
     /**
@@ -75,28 +96,7 @@ class Answer extends Abstracts
      */
     public function getByQuestionId(int $questionId): array
     {
-        return $this
-            ->where('question_id', $questionId)
-            ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
-            ->paginate();
-    }
-
-    /**
-     * 获取 url 参数获取已删除的回答列表
-     *
-     * @return array
-     */
-    public function getDeleted(): array
-    {
-        $defaultOrder = ['delete_time' => 'DESC'];
-        $allowOrderFields = collect($this->allowOrderFields)->push('delete_time')->unique()->all();
-        $order = $this->getOrderFromRequest($defaultOrder, $allowOrderFields);
-
-        return $this
-            ->onlyTrashed()
-            ->where($this->getWhereFromRequest())
-            ->order($order)
-            ->paginate();
+        return $this->getBy('question_id', $questionId);
     }
 
     /**
@@ -110,5 +110,19 @@ class Answer extends Abstracts
             ->where($this->getWhereFromRequest())
             ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
             ->paginate();
+    }
+
+    /**
+     * 减少指定回答的评论数量
+     *
+     * @param int $answerId
+     * @param int $count
+     */
+    public function decCommentCount(int $answerId, int $count): void
+    {
+        $this
+            ->where('answer_id', $answerId)
+            ->dec('comment_count', $count)
+            ->update();
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\AnswerModel;
+
 /**
  * 回答转换器
- *
- * @property-read \MDClub\Model\Answer $answerModel
  */
 class Answer extends Abstracts
 {
@@ -28,8 +28,7 @@ class Answer extends Abstracts
             return [];
         }
 
-        $answers = $this->answerModel
-            ->field(['answer_id', 'content_rendered', 'create_time', 'update_time'])
+        $answers = AnswerModel::field(['answer_id', 'content_rendered', 'create_time', 'update_time'])
             ->select($answerIds);
 
         return collect($answers)

@@ -4,27 +4,35 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Service\TokenService;
 
 /**
- * 身份验证
+ * 身份验证 API
  */
 class Token extends Abstracts
 {
     /**
-     * 创建 token
+     * @inheritDoc
+     */
+    protected function getService(): string
+    {
+        return \MDClub\Service\Token::class;
+    }
+
+    /**
+     * 创建 token（即用户登录）
      *
      * @return array
      */
     public function create(): array
     {
-        $token = $this->tokenCreateService->create(
-            $this->request->getParsedBody()['name'] ?? '',
-            $this->request->getParsedBody()['password'] ?? '',
-            $this->request->getParsedBody()['device'] ?? ''
-        );
-        $this->auth->setToken($token);
+        $requestBody = Request::getParsedBody();
+        $token = TokenService::create($requestBody);
 
-        return $this->auth->getTokenInfo();
+        Auth::setToken($token);
+
+        return Auth::getTokenInfo();
     }
 }

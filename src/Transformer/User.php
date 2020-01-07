@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Model\FollowModel;
+use MDClub\Facade\Model\UserModel;
+use MDClub\Facade\Service\UserAvatarService;
+use MDClub\Facade\Service\UserCoverService;
+use MDClub\Facade\Transformer\FollowTransformer;
+
 /**
  * 用户转换器
- *
- * @property-read \MDClub\Model\Follow        $followModel
- * @property-read \MDClub\Model\User          $userModel
- * @property-read \MDClub\Service\User\Avatar $userAvatarService
- * @property-read \MDClub\Service\User\Cover  $userCoverService
  */
 class User extends Abstracts
 {
@@ -41,11 +43,11 @@ class User extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['user_id'], $item['avatar'])) {
-            $item['avatar'] = $this->userAvatarService->getBrandUrls($item['user_id'], $item['avatar']);
+            $item['avatar'] = UserAvatarService::getBrandUrls($item['user_id'], $item['avatar']);
         }
 
         if (isset($item['user_id'], $item['cover'])) {
-            $item['cover'] = $this->userCoverService->getBrandUrls($item['user_id'], $item['cover']);
+            $item['cover'] = UserCoverService::getBrandUrls($item['user_id'], $item['cover']);
         }
 
         return $item;
@@ -58,9 +60,9 @@ class User extends Abstracts
      * @param  array $knownRelationship
      * @return array
      */
-    protected function is_followed(array $items, array $knownRelationship): array
+    protected function isFollowed(array $items, array $knownRelationship): array
     {
-        $currentUserId = $this->auth->userId();
+        $currentUserId = Auth::userId();
         $userIds = collect($items)->pluck('user_id')->unique()->diff($currentUserId)->all();
         $followedUserIds = [];
 
@@ -68,7 +70,7 @@ class User extends Abstracts
             if (isset($knownRelationship['is_followed'])) {
                 $followedUserIds = $knownRelationship['is_followed'] ? $userIds : [];
             } else {
-                $followedUserIds = $this->followModel->where([
+                $followedUserIds = FollowModel::where([
                     'user_id' => $userIds,
                     'followable_id' => $currentUserId,
                     'followable_type' => 'user',
@@ -90,9 +92,9 @@ class User extends Abstracts
      * @param  array $knownRelationship
      * @return array
      */
-    protected function is_following(array $items, array $knownRelationship): array
+    protected function isFollowing(array $items, array $knownRelationship): array
     {
-        $userId = $this->auth->userId();
+        $userId = Auth::userId();
         $keys = collect($items)->pluck('user_id')->unique()->diff($userId)->all();
         $followingKeys = [];
 
@@ -100,7 +102,7 @@ class User extends Abstracts
             if (isset($knownRelationship['is_following'])) {
                 $followingKeys = $knownRelationship['is_following'] ? $keys : [];
             } else {
-                $followingKeys = $this->followTransformer->getInRelationship($keys, 'user');
+                $followingKeys = FollowTransformer::getInRelationship($keys, 'user');
             }
         }
 
@@ -117,9 +119,9 @@ class User extends Abstracts
      * @param  array $items
      * @return array
      */
-    protected function is_me(array $items): array
+    protected function isMe(array $items): array
     {
-        $userId = $this->auth->userId();
+        $userId = Auth::userId();
 
         foreach ($items as &$item) {
             $item['relationships']['is_me'] = $userId === $item['user_id'];
@@ -140,14 +142,14 @@ class User extends Abstracts
             return [];
         }
 
-        $users = $this->userModel
-            ->field(['user_id', 'avatar', 'username', 'headline'])
+        $users = UserModel
+            ::field(['user_id', 'avatar', 'username', 'headline'])
             ->select($userIds);
 
         return collect($users)
             ->keyBy('user_id')
             ->map(function ($item) {
-                $item['avatar'] = $this->userAvatarService->getBrandUrls($item['user_id'], $item['avatar']);
+                $item['avatar'] = UserAvatarService::getBrandUrls($item['user_id'], $item['avatar']);
 
                 return $item;
             })

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace MDClub\Middleware;
 
+use MDClub\Initializer\App;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Psr7\Response;
 
 /**
  * 如果请求 URL 以 / 结尾，则跳转到不带 / 的 URL
@@ -29,11 +29,9 @@ class TrailingSlash implements MiddlewareInterface
             $uri = $uri->withPath(substr($path, 0, -1));
 
             if ($request->getMethod() === 'GET') {
-                $response = new Response();
+                $response = App::$slim->getResponseFactory()->createResponse();
 
-                return $response
-                    ->withHeader('Location', (string) $uri)
-                    ->withStatus(301);
+                return $response->withHeader('Location', (string) $uri)->withStatus(301);
             } else {
                 $request = $request->withUri($uri);
             }

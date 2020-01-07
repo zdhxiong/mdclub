@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace MDClub\Initializer;
 
-use MDClub\Constant\ApiError;
+use MDClub\Constant\ApiErrorConstant;
 use MDClub\Exception\ApiException;
 use MDClub\Exception\ValidationException;
-use MDClub\Helper\Response;
+use MDClub\Facade\Library\Captcha;
+use MDClub\Facade\Library\Log;
+use MDClub\Facade\Library\Request;
+use MDClub\Facade\Library\View;
+use MDClub\Helper\Cors;
 use MDClub\Middleware\Trace;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Psr7\Factory\StreamFactory;
@@ -24,60 +25,20 @@ use Whoops\Run;
 
 /**
  * 错误处理
- *
- * @property-read \MDClub\Library\Log     $log
- * @property-read \MDClub\Library\View    $view
- * @property-read \MDClub\Library\Captcha $captcha
- * @property-read ServerRequestInterface  $request
- * @property-read array                   $settings
  */
 class ErrorHandler
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var ResponseFactoryInterface
-     */
-    protected $responseFactory;
-
-    /**
-     * @var bool
-     */
-    protected $debug;
-
     /**
      * @var Throwable
      */
     protected $exception;
 
     /**
-     * 魔术方法获取容器中的对象
-     *
-     * @param $name
-     * @return mixed
+     * @param Throwable $exception
      */
-    public function __get($name)
+    public function __construct(Throwable $exception)
     {
-        return $this->container->get($name);
-    }
-
-    /**
-     * @param ContainerInterface       $container
-     * @param ResponseFactoryInterface $responseFactory
-     * @param Throwable                $exception
-     */
-    public function __construct(
-        ContainerInterface $container,
-        ResponseFactoryInterface $responseFactory,
-        Throwable $exception
-    ) {
-        $this->container = $container;
-        $this->responseFactory = $responseFactory;
         $this->exception = $exception;
-        $this->debug = $this->settings['debug'];
 
         switch (true) {
             case $exception instanceof ValidationException:
@@ -101,10 +62,8 @@ class ErrorHandler
                 break;
         }
 
-        $response = Response::withCors($response);
-
         $responseEmitter = new ResponseEmitter();
-        $responseEmitter->emit($response);
+        $responseEmitter->emit(Cors::enable($response));
     }
 
     /**
@@ -120,10 +79,7 @@ class ErrorHandler
             'errors' => $this->exception->getErrors(),
         ];
 
-        if ($this->exception->isNeedCaptcha()) {
-            $output = $this->withCaptcha($output);
-        }
-
+        $output = $this->withCaptcha($output);
         $response = $this->renderJson($output);
         $response = $this->withTrace($response);
 
@@ -142,15 +98,8 @@ class ErrorHandler
             'message' => $this->exception->getMessage(),
         ];
 
-        $extraMessage = $this->exception->getExtraMessage();
-        if ($extraMessage) {
-            $output['extra_message'] = $extraMessage;
-        }
-
-        if ($this->exception->isNeedCaptcha()) {
-            $output = $this->withCaptcha($output);
-        }
-
+        $output = $this->withExtraMessage($output);
+        $output = $this->withCaptcha($output);
         $response = $this->renderJson($output);
         $response = $this->withTrace($response);
 
@@ -164,14 +113,14 @@ class ErrorHandler
      */
     protected function handleNotFoundException(): ResponseInterface
     {
-        if ($this->request->getMethod() === 'OPTIONS') {
+        if (Request::getMethod() === 'OPTIONS') {
             return $this->renderPlainText();
         }
 
-        if ($this->isRequestJson()) {
+        if (Request::isJson()) {
             return $this->renderJson([
-                'code' => ApiError::SYSTEM_API_NOT_FOUND[0],
-                'message' => ApiError::SYSTEM_API_NOT_FOUND[1],
+                'code' => ApiErrorConstant::SYSTEM_API_NOT_FOUND[0],
+                'message' => ApiErrorConstant::SYSTEM_API_NOT_FOUND[1],
             ]);
         }
 
@@ -186,16 +135,17 @@ class ErrorHandler
     protected function handleNotAllowedException(): ResponseInterface
     {
         $allow = implode(', ', $this->exception->getAllowedMethods());
+        $extraMessage = "Method not allowed. Must be one of: {$allow}";
 
-        if ($this->request->getMethod() === 'OPTIONS') {
-            return $this->renderPlainText();
+        if (Request::getMethod() === 'OPTIONS') {
+            return $this->renderPlainText($extraMessage);
         }
 
-        if ($this->isRequestJson()) {
+        if (Request::isJson()) {
             return $this->renderJson([
-                'code' => ApiError::SYSTEM_API_NOT_ALLOWED[0],
-                'message' => ApiError::SYSTEM_API_NOT_ALLOWED[1],
-                'extra_message' => 'Method not allowed. Must be one of: ' . $allow,
+                'code' => ApiErrorConstant::SYSTEM_API_NOT_ALLOWED[0],
+                'message' => ApiErrorConstant::SYSTEM_API_NOT_ALLOWED[1],
+                'extra_message' => $extraMessage,
             ]);
         }
 
@@ -210,10 +160,10 @@ class ErrorHandler
     protected function handleUndefinedException(): ResponseInterface
     {
         // 调试环境交由 whoops 处理
-        if ($this->debug) {
+        if (App::$config['APP_DEBUG']) {
             $whoops = new Run();
 
-            if ($this->isRequestJson()) {
+            if (Request::isJson()) {
                 $handler = new JsonResponseHandler();
                 $handler->setJsonApi(true)->addTraceToOutput(true);
                 $contentType = 'application/json';
@@ -223,7 +173,7 @@ class ErrorHandler
             }
 
             $output = $whoops->prependHandler($handler)->handleException($this->exception);
-            $response = $this->responseFactory->createResponse();
+            $response = App::$slim->getResponseFactory()->createResponse();
 
             return $response
                 ->withHeader('Content-type', $contentType)
@@ -233,10 +183,10 @@ class ErrorHandler
 
         $this->logError();
 
-        if ($this->isRequestJson()) {
+        if (Request::isJson()) {
             return $this->renderJson([
-                'code' => ApiError::SYSTEM_ERROR[0],
-                'message' => ApiError::SYSTEM_ERROR[1],
+                'code' => ApiErrorConstant::SYSTEM_ERROR[0],
+                'message' => ApiErrorConstant::SYSTEM_ERROR[1],
             ]);
         }
 
@@ -248,7 +198,10 @@ class ErrorHandler
      */
     protected function logError()
     {
-        $this->log->error($this->exception->getMessage(), $this->exception->getTrace());
+        $message = $this->exception->getMessage();
+        $trace = $this->exception->getTrace();
+
+        Log::error($message, $trace);
     }
 
     /**
@@ -259,13 +212,32 @@ class ErrorHandler
      */
     protected function withTrace(ResponseInterface $response): ResponseInterface
     {
-        if (!$this->debug) {
+        if (!App::$config['APP_DEBUG']) {
             return $response;
         }
 
-        $trace = new Trace($this->container);
+        $trace = new Trace();
 
-        return $trace->appendTraceMessage($this->request, $response);
+        return $trace->appendTraceMessage($response);
+    }
+
+    /**
+     * 包含额外的错误描述
+     *
+     * @param array $output
+     * @return array
+     */
+    protected function withExtraMessage(array $output): array
+    {
+        $extraMessage = $this->exception->getExtraMessage();
+
+        if (!$extraMessage) {
+            return $output;
+        }
+
+        $output['extra_message'] = $extraMessage;
+
+        return $output;
     }
 
     /**
@@ -276,7 +248,12 @@ class ErrorHandler
      */
     protected function withCaptcha(array $output): array
     {
-        $captchaInfo = $this->captcha->generate();
+        if (!$this->exception->isNeedCaptcha()) {
+            return $output;
+        }
+
+        $captchaInfo = Captcha::generate();
+
         $output['captcha_token'] = $captchaInfo['token'];
         $output['captcha_image'] = $captchaInfo['image'];
 
@@ -292,7 +269,7 @@ class ErrorHandler
     protected function renderJson(array $output): ResponseInterface
     {
         $body = (string) json_encode($output);
-        $response = $this->responseFactory->createResponse();
+        $response = App::$slim->getResponseFactory()->createResponse();
 
         return $response
             ->withHeader('Content-type', 'application/json;charset=utf-8')
@@ -307,8 +284,8 @@ class ErrorHandler
      */
     protected function render404Html(): ResponseInterface
     {
-        $body = $this->view->fetch('/404.php');
-        $response = $this->responseFactory->createResponse();
+        $body = View::fetch('/404.php');
+        $response = App::$slim->getResponseFactory()->createResponse();
 
         return $response
             ->withHeader('Content-type', 'text/html')
@@ -323,8 +300,8 @@ class ErrorHandler
      */
     protected function render500Html(): ResponseInterface
     {
-        $body = $this->view->fetch('/500.php');
-        $response = $this->responseFactory->createResponse();
+        $body = View::fetch('/500.php');
+        $response = App::$slim->getResponseFactory()->createResponse();
 
         return $response
             ->withHeader('Content-type', 'text/html')
@@ -340,23 +317,11 @@ class ErrorHandler
      */
     protected function renderPlainText(string $output = ''): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse();
+        $response = App::$slim->getResponseFactory()->createResponse();
 
         return $response
             ->withHeader('Content-type', 'text/plain')
             ->withStatus(200)
             ->withBody((new StreamFactory())->createStream($output));
-    }
-
-    /**
-     * 是否是 JSON 请求
-     *
-     * @return bool
-     */
-    protected function isRequestJson(): bool
-    {
-        $accept = $this->request->getHeaderLine('accept');
-
-        return strpos($accept, 'application/json') > -1;
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Exception;
 
-use MDClub\Constant\ApiError;
+use MDClub\Constant\ApiErrorConstant;
 use Exception;
 
 /**
@@ -32,7 +32,7 @@ class ValidationException extends Exception
      */
     public function __construct(array $errors, bool $needCaptcha = false)
     {
-        parent::__construct(...array_reverse(ApiError::SYSTEM_FIELD_VERIFY_FAILED));
+        parent::__construct(...array_reverse(ApiErrorConstant::COMMON_FIELD_VERIFY_FAILED));
         $this->needCaptcha = $needCaptcha;
         $this->errors = $errors;
     }

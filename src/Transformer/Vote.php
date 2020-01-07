@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Model\VoteModel;
+
 /**
  * 投票转换器
- *
- * @property-read \MDClub\Model\Vote $voteModel
  */
 class Vote extends Abstracts
 {
@@ -20,17 +21,16 @@ class Vote extends Abstracts
      */
     public function getInRelationship(array $targetIds, string $targetType): array
     {
-        $userId = $this->auth->userId();
         $emptyVotings = collect()->unionFill($targetIds, '')->all();
 
-        if (!$userId) {
+        if (!Auth::userId()) {
             return $emptyVotings;
         }
 
-        $votings = $this->voteModel
-            ->field(['votable_id', 'type'])
+        $votings = VoteModel
+            ::field(['votable_id', 'type'])
             ->where([
-                'user_id'      => $userId,
+                'user_id'      => Auth::userId(),
                 'votable_id'   => $targetIds,
                 'votable_type' => $targetType,
             ])

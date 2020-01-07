@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Transformer\UserTransformer;
+
 /**
  * 举报详情转换器
  */
@@ -20,7 +22,7 @@ class ReportReason extends Abstracts
     protected function reporter(array $items): array
     {
         $userIds = array_unique(array_column($items, 'reporter_id'));
-        $users = $this->userTransformer->getInRelationship($userIds);
+        $users = UserTransformer::getInRelationship($userIds);
 
         foreach ($items as &$item) {
             $item['relationships']['reporter'] = $users[$item['reporter_id']];

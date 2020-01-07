@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\QuestionModel;
+
 /**
  * 提问转换器
- *
- * @property-read \MDClub\Model\Question $questionModel
  */
 class Question extends Abstracts
 {
@@ -28,8 +28,7 @@ class Question extends Abstracts
             return [];
         }
 
-        $questions = $this->questionModel
-            ->field(['question_id', 'title', 'create_time', 'update_time'])
+        $questions = QuestionModel::field(['question_id', 'title', 'create_time', 'update_time'])
             ->select($questionIds);
 
         return collect($questions)

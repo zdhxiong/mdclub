@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\ArticleModel;
+
 /**
  * 文章转换器
- *
- * @property-read \MDClub\Model\Article $articleModel
  */
 class Article extends Abstracts
 {
@@ -28,8 +28,7 @@ class Article extends Abstracts
             return [];
         }
 
-        $articles = $this->articleModel
-            ->field(['article_id', 'title', 'create_time', 'update_time'])
+        $articles = ArticleModel::field(['article_id', 'title', 'create_time', 'update_time'])
             ->select($articleIds);
 
         return collect($articles)

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MDClub\Middleware;
 
-use MDClub\Helper\Request;
-use MDClub\Library\Cache;
-use MDClub\Library\Db;
+use MDClub\Facade\Library\Cache;
+use MDClub\Facade\Library\Db;
+use MDClub\Facade\Library\Request;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -15,11 +15,8 @@ use Slim\Psr7\Factory\StreamFactory;
 
 /**
  * 在 Response 中添加 Trace 信息
- *
- * @property-read Db    $db
- * @property-read Cache $cache
  */
-class Trace extends Abstracts implements MiddlewareInterface
+class Trace implements MiddlewareInterface
 {
     /**
      * @inheritDoc
@@ -28,19 +25,18 @@ class Trace extends Abstracts implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        return $this->appendTraceMessage($request, $response);
+        return $this->appendTraceMessage($response);
     }
 
     /**
      * 追加 trace 消息到 response 中
      *
-     * @param  ServerRequestInterface $request
      * @param  ResponseInterface      $response
      * @return ResponseInterface
      */
-    public function appendTraceMessage(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function appendTraceMessage(ResponseInterface $response): ResponseInterface
     {
-        $trace = $this->generateTrace($request);
+        $trace = $this->generateTrace();
 
         if (strpos($response->getHeaderLine('Content-Type'), 'application/json') > -1) {
             $response = $this->renderJsonMessage($response, $trace);
@@ -93,23 +89,22 @@ class Trace extends Abstracts implements MiddlewareInterface
     /**
      * 获取 Trace 信息
      *
-     * @param  ServerRequestInterface $request
      * @return array
      */
-    protected function generateTrace(ServerRequestInterface $request): array
+    protected function generateTrace(): array
     {
-        $sql = $this->db->log();
-        $cache = $this->cache->log();
-        $time = microtime(true) - Request::microtime($request);
+        $sql = Db::log();
+        $cache = Cache::log();
+        $time = microtime(true) - Request::microtime();
         $files = get_included_files();
 
         return [
-            'TimeUsage'                => $this->timeFormat($time),
-            'MemoryUsage'              => $this->memoryFormat(memory_get_usage()),
-            'ThroughputRate'           => number_format(1 / $time, 2) . ' req/s',
-            'Cache('.count($cache).')' => $cache,
-            'SQL('.count($sql).')'     => $sql,
-            'File('.count($files).')'  => $files,
+            'TimeUsage'                    => $this->timeFormat($time),
+            'MemoryUsage'                  => $this->memoryFormat(memory_get_usage()),
+            'ThroughputRate'               => number_format(1 / $time, 2) . ' req/s',
+            'Cache(' . count($cache) . ')' => $cache,
+            'SQL(' . count($sql) . ')'     => $sql,
+            'File(' . count($files) . ')'  => $files,
         ];
     }
 

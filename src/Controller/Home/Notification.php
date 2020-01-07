@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\View;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 通知
+ * 通知页面
  */
-class Notification extends Abstracts
+class Notification
 {
     /**
      * 通知列表页
@@ -19,6 +19,6 @@ class Notification extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/notification/index.php');
+        return View::render('/notification/index.php');
     }
 }

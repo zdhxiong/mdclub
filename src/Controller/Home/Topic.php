@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\View;
+use MDClub\Facade\Service\TopicService;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 话题
+ * 话题页面
  */
-class Topic extends Abstracts
+class Topic
 {
     /**
      * 话题列表页
@@ -19,17 +20,23 @@ class Topic extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/topic/index.php');
+        return View::render('/topic/index.php');
     }
 
     /**
      * 话题详情页
      *
-     * @param  int      $topic_id
+     * @param int $topicId
+     *
      * @return ResponseInterface
      */
-    public function info(int $topic_id): ResponseInterface
+    public function info(int $topicId): ResponseInterface
     {
-        return $this->render('/topic/info.php');
+        return View::render(
+            '/topic/info.php',
+            [
+                'topic' => TopicService::getOrFail($topicId),
+            ]
+        );
     }
 }

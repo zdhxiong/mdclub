@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Middleware;
 
-use MDClub\Helper\Response;
+use MDClub\Helper\Cors;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -22,6 +22,6 @@ class EnableCrossRequest implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        return Response::withCors($response);
+        return Cors::enable($response);
     }
 }

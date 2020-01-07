@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MDClub\Initializer;
 
 use ErrorException;
-use Slim\App;
 use Throwable;
 
 /**
@@ -13,18 +12,8 @@ use Throwable;
  */
 class Error
 {
-    /**
-     * @var App
-     */
-    protected $app;
-
-    /**
-     * @param App $app
-     */
-    public function __construct(App $app)
+    public function __construct()
     {
-        $this->app = $app;
-
         error_reporting(E_ALL);
         set_error_handler([$this, 'appError']);
         set_exception_handler([$this, 'appException']);
@@ -38,11 +27,7 @@ class Error
      */
     public function appException(Throwable $exception): void
     {
-        new ErrorHandler(
-            $this->app->getContainer(),
-            $this->app->getResponseFactory(),
-            $exception
-        );
+        new ErrorHandler($exception);
     }
 
     /**

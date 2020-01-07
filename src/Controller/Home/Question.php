@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Home;
 
-use MDClub\Controller\Abstracts;
+use MDClub\Facade\Library\View;
+use MDClub\Facade\Service\QuestionService;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * 问答
+ * 问答页面
  */
-class Question extends Abstracts
+class Question
 {
     /**
      * 问答列表页
@@ -19,17 +20,23 @@ class Question extends Abstracts
      */
     public function index(): ResponseInterface
     {
-        return $this->render('/question/index.php');
+        return View::render('/question/index.php');
     }
 
     /**
      * 问答详情页
      *
-     * @param  int               $question_id
+     * @param int $questionId
+     *
      * @return ResponseInterface
      */
-    public function info(int $question_id): ResponseInterface
+    public function info(int $questionId): ResponseInterface
     {
-        return $this->render('/question/info.php');
+        return View::render(
+            '/question/info.php',
+            [
+                'question' => QuestionService::getOrFail($questionId),
+            ]
+        );
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Model;
 
-use MDClub\Observer\Article as ArticleObserver;
+use MDClub\Facade\Library\Auth;
 
 /**
  * 文章模型
@@ -15,7 +15,6 @@ class Article extends Abstracts
     public $primaryKey = 'article_id';
     protected $timestamps = true;
     protected $softDelete = true;
-    protected $observe = ArticleObserver::class;
 
     public $columns = [
         'article_id',
@@ -44,6 +43,15 @@ class Article extends Abstracts
         'topic_id', // topic_id 需要另外写逻辑
     ];
 
+    public function __construct()
+    {
+        if (Auth::isManager()) {
+            $this->allowOrderFields[] = 'delete_time';
+        }
+
+        parent::__construct();
+    }
+
     /**
      * @inheritDoc
      */
@@ -60,9 +68,9 @@ class Article extends Abstracts
     /**
      * @inheritDoc
      */
-    public function getWhereFromRequest(array $defaultFilter = [], array $allowFilterFields = null): array
+    public function getWhereFromRequest(array $defaultFilter = []): array
     {
-        $where = parent::getWhereFromRequest($defaultFilter, $allowFilterFields);
+        $where = parent::getWhereFromRequest($defaultFilter);
 
         if (isset($where['topic_id'])) {
             $this->join(['[><]topicable' => ['article_id' => 'topicable_id']]);
@@ -126,5 +134,19 @@ class Article extends Abstracts
             ->where($this->getWhereFromRequest())
             ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
             ->paginate();
+    }
+
+    /**
+     * 减少指定文章的评论数量
+     *
+     * @param int $articleId
+     * @param int $count
+     */
+    public function decCommentCount(int $articleId, int $count = 1): void
+    {
+        $this
+            ->where('article_id', $articleId)
+            ->dec('comment_count', $count)
+            ->update();
     }
 }

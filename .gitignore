@@ -1,3 +1,6 @@
 .idea/
 var/
 vendor/
+public/static/admin/
+public/static/theme/
+public/static/upload

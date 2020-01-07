@@ -4,29 +4,30 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Rss;
 
-use MDClub\Controller\Abstracts;
 use Psr\Http\Message\ResponseInterface;
 
-class Question extends Abstracts
+/**
+ * 提问 RSS
+ */
+class Question
 {
     /**
-     * 获取提问列表
+     * 提问列表 RSS
      *
      * @return ResponseInterface
      */
     public function getList(): ResponseInterface
     {
-
     }
 
     /**
-     * 根据 question_id 获取回答列表
+     * 某一提问的回答 RSS
      *
-     * @param  int               $question_id
+     * @param int $questionId
+     *
      * @return ResponseInterface
      */
-    public function getAnswers(int $question_id): ResponseInterface
+    public function getAnswers(int $questionId): ResponseInterface
     {
-
     }
 }

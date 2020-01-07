@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace MDClub\Library\StorageAdapter;
 
 use Buzz\Client\Curl;
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
-use MDClub\Helper\Request;
-use MDClub\Traits\Url;
-use Psr\Container\ContainerInterface;
+use MDClub\Facade\Library\Option;
+use MDClub\Facade\Library\Request;
+use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Headers;
@@ -19,8 +20,6 @@ use Slim\Psr7\Request as Psr7Request;
  */
 class Upyun extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * 域名
      */
@@ -47,16 +46,11 @@ class Upyun extends Abstracts implements Interfaces
      */
     protected $password;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
-        $this->bucket = $this->option->storage_upyun_bucket;
-        $this->operator = $this->option->storage_upyun_operator;
-        $this->password = $this->option->storage_upyun_password;
+        $this->bucket = Option::get(OptionConstant::STORAGE_UPYUN_BUCKET);
+        $this->operator = Option::get(OptionConstant::STORAGE_UPYUN_OPERATOR);
+        $this->password = Option::get(OptionConstant::STORAGE_UPYUN_PASSWORD);
     }
 
     /**
@@ -125,15 +119,15 @@ class Upyun extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = Request::isSupportWebp($this->request);
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $isSupportWebp = Request::isSupportWebp();
+        $data['o'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
             $params = "!/both/{$width}x{$height}";
             $params .= $isSupportWebp ? '/format/webp' : '';
 
-            $data[$size] = "{$url}{$path}{$params}";
+            $data[$size] = "{$storagePath}{$path}{$params}";
         }
 
         return $data;

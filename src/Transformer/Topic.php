@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\TopicModel;
+use MDClub\Facade\Service\TopicService;
 use MDClub\Initializer\Collection;
 
 /**
  * 话题转换器
- *
- * @property-read \MDClub\Model\Topic          $topicModel
- * @property-read \MDClub\Service\Topic\Update $topicUpdateService
  */
 class Topic extends Abstracts
 {
@@ -28,7 +27,7 @@ class Topic extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['topic_id'], $item['cover'])) {
-            $item['cover'] = $this->topicUpdateService->getBrandUrls($item['topic_id'], $item['cover']);
+            $item['cover'] = TopicService::getBrandUrls($item['topic_id'], $item['cover']);
         }
 
         return $item;
@@ -47,8 +46,8 @@ class Topic extends Abstracts
             return [];
         }
 
-        $topicable = $this->topicModel
-            ->join([
+        $topicable = TopicModel
+            ::join([
                 '[><]topicable' => ['topic_id' => 'topic_id']
             ])
             ->where('topicable.topicable_type', $targetType)
@@ -60,7 +59,7 @@ class Topic extends Abstracts
         return collect($topicable)
             ->map(function ($item) {
                 // 封面地址格式化
-                $item['cover'] = $this->topicUpdateService->getBrandUrls($item['topic_id'], $item['cover']);
+                $item['cover'] = TopicService::getBrandUrls($item['topic_id'], $item['cover']);
 
                 return $item;
             })

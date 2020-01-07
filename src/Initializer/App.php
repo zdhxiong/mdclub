@@ -9,53 +9,62 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * 应用入口
  */
 class App
 {
-    protected $app;
+    /**
+     * Slim 应用实例
+     *
+     * @var \Slim\App
+     */
+    public static $slim;
 
     /**
+     * 配置文件中的数据
+     *
+     * @var array
+     */
+    public static $config;
+
+    /**
+     * 容器实例
+     *
+     * @var Container
+     */
+    public static $container;
+
+    /**
+     * 请求实例
+     *
      * @var ServerRequestInterface
      */
     protected $request;
 
     /**
-     * @param ServerRequestInterface|null $request
-     * @param array                       $focusConfig
+     * @param ServerRequestInterface|null $request     可传入实现了 psr7 的请求对象
+     * @param array                       $focusConfig 传入该配置，可强制覆盖自定义配置
      */
     public function __construct(ServerRequestInterface $request = null, array $focusConfig = [])
     {
+        $this->request = $request ?? ServerRequestFactory::createFromGlobals();
+        $container = new Container([ ServerRequestInterface::class => $this->request ]);
         $config = $this->getConfig($focusConfig);
 
-        // 确保临时文件目录存在（Fast-Route 不会自动创建缓存文件目录）
-        if (!is_dir($config['APP_RUNTIME'])) {
-            (new Filesystem())->mkdir($config['APP_RUNTIME']);
-        }
-
-        // 手动指定响应工厂，无需再自动检测，提升性能
         AppFactory::setResponseFactory(new ResponseFactory());
-
-        $container = new Container($config);
-
-        if (!$request) {
-            $request = ServerRequestFactory::createFromGlobals();
-        }
-
-        $this->request = $request;
-        $container->offsetSet('request', $request);
-
         AppFactory::setContainer($container);
 
-        $this->app = AppFactory::create();
+        $slim = AppFactory::create();
 
-        new Error($this->app);
-        new Dependencies($this->app);
-        new Middleware($this->app);
-        new Route($this->app);
+        self::$slim = $slim;
+        self::$config = $config;
+        self::$container = $container;
+
+        new Error();
+        new Dependencies();
+        new Route();
     }
 
     /**
@@ -82,6 +91,21 @@ class App
      */
     public function run(): ResponseInterface
     {
-        return $this->app->handle($this->request);
+        return self::$slim->handle($this->request);
+    }
+
+    /**
+     * 调用容器中指定类的指定方法
+     *
+     * @param  string $facadeAccessor
+     * @param  string $name
+     * @param  array  $arguments
+     * @return mixed
+     */
+    public static function createFacade(string $facadeAccessor, string $name, array $arguments = [])
+    {
+        $object = self::$container->get($facadeAccessor);
+
+        return call_user_func_array([$object, $name], $arguments);
     }
 }

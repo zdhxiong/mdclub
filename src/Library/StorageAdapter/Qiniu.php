@@ -6,10 +6,11 @@ namespace MDClub\Library\StorageAdapter;
 
 use Buzz\Message\FormRequestBuilder;
 use InvalidArgumentException;
+use MDClub\Constant\OptionConstant;
 use MDClub\Exception\SystemException;
-use MDClub\Helper\Request;
-use MDClub\Traits\Url;
-use Psr\Container\ContainerInterface;
+use MDClub\Facade\Library\Option;
+use MDClub\Facade\Library\Request;
+use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -17,12 +18,10 @@ use Psr\Http\Message\StreamInterface;
  */
 class Qiniu extends Abstracts implements Interfaces
 {
-    use Url;
-
     /**
      * 存储区域和域名的映射
      */
-    static protected $zones = [
+    protected static $zones = [
         'z0' => 'up.qiniup.com',
         'z1' => 'up-z1.qiniup.com',
         'z2' => 'up-z2.qiniup.com',
@@ -58,17 +57,12 @@ class Qiniu extends Abstracts implements Interfaces
      */
     protected $bucket;
 
-    /**
-     * @inheritDoc
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct()
     {
-        parent::__construct($container);
-
-        $this->accessKey = $this->option->storage_qiniu_access_id;
-        $this->secretKey = $this->option->storage_qiniu_access_secret;
-        $this->bucket = $this->option->storage_qiniu_bucket;
-        $this->zone = $this->option->storage_qiniu_zone;
+        $this->accessKey = Option::get(OptionConstant::STORAGE_QINIU_ACCESS_ID);
+        $this->secretKey = Option::get(OptionConstant::STORAGE_QINIU_ACCESS_SECRET);
+        $this->bucket = Option::get(OptionConstant::STORAGE_QINIU_BUCKET);
+        $this->zone = Option::get(OptionConstant::STORAGE_QINIU_ZONE);
     }
 
     /**
@@ -134,15 +128,15 @@ class Qiniu extends Abstracts implements Interfaces
      */
     public function get(string $path, array $thumbs): array
     {
-        $url = $this->getStorageUrl();
-        $isSupportWebp = Request::isSupportWebp($this->request);
-        $data['o'] = $url . $path;
+        $storagePath = Url::storagePath();
+        $isSupportWebp = Request::isSupportWebp();
+        $data['o'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
             $params = "?imageView2/1/w/{$width}/h/{$height}";
             $params .= $isSupportWebp ? '/format/webp' : '';
 
-            $data[$size] = "{$url}{$path}{$params}";
+            $data[$size] = "{$storagePath}{$path}{$params}";
         }
 
         return $data;
@@ -192,6 +186,7 @@ class Qiniu extends Abstracts implements Interfaces
             if ($response->getStatusCode() !== 200) {
                 throw new SystemException($response->getReasonPhrase());
             }
-        } catch (InvalidArgumentException $e) {} // 612: 待删除资源不存在
+        } catch (InvalidArgumentException $e) {
+        } // 612: 待删除资源不存在
     }
 }
