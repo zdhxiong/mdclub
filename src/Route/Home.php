@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Route;
 
+use MDClub\Constant\RouteNameConstant;
 use MDClub\Controller\Home\Api;
 use MDClub\Controller\Home\Article;
 use MDClub\Controller\Home\Inbox;
@@ -23,19 +24,52 @@ class Home
     {
         $slim = App::$slim;
 
-        $slim->get('/', Index::class . ':index');
+        $slim
+            ->get('/', Index::class . ':index')
+            ->setName(RouteNameConstant::INDEX);
 
-        $slim->get('/migration', Index::class . ':migration');
-        $slim->get('/topics', Topic::class . ':index');
-        $slim->get('/topics/{topic_id:\d+}', Topic::class . ':info');
-        $slim->get('/articles', Article::class . ':index');
-        $slim->get('/articles/{article_id:\d+}', Article::class . ':info');
-        $slim->get('/questions', Question::class . ':index');
-        $slim->get('/questions/{question_id:\d+}', Question::class . ':info');
-        $slim->get('/users', User::class . ':index');
-        $slim->get('/users/{user_id:\d+}', User::class . ':info');
-        $slim->get('/notifications', Notification::class . ':index');
-        $slim->get('/inbox', Inbox::class . ':index');
-        $slim->get('/api', Api::class . ':index');
+        $slim
+            ->get('/migration', Index::class . ':migration');
+
+        $slim
+            ->get('/topics', Topic::class . ':index')
+            ->setName(RouteNameConstant::TOPICS);
+
+        $slim
+            ->get('/topics/{topic_id:\d+}', Topic::class . ':info')
+            ->setName(RouteNameConstant::TOPIC);
+
+        $slim
+            ->get('/articles', Article::class . ':index')
+            ->setName(RouteNameConstant::ARTICLES);
+
+        $slim
+            ->get('/articles/{article_id:\d+}', Article::class . ':info')
+            ->setName(RouteNameConstant::ARTICLE);
+
+        $slim
+            ->get('/questions', Question::class . ':index')
+            ->setName(RouteNameConstant::QUESTIONS);
+
+        $slim
+            ->get('/questions/{question_id:\d+}', Question::class . ':info')
+            ->setName(RouteNameConstant::QUESTION);
+
+        $slim
+            ->get('/users', User::class . ':index')
+            ->setName(RouteNameConstant::USERS);
+
+        $slim
+            ->get('/users/{user_id:\d+}', User::class . ':info')
+            ->setName(RouteNameConstant::USER);
+
+        $slim
+            ->get('/notifications', Notification::class . ':index');
+
+        $slim
+            ->get('/inbox', Inbox::class . ':index');
+
+        $slim
+            ->get('/api', Api::class . ':index');
     }
 }

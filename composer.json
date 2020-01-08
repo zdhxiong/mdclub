@@ -16,7 +16,6 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "ext-password": "*",
         "psr/container": "^1.0",
         "pimple/pimple": "^3.2",
         "psr/http-client": "^1.0",

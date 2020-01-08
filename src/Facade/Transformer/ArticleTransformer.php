@@ -10,6 +10,7 @@ use MDClub\Transformer\Article;
 /**
  * ArticleTransformer Facade
  *
+ * @method static void  setInclude(array $includes)
  * @method static array transform(array $items, array $knownRelationship = [])
  * @method static array getInRelationship(array $articleIds)
  */

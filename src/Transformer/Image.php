@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Transformer;
 
+use MDClub\Facade\Model\ImageModel;
 use MDClub\Facade\Service\ImageService;
 
 /**
@@ -103,12 +104,12 @@ class Image extends Abstracts
             return [];
         }
 
-        $images = $this->container->imageModel->select($keys);
+        $images = ImageModel::select($keys);
 
         return collect($images)
             ->keyBy('key')
             ->map(function ($item) {
-                $item['urls'] = $this->container->imageGetService->getUrls($item['key'], $item['create_time']);
+                $item['urls'] = ImageService::getUrls($item['key'], $item['create_time']);
 
                 return $item;
             })

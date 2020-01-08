@@ -53,6 +53,16 @@ abstract class Abstracts
     {
         $includes = Request::getQueryParams()['include'] ?? '';
         $includes = explode(',', $includes);
+        $this->setInclude($includes);
+    }
+
+    /**
+     * 设置 include
+     *
+     * @param array $includes
+     */
+    public function setInclude(array $includes): void
+    {
         $this->includes = array_intersect($this->availableIncludes, $includes);
     }
 

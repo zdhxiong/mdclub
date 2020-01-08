@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\Rss;
 
+use MDClub\Constant\RouteNameConstant;
+use MDClub\Facade\Service\QuestionService;
+use MDClub\Facade\Transformer\QuestionTransformer;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * 提问 RSS
  */
-class Question
+class Question extends Abstracts
 {
     /**
      * 提问列表 RSS
@@ -18,16 +21,16 @@ class Question
      */
     public function getList(): ResponseInterface
     {
-    }
+        QuestionTransformer::setInclude(['user']);
 
-    /**
-     * 某一提问的回答 RSS
-     *
-     * @param int $questionId
-     *
-     * @return ResponseInterface
-     */
-    public function getAnswers(int $questionId): ResponseInterface
-    {
+        $questions = QuestionService::getList();
+
+        $questions['data'] = QuestionTransformer::transform($questions['data']);
+        $title = "{$this->siteName} 的最新提问";
+        $url = $this->url(RouteNameConstant::QUESTIONS);
+        $feedUrl = $this->url(RouteNameConstant::RSS_QUESTIONS);
+        $cacheKey = 'rss_questions';
+
+        return $this->renderQuestions($questions['data'], $title, $url, $feedUrl, $cacheKey);
     }
 }

@@ -36,12 +36,12 @@ class Trace implements MiddlewareInterface
      */
     public function appendTraceMessage(ResponseInterface $response): ResponseInterface
     {
-        $trace = $this->generateTrace();
+        $contentType = $response->getHeaderLine('Content-Type');
 
-        if (strpos($response->getHeaderLine('Content-Type'), 'application/json') > -1) {
-            $response = $this->renderJsonMessage($response, $trace);
-        } else {
-            $response = $this->renderHtmlMessage($response, $trace);
+        if (strpos($contentType, 'application/json') > -1) {
+            $response = $this->renderJsonMessage($response, $this->generateTrace());
+        } elseif (strpos($contentType, 'text/html') > -1) {
+            $response = $this->renderHtmlMessage($response, $this->generateTrace());
         }
 
         return $response;
