@@ -25,7 +25,7 @@ abstract class Abstracts implements MiddlewareInterface
         $response = $handler->handle($request);
         $transformer = App::$container->get($this->getTransformer());
 
-        /** @var $instance TransformerAbstracts */
+        /** @var TransformerAbstracts $instance */
         $instance = new $transformer();
 
         $body = json_decode($response->getBody()->__toString(), true);

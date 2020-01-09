@@ -10,7 +10,7 @@ use Exception;
 /**
  * 字段验证异常
  */
-class ValidationException extends Exception
+class ValidationException extends Exception implements NeedCaptchaExceptionInterface
 {
     /**
      * 下次验证是否需要图形验证码
@@ -38,9 +38,7 @@ class ValidationException extends Exception
     }
 
     /**
-     * 下次请求是否需要验证码
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function isNeedCaptcha(): bool
     {

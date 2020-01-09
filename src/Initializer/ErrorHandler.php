@@ -6,6 +6,7 @@ namespace MDClub\Initializer;
 
 use MDClub\Constant\ApiErrorConstant;
 use MDClub\Exception\ApiException;
+use MDClub\Exception\NeedCaptchaExceptionInterface;
 use MDClub\Exception\ValidationException;
 use MDClub\Facade\Library\Captcha;
 use MDClub\Facade\Library\Log;
@@ -29,24 +30,17 @@ use Whoops\Run;
 class ErrorHandler
 {
     /**
-     * @var Throwable
-     */
-    protected $exception;
-
-    /**
      * @param Throwable $exception
      */
     public function __construct(Throwable $exception)
     {
-        $this->exception = $exception;
-
         switch (true) {
             case $exception instanceof ValidationException:
-                $response = $this->handleValidationException();
+                $response = $this->handleValidationException($exception);
                 break;
 
             case $exception instanceof ApiException:
-                $response = $this->handleApiException();
+                $response = $this->handleApiException($exception);
                 break;
 
             case $exception instanceof HttpNotFoundException:
@@ -54,11 +48,11 @@ class ErrorHandler
                 break;
 
             case $exception instanceof HttpMethodNotAllowedException:
-                $response = $this->handleNotAllowedException();
+                $response = $this->handleNotAllowedException($exception);
                 break;
 
             default:
-                $response = $this->handleUndefinedException();
+                $response = $this->handleUndefinedException($exception);
                 break;
         }
 
@@ -67,19 +61,40 @@ class ErrorHandler
     }
 
     /**
-     * 处理验证异常，返回 json
+     * 创建响应
+     *
+     * @param string $contentType
+     * @param int    $status
+     * @param string $body
      *
      * @return ResponseInterface
      */
-    protected function handleValidationException(): ResponseInterface
+    protected function createResponse(string $contentType, int $status, string $body): ResponseInterface
+    {
+        $response = App::$slim->getResponseFactory()->createResponse();
+
+        return $response
+            ->withHeader('Content-type', $contentType)
+            ->withStatus($status)
+            ->withBody((new StreamFactory())->createStream($body));
+    }
+
+    /**
+     * 处理验证异常，返回 json
+     *
+     * @param ValidationException $exception
+     *
+     * @return ResponseInterface
+     */
+    protected function handleValidationException(ValidationException $exception): ResponseInterface
     {
         $output = [
-            'code' => $this->exception->getCode(),
-            'message' => $this->exception->getMessage(),
-            'errors' => $this->exception->getErrors(),
+            'code' => $exception->getCode(),
+            'message' => $exception->getMessage(),
+            'errors' => $exception->getErrors(),
         ];
 
-        $output = $this->withCaptcha($output);
+        $output = $this->withCaptcha($exception, $output);
         $response = $this->renderJson($output);
         $response = $this->withTrace($response);
 
@@ -89,17 +104,19 @@ class ErrorHandler
     /**
      * 处理 API 异常，返回 json
      *
+     * @param ApiException $exception
+     *
      * @return ResponseInterface
      */
-    protected function handleApiException(): ResponseInterface
+    protected function handleApiException(ApiException $exception): ResponseInterface
     {
         $output = [
-            'code' => $this->exception->getCode(),
-            'message' => $this->exception->getMessage(),
+            'code' => $exception->getCode(),
+            'message' => $exception->getMessage(),
         ];
 
-        $output = $this->withExtraMessage($output);
-        $output = $this->withCaptcha($output);
+        $output = $this->withExtraMessage($exception, $output);
+        $output = $this->withCaptcha($exception, $output);
         $response = $this->renderJson($output);
         $response = $this->withTrace($response);
 
@@ -130,11 +147,13 @@ class ErrorHandler
     /**
      * 处理 NotAllowed 异常
      *
+     * @param HttpMethodNotAllowedException $exception
+     *
      * @return ResponseInterface
      */
-    protected function handleNotAllowedException(): ResponseInterface
+    protected function handleNotAllowedException(HttpMethodNotAllowedException $exception): ResponseInterface
     {
-        $allow = implode(', ', $this->exception->getAllowedMethods());
+        $allow = implode(', ', $exception->getAllowedMethods());
         $extraMessage = "Method not allowed. Must be one of: {$allow}";
 
         if (Request::getMethod() === 'OPTIONS') {
@@ -155,9 +174,11 @@ class ErrorHandler
     /**
      * 处理其他异常
      *
+     * @param Throwable $exception
+     *
      * @return ResponseInterface
      */
-    protected function handleUndefinedException(): ResponseInterface
+    protected function handleUndefinedException(Throwable $exception): ResponseInterface
     {
         // 调试环境交由 whoops 处理
         if (App::$config['APP_DEBUG']) {
@@ -172,16 +193,12 @@ class ErrorHandler
                 $contentType = 'text/html';
             }
 
-            $output = $whoops->prependHandler($handler)->handleException($this->exception);
-            $response = App::$slim->getResponseFactory()->createResponse();
+            $output = $whoops->prependHandler($handler)->handleException($exception);
 
-            return $response
-                ->withHeader('Content-type', $contentType)
-                ->withStatus(500)
-                ->withBody((new StreamFactory())->createStream($output));
+            return $this->createResponse($contentType, 500, $output);
         }
 
-        $this->logError();
+        $this->logError($exception);
 
         if (Request::isJson()) {
             return $this->renderJson([
@@ -195,11 +212,13 @@ class ErrorHandler
 
     /**
      * 写入异常到日志
+     *
+     * @param Throwable $exception
      */
-    protected function logError()
+    protected function logError(Throwable $exception)
     {
-        $message = $this->exception->getMessage();
-        $trace = $this->exception->getTrace();
+        $message = $exception->getMessage();
+        $trace = $exception->getTrace();
 
         Log::error($message, $trace);
     }
@@ -224,12 +243,14 @@ class ErrorHandler
     /**
      * 包含额外的错误描述
      *
-     * @param array $output
+     * @param ApiException $exception
+     * @param array        $output
+     *
      * @return array
      */
-    protected function withExtraMessage(array $output): array
+    protected function withExtraMessage(ApiException $exception, array $output): array
     {
-        $extraMessage = $this->exception->getExtraMessage();
+        $extraMessage = $exception->getExtraMessage();
 
         if (!$extraMessage) {
             return $output;
@@ -243,12 +264,14 @@ class ErrorHandler
     /**
      * 包含验证码
      *
-     * @param  array $output
+     * @param NeedCaptchaExceptionInterface $exception
+     * @param array                         $output
+     *
      * @return array
      */
-    protected function withCaptcha(array $output): array
+    protected function withCaptcha(NeedCaptchaExceptionInterface $exception, array $output): array
     {
-        if (!$this->exception->isNeedCaptcha()) {
+        if (!$exception->isNeedCaptcha()) {
             return $output;
         }
 
@@ -268,13 +291,10 @@ class ErrorHandler
      */
     protected function renderJson(array $output): ResponseInterface
     {
+        $contentType = 'application/json;charset=utf-8';
         $body = (string) json_encode($output);
-        $response = App::$slim->getResponseFactory()->createResponse();
 
-        return $response
-            ->withHeader('Content-type', 'application/json;charset=utf-8')
-            ->withStatus(200)
-            ->withBody((new StreamFactory())->createStream($body));
+        return $this->createResponse($contentType, 200, $body);
     }
 
     /**
@@ -284,13 +304,10 @@ class ErrorHandler
      */
     protected function render404Html(): ResponseInterface
     {
+        $contentType = 'text/html';
         $body = View::fetch('/404.php');
-        $response = App::$slim->getResponseFactory()->createResponse();
 
-        return $response
-            ->withHeader('Content-type', 'text/html')
-            ->withStatus(404)
-            ->withBody((new StreamFactory())->createStream($body));
+        return $this->createResponse($contentType, 404, $body);
     }
 
     /**
@@ -300,13 +317,10 @@ class ErrorHandler
      */
     protected function render500Html(): ResponseInterface
     {
+        $contentType = 'text/html';
         $body = View::fetch('/500.php');
-        $response = App::$slim->getResponseFactory()->createResponse();
 
-        return $response
-            ->withHeader('Content-type', 'text/html')
-            ->withStatus(500)
-            ->withBody((new StreamFactory())->createStream($body));
+        return $this->createResponse($contentType, 500, $body);
     }
 
     /**
@@ -317,11 +331,8 @@ class ErrorHandler
      */
     protected function renderPlainText(string $output = ''): ResponseInterface
     {
-        $response = App::$slim->getResponseFactory()->createResponse();
+        $contentType = 'text/plain';
 
-        return $response
-            ->withHeader('Content-type', 'text/plain')
-            ->withStatus(200)
-            ->withBody((new StreamFactory())->createStream($output));
+        return $this->createResponse($contentType, 200, $output);
     }
 }

@@ -104,14 +104,14 @@ class Answer extends Abstracts
         }
 
         $canEdit = Option::get(OptionConstant::ANSWER_CAN_EDIT);
-        $canEditBefore = Option::get(OptionConstant::ANSWER_CAN_EDIT_BEFORE);
+        $canEditBefore = (int) Option::get(OptionConstant::ANSWER_CAN_EDIT_BEFORE);
         $canEditOnlyNoComment = Option::get(OptionConstant::ANSWER_CAN_EDIT_ONLY_NO_COMMENT);
 
         if (!$canEdit) {
             throw new ApiException(ApiErrorConstant::ANSWER_CANT_EDIT);
         }
 
-        if ($canEditBefore && $answer['create_time'] + $canEditBefore < Request::time()) {
+        if ($canEditBefore && (int) $answer['create_time'] + $canEditBefore < Request::time()) {
             throw new ApiException(ApiErrorConstant::ANSWER_CANT_EDIT_TIMEOUT);
         }
 
@@ -150,14 +150,14 @@ class Answer extends Abstracts
         }
 
         $canDelete = Option::get(OptionConstant::ANSWER_CAN_DELETE);
-        $canDeleteBefore = Option::get(OptionConstant::ANSWER_CAN_DELETE_BEFORE);
+        $canDeleteBefore = (int) Option::get(OptionConstant::ANSWER_CAN_DELETE_BEFORE);
         $canDeleteOnlyNoComment = Option::get(OptionConstant::ANSWER_CAN_DELETE_ONLY_NO_COMMENT);
 
         if (!$canDelete) {
             throw new ApiException(ApiErrorConstant::ANSWER_CANT_DELETE);
         }
 
-        if ($canDeleteBefore && $answer['create_time'] + $canDeleteBefore < Request::time()) {
+        if ($canDeleteBefore && (int) $answer['create_time'] + $canDeleteBefore < Request::time()) {
             throw new ApiException(ApiErrorConstant::ANSWER_CANT_DELETE_TIMEOUT);
         }
 

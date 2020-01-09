@@ -36,7 +36,7 @@ trait Deletable
     /**
      * 永久删除
      *
-     * @param $deletableId
+     * @param int $deletableId
      *
      * @return array
      */

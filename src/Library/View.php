@@ -61,7 +61,7 @@ class View
     {
         $output = $this->fetch($template, $data);
 
-        /** @var $response ResponseInterface */
+        /** @var ResponseInterface $response */
         $response = App::$container->get(ResponseInterface::class);
         $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
         $response->getBody()->write($output);

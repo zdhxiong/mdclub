@@ -26,6 +26,10 @@ class Image extends Abstracts
         'user_id',
     ];
 
+    public $allowOrderFields = [
+        'create_time'
+    ];
+
     public $allowFilterFields = [
         'key',
         'item_type',
@@ -53,7 +57,7 @@ class Image extends Abstracts
     {
         return $this
             ->where($this->getWhereFromRequest())
-            ->order('create_time', 'DESC')
+            ->order($this->getOrderFromRequest(['create_time' => 'DESC']))
             ->paginate();
     }
 }

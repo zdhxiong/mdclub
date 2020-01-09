@@ -191,7 +191,7 @@ class User extends Abstracts implements FollowableInterface, GetableInterface
     /**
      * 创建账号
      *
-     * @param array [email, email_code, username, password]
+     * @param array $data [email, email_code, username, password]
      *
      * @return array
      */

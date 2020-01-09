@@ -9,7 +9,7 @@ use Exception;
 /**
  * API 异常
  */
-class ApiException extends Exception
+class ApiException extends Exception implements NeedCaptchaExceptionInterface
 {
     /**
      * 下次验证是否需要图形验证码
@@ -38,9 +38,7 @@ class ApiException extends Exception
     }
 
     /**
-     * 下次请求是否需要验证码
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function isNeedCaptcha(): bool
     {

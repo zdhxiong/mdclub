@@ -40,7 +40,7 @@ class Collection extends LaravelCollection
      * collect($arr)->unionFill([0, 1, 2, 3]) // [ 0 => ['year' => 2010], 1 => [], 2 => [], 3 => ['year' => 2013] ]
      *
      * @param  Collection|array $keys
-     * @param                   $defaultValue
+     * @param  mixed            $defaultValue
      * @return Collection
      */
     public function unionFill($keys, $defaultValue = []): self

@@ -104,7 +104,7 @@ abstract class Abstracts
     /**
      * 为字符串
      *
-     * @param $data
+     * @param mixed $data
      *
      * @return bool
      */
@@ -194,7 +194,7 @@ abstract class Abstracts
     /**
      * 设置当前字段的值
      *
-     * @param $value
+     * @param mixed $value
      */
     protected function setValue($value): void
     {
@@ -589,11 +589,11 @@ abstract class Abstracts
      * 包含：对数组中的每个元素进行验证的方法
      *
      * @param string $name
-     * @param        $arguments
+     * @param array  $arguments
      *
      * @return $this
      */
-    public function __call(string $name, $arguments): self
+    public function __call(string $name, array $arguments): self
     {
         $arrayValidators = [
             'eachID' => "{$this->field} 数组的每个元素都必须是正整数",

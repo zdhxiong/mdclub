@@ -26,6 +26,8 @@ abstract class Abstracts
     protected $year;
     protected $time;
     protected $copyright;
+    protected $cacheTTL;
+    protected $feed;
 
     public function __construct()
     {
@@ -34,6 +36,8 @@ abstract class Abstracts
         $this->year = date('Y');
         $this->time = Request::time();
         $this->copyright = "Copyright {$this->year}, {$this->siteName}";
+        $this->cacheTTL = 60;
+        $this->feed = new Feed();
     }
 
     /**
@@ -72,6 +76,31 @@ abstract class Abstracts
     }
 
     /**
+     * @param string $title
+     * @param string $url
+     * @param string $feedUrl
+     *
+     * @return Channel
+     */
+    protected function getChannel(string $title, string $url, string $feedUrl): Channel
+    {
+        $channel = new Channel();
+
+        $channel
+            ->title($title)
+            ->url($url)
+            ->feedUrl($feedUrl)
+            ->language($this->language)
+            ->copyright($this->copyright)
+            ->pubDate($this->time)
+            ->lastBuildDate($this->time)
+            ->ttl($this->cacheTTL)
+            ->appendTo($this->feed);
+
+        return $channel;
+    }
+
+    /**
      * 输出提问列表 RSS 内容
      *
      * @param array  $questions
@@ -89,26 +118,12 @@ abstract class Abstracts
         string $feedUrl,
         string $cacheKey
     ): ResponseInterface {
-        $cacheTTL = 60;
         $content = Cache::get($cacheKey);
-
         if ($content) {
             return $this->render($content);
         }
 
-        $feed = new Feed();
-        $channel = new Channel();
-
-        $channel
-            ->title($title)
-            ->url($url)
-            ->feedUrl($feedUrl)
-            ->language($this->language)
-            ->copyright($this->copyright)
-            ->pubDate($this->time)
-            ->lastBuildDate($this->time)
-            ->ttl($cacheTTL)
-            ->appendTo($feed);
+        $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($questions as $question) {
             $path = $this->url(RouteNameConstant::QUESTION, ['question_id' => $question['question_id']]);
@@ -124,8 +139,8 @@ abstract class Abstracts
                 ->appendTo($channel);
         }
 
-        $content = $feed->render();
-        Cache::set($cacheKey, $content, $cacheTTL);
+        $content = $this->feed->render();
+        Cache::set($cacheKey, $content, $this->cacheTTL);
 
         return $this->render($content);
     }
@@ -148,26 +163,12 @@ abstract class Abstracts
         string $feedUrl,
         string $cacheKey
     ): ResponseInterface {
-        $cacheTTL = 60;
         $content = Cache::get($cacheKey);
-
         if ($content) {
             return $this->render($content);
         }
 
-        $feed = new Feed();
-        $channel = new Channel();
-
-        $channel
-            ->title($title)
-            ->url($url)
-            ->feedUrl($feedUrl)
-            ->language($this->language)
-            ->copyright($this->copyright)
-            ->pubDate($this->time)
-            ->lastBuildDate($this->time)
-            ->ttl($cacheTTL)
-            ->appendTo($feed);
+        $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($articles as $article) {
             $path = $this->url(RouteNameConstant::ARTICLE, ['article_id' => $article['article_id']]);
@@ -183,8 +184,8 @@ abstract class Abstracts
                 ->appendTo($channel);
         }
 
-        $content = $feed->render();
-        Cache::set($cacheKey, $content, $cacheTTL);
+        $content = $this->feed->render();
+        Cache::set($cacheKey, $content, $this->cacheTTL);
 
         return $this->render($content);
     }
