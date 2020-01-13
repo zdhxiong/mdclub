@@ -11,6 +11,7 @@ use MDClub\Controller\Home\Inbox;
 use MDClub\Controller\Home\Index;
 use MDClub\Controller\Home\Notification;
 use MDClub\Controller\Home\Question;
+use MDClub\Controller\Home\Sitemap;
 use MDClub\Controller\Home\Topic;
 use MDClub\Controller\Home\User;
 use MDClub\Initializer\App;
@@ -71,5 +72,8 @@ class Home
 
         $slim
             ->get('/api', Api::class . ':index');
+
+        $slim
+            ->get('/sitemap.xml', Sitemap::class . ':index');
     }
 }

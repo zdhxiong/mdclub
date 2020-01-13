@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "646e15e67c5ba81192b5f86d860f2ef2",
+    "content-hash": "22dfc7a398be6e52788e0b5a5d5fcd2a",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -1848,6 +1848,57 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
+            "name": "samdark/sitemap",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samdark/sitemap.git",
+                "reference": "dcfef471e79abca9d3c4d83dd6a7861cec1a596a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samdark/sitemap/zipball/dcfef471e79abca9d3c4d83dd6a7861cec1a596a",
+                "reference": "dcfef471e79abca9d3c4d83dd6a7861cec1a596a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-xmlwriter": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "samdark\\sitemap\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Makarov",
+                    "email": "sam@rmcreative.ru",
+                    "homepage": "http://rmcreative.ru/"
+                }
+            ],
+            "description": "Sitemap and sitemap index builder",
+            "homepage": "https://github.com/samdark/sitemap",
+            "keywords": [
+                "Sitemap"
+            ],
+            "time": "2019-03-27T09:31:20+00:00"
+        },
+        {
             "name": "slim/php-view",
             "version": "2.2.1",
             "source": {
@@ -2794,63 +2845,6 @@
             "time": "2019-12-01T08:48:26+00:00"
         },
         {
-            "name": "thepixeldeveloper/sitemap",
-            "version": "5.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ThePixelDeveloper/Sitemap.git",
-                "reference": "a8bca8d8f8dbd478e88c4559c0d3565b28acf600"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ThePixelDeveloper/Sitemap/zipball/a8bca8d8f8dbd478e88c4559c0d3565b28acf600",
-                "reference": "a8bca8d8f8dbd478e88c4559c0d3565b28acf600",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0",
-                "phpstan/phpstan-phpunit": "^0",
-                "phpunit/phpunit": "^7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Thepixeldeveloper\\Sitemap\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mathew Davies",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP XML sitemap generation",
-            "keywords": [
-                "Sitemap",
-                "php",
-                "sitemap-builder",
-                "sitemap-generator",
-                "sitemap-php",
-                "sitemap-xml",
-                "xml",
-                "xml-sitemap"
-            ],
-            "time": "2018-06-24T16:00:39+00:00"
-        },
-        {
             "name": "tightenco/collect",
             "version": "v6.5.2",
             "source": {
@@ -3561,6 +3555,63 @@
                 "standards"
             ],
             "time": "2019-12-04T04:46:47+00:00"
+        },
+        {
+            "name": "thepixeldeveloper/sitemap",
+            "version": "5.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ThePixelDeveloper/Sitemap.git",
+                "reference": "a8bca8d8f8dbd478e88c4559c0d3565b28acf600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ThePixelDeveloper/Sitemap/zipball/a8bca8d8f8dbd478e88c4559c0d3565b28acf600",
+                "reference": "a8bca8d8f8dbd478e88c4559c0d3565b28acf600",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0",
+                "phpstan/phpstan-phpunit": "^0",
+                "phpunit/phpunit": "^7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Thepixeldeveloper\\Sitemap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathew Davies",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP XML sitemap generation",
+            "keywords": [
+                "Sitemap",
+                "php",
+                "sitemap-builder",
+                "sitemap-generator",
+                "sitemap-php",
+                "sitemap-xml",
+                "xml",
+                "xml-sitemap"
+            ],
+            "time": "2018-06-24T16:00:39+00:00"
         }
     ],
     "aliases": [],

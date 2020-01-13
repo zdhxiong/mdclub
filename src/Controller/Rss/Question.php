@@ -7,6 +7,7 @@ namespace MDClub\Controller\Rss;
 use MDClub\Constant\RouteNameConstant;
 use MDClub\Facade\Service\QuestionService;
 use MDClub\Facade\Transformer\QuestionTransformer;
+use MDClub\Helper\Url;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -27,8 +28,8 @@ class Question extends Abstracts
 
         $questions['data'] = QuestionTransformer::transform($questions['data']);
         $title = "{$this->siteName} 的最新提问";
-        $url = $this->url(RouteNameConstant::QUESTIONS);
-        $feedUrl = $this->url(RouteNameConstant::RSS_QUESTIONS);
+        $url = Url::fromRoute(RouteNameConstant::QUESTIONS);
+        $feedUrl = Url::fromRoute(RouteNameConstant::RSS_QUESTIONS);
         $cacheKey = 'rss_questions';
 
         return $this->renderQuestions($questions['data'], $title, $url, $feedUrl, $cacheKey);

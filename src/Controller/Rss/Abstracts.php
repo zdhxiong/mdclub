@@ -41,23 +41,6 @@ abstract class Abstracts
     }
 
     /**
-     * 获取指定路由链接
-     *
-     * @param string $name
-     * @param array  $data
-     * @param array  $queryParams
-     *
-     * @return string
-     */
-    protected function url(string $name, array $data = [], array $queryParams = []): string
-    {
-        $routeParser = App::$slim->getRouteCollector()->getRouteParser();
-        $host = Url::hostPath();
-
-        return $host . $routeParser->urlFor($name, $data, $queryParams);
-    }
-
-    /**
      * 输出 RSS 内容
      *
      * @param string $content
@@ -126,7 +109,7 @@ abstract class Abstracts
         $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($questions as $question) {
-            $path = $this->url(RouteNameConstant::QUESTION, ['question_id' => $question['question_id']]);
+            $path = Url::fromRoute(RouteNameConstant::QUESTION, ['question_id' => $question['question_id']]);
 
             (new Item())
                 ->title($question['title'])
@@ -171,7 +154,7 @@ abstract class Abstracts
         $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($articles as $article) {
-            $path = $this->url(RouteNameConstant::ARTICLE, ['article_id' => $article['article_id']]);
+            $path = Url::fromRoute(RouteNameConstant::ARTICLE, ['article_id' => $article['article_id']]);
 
             (new Item())
                 ->title($article['title'])

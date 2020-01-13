@@ -10,6 +10,7 @@ use MDClub\Facade\Service\QuestionService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Transformer\ArticleTransformer;
 use MDClub\Facade\Transformer\QuestionTransformer;
+use MDClub\Helper\Url;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -33,8 +34,8 @@ class User extends Abstracts
 
         $questions['data'] = QuestionTransformer::transform($questions['data']);
         $title = "{$this->siteName} 中 {$user['username']} 发表的提问";
-        $url = $this->url(RouteNameConstant::QUESTIONS, [], ['user_id' => $userId]);
-        $feedUrl = $this->url(RouteNameConstant::RSS_USER_QUESTIONS, ['user_id' => $userId]);
+        $url = Url::fromRoute(RouteNameConstant::QUESTIONS, [], ['user_id' => $userId]);
+        $feedUrl = Url::fromRoute(RouteNameConstant::RSS_USER_QUESTIONS, ['user_id' => $userId]);
         $cacheKey = "rss_user_{$userId}_questions";
 
         return $this->renderQuestions($questions['data'], $title, $url, $feedUrl, $cacheKey);
@@ -56,8 +57,8 @@ class User extends Abstracts
 
         $articles['data'] = ArticleTransformer::transform($articles['data']);
         $title = "{$this->siteName} 中 {$user['username']} 发表的文章";
-        $url = $this->url(RouteNameConstant::ARTICLES, [], ['user_id' => $userId]);
-        $feedUrl = $this->url(RouteNameConstant::RSS_USER_ARTICLES, ['user_id' => $userId]);
+        $url = Url::fromRoute(RouteNameConstant::ARTICLES, [], ['user_id' => $userId]);
+        $feedUrl = Url::fromRoute(RouteNameConstant::RSS_USER_ARTICLES, ['user_id' => $userId]);
         $cacheKey = "rss_user_{$userId}_articles";
 
         return $this->renderArticles($articles['data'], $title, $url, $feedUrl, $cacheKey);

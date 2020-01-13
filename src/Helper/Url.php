@@ -7,6 +7,7 @@ namespace MDClub\Helper;
 use MDClub\Constant\OptionConstant;
 use MDClub\Facade\Library\Option;
 use MDClub\Facade\Library\Request;
+use MDClub\Initializer\App;
 
 /**
  * URL 相关方法
@@ -84,5 +85,22 @@ class Url
         }
 
         return $storageUrl;
+    }
+
+    /**
+     * 从路由生成链接
+     *
+     * @param string $name
+     * @param array  $data
+     * @param array  $queryParams
+     *
+     * @return string
+     */
+    public static function fromRoute(string $name, array $data = [], array $queryParams = []): string
+    {
+        $routeParser = App::$slim->getRouteCollector()->getRouteParser();
+        $host = Url::hostPath();
+
+        return $host . $routeParser->urlFor($name, $data, $queryParams);
     }
 }

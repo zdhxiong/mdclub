@@ -7,6 +7,7 @@ namespace MDClub\Controller\Rss;
 use MDClub\Constant\RouteNameConstant;
 use MDClub\Facade\Service\ArticleService;
 use MDClub\Facade\Transformer\ArticleTransformer;
+use MDClub\Helper\Url;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -27,8 +28,8 @@ class Article extends Abstracts
 
         $articles['data'] = ArticleTransformer::transform($articles['data']);
         $title = "{$this->siteName} 的最新文章";
-        $url = $this->url(RouteNameConstant::ARTICLES);
-        $feedUrl = $this->url(RouteNameConstant::RSS_ARTICLES);
+        $url = Url::fromRoute(RouteNameConstant::ARTICLES);
+        $feedUrl = Url::fromRoute(RouteNameConstant::RSS_ARTICLES);
         $cacheKey = 'rss_articles';
 
         return $this->renderArticles($articles['data'], $title, $url, $feedUrl, $cacheKey);
