@@ -1,23 +1,23 @@
 type: object
 properties:
-  o:
+  original:
     type: string
     description: 封面原图地址
-    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
-  s:
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
+  small:
     type: string
     description: 小型封面地址
-    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
-  m:
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
+  middle:
     type: string
     description: 中型封面地址
-    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
-  l:
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
+  large:
     type: string
     description: 大型封面地址
-    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
+    example: https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
 required:
-  - o
-  - s
-  - m
-  - l
+  - original
+  - small
+  - middle
+  - large

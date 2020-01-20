@@ -1,15 +1,15 @@
 type: object
 properties:
-  o:
+  original:
     type: string
     description: 原图地址
-  r:
+  release:
     type: string
     description: 宽度固定，高度自适应的图片地址
-  t:
+  thumb:
     type: string
     description: 固定宽高的缩略图地址
 required:
-  - o
-  - r
-  - t
+  - original
+  - release
+  - thumb
