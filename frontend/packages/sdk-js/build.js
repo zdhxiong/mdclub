@@ -2,16 +2,16 @@ const rollup = require('rollup');
 const { eslint } = require('rollup-plugin-eslint');
 const { uglify } = require('rollup-plugin-uglify');
 const buble = require('@rollup/plugin-buble');
-const typescript = require('rollup-plugin-typescript');
+const typescript = require('@rollup/plugin-typescript');
 const polyfill = require('rollup-plugin-polyfill');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const json = require('rollup-plugin-json');
+const resolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const json = require('@rollup/plugin-json');
 const tsconfig = require('./src/tsconfig.json');
 const pkg = require('./package.json');
 const serverFactory = require('spa-server');
 
-const arguments = process.argv.splice(2);
+const args = process.argv.splice(2);
 
 const banner = `
 /*!
@@ -128,8 +128,8 @@ async function test() {
   console.log('打开 http://127.0.0.1:8889/test/index.html 开始测试');
 }
 
-if (arguments.indexOf('--build') > -1) {
+if (args.indexOf('--build') > -1) {
   build();
-} else if (arguments.indexOf('--test') > -1) {
+} else if (args.indexOf('--test') > -1) {
   test();
 }
