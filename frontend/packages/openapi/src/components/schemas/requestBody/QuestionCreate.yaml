@@ -2,4 +2,4 @@ allOf:
   - $ref: '#/components/schemas/QuestionUpdateRequestBody'
 required:
   - title
-  - topic_id
+  - topic_ids

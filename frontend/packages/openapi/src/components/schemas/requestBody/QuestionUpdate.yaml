@@ -4,7 +4,7 @@ properties:
     type: string
     description: 标题
     example: 请问作者开发了哪些软件？
-  topic_id:
+  topic_ids:
     type: array
     items:
       type: integer

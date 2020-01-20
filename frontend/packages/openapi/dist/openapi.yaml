@@ -2921,22 +2921,22 @@ components:
           type: string
           description: 封面原图地址
           example: >-
-            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
         small:
           type: string
           description: 小型封面地址
           example: >-
-            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
         middle:
           type: string
           description: 中型封面地址
           example: >-
-            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
         large:
           type: string
           description: 大型封面地址
           example: >-
-            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
       required:
         - original
         - small
@@ -3097,22 +3097,22 @@ components:
           type: string
           description: 头像原图地址
           example: >-
-            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
         small:
           type: string
           description: 小头像地址
           example: >-
-            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
         middle:
           type: string
           description: 中头像地址
           example: >-
-            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
         large:
           type: string
           description: 大头像地址
           example: >-
-            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
       required:
         - original
         - small
@@ -3125,22 +3125,22 @@ components:
           type: string
           description: 封面原图地址
           example: >-
-            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_o.jpg
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
         small:
           type: string
           description: 小型封面地址
           example: >-
-            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_s.jpg
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
         middle:
           type: string
           description: 中型封面地址
           example: >-
-            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_m.jpg
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
         large:
           type: string
           description: 大型封面地址
           example: >-
-            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_l.jpg
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
       required:
         - original
         - small
@@ -3182,7 +3182,7 @@ components:
         - $ref: '#/components/schemas/ArticleUpdateRequestBody'
       required:
         - title
-        - topic_id
+        - topic_ids
     ArticleUpdateRequestBody:
       type: object
       properties:
@@ -3190,7 +3190,7 @@ components:
           type: string
           description: 标题
           example: 欢迎使用 MDClub 开源社区系统
-        topic_id:
+        topic_ids:
           type: array
           items:
             type: integer
@@ -3668,7 +3668,7 @@ components:
         - $ref: '#/components/schemas/QuestionUpdateRequestBody'
       required:
         - title
-        - topic_id
+        - topic_ids
     QuestionUpdateRequestBody:
       type: object
       properties:
@@ -3676,7 +3676,7 @@ components:
           type: string
           description: 标题
           example: 请问作者开发了哪些软件？
-        topic_id:
+        topic_ids:
           type: array
           items:
             type: integer

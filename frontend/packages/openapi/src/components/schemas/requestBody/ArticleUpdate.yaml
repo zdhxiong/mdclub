@@ -4,7 +4,7 @@ properties:
     type: string
     description: 标题
     example: 欢迎使用 MDClub 开源社区系统
-  topic_id:
+  topic_ids:
     type: array
     items:
       type: integer
