@@ -38,9 +38,9 @@ class UserCover
     protected function getBrandSize(): array
     {
         return [
-            's' => [600, 336],
-            'm' => [1050, 588],
-            'l' => [1450, 812],
+            'small' => [600, 336],
+            'middle' => [1050, 588],
+            'large' => [1450, 812],
         ];
     }
 
@@ -53,7 +53,7 @@ class UserCover
     {
         $suffix = Request::isSupportWebp() ? 'webp' : 'jpg';
         $staticUrl = Url::staticPath();
-        $data['o'] = "{$staticUrl}default/user_cover.{$suffix}";
+        $data['original'] = "{$staticUrl}default/user_cover.{$suffix}";
 
         foreach (array_keys($this->getBrandSize()) as $size) {
             $data[$size] = "{$staticUrl}default/user_cover_{$size}.{$suffix}";

@@ -19,8 +19,8 @@ use Psr\Http\Message\UploadedFileInterface;
  *
  * 如果使用本地存储，则每张图片需要保存为：
  * 1. 原图
- * 2. 宽度为 650px，高度自适应（存储为本地图片时，以 _r 为后缀）
- * 3. 宽度为 132px，高度为 88px，居中裁剪的缩略图（存储为本地图片时，以 _t 为后缀）
+ * 2. 宽度为 650px，高度自适应（存储为本地图片时，以 _release 为后缀）
+ * 3. 宽度为 132px，高度为 88px，居中裁剪的缩略图（存储为本地图片时，以 _thumb 为后缀）
  */
 class Image extends Abstracts implements GetableInterface
 {
@@ -42,8 +42,8 @@ class Image extends Abstracts implements GetableInterface
     protected function getSize(): array
     {
         return [
-            't' => [132, 88],
-            'r' => [650, 0],
+            'thumb' => [132, 88],
+            'release' => [650, 0],
         ];
     }
 

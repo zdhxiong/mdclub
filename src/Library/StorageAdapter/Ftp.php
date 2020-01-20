@@ -113,7 +113,7 @@ class Ftp extends Abstracts implements Interfaces
     public function get(string $path, array $thumbs): array
     {
         $storagePath = Url::storagePath();
-        $data['o'] = $storagePath . $path;
+        $data['original'] = $storagePath . $path;
 
         foreach (array_keys($thumbs) as $size) {
             $data[$size] = $storagePath . $this->getThumbLocation($path, $size);

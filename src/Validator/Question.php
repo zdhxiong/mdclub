@@ -40,7 +40,7 @@ class Question extends Abstracts
         'title' => '提问标题',
         'content_markdown' => '提问内容',
         'content_rendered' => '提问内容',
-        'topic_id' => '所属话题'
+        'topic_ids' => '所属话题'
     ];
 
     /**
@@ -54,7 +54,7 @@ class Question extends Abstracts
         return $this->data($data)
             ->field('title')->exist()->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownExist()->markdownSupport(100000)
-            ->field('topic_id')->exist()->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
+            ->field('topic_ids')->exist()->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
     }
 
@@ -72,7 +72,7 @@ class Question extends Abstracts
         return $this->data($data)
             ->field('title')->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownSupport(100000)
-            ->field('topic_id')->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
+            ->field('topic_ids')->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
     }
 

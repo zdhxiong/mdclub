@@ -39,9 +39,9 @@ class UserAvatar
     protected function getBrandSize(): array
     {
         return [
-            's' => [64, 64],
-            'm' => [128, 128],
-            'l' => [256, 256],
+            'small' => [64, 64],
+            'middle' => [128, 128],
+            'large' => [256, 256],
         ];
     }
 

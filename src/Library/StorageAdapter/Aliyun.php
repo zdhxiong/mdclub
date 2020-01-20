@@ -123,7 +123,7 @@ class Aliyun extends Abstracts implements Interfaces
     {
         $storagePath = Url::storagePath();
         $isSupportWebp = Request::isSupportWebp();
-        $data['o'] = $storagePath . $path;
+        $data['original'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
             $params = "?x-oss-process=image/resize,m_fill,w_{$width},h_{$height},limit_0";

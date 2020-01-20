@@ -38,7 +38,7 @@ class Article extends Abstracts
         'title' => '文章标题',
         'content_markdown' => '文章正文',
         'content_rendered' => '文章正文',
-        'topic_id' => '所属话题'
+        'topic_ids' => '所属话题'
     ];
 
     /**
@@ -52,7 +52,7 @@ class Article extends Abstracts
         return $this->data($data)
             ->field('title')->exist()->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownExist()->markdownSupport(100000)
-            ->field('topic_id')->exist()->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
+            ->field('topic_ids')->exist()->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
     }
 
@@ -70,7 +70,7 @@ class Article extends Abstracts
         return $this->data($data)
             ->field('title')->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownSupport(100000)
-            ->field('topic_id')->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
+            ->field('topic_ids')->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
     }
 

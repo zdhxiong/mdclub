@@ -102,7 +102,7 @@ class Question extends Abstracts implements
             ->set('content_rendered', $createData['content_rendered'])
             ->insert();
 
-        $this->updateTopicable($questionId, $createData['topic_id']);
+        $this->updateTopicable($questionId, $createData['topic_ids']);
 
         QuestionService::addFollow($questionId);
         UserModel::incQuestionCount($userId);
@@ -140,8 +140,8 @@ class Question extends Abstracts implements
             QuestionModel::update();
         }
 
-        if (isset($updateDate['topic_id'])) {
-            $this->updateTopicable($questionId, $updateDate['topic_id'], true);
+        if (isset($updateDate['topic_ids'])) {
+            $this->updateTopicable($questionId, $updateDate['topic_ids'], true);
         }
     }
 

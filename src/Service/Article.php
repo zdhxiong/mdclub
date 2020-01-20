@@ -100,7 +100,7 @@ class Article extends Abstracts implements
             ->set('content_rendered', $createData['content_rendered'])
             ->insert();
 
-        $this->updateTopicable($articleId, $createData['topic_id']);
+        $this->updateTopicable($articleId, $createData['topic_ids']);
 
         ArticleService::addFollow($articleId);
         UserModel::incArticleCount($userId);
@@ -138,8 +138,8 @@ class Article extends Abstracts implements
             ArticleModel::update();
         }
 
-        if (isset($updateData['topic_id'])) {
-            $this->updateTopicable($articleId, $updateData['topic_id'], true);
+        if (isset($updateData['topic_ids'])) {
+            $this->updateTopicable($articleId, $updateData['topic_ids'], true);
         }
     }
 

@@ -55,9 +55,9 @@ class Topic extends Abstracts implements DeletableInterface, FollowableInterface
     protected function getBrandSize(): array
     {
         return [
-            's' => [360, 202],
-            'm' => [720, 404],
-            'l' => [1080, 606],
+            'small' => [360, 202],
+            'middle' => [720, 404],
+            'large' => [1080, 606],
         ];
     }
 
@@ -70,7 +70,7 @@ class Topic extends Abstracts implements DeletableInterface, FollowableInterface
     {
         $suffix = Request::isSupportWebp() ? 'webp' : 'jpg';
         $staticPath = Url::staticPath();
-        $data['o'] = "{$staticPath}default/topic_cover.{$suffix}";
+        $data['original'] = "{$staticPath}default/topic_cover.{$suffix}";
 
         foreach (array_keys($this->getBrandSize()) as $size) {
             $data[$size] = "{$staticPath}default/topic_cover_{$size}.{$suffix}";
