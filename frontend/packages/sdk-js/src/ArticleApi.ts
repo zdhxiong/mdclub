@@ -50,7 +50,7 @@ interface CreateParams {
   /**
    * 话题ID
    */
-  topic_id: Array<number>;
+  topic_ids: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -282,7 +282,7 @@ interface UpdateParams {
   /**
    * 话题ID
    */
-  topic_id?: Array<number>;
+  topic_ids?: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -332,7 +332,7 @@ export const create = (params: CreateParams): Promise<ArticleResponse> =>
     buildURL('/articles', params, ['include']),
     buildRequestBody(params, [
       'title',
-      'topic_id',
+      'topic_ids',
       'content_markdown',
       'content_rendered',
     ]),
@@ -490,7 +490,7 @@ export const update = (params: UpdateParams): Promise<ArticleResponse> =>
     buildURL('/articles/{article_id}', params, ['include']),
     buildRequestBody(params, [
       'title',
-      'topic_id',
+      'topic_ids',
       'content_markdown',
       'content_rendered',
     ]),

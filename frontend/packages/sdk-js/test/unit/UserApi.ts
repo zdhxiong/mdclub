@@ -128,7 +128,12 @@ describe('UserApi', () => {
     setDefaultTokenToNormal();
 
     return UserApi.deleteMyAvatar().then(response => {
-      deepEqual(Object.keys(response.data), ['o', 's', 'm', 'l']);
+      deepEqual(Object.keys(response.data), [
+        'original',
+        'small',
+        'middle',
+        'large',
+      ]);
     });
   });
 
@@ -137,7 +142,12 @@ describe('UserApi', () => {
     setDefaultTokenToNormal();
 
     return UserApi.deleteMyCover().then(response => {
-      deepEqual(Object.keys(response.data), ['o', 's', 'm', 'l']);
+      deepEqual(Object.keys(response.data), [
+        'original',
+        'small',
+        'middle',
+        'large',
+      ]);
     });
   });
 
@@ -149,7 +159,12 @@ describe('UserApi', () => {
     setDefaultTokenToManager();
 
     return UserApi.deleteAvatar({ user_id: 10000 }).then(response => {
-      deepEqual(Object.keys(response.data), ['o', 's', 'm', 'l']);
+      deepEqual(Object.keys(response.data), [
+        'original',
+        'small',
+        'middle',
+        'large',
+      ]);
     });
   });
 
@@ -161,7 +176,12 @@ describe('UserApi', () => {
     setDefaultTokenToManager();
 
     return UserApi.deleteCover({ user_id: 10000 }).then(response => {
-      deepEqual(Object.keys(response.data), ['o', 's', 'm', 'l']);
+      deepEqual(Object.keys(response.data), [
+        'original',
+        'small',
+        'middle',
+        'large',
+      ]);
     });
   });
 

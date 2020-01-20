@@ -18,7 +18,7 @@ import { failed, successWhen } from '../utils/result';
 
 const articleCreateData: any = {
   title: '文章1',
-  topic_id: [1, 2],
+  topic_ids: [1, 2],
   content_markdown: 'test',
   include: ['user', 'topics', 'is_following', 'voting'],
 };
@@ -26,7 +26,7 @@ const articleCreateData: any = {
 const articleUpdateData: any = {
   article_id: 1,
   title: '更新后的提问',
-  topic_id: [1],
+  topic_ids: [1],
   content_rendered: '<p>new</p>',
   include: ['user', 'topics', 'is_following', 'voting'],
 };
@@ -42,13 +42,13 @@ describe('ArticleApi', () => {
 
     return ArticleApi.create({
       title: 'title',
-      topic_id: [2, 5],
+      topic_ids: [2, 5],
       content_markdown: 'test',
     })
       .then(() => failed())
       .catch(response => {
         successWhen(response.code === errors.COMMON_FIELD_VERIFY_FAILED);
-        deepEqual(Object.keys(response.errors), ['topic_id']);
+        deepEqual(Object.keys(response.errors), ['topic_ids']);
       });
   });
 

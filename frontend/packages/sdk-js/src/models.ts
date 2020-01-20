@@ -163,7 +163,7 @@ export interface ArticleCreateRequestBody {
   /**
    * 话题ID
    */
-  topic_id: Array<number>;
+  topic_ids: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -227,7 +227,7 @@ export interface ArticleUpdateRequestBody {
   /**
    * 话题ID
    */
-  topic_id?: Array<number>;
+  topic_ids?: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -526,15 +526,15 @@ export interface ImageUrls {
   /**
    * 原图地址
    */
-  o: string;
+  original: string;
   /**
    * 宽度固定，高度自适应的图片地址
    */
-  r: string;
+  release: string;
   /**
    * 固定宽高的缩略图地址
    */
-  t: string;
+  thumb: string;
 }
 
 export interface ImagesResponse {
@@ -1322,7 +1322,7 @@ export interface QuestionCreateRequestBody {
   /**
    * 话题ID
    */
-  topic_id: Array<number>;
+  topic_ids: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -1386,7 +1386,7 @@ export interface QuestionUpdateRequestBody {
   /**
    * 话题ID
    */
-  topic_id?: Array<number>;
+  topic_ids?: Array<number>;
   /**
    * Markdown 格式的正文
    */
@@ -1598,19 +1598,19 @@ export interface TopicCover {
   /**
    * 封面原图地址
    */
-  o: string;
+  original: string;
   /**
    * 小型封面地址
    */
-  s: string;
+  small: string;
   /**
    * 中型封面地址
    */
-  m: string;
+  middle: string;
   /**
    * 大型封面地址
    */
-  l: string;
+  large: string;
 }
 
 export interface TopicCreateRequestBody {
@@ -1793,19 +1793,19 @@ export interface UserAvatar {
   /**
    * 头像原图地址
    */
-  o: string;
+  original: string;
   /**
    * 小头像地址
    */
-  s: string;
+  small: string;
   /**
    * 中头像地址
    */
-  m: string;
+  middle: string;
   /**
    * 大头像地址
    */
-  l: string;
+  large: string;
 }
 
 export interface UserAvatarRequestBody {
@@ -1827,19 +1827,19 @@ export interface UserCover {
   /**
    * 封面原图地址
    */
-  o: string;
+  original: string;
   /**
    * 小型封面地址
    */
-  s: string;
+  small: string;
   /**
    * 中型封面地址
    */
-  m: string;
+  middle: string;
   /**
    * 大型封面地址
    */
-  l: string;
+  large: string;
 }
 
 export interface UserCoverRequestBody {
