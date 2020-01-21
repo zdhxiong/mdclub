@@ -6,6 +6,7 @@ import {
   RequestOptionsInterface,
   ResponseInterface,
 } from '../util/misc';
+import { GET } from '../util/requestMethod';
 import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 import extend from 'mdui.jq/es/functions/extend';
 
@@ -17,22 +18,23 @@ export default class extends BrowserAbstract
       token: this.getStorage('token') || undefined,
     };
 
-    if (options.headers) {
-      headers = extend({}, headers, options.headers);
-    }
-
     if (options.data && options.data instanceof FormData) {
       headers['Content-Type'] = 'multipart/form-data';
     }
 
+    if (options.headers) {
+      headers = extend({}, headers, options.headers);
+    }
+
     return new Promise((resolve, reject): void => {
       $.ajax({
-        method: options.method || 'GET',
-        url: `${globalOptions.apiPath || ''}${options.url || ''}`,
+        method: options.method || GET,
+        url: `${globalOptions.apiPath}${options.url || ''}`,
         data: JSON.stringify(options.data),
         headers,
         dataType: 'json',
         contentType: 'application/json',
+        timeout: globalOptions.timeout,
         global: false,
         beforeSend: () => {
           globalOptions.beforeSend && globalOptions.beforeSend();

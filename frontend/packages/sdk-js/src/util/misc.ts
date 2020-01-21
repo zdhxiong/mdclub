@@ -1,5 +1,6 @@
 import { Pagination } from '../models';
 import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
+import { METHOD_TYPE } from './requestMethod';
 
 export type BeforeSendCallback = () => void | false;
 export type SuccessCallback = (response: any) => void;
@@ -19,7 +20,7 @@ export interface ResponseInterface {
  * 请求适配器参数接口
  */
 export interface RequestOptionsInterface {
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method?: METHOD_TYPE;
   url?: string;
   data?: PlainObject | FormData;
   headers?: PlainObject<string>;

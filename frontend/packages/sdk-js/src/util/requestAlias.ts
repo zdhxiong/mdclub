@@ -2,6 +2,7 @@ import defaults from '../defaults';
 import { ResponseInterface } from './misc';
 import { isUndefined } from 'mdui.jq/es/utils';
 import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
+import { METHOD_TYPE, GET, POST, PUT, PATCH, DELETE } from './requestMethod';
 
 if (isUndefined(defaults.adapter)) {
   throw new Error(
@@ -9,16 +10,8 @@ if (isUndefined(defaults.adapter)) {
   );
 }
 
-type METHOD = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
-const GET = 'GET';
-const POST = 'POST';
-const PUT = 'PUT';
-const PATCH = 'PATCH';
-const DELETE = 'DELETE';
-
 const requestHandle = (
-  method: METHOD,
+  method: METHOD_TYPE,
   url: string,
   data?: PlainObject | FormData,
 ): Promise<ResponseInterface> => {

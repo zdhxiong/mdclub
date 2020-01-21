@@ -97,7 +97,7 @@ async function test() {
   const bundle = await rollup.rollup({
     input: './test/index.ts',
     plugins: [
-      resolve(),
+      resolve({ mainFields: ["jsnext", "preferBuiltins", "browser"] }),
       commonjs(),
       json(),
       eslint({

@@ -16,9 +16,10 @@ interface DefaultsInterface {
   // 是否进行请求方法重写，若为true，则把 patch, put 请求重写成 post，把 delete 请求重写成 get
   methodOverride?: boolean;
 
-  /**
-   * 适配器实例
-   */
+  // 请求超时时间
+  timeout?: number;
+
+  // 适配器实例
   adapter?: RequestAdapterInterface;
 
   // 开始发送请求前的回调函数，返回 false 可取消请求
@@ -34,6 +35,10 @@ interface DefaultsInterface {
   complete?: CompleteCallback;
 }
 
-const defaults: DefaultsInterface = {};
+const defaults: DefaultsInterface = {
+  apiPath: '',
+  methodOverride: false,
+  timeout: 30000,
+};
 
 export default defaults;
