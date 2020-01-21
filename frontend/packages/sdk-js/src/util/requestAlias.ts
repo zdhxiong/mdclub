@@ -9,34 +9,58 @@ if (isUndefined(defaults.adapter)) {
   );
 }
 
+type METHOD = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+const GET = 'GET';
+const POST = 'POST';
+const PUT = 'PUT';
+const PATCH = 'PATCH';
+const DELETE = 'DELETE';
+
 const requestHandle = (
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  method: METHOD,
   url: string,
   data?: PlainObject | FormData,
-): Promise<ResponseInterface> =>
-  defaults.adapter!.request({ method, url, data });
+): Promise<ResponseInterface> => {
+  const headers: PlainObject<string> = {};
+  const XHttpMethodOverride = 'X-Http-Method-Override';
+
+  if (defaults.methodOverride) {
+    if (method === PATCH || method === PUT) {
+      headers[XHttpMethodOverride] = method;
+      method = POST;
+    }
+
+    if (method === DELETE) {
+      headers[XHttpMethodOverride] = method;
+      method = GET;
+    }
+  }
+
+  return defaults.adapter!.request({ method, url, data, headers });
+};
 
 export const getRequest = (
   url: string,
   data?: PlainObject,
-): Promise<ResponseInterface> => requestHandle('GET', url, data);
+): Promise<ResponseInterface> => requestHandle(GET, url, data);
 
 export const postRequest = (
   url: string,
   data?: PlainObject | FormData,
-): Promise<ResponseInterface> => requestHandle('POST', url, data);
+): Promise<ResponseInterface> => requestHandle(POST, url, data);
 
 export const patchRequest = (
   url: string,
   data?: PlainObject,
-): Promise<ResponseInterface> => requestHandle('PATCH', url, data);
+): Promise<ResponseInterface> => requestHandle(PATCH, url, data);
 
 export const putRequest = (
   url: string,
   data?: PlainObject,
-): Promise<ResponseInterface> => requestHandle('PUT', url, data);
+): Promise<ResponseInterface> => requestHandle(PUT, url, data);
 
 export const deleteRequest = (
   url: string,
   data?: PlainObject,
-): Promise<ResponseInterface> => requestHandle('DELETE', url, data);
+): Promise<ResponseInterface> => requestHandle(DELETE, url, data);

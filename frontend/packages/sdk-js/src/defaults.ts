@@ -13,6 +13,9 @@ interface DefaultsInterface {
   // API 地址
   apiPath?: string;
 
+  // 是否进行请求方法重写，若为true，则把 patch, put 请求重写成 post，把 delete 请求重写成 get
+  methodOverride?: boolean;
+
   /**
    * 适配器实例
    */

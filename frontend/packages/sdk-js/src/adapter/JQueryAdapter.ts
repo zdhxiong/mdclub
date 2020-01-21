@@ -7,15 +7,19 @@ import {
   ResponseInterface,
 } from '../util/misc';
 import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
+import extend from 'mdui.jq/es/functions/extend';
 
 export default class extends BrowserAbstract
   implements RequestAdapterInterface {
-
   request(options: RequestOptionsInterface): Promise<ResponseInterface> {
-    const headers: PlainObject = {
+    let headers: PlainObject = {
       'Content-Type': 'application/json',
       token: this.getStorage('token') || undefined,
     };
+
+    if (options.headers) {
+      headers = extend({}, headers, options.headers);
+    }
 
     if (options.data && options.data instanceof FormData) {
       headers['Content-Type'] = 'multipart/form-data';
@@ -31,21 +35,21 @@ export default class extends BrowserAbstract
         contentType: 'application/json',
         global: false,
         beforeSend: () => {
-          globalOptions.beforeSend && globalOptions.beforeSend()
+          globalOptions.beforeSend && globalOptions.beforeSend();
         },
         success: data => {
           globalOptions.success && globalOptions.success(data);
           data.code === 0 ? resolve(data) : reject(data);
         },
         error: (_, textStatus) => {
-          globalOptions.error && globalOptions.error(textStatus)
+          globalOptions.error && globalOptions.error(textStatus);
           reject({
             code: 999999,
             message: textStatus,
-          })
+          });
         },
         complete: () => {
-          globalOptions.complete && globalOptions.complete()
+          globalOptions.complete && globalOptions.complete();
         },
       });
     });

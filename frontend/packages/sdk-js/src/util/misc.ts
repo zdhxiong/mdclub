@@ -22,6 +22,7 @@ export interface RequestOptionsInterface {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   url?: string;
   data?: PlainObject | FormData;
+  headers?: PlainObject<string>;
 }
 
 /**
