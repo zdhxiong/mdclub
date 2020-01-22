@@ -26,9 +26,7 @@ const input = './src/index.ts';
 const plugins = [
   resolve(),
   commonjs(),
-  eslint({
-    fix: true,
-  }),
+  eslint(),
   typescript(tsconfig.compilerOptions),
 ];
 
@@ -53,7 +51,6 @@ async function buildUmd() {
   plugins.push(
     buble(),
     polyfill([
-      // 等把 mdui.jq 的 ajax 的 core, event, jsonp 拆分后，不需要在引入事件 polyfill
       'mdn-polyfills/MouseEvent',
       'mdn-polyfills/CustomEvent',
       'promise-polyfill/src/polyfill',
@@ -100,14 +97,17 @@ async function test() {
       resolve({ mainFields: ["jsnext", "preferBuiltins", "browser"] }),
       commonjs(),
       json(),
-      eslint({
-        fix: true,
-      }),
+      eslint(),
       typescript({
         module: "ES6",
         target: "ES6"
       }),
       buble(),
+      polyfill([
+        'mdn-polyfills/MouseEvent',
+        'mdn-polyfills/CustomEvent',
+        'promise-polyfill/src/polyfill',
+      ]),
     ],
   });
 

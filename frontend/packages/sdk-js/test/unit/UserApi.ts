@@ -4,6 +4,7 @@ import * as QuestionApi from '../../es/QuestionApi';
 import * as TopicApi from '../../es/TopicApi';
 import errors from '../utils/errors';
 import models from '../utils/models';
+import extend from 'mdui.jq/es/functions/extend';
 import {
   removeDefaultToken,
   setDefaultTokenToManager,
@@ -99,11 +100,11 @@ describe('UserApi', () => {
     setDefaultTokenToManager();
 
     return UserApi.update(
-      Object.assign({ user_id: 10000 }, userUpdateData),
+      extend({ user_id: 10000 }, userUpdateData),
     ).then(response => matchModel(response.data, models.User));
   });
   it('update - 普通用户修改别人的信息', () =>
-    needManager(UserApi.update, Object.assign({ user_id: 1 }, userUpdateData)));
+    needManager(UserApi.update, extend({ user_id: 1 }, userUpdateData)));
 
   it('update - 修改自己的信息', () => {
     setDefaultTokenToNormal();

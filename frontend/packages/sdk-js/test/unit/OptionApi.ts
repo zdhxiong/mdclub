@@ -166,7 +166,7 @@ describe('OptionApi', () => {
       answer_can_delete: 'true',
       // @ts-ignore
       answer_can_delete_before: '0',
-      site_description: 'test'.repeat(1000),
+      site_description: new Array(1000).join('test'),
     })
       .then(() => failed('值类型错误时，应该抛出错误'))
       .catch((response: any) => {

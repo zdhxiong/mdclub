@@ -6,13 +6,16 @@
   "module": "dist/mdclub-sdk.esm.js",
   "types": "es/index.d.ts",
   "scripts": {
-    "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
-    "build": "tsc -p src/tsconfig.json && node build.js --build",
-    "test": "cd test && node reset_mysql.js && cd ../ && node build.js --test"
+    "eslint-src": "eslint --fix src/**/*.ts",
+    "eslint-test": "eslint --fix test/**/*.ts",
+    "eslint": "npm run eslint-src && npm run eslint-test",
+    "test": "npm run eslint-test && cd test && node reset_mysql.js && cd ../ && node build.js --test",
+    "build": "npm run eslint-src && tsc -p src/tsconfig.json && node build.js --build",
+    "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run build"
+      "pre-commit": "npm run eslint-test && npm run build"
     }
   },
   "repository": {

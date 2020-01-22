@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "strict": true, // noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "strict": true, // noImplicitAny, noImplicitThis, alwaysStrict, strictNullChecks, strictFunctionTypes, strictPropertyInitialization
-    "noImplicitReturns": true,
     "newLine": "lf"
   }
 }
