@@ -26,7 +26,6 @@ const input = './src/index.ts';
 const plugins = [
   resolve(),
   commonjs(),
-  eslint(),
   typescript(tsconfig.compilerOptions),
 ];
 
@@ -97,7 +96,9 @@ async function test() {
       resolve({ mainFields: ["jsnext", "preferBuiltins", "browser"] }),
       commonjs(),
       json(),
-      eslint(),
+      eslint({
+        fix: true,
+      }),
       typescript({
         module: "ES6",
         target: "ES6"
