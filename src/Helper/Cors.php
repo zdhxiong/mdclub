@@ -24,7 +24,7 @@ class Cors
             ->withHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, PUT, DELETE')
             ->withHeader(
                 'Access-Control-Allow-Headers',
-                'Token, Origin, X-Requested-With, Accept, Content-Type, Connection, User-Agent'
+                'Token, Origin, X-Requested-With, X-Http-Method-Override, Accept, Content-Type, Connection, User-Agent'
             );
     }
 }
