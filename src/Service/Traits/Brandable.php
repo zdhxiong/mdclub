@@ -48,7 +48,7 @@ trait Brandable
         $hash = md5((string)$id);
         $path = implode('/', [$this->getBrandType(), substr($hash, 0, 2), substr($hash, 2, 2)]);
 
-        return "{$path}/{$filename}";
+        return "/{$path}/{$filename}";
     }
 
     /**

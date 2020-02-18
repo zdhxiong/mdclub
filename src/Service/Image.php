@@ -59,7 +59,7 @@ class Image extends Abstracts implements GetableInterface
     {
         $path = implode('/', ['image', date('Y-m/d', $timestamp), substr($key, 0, 2)]);
 
-        return "{$path}/{$key}";
+        return "/{$path}/{$key}";
     }
 
     /**

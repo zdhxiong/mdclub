@@ -35,15 +35,28 @@ class Url
     {
         $staticUrl = Option::get(OptionConstant::SITE_STATIC_URL);
 
-        if ($staticUrl && substr($staticUrl, -1) !== '/') {
-            $staticUrl .= '/';
+        if ($staticUrl && substr($staticUrl, -1) === '/') {
+            $staticUrl = substr($staticUrl, 0, -1);
         }
 
         if (!$staticUrl) {
-            $staticUrl = self::hostPath() . '/static/';
+            $staticUrl = self::hostPath() . '/static';
         }
 
         return $staticUrl;
+    }
+
+    /**
+     * 获取当前主题的静态资源路径
+     *
+     * @return string
+     */
+    public static function themeStaticPath(): string
+    {
+        $staticUrl = self::staticPath();
+        $theme = Option::get(OptionConstant::THEME);
+
+        return "${staticUrl}/theme/${theme}";
     }
 
     /**
@@ -76,12 +89,12 @@ class Url
     {
         $storageUrl = Option::get(OptionConstant::STORAGE_URL);
 
-        if ($storageUrl && substr($storageUrl, -1) !== '/') {
-            $storageUrl .= '/';
+        if ($storageUrl && substr($storageUrl, -1) === '/') {
+            $storageUrl = substr($storageUrl, 0, -1);
         }
 
         if (!$storageUrl) {
-            $storageUrl = self::hostPath() . '/static/upload/';
+            $storageUrl = self::hostPath() . '/static/upload';
         }
 
         return $storageUrl;

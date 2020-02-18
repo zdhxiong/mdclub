@@ -70,10 +70,10 @@ class Topic extends Abstracts implements DeletableInterface, FollowableInterface
     {
         $suffix = Request::isSupportWebp() ? 'webp' : 'jpg';
         $staticPath = Url::staticPath();
-        $data['original'] = "{$staticPath}default/topic_cover.{$suffix}";
+        $data['original'] = "{$staticPath}/default/topic_cover.{$suffix}";
 
         foreach (array_keys($this->getBrandSize()) as $size) {
-            $data[$size] = "{$staticPath}default/topic_cover_{$size}.{$suffix}";
+            $data[$size] = "{$staticPath}/default/topic_cover_{$size}.{$suffix}";
         }
 
         return $data;

@@ -24,7 +24,7 @@ class Index
     public function index(): ResponseInterface
     {
         $staticUrl = Url::staticPath();
-        $webpackAssetsPath = "{$staticUrl}admin/webpack-assets.json";
+        $webpackAssetsPath = "{$staticUrl}/admin/webpack-assets.json";
 
         if (!$assetsInfo = file_get_contents($webpackAssetsPath)) {
             throw new SystemException("Can not find file: {$webpackAssetsPath}");
@@ -40,7 +40,7 @@ class Index
                         return;
                     }
 
-                    $assets = "${staticUrl}admin/${item}";
+                    $assets = "${staticUrl}/admin/${item}";
 
                     if (strpos($item, 'css') === 0) {
                         $css .= "<link rel='stylesheet' href='${assets}'/>";

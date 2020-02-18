@@ -53,10 +53,10 @@ class UserCover
     {
         $suffix = Request::isSupportWebp() ? 'webp' : 'jpg';
         $staticUrl = Url::staticPath();
-        $data['original'] = "{$staticUrl}default/user_cover.{$suffix}";
+        $data['original'] = "{$staticUrl}/default/user_cover.{$suffix}";
 
         foreach (array_keys($this->getBrandSize()) as $size) {
-            $data[$size] = "{$staticUrl}default/user_cover_{$size}.{$suffix}";
+            $data[$size] = "{$staticUrl}/default/user_cover_{$size}.{$suffix}";
         }
 
         return $data;
