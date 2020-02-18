@@ -3,6 +3,7 @@ import sha1 from 'sha-1';
 import { postRequest } from './util/requestAlias';
 import { buildURL, buildRequestBody } from './util/requestHandler';
 import { TokenResponse } from './models';
+import defaults from './defaults';
 
 interface LoginParams {
   /**
@@ -43,5 +44,14 @@ export const login = (params: LoginParams): Promise<TokenResponse> => {
       'captcha_token',
       'captcha_code',
     ]),
-  );
+  ).then(response => {
+    if (!response.code) {
+      defaults.adapter!.setStorage(
+        'token',
+        (response as TokenResponse).data.token,
+      );
+    }
+
+    return response;
+  });
 };
