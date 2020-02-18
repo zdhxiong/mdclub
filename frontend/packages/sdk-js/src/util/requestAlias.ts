@@ -30,6 +30,20 @@ const requestHandle = (
     }
   }
 
+  // header 中添加 accept
+  const accepts = ['application/json'];
+  if (
+    typeof document !== 'undefined' &&
+    !![].map &&
+    document
+      .createElement('canvas')
+      .toDataURL('image/webp')
+      .indexOf('data:image/webp') === 0
+  ) {
+    accepts.push('image/webp');
+  }
+  headers['Accept'] = accepts.join(', ');
+
   return defaults.adapter!.request({ method, url, data, headers });
 };
 
