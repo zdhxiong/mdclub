@@ -2,7 +2,7 @@ import * as UserApi from '../../es/UserApi';
 import * as ArticleApi from '../../es/ArticleApi';
 import * as QuestionApi from '../../es/QuestionApi';
 import * as TopicApi from '../../es/TopicApi';
-import errors from '../utils/errors';
+import * as errors from '../../es/errors';
 import models from '../utils/models';
 import extend from 'mdui.jq/es/functions/extend';
 import {

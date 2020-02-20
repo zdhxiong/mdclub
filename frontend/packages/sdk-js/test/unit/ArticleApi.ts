@@ -1,5 +1,5 @@
 import * as ArticleApi from '../../es/ArticleApi';
-import errors from '../utils/errors';
+import * as errors from '../../es/errors';
 import models from '../utils/models';
 import {
   removeDefaultToken,

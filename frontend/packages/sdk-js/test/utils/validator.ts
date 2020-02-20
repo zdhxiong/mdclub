@@ -1,4 +1,4 @@
-import errors from './errors';
+import * as errors from '../../es/errors';
 import { removeDefaultToken, setDefaultTokenToNormal } from './token';
 
 // @ts-ignore

@@ -1,0 +1,114 @@
+/**
+ * 错误代码
+ *
+ * 错误码格式：A-BB-CCC
+ * A：错误级别，1：系统级错误；2：服务级错误
+ * B：模块编号
+ * C：具体错误编号
+ */
+/**
+ * 系统级错误
+ */
+export const SYSTEM_ERROR = 100000;
+export const SYSTEM_MAINTAIN = 100001;
+export const SYSTEM_IP_LIMIT = 100002;
+export const SYSTEM_USER_LIMIT = 100003;
+export const SYSTEM_API_NOT_FOUND = 100004;
+export const SYSTEM_API_NOT_ALLOWED = 100005;
+export const SYSTEM_REQUEST_JSON_INVALID = 100006;
+
+/**
+ * 通用服务错误，模块编号：0
+ */
+export const COMMON_FIELD_VERIFY_FAILED = 200001;
+export const COMMON_SEND_EMAIL_FAILED = 200002;
+export const COMMON_EMAIL_VERIFY_EXPIRED = 200003;
+export const COMMON_IMAGE_UPLOAD_FAILED = 200004;
+export const COMMON_IMAGE_NOT_FOUND = 200005;
+export const COMMON_VOTE_TYPE_ERROR = 200006;
+
+/**
+ * 用户相关错误，模块编号：1
+ */
+export const USER_NEED_LOGIN = 201001;
+export const USER_NEED_MANAGE_PERMISSION = 201002;
+export const USER_NOT_FOUND = 201003;
+export const USER_TARGET_NOT_FOUND = 201004;
+export const USER_DISABLED = 201005;
+export const USER_PASSWORD_ERROR = 201006;
+export const USER_AVATAR_UPLOAD_FAILED = 201007;
+export const USER_COVER_UPLOAD_FAILED = 201008;
+export const USER_CANT_FOLLOW_YOURSELF = 201009;
+
+/**
+ * 提问相关错误，模块编号：2
+ */
+export const QUESTION_NOT_FOUND = 202001;
+
+export const QUESTION_CANT_EDIT = 202002;
+export const QUESTION_CANT_EDIT_NOT_AUTHOR = 202003;
+export const QUESTION_CANT_EDIT_TIMEOUT = 202004;
+export const QUESTION_CANT_EDIT_HAS_ANSWER = 202005;
+export const QUESTION_CANT_EDIT_HAS_COMMENT = 202006;
+
+export const QUESTION_CANT_DELETE = 202007;
+export const QUESTION_CANT_DELETE_NOT_AUTHOR = 202008;
+export const QUESTION_CANT_DELETE_TIMEOUT = 202009;
+export const QUESTION_CANT_DELETE_HAS_ANSWER = 202010;
+export const QUESTION_CANT_DELETE_HAS_COMMENT = 202011;
+
+/**
+ * 回答相关错误，模块编号：3
+ */
+export const ANSWER_NOT_FOUND = 203001;
+
+export const ANSWER_CANT_EDIT = 203002;
+export const ANSWER_CANT_EDIT_NOT_AUTHOR = 203003;
+export const ANSWER_CANT_EDIT_TIMEOUT = 203004;
+export const ANSWER_CANT_EDIT_HAS_COMMENT = 203005;
+
+export const ANSWER_CANT_DELETE = 203006;
+export const ANSWER_CANT_DELETE_NOT_AUTHOR = 203007;
+export const ANSWER_CANT_DELETE_TIMEOUT = 203008;
+export const ANSWER_CANT_DELETE_HAS_COMMENT = 203009;
+
+/**
+ * 评论相关错误，模块编号：4
+ */
+export const COMMENT_NOT_FOUND = 204001;
+
+export const COMMENT_CANT_EDIT = 204002;
+export const COMMENT_CANT_EDIT_NOT_AUTHOR = 204003;
+export const COMMENT_CANT_EDIT_TIMEOUT = 204004;
+
+export const COMMENT_CANT_DELETE = 204005;
+export const COMMENT_CANT_DELETE_NOT_AUTHOR = 204006;
+export const COMMENT_CANT_DELETE_TIMEOUT = 204007;
+
+/**
+ * 话题相关错误，模块编号：5
+ */
+export const TOPIC_NOT_FOUND = 205001;
+export const TOPIC_COVER_UPLOAD_FAILED = 205002;
+
+/**
+ * 文章相关错误，模块编号：6
+ */
+export const ARTICLE_NOT_FOUND = 206001;
+
+export const ARTICLE_CANT_EDIT_NOT_AUTHOR = 206002;
+export const ARTICLE_CANT_EDIT = 206003;
+export const ARTICLE_CANT_EDIT_TIMEOUT = 206004;
+export const ARTICLE_CANT_EDIT_HAS_COMMENT = 206005;
+
+export const ARTICLE_CANT_DELETE_NOT_AUTHOR = 206006;
+export const ARTICLE_CANT_DELETE = 206007;
+export const ARTICLE_CANT_DELETE_TIMEOUT = 206008;
+export const ARTICLE_CANT_DELETE_HAS_COMMENT = 206009;
+
+/**
+ * 举报相关错误，模块编号：7
+ */
+export const REPORT_NOT_FOUND = 207001;
+export const REPORT_TARGET_NOT_FOUND = 207002;
+export const REPORT_ALREADY_SUBMITTED = 207003;

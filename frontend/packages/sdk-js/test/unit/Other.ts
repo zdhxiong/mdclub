@@ -1,5 +1,5 @@
 import defaults from '../../es/defaults';
-import errors from '../utils/errors';
+import * as errors from '../../es/errors';
 import { failed, success } from '../utils/result';
 
 describe('Other', () => {

@@ -1,5 +1,6 @@
 import BrowserAdapter from './adapter/BrowserAdapter';
 import defaults from './defaults';
+import * as errors from './errors';
 import * as AnswerApi from './AnswerApi';
 import * as ArticleApi from './ArticleApi';
 import * as CaptchaApi from './CaptchaApi';
@@ -17,6 +18,7 @@ defaults.adapter = new BrowserAdapter();
 
 export {
   defaults,
+  errors,
   AnswerApi,
   ArticleApi,
   CaptchaApi,

@@ -1,6 +1,6 @@
 import { Option } from '../../es/models';
 import * as OptionApi from '../../es/OptionApi';
-import errors from '../utils/errors';
+import * as errors from '../../es/errors';
 import publicFields from '../utils/publicFields';
 import {
   removeDefaultToken,
