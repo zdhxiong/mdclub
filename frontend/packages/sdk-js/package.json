@@ -1,6 +1,6 @@
 {
   "name": "mdclub-sdk-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MDClub 的 Javascript 版 SDK",
   "main": "dist/mdclub-sdk.js",
   "module": "dist/mdclub-sdk.esm.js",
@@ -11,6 +11,13 @@
     "build": "npm run eslint && tsc -p src/tsconfig.json && node build.js --build",
     "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec"
   },
+  "files": [
+    "dist",
+    "es",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "npm run build"
