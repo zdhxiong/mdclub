@@ -178,6 +178,8 @@ class User extends Abstracts
     /**
      * 注册时的验证
      *
+     * 首先验证 email 和 email_code，若验证不通过，则不严重 username 和 password，用于前端设计注册时支持分步注册
+     *
      * @param array $data [email, email_code, username, password]
      *
      * @return array
@@ -186,18 +188,19 @@ class User extends Abstracts
     {
         $data = $this->data($data)
             ->field('email')->exist()->emailNotExist()
-            ->field('email_code')->exist()->string()->notEmpty()
-            ->field('username')->exist()->usernameNotExist()
-            ->field('password')->exist()->string()->notEmpty()
+            ->field('email_code')->exist()->string()->notEmpty()->emailCode()
             ->validate();
 
         return $this->data($data)
-            ->field('email_code')->emailCode()
+            ->field('username')->exist()->usernameNotExist()
+            ->field('password')->exist()->string()->notEmpty()
             ->validate();
     }
 
     /**
      * 修改密码时验证
+     *
+     * 首先验证 email 和 email_code，若验证不通过，则不验证 password，用于前端设计重置密码时支持分步修改
      *
      * @param array $data [email, email_code, password]
      *
@@ -207,12 +210,11 @@ class User extends Abstracts
     {
         $data = $this->data($data)
             ->field('email')->exist()->string()->notEmpty()->email()
-            ->field('email_code')->exist()->string()->notEmpty()
-            ->field('password')->exist()->string()->notEmpty()
+            ->field('email_code')->exist()->string()->notEmpty()->emailCode()
             ->validate();
 
         return $this->data($data)
-            ->field('email_code')->emailCode()
+            ->field('password')->exist()->string()->notEmpty()
             ->validate();
     }
 

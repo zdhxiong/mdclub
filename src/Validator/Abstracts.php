@@ -122,7 +122,7 @@ abstract class Abstracts
      */
     protected function isEmail($data): bool
     {
-        return filter_var($data, FILTER_VALIDATE_EMAIL);
+        return !!filter_var($data, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -231,7 +231,7 @@ abstract class Abstracts
         }
 
         if ($this->isEmpty($this->value())) {
-            $this->setError("\{{$this->field}\}不能为空");
+            $this->setError("{{$this->field}}不能为空");
         }
 
         return $this;
@@ -316,14 +316,14 @@ abstract class Abstracts
 
         if (is_null($min)) {
             if ($length > $max) {
-                $this->setError("\{{$this->field}\}不能超过 ${max} 个字符");
+                $this->setError("{{$this->field}}不能超过 ${max} 个字符");
             }
         } elseif (is_null($max)) {
             if ($length < $min) {
-                $this->setError("\{{$this->field}\}不能少于 ${min} 个字符");
+                $this->setError("{{$this->field}}不能少于 ${min} 个字符");
             }
         } elseif ($length < $min || $length > $max) {
-            $this->setError("\{{$this->field}\}的字符长度应在 ${min} 至 ${max} 之间");
+            $this->setError("{{$this->field}}的字符长度应在 ${min} 至 ${max} 之间");
         }
 
         return $this;
@@ -378,7 +378,7 @@ abstract class Abstracts
         }
 
         if (!in_array($this->value(), $range)) {
-            $this->setError("\{{$this->field}\}必须是 " . implode(', ', $range) . '之一');
+            $this->setError("{{$this->field}}必须是 " . implode(', ', $range) . '之一');
         }
 
         return $this;
