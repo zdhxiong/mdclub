@@ -84,7 +84,7 @@ class Captcha
 
         CacheFacade::delete($cacheKey);
 
-        return $correctCode === $code;
+        return strtolower($correctCode) === strtolower($code);
     }
 
     /**
