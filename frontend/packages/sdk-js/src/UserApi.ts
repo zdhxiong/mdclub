@@ -1071,7 +1071,9 @@ export const getQuestions = (
  * 返回用户信息
  */
 export const register = (params: RegisterParams): Promise<UserResponse> => {
-  params.password = sha1(params.password);
+  if (params.password) {
+    params.password = sha1(params.password);
+  }
 
   return postRequest(
     buildURL('/users', params, ['include']),
@@ -1142,7 +1144,9 @@ export const updateMine = (params: UpdateMineParams): Promise<UserResponse> =>
 export const updatePassword = (
   params: UpdatePasswordParams,
 ): Promise<EmptyResponse> => {
-  params.password = sha1(params.password);
+  if (params.password) {
+    params.password = sha1(params.password);
+  }
 
   return putRequest(
     buildURL('/user/password', params),
