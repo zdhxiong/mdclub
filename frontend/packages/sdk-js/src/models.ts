@@ -398,17 +398,6 @@ export interface EmptyResponse {
   data: object;
 }
 
-export interface ErrorField {
-  /**
-   * 错误字段名
-   */
-  field: string;
-  /**
-   * 错误描述
-   */
-  message: string;
-}
-
 export interface ErrorResponse {
   /**
    * 错误代码
@@ -430,7 +419,13 @@ export interface ErrorResponse {
    * 图形验证码的base64格式图片
    */
   captcha_image?: string;
-  errors?: Array<ErrorField>;
+
+  /**
+   * 错误字段。键名为字段名，键值为错误信息
+   */
+  errors?: {
+    [field: string]: string;
+  };
 }
 
 /**
