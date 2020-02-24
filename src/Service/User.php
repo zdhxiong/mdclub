@@ -8,6 +8,7 @@ use MDClub\Constant\ApiErrorConstant;
 use MDClub\Constant\OptionConstant;
 use MDClub\Exception\ApiException;
 use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Library\Cache;
 use MDClub\Facade\Library\Email;
 use MDClub\Facade\Library\Option;
 use MDClub\Facade\Library\Request;
@@ -16,6 +17,7 @@ use MDClub\Facade\Model\UserModel;
 use MDClub\Facade\Service\UserAvatarService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\UserValidator;
+use MDClub\Helper\Ip;
 use MDClub\Service\Interfaces\FollowableInterface;
 use MDClub\Service\Interfaces\GetableInterface;
 use MDClub\Service\Traits\Followable;
@@ -222,6 +224,10 @@ class User extends Abstracts implements FollowableInterface, GetableInterface
             'option' => Option::onlyAuthorized()->getAll(),
         ];
         Email::sendByTemplate($template, $to, $subject, $templateData);
+
+        // 注册成功后，删除登录防爆破缓存，避免注册完自动登录时出现验证码
+        $ip = Ip::getIpSign();
+        Cache::delete("throttle_create_token_{$ip}");
 
         return $user;
     }
