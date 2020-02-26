@@ -16,14 +16,10 @@ import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 export default class extends BrowserAbstract
   implements RequestAdapterInterface {
   request(options: RequestOptionsInterface): Promise<ResponseInterface> {
+    const isFormData = options.data instanceof FormData;
     let headers: PlainObject = {
-      'Content-Type': 'application/json',
       token: this.getStorage('token') || undefined,
     };
-
-    if (options.data && options.data instanceof FormData) {
-      headers['Content-Type'] = 'multipart/form-data';
-    }
 
     if (options.headers) {
       headers = extend({}, headers, options.headers);
@@ -33,10 +29,10 @@ export default class extends BrowserAbstract
       ajax({
         method: options.method || GET,
         url: `${globalOptions.apiPath}${options.url || ''}`,
-        data: JSON.stringify(options.data),
+        data: isFormData ? options.data : JSON.stringify(options.data),
         headers,
         dataType: 'json',
-        contentType: 'application/json',
+        contentType: isFormData ? false : 'application/json',
         timeout: globalOptions.timeout,
         global: false,
         beforeSend: () => {

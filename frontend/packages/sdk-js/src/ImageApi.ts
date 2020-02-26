@@ -82,7 +82,7 @@ interface UploadParams {
   /**
    * 图片
    */
-  image: any;
+  image: File;
   /**
    * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
    */
@@ -142,8 +142,9 @@ export const update = (params: UpdateParams): Promise<ImageResponse> =>
  * 上传图片
  * 上传图片
  */
-export const upload = (params: UploadParams): Promise<ImageResponse> =>
-  postRequest(
-    buildURL('/images', params, ['include']),
-    buildRequestBody(params, ['image']),
-  );
+export const upload = (params: UploadParams): Promise<ImageResponse> => {
+  const formData = new FormData();
+  formData.append('image', params.image);
+
+  return postRequest(buildURL('/images', params, ['include']), formData);
+};

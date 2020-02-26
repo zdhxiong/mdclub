@@ -9,7 +9,7 @@ import param from 'mdui.jq/es/functions/param';
  */
 export function buildURL(
   path: string,
-  params: PlainObject,
+  params: PlainObject = {},
   queryParamNames: string[] = [],
 ): string {
   // 替换 path 参数

@@ -1,5 +1,5 @@
 import { getRequest, postRequest, deleteRequest } from './util/requestAlias';
-import { buildURL, buildRequestBody } from './util/requestHandler';
+import { buildURL } from './util/requestHandler';
 import {
   QuestionsResponse,
   TopicsResponse,
@@ -36,7 +36,7 @@ interface CreateParams {
   /**
    * 封面图片
    */
-  cover: any;
+  cover: File;
   /**
    * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
    */
@@ -246,7 +246,7 @@ interface UpdateParams {
   /**
    * 封面图片
    */
-  cover?: any;
+  cover?: File;
   /**
    * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
    */
@@ -273,11 +273,14 @@ export const addFollow = (
  * 🔐发布话题
  * 仅管理员可调用该接口
  */
-export const create = (params: CreateParams): Promise<TopicResponse> =>
-  postRequest(
-    buildURL('/topics', params, ['include']),
-    buildRequestBody(params, ['name', 'description', 'cover']),
-  );
+export const create = (params: CreateParams): Promise<TopicResponse> => {
+  const formData = new FormData();
+  formData.append('name', params.name);
+  formData.append('description', params.name);
+  formData.append('cover', params.cover);
+
+  return postRequest(buildURL('/topics', params, ['include']), formData);
+};
 
 /**
  * 取消关注指定话题
@@ -404,8 +407,15 @@ export const untrashMultiple = (
  * 🔐更新话题信息
  * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
  */
-export const update = (params: UpdateParams): Promise<TopicResponse> =>
-  postRequest(
+export const update = (params: UpdateParams): Promise<TopicResponse> => {
+  const formData = new FormData();
+  formData.append('topic_id', params.topic_id.toString());
+  params.name && formData.append('name', params.name);
+  params.description && formData.append('description', params.description);
+  params.cover && formData.append('cover', params.cover);
+
+  return postRequest(
     buildURL('/topics/{topic_id}', params, ['include']),
-    buildRequestBody(params, ['name', 'description', 'cover']),
+    formData,
   );
+};

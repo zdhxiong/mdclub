@@ -681,14 +681,14 @@ interface UploadMyAvatarParams {
   /**
    * 用户头像
    */
-  avatar: any;
+  avatar: File;
 }
 
 interface UploadMyCoverParams {
   /**
    * 用户封面
    */
-  cover: any;
+  cover: File;
 }
 
 /**
@@ -1160,11 +1160,12 @@ export const updatePassword = (
  */
 export const uploadMyAvatar = (
   params: UploadMyAvatarParams,
-): Promise<UserAvatarResponse> =>
-  postRequest(
-    buildURL('/user/avatar', params),
-    buildRequestBody(params, ['avatar']),
-  );
+): Promise<UserAvatarResponse> => {
+  const formData = new FormData();
+  formData.append('avatar', params.avatar);
+
+  return postRequest(buildURL('/user/avatar'), formData);
+};
 
 /**
  * 上传当前登录用户的封面
@@ -1172,8 +1173,9 @@ export const uploadMyAvatar = (
  */
 export const uploadMyCover = (
   params: UploadMyCoverParams,
-): Promise<UserCoverResponse> =>
-  postRequest(
-    buildURL('/user/cover', params),
-    buildRequestBody(params, ['cover']),
-  );
+): Promise<UserCoverResponse> => {
+  const formData = new FormData();
+  formData.append('cover', params.cover);
+
+  return postRequest(buildURL('/user/cover'), formData);
+};
