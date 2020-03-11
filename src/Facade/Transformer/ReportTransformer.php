@@ -11,6 +11,7 @@ use MDClub\Transformer\Report;
  * ReportTransformer Facade
  *
  * @method static void  setInclude(array $includes)
+ * @method static array getAvailableIncludes()
  * @method static array transform(array $items, array $knownRelationship = [])
  */
 class ReportTransformer extends Facade

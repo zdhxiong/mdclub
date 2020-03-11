@@ -67,6 +67,16 @@ abstract class Abstracts
     }
 
     /**
+     * 获取支持的 includes 参数数组
+     *
+     * @return array
+     */
+    public function getAvailableIncludes(): array
+    {
+        return $this->availableIncludes;
+    }
+
+    /**
      * 数据格式化
      *
      * @param  array $item
@@ -207,7 +217,7 @@ abstract class Abstracts
      * 转换数据
      *
      * @param  array $items             数组，或多个元素组成的二维数组
-     * @param  array $knownRelationship 已知的 relationship，若指定了该参数，则对于的字段不再需要计算
+     * @param  array $knownRelationship 已知的 relationship，若指定了该参数，则对应的字段不再需要计算
      * @return array
      */
     public function transform(array $items, array $knownRelationship = []): array

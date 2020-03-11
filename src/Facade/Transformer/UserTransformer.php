@@ -11,6 +11,7 @@ use MDClub\Transformer\User;
  * UserTransformer Facade
  *
  * @method static void  setInclude(array $includes)
+ * @method static array getAvailableIncludes()
  * @method static array transform(array $items, array $knownRelationship = [])
  * @method static array getInRelationship(array $userIds)
  */
