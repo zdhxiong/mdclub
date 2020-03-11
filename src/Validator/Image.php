@@ -29,7 +29,7 @@ class Image extends Abstracts
                 ->field('image')->exist()->uploadedImage()
                 ->validate();
         } catch (ValidationException $e) {
-            throw new ApiException(ApiErrorConstant::COMMON_IMAGE_UPLOAD_FAILED, false, $e->getErrors()['avatar']);
+            throw new ApiException(ApiErrorConstant::COMMON_IMAGE_UPLOAD_FAILED, false, $e->getErrors()['image']);
         }
 
         return $data['image'];
