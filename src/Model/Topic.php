@@ -73,10 +73,10 @@ class Topic extends Abstracts
     /**
      * 减少指定话题的文章数量
      *
-     * @param int $topicId
-     * @param int $count
+     * @param int|array $topicId
+     * @param int       $count
      */
-    public function decArticleCount(int $topicId, int $count = 1): void
+    public function decArticleCount($topicId, int $count = 1): void
     {
         $this
             ->where('topic_id', $topicId)
@@ -85,16 +85,44 @@ class Topic extends Abstracts
     }
 
     /**
+     * 增加指定话题的文章数量
+     *
+     * @param int|array $topicId
+     * @param int       $count
+     */
+    public function incArticleCount($topicId, int $count = 1): void
+    {
+        $this
+            ->where('topic_id', $topicId)
+            ->inc('article_count', $count)
+            ->update();
+    }
+
+    /**
      * 减少指定话题的提问数量
      *
-     * @param int $topicId
-     * @param int $count
+     * @param int|array $topicId
+     * @param int       $count
      */
-    public function decQuestionCount(int $topicId, int $count = 1): void
+    public function decQuestionCount($topicId, int $count = 1): void
     {
         $this
             ->where('topic_id', $topicId)
             ->dec('question_count', $count)
+            ->update();
+    }
+
+    /**
+     * 增加指定话题的提问数量
+     *
+     * @param int|array $topicId
+     * @param int       $count
+     */
+    public function incQuestionCount($topicId, int $count = 1): void
+    {
+        $this
+            ->where('topic_id', $topicId)
+            ->inc('question_count', $count)
             ->update();
     }
 }

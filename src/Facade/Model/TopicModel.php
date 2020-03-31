@@ -10,8 +10,10 @@ use MDClub\Model\Topic;
  * TopicModel Facade
  *
  * @method static array getList()
- * @method static void  decArticleCount(int $topicId, int $count = 1)
- * @method static void  decQuestionCount(int $topicId, int $count = 1)
+ * @method static void  decArticleCount($topicId, int $count = 1)
+ * @method static void  incArticleCount($topicId, int $count = 1)
+ * @method static void  decQuestionCount($topicId, int $count = 1)
+ * @method static void  incQuestionCount($topicId, int $count = 1)
  */
 class TopicModel extends Abstracts
 {

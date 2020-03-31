@@ -104,7 +104,6 @@ class Question extends Abstracts implements
 
         $this->updateTopicable($questionId, $createData['topic_ids']);
 
-        QuestionService::addFollow($questionId);
         UserModel::incQuestionCount($userId);
 
         return $questionId;
@@ -168,6 +167,7 @@ class Question extends Abstracts implements
                     ->where('topicable_id', $questionId)
                     ->where('topic_id', $needDeleteTopicIds)
                     ->delete();
+                TopicModel::decQuestionCount($needDeleteTopicIds);
             }
 
             $topicIds = array_diff($topicIds, $existTopicIds);
@@ -184,6 +184,7 @@ class Question extends Abstracts implements
         }
         if ($topicable) {
             TopicableModel::insert($topicable);
+            TopicModel::incQuestionCount($topicIds);
         }
     }
 

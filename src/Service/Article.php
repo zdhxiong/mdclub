@@ -102,7 +102,6 @@ class Article extends Abstracts implements
 
         $this->updateTopicable($articleId, $createData['topic_ids']);
 
-        ArticleService::addFollow($articleId);
         UserModel::incArticleCount($userId);
 
         return $articleId;
@@ -166,6 +165,7 @@ class Article extends Abstracts implements
                     ->where('topicable_id', $articleId)
                     ->where('topic_id', $needDeleteTopicIds)
                     ->delete();
+                TopicModel::decArticleCount($needDeleteTopicIds);
             }
 
             $topicIds = array_diff($topicIds, $existTopicIds);
@@ -182,6 +182,7 @@ class Article extends Abstracts implements
         }
         if ($topicable) {
             TopicableModel::insert($topicable);
+            TopicModel::incArticleCount($topicIds);
         }
     }
 
