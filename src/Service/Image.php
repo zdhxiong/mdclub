@@ -43,7 +43,7 @@ class Image extends Abstracts implements GetableInterface
     {
         return [
             'thumb' => [132, 88],
-            'release' => [650, 0],
+            'release' => [704, 0],
         ];
     }
 
