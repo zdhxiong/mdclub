@@ -69,7 +69,7 @@ class Aliyun extends Abstracts implements Interfaces
         // 签名（https://help.aliyun.com/document_detail/31951.html?spm=a2c4g.11186623.6.1097.b2c43bdbx35G1S）
         $contentType = $method === 'PUT' ? 'application/x-www-form-urlencoded' : 'application/octet-stream';
         $date = gmdate('D, d M Y H:i:s \G\M\T');
-        $canonicalizedResource = "/{$this->bucket}/$path";
+        $canonicalizedResource = "/{$this->bucket}$path";
         $signature  = base64_encode(hash_hmac(
             'sha1',
             "{$method}\n\n{$contentType}\n{$date}\n{$canonicalizedResource}",
