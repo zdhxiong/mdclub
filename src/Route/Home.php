@@ -30,9 +30,6 @@ class Home
             ->setName(RouteNameConstant::INDEX);
 
         $slim
-            ->get('/migration', Index::class . ':migration');
-
-        $slim
             ->get('/topics', Topic::class . ':index')
             ->setName(RouteNameConstant::TOPICS);
 
@@ -55,6 +52,10 @@ class Home
         $slim
             ->get('/questions/{question_id:\d+}', Question::class . ':info')
             ->setName(RouteNameConstant::QUESTION);
+
+        $slim
+            ->get('/questions/{question_id:\d+}/answers/{answer_id:\d+}', Question::class . ':answer')
+            ->setName(RouteNameConstant::ANSWER);
 
         $slim
             ->get('/users', User::class . ':index')

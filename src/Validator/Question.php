@@ -145,13 +145,13 @@ class Question extends Abstracts
         $question = QuestionModel::force()->get($questionId);
 
         if (!$question) {
-            return null;
+            throw new ApiException(ApiErrorConstant::QUESTION_NOT_FOUND);
         }
 
         if (Auth::isManager()) {
             return $question;
         } elseif ($question['delete_time']) {
-            return null;
+            throw new ApiException(ApiErrorConstant::QUESTION_NOT_FOUND);
         }
 
         if ($question['user_id'] !== Auth::userId()) {

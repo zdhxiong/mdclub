@@ -133,7 +133,9 @@ class Auth
      */
     public function userId(): ?int
     {
-        return $this->getTokenInfo()['user_id'];
+        $tokenInfo = $this->getTokenInfo();
+
+        return $tokenInfo ? $tokenInfo['user_id'] : null;
     }
 
     /**

@@ -102,7 +102,7 @@ trait Followable
         $table = $model->table;
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($table) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($table) . 'Service';
 
         $class::hasOrFail($followableId);
 
@@ -172,7 +172,7 @@ trait Followable
         $table = $model->table;
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($table) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($table) . 'Service';
 
         $class::hasOrFail($followableId);
 

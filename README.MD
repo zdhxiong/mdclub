@@ -1,5 +1,10 @@
 ## 安装步骤
 
+可写权限的目录：
+
+var: 缓存，临时文件
+public/sitemap: 自动生成 sitemap 文件
+
 1. 执行 `composer install --no-dev` 安装依赖
 2. 复制 `config.example.php`，并重命名为 `config.php`，修改其中的数据库配置信息
 

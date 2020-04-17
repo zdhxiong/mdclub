@@ -138,13 +138,13 @@ class Article extends Abstracts
         $article = ArticleModel::force()->get($articleId);
 
         if (!$article) {
-            return null;
+            throw new ApiException(ApiErrorConstant::ARTICLE_NOT_FOUND);
         }
 
         if (Auth::isManager()) {
             return $article;
         } elseif ($article['delete_time']) {
-            return null;
+            throw new ApiException(ApiErrorConstant::ARTICLE_NOT_FOUND);
         }
 
         if ($article['user_id'] !== Auth::userId()) {

@@ -39,7 +39,7 @@ trait Votable
         $table = $model->table;
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($table) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($table) . 'Service';
 
         $class::hasOrFail($votableId);
 
@@ -87,7 +87,7 @@ trait Votable
         $table = $model->table;
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($table) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($table) . 'Service';
 
         $class::hasOrFail($votableId);
 
@@ -139,7 +139,7 @@ trait Votable
         $table = $model->table;
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($table) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($table) . 'Service';
 
         $class::hasOrFail($votableId);
 

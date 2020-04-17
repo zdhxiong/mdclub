@@ -43,7 +43,7 @@ class Report extends Abstracts implements GetableInterface
         }
 
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($reportableType) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($reportableType) . 'Service';
         $class::hasOrFail($reportableId);
     }
 

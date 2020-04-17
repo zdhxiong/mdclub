@@ -16,6 +16,7 @@ class RouteNameConstant
     public const ARTICLE = 'article';
     public const QUESTIONS = 'questions';
     public const QUESTION = 'question';
+    public const ANSWER = 'answer';
     public const USERS = 'users';
     public const USER = 'user';
 

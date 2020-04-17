@@ -436,6 +436,26 @@ function get_following_questions(int $userId, array $queryParams = []): array
 // ----------------------------------------------------- 回答函数
 
 /**
+ * 获取回答详情
+ *
+ * 参见接口：GET /answers/{answer_id}
+ *
+ * @param int   $answerId
+ * @param array $queryParams
+ *
+ * @return array
+ */
+function get_answer(int $answerId, array $queryParams = []): array
+{
+    get_request($queryParams);
+
+    $answer = AnswerService::get($answerId);
+    $answer = AnswerTransformer::transform($answer);
+
+    return $answer;
+}
+
+/**
  * 获取回答列表
  *
  * 参见接口: GET /answers

@@ -46,7 +46,7 @@ class Comment extends Abstracts
     public function create(string $commentableType, int $commentableId, array $data): array
     {
         /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . lcfirst($commentableType) . 'Service';
+        $class = '\MDClub\Facade\Service\\' . ucfirst($commentableType) . 'Service';
         $class::hasOrFail($commentableId);
 
         return $this->data($data)
@@ -130,13 +130,13 @@ class Comment extends Abstracts
         $comment = CommentModel::force()->get($commentId);
 
         if (!$comment) {
-            return null;
+            throw new ApiException(ApiErrorConstant::COMMENT_NOT_FOUND);
         }
 
         if (Auth::isManager()) {
             return $comment;
         } elseif ($comment['delete_time']) {
-            return null;
+            throw new ApiException(ApiErrorConstant::COMMENT_NOT_FOUND);
         }
 
         if ($comment['user_id'] !== Auth::userId()) {

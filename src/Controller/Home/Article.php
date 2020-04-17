@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MDClub\Controller\Home;
 
 use MDClub\Facade\Library\View;
-use MDClub\Facade\Service\ArticleService;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -26,19 +25,10 @@ class Article
     /**
      * 文章详情页面
      *
-     * todo 修改中间件，非 api 模块抛出异常时，显示 HTML 页面
-     *
-     * @param int $articleId
-     *
      * @return ResponseInterface
      */
-    public function info(int $articleId): ResponseInterface
+    public function info(): ResponseInterface
     {
-        return View::render(
-            '/article/info.php',
-            [
-                'article' => ArticleService::getOrFail($articleId),
-            ]
-        );
+        return View::render('/article/info.php');
     }
 }

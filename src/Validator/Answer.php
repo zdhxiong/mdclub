@@ -136,13 +136,13 @@ class Answer extends Abstracts
         $answer = AnswerModel::force()->get($answerId);
 
         if (!$answer) {
-            return null;
+            throw new ApiException(ApiErrorConstant::ANSWER_NOT_FOUND);
         }
 
         if (Auth::isManager()) {
             return $answer;
         } elseif ($answer['delete_time']) {
-            return null;
+            throw new ApiException(ApiErrorConstant::ANSWER_NOT_FOUND);
         }
 
         if ($answer['user_id'] !== Auth::userId()) {
