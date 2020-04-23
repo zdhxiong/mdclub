@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Service;
 
-use Md\MDAvatars;
+use MDClub\Vendor\MDAvatars;
 use MDClub\Constant\ApiErrorConstant;
 use MDClub\Exception\ApiException;
 use MDClub\Facade\Model\UserModel;
