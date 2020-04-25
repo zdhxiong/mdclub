@@ -6,7 +6,6 @@ namespace MDClub\Route;
 
 use MDClub\Controller\Admin\Index;
 use MDClub\Initializer\App;
-use MDClub\Middleware\ManagerOr404;
 
 /**
  * 管理后台路由
@@ -17,8 +16,6 @@ class Admin
     {
         $slim = App::$slim;
 
-        $slim
-            ->get('/admin[/{path}]', Index::class . ':index')
-            ->add(ManagerOr404::class);
+        $slim->get('/admin[/{path}]', Index::class . ':index');
     }
 }
