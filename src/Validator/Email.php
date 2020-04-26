@@ -10,9 +10,9 @@ namespace MDClub\Validator;
 class Email extends Abstracts
 {
     protected $attributes = [
-        'to' => '邮箱地址',
+        'email' => '邮箱地址',
         'subject' => '邮件标题',
-        'body' => '邮件正文'
+        'content' => '邮件正文'
     ];
 
     /**
@@ -24,9 +24,9 @@ class Email extends Abstracts
     public function send(array $data): array
     {
         return $this->data($data)
-            ->field('to')->exist()->arrayLength(1, 100)->arrayUnique()->eachEmail()
+            ->field('email')->exist()->arrayLength(1, 100)->arrayUnique()->eachEmail()
             ->field('subject')->exist()->string()->notEmpty()
-            ->field('body')->exist()->string()->notEmpty()
+            ->field('content')->exist()->string()->notEmpty()
             ->validate();
     }
 }

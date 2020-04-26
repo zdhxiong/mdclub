@@ -105,20 +105,20 @@ class Email
 
         $data = EmailValidator::send(
             [
-                'to' => $to,
+                'email' => $to,
                 'subject' => $subject,
-                'body' => $body,
+                'content' => $body,
             ]
         );
 
         $mailer = $this->getMailer();
 
-        foreach ($data['to'] as $address) {
+        foreach ($data['email'] as $address) {
             $mailer->addAddress($address);
         }
 
         $mailer->Subject = $data['subject'];
-        $mailer->Body = $data['body'];
+        $mailer->Body = $data['content'];
 
         try {
             $mailer->send();
