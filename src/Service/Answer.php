@@ -12,6 +12,7 @@ use MDClub\Facade\Model\ReportModel;
 use MDClub\Facade\Model\UserModel;
 use MDClub\Facade\Model\VoteModel;
 use MDClub\Facade\Service\CommentService;
+use MDClub\Facade\Service\ImageService;
 use MDClub\Facade\Service\QuestionService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\AnswerValidator;
@@ -87,6 +88,7 @@ class Answer extends Abstracts implements CommentableInterface, DeletableInterfa
 
         UserModel::incAnswerCount($userId);
         QuestionModel::incAnswerCount($questionId);
+        ImageService::updateItemRelated('answer', $answerId, $createData['content_markdown']);
 
         return $answerId;
     }

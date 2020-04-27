@@ -16,7 +16,7 @@ use MDClub\Facade\Model\UserModel;
 use MDClub\Facade\Model\VoteModel;
 use MDClub\Facade\Service\AnswerService;
 use MDClub\Facade\Service\CommentService;
-use MDClub\Facade\Service\QuestionService;
+use MDClub\Facade\Service\ImageService;
 use MDClub\Facade\Service\TopicService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\QuestionValidator;
@@ -105,6 +105,7 @@ class Question extends Abstracts implements
         $this->updateTopicable($questionId, $createData['topic_ids']);
 
         UserModel::incQuestionCount($userId);
+        ImageService::updateItemRelated('question', $questionId, $createData['content_markdown']);
 
         return $questionId;
     }

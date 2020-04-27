@@ -19,7 +19,7 @@ use Psr\Http\Message\UploadedFileInterface;
  *
  * 如果使用本地存储，则每张图片需要保存为：
  * 1. 原图
- * 2. 宽度为 650px，高度自适应（存储为本地图片时，以 _release 为后缀）
+ * 2. 宽度为 702px，高度自适应（存储为本地图片时，以 _release 为后缀）
  * 3. 宽度为 132px，高度为 88px，居中裁剪的缩略图（存储为本地图片时，以 _thumb 为后缀）
  */
 class Image extends Abstracts implements GetableInterface
@@ -43,7 +43,7 @@ class Image extends Abstracts implements GetableInterface
     {
         return [
             'thumb' => [132, 88],
-            'release' => [704, 0],
+            'release' => [702, 0],
         ];
     }
 
@@ -147,6 +147,32 @@ class Image extends Abstracts implements GetableInterface
         ImageModel
             ::where('key', $key)
             ->update('filename', $data['filename']);
+    }
+
+    /**
+     * 从 markdown 文本中提取图片链接，并更新图片的 item_type 和 item_id
+     *
+     * @param $itemType
+     * @param $itemId
+     * @param $markdownContent
+     */
+    public function updateItemRelated($itemType, $itemId, $markdownContent): void
+    {
+        // 从 markdown 文本中提取链接
+        preg_match_all("/!\[([^_]+?)_release\.(.+?)\]/", $markdownContent, $matches);
+
+        $count = count($matches[0]);
+        $keys = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $keys[] = $matches[1][$i] . '.' . $matches[2][$i];
+        }
+
+        ImageModel
+            ::where('key', $keys)
+            ->set('item_type', $itemType)
+            ->set('item_id', $itemId)
+            ->update();
     }
 
     /**

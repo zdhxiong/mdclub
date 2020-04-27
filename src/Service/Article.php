@@ -13,8 +13,8 @@ use MDClub\Facade\Model\TopicableModel;
 use MDClub\Facade\Model\TopicModel;
 use MDClub\Facade\Model\UserModel;
 use MDClub\Facade\Model\VoteModel;
-use MDClub\Facade\Service\ArticleService;
 use MDClub\Facade\Service\CommentService;
+use MDClub\Facade\Service\ImageService;
 use MDClub\Facade\Service\TopicService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\ArticleValidator;
@@ -103,6 +103,7 @@ class Article extends Abstracts implements
         $this->updateTopicable($articleId, $createData['topic_ids']);
 
         UserModel::incArticleCount($userId);
+        ImageService::updateItemRelated('article', $articleId, $createData['content_markdown']);
 
         return $articleId;
     }
