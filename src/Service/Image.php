@@ -168,11 +168,13 @@ class Image extends Abstracts implements GetableInterface
             $keys[] = $matches[1][$i] . '.' . $matches[2][$i];
         }
 
-        ImageModel
-            ::where('key', $keys)
-            ->set('item_type', $itemType)
-            ->set('item_id', $itemId)
-            ->update();
+        if ($keys) {
+            ImageModel
+                ::where('key', $keys)
+                ->set('item_type', $itemType)
+                ->set('item_id', $itemId)
+                ->update();
+        }
     }
 
     /**
