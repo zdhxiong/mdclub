@@ -6,7 +6,11 @@ namespace MDClub\Service\Traits;
 
 use MDClub\Constant\ApiErrorConstant;
 use MDClub\Exception\ApiException;
+use MDClub\Facade\Library\Request;
+use MDClub\Initializer\App;
 use MDClub\Model\Abstracts as ModelAbstracts;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * 可获取对象。用于 question, answer, article, comment, topic, user, image, report
@@ -128,6 +132,10 @@ trait Getable
             'user'     => ApiErrorConstant::USER_NOT_FOUND,
         ];
 
-        throw new ApiException($exceptions[$table]);
+        if (Request::isJson()) {
+            throw new ApiException($exceptions[$table]);
+        } else {
+            throw new HttpNotFoundException(App::$container->get(ServerRequestInterface::class));
+        }
     }
 }

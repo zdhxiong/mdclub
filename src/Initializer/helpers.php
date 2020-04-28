@@ -185,7 +185,7 @@ function get_user(int $userId = null, array $queryParams = []): array
         $userId = get_user_id();
     }
 
-    $user = UserService::get($userId);
+    $user = UserService::getOrFail($userId);
     $user = UserTransformer::transform($user);
 
     return $user;
@@ -266,7 +266,7 @@ function get_topic(int $topicId, array $queryParams = []): array
 {
     get_request($queryParams);
 
-    $topic = TopicService::get($topicId);
+    $topic = TopicService::getOrFail($topicId);
     $topic = TopicTransformer::transform($topic);
 
     return $topic;
@@ -327,7 +327,7 @@ function get_article(int $articleId, array $queryParams = []): array
 {
     get_request($queryParams);
 
-    $article = ArticleService::get($articleId);
+    $article = ArticleService::getOrFail($articleId);
     $article = ArticleTransformer::transform($article);
 
     return $article;
@@ -388,7 +388,7 @@ function get_question(int $questionId, array $queryParams = []): array
 {
     get_request($queryParams);
 
-    $question = QuestionService::get($questionId);
+    $question = QuestionService::getOrFail($questionId);
     $question = QuestionTransformer::transform($question);
 
     return $question;
@@ -449,7 +449,7 @@ function get_answer(int $answerId, array $queryParams = []): array
 {
     get_request($queryParams);
 
-    $answer = AnswerService::get($answerId);
+    $answer = AnswerService::getOrFail($answerId);
     $answer = AnswerTransformer::transform($answer);
 
     return $answer;
