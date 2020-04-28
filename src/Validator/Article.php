@@ -50,7 +50,7 @@ class Article extends Abstracts
     public function create(array $data): array
     {
         return $this->data($data)
-            ->field('title')->exist()->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
+            ->field('title')->exist()->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownExist()->markdownSupport(100000)
             ->field('topic_ids')->exist()->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
@@ -68,7 +68,7 @@ class Article extends Abstracts
         $this->checkUpdatePermissions($articleId);
 
         return $this->data($data)
-            ->field('title')->stripTags()->trim()->notEmpty()->length(2, 80)->htmlentities()
+            ->field('title')->trim()->notEmpty()->length(2, 80)->htmlentities()
             ->field('content')->markdownSupport(100000)
             ->field('topic_ids')->arrayUnique()->arrayLength(1, 10)->topicIdsExist()
             ->validate();
