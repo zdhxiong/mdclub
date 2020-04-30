@@ -276,7 +276,7 @@ export const addFollow = (
 export const create = (params: CreateParams): Promise<TopicResponse> => {
   const formData = new FormData();
   formData.append('name', params.name);
-  formData.append('description', params.name);
+  formData.append('description', params.description);
   formData.append('cover', params.cover);
 
   return postRequest(buildURL('/topics', params, ['include']), formData);
