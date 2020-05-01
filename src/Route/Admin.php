@@ -16,6 +16,6 @@ class Admin
     {
         $slim = App::$slim;
 
-        $slim->get('/admin[/{path}]', Index::class . ':index');
+        $slim->get('/admin[/{path:.+}]', Index::class . ':index');
     }
 }
