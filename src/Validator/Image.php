@@ -48,7 +48,7 @@ class Image extends Abstracts
         ImageService::getOrFail($key);
 
         return $this->data($data)
-            ->field('filename')->stripTags()->trim()->notEmpty()->length(1, 255)->htmlentities()
+            ->field('filename')->stripTags()->trim()->notEmpty()->length(1, 255)
             ->validate();
     }
 }

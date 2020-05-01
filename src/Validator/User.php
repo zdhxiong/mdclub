@@ -235,11 +235,11 @@ class User extends Abstracts
         $data = collect($data)->only(['headline', 'bio', 'blog', 'company', 'location'])->all();
 
         return $this->data($data)
-            ->field('headline')->length(null, 40)->htmlentities()
-            ->field('bio')->length(null, 160)->htmlentities()
-            ->field('blog')->length(null, 255)->htmlentities()
-            ->field('company')->length(null, 255)->htmlentities()
-            ->field('location')->length(null, 255)->htmlentities()
+            ->field('headline')->length(null, 40)
+            ->field('bio')->length(null, 160)
+            ->field('blog')->length(null, 255)
+            ->field('company')->length(null, 255)
+            ->field('location')->length(null, 255)
             ->validate();
     }
 }

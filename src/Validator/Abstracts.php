@@ -502,23 +502,6 @@ abstract class Abstracts
     }
 
     /**
-     * 转换为 HTML 实体
-     *
-     * @return $this
-     */
-    protected function htmlentities(): self
-    {
-        if ($this->string()->skip()) {
-            return $this;
-        }
-
-        $value = htmlentities($this->value());
-        $this->setValue($value);
-
-        return $this;
-    }
-
-    /**
      * 过滤数组中的重复元素
      *
      * @return $this

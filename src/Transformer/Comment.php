@@ -17,6 +17,21 @@ class Comment extends Abstracts
     protected $userExcept = ['delete_time'];
 
     /**
+     * 格式化评论信息
+     *
+     * @param array $item
+     * @return array
+     */
+    protected function format(array $item): array
+    {
+        if (isset($item['content'])) {
+            $item['content'] = htmlentities($item['content']);
+        }
+
+        return $item;
+    }
+
+    /**
      * 获取 comment 子资源
      *
      * @param  array $commentIds
@@ -34,7 +49,8 @@ class Comment extends Abstracts
         return collect($comments)
             ->keyBy('comment_id')
             ->map(static function ($item) {
-                $item['content_summary'] = mb_substr($item['content'], 0, 80);
+                $item['content_summary'] = htmlentities(mb_substr($item['content'], 0, 80));
+                unset($item['content']);
 
                 return $item;
             })

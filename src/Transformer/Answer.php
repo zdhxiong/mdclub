@@ -35,6 +35,7 @@ class Answer extends Abstracts
             ->keyBy('answer_id')
             ->map(function ($item) {
                 $item['content_summary'] = mb_substr(strip_tags($item['content_rendered']), 0, 80);
+                unset($item['content_rendered']);
 
                 return $item;
             })

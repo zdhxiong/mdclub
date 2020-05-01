@@ -28,6 +28,10 @@ class Image extends Abstracts
             $item['urls'] = ImageService::getUrls($item['key'], $item['create_time']);
         }
 
+        if (isset($item['filename'])) {
+            $item['filename'] = htmlentities($item['filename']);
+        }
+
         return $item;
     }
 
@@ -110,6 +114,7 @@ class Image extends Abstracts
             ->keyBy('key')
             ->map(function ($item) {
                 $item['urls'] = ImageService::getUrls($item['key'], $item['create_time']);
+                $item['filename'] = htmlentities($item['filename']);
 
                 return $item;
             })

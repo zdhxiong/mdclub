@@ -30,6 +30,14 @@ class Topic extends Abstracts
             $item['cover'] = TopicService::getBrandUrls($item['topic_id'], $item['cover']);
         }
 
+        if (isset($item['name'])) {
+            $item['name'] = htmlentities($item['name']);
+        }
+
+        if (isset($item['description'])) {
+            $item['description'] = htmlentities($item['description']);
+        }
+
         return $item;
     }
 
@@ -58,8 +66,8 @@ class Topic extends Abstracts
 
         return collect($topicable)
             ->map(function ($item) {
-                // 封面地址格式化
                 $item['cover'] = TopicService::getBrandUrls($item['topic_id'], $item['cover']);
+                $item['name'] = htmlentities($item['name']);
 
                 return $item;
             })

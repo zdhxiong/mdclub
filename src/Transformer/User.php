@@ -50,6 +50,26 @@ class User extends Abstracts
             $item['cover'] = UserCoverService::getBrandUrls($item['user_id'], $item['cover']);
         }
 
+        if (isset($item['headline'])) {
+            $item['headline'] = htmlentities($item['headline']);
+        }
+
+        if (isset($item['bio'])) {
+            $item['bio'] = htmlentities($item['bio']);
+        }
+
+        if (isset($item['blog'])) {
+            $item['blog'] = htmlentities($item['blog']);
+        }
+
+        if (isset($item['company'])) {
+            $item['company'] = htmlentities($item['company']);
+        }
+
+        if (isset($item['location'])) {
+            $item['location'] = htmlentities($item['location']);
+        }
+
         return $item;
     }
 
@@ -150,6 +170,7 @@ class User extends Abstracts
             ->keyBy('user_id')
             ->map(function ($item) {
                 $item['avatar'] = UserAvatarService::getBrandUrls($item['user_id'], $item['avatar']);
+                $item['headline'] = htmlentities($item['headline']);
 
                 return $item;
             })

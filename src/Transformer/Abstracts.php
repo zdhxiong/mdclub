@@ -6,6 +6,7 @@ namespace MDClub\Transformer;
 
 use MDClub\Facade\Library\Auth;
 use MDClub\Facade\Library\Request;
+use MDClub\Facade\Transformer\AnswerTransformer;
 use MDClub\Facade\Transformer\ArticleTransformer;
 use MDClub\Facade\Transformer\FollowTransformer;
 use MDClub\Facade\Transformer\QuestionTransformer;
@@ -121,6 +122,26 @@ abstract class Abstracts
         foreach ($items as &$item) {
             if (isset($item['question_id'])) {
                 $item['relationships']['question'] = $questions[$item['question_id']];
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * 添加 answer 子资源
+     *
+     * @param array $items
+     * @return array
+     */
+    protected function answer(array $items): array
+    {
+        $answerIds = array_unique(array_column($items, 'answer_id'));
+        $answers = AnswerTransformer::getInRelationship($answerIds);
+
+        foreach ($items as &$item) {
+            if (isset($item['answer_id'])) {
+                $item['relationships']['answer'] = $answers[$item['answer_id']];
             }
         }
 

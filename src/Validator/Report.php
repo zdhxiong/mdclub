@@ -35,7 +35,7 @@ class Report extends Abstracts
         ReportService::hasTargetOrFail($reportableType, $reportableId);
 
         $data = $this->data($data)
-            ->field('reason')->exist()->length(2, 200)->htmlentities()
+            ->field('reason')->exist()->length(2, 200)
             ->validate();
 
         $reported = ReportModel

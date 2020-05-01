@@ -17,6 +17,21 @@ class Question extends Abstracts
     protected $userExcept = ['delete_time'];
 
     /**
+     * 格式化提问信息
+     *
+     * @param array $item
+     * @return array
+     */
+    protected function format(array $item): array
+    {
+        if (isset($item['title'])) {
+            $item['title'] = htmlentities($item['title']);
+        }
+
+        return $item;
+    }
+
+    /**
      * 获取 question 子资源
      *
      * @param  array $questionIds
@@ -33,6 +48,11 @@ class Question extends Abstracts
 
         return collect($questions)
             ->keyBy('question_id')
+            ->map(function ($item) {
+                $item['title'] = htmlentities($item['title']);
+
+                return $item;
+            })
             ->unionFill($questionIds)
             ->all();
     }

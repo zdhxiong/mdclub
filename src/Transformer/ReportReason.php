@@ -14,6 +14,21 @@ class ReportReason extends Abstracts
     protected $availableIncludes = ['reporter', 'question', 'answer', 'article', 'comment', 'user'];
 
     /**
+     * 格式化举报详情
+     *
+     * @param array $item
+     * @return array
+     */
+    protected function format(array $item): array
+    {
+        if (isset($item['reason'])) {
+            $item['reason'] = htmlentities($item['reason']);
+        }
+
+        return $item;
+    }
+
+    /**
      * 添加 reporter 子资源
      *
      * @param  array $items

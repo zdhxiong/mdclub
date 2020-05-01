@@ -32,7 +32,7 @@ class Topic extends Abstracts
      */
     protected function topicNameNotExist(int $topicId = null): self
     {
-        if ($this->trim()->notEmpty()->length(1, 20)->htmlentities()->skip()) {
+        if ($this->trim()->notEmpty()->length(1, 20)->skip()) {
             return $this;
         }
 
@@ -69,7 +69,7 @@ class Topic extends Abstracts
     {
         return $this->data($data)
             ->field('name')->exist()->topicNameNotExist()
-            ->field('description')->exist()->trim()->notEmpty()->length(1, 1000)->htmlentities()
+            ->field('description')->exist()->trim()->notEmpty()->length(1, 1000)
             ->field('cover')->exist()->uploadedImage(true)
             ->validate();
     }
@@ -88,7 +88,7 @@ class Topic extends Abstracts
 
         return $this->data($data)
             ->field('name')->topicNameNotExist($topicId)
-            ->field('description')->trim()->notEmpty()->length(1, 1000)->htmlentities()
+            ->field('description')->trim()->notEmpty()->length(1, 1000)
             ->field('cover')->uploadedImage(true)
             ->validate();
     }

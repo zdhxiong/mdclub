@@ -50,7 +50,7 @@ class Comment extends Abstracts
         $class::hasOrFail($commentableId);
 
         return $this->data($data)
-            ->field('content')->exist()->trim()->notEmpty()->length(1, 1000)->htmlentities()
+            ->field('content')->exist()->trim()->notEmpty()->length(1, 1000)
             ->validate();
     }
 
@@ -67,7 +67,7 @@ class Comment extends Abstracts
         $this->checkUpdatePermissions($commentId);
 
         return $this->data($data)
-            ->field('content')->trim()->notEmpty()->length(1, 1000)->htmlentities()
+            ->field('content')->trim()->notEmpty()->length(1, 1000)
             ->validate();
     }
 

@@ -17,6 +17,21 @@ class Article extends Abstracts
     protected $userExcept = ['delete_time'];
 
     /**
+     * 格式化文章信息
+     *
+     * @param array $item
+     * @return array
+     */
+    protected function format(array $item): array
+    {
+        if (isset($item['title'])) {
+            $item['title'] = htmlentities($item['title']);
+        }
+
+        return $item;
+    }
+
+    /**
      * 获取 article 子资源
      *
      * @param  array $articleIds
@@ -33,6 +48,11 @@ class Article extends Abstracts
 
         return collect($articles)
             ->keyBy('article_id')
+            ->map(function ($item) {
+                $item['title'] = htmlentities($item['title']);
+
+                return $item;
+            })
             ->unionFill($articleIds)
             ->all();
     }
