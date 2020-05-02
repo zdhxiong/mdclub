@@ -712,7 +712,7 @@ abstract class Abstracts
     {
         $join = $this->joinData;
         $columns = $this->getColumns();
-        $where = $this->getWhere($primaryValue ? [$this->primaryKey => $primaryValue] : null);
+        $where = $this->getWhere($primaryValue !== null ? [$this->primaryKey => $primaryValue] : null);
 
         $this->reset();
 

@@ -181,7 +181,7 @@ function get_user(int $userId = null, array $queryParams = []): array
 {
     get_request($queryParams);
 
-    if (!$userId) {
+    if ($userId === null) {
         $userId = get_user_id();
     }
 
