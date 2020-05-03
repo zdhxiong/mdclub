@@ -46,7 +46,7 @@ export const login = (params: LoginParams): Promise<TokenResponse> => {
       'captcha_token',
       'captcha_code',
     ]),
-  ).then(response => {
+  ).then((response) => {
     if (!response.code) {
       defaults.adapter!.setStorage(
         'token',

@@ -37,13 +37,13 @@ export default class extends BrowserAbstract
         body: JSON.stringify(options.data),
         mode: 'cors',
       })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           globalOptions.success && globalOptions.success(data);
           globalOptions.complete && globalOptions.complete();
           data.code === 0 ? resolve(data) : reject(data);
         })
-        .catch(err => {
+        .catch((err) => {
           globalOptions.error && globalOptions.error(err);
           globalOptions.complete && globalOptions.complete();
           reject({

@@ -25,7 +25,7 @@ export function buildURL(
 
   // 添加 query 参数
   const queryObj: PlainObject<string> = {};
-  queryParamNames.forEach(name => {
+  queryParamNames.forEach((name) => {
     if (params[name] != null) {
       queryObj[name] = String(params[name]);
     }
@@ -47,7 +47,7 @@ export function buildRequestBody(
 ): PlainObject {
   const requestBody: PlainObject = {};
 
-  requestBodyNames.forEach(name => {
+  requestBodyNames.forEach((name) => {
     if (params[name] != null) {
       requestBody[name] = params[name];
     }

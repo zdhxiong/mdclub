@@ -38,7 +38,7 @@ export default class extends BrowserAbstract
         beforeSend: () => {
           globalOptions.beforeSend && globalOptions.beforeSend();
         },
-        success: data => {
+        success: (data) => {
           globalOptions.success && globalOptions.success(data);
           data.code === 0 ? resolve(data) : reject(data);
         },
