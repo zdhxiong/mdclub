@@ -70,6 +70,9 @@
 /comments/{comment_ids}:
   $ref: ./comments.{comment_ids}.yaml
 
+/comments/{comment_id}/replies:
+  $ref: ./comments.{comment_id}.replies.yaml
+
 /comments/{comment_id}/trash:
   $ref: ./comments.{comment_id}.trash.yaml
 

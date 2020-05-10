@@ -937,7 +937,7 @@
     "/comments": {
       "get": {
         "operationId": "getList",
-        "summary": "获取所有评论",
+        "summary": "🔐获取所有评论",
         "description": "获取所有评论。\n",
         "parameters": [
           {
@@ -1046,6 +1046,68 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/Empty"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Comment"
+        ]
+      }
+    },
+    "/comments/{comment_id}/replies": {
+      "get": {
+        "operationId": "getReplies",
+        "summary": "获取指定评论的回复",
+        "description": "获知指定评论的回复。\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/comment_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/order.comments"
+          },
+          {
+            "$ref": "#/components/parameters/include.comment"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Comments"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Comment"
+        ]
+      },
+      "post": {
+        "operationId": "createReply",
+        "summary": "在指定评论下发表回复",
+        "description": "在指定评论下发表回复\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/comment_id.path"
+          },
+          {
+            "$ref": "#/components/parameters/include.comment"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Comment"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Comment"
           },
           "default": {
             "$ref": "#/components/responses/Error"
