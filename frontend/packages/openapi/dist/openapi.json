@@ -3948,7 +3948,8 @@
             "enum": [
               "article",
               "question",
-              "answer"
+              "answer",
+              "comment"
             ],
             "example": "question"
           },
@@ -6925,7 +6926,8 @@
           "enum": [
             "article",
             "question",
-            "answer"
+            "answer",
+            "comment"
           ]
         },
         "example": "article"

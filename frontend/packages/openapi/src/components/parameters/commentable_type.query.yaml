@@ -7,4 +7,5 @@ schema:
     - article
     - question
     - answer
+    - comment
 example: article

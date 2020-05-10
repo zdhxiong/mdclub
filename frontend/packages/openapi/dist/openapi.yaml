@@ -2460,6 +2460,7 @@ components:
             - article
             - question
             - answer
+            - comment
           example: question
         user_id:
           type: integer
@@ -4790,6 +4791,7 @@ components:
           - article
           - question
           - answer
+          - comment
       example: article
     disabled.query:
       name: disabled
