@@ -29,6 +29,10 @@ class Follow extends Abstracts
      */
     protected function deleteByIds(string $type, array $ids): void
     {
+        if (!$ids) {
+            return;
+        }
+
         $this
             ->where('followable_type', $type)
             ->where('followable_id', $ids)

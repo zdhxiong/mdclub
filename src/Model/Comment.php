@@ -110,6 +110,10 @@ class Comment extends Abstracts
      */
     protected function deleteByIds(string $type, array $ids): void
     {
+        if (!$ids) {
+            return;
+        }
+
         $this
             ->force()
             ->where('commentable_type', $type)

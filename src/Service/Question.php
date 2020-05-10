@@ -210,6 +210,10 @@ class Question extends Abstracts implements
      */
     public function afterDelete(array $questions): void
     {
+        if (!$questions) {
+            return;
+        }
+
         $questionIds = array_column($questions, 'question_id');
 
         // 作者的 question_count - 1, 关注者的 following_question_count - 1

@@ -208,6 +208,10 @@ class Article extends Abstracts implements
      */
     public function afterDelete(array $articles): void
     {
+        if (!$articles) {
+            return;
+        }
+
         $articleIds = array_column($articles, 'article_id');
 
         // 作者的 article_count - 1, 关注者的 following_article_count - 1

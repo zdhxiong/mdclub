@@ -28,6 +28,10 @@ class Topicable extends Abstracts
      */
     public function deleteByQuestionIds(array $questionIds): void
     {
+        if (!$questionIds) {
+            return;
+        }
+
         $this
             ->where('topicable_type', 'question')
             ->where('topicable_id', $questionIds)
@@ -41,6 +45,10 @@ class Topicable extends Abstracts
      */
     public function deleteByArticleIds(array $articleIds): void
     {
+        if (!$articleIds) {
+            return;
+        }
+
         $this
             ->where('topicable_type', 'article')
             ->where('topicable_id', $articleIds)
@@ -54,6 +62,10 @@ class Topicable extends Abstracts
      */
     public function deleteByTopicIds(array $topicIds): void
     {
+        if (!$topicIds) {
+            return;
+        }
+
         $this->where('topic_id', $topicIds)->delete();
     }
 }

@@ -60,6 +60,10 @@ class Report extends Abstracts
      */
     protected function deleteByIds(string $type, array $ids): void
     {
+        if (!$ids) {
+            return;
+        }
+
         $this
             ->where('reportable_type', $type)
             ->where('reportable_id', $ids)

@@ -93,6 +93,10 @@ class Comment extends Abstracts implements DeletableInterface, GetableInterface,
      */
     public function afterDelete(array $comments, bool $callByParent = false): void
     {
+        if (!$comments) {
+            return;
+        }
+
         $commentIds = array_column($comments, 'comment_id');
 
         ReportModel::deleteByCommentIds($commentIds);

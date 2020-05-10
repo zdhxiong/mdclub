@@ -138,6 +138,10 @@ class Answer extends Abstracts implements CommentableInterface, DeletableInterfa
      */
     public function afterDelete(array $answers, bool $callByParent = false): void
     {
+        if (!$answers) {
+            return;
+        }
+
         $answerIds = array_column($answers, 'answer_id');
 
         ReportModel::deleteByAnswerIds($answerIds);

@@ -30,6 +30,10 @@ class Vote extends Abstracts
      */
     protected function deleteByIds(string $type, array $ids): void
     {
+        if (!$ids) {
+            return;
+        }
+
         $this
             ->where('votable_type', $type)
             ->where('votable_id', $ids)

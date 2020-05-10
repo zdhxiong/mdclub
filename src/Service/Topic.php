@@ -154,6 +154,10 @@ class Topic extends Abstracts implements DeletableInterface, FollowableInterface
      */
     public function afterDelete(array $topics): void
     {
+        if (!$topics) {
+            return;
+        }
+
         $topicIds = array_column($topics, 'topic_id');
 
         // 关注了这些话题的用户ID
