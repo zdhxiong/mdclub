@@ -1,6 +1,6 @@
 get:
   operationId: getList
-  summary: 获取所有评论
+  summary: 🔐获取所有评论
   description: |
     获取所有评论。
   parameters:
