@@ -309,7 +309,11 @@ export interface Comment {
 /**
  * Enum for the commentable_type property.
  */
-export type CommentCommentableTypeEnum = 'article' | 'question' | 'answer';
+export type CommentCommentableTypeEnum =
+  | 'article'
+  | 'question'
+  | 'answer'
+  | 'comment';
 
 export interface CommentInRelationship {
   /**

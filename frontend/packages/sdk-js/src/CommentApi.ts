@@ -32,6 +32,21 @@ interface AddVoteParams {
   type: VoteRequestBodyTypeEnum;
 }
 
+interface CreateReplyParams {
+  /**
+   * 评论ID
+   */
+  commentId: number;
+  /**
+   * 评论内容
+   */
+  content: string;
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
+  include?: Array<'user' | 'voting'>;
+}
+
 interface DeleteMultipleParams {
   /**
    * 多个用 `,` 分隔的评论ID，最多可提供 100 个 ID
@@ -91,7 +106,7 @@ interface GetListParams {
   /**
    * 评论目标类型
    */
-  commentable_type?: 'article' | 'question' | 'answer';
+  commentable_type?: 'article' | 'question' | 'answer' | 'comment';
   /**
    * 用户ID
    */
@@ -100,6 +115,35 @@ interface GetListParams {
    * 是否仅获取回收站中的数据
    */
   trashed?: boolean;
+}
+
+interface GetRepliesParams {
+  /**
+   * 评论ID
+   */
+  commentId: number;
+  /**
+   * 当前页数
+   */
+  page?: number;
+  /**
+   * 每页条数（最大为 100）
+   */
+  perPage?: number;
+  /**
+   * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-create_time`。其中 `delete_time` 值仅管理员使用有效。
+   */
+  order?:
+    | 'vote_count'
+    | 'create_time'
+    | 'delete_time'
+    | '-vote_count'
+    | '-create_time'
+    | '-delete_time';
+  /**
+   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   */
+  include?: Array<'user' | 'voting'>;
 }
 
 interface GetVotersParams {
@@ -202,6 +246,18 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   );
 
 /**
+ * 在指定评论下发表回复
+ * 在指定评论下发表回复
+ */
+export const createReply = (
+  params: CreateReplyParams,
+): Promise<CommentResponse> =>
+  postRequest(
+    buildURL('/comments/{comment_id}/replies', params, ['include']),
+    buildRequestBody(params, ['content']),
+  );
+
+/**
  * 🔐批量删除评论
  * 仅管理员可调用该接口。 只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
  */
@@ -244,6 +300,22 @@ export const getList = (
       'commentable_type',
       'user_id',
       'trashed',
+    ]),
+  );
+
+/**
+ * 获取指定评论的回复
+ * 获知指定评论的回复。
+ */
+export const getReplies = (
+  params: GetRepliesParams,
+): Promise<CommentsResponse> =>
+  getRequest(
+    buildURL('/comments/{comment_id}/replies', params, [
+      'page',
+      'per_page',
+      'order',
+      'include',
     ]),
   );
 
