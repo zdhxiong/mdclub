@@ -22,6 +22,7 @@ class Comment extends Abstracts
         'commentable_type',
         'user_id',
         'content',
+        'reply_count',
         'vote_count',
         'create_time',
         'update_time',
@@ -56,6 +57,7 @@ class Comment extends Abstracts
     {
         return collect($data)->union([
             'vote_count' => 0,
+            'reply_count' => 0,
         ])->all();
     }
 

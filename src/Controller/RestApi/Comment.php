@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Controller\RestApi;
 
+use MDClub\Controller\RestApi\Traits\Commentable;
 use MDClub\Controller\RestApi\Traits\Deletable;
 use MDClub\Controller\RestApi\Traits\Getable;
 use MDClub\Controller\RestApi\Traits\Votable;
@@ -15,6 +16,7 @@ use MDClub\Facade\Service\CommentService;
  */
 class Comment extends Abstracts
 {
+    use Commentable;
     use Deletable;
     use Getable;
     use Votable;

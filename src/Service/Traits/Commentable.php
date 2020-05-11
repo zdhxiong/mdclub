@@ -48,10 +48,10 @@ trait Commentable
             ->set('content', $createData['content'])
             ->insert();
 
-        // 评论数量 +1
+        // 评论数量 +1，若是对评论的回复，字段为 reply_count，其他为 comment_count
         $model
             ->where("${table}_id", $commentableId)
-            ->inc('comment_count')
+            ->inc($table === 'comment' ? 'reply_count' : 'comment_count')
             ->update();
 
         return $commentId;

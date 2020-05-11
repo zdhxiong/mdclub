@@ -542,6 +542,15 @@ class RestApi
             ->patch('/comments/{comment_id:\d+}', Comment::class . ':update')
             ->add(TransformerForComment::class)
             ->add(NeedLogin::class);
+
+        $group
+            ->post('/comments/{comment_id:\d+}/replies', Comment::class . ':createComment')
+            ->add(TransformerForComment::class)
+            ->add(NeedLogin::class);
+
+        $group
+            ->get('/comments/{comment_id:\d+}/replies', Comment::class . ':getComments')
+            ->add(TransformerForComment::class);
     }
 
     /**

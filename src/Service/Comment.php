@@ -12,10 +12,10 @@ use MDClub\Facade\Model\ReportModel;
 use MDClub\Facade\Model\VoteModel;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\CommentValidator;
-use MDClub\Initializer\App;
 use MDClub\Service\Interfaces\DeletableInterface;
 use MDClub\Service\Interfaces\GetableInterface;
 use MDClub\Service\Interfaces\VotableInterface;
+use MDClub\Service\Traits\Commentable;
 use MDClub\Service\Traits\Deletable;
 use MDClub\Service\Traits\Getable;
 use MDClub\Service\Traits\Votable;
@@ -25,6 +25,7 @@ use MDClub\Service\Traits\Votable;
  */
 class Comment extends Abstracts implements DeletableInterface, GetableInterface, VotableInterface
 {
+    use Commentable;
     use Deletable;
     use Getable;
     use Votable;
