@@ -36,7 +36,7 @@ interface CreateReplyParams {
   /**
    * 评论ID
    */
-  commentId: number;
+  comment_id: number;
   /**
    * 评论内容
    */
@@ -121,7 +121,7 @@ interface GetRepliesParams {
   /**
    * 评论ID
    */
-  commentId: number;
+  comment_id: number;
   /**
    * 当前页数
    */
