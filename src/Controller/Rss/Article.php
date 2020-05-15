@@ -22,6 +22,7 @@ class Article extends Abstracts
      */
     public function getList(): ResponseInterface
     {
+        $this->setOrder();
         ArticleTransformer::setInclude(['user']);
 
         $articles = ArticleService::getList();
@@ -30,8 +31,7 @@ class Article extends Abstracts
         $title = "{$this->siteName} 的最新文章";
         $url = Url::fromRoute(RouteNameConstant::ARTICLES);
         $feedUrl = Url::fromRoute(RouteNameConstant::RSS_ARTICLES);
-        $cacheKey = 'rss_articles';
 
-        return $this->renderArticles($articles['data'], $title, $url, $feedUrl, $cacheKey);
+        return $this->renderArticles($articles['data'], $title, $url, $feedUrl);
     }
 }

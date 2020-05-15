@@ -6,12 +6,12 @@ namespace MDClub\Controller\Rss;
 
 use MDClub\Constant\OptionConstant;
 use MDClub\Constant\RouteNameConstant;
-use MDClub\Facade\Library\Cache;
 use MDClub\Facade\Library\Option;
 use MDClub\Facade\Library\Request;
 use MDClub\Helper\Url;
 use MDClub\Initializer\App;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Suin\RSSWriter\Channel;
 use Suin\RSSWriter\Feed;
 use Suin\RSSWriter\Item;
@@ -36,8 +36,21 @@ abstract class Abstracts
         $this->year = date('Y');
         $this->time = Request::time();
         $this->copyright = "Copyright {$this->year}, {$this->siteName}";
-        $this->cacheTTL = 60;
+        $this->cacheTTL = 300;
         $this->feed = new Feed();
+    }
+
+    /**
+     * 设置成按创建时间倒序排列
+     */
+    protected function setOrder(): void
+    {
+        /** @var ServerRequestInterface $request */
+        $request = App::$container->get(ServerRequestInterface::class);
+
+        $request = $request->withQueryParams(['order' => '-create_time']);
+
+        App::$container->offsetSet(ServerRequestInterface::class, $request);
     }
 
     /**
@@ -90,7 +103,6 @@ abstract class Abstracts
      * @param string $title
      * @param string $url
      * @param string $feedUrl
-     * @param string $cacheKey
      *
      * @return ResponseInterface
      */
@@ -98,14 +110,8 @@ abstract class Abstracts
         array $questions,
         string $title,
         string $url,
-        string $feedUrl,
-        string $cacheKey
+        string $feedUrl
     ): ResponseInterface {
-        $content = Cache::get($cacheKey);
-        if ($content) {
-            return $this->render($content);
-        }
-
         $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($questions as $question) {
@@ -123,7 +129,6 @@ abstract class Abstracts
         }
 
         $content = $this->feed->render();
-        Cache::set($cacheKey, $content, $this->cacheTTL);
 
         return $this->render($content);
     }
@@ -135,7 +140,6 @@ abstract class Abstracts
      * @param string $title
      * @param string $url
      * @param string $feedUrl
-     * @param string $cacheKey
      *
      * @return ResponseInterface
      */
@@ -143,14 +147,8 @@ abstract class Abstracts
         array $articles,
         string $title,
         string $url,
-        string $feedUrl,
-        string $cacheKey
+        string $feedUrl
     ): ResponseInterface {
-        $content = Cache::get($cacheKey);
-        if ($content) {
-            return $this->render($content);
-        }
-
         $channel = $this->getChannel($title, $url, $feedUrl);
 
         foreach ($articles as $article) {
@@ -168,7 +166,48 @@ abstract class Abstracts
         }
 
         $content = $this->feed->render();
-        Cache::set($cacheKey, $content, $this->cacheTTL);
+
+        return $this->render($content);
+    }
+
+    /**
+     * 输出回答列表的 RSS 内容
+     *
+     * @param array  $answers
+     * @param string $title
+     * @param string $url
+     * @param string $feedUrl
+     *
+     * @return ResponseInterface
+     */
+    protected function renderAnswers(
+        array $answers,
+        string $title,
+        string $url,
+        string $feedUrl
+    ): ResponseInterface {
+        $channel = $this->getChannel($title, $url, $feedUrl);
+
+        foreach ($answers as $answer) {
+            $path = Url::fromRoute(RouteNameConstant::ANSWER, [
+                'question_id' => $answer['question_id'],
+                'answer_id' => $answer['answer_id'],
+            ]);
+
+            $contentStripTags = strip_tags($answer['content_rendered']);
+
+            (new Item())
+                ->title(mb_substr($contentStripTags, 0, 30))
+                ->description(mb_substr($contentStripTags, 0, 80))
+                ->contentEncoded($answer['content_rendered'])
+                ->url($path)
+                ->author($answer['relationships']['user']['username'])
+                ->pubDate($answer['create_time'])
+                ->guid($path, true)
+                ->appendTo($channel);
+        }
+
+        $content = $this->feed->render();
 
         return $this->render($content);
     }

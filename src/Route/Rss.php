@@ -27,6 +27,10 @@ class Rss
                 ->setName(RouteNameConstant::RSS_QUESTIONS);
 
             $group
+                ->get('/questions/{question_id:\d+}/answers', Question::class . ':getAnswers')
+                ->setName(RouteNameConstant::RSS_QUESTION_ANSWERS);
+
+            $group
                 ->get('/articles', Article::class . ':getList')
                 ->setName(RouteNameConstant::RSS_ARTICLES);
 
@@ -37,6 +41,10 @@ class Rss
             $group
                 ->get('/users/{user_id:\d+}/articles', User::class . ':getArticles')
                 ->setName(RouteNameConstant::RSS_USER_ARTICLES);
+
+            $group
+                ->get('/users/{user_id:\d+}/answers', User::class . ':getAnswers')
+                ->setName(RouteNameConstant::RSS_USER_ANSWERS);
 
             $group
                 ->get('/topics/{topic_id:\d+}/questions', Topic::class . ':getQuestions')

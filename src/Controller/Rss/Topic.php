@@ -27,6 +27,7 @@ class Topic extends Abstracts
      */
     public function getQuestions(int $topicId): ResponseInterface
     {
+        $this->setOrder();
         QuestionTransformer::setInclude(['user']);
 
         $topic = TopicService::get($topicId);
@@ -34,11 +35,10 @@ class Topic extends Abstracts
 
         $questions['data'] = QuestionTransformer::transform($questions['data']);
         $title = "{$this->siteName} 中 {$topic['name']} 话题下的提问";
-        $url = Url::fromRoute(RouteNameConstant::QUESTION, [], ['topic_id' => $topicId]);
+        $url = Url::fromRoute(RouteNameConstant::TOPIC, ['topic_id' => $topicId]) . '#questions';
         $feedUrl = Url::fromRoute(RouteNameConstant::RSS_TOPIC_QUESTIONS, ['topic_id' => $topicId]);
-        $cacheKey = "rss_topic_{$topicId}_questions";
 
-        return $this->renderQuestions($questions['data'], $title, $url, $feedUrl, $cacheKey);
+        return $this->renderQuestions($questions['data'], $title, $url, $feedUrl);
     }
 
     /**
@@ -50,6 +50,7 @@ class Topic extends Abstracts
      */
     public function getArticles(int $topicId): ResponseInterface
     {
+        $this->setOrder();
         ArticleTransformer::setInclude(['user']);
 
         $topic = TopicService::get($topicId);
@@ -57,10 +58,9 @@ class Topic extends Abstracts
 
         $articles['data'] = ArticleTransformer::transform($articles['data']);
         $title = "{$this->siteName} 中 {$topic['name']} 话题下的文章";
-        $url = Url::fromRoute(RouteNameConstant::ARTICLE, [], ['topic_id' => $topicId]);
+        $url = Url::fromRoute(RouteNameConstant::TOPIC, ['topic_id' => $topicId]) . '#articles';
         $feedUrl = Url::fromRoute(RouteNameConstant::RSS_TOPIC_ARTICLES, ['topic_id' => $topicId]);
-        $cacheKey = "rss_topic_{$topicId}_articles";
 
-        return $this->renderArticles($articles['data'], $title, $url, $feedUrl, $cacheKey);
+        return $this->renderArticles($articles['data'], $title, $url, $feedUrl);
     }
 }
