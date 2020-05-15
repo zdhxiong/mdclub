@@ -113,7 +113,7 @@ abstract class Abstracts
 
             (new Item())
                 ->title($question['title'])
-                ->description(substr(strip_tags($question['content_rendered']), 0, 80))
+                ->description(mb_substr(strip_tags($question['content_rendered']), 0, 80))
                 ->contentEncoded($question['content_rendered'])
                 ->url($path)
                 ->author($question['relationships']['user']['username'])
@@ -158,7 +158,7 @@ abstract class Abstracts
 
             (new Item())
                 ->title($article['title'])
-                ->description(substr(strip_tags($article['content_rendered']), 0, 80))
+                ->description(mb_substr(strip_tags($article['content_rendered']), 0, 80))
                 ->contentEncoded($article['content_rendered'])
                 ->url($path)
                 ->author($article['relationships']['user']['username'])
