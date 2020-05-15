@@ -151,7 +151,7 @@ function generate_url_from_route(string $name, array $data = [], array $queryPar
  */
 function get_options(): array
 {
-    return Option::getAll();
+    return Option::onlyAuthorized()->getAll();
 }
 
 // ----------------------------------------------------- 用户函数
