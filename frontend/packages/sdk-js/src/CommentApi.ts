@@ -129,7 +129,7 @@ interface GetRepliesParams {
   /**
    * 每页条数（最大为 100）
    */
-  perPage?: number;
+  per_page?: number;
   /**
    * 排序方式。在字段前加 `-` 表示倒序排列。  可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-create_time`。其中 `delete_time` 值仅管理员使用有效。
    */
