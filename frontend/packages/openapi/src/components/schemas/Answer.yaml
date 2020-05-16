@@ -36,6 +36,16 @@ properties:
     type: integer
     description: 投票数（赞成票 - 反对票，可能为负数）
     example: 44
+  vote_up_count:
+    type: integer
+    description: 赞成票总数
+    minimum: 0
+    example: 96
+  vote_down_count:
+    type: integer
+    description: 反对票总数
+    minimum: 0
+    example: 52
   create_time:
     type: integer
     description: 创建时间
@@ -43,7 +53,7 @@ properties:
     example: 1563512214
   update_time:
     type: integer
-    description: 🔐更新时间
+    description: 更新时间
     minimum: 1
     example: 1563512214
   delete_time:
@@ -61,4 +71,7 @@ required:
   - content_rendered
   - comment_count
   - vote_count
+  - vote_up_count
+  - vote_down_count
   - create_time
+  - update_time

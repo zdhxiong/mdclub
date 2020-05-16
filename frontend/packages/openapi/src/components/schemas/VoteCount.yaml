@@ -4,6 +4,18 @@ properties:
   vote_count:
     type: integer
     description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
-    example: 8
+    example: 44
+  vote_up_count:
+    type: integer
+    description: 赞成票总数
+    minimum: 0
+    example: 96
+  vote_down_count:
+    type: integer
+    description: 反对票总数
+    minimum: 0
+    example: 52
 required:
   - vote_count
+  - vote_up_count
+  - vote_down_count
