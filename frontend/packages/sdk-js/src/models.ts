@@ -28,6 +28,14 @@ export interface Answer {
    */
   vote_count: number;
   /**
+   * 赞成票总数
+   */
+  vote_up_count: number;
+  /**
+   * 反对票总数
+   */
+  vote_down_count: number;
+  /**
    * 创建时间
    */
   create_time: number;
@@ -140,6 +148,14 @@ export interface Article {
    * 投票数（赞成票 - 反对票，可能为负数）
    */
   vote_count: number;
+  /**
+   * 赞成票总数
+   */
+  vote_up_count: number;
+  /**
+   * 反对票总数
+   */
+  vote_down_count: number;
   /**
    * 创建时间
    */
@@ -291,6 +307,14 @@ export interface Comment {
    * 投票数（赞成票 - 反对票，可能为负数）
    */
   vote_count: number;
+  /**
+   * 赞成票总数
+   */
+  vote_up_count: number;
+  /**
+   * 反对票总数
+   */
+  vote_down_count: number;
   /**
    * 发表时间
    */
@@ -1295,6 +1319,14 @@ export interface Question {
    */
   vote_count: number;
   /**
+   * 赞成票总数
+   */
+  vote_up_count: number;
+  /**
+   * 反对票总数
+   */
+  vote_down_count: number;
+  /**
    * 最后回答时间
    */
   last_answer_time: number;
@@ -2007,6 +2039,14 @@ export interface VoteCount {
    * 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
    */
   vote_count: number;
+  /**
+   * 赞成票总数
+   */
+  vote_up_count: number;
+  /**
+   * 反对票总数
+   */
+  vote_down_count: number;
 }
 
 export interface VoteCountResponse {
