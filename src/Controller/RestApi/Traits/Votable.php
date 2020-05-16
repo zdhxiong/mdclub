@@ -47,9 +47,8 @@ trait Votable
         $type = Request::getParsedBody()['type'] ?? '';
 
         $service->addVote($votableId, $type);
-        $voteCount = $service->getVoteCount($votableId);
 
-        return ['vote_count' => $voteCount];
+        return $service->getVoteCount($votableId);
     }
 
     /**
@@ -64,8 +63,7 @@ trait Votable
         $service = $this->getServiceInstance();
 
         $service->deleteVote($votableId);
-        $voteCount = $service->getVoteCount($votableId);
 
-        return ['vote_count' => $voteCount];
+        return $service->getVoteCount($votableId);
     }
 }

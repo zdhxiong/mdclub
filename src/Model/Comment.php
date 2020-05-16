@@ -24,6 +24,8 @@ class Comment extends Abstracts
         'content',
         'reply_count',
         'vote_count',
+        'vote_up_count',
+        'vote_down_count',
         'create_time',
         'update_time',
         'delete_time',
@@ -56,8 +58,10 @@ class Comment extends Abstracts
     protected function beforeInsert(array $data): array
     {
         return collect($data)->union([
-            'vote_count' => 0,
-            'reply_count' => 0,
+            'vote_count'      => 0,
+            'vote_up_count'   => 0,
+            'vote_down_count' => 0,
+            'reply_count'     => 0,
         ])->all();
     }
 

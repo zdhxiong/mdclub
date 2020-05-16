@@ -25,12 +25,12 @@ interface VotableInterface
     public function deleteVote(int $votableId): void;
 
     /**
-     * 获取投票总数（赞同票 - 反对票），可能出现负数
+     * 获取投票数。包含 vote_count, vote_up_count, vote_down_count
      *
      * @param int $votableId
-     * @return int
+     * @return array
      */
-    public function getVoteCount(int $votableId): int;
+    public function getVoteCount(int $votableId): array;
 
     /**
      * 获取指定对象的投票者

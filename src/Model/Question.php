@@ -28,6 +28,8 @@ class Question extends Abstracts
         'view_count',
         'follower_count',
         'vote_count',
+        'vote_up_count',
+        'vote_down_count',
         'last_answer_time',
         'create_time',
         'update_time',
@@ -66,6 +68,8 @@ class Question extends Abstracts
             'view_count'       => 0,
             'follower_count'   => 0,
             'vote_count'       => 0,
+            'vote_up_count'    => 0,
+            'vote_down_count'  => 0,
             'last_answer_time' => 0,
         ])->all();
     }

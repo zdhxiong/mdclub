@@ -26,6 +26,8 @@ class Article extends Abstracts
         'view_count',
         'follower_count',
         'vote_count',
+        'vote_up_count',
+        'vote_down_count',
         'create_time',
         'update_time',
         'delete_time',
@@ -58,10 +60,12 @@ class Article extends Abstracts
     protected function beforeInsert(array $data): array
     {
         return collect($data)->union([
-            'comment_count'  => 0,
-            'view_count'     => 0,
-            'follower_count' => 0,
-            'vote_count'     => 0,
+            'comment_count'   => 0,
+            'view_count'      => 0,
+            'follower_count'  => 0,
+            'vote_count'      => 0,
+            'vote_up_count'   => 0,
+            'vote_down_count' => 0,
         ])->all();
     }
 

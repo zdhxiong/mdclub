@@ -56,8 +56,8 @@ trait Votable
             VoteModel::insert(array_merge($voteWhere, ['type' => $type]));
 
             $type === 'up'
-                ? $model->inc('vote_count')
-                : $model->dec('vote_count');
+                ? $model->inc('vote_count')->inc('vote_up_count')
+                : $model->dec('vote_count')->inc('vote_down_count');
 
             $model->where("${table}_id", $votableId)->update();
         } elseif ($type !== $vote['type']) {
@@ -69,8 +69,8 @@ trait Votable
                 ->update();
 
             $type === 'up'
-                ? $model->inc('vote_count', 2)
-                : $model->dec('vote_count', 2);
+                ? $model->inc('vote_count', 2)->dec('vote_down_count')->inc('vote_up_count')
+                : $model->dec('vote_count', 2)->dec('vote_up_count')->inc('vote_down_count');
 
             $model->where("${table}_id", $votableId)->update();
         }
@@ -103,26 +103,27 @@ trait Votable
             VoteModel::where($voteWhere)->delete();
 
             $vote['type'] === 'up'
-                ? $model->dec('vote_count')
-                : $model->inc('vote_count');
+                ? $model->dec('vote_count')->dec('vote_up_count')
+                : $model->inc('vote_count')->dec('vote_down_count');
 
             $model->where("${table}_id", $votableId)->update();
         }
     }
 
     /**
-     * 获取投票总数（赞同票 - 反对票），可能出现负数
+     * 获取投票数。包含 vote_count, vote_up_count, vote_down_count
      *
      * @param int $votableId
      *
-     * @return int
+     * @return array
      */
-    public function getVoteCount(int $votableId): int
+    public function getVoteCount(int $votableId): array
     {
         $model = $this->getModelInstance();
-        $votableTarget = $model->field('vote_count')->get($votableId);
+        $fields = ['vote_count', 'vote_up_count', 'vote_down_count'];
 
-        return $votableTarget['vote_count'] ?? 0;
+        return $model->field($fields)->get($votableId)
+            ?: ['vote_count' => 0, 'vote_up_count' => 0, 'vote_down_count' => 0];
     }
 
     /**
