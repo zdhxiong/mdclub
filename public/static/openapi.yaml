@@ -1,0 +1,5549 @@
+openapi: 3.0.2
+info:
+  title: MDClub API 文档
+  description: "MDClub 是一个 Material Design 风格的社区应用。\n\n**接口文档说明**\n\n* 接口描述中，若含 \U0001F510 图标，表示该接口仅管理员有权限调用。\n* 接口返回值的字段描述中，若含 \U0001F510 图标，表示只有管理员调用接口时，返回值中才会包含该字段。\n* 接口参数的描述中，若含 \U0001F510 图标，表示只有管理员才能添加该参数。\n\n`GET`、`PUT`、`DELETE` 请求均符合幂等性。\n"
+  termsOfService: 'https://github.com/zdhxiong'
+  contact:
+    name: zdhxiong
+    url: 'https://github.com/zdhxiong'
+    email: zdhxiong@gmail.com
+  license:
+    name: MIT
+    url: 'https://github.com/zdhxiong/mdclub/blob/master/LICENSE'
+  version: 1.0.0
+servers:
+  - url: /api
+    description: 当前服务器
+  - url: '{scheme}://{host}{path}'
+    description: 指定的服务器
+    variables:
+      scheme:
+        enum:
+          - http
+          - https
+        default: http
+        description: 协议
+      host:
+        default: mdclub.test
+        description: 服务器域名
+      path:
+        default: /api
+        description: 服务器接口根路径
+paths:
+  /answers:
+    get:
+      operationId: getList
+      summary: 获取回答列表
+      description: |
+        获取回答列表。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.answers'
+        - $ref: '#/components/parameters/include.answer'
+        - $ref: '#/components/parameters/answer_id.query'
+        - $ref: '#/components/parameters/question_id.query'
+        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/trashed.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把回答放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把回答移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除回答"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/answer_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/comments':
+    get:
+      operationId: getComments
+      summary: 获取指定回答的评论
+      description: |
+        获取指定回答的评论。
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+    post:
+      operationId: createComment
+      summary: 在指定回答下发表评论
+      description: |
+        在指定回答下发表评论
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      requestBody:
+        $ref: '#/components/requestBodies/Comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把回答放入回收站"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把回答移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}/voters':
+    get:
+      operationId: getVoters
+      summary: 获取回答的投票者
+      description: |
+        获取回答的投票者
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+        - $ref: '#/components/parameters/vote_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+    post:
+      operationId: addVote
+      summary: 为回答投票
+      description: 为回答投票
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+      requestBody:
+        $ref: '#/components/requestBodies/Vote'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+    delete:
+      operationId: deleteVote
+      summary: 取消为回答的投票
+      description: 取消为回答的投票
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  '/answers/{answer_id}':
+    get:
+      operationId: get
+      summary: 获取回答详情
+      description: |
+        获取回答详情
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+    patch:
+      operationId: update
+      summary: 修改回答信息
+      description: |
+        管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。
+
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+        - $ref: '#/components/parameters/include.answer'
+      requestBody:
+        $ref: '#/components/requestBodies/Answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+    delete:
+      operationId: delete
+      summary: 删除回答
+      description: |
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+
+        管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
+      parameters:
+        - $ref: '#/components/parameters/answer_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answer
+  /articles:
+    get:
+      operationId: getList
+      summary: 获取文章列表
+      description: |
+        获取文章列表。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.articles'
+        - $ref: '#/components/parameters/include.article'
+        - $ref: '#/components/parameters/article_id.query'
+        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/topic_id.query'
+        - $ref: '#/components/parameters/trashed.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    post:
+      operationId: create
+      summary: 发表文章
+      description: |
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/include.article'
+      requestBody:
+        $ref: '#/components/requestBodies/ArticleCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把文章放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把文章移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_ids.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除文章"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/article_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/comments':
+    get:
+      operationId: getComments
+      summary: 获取指定文章的评论列表
+      description: |
+        获取指定文章的评论列表。
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    post:
+      operationId: createComment
+      summary: 在指定文章下发表评论
+      description: |
+        在指定文章下发表评论
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      requestBody:
+        $ref: '#/components/requestBodies/Comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/followers':
+    get:
+      operationId: getFollowers
+      summary: 获取指定文章的关注者
+      description: |
+        获取指定文章的关注者
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    post:
+      operationId: addFollow
+      summary: 添加关注
+      description: 添加关注
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    delete:
+      operationId: deleteFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把文章放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把文章移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}/voters':
+    get:
+      operationId: getVoters
+      summary: 获取文章的投票者
+      description: |
+        获取文章的投票者
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+        - $ref: '#/components/parameters/vote_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    post:
+      operationId: addVote
+      summary: 为文章投票
+      description: 为文章投票
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      requestBody:
+        $ref: '#/components/requestBodies/Vote'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    delete:
+      operationId: deleteVote
+      summary: 取消为文章的投票
+      description: 取消为文章的投票
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  '/articles/{article_id}':
+    get:
+      operationId: get
+      summary: 获取指定文章信息
+      description: 获取指定文章信息
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    patch:
+      operationId: update
+      summary: 更新文章信息
+      description: |
+        管理员可修改文章。文章作者是否可修改文章，由管理员在后台的设置决定。
+
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+        - $ref: '#/components/parameters/include.article'
+      requestBody:
+        $ref: '#/components/requestBodies/ArticleUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Article'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+    delete:
+      operationId: delete
+      summary: 删除文章
+      description: |
+        只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+
+        管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
+      parameters:
+        - $ref: '#/components/parameters/article_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Article
+  /captchas:
+    post:
+      operationId: generate
+      summary: 生成新的图形验证码
+      description: 生成新的图形验证码
+      responses:
+        '200':
+          $ref: '#/components/responses/Captcha'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Captcha
+  /comments:
+    get:
+      operationId: getList
+      summary: "\U0001F510获取所有评论"
+      description: |
+        获取所有评论。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+        - $ref: '#/components/parameters/comment_id.query'
+        - $ref: '#/components/parameters/commentable_id.query'
+        - $ref: '#/components/parameters/commentable_type.query'
+        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/trashed.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把评论放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把评论移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除评论"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/comment_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/replies':
+    get:
+      operationId: getReplies
+      summary: 获取指定评论的回复
+      description: |
+        获知指定评论的回复。
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+    post:
+      operationId: createReply
+      summary: 在指定评论下发表回复
+      description: |
+        在指定评论下发表回复
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      requestBody:
+        $ref: '#/components/requestBodies/Comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把评论放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把评论移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}/voters':
+    get:
+      operationId: getVoters
+      summary: 获取评论的投票者
+      description: |
+        获取评论的投票者
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+        - $ref: '#/components/parameters/vote_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+    post:
+      operationId: addVote
+      summary: 为评论投票
+      description: 为评论投票
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+      requestBody:
+        $ref: '#/components/requestBodies/Vote'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+    delete:
+      operationId: deleteVote
+      summary: 取消为评论的投票
+      description: 取消为评论的投票
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  '/comments/{comment_id}':
+    get:
+      operationId: get
+      summary: 获取评论详情
+      description: |
+        获取评论详情
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+    patch:
+      operationId: update
+      summary: 修改评论
+      description: |
+        管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      requestBody:
+        $ref: '#/components/requestBodies/Comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+    delete:
+      operationId: delete
+      summary: 删除评论
+      description: |
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+
+        管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
+      parameters:
+        - $ref: '#/components/parameters/comment_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Comment
+  /emails:
+    post:
+      operationId: send
+      summary: "\U0001F510发送邮件"
+      description: 用于后台管理员发送邮件，需要管理员权限
+      requestBody:
+        $ref: '#/components/requestBodies/Email'
+      responses:
+        '200':
+          $ref: '#/components/responses/Email'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Email
+  /images:
+    get:
+      operationId: getList
+      summary: "\U0001F510获取图片列表"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.image'
+        - $ref: '#/components/parameters/image_key.query'
+        - $ref: '#/components/parameters/image_item_type.query'
+        - $ref: '#/components/parameters/image_item_id.query'
+        - $ref: '#/components/parameters/user_id.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Images'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+    post:
+      operationId: upload
+      summary: 上传图片
+      description: |
+        上传图片
+      parameters:
+        - $ref: '#/components/parameters/include.image'
+      requestBody:
+        $ref: '#/components/requestBodies/ImageUpload'
+      responses:
+        '200':
+          $ref: '#/components/responses/Image'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+  '/images/{keys}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除图片"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/image_keys.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+  '/images/{key}':
+    get:
+      operationId: get
+      summary: 获取指定图片信息
+      description: |
+        获取指定图片信息
+      parameters:
+        - $ref: '#/components/parameters/image_key.path'
+        - $ref: '#/components/parameters/include.image'
+      responses:
+        '200':
+          $ref: '#/components/responses/Image'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+    patch:
+      operationId: update
+      summary: "\U0001F510更新指定图片信息"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/image_key.path'
+        - $ref: '#/components/parameters/include.image'
+      requestBody:
+        $ref: '#/components/requestBodies/ImageUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Image'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+    delete:
+      operationId: delete
+      summary: "\U0001F510删除指定图片"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/image_key.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Image
+  /options:
+    get:
+      operationId: get
+      summary: 获取站点全局设置参数
+      description: 获取站点全局设置参数
+      responses:
+        '200':
+          $ref: '#/components/responses/Option'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Option
+    patch:
+      operationId: update
+      summary: "\U0001F510更新站点全局设置"
+      description: 仅管理员可调用该接口
+      requestBody:
+        $ref: '#/components/requestBodies/Option'
+      responses:
+        '200':
+          $ref: '#/components/responses/Option'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Option
+  /questions:
+    get:
+      operationId: getList
+      summary: 获取提问列表
+      description: |
+        获取提问列表。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.questions'
+        - $ref: '#/components/parameters/include.question'
+        - $ref: '#/components/parameters/question_id.query'
+        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/topic_id.query'
+        - $ref: '#/components/parameters/trashed.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    post:
+      operationId: create
+      summary: 发表提问
+      description: |
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/include.question'
+      requestBody:
+        $ref: '#/components/requestBodies/QuestionCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把提问放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把提问移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_ids.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除提问"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/question_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/answers':
+    get:
+      operationId: getAnswers
+      summary: 获取指定提问下的回答
+      description: |
+        获取指定提问下的回答。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.answers'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    post:
+      operationId: createAnswer
+      summary: 在指定提问下发表回答
+      description: |
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.answer'
+      requestBody:
+        $ref: '#/components/requestBodies/Answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/comments':
+    get:
+      operationId: getComments
+      summary: 获取指定提问的评论
+      description: |
+        获取指定提问的评论。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    post:
+      operationId: createComment
+      summary: 在指定提问下发表评论
+      description: |
+        在指定提问下发表评论
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.comment'
+      requestBody:
+        $ref: '#/components/requestBodies/Comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/followers':
+    get:
+      operationId: getFollowers
+      summary: 获取指定提问的关注者
+      description: |
+        获取指定提问的关注者
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    post:
+      operationId: addFollow
+      summary: 添加关注
+      description: 添加关注
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    delete:
+      operationId: deleteFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把提问放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把提问移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}/voters':
+    get:
+      operationId: getVoters
+      summary: 获取提问的投票者
+      description: |
+        获取提问的投票者
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+        - $ref: '#/components/parameters/vote_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    post:
+      operationId: addVote
+      summary: 为提问投票
+      description: 为提问投票
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      requestBody:
+        $ref: '#/components/requestBodies/Vote'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    delete:
+      operationId: deleteVote
+      summary: 取消为提问的投票
+      description: 取消为提问的投票
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/VoteCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  '/questions/{question_id}':
+    get:
+      operationId: get
+      summary: 获取指定提问信息
+      description: |
+        获取指定提问信息
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    patch:
+      operationId: update
+      summary: 更新提问信息
+      description: |
+        管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。
+
+        `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
+        若两个参数都传入，则以 `content_markdown` 为准。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+        - $ref: '#/components/parameters/include.question'
+      requestBody:
+        $ref: '#/components/requestBodies/QuestionUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Question'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+    delete:
+      operationId: delete
+      summary: 删除提问
+      description: |
+        只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
+
+        管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
+      parameters:
+        - $ref: '#/components/parameters/question_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Question
+  /reports:
+    get:
+      operationId: getList
+      summary: "\U0001F510获取被举报的内容列表"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.report'
+        - $ref: '#/components/parameters/reportable_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/ReportGroups'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Report
+  '/reports/{report_targets}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除举报"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/report_targets'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Report
+  '/reports/{reportable_type}:{reportable_id}':
+    get:
+      operationId: getReasons
+      summary: "\U0001F510获取被举报内容的举报详情"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/reportable_type.path'
+        - $ref: '#/components/parameters/reportable_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.reportReason'
+      responses:
+        '200':
+          $ref: '#/components/responses/Reports'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Report
+    post:
+      operationId: create
+      summary: 添加举报
+      description: |
+        添加举报
+      parameters:
+        - $ref: '#/components/parameters/reportable_type.path'
+        - $ref: '#/components/parameters/reportable_id.path'
+        - $ref: '#/components/parameters/include.reportReason'
+      requestBody:
+        $ref: '#/components/requestBodies/Report'
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Report
+    delete:
+      operationId: delete
+      summary: "\U0001F510删除举报"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/reportable_type.path'
+        - $ref: '#/components/parameters/reportable_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Report
+  /tokens:
+    post:
+      operationId: login
+      summary: 生成 Token
+      description: |
+        通过账号密码登陆，返回 Token 信息。
+
+        若登录失败，且返回信息中含参数 `captcha_token` 和 `captcha_image`，
+        表示下次调用该接口时，需要用户输入图形验证码，并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
+      requestBody:
+        $ref: '#/components/requestBodies/UserLogin'
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Token
+  /topics:
+    get:
+      operationId: getList
+      summary: 获取全部话题
+      description: |
+        获取全部话题。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.topic'
+        - $ref: '#/components/parameters/order.topics'
+        - $ref: '#/components/parameters/topic_id.query'
+        - $ref: '#/components/parameters/topic_name.query'
+        - $ref: '#/components/parameters/trashed.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+    post:
+      operationId: create
+      summary: "\U0001F510发布话题"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/include.topic'
+      requestBody:
+        $ref: '#/components/requestBodies/TopicCreate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_ids}/trash':
+    post:
+      operationId: trashMultiple
+      summary: "\U0001F510批量把话题放入回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_ids}/untrash':
+    post:
+      operationId: untrashMultiple
+      summary: "\U0001F510批量把话题移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: "\U0001F510批量删除话题"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/topic_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/articles':
+    get:
+      operationId: getArticles
+      summary: 获取指定话题下的文章
+      description: |
+        获取指定话题下的文章。
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.articles'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/followers':
+    get:
+      operationId: getFollowers
+      summary: 获取指定话题的关注者
+      description: |
+        不含已禁用的用户
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+    post:
+      operationId: addFollow
+      summary: 关注指定话题
+      description: 关注指定话题
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+    delete:
+      operationId: deleteFollow
+      summary: 取消关注指定话题
+      description: 取消关注指定话题
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/questions':
+    get:
+      operationId: getQuestions
+      summary: 获取指定话题下的提问
+      description: |
+        获取指定话题下的提问。
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.questions'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/trash':
+    post:
+      operationId: trash
+      summary: "\U0001F510把话题放入回收站"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}/untrash':
+    post:
+      operationId: untrash
+      summary: "\U0001F510把话题移出回收站"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  '/topics/{topic_id}':
+    get:
+      operationId: get
+      summary: 获取指定话题信息
+      description: |
+        获取指定话题信息
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+    post:
+      operationId: update
+      summary: "\U0001F510更新话题信息"
+      description: |
+        **仅管理员可调用该接口**
+
+        因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+        - $ref: '#/components/parameters/include.topic'
+      requestBody:
+        $ref: '#/components/requestBodies/TopicUpdate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topic'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+    delete:
+      operationId: delete
+      summary: "\U0001F510删除话题"
+      description: |
+        仅管理员可调用该接口。
+        只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/topic_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Topic
+  /user/answers:
+    get:
+      operationId: getMyAnswers
+      summary: 获取当前登录用户发表的回答
+      description: |
+        获取当前登录用户发表的回答
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.answers'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/articles:
+    get:
+      operationId: getMyArticles
+      summary: 获取当前登录用户发表的文章
+      description: |
+        获取当前登录用户发表的文章
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.articles'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/avatar:
+    post:
+      operationId: uploadMyAvatar
+      summary: 上传当前登录用户的头像
+      description: 上传当前登录用户的头像
+      requestBody:
+        $ref: '#/components/requestBodies/UserAvatar'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserAvatar'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    delete:
+      operationId: deleteMyAvatar
+      summary: 删除当前登录用户的头像，并重置为默认头像
+      description: 删除当前登录用户的头像，并重置为默认头像
+      responses:
+        '200':
+          $ref: '#/components/responses/UserAvatar'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/comments:
+    get:
+      operationId: getMyComments
+      summary: 获取当前登录用户发表的评论
+      description: |
+        获取当前登录用户发表的评论
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/cover:
+    post:
+      operationId: uploadMyCover
+      summary: 上传当前登录用户的封面
+      description: 上传当前登录用户的封面
+      requestBody:
+        $ref: '#/components/requestBodies/UserCover'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserCover'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    delete:
+      operationId: deleteMyCover
+      summary: 删除当前登录用户的封面，并重置为默认封面
+      description: 删除当前登录用户的封面，并重置为默认封面
+      responses:
+        '200':
+          $ref: '#/components/responses/UserCover'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/followees:
+    get:
+      operationId: getMyFollowees
+      summary: 获取当前登录用户关注的用户
+      description: |
+        获取当前登录用户关注的用户
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/followers:
+    get:
+      operationId: getMyFollowers
+      summary: 获取当前登录用户的关注者
+      description: |
+        获取当前登录用户的关注者
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/following_articles:
+    get:
+      operationId: getMyFollowingArticles
+      summary: 获取登录用户关注的文章
+      description: |
+        获取登录用户关注的文章
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/following_questions:
+    get:
+      operationId: getMyFollowingQuestions
+      summary: 获取登录用户关注的提问
+      description: |
+        获取登录用户关注的提问
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/following_topics:
+    get:
+      operationId: getMyFollowingTopics
+      summary: 获取登录用户关注的话题
+      description: |
+        获取登录用户关注的话题
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/password/email:
+    post:
+      operationId: sendPasswordResetEmail
+      summary: 发送重置密码邮箱验证码
+      description: |
+        若返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，
+        并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
+      requestBody:
+        $ref: '#/components/requestBodies/UserSendEmail'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/password:
+    put:
+      operationId: updatePassword
+      summary: 验证邮箱并更新密码
+      description: 验证邮箱并更新密码
+      requestBody:
+        $ref: '#/components/requestBodies/UserPasswordReset'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/questions:
+    get:
+      operationId: getMyQuestions
+      summary: 获取登录用户发表的提问
+      description: |
+        获取登录用户发表的提问
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.questions'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user/register/email:
+    post:
+      operationId: sendRegisterEmail
+      summary: 发送注册邮箱验证码
+      description: |
+        若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，
+        并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。
+      requestBody:
+        $ref: '#/components/requestBodies/UserSendEmail'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /user:
+    get:
+      operationId: getMine
+      summary: 获取当前登录用户的信息
+      description: |
+        获取当前登录用户的信息
+      parameters:
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    patch:
+      operationId: updateMine
+      summary: 更新当前登录用户信息
+      description: |
+        更新当前登录用户信息
+      parameters:
+        - $ref: '#/components/parameters/include.user'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  /users:
+    get:
+      operationId: getList
+      summary: 获取用户列表
+      description: |
+        仅管理员可使用 email 参数进行搜索
+
+        仅管理员可获取已禁用的用户列表
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.users'
+        - $ref: '#/components/parameters/include.user'
+        - $ref: '#/components/parameters/user_id.query'
+        - $ref: '#/components/parameters/username.query'
+        - $ref: '#/components/parameters/email.query'
+        - $ref: '#/components/parameters/disabled.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    post:
+      operationId: register
+      summary: 验证邮箱并创建账号
+      description: 返回用户信息
+      parameters:
+        - $ref: '#/components/parameters/include.user'
+      requestBody:
+        $ref: '#/components/requestBodies/UserRegister'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_ids}/disable':
+    post:
+      operationId: disableMultiple
+      summary: "\U0001F510批量禁用用户"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/user_ids.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_ids}/enable':
+    post:
+      operationId: enableMultiple
+      summary: "\U0001F510批量恢复用户"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/user_ids.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/answers':
+    get:
+      operationId: getAnswers
+      summary: 获取指定用户发表的回答
+      description: |
+        获取指定用户发表的回答
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.answers'
+        - $ref: '#/components/parameters/include.answer'
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/articles':
+    get:
+      operationId: getArticles
+      summary: 获取指定用户发表的文章
+      description: |
+        获取指定用户发表的文章
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.articles'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/avatar':
+    delete:
+      operationId: deleteAvatar
+      summary: "\U0001F510删除指定用户的头像，并重置为默认头像"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserAvatar'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/comments':
+    get:
+      operationId: getComments
+      summary: 获取指定用户发表的评论
+      description: |
+        获取指定用户发表的评论
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.comments'
+        - $ref: '#/components/parameters/include.comment'
+      responses:
+        '200':
+          $ref: '#/components/responses/Comments'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/cover':
+    delete:
+      operationId: deleteCover
+      summary: "\U0001F510删除指定用户的封面，并重置为默认封面"
+      description: 仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserCover'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/disable':
+    post:
+      operationId: disable
+      summary: "\U0001F510禁用指定用户"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/enable':
+    post:
+      operationId: enable
+      summary: "\U0001F510恢复指定用户"
+      description: |
+        仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/followees':
+    get:
+      operationId: getFollowees
+      summary: 获取指定用户关注的用户列表
+      description: |
+        获取指定用户关注的用户列表
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/followers':
+    get:
+      operationId: getFollowers
+      summary: 获取指定用户的关注者
+      description: |
+        获取指定用户的关注者
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/Users'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    post:
+      operationId: addFollow
+      summary: 添加关注
+      description: 添加关注
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    delete:
+      operationId: deleteFollow
+      summary: 取消关注
+      description: 取消关注
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/FollowerCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/following_articles':
+    get:
+      operationId: getFollowingArticles
+      summary: 获取指定用户关注的文章列表
+      description: |
+        获取指定用户关注的文章列表
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.article'
+      responses:
+        '200':
+          $ref: '#/components/responses/Articles'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/following_questions':
+    get:
+      operationId: getFollowingQuestions
+      summary: 获取指定用户关注的提问列表
+      description: |
+        获取指定用户关注的提问列表
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/following_topics':
+    get:
+      operationId: getFollowingTopics
+      summary: 获取指定用户关注的话题列表
+      description: |
+        获取指定用户关注的话题列表
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.topic'
+      responses:
+        '200':
+          $ref: '#/components/responses/Topics'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}/questions':
+    get:
+      operationId: getQuestions
+      summary: 获取指定用户发表的提问
+      description: |
+        获取指定用户发表的提问
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/order.questions'
+        - $ref: '#/components/parameters/include.question'
+      responses:
+        '200':
+          $ref: '#/components/responses/Questions'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+  '/users/{user_id}':
+    get:
+      operationId: get
+      summary: 获取指定用户信息
+      description: "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 \U0001F510 标明）\n"
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+    patch:
+      operationId: update
+      summary: "\U0001F510更新指定用户信息"
+      description: |
+        仅管理员可调用该接口
+      parameters:
+        - $ref: '#/components/parameters/user_id.path'
+        - $ref: '#/components/parameters/include.user'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - User
+components:
+  schemas:
+    Answer:
+      type: object
+      properties:
+        answer_id:
+          type: integer
+          description: 回答ID
+          minimum: 1
+          example: 1
+        question_id:
+          type: integer
+          description: 提问ID
+          minimum: 1
+          example: 1
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        content_markdown:
+          type: string
+          description: markdown 格式的内容
+          example: |
+            **mdui** [https://mdui.org](https://mdui.org)
+            mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。
+            **MDClub** [https://mdclub.org](https://mdclub.org)
+            MDClub 是使用 mdui 作为前端框架的开源社区应用。
+        content_rendered:
+          type: string
+          description: html 格式的内容
+          example: >-
+            <p><strong>mdui</strong> <a href="https://mdui.org"
+            target="_blank">https://mdui.org</a> <br>mdui
+            是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design
+            框架。</p><p><strong>MDClub</strong> <a href="https://mdclub.org"
+            target="_blank">https://mdclub.org</a> <br>MDClub 是使用 mdui
+            作为前端框架的开源社区应用。</p>
+        comment_count:
+          type: integer
+          description: 评论数量
+          minimum: 0
+          example: 23
+        vote_count:
+          type: integer
+          description: 投票数（赞成票 - 反对票，可能为负数）
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
+        create_time:
+          type: integer
+          description: 创建时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+        delete_time:
+          type: integer
+          description: "\U0001F510删除时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/AnswerRelationship'
+      required:
+        - answer_id
+        - question_id
+        - user_id
+        - content_markdown
+        - content_rendered
+        - comment_count
+        - vote_count
+        - vote_up_count
+        - vote_down_count
+        - create_time
+        - update_time
+    Article:
+      type: object
+      properties:
+        article_id:
+          type: integer
+          description: 文章ID
+          minimum: 1
+          example: 1
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        title:
+          type: string
+          description: 文章标题
+          example: 欢迎使用 MDClub 开源社区系统
+        content_markdown:
+          type: string
+          description: Markdown 格式的文章内容
+          example: |
+            MDClub 是一个开源社区系统，使用 [mdui](https://mdui.org) 作为前端框架。
+
+            系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。
+        content_rendered:
+          type: string
+          description: HTML 格式的文章内容
+          example: >-
+            <p>MDClub 是一个开源社区系统，使用 <a href="https://mdui.org"
+            target="_blank">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api
+            开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>
+        comment_count:
+          type: integer
+          description: 评论数量
+          minimum: 0
+          example: 22
+        view_count:
+          type: integer
+          description: 浏览量
+          minimum: 0
+          example: 487
+        follower_count:
+          type: integer
+          description: 关注者数量
+          minimum: 0
+          example: 12
+        vote_count:
+          type: integer
+          description: 投票数（赞成票 - 反对票，可能为负数）
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
+        create_time:
+          type: integer
+          description: 创建时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间（用户可以更新自己的文章）
+          minimum: 1
+          example: 1563512214
+        delete_time:
+          type: integer
+          description: "\U0001F510删除时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/ArticleRelationship'
+      required:
+        - article_id
+        - user_id
+        - title
+        - content_markdown
+        - content_rendered
+        - comment_count
+        - view_count
+        - follower_count
+        - vote_count
+        - vote_up_count
+        - vote_down_count
+        - create_time
+        - update_time
+    Captcha:
+      type: object
+      properties:
+        captcha_token:
+          type: string
+          description: 图形验证码token
+        captcha_image:
+          type: string
+          format: byte
+          description: base64格式的图形验证码图片
+      required:
+        - captcha_token
+        - captcha_image
+    CodeSuccess:
+      type: integer
+      description: 无任务错误时，状态码为 0
+      default: 0
+      example: 0
+    Comment:
+      type: object
+      properties:
+        comment_id:
+          type: integer
+          description: 评论ID
+          minimum: 1
+          example: 1
+        commentable_id:
+          type: integer
+          description: 评论目标的ID
+          minimum: 1
+          example: 1
+        commentable_type:
+          type: string
+          description: 评论目标类型
+          enum:
+            - article
+            - question
+            - answer
+            - comment
+          example: question
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        content:
+          type: string
+          description: 评论内容
+          example: mdui 是我见过的 Web 框架里对规范实现最好的一版了
+        vote_count:
+          type: integer
+          description: 投票数（赞成票 - 反对票，可能为负数）
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
+        create_time:
+          type: integer
+          description: 发表时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 修改时间
+          minimum: 1
+          example: 1563512214
+        delete_time:
+          type: integer
+          description: "\U0001F510删除时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/CommentRelationship'
+      required:
+        - comment_id
+        - commentable_id
+        - commentable_type
+        - user_id
+        - content
+        - vote_count
+        - vote_up_count
+        - vote_down_count
+        - create_time
+        - update_time
+    Email:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 100
+          description: 邮箱地址
+          example:
+            - zdhxiong@gmail.com
+            - example@example.com
+        subject:
+          type: string
+          description: 邮件标题
+          example: 这是一封测试邮件
+        content:
+          type: string
+          description: 邮件内容
+          example: 如果你收到了这封邮件，说明你的邮件服务器已配置成功
+      required:
+        - email
+        - subject
+        - content
+    ErrorField:
+      type: object
+      properties:
+        field:
+          type: string
+          description: 错误字段名
+          example: email
+        message:
+          type: string
+          description: 错误描述
+          example: 邮箱格式错误
+      required:
+        - field
+        - message
+    FollowerCount:
+      type: object
+      description: 关注者数量
+      properties:
+        follower_count:
+          type: integer
+          description: 关注者数量
+          minimum: 0
+          example: 112
+      required:
+        - follower_count
+    Image:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 图片的 key
+          example: 4c018974e3cf4e1d8c174d82adba0c43.jpg
+        filename:
+          type: string
+          description: 图片原始文件名
+          example: Material Design Logo.png
+        width:
+          type: integer
+          description: 原始图片宽度
+          minimum: 1
+          example: 1280
+        height:
+          type: integer
+          description: 原始图片高度
+          minimum: 1
+          example: 720
+        create_time:
+          type: integer
+          description: 图片上传时间
+          minimum: 1
+          example: 1563512214
+        item_type:
+          type: string
+          description: 图片关联对象类型
+          enum:
+            - question
+            - answer
+            - article
+          example: question
+        item_id:
+          type: integer
+          description: 图片关联对象ID
+          minimum: 1
+          example: 1
+        user_id:
+          type: integer
+          description: 图片上传者ID
+          minimum: 1
+          example: 1
+        urls:
+          $ref: '#/components/schemas/ImageUrls'
+        relationships:
+          $ref: '#/components/schemas/ImageRelationship'
+      required:
+        - key
+        - filename
+        - width
+        - height
+        - create_time
+        - item_type
+        - item_id
+        - user_id
+        - urls
+    ImageUrls:
+      type: object
+      properties:
+        original:
+          type: string
+          description: 原图地址
+        release:
+          type: string
+          description: 宽度固定，高度自适应的图片地址
+        thumb:
+          type: string
+          description: 固定宽高的缩略图地址
+      required:
+        - original
+        - release
+        - thumb
+    Option:
+      allOf:
+        - $ref: '#/components/schemas/OptionUpdateRequestBody'
+      required:
+        - answer_can_delete
+        - answer_can_delete_before
+        - answer_can_delete_only_no_comment
+        - answer_can_edit
+        - answer_can_edit_before
+        - answer_can_edit_only_no_comment
+        - article_can_delete
+        - article_can_delete_before
+        - article_can_delete_only_no_comment
+        - article_can_edit
+        - article_can_edit_before
+        - article_can_edit_only_no_comment
+        - comment_can_delete
+        - comment_can_delete_before
+        - comment_can_edit
+        - comment_can_edit_before
+        - language
+        - question_can_delete
+        - question_can_delete_before
+        - question_can_delete_only_no_answer
+        - question_can_delete_only_no_comment
+        - question_can_edit
+        - question_can_edit_before
+        - question_can_edit_only_no_answer
+        - question_can_edit_only_no_comment
+        - site_description
+        - site_gongan_beian
+        - site_icp_beian
+        - site_keywords
+        - site_name
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: 当前页码
+          minimum: 1
+          example: 1
+        per_page:
+          type: integer
+          description: 每页条数
+          minimum: 1
+          maximum: 100
+          example: 15
+        previous:
+          type: integer
+          description: 上一页页码，为 `null` 表示没有上一页
+          minimum: 1
+          nullable: true
+          example: null
+        next:
+          type: integer
+          description: 下一页页码，为 `null` 表示没有下一页
+          minimum: 2
+          nullable: true
+          example: 2
+        total:
+          type: integer
+          description: 数据总数
+          minimum: 0
+          example: 124
+        pages:
+          type: integer
+          description: 总页数
+          minimum: 1
+          example: 9
+      required:
+        - page
+        - per_page
+        - previous
+        - next
+        - total
+        - pages
+    Question:
+      type: object
+      properties:
+        question_id:
+          type: integer
+          description: 提问ID
+          minimum: 1
+          example: 1
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        title:
+          type: string
+          description: 提问标题
+          example: 请问作者开发了哪些软件？
+        content_markdown:
+          type: string
+          description: Markdown 格式的提问内容
+          example: 如题
+        content_rendered:
+          type: string
+          description: HTML 格式的提问内容
+          example: <p>如题</p>
+        comment_count:
+          type: integer
+          description: 评论数量
+          minimum: 0
+          example: 6
+        answer_count:
+          type: integer
+          description: 回答数量
+          minimum: 0
+          example: 18
+        view_count:
+          type: integer
+          description: 浏览量
+          minimum: 0
+          example: 168
+        follower_count:
+          type: integer
+          description: 关注者数量
+          minimum: 0
+          example: 12
+        vote_count:
+          type: integer
+          description: 投票数（赞成票 - 反对票，可能为负数）
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
+        last_answer_time:
+          type: integer
+          description: 最后回答时间
+          minimum: 0
+          example: 1563512214
+        create_time:
+          type: integer
+          description: 创建时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间（更新提问本身，或在提问下发表回答，都会更新该字段）
+          minimum: 1
+          example: 1563512214
+        delete_time:
+          type: integer
+          description: "\U0001F510删除时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/QuestionRelationship'
+      required:
+        - question_id
+        - user_id
+        - title
+        - content_markdown
+        - content_rendered
+        - comment_count
+        - answer_count
+        - view_count
+        - follower_count
+        - vote_count
+        - vote_up_count
+        - vote_down_count
+        - last_answer_time
+        - create_time
+        - update_time
+    Report:
+      type: object
+      description: 举报
+      properties:
+        report_id:
+          type: integer
+          description: 举报ID
+          minimum: 1
+          example: 1
+        reportable_id:
+          type: integer
+          description: 举报目标的ID
+          minimum: 1
+          example: 1
+        reportable_type:
+          type: string
+          description: 举报目标类型
+          enum:
+            - question
+            - answer
+            - article
+            - comment
+            - user
+          example: question
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        reason:
+          type: string
+          description: 举报理由
+          example: 恶意打广告
+        create_time:
+          type: integer
+          description: 举报时间
+          minimum: 1
+          example: 1563512214
+        relationships:
+          $ref: '#/components/schemas/ReportRelationship'
+      required:
+        - report_id
+        - reportable_id
+        - reportable_type
+        - user_id
+        - reason
+        - create_time
+    ReportGroup:
+      type: object
+      description: 举报集合
+      properties:
+        reportable_id:
+          type: integer
+          description: 举报目标的ID
+          minimum: 1
+          example: 1
+        reportable_type:
+          type: string
+          description: 举报目标类型
+          enum:
+            - question
+            - answer
+            - article
+            - comment
+            - user
+          example: question
+        reporter_count:
+          type: integer
+          description: 指定对象的被举报数量
+          minimum: 1
+          example: 12
+        relationships:
+          $ref: '#/components/schemas/ReportGroupRelationship'
+      required:
+        - reportable_id
+        - reportable_type
+        - reporter_count
+    Token:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token 字符串
+          example: 13180944453b7d052125486eefabedf9
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        device:
+          type: string
+          description: 设备信息
+          example: Xiaomi6
+        create_time:
+          type: integer
+          description: 创建时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+        expire_time:
+          type: integer
+          description: 过期时间
+          minimum: 1
+          example: 2063512214
+      required:
+        - token
+        - user_id
+        - device
+        - create_time
+        - update_time
+        - expire_time
+    Topic:
+      type: object
+      properties:
+        topic_id:
+          type: integer
+          description: 话题ID
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          description: 话题名称
+          example: MDClub
+        cover:
+          $ref: '#/components/schemas/TopicCover'
+        description:
+          type: string
+          description: 话题描述
+          example: 一个漂亮强大的开源社区系统
+        article_count:
+          type: integer
+          description: 文章数量
+          minimum: 0
+          example: 12
+        question_count:
+          type: integer
+          description: 提问数量
+          minimum: 0
+          example: 16
+        follower_count:
+          type: integer
+          description: 关注者数量
+          minimum: 0
+          example: 42
+        delete_time:
+          type: integer
+          description: "\U0001F510删除时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/TopicRelationship'
+      required:
+        - topic_id
+        - name
+        - cover
+        - description
+        - article_count
+        - question_count
+        - follower_count
+    TopicCover:
+      type: object
+      properties:
+        original:
+          type: string
+          description: 封面原图地址
+          example: >-
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
+        small:
+          type: string
+          description: 小型封面地址
+          example: >-
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
+        middle:
+          type: string
+          description: 中型封面地址
+          example: >-
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
+        large:
+          type: string
+          description: 大型封面地址
+          example: >-
+            https://mdclub.org/topic-cover/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
+      required:
+        - original
+        - small
+        - middle
+        - large
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户 ID
+          minimum: 1
+          example: 1
+        username:
+          type: string
+          description: 用户名
+          example: zdhxiong
+        email:
+          type: string
+          description: "\U0001F510邮箱"
+          format: email
+          example: zdhxiong@gmail.com
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+        cover:
+          $ref: '#/components/schemas/UserCover'
+        create_ip:
+          type: string
+          description: "\U0001F510注册 IP"
+          example: 210.23.121.44
+        create_location:
+          type: string
+          description: "\U0001F510注册地"
+          example: 中国 浙江 杭州
+        last_login_time:
+          type: integer
+          description: "\U0001F510最后登陆时间"
+          minimum: 1
+          example: 1563512214
+        last_login_ip:
+          type: string
+          description: "\U0001F510最后登陆 IP"
+          example: 210.23.121.44
+        last_login_location:
+          type: string
+          description: "\U0001F510最后登录地"
+          example: 中国 浙江 杭州
+        follower_count:
+          type: integer
+          description: 关注者数量
+          minimum: 0
+          example: 112
+        followee_count:
+          type: integer
+          description: 关注的用户数量
+          minimum: 0
+          example: 8
+        following_article_count:
+          type: integer
+          description: 关注的文章数量
+          minimum: 0
+          example: 12
+        following_question_count:
+          type: integer
+          description: 关注的提问数量
+          minimum: 0
+          example: 14
+        following_topic_count:
+          type: integer
+          description: 关注的话题数量
+          minimum: 0
+          example: 4
+        article_count:
+          type: integer
+          description: 发表的文章数量
+          minimum: 0
+          example: 6
+        question_count:
+          type: integer
+          description: 发表的提问数量
+          minimum: 0
+          example: 11
+        answer_count:
+          type: integer
+          description: 发表的提问回答数量
+          minimum: 0
+          example: 28
+        notification_unread:
+          type: integer
+          description: "\U0001F510未读消息数量"
+          minimum: 0
+          example: 4
+        inbox_unread:
+          type: integer
+          description: "\U0001F510未读私信数量"
+          minimum: 0
+          example: 2
+        headline:
+          type: string
+          description: 一句话介绍自己
+          example: mdui 作者
+        bio:
+          type: string
+          description: 个人简介
+          example: 独立全栈开发者
+        blog:
+          type: string
+          description: 个人主页链接
+          example: 'https://mdui.org'
+        company:
+          type: string
+          description: 所属企业
+          example: 无
+        location:
+          type: string
+          description: 所在地区
+          example: 杭州
+        create_time:
+          type: integer
+          description: 注册时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: "\U0001F510更新时间"
+          minimum: 1
+          example: 1563512214
+        disable_time:
+          type: integer
+          description: "\U0001F510禁用时间"
+          minimum: 0
+          example: 0
+        relationships:
+          $ref: '#/components/schemas/UserRelationship'
+      required:
+        - user_id
+        - username
+        - avatar
+        - cover
+        - follower_count
+        - followee_count
+        - following_article_count
+        - following_question_count
+        - following_topic_count
+        - article_count
+        - question_count
+        - answer_count
+        - headline
+        - bio
+        - blog
+        - company
+        - location
+        - create_time
+    UserAvatar:
+      type: object
+      properties:
+        original:
+          type: string
+          description: 头像原图地址
+          example: >-
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
+        small:
+          type: string
+          description: 小头像地址
+          example: >-
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
+        middle:
+          type: string
+          description: 中头像地址
+          example: >-
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
+        large:
+          type: string
+          description: 大头像地址
+          example: >-
+            https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
+      required:
+        - original
+        - small
+        - middle
+        - large
+    UserCover:
+      type: object
+      properties:
+        original:
+          type: string
+          description: 封面原图地址
+          example: >-
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
+        small:
+          type: string
+          description: 小型封面地址
+          example: >-
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_small.jpg
+        middle:
+          type: string
+          description: 中型封面地址
+          example: >-
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_middle.jpg
+        large:
+          type: string
+          description: 大型封面地址
+          example: >-
+            https://mdclub.org/user-cover/c4/ca/bc03445db47540eea79148252e7a91fe_large.jpg
+      required:
+        - original
+        - small
+        - middle
+        - large
+    VoteCount:
+      type: object
+      description: 投票数量
+      properties:
+        vote_count:
+          type: integer
+          description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
+      required:
+        - vote_count
+        - vote_up_count
+        - vote_down_count
+    AnswerRequestBody:
+      type: object
+      properties:
+        content_markdown:
+          type: string
+          description: Markdown 格式的正文
+          example: |
+            **mdui** [https://mdui.org](https://mdui.org)
+            mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。
+            **MDClub** [https://mdclub.org](https://mdclub.org)
+            MDClub 是使用 mdui 作为前端框架的开源社区应用。
+        content_rendered:
+          type: string
+          description: HTML 格式的正文
+          example: >-
+            <p><strong>mdui</strong> <a href="https://mdui.org"
+            target="_blank">https://mdui.org</a> <br>mdui
+            是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design
+            框架。</p><p><strong>MDClub</strong> <a href="https://mdclub.org"
+            target="_blank">https://mdclub.org</a> <br>MDClub 是使用 mdui
+            作为前端框架的开源社区应用。</p>
+    ArticleCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/ArticleUpdateRequestBody'
+      required:
+        - title
+        - topic_ids
+    ArticleUpdateRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 标题
+          example: 欢迎使用 MDClub 开源社区系统
+        topic_ids:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          maxItems: 10
+          description: 话题ID
+          example:
+            - 1
+            - 2
+            - 3
+        content_markdown:
+          type: string
+          description: Markdown 格式的正文
+          example: |
+            MDClub 是一个开源社区系统，使用 [mdui](https://mdui.org) 作为前端框架。
+
+            系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。
+        content_rendered:
+          type: string
+          description: HTML 格式的正文
+          example: >-
+            <p>MDClub 是一个开源社区系统，使用 <a href="https://mdui.org"
+            target="_blank">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api
+            开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>
+    CommentRequestBody:
+      type: object
+      properties:
+        content:
+          type: string
+          description: 评论内容
+          example: mdui 是我见过的 Web 框架里对规范实现最好的一版了
+      required:
+        - content
+    ImageUpdateRequestBody:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: 图片文件名
+          example: Material Design Logo.png
+      required:
+        - filename
+    ImageUploadRequestBody:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+          description: 图片
+      required:
+        - image
+    OptionUpdateRequestBody:
+      type: object
+      properties:
+        answer_can_delete:
+          type: boolean
+          description: >
+            回答作者是否可删除回答。
+
+
+            为 `false` 时，不允许删除；
+
+            为 `true` 时，在满足 `answer_can_delete_before` 和
+            `answer_can_delete_only_no_comment` 的条件时可删除。
+          example: false
+        answer_can_delete_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后多少秒内，允许作者删除回答（为 `0` 时表示不做限制）。仅在 `answer_can_delete` 为 `true`
+            时该参数才有效。
+          example: 0
+        answer_can_delete_only_no_comment:
+          type: boolean
+          description: |
+            是否仅在没有评论时，允许作者删除回答。仅在 `answer_can_delete` 为 `true` 时该参数才有效。
+          example: false
+        answer_can_edit:
+          type: boolean
+          description: >
+            回答作者是否可编辑回答。
+
+
+            为 `false` 时，不允许编辑；
+
+            为 `true` 时，在满足 `answer_can_edit_before` 和
+            `answer_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
+        answer_can_edit_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后的多少秒内，允许作者编辑回答（为 `0` 时表示不做限制）。仅在 `answer_can_edit` 为 `true`
+            时该参数才有效。
+          example: 0
+        answer_can_edit_only_no_comment:
+          type: boolean
+          description: |
+            是否仅在没有评论时，允许作者编辑回答。仅在 `answer_can_edit` 为 `true` 时该参数才有效。
+          example: false
+        article_can_delete:
+          type: boolean
+          description: >
+            文章作者是否可删除文章。
+
+
+            为 `false` 时，不允许删除；
+
+            为 `true` 时，在满足 `article_can_delete_before` 和
+            `article_can_delete_only_no_comment` 的条件时可删除。
+          example: false
+        article_can_delete_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后多少秒内，允许作者删除文章（为 `0` 时表示不做限制）。仅在 `article_can_delete` 为 `true`
+            时该参数才有效。
+          example: 0
+        article_can_delete_only_no_comment:
+          type: boolean
+          description: |
+            仅在没有评论时，允许作者删除文章。仅在 `article_can_delete` 为 `true` 时该参数才有效。
+          example: false
+        article_can_edit:
+          type: boolean
+          description: >
+            文章作者是否可编辑文章。
+
+
+            为 `false` 时，不允许编辑；
+
+            为 `true` 时，在满足 `article_can_edit_before` 和
+            `article_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
+        article_can_edit_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后的多少秒内，允许作者编辑文章（为 `0` 时表示不做限制）。仅在 `article_can_edit` 为 `true`
+            时该参数才有效。
+          example: 0
+        article_can_edit_only_no_comment:
+          type: boolean
+          description: |
+            仅在没有评论时，允许作者编辑文章。仅在 `article_can_edit` 为 `true` 时该参数才有效。
+          example: false
+        cache_memcached_host:
+          type: string
+          description: "\U0001F510Memcached 服务器地址"
+          example: 134.56.2.11
+        cache_memcached_password:
+          type: string
+          description: "\U0001F510Memcached 密码"
+          example: gfdcg3234
+        cache_memcached_port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+          description: "\U0001F510Memcached 端口号"
+          example: 12
+        cache_memcached_username:
+          type: string
+          description: "\U0001F510Memcached 用户名"
+          example: username
+        cache_prefix:
+          type: string
+          description: "\U0001F510缓存键名前缀（只能包含字符 -+.A-Za-z0-9）"
+          example: mc_
+        cache_redis_host:
+          type: string
+          description: "\U0001F510Redis 服务器地址"
+          example: 123.33.5.11
+        cache_redis_password:
+          type: string
+          description: "\U0001F510Redis 密码"
+          example: gdf234
+        cache_redis_port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+          description: "\U0001F510Redis 端口号"
+          example: 11
+        cache_redis_username:
+          type: string
+          description: "\U0001F510Redis 用户名"
+          example: username
+        cache_type:
+          type: string
+          enum:
+            - pdo
+            - redis
+            - memcached
+          description: "\U0001F510缓存类型"
+          example: redis
+        comment_can_delete:
+          type: boolean
+          description: |
+            评论作者是否可删除评论。
+
+            为 `false` 时，不允许删除；
+            为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+          example: false
+        comment_can_delete_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后多少秒内，允许作者删除评论（为 `0` 时表示不做限制）。仅在 `comment_can_delete` 为 `true`
+            时该参数才有效。
+          example: 0
+        comment_can_edit:
+          type: boolean
+          description: |
+            评论作者是否可编辑评论。
+
+            为 `false` 时，不允许编辑；
+            为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+          example: false
+        comment_can_edit_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后的多少秒内，允许作者编辑评论（为 `0` 时表示不做限制）。仅在 `comment_can_edit` 为 `true`
+            时该参数才有效。
+          example: 0
+        language:
+          type: string
+          enum:
+            - en
+            - pl
+            - ru
+            - zh-CN
+            - zh-TW
+          description: 系统语言
+          example: zh-CN
+        question_can_delete:
+          type: boolean
+          description: >
+            提问作者是否可删除提问。
+
+
+            为 `false` 时，不允许删除；
+
+            为 `true` 时，在满足
+            `question_can_delete_before`、`question_can_delete_only_no_answer` 和
+            `question_can_delete_only_no_comment` 的条件时可删除。
+          example: false
+        question_can_delete_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后多少秒内，允许作者删除提问（为 `0` 时表示不做限制）。仅在 `question_can_delete` 为 `true`
+            时该参数才有效。
+          example: 0
+        question_can_delete_only_no_answer:
+          type: boolean
+          description: |
+            仅在没有回答时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+          example: false
+        question_can_delete_only_no_comment:
+          type: boolean
+          description: |
+            仅在没有评论时，允许作者删除提问。仅在 `question_can_delete` 为 `true` 时该参数才有效。
+          example: false
+        question_can_edit:
+          type: boolean
+          description: >
+            提问作者是否可编辑提问。
+
+
+            为 `false` 时，不允许编辑；
+
+            为 `true` 时，在满足
+            `question_can_edit_before`、`question_can_edit_only_no_answer` 和
+            `question_can_edit_only_no_comment` 的条件时可编辑。
+          example: false
+        question_can_edit_before:
+          type: integer
+          minimum: 0
+          description: >
+            在发表后的多少秒内，允许作者编辑提问（为 `0` 时表示不做限制）。仅在 `question_can_edit` 为 `true`
+            时该参数才有效。
+          example: 0
+        question_can_edit_only_no_answer:
+          type: boolean
+          description: |
+            仅在没有回答时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+          example: false
+        question_can_edit_only_no_comment:
+          type: boolean
+          description: |
+            仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
+          example: false
+        site_description:
+          type: string
+          description: 站点简介
+          example: 最好的开源社区系统
+        site_gongan_beian:
+          type: string
+          description: 站点公安备案号
+          example: 浙公网安备 653673547653475346号
+        site_icp_beian:
+          type: string
+          description: 站点 ICP 备案号
+          example: 浙ICP备65465464号-1
+        site_keywords:
+          type: string
+          description: 站点关键词
+          example: 'Material Design,community'
+        site_name:
+          type: string
+          description: 站点名称
+          example: MDClub
+        site_static_url:
+          type: string
+          description: "\U0001F510静态资源 URL 地址"
+          example: 'https://mdclub.org/static'
+        smtp_host:
+          type: string
+          description: "\U0001F510SMTP 服务器地址"
+          example: 144.33.6.12
+        smtp_password:
+          type: string
+          description: "\U0001F510SMTP 密码"
+          example: fsadf443
+        smtp_port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+          description: "\U0001F510SMTP 端口"
+          example: 465
+        smtp_reply_to:
+          type: string
+          description: "\U0001F510SMTP 回信地址"
+          example: example@example.com
+        smtp_secure:
+          type: string
+          enum:
+            - ssl
+            - tls
+            - ''
+          default: ''
+          description: "\U0001F510SMTP 加密方式"
+          example: ssl
+        smtp_username:
+          type: string
+          description: "\U0001F510SMTP 账户"
+          example: noreply@mail.example.com
+        storage_aliyun_access_id:
+          type: string
+          description: "\U0001F510阿里云 AccessKey ID"
+          example: fdgdfgdsfg34534
+        storage_aliyun_access_secret:
+          type: string
+          description: "\U0001F510阿里云 Access Key Secret"
+          example: tgfdgfsdg435g
+        storage_aliyun_bucket:
+          type: string
+          description: "\U0001F510阿里云 OSS 的 Bucket 名称"
+          example: mdclub
+        storage_aliyun_endpoint:
+          type: string
+          description: "\U0001F510阿里云 OSS 的 EndPoint"
+          example: oss-cn-hangzhou.aliyuncs.com
+        storage_ftp_host:
+          type: string
+          description: "\U0001F510FTP 服务器地址"
+          example: 122.33.1.76
+        storage_ftp_passive:
+          type: boolean
+          description: "\U0001F510是否使用被动传输模式。true（被动模式）；false（主动模式）"
+          example: true
+        storage_ftp_password:
+          type: string
+          description: "\U0001F510FTP 密码"
+          example: fdsgdf67
+        storage_ftp_port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+          description: "\U0001F510FTP 端口号"
+          example: 21
+        storage_ftp_root:
+          type: string
+          description: "\U0001F510FTP 存储目录"
+          example: /mdclub
+        storage_ftp_ssl:
+          type: boolean
+          description: "\U0001F510FTP 是否启用 SSL。true（启用）；false（不启用）"
+          example: true
+        storage_ftp_username:
+          type: string
+          description: "\U0001F510FTP 用户名"
+          example: username
+        storage_local_dir:
+          type: string
+          description: "\U0001F510本地文件存储目录"
+          example: /mdclub/storage
+        storage_qiniu_access_id:
+          type: string
+          description: "\U0001F510七牛云 AccessKey"
+          example: gfdgdfg345345
+        storage_qiniu_access_secret:
+          type: string
+          description: "\U0001F510七牛云 SecretKey"
+          example: gffhgfdhdfghdgf456645
+        storage_qiniu_bucket:
+          type: string
+          description: "\U0001F510七牛云 Bucket"
+          example: mdclub
+        storage_qiniu_zone:
+          type: string
+          enum:
+            - z0
+            - z1
+            - z2
+            - na0
+            - as0
+          description: "\U0001F510FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）"
+          example: z0
+        storage_sftp_host:
+          type: string
+          description: "\U0001F510SFTP 服务器地址"
+          example: 122.33.4.12
+        storage_sftp_password:
+          type: string
+          description: "\U0001F510SFTP 密码"
+          example: 43fdfg
+        storage_sftp_port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+          description: "\U0001F510SFTP 端口号"
+          example: 22
+        storage_sftp_root:
+          type: string
+          description: "\U0001F510SFTP 存储目录"
+          example: /mdclub/storage
+        storage_sftp_username:
+          type: string
+          description: "\U0001F510SFTP 用户名"
+          example: username
+        storage_type:
+          type: string
+          enum:
+            - local
+            - ftp
+            - sftp
+            - aliyun
+            - upyun
+            - qiniu
+          description: "\U0001F510存储类型"
+          example: aliyun
+        storage_upyun_bucket:
+          type: string
+          description: "\U0001F510又拍云 Bucket"
+          example: mdclub
+        storage_upyun_operator:
+          type: string
+          description: "\U0001F510又拍云操作员账号"
+          example: username
+        storage_upyun_password:
+          type: string
+          description: "\U0001F510又拍云操作员密码"
+          example: gfdg434
+        storage_url:
+          type: string
+          description: "\U0001F510本地文件访问链接"
+          example: 'https://mdclub.org/static'
+        theme:
+          type: string
+          description: "\U0001F510主题名称"
+          example: material
+    QuestionCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/QuestionUpdateRequestBody'
+      required:
+        - title
+        - topic_ids
+    QuestionUpdateRequestBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 标题
+          example: 请问作者开发了哪些软件？
+        topic_ids:
+          type: array
+          items:
+            type: integer
+          minItems: 1
+          maxItems: 100
+          description: 话题ID
+          example:
+            - 1
+            - 2
+            - 3
+        content_markdown:
+          type: string
+          description: Markdown 格式的正文
+          example: 如题
+        content_rendered:
+          type: string
+          description: HTML 格式的正文
+          example: <p>如题</p>
+    ReportRequestBody:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: 举报理由
+          example: 恶意打广告
+      required:
+        - reason
+    TopicCreateRequestBody:
+      allOf:
+        - $ref: '#/components/schemas/TopicUpdateRequestBody'
+      required:
+        - name
+        - description
+        - cover
+    TopicUpdateRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 话题名称
+          example: MDClub
+        description:
+          type: string
+          description: 话题描述
+          example: 一个漂亮强大的开源社区系统
+        cover:
+          type: string
+          format: binary
+          description: 封面图片
+    UserAvatarRequestBody:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+          description: 用户头像
+      required:
+        - avatar
+    UserCoverRequestBody:
+      type: object
+      properties:
+        cover:
+          type: string
+          format: binary
+          description: 用户封面
+      required:
+        - cover
+    UserLoginRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 用户名或邮箱
+          example: zdhxiong
+        password:
+          type: string
+          description: 经过 hash1 加密后的密码
+          example: 7c4a8d09ca3762af61e59520943dc26494f8941b
+        device:
+          type: string
+          description: 设备信息
+          example: Xiaomi6
+        captcha_token:
+          type: string
+          description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+          example: 73687e77c8314821a8a301d96c776f01
+        captcha_code:
+          type: string
+          description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+          example: f8h4d
+      required:
+        - name
+        - password
+    UserPasswordResetRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: 邮箱
+          example: zdhxiong@gmail.com
+        email_code:
+          type: string
+          description: 邮箱验证码
+          example: hg8d3d
+        password:
+          type: string
+          description: hash1 加密后的密码
+          example: 7c4a8d09ca3762af61e59520943dc26494f8941b
+      required:
+        - email
+        - email_code
+        - password
+    UserRegisterRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: 邮箱
+          format: email
+          example: zdhxiong@gmail.com
+        email_code:
+          type: string
+          description: 邮箱验证码
+          example: hg8d3d
+        username:
+          type: string
+          description: 用户名
+          example: zdhxiong
+        password:
+          type: string
+          description: hash1 加密后的密码
+          example: 7c4a8d09ca3762af61e59520943dc26494f8941b
+      required:
+        - email
+        - email_code
+        - username
+        - password
+    UserRequestBody:
+      type: object
+      properties:
+        headline:
+          type: string
+          description: 一句话介绍
+          example: mdui 作者
+        bio:
+          type: string
+          description: 个人简介
+          example: 独立全栈开发者
+        blog:
+          type: string
+          description: 个人主页
+          example: 'https://mdui.org'
+        company:
+          type: string
+          description: 所属企业
+          example: 无
+        location:
+          type: string
+          description: 所属地区
+          example: 杭州
+    UserSendEmailRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: 邮箱
+          format: email
+          example: zdhxiong@gmail.com
+        captcha_token:
+          type: string
+          description: 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+          example: 73687e77c8314821a8a301d96c776f01
+        captcha_code:
+          type: string
+          description: 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+          example: f8h4d
+      required:
+        - email
+    VoteRequestBody:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - up
+            - down
+          description: 投票类型
+          example: up
+      required:
+        - type
+    AnswerResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Answer'
+      required:
+        - code
+        - data
+    AnswersResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    ArticleResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Article'
+      required:
+        - code
+        - data
+    ArticlesResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    CaptchaResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Captcha'
+      required:
+        - code
+        - data
+    CommentResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Comment'
+      required:
+        - code
+        - data
+    CommentsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    EmailResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Email'
+      required:
+        - code
+        - data
+    EmptyResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: object
+      required:
+        - code
+        - data
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 错误代码
+          minimum: 100000
+          maximum: 999999
+        message:
+          type: string
+          description: 错误描述
+        extra_message:
+          type: string
+          description: 额外的错误描述
+        captcha_token:
+          type: string
+          description: 图形验证码token。若返回了该参数，表示下次调用该接口需要输入图形验证码
+        captcha_image:
+          type: string
+          format: byte
+          description: 图形验证码的base64格式图片
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorField'
+      required:
+        - code
+        - message
+    FollowerCountResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/FollowerCount'
+      required:
+        - code
+        - data
+    ImageResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Image'
+      required:
+        - code
+        - data
+    ImagesResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    OptionResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Option'
+      required:
+        - code
+        - data
+    QuestionResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Question'
+      required:
+        - code
+        - data
+    QuestionsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    ReportGroupsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportGroup'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    ReportResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Report'
+      required:
+        - code
+        - data
+    ReportsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    TokenResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Token'
+      required:
+        - code
+        - data
+    TopicResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Topic'
+      required:
+        - code
+        - data
+    TopicsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    UserAvatarResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/UserAvatar'
+      required:
+        - code
+        - data
+    UserCoverResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/UserCover'
+      required:
+        - code
+        - data
+    UserResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/User'
+      required:
+        - code
+        - data
+    UsersResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    VoteCountResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/VoteCount'
+      required:
+        - code
+        - data
+    AnswerRelationship:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        voting:
+          type: string
+          description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
+          enum:
+            - up
+            - down
+            - ''
+          example: up
+    ArticleRelationship:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+        topics:
+          $ref: '#/components/schemas/TopicsInRelationship'
+        is_following:
+          type: boolean
+          description: 当前登录用户是否已关注该文章
+          example: true
+        voting:
+          type: string
+          description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
+          enum:
+            - up
+            - down
+            - ''
+          example: up
+    CommentRelationship:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+        voting:
+          type: string
+          description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
+          enum:
+            - up
+            - down
+            - ''
+          example: up
+    ImageRelationship:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+    QuestionRelationship:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+        topics:
+          $ref: '#/components/schemas/TopicsInRelationship'
+        is_following:
+          type: boolean
+          description: 当前登录用户是否已关注该提问
+          example: true
+        voting:
+          type: string
+          description: 当前登录用户的投票类型（up、down），未投过票则为空字符串
+          enum:
+            - up
+            - down
+            - ''
+          example: up
+    ReportGroupRelationship:
+      type: object
+      properties:
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        comment:
+          $ref: '#/components/schemas/CommentInRelationship'
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+    ReportRelationship:
+      type: object
+      properties:
+        reporter:
+          $ref: '#/components/schemas/UserInRelationship'
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        comment:
+          $ref: '#/components/schemas/CommentInRelationship'
+        user:
+          $ref: '#/components/schemas/UserInRelationship'
+    TopicRelationship:
+      type: object
+      properties:
+        is_following:
+          type: boolean
+          description: 当前登录用户是否已关注该话题
+          example: true
+    UserRelationship:
+      type: object
+      properties:
+        is_me:
+          type: boolean
+          description: 该用户是否是当前登录用户
+          example: false
+        is_following:
+          type: boolean
+          description: 当前登录用户是否已关注该用户
+          example: true
+        is_followed:
+          type: boolean
+          description: 该用户是否已关注当前登录用户
+          example: true
+    AnswerInRelationship:
+      type: object
+      properties:
+        answer_id:
+          type: integer
+          description: 回答ID
+          minimum: 1
+          example: 1
+        content_summary:
+          type: string
+          description: 内容摘要
+          example: mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。
+        create_time:
+          type: integer
+          description: 发布时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+      required:
+        - answer_id
+        - content_summary
+        - create_time
+        - update_time
+    ArticleInRelationship:
+      type: object
+      properties:
+        article_id:
+          type: integer
+          description: 文章ID
+          minimum: 1
+          example: 1
+        title:
+          type: string
+          description: 文章标题
+          example: 欢迎使用 MDClub 开源社区系统
+        create_time:
+          type: integer
+          description: 发布时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+      required:
+        - article_id
+        - title
+        - create_time
+        - update_time
+    CommentInRelationship:
+      type: object
+      properties:
+        comment_id:
+          type: integer
+          description: 评论ID
+          minimum: 1
+          example: 1
+        content_summary:
+          type: string
+          description: 内容摘要
+          example: mdui 是我见过的 Web 框架里对规范实现最好的一版了
+        create_time:
+          type: integer
+          description: 发布时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+      required:
+        - comment_id
+        - content_summary
+        - create_time
+        - update_time
+    QuestionInRelationship:
+      type: object
+      properties:
+        question_id:
+          type: integer
+          description: 提问ID
+          minimum: 1
+          example: 1
+        title:
+          type: string
+          description: 提问标题
+          example: 请问作者开发了哪些软件？
+        create_time:
+          type: integer
+          description: 发布时间
+          minimum: 1
+          example: 1563512214
+        update_time:
+          type: integer
+          description: 更新时间
+          minimum: 1
+          example: 1563512214
+      required:
+        - question_id
+        - title
+        - create_time
+        - update_time
+    TopicInRelationship:
+      type: object
+      properties:
+        topic_id:
+          type: integer
+          description: 话题 ID
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          description: 话题名称
+          example: MDClub
+        cover:
+          $ref: '#/components/schemas/TopicCover'
+      required:
+        - topic_id
+        - name
+        - cover
+    TopicsInRelationship:
+      type: array
+      items:
+        $ref: '#/components/schemas/TopicInRelationship'
+    UserInRelationship:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+          minimum: 1
+          example: 1
+        username:
+          type: string
+          description: 用户名
+          example: zdhxiong
+        headline:
+          type: string
+          description: 一句话介绍
+          example: mdui作者
+        avatar:
+          $ref: '#/components/schemas/UserAvatar'
+      required:
+        - user_id
+        - username
+        - headline
+        - avatar
+  responses:
+    Answer:
+      description: 回答详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AnswerResponse'
+    Answers:
+      description: 回答列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AnswersResponse'
+    Article:
+      description: 文章详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticleResponse'
+    Articles:
+      description: 文章列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticlesResponse'
+    Captcha:
+      description: 图形验证码信息
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CaptchaResponse'
+    Comment:
+      description: 评论详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentResponse'
+    Comments:
+      description: 评论列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentsResponse'
+    Email:
+      description: 邮件详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmailResponse'
+    Empty:
+      description: 空数据，通过状态码区分成功还是失败
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmptyResponse'
+    Error:
+      description: 默认的错误返回值
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    FollowerCount:
+      description: 关注者数量
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FollowerCountResponse'
+    Image:
+      description: 图片详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ImageResponse'
+    Images:
+      description: 图片列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ImagesResponse'
+    Option:
+      description: 全局设置参数列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OptionResponse'
+    Question:
+      description: 提问详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionResponse'
+    Questions:
+      description: 提问列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionsResponse'
+    Report:
+      description: 举报详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportResponse'
+    ReportGroups:
+      description: 举报列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportGroupsResponse'
+    Reports:
+      description: 举报详情列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportsResponse'
+    Token:
+      description: Token 信息
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+    Topic:
+      description: 话题详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TopicResponse'
+    Topics:
+      description: 话题列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TopicsResponse'
+    User:
+      description: 完整的用户信息
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserResponse'
+    UserAvatar:
+      description: 新头像地址
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserAvatarResponse'
+    UserCover:
+      description: 新封面地址
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserCoverResponse'
+    Users:
+      description: 用户列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UsersResponse'
+    VoteCount:
+      description: 投票数量
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VoteCountResponse'
+  parameters:
+    answer_id.path:
+      name: answer_id
+      in: path
+      description: 回答ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    answer_id.query:
+      name: answer_id
+      in: query
+      description: 回答ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    answer_ids.path:
+      name: answer_ids
+      in: path
+      description: '多个用 `,` 分隔的回答ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    answer_ids:
+      name: answer_id
+      in: query
+      description: '用“,”分隔的回答ID，最多可提供100个ID'
+      schema:
+        type: array
+        items:
+          type: integer
+          minimum: 1
+        minItems: 1
+        maxItems: 100
+      style: form
+      explode: false
+      example:
+        - 1
+        - 2
+        - 3
+    article_id.path:
+      name: article_id
+      in: path
+      description: 文章ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    article_id.query:
+      name: article_id
+      in: query
+      description: 文章ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    article_ids.path:
+      name: article_ids
+      in: path
+      description: '多个用 `,` 分隔的文章ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    comment_id.path:
+      name: comment_id
+      in: path
+      description: 评论ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    comment_id.query:
+      name: comment_id
+      in: query
+      description: 评论ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    comment_ids.path:
+      name: comment_ids
+      in: path
+      description: '多个用 `,` 分隔的评论ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    commentable_id.query:
+      name: commentable_id
+      in: query
+      description: 评论目标的ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    commentable_type.query:
+      name: commentable_type
+      in: query
+      description: 评论目标类型
+      schema:
+        type: string
+        enum:
+          - article
+          - question
+          - answer
+          - comment
+      example: article
+    disabled.query:
+      name: disabled
+      in: query
+      description: 是否仅获取已禁用的用户
+      schema:
+        type: boolean
+        default: false
+      example: false
+    email.query:
+      name: email
+      in: query
+      description: 邮箱
+      schema:
+        type: string
+        format: email
+      example: zdhxiong@gmail.com
+    image_key.path:
+      name: key
+      in: path
+      description: 图片key
+      required: true
+      schema:
+        type: string
+      example: 4c018974e3cf4e1d8c174d82adba0c43.jpg
+    image_key.query:
+      name: key
+      in: query
+      description: 图片key
+      schema:
+        type: string
+      example: 4c018974e3cf4e1d8c174d82adba0c43.jpg
+    image_keys.path:
+      name: keys
+      in: path
+      description: '多个用 `,` 分隔的评论ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: >-
+        4c018974e3cf4e1d8c174d82adba0c43.jpg,5178883f06a34b748dd166b0a7c913b0.jpg,92b3a5c64ba04812bc41ab7400961a16.jpg
+    image_item_id.query:
+      name: item_id
+      in: query
+      description: 图片关联对象的ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    image_item_type.query:
+      name: item_type
+      in: query
+      description: 图片关联对象的类型
+      schema:
+        type: string
+        enum:
+          - question
+          - answer
+          - article
+      example: question
+    include.answer:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - question
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - question
+    include.article:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - topics
+            - is_following
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - voting
+    include.comment:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - voting
+    include.image:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - question
+            - article
+            - answer
+      style: form
+      explode: false
+      example:
+        - user
+        - question
+    include.question:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - user
+            - topics
+            - is_following
+            - voting
+      style: form
+      explode: false
+      example:
+        - user
+        - is_following
+    include.report:
+      name: include
+      in: query
+      description: >-
+        响应中需要包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`,
+        `user`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - question
+            - answer
+            - article
+            - comment
+            - user
+      style: form
+      explode: false
+      example:
+        - question
+        - article
+    include.reportReason:
+      name: include
+      in: query
+      description: >-
+        响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`,
+        `comment`, `user`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - reporter
+            - question
+            - answer
+            - article
+            - comment
+            - user
+      style: form
+      explode: false
+      example:
+        - reporter
+        - question
+        - article
+    include.topic:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - is_following
+      style: form
+      explode: false
+      example:
+        - is_following
+    include.user:
+      name: include
+      in: query
+      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`'
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - is_followed
+            - is_following
+            - is_me
+      style: form
+      explode: false
+      example:
+        - is_followed
+        - is_me
+    order.answers:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.articles:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.comments:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`delete_time`。默认为 `-create_time`。其中
+        `delete_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-delete_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.questions:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `vote_count`、`create_time`、`update_time`、`delete_time`。默认为
+        `-create_time`。其中 `delete_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - vote_count
+          - create_time
+          - update_time
+          - delete_time
+          - '-vote_count'
+          - '-create_time'
+          - '-update_time'
+          - '-delete_time'
+        default: '-create_time'
+      example: '-create_time'
+    order.topics:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `topic_id`、`follower_count`、`delete_time`。默认为 `topic_id`。其中
+        `delete_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - topic_id
+          - follower_count
+          - delete_time
+          - '-topic_id'
+          - '-follower_count'
+          - '-delete_time'
+        default: topic_id
+      example: topic_id
+    order.users:
+      name: order
+      in: query
+      description: >
+        排序方式。在字段前加 `-` 表示倒序排列。
+
+
+        可排序字段包括 `create_time`、`disable_time`、`follower_count`。默认为
+        `-create_time`。其中 `disable_time` 值仅管理员使用有效。
+      schema:
+        type: string
+        enum:
+          - create_time
+          - disable_time
+          - follower_count
+          - '-create_time'
+          - '-disable_time'
+          - '-follower_count'
+        default: '-create_time'
+      example: '-create_time'
+    page:
+      name: page
+      in: query
+      description: 当前页数
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    per_page:
+      name: per_page
+      in: query
+      description: 每页条数（最大为 100）
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 15
+      example: 15
+    question_id.path:
+      name: question_id
+      in: path
+      description: 提问ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    question_id.query:
+      name: question_id
+      in: query
+      description: 提问ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    question_ids.path:
+      name: question_ids
+      in: path
+      description: '多个用 `,` 分隔的提问ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    report_targets:
+      name: report_targets
+      in: path
+      description: |
+        类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。
+
+        例如 question:12,comment:34
+      required: true
+      schema:
+        type: string
+      example: 'question:12,comment:34'
+    reportable_id.path:
+      name: reportable_id
+      in: path
+      description: 目标ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    reportable_type.path:
+      name: reportable_type
+      in: path
+      description: 目标类型
+      required: true
+      schema:
+        type: string
+        enum:
+          - question
+          - answer
+          - article
+          - comment
+          - user
+      example: question
+    reportable_type.query:
+      name: reportable_type
+      in: query
+      description: 目标类型
+      schema:
+        type: string
+        enum:
+          - question
+          - answer
+          - article
+          - comment
+          - user
+      example: question
+    token:
+      name: token
+      in: header
+      description: token
+      schema:
+        type: string
+      example: 13180944453b7d052125486eefabedf9
+    topic_id.path:
+      name: topic_id
+      in: path
+      description: 话题ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    topic_id.query:
+      name: topic_id
+      in: query
+      description: 话题ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    topic_ids.path:
+      name: topic_ids
+      in: path
+      description: '多个用 `,` 分隔的话题ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    topic_name.query:
+      name: name
+      in: query
+      description: 话题名称
+      schema:
+        type: string
+      example: MDClub
+    trashed.query:
+      name: trashed
+      in: query
+      description: 是否仅获取回收站中的数据
+      schema:
+        type: boolean
+        default: false
+      example: false
+    user_id.path:
+      name: user_id
+      in: path
+      description: 用户ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    user_id.query:
+      name: user_id
+      in: query
+      description: 用户ID
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    user_ids.path:
+      name: user_ids
+      in: path
+      description: '多个用 `,` 分隔的用户ID，最多可提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    username.query:
+      name: username
+      in: query
+      description: 用户名
+      schema:
+        type: string
+      example: zdhxiong
+    vote_type.query:
+      name: type
+      in: query
+      description: |
+        默认获取全部投票类型的用户
+        `up` 表示仅获取投赞成票的用户
+        `down` 表示仅获取投反对票的用户
+      schema:
+        type: string
+        enum:
+          - up
+          - down
+      example: up
+  requestBodies:
+    Answer:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AnswerRequestBody'
+    ArticleCreate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticleCreateRequestBody'
+    ArticleUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ArticleUpdateRequestBody'
+    Comment:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommentRequestBody'
+    Email:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Email'
+    ImageUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ImageUpdateRequestBody'
+    ImageUpload:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/ImageUploadRequestBody'
+    Option:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Option'
+    QuestionCreate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionCreateRequestBody'
+    QuestionUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionUpdateRequestBody'
+    Report:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReportRequestBody'
+    TopicCreate:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/TopicCreateRequestBody'
+    TopicUpdate:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/TopicUpdateRequestBody'
+    User:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserRequestBody'
+    UserAvatar:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/UserAvatarRequestBody'
+    UserCover:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/UserCoverRequestBody'
+    UserLogin:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserLoginRequestBody'
+    UserPasswordReset:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserPasswordResetRequestBody'
+    UserRegister:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserRegisterRequestBody'
+    UserSendEmail:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserSendEmailRequestBody'
+    Vote:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VoteRequestBody'
+  securitySchemes:
+    token:
+      type: apiKey
+      name: token
+      in: header
+tags:
+  - name: Token
+    description: 身份验证
+  - name: Option
+    description: 系统设置
+  - name: User
+    description: 用户
+  - name: Topic
+    description: 话题
+  - name: Question
+    description: 提问
+  - name: Answer
+    description: 回答
+  - name: Article
+    description: 文章
+  - name: Comment
+    description: 评论
+  - name: Report
+    description: 举报
+  - name: Inbox
+    description: 私信
+  - name: Notification
+    description: 通知
+  - name: Captcha
+    description: 图形验证码
+  - name: Email
+    description: 邮件
+  - name: Image
+    description: 图片
+externalDocs:
+  description: 更多文档参见
+  url: 'https://mdclub.org'

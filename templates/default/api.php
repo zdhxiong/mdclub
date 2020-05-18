@@ -22,7 +22,7 @@
             presets: [ SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset ],
             plugins: [ SwaggerUIBundle.plugins.DownloadUrl ],
             layout: "StandaloneLayout",
-            url: "./openapi.yaml",
+            url: "./static/openapi.yaml",
         });
     }
 </script>
