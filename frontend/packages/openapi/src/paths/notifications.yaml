@@ -1,0 +1,18 @@
+get:
+  operationId: getList
+  summary: 获取通知列表
+  description: |
+    获取通知列表。
+  parameters:
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/per_page'
+    - $ref: '#/components/parameters/include.notification'
+    - $ref: '#/components/parameters/notification_type.query'
+    - $ref: '#/components/parameters/notification_read.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/Notifications'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Notification

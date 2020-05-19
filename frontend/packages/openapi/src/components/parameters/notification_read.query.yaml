@@ -1,0 +1,7 @@
+name: read
+in: query
+description: |
+  默认包含已读和未读的通知。若 `read` 为 `true`，则仅包含已读的通知；若为 `false`，则仅包含未读的通知。
+schema:
+  type: boolean
+example: false

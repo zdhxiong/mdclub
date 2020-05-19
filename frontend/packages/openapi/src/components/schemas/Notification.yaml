@@ -1,0 +1,83 @@
+type: object
+properties:
+  notification_id:
+    type: integer
+    description: 通知ID
+    minimum: 1
+    example: 1
+  receiver_id:
+    type: integer
+    description: 通知接收者ID
+    minimum: 1
+    example: 1
+  sender_id:
+    type: integer
+    description: 通知发送者ID
+    minimum: 1
+    example: 2
+  type:
+    type: string
+    description: 通知类型
+    enum:
+      - question_answered
+      - question_commented
+      - question_deleted
+      - article_commented
+      - article_deleted
+      - answer_commented
+      - answer_deleted
+      - comment_replied
+      - comment_deleted
+  content_rendered:
+    type: string
+    description: HTML 格式的通知内容
+    example:
+  article_id:
+    type: integer
+    description: 相关文章ID
+    minimum: 1
+    example: 1
+  question_id:
+    type: integer
+    description: 相关提问ID
+    minimum: 1
+    example: 1
+  answer_id:
+    type: integer
+    description: 相关回答ID
+    minimum: 1
+    example: 1
+  comment_id:
+    type: integer
+    description: 相关评论ID
+    minimum: 1
+    example: 1
+  reply_id:
+    type: integer
+    description: 相关回复ID
+    minimum: 1
+    example: 1
+  create_time:
+    type: integer
+    description: 通知发送时间
+    minimum: 1
+    example: 1563512214
+  read_time:
+    type: integer
+    description: 通知阅读时间
+    minimum: 1
+    example: 1563512214
+  relationships:
+    $ref: '#/components/schemas/NotificationRelationship'
+required:
+  - notification_id
+  - receiver_id
+  - sender_id
+  - type
+  - article_id
+  - question_id
+  - answer_id
+  - comment_id
+  - reply_id
+  - create_time
+  - read_time

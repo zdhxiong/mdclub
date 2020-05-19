@@ -19,6 +19,8 @@ Image:
   $ref: ./Image.yaml
 ImageUrls:
   $ref: ./ImageUrls.yaml
+Notification:
+  $ref: ./Notification.yaml
 Option:
   $ref: ./Option.yaml
 Pagination:
@@ -113,6 +115,10 @@ ImageResponse:
   $ref: ./response/Image.yaml
 ImagesResponse:
   $ref: ./response/Images.yaml
+NotificationResponse:
+  $ref: ./response/Notification.yaml
+NotificationsResponse:
+  $ref: ./response/Notifications.yaml
 OptionResponse:
   $ref: ./response/Option.yaml
 QuestionResponse:
@@ -151,6 +157,8 @@ CommentRelationship:
   $ref: ./relationships/Comment.yaml
 ImageRelationship:
   $ref: ./relationships/Image.yaml
+NotificationRelationship:
+  $ref: ./relationships/Notification.yaml
 QuestionRelationship:
   $ref: ./relationships/Question.yaml
 ReportGroupRelationship:

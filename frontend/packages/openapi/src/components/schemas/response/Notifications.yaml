@@ -1,0 +1,14 @@
+type: object
+properties:
+  code:
+    $ref: '#/components/schemas/CodeSuccess'
+  data:
+    type: array
+    items:
+      $ref: '#/components/schemas/Notification'
+  pagination:
+    $ref: '#/components/schemas/Pagination'
+required:
+  - code
+  - data
+  - pagination

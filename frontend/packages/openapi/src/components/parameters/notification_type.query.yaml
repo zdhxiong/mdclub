@@ -1,0 +1,16 @@
+name: type
+in: query
+description: 通知类型
+schema:
+  type: string
+  enum:
+    - question_answered
+    - question_commented
+    - question_deleted
+    - article_commented
+    - article_deleted
+    - answer_commented
+    - answer_deleted
+    - comment_replied
+    - comment_deleted
+example: question_answered

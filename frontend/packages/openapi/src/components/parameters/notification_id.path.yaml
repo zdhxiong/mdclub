@@ -1,0 +1,8 @@
+name: notification_id
+in: path
+description: 通知ID
+required: true
+schema:
+  type: integer
+  minimum: 1
+example: 1

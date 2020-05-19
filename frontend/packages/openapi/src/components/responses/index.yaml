@@ -24,6 +24,10 @@ Image:
   $ref: ./Image.yaml
 Images:
   $ref: ./Images.yaml
+Notification:
+  $ref: ./Notification.yaml
+Notifications:
+  $ref: ./Notifications.yaml
 Option:
   $ref: ./Option.yaml
 Question:

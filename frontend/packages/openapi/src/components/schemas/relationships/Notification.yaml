@@ -1,0 +1,16 @@
+type: object
+properties:
+  receiver:
+    $ref: '#/components/schemas/UserInRelationship'
+  sender:
+    $ref: '#/components/schemas/UserInRelationship'
+  article:
+    $ref: '#/components/schemas/ArticleInRelationship'
+  question:
+    $ref: '#/components/schemas/QuestionInRelationship'
+  answer:
+    $ref: '#/components/schemas/AnswerInRelationship'
+  comment:
+    $ref: '#/components/schemas/CommentInRelationship'
+  reply:
+    $ref: '#/components/schemas/CommentInRelationship'

@@ -1,0 +1,14 @@
+post:
+  operationId: read
+  summary: 把一条通知标记为已读
+  description: 把一条通知标记为已读
+  parameters:
+    - $ref: '#/components/parameters/notification_id.path'
+    - $ref: '#/components/parameters/include.notification'
+  responses:
+    '200':
+      $ref: '#/components/responses/Notification'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Notification

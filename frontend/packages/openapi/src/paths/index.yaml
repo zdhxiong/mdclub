@@ -97,6 +97,21 @@
 /images/{key}:
   $ref: ./images.{key}.yaml
 
+/notifications:
+  $ref: ./notifications.yaml
+
+/notifications/{notification_ids}/read:
+  $ref: ./notifications.{notification_ids}.read.yaml
+
+/notifications/{notification_ids}:
+  $ref: ./notifications.{notification_ids}.yaml
+
+/notifications/{notification_id}/read:
+  $ref: ./notifications.{notification_id}.read.yaml
+
+/notifications/{notification_id}:
+  $ref: ./notifications.{notification_id}.yaml
+
 /options:
   $ref: ./options.yaml
 

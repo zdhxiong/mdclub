@@ -1,0 +1,5 @@
+description: 通知详情
+content:
+  application/json:
+    schema:
+      $ref: '#/components/schemas/NotificationResponse'

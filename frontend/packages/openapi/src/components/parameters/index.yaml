@@ -44,6 +44,8 @@ include.comment:
   $ref: ./include.comment.yaml
 include.image:
   $ref: ./include.image.yaml
+include.notification:
+  $ref: ./include.notification.yaml
 include.question:
   $ref: ./include.question.yaml
 include.report:
@@ -54,6 +56,14 @@ include.topic:
   $ref: ./include.topic.yaml
 include.user:
   $ref: ./include.user.yaml
+notification_id.path:
+  $ref: ./notification_id.path.yaml
+notification_ids.path:
+  $ref: ./notification_ids.path.yaml
+notification_read.query:
+  $ref: ./notification_read.query.yaml
+notification_type.query:
+  $ref: ./notification_type.query.yaml
 order.answers:
   $ref: ./order.answers.yaml
 order.articles:

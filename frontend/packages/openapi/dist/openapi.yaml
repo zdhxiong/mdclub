@@ -922,6 +922,85 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Image
+  /notifications:
+    get:
+      operationId: getList
+      summary: 获取通知列表
+      description: |
+        获取通知列表。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.notification'
+        - $ref: '#/components/parameters/notification_type.query'
+        - $ref: '#/components/parameters/notification_read.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notifications'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_ids}/read':
+    post:
+      operationId: readMultiple
+      summary: 批量把通知标记为已读
+      description: 批量把通知标记为已读
+      parameters:
+        - $ref: '#/components/parameters/notification_ids.path'
+        - $ref: '#/components/parameters/include.notification'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notifications'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: 批量删除通知
+      description: |
+        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_id}/read':
+    post:
+      operationId: read
+      summary: 把一条通知标记为已读
+      description: 把一条通知标记为已读
+      parameters:
+        - $ref: '#/components/parameters/notification_id.path'
+        - $ref: '#/components/parameters/include.notification'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notification'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_id}':
+    delete:
+      operationId: delete
+      summary: 删除通知
+      description: |
+        只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
   /options:
     get:
       operationId: get
@@ -2317,6 +2396,16 @@ components:
           type: integer
           description: 投票数（赞成票 - 反对票，可能为负数）
           example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
         create_time:
           type: integer
           description: 创建时间
@@ -2324,7 +2413,7 @@ components:
           example: 1563512214
         update_time:
           type: integer
-          description: "\U0001F510更新时间"
+          description: 更新时间
           minimum: 1
           example: 1563512214
         delete_time:
@@ -2342,7 +2431,10 @@ components:
         - content_rendered
         - comment_count
         - vote_count
+        - vote_up_count
+        - vote_down_count
         - create_time
+        - update_time
     Article:
       type: object
       properties:
@@ -2392,7 +2484,17 @@ components:
         vote_count:
           type: integer
           description: 投票数（赞成票 - 反对票，可能为负数）
-          example: 8
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
         create_time:
           type: integer
           description: 创建时间
@@ -2420,6 +2522,8 @@ components:
         - view_count
         - follower_count
         - vote_count
+        - vote_up_count
+        - vote_down_count
         - create_time
         - update_time
     Captcha:
@@ -2474,8 +2578,17 @@ components:
         vote_count:
           type: integer
           description: 投票数（赞成票 - 反对票，可能为负数）
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
           minimum: 0
-          example: 8
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
         create_time:
           type: integer
           description: 发表时间
@@ -2500,6 +2613,8 @@ components:
         - user_id
         - content
         - vote_count
+        - vote_up_count
+        - vote_down_count
         - create_time
         - update_time
     Email:
@@ -2626,6 +2741,90 @@ components:
         - original
         - release
         - thumb
+    Notification:
+      type: object
+      properties:
+        notification_id:
+          type: integer
+          description: 通知ID
+          minimum: 1
+          example: 1
+        receiver_id:
+          type: integer
+          description: 通知接收者ID
+          minimum: 1
+          example: 1
+        sender_id:
+          type: integer
+          description: 通知发送者ID
+          minimum: 1
+          example: 2
+        type:
+          type: string
+          description: 通知类型
+          enum:
+            - question_answered
+            - question_commented
+            - question_deleted
+            - article_commented
+            - article_deleted
+            - answer_commented
+            - answer_deleted
+            - comment_replied
+            - comment_deleted
+        content_rendered:
+          type: string
+          description: HTML 格式的通知内容
+          example: null
+        article_id:
+          type: integer
+          description: 相关文章ID
+          minimum: 1
+          example: 1
+        question_id:
+          type: integer
+          description: 相关提问ID
+          minimum: 1
+          example: 1
+        answer_id:
+          type: integer
+          description: 相关回答ID
+          minimum: 1
+          example: 1
+        comment_id:
+          type: integer
+          description: 相关评论ID
+          minimum: 1
+          example: 1
+        reply_id:
+          type: integer
+          description: 相关回复ID
+          minimum: 1
+          example: 1
+        create_time:
+          type: integer
+          description: 通知发送时间
+          minimum: 1
+          example: 1563512214
+        read_time:
+          type: integer
+          description: 通知阅读时间
+          minimum: 1
+          example: 1563512214
+        relationships:
+          $ref: '#/components/schemas/NotificationRelationship'
+      required:
+        - notification_id
+        - receiver_id
+        - sender_id
+        - type
+        - article_id
+        - question_id
+        - answer_id
+        - comment_id
+        - reply_id
+        - create_time
+        - read_time
     Option:
       allOf:
         - $ref: '#/components/schemas/OptionUpdateRequestBody'
@@ -2751,7 +2950,17 @@ components:
         vote_count:
           type: integer
           description: 投票数（赞成票 - 反对票，可能为负数）
-          example: 8
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
         last_answer_time:
           type: integer
           description: 最后回答时间
@@ -2785,6 +2994,8 @@ components:
         - view_count
         - follower_count
         - vote_count
+        - vote_up_count
+        - vote_down_count
         - last_answer_time
         - create_time
         - update_time
@@ -3190,9 +3401,21 @@ components:
         vote_count:
           type: integer
           description: 投票目标获得的总投票量（赞成票 - 反对票），结果可以为负数
-          example: 8
+          example: 44
+        vote_up_count:
+          type: integer
+          description: 赞成票总数
+          minimum: 0
+          example: 96
+        vote_down_count:
+          type: integer
+          description: 反对票总数
+          minimum: 0
+          example: 52
       required:
         - vote_count
+        - vote_up_count
+        - vote_down_count
     AnswerRequestBody:
       type: object
       properties:
@@ -4072,6 +4295,31 @@ components:
         - code
         - data
         - pagination
+    NotificationResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Notification'
+      required:
+        - code
+        - data
+    NotificationsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
     OptionResponse:
       type: object
       properties:
@@ -4295,6 +4543,23 @@ components:
           $ref: '#/components/schemas/ArticleInRelationship'
         answer:
           $ref: '#/components/schemas/AnswerInRelationship'
+    NotificationRelationship:
+      type: object
+      properties:
+        receiver:
+          $ref: '#/components/schemas/UserInRelationship'
+        sender:
+          $ref: '#/components/schemas/UserInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+        comment:
+          $ref: '#/components/schemas/CommentInRelationship'
+        reply:
+          $ref: '#/components/schemas/CommentInRelationship'
     QuestionRelationship:
       type: object
       properties:
@@ -4596,6 +4861,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ImagesResponse'
+    Notification:
+      description: 通知详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationResponse'
+    Notifications:
+      description: 通知列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationsResponse'
     Option:
       description: 全局设置参数列表
       content:
@@ -4921,6 +5198,29 @@ components:
       example:
         - user
         - question
+    include.notification:
+      name: include
+      in: query
+      description: >-
+        响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`,
+        `answer`, `comment`, `reply`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - receiver
+            - sender
+            - article
+            - question
+            - answer
+            - comment
+            - reply
+      style: form
+      explode: false
+      example:
+        - receiver
+        - sender
     include.question:
       name: include
       in: query
@@ -5014,6 +5314,48 @@ components:
       example:
         - is_followed
         - is_me
+    notification_id.path:
+      name: notification_id
+      in: path
+      description: 通知ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    notification_ids.path:
+      name: notification_ids
+      in: path
+      description: '多个用 `,` 分隔的通知ID，最多提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    notification_read.query:
+      name: read
+      in: query
+      description: |
+        默认包含已读和未读的通知。若 `read` 为 `true`，则仅包含已读的通知；若为 `false`，则仅包含未读的通知。
+      schema:
+        type: boolean
+      example: false
+    notification_type.query:
+      name: type
+      in: query
+      description: 通知类型
+      schema:
+        type: string
+        enum:
+          - question_answered
+          - question_commented
+          - question_deleted
+          - article_commented
+          - article_deleted
+          - answer_commented
+          - answer_deleted
+          - comment_replied
+          - comment_deleted
+      example: question_answered
     order.answers:
       name: order
       in: query
