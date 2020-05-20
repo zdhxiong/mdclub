@@ -40,9 +40,9 @@ export interface Answer {
    */
   create_time: number;
   /**
-   * 🔐更新时间
+   * 更新时间
    */
-  update_time?: number;
+  update_time: number;
   /**
    * 🔐删除时间
    */
@@ -447,13 +447,10 @@ export interface ErrorResponse {
    * 图形验证码的base64格式图片
    */
   captcha_image?: string;
-
   /**
    * 错误字段。键名为字段名，键值为错误信息
    */
-  errors?: {
-    [field: string]: string;
-  };
+  errors?: { [key: string]: string };
 }
 
 /**
@@ -566,6 +563,113 @@ export interface ImagesResponse {
    */
   code: number;
   data: Array<Image>;
+  pagination: Pagination;
+}
+
+export interface Notification {
+  /**
+   * 通知ID
+   */
+  notification_id: number;
+  /**
+   * 通知接收者ID
+   */
+  receiver_id: number;
+  /**
+   * 通知发送者ID
+   */
+  sender_id: number;
+  /**
+   * 通知类型
+   */
+  type: NotificationTypeEnum;
+  /**
+   * 相关文章ID
+   */
+  article_id: number;
+  /**
+   * 相关提问ID
+   */
+  question_id: number;
+  /**
+   * 相关回答ID
+   */
+  answer_id: number;
+  /**
+   * 相关评论ID
+   */
+  comment_id: number;
+  /**
+   * 相关回复ID
+   */
+  reply_id: number;
+  /**
+   * 通知发送时间
+   */
+  create_time: number;
+  /**
+   * 通知阅读时间
+   */
+  read_time: number;
+  relationships?: NotificationRelationship;
+}
+
+/**
+ * Enum for the type property.
+ */
+export type NotificationTypeEnum =
+  | 'question_answered'
+  | 'question_commented'
+  | 'question_deleted'
+  | 'article_commented'
+  | 'article_deleted'
+  | 'answer_commented'
+  | 'answer_deleted'
+  | 'comment_replied'
+  | 'comment_deleted';
+
+/**
+ * 未读通知数量
+ */
+export interface NotificationCount {
+  /**
+   * 未读通知数量
+   */
+  notification_count: number;
+}
+
+export interface NotificationCountResponse {
+  /**
+   * 无任务错误时，状态码为 0
+   */
+  code: number;
+  data: NotificationCount;
+}
+
+export interface NotificationRelationship {
+  receiver?: UserInRelationship;
+  sender?: UserInRelationship;
+  article?: ArticleInRelationship;
+  question?: QuestionInRelationship;
+  answer?: AnswerInRelationship;
+  comment?: CommentInRelationship;
+  reply?: CommentInRelationship;
+}
+
+export interface NotificationResponse {
+  /**
+   * 无任务错误时，状态码为 0
+   */
+  code: number;
+  data: Notification;
+}
+
+export interface NotificationsResponse {
+  /**
+   * 无任务错误时，状态码为 0
+   */
+  code: number;
+  data: Array<Notification>;
   pagination: Pagination;
 }
 
@@ -995,7 +1099,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐缓存类型
    */
-  cache_type?: OptionUpdateRequestBodyCacheTypeEnum;
+  cache_type?: OptionCacheTypeEnum;
   /**
    * 评论作者是否可删除评论。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
    */
@@ -1015,7 +1119,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 系统语言
    */
-  language?: OptionUpdateRequestBodyLanguageEnum;
+  language?: OptionLanguageEnum;
   /**
    * 提问作者是否可删除提问。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
    */
@@ -1091,7 +1195,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐SMTP 加密方式
    */
-  smtp_secure?: OptionUpdateRequestBodySmtpSecureEnum;
+  smtp_secure?: OptionSmtpSecureEnum;
   /**
    * 🔐SMTP 账户
    */
@@ -1159,7 +1263,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
    */
-  storage_qiniu_zone?: OptionUpdateRequestBodyStorageQiniuZoneEnum;
+  storage_qiniu_zone?: OptionStorageQiniuZoneEnum;
   /**
    * 🔐SFTP 服务器地址
    */
@@ -1183,7 +1287,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐存储类型
    */
-  storage_type?: OptionUpdateRequestBodyStorageTypeEnum;
+  storage_type?: OptionStorageTypeEnum;
   /**
    * 🔐又拍云 Bucket
    */
@@ -1205,50 +1309,6 @@ export interface OptionUpdateRequestBody {
    */
   theme?: string;
 }
-
-/**
- * Enum for the cache_type property.
- */
-export type OptionUpdateRequestBodyCacheTypeEnum =
-  | 'pdo'
-  | 'redis'
-  | 'memcached';
-
-/**
- * Enum for the language property.
- */
-export type OptionUpdateRequestBodyLanguageEnum =
-  | 'en'
-  | 'pl'
-  | 'ru'
-  | 'zh-CN'
-  | 'zh-TW';
-
-/**
- * Enum for the smtp_secure property.
- */
-export type OptionUpdateRequestBodySmtpSecureEnum = 'ssl' | 'tls' | '';
-
-/**
- * Enum for the storage_qiniu_zone property.
- */
-export type OptionUpdateRequestBodyStorageQiniuZoneEnum =
-  | 'z0'
-  | 'z1'
-  | 'z2'
-  | 'na0'
-  | 'as0';
-
-/**
- * Enum for the storage_type property.
- */
-export type OptionUpdateRequestBodyStorageTypeEnum =
-  | 'local'
-  | 'ftp'
-  | 'sftp'
-  | 'aliyun'
-  | 'upyun'
-  | 'qiniu';
 
 export interface Pagination {
   /**
@@ -1778,7 +1838,7 @@ export interface User {
    */
   answer_count: number;
   /**
-   * 🔐未读消息数量
+   * 🔐未读通知数量
    */
   notification_unread?: number;
   /**
