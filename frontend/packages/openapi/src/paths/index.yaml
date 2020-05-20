@@ -97,6 +97,9 @@
 /images/{key}:
   $ref: ./images.{key}.yaml
 
+/notifications/count:
+  $ref: ./notifications.count.yaml
+
 /notifications:
   $ref: ./notifications.yaml
 

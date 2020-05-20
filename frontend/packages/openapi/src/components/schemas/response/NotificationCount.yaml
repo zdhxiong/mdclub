@@ -1,0 +1,9 @@
+type: object
+properties:
+  code:
+    $ref: '#/components/schemas/CodeSuccess'
+  data:
+    $ref: '#/components/schemas/NotificationCount'
+required:
+  - code
+  - data

@@ -1,0 +1,5 @@
+description: 未读通知数量
+content:
+  application/json:
+    schema:
+      $ref: '#/components/schemas/NotificationCountResponse'

@@ -21,6 +21,8 @@ ImageUrls:
   $ref: ./ImageUrls.yaml
 Notification:
   $ref: ./Notification.yaml
+NotificationCount:
+  $ref: ./NotificationCount.yaml
 Option:
   $ref: ./Option.yaml
 Pagination:
@@ -117,6 +119,8 @@ ImagesResponse:
   $ref: ./response/Images.yaml
 NotificationResponse:
   $ref: ./response/Notification.yaml
+NotificationCountResponse:
+  $ref: ./response/NotificationCount.yaml
 NotificationsResponse:
   $ref: ./response/Notifications.yaml
 OptionResponse:

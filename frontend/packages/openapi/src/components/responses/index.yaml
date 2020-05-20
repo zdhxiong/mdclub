@@ -26,6 +26,8 @@ Images:
   $ref: ./Images.yaml
 Notification:
   $ref: ./Notification.yaml
+NotificationCount:
+  $ref: ./NotificationCount.yaml
 Notifications:
   $ref: ./Notifications.yaml
 Option:

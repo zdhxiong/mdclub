@@ -81,7 +81,7 @@ properties:
     example: 28
   notification_unread:
     type: integer
-    description: 🔐未读消息数量
+    description: 🔐未读通知数量
     minimum: 0
     example: 4
   inbox_unread:

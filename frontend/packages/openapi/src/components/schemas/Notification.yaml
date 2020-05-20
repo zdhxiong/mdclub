@@ -28,10 +28,6 @@ properties:
       - answer_deleted
       - comment_replied
       - comment_deleted
-  content_rendered:
-    type: string
-    description: HTML 格式的通知内容
-    example:
   article_id:
     type: integer
     description: 相关文章ID

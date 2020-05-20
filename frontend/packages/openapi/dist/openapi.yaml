@@ -922,6 +922,21 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Image
+  /notifications/count:
+    get:
+      operationId: getCount
+      summary: 获取未读通知数量
+      description: |
+        获取未读通知数量。
+      parameters:
+        - $ref: '#/components/parameters/notification_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/NotificationCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
   /notifications:
     get:
       operationId: getList
@@ -989,9 +1004,9 @@ paths:
   '/notifications/{notification_id}':
     delete:
       operationId: delete
-      summary: 删除通知
+      summary: 删除一条通知
       description: |
-        只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/notification_id.path'
       responses:
@@ -2772,10 +2787,6 @@ components:
             - answer_deleted
             - comment_replied
             - comment_deleted
-        content_rendered:
-          type: string
-          description: HTML 格式的通知内容
-          example: null
         article_id:
           type: integer
           description: 相关文章ID
@@ -2825,6 +2836,16 @@ components:
         - reply_id
         - create_time
         - read_time
+    NotificationCount:
+      type: object
+      description: 未读通知数量
+      properties:
+        notification_count:
+          type: integer
+          description: 未读通知数量
+          example: 12
+      required:
+        - notification_count
     Option:
       allOf:
         - $ref: '#/components/schemas/OptionUpdateRequestBody'
@@ -3274,7 +3295,7 @@ components:
           example: 28
         notification_unread:
           type: integer
-          description: "\U0001F510未读消息数量"
+          description: "\U0001F510未读通知数量"
           minimum: 0
           example: 4
         inbox_unread:
@@ -4305,6 +4326,16 @@ components:
       required:
         - code
         - data
+    NotificationCountResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/NotificationCount'
+      required:
+        - code
+        - data
     NotificationsResponse:
       type: object
       properties:
@@ -4867,6 +4898,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/NotificationResponse'
+    NotificationCount:
+      description: 未读通知数量
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationCountResponse'
     Notifications:
       description: 通知列表
       content:

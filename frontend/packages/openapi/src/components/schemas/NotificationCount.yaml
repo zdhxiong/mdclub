@@ -1,0 +1,9 @@
+type: object
+description: 未读通知数量
+properties:
+  notification_count:
+    type: integer
+    description: 未读通知数量
+    example: 12
+required:
+  - notification_count

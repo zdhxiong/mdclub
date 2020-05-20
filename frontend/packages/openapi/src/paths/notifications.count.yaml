@@ -1,0 +1,14 @@
+get:
+  operationId: getCount
+  summary: 获取未读通知数量
+  description: |
+    获取未读通知数量。
+  parameters:
+    - $ref: '#/components/parameters/notification_type.query'
+  responses:
+    '200':
+      $ref: '#/components/responses/NotificationCount'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Notification
