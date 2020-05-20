@@ -2657,20 +2657,6 @@ components:
         - email
         - subject
         - content
-    ErrorField:
-      type: object
-      properties:
-        field:
-          type: string
-          description: 错误字段名
-          example: email
-        message:
-          type: string
-          description: 错误描述
-          example: 邮箱格式错误
-      required:
-        - field
-        - message
     FollowerCount:
       type: object
       description: 关注者数量
@@ -4275,9 +4261,10 @@ components:
           format: byte
           description: 图形验证码的base64格式图片
         errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorField'
+          type: object
+          additionalProperties:
+            type: string
+            description: 错误字段名与错误描述
       required:
         - code
         - message

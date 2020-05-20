@@ -11,8 +11,6 @@ Comment:
   $ref: ./Comment.yaml
 Email:
   $ref: ./Email.yaml
-ErrorField:
-  $ref: ./ErrorField.yaml
 FollowerCount:
   $ref: ./FollowerCount.yaml
 Image:
