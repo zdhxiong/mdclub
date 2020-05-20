@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MDClub\Controller\RestApi;
 
 use MDClub\Facade\Library\Request;
-use MDClub\Facade\Model\ReportModel;
 use MDClub\Facade\Service\ReportService;
 
 /**

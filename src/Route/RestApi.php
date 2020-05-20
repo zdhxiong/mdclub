@@ -10,6 +10,7 @@ use MDClub\Controller\RestApi\Captcha;
 use MDClub\Controller\RestApi\Comment;
 use MDClub\Controller\RestApi\Email;
 use MDClub\Controller\RestApi\Image;
+use MDClub\Controller\RestApi\Notification;
 use MDClub\Controller\RestApi\Option;
 use MDClub\Controller\RestApi\Question;
 use MDClub\Controller\RestApi\Report;
@@ -25,6 +26,7 @@ use MDClub\Middleware\Transformer\Answer as TransformerForAnswer;
 use MDClub\Middleware\Transformer\Article as TransformerForArticle;
 use MDClub\Middleware\Transformer\Comment as TransformerForComment;
 use MDClub\Middleware\Transformer\Image as TransformerForImage;
+use MDClub\Middleware\Transformer\Notification as TransformerForNotification;
 use MDClub\Middleware\Transformer\Question as TransformerForQuestion;
 use MDClub\Middleware\Transformer\Report as TransformerForReport;
 use MDClub\Middleware\Transformer\ReportReason as TransformerForReportReason;
@@ -600,6 +602,32 @@ class RestApi
      */
     protected function notification(RouteCollectorProxy $group): void
     {
+        $group
+            ->get('/notifications/count', Notification::class . ':getCount')
+            ->add(NeedLogin::class);
+
+        $group
+            ->get('/notifications', Notification::class . ':getList')
+            ->add(TransformerForNotification::class)
+            ->add(NeedLogin::class);
+
+        $group
+            ->post('/notifications/{notification_ids}/read', Notification::class . ':readMultiple')
+            ->add(TransformerForNotification::class)
+            ->add(NeedLogin::class);
+
+        $group
+            ->delete('/notifications/{notification_ids}', Notification::class . ':deleteMultiple')
+            ->add(NeedLogin::class);
+
+        $group
+            ->post('/notifications/{notification_id:\d+}/read', Notification::class . ':read')
+            ->add(TransformerForNotification::class)
+            ->add(NeedLogin::class);
+
+        $group
+            ->delete('/notifications/{notification_id:\d+}', Notification::class . ':delete')
+            ->add(NeedLogin::class);
     }
 
     /**

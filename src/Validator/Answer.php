@@ -43,14 +43,11 @@ class Answer extends Abstracts
     /**
      * 创建时验证
      *
-     * @param  int   $questionId
      * @param  array $data       [content_markdown, content_rendered]
      * @return array
      */
-    public function create(int $questionId, array $data): array
+    public function create(array $data): array
     {
-        QuestionService::hasOrFail($questionId);
-
         return $this->data($data)
             ->field('content')->markdownExist()->markdownSupport(100000)
             ->validate();

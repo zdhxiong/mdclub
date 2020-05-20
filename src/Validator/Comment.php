@@ -37,18 +37,12 @@ class Comment extends Abstracts
     /**
      * 创建时验证
      *
-     * @param string $commentableType 评论目标类型，question | article | answer
-     * @param int    $commentableId   评论目标ID
      * @param array  $data
      *
      * @return array
      */
-    public function create(string $commentableType, int $commentableId, array $data): array
+    public function create(array $data): array
     {
-        /** @var QuestionService $class */
-        $class = '\MDClub\Facade\Service\\' . ucfirst($commentableType) . 'Service';
-        $class::hasOrFail($commentableId);
-
         return $this->data($data)
             ->field('content')->exist()->trim()->notEmpty()->length(1, 1000)
             ->validate();

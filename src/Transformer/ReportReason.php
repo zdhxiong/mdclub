@@ -36,7 +36,7 @@ class ReportReason extends Abstracts
      */
     protected function reporter(array $items): array
     {
-        $userIds = array_unique(array_column($items, 'reporter_id'));
+        $userIds = collect($items)->pluck('reporter_id')->unique()->filter()->all();
         $users = UserTransformer::getInRelationship($userIds);
 
         foreach ($items as &$item) {

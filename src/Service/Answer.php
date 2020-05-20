@@ -13,6 +13,7 @@ use MDClub\Facade\Model\UserModel;
 use MDClub\Facade\Model\VoteModel;
 use MDClub\Facade\Service\CommentService;
 use MDClub\Facade\Service\ImageService;
+use MDClub\Facade\Service\NotificationService;
 use MDClub\Facade\Service\QuestionService;
 use MDClub\Facade\Service\UserService;
 use MDClub\Facade\Validator\AnswerValidator;
@@ -78,14 +79,19 @@ class Answer extends Abstracts implements CommentableInterface, DeletableInterfa
      */
     public function create(int $questionId, array $data): int
     {
+        $question = QuestionService::getOrFail($questionId);
         $userId = Auth::userId();
 
-        $createData = AnswerValidator::create($questionId, $data);
+        $createData = AnswerValidator::create($data);
         $createData['user_id'] = $userId;
         $createData['question_id'] = $questionId;
 
         $answerId = (int) AnswerModel::insert($createData);
 
+        NotificationService::add($question['user_id'], 'question_answered', [
+            'question_id' => $questionId,
+            'answer_id' => $answerId,
+        ])->send();
         UserModel::incAnswerCount($userId);
         QuestionModel::incAnswerCount($questionId);
         ImageService::updateItemRelated('answer', $answerId, $createData['content_markdown']);

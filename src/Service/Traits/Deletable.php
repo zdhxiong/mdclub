@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace MDClub\Service\Traits;
 
+use MDClub\Facade\Service\NotificationService;
 use MDClub\Model\Abstracts as ModelAbstracts;
 
 /**
  * 可删除的对象，含软删除功能。用于 answer, comment, article, question, topic
+ *
+ * 放入回收站需要发送通知
+ * 未在回收站中直接删除需要发送通知
+ * 已在回收站中直接删除不发送通知
  *
  * 父类中可使用：
  * afterDelete(array $items): void
@@ -27,6 +32,24 @@ trait Deletable
     abstract protected function throwNotFoundException(): void;
 
     /**
+     * 检查删除当前对象时是否需要发送通知
+     *
+     * @return bool
+     */
+    private function isNeedSendNotification(): bool
+    {
+        $model = $this->getModelInstance();
+        $needNotifications = [
+            'question',
+            'article',
+            'answer',
+            'comment',
+        ];
+
+        return in_array($model->table, $needNotifications);
+    }
+
+    /**
      * @inheritDoc
      */
     public function deleteMultiple(array $deletableIds): void
@@ -44,6 +67,18 @@ trait Deletable
         }
 
         $model->force()->delete(array_column($items, $primaryKey));
+
+        if ($this->isNeedSendNotification()) {
+            foreach ($items as $item) {
+                if (!$item['delete_time']) {
+                    NotificationService::add($item['user_id'], "{$model->table}_deleted", [
+                        "{$model->table}_id" => $item[$primaryKey],
+                    ]);
+                }
+            }
+
+            NotificationService::send();
+        }
 
         if (method_exists($this, 'afterDelete')) {
             $this->afterDelete($items);
@@ -77,6 +112,13 @@ trait Deletable
 
         $model->force()->delete($deletableId);
 
+        // 不在回收站中才需要发送通知
+        if (!$item['delete_time'] && $this->isNeedSendNotification()) {
+            NotificationService::add($item['user_id'], "{$model->table}_deleted", [
+                "{$model->table}_id" => $deletableId,
+            ])->send();
+        }
+
         if (method_exists($this, 'afterDelete')) {
             $this->afterDelete([$item]);
         }
@@ -89,16 +131,24 @@ trait Deletable
     {
         $model = $this->getModelInstance();
         $primaryKey = $model->primaryKey;
+        $existItems = $model->get($deletableIds);
+        $existIds = array_column($existItems, $primaryKey);
 
-        $existIds = $model
-            ->where($primaryKey, $deletableIds)
-            ->pluck($primaryKey);
-
-        if (!$existIds) {
+        if (!$existItems) {
             return [];
         }
 
         $model->delete($existIds);
+
+        if ($this->isNeedSendNotification()) {
+            foreach ($existItems as $item) {
+                NotificationService::add($item['user_id'], "{$model->table}_deleted", [
+                    "{$model->table}_id" => $item[$primaryKey],
+                ]);
+            }
+
+            NotificationService::send();
+        }
 
         $trashedItems = $model->force()->select($existIds);
 
@@ -115,13 +165,19 @@ trait Deletable
     public function trash(int $id): array
     {
         $model = $this->getModelInstance();
-        $exist = $model->has($id);
+        $item = $model->get($id);
 
-        if (!$exist) {
+        if (!$item) {
             $this->throwNotFoundException();
         }
 
         $model->delete($id);
+
+        if ($this->isNeedSendNotification()) {
+            NotificationService::add($item['user_id'], "{$model->table}_deleted", [
+                "{$model->table}_id" => $id,
+            ])->send();
+        }
 
         $trashedItem = $model->force()->get($id);
 

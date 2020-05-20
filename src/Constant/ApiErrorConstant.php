@@ -120,4 +120,9 @@ class ApiErrorConstant
     public const REPORT_NOT_FOUND                 = [207001, '指定举报不存在'];
     public const REPORT_TARGET_NOT_FOUND          = [207002, '举报目标不存在'];
     public const REPORT_ALREADY_SUBMITTED         = [207003, '不能重复举报'];
+
+    /**
+     * 通知相关错误，模块编号：8
+     */
+    public const NOTIFICATION_NOT_FOUND           = [208001, '指定通知不存在'];
 }

@@ -71,8 +71,10 @@ class Home
         $slim
             ->get('/inbox', Inbox::class . ':index');
 
-        $slim
-            ->get('/api', Api::class . ':index');
+        if (App::$config['APP_SHOW_API_DOCS']) {
+            $slim
+                ->get('/api', Api::class . ':index');
+        }
 
         $slim
             ->get('/sitemap.xml', Sitemap::class . ':index');

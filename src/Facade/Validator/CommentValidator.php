@@ -10,7 +10,7 @@ use MDClub\Validator\Comment;
 /**
  * CommentValidator Facade
  *
- * @method static array create(string $commentableType, int $commentableId, array $data)
+ * @method static array create(array $data)
  * @method static array update(int $commentId, array $data)
  * @method static array delete(int $commentId)
  */

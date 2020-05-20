@@ -6,14 +6,11 @@ namespace MDClub\Transformer;
 
 use MDClub\Facade\Library\Auth;
 use MDClub\Facade\Library\Request;
-use MDClub\Facade\Transformer\AnswerTransformer;
-use MDClub\Facade\Transformer\ArticleTransformer;
 use MDClub\Facade\Transformer\FollowTransformer;
-use MDClub\Facade\Transformer\QuestionTransformer;
 use MDClub\Facade\Transformer\TopicTransformer;
-use MDClub\Facade\Transformer\UserTransformer;
 use MDClub\Facade\Transformer\VoteTransformer;
 use MDClub\Helper\Str;
+use MDClub\Initializer\App;
 
 /**
  * 转换器抽象类
@@ -89,6 +86,32 @@ abstract class Abstracts
     }
 
     /**
+     * 获取用在 relationships 中的子资源
+     * 例如根据 user_id，生产用在 relationships 中的 user
+     *
+     * @param array  $items
+     * @param string $name relationships 中的字段名，需要有对应的以 _id 为后缀的字段
+     * @param string $transformerClass
+     *
+     * @return array
+     */
+    protected function relationshipItemTransform(array $items, string $name, string $transformerClass): array
+    {
+        $idName = "${name}_id";
+        $ids = collect($items)->pluck($idName)->unique()->filter()->all();
+        $transformer = App::$container->get($transformerClass);
+        $children =  $transformer->getInRelationship($ids);
+
+        foreach ($items as &$item) {
+            if (isset($item[$idName])) {
+                $item['relationships'][$name] = $item[$idName] ? $children[$item[$idName]] : null;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
      * 添加 user 子资源
      *
      * @param  array $items
@@ -96,16 +119,7 @@ abstract class Abstracts
      */
     protected function user(array $items): array
     {
-        $userIds = array_unique(array_column($items, 'user_id'));
-        $users = UserTransformer::getInRelationship($userIds);
-
-        foreach ($items as &$item) {
-            if (isset($item['user_id'])) {
-                $item['relationships']['user'] = $users[$item['user_id']];
-            }
-        }
-
-        return $items;
+        return $this->relationshipItemTransform($items, 'user', User::class);
     }
 
     /**
@@ -116,16 +130,7 @@ abstract class Abstracts
      */
     protected function question(array $items): array
     {
-        $questionIds = array_unique(array_column($items, 'question_id'));
-        $questions = QuestionTransformer::getInRelationship($questionIds);
-
-        foreach ($items as &$item) {
-            if (isset($item['question_id'])) {
-                $item['relationships']['question'] = $questions[$item['question_id']];
-            }
-        }
-
-        return $items;
+        return $this->relationshipItemTransform($items, 'question', Question::class);
     }
 
     /**
@@ -136,16 +141,7 @@ abstract class Abstracts
      */
     protected function answer(array $items): array
     {
-        $answerIds = array_unique(array_column($items, 'answer_id'));
-        $answers = AnswerTransformer::getInRelationship($answerIds);
-
-        foreach ($items as &$item) {
-            if (isset($item['answer_id'])) {
-                $item['relationships']['answer'] = $answers[$item['answer_id']];
-            }
-        }
-
-        return $items;
+        return $this->relationshipItemTransform($items, 'answer', Answer::class);
     }
 
     /**
@@ -156,16 +152,18 @@ abstract class Abstracts
      */
     protected function article(array $items): array
     {
-        $articleIds = array_unique(array_column($items, 'article_id'));
-        $articles = ArticleTransformer::getInRelationship($articleIds);
+        return $this->relationshipItemTransform($items, 'article', Article::class);
+    }
 
-        foreach ($items as &$item) {
-            if (isset($item['article_id'])) {
-                $item['relationships']['article'] = $articles[$item['article_id']];
-            }
-        }
-
-        return $items;
+    /**
+     * 获取 comment 子资源
+     *
+     * @param array $items
+     * @return array
+     */
+    protected function comment(array $items): array
+    {
+        return $this->relationshipItemTransform($items, 'comment', Comment::class);
     }
 
     /**
@@ -176,7 +174,7 @@ abstract class Abstracts
      */
     protected function voting(array $items): array
     {
-        $keys = array_unique(array_column($items, $this->primaryKey));
+        $keys = collect($items)->pluck($this->primaryKey)->unique()->filter()->all();
         $votings = VoteTransformer::getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
@@ -196,7 +194,7 @@ abstract class Abstracts
      */
     protected function topics(array $items): array
     {
-        $keys = array_unique(array_column($items, $this->primaryKey));
+        $keys = collect($items)->pluck($this->primaryKey)->unique()->filter()->all();
         $topics = TopicTransformer::getInRelationship($keys, $this->table);
 
         foreach ($items as &$item) {
@@ -217,7 +215,7 @@ abstract class Abstracts
      */
     protected function isFollowing(array $items, array $knownRelationship): array
     {
-        $keys = array_unique(array_column($items, $this->primaryKey));
+        $keys = collect($items)->pluck($this->primaryKey)->unique()->filter()->all();
 
         if (isset($knownRelationship['is_following'])) {
             $followingKeys = $knownRelationship['is_following'] ? $keys : [];

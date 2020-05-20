@@ -10,7 +10,7 @@ use MDClub\Validator\Answer;
 /**
  * AnswerValidator Facade
  *
- * @method static array create(int $questionId, array $data)
+ * @method static array create(array $data)
  * @method static array update(int $answerId, array $data)
  * @method static array delete(int $answerId)
  */
