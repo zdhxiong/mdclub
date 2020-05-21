@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MDClub\Service\Traits;
 
 use MDClub\Facade\Library\Auth;
+use MDClub\Facade\Model\AnswerModel;
 use MDClub\Facade\Model\CommentModel;
 use MDClub\Facade\Service\NotificationService;
 use MDClub\Facade\Service\QuestionService;
@@ -57,16 +58,58 @@ trait Commentable
             ->insert();
 
         // 发送通知
-        if ($table !== 'comment') {
-            NotificationService::add($commentableTarget['user_id'], "${table}_commented", [
-                "${table}_id" => $commentableId,
-                'comment_id' => $commentId,
-            ])->send();
-        } else {
-            NotificationService::add($commentableTarget['user_id'], "${table}_replied", [
-                'comment_id' => $commentableId,
-                'reply_id' => $commentId,
-            ])->send();
+        switch ($table) {
+            // 对评论进行回复
+            case 'comment':
+                $comment = CommentModel::field(['commentable_id', 'commentable_type'])->get($commentableId);
+                $relationshipIds = [
+                    'comment_id' => $commentableId,
+                    'reply_id' => $commentId,
+                ];
+
+                switch ($comment['commentable_type']) {
+                    case 'question':
+                        $relationshipIds['question_id'] = $comment['commentable_id'];
+                        break;
+                    case 'article':
+                        $relationshipIds['article_id'] = $comment['commentable_id'];
+                        break;
+                    case 'answer':
+                        $answer = AnswerModel::field('question_id')->get($comment['commentable_id']);
+                        $relationshipIds['answer_id'] = $comment['commentable_id'];
+                        $relationshipIds['question_id'] = $answer['question_id'];
+                        break;
+                    default:
+                        break;
+                }
+
+                NotificationService
+                    ::add($commentableTarget['user_id'], 'comment_replied', $relationshipIds)
+                    ->send();
+                break;
+
+            // 对回答进行评论
+            case 'answer':
+                $answer = AnswerModel::field('question_id')->get($commentableId);
+                $relationshipIds = [
+                    'question_id' => $answer['question_id'],
+                    'answer_id' => $commentableId,
+                    'comment_id' => $commentId,
+                ];
+                NotificationService
+                    ::add($commentableTarget['user_id'], 'answer_commented', $relationshipIds)
+                    ->send();
+                break;
+
+            default:
+                $relationshipIds = [
+                    "${table}_id" => $commentableId,
+                    'comment_id' => $commentId,
+                ];
+                NotificationService
+                    ::add($commentableTarget['user_id'], "${table}_commented", $relationshipIds)
+                    ->send();
+                break;
         }
 
         // 评论数量 +1，若是对评论的回复，字段为 reply_count，其他为 comment_count
