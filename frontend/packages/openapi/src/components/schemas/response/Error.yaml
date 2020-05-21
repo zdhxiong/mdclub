@@ -20,9 +20,9 @@ properties:
     description: 图形验证码的base64格式图片
   errors:
     type: object
+    description: 错误字段。键名为字段名，键值为错误信息
     additionalProperties:
       type: string
-      description: 错误字段名与错误描述
 
 required:
   - code

@@ -17,7 +17,17 @@ properties:
     example: 2
   type:
     type: string
-    description: 通知类型
+    description: |
+      通知类型：
+      * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id`
+      * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id`
+      * `question_deleted`：提问被删除。此时会包含 `question_id`
+      * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id`
+      * `article_deleted`：文章被删除。此时会包含 `article_id`
+      * `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id`
+      * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`
+      * `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
+      * `comment_deleted`：评论被删除。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
     enum:
       - question_answered
       - question_commented
