@@ -136,7 +136,7 @@ export const deleteMultiple = (
  * 获取未读通知数量。
  */
 export const getCount = (
-  params: GetCountParams,
+  params: GetCountParams = {},
 ): Promise<NotificationCountResponse> =>
   getRequest(buildURL('/notifications/count', params, ['type']));
 
@@ -145,7 +145,7 @@ export const getCount = (
  * 获取通知列表。
  */
 export const getList = (
-  params: GetListParams,
+  params: GetListParams = {},
 ): Promise<NotificationsResponse> =>
   getRequest(
     buildURL('/notifications', params, [
