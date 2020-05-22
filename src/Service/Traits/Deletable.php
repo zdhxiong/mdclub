@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MDClub\Service\Traits;
 
+use MDClub\Facade\Model\AnswerModel;
 use MDClub\Facade\Service\NotificationService;
 use MDClub\Model\Abstracts as ModelAbstracts;
 
@@ -50,6 +51,101 @@ trait Deletable
     }
 
     /**
+     * 删除后添加一条通知
+     *
+     * @param array $items
+     */
+    protected function addNotifications(array $items): void
+    {
+        if (!$items || !$this->isNeedSendNotification()) {
+            return;
+        }
+
+        $model = $this->getModelInstance();
+        $table = $model->table;
+        $type = "${table}_deleted";
+
+        switch ($table) {
+            case 'question':
+                foreach ($items as $item) {
+                    NotificationService::add($item['user_id'], $type, [
+                        'question_id' => $item['question_id'],
+                        'content_deleted' => serialize($item),
+                    ]);
+                }
+                break;
+
+            case 'article':
+                foreach ($items as $item) {
+                    NotificationService::add($item['user_id'], $type, [
+                        'article_id' => $item['article_id'],
+                        'content_deleted' => serialize($item),
+                    ]);
+                }
+                break;
+
+            case 'answer':
+                foreach ($items as $item) {
+                    NotificationService::add($item['user_id'], $type, [
+                        'question_id' => $item['question_id'],
+                        'answer_id' => $item['answer_id'],
+                        'content_deleted' => serialize($item),
+                    ]);
+                }
+                break;
+
+            case 'comment':
+                // 对回答的评论，需要查询回答列表
+                $hasAnswer = in_array('answer', array_column($items, 'commentable_type'));
+                $answerIdToQuestionId = [];
+
+                if ($hasAnswer) {
+                    $answerIds = collect($items)->map(function ($value) {
+                        return $value['commentable_type'] === 'answer' ? $value['commentable_id'] : false;
+                    })->unique()->filter()->all();
+
+                    $answerIdToQuestionId = AnswerModel
+                        ::field('question_id')
+                        ->where('answer_id', $answerIds)
+                        ->pluck('question_id', 'answer_id');
+                }
+
+                foreach ($items as $item) {
+                    $relationshipIds = [
+                        'comment_id' => $item['comment_id'],
+                        'content_deleted' => serialize($item),
+                    ];
+
+                    switch ($item['commentable_type']) {
+                        case 'question':
+                            $relationshipIds['question_id'] = $item['commentable_id'];
+                            break;
+
+                        case 'article':
+                            $relationshipIds['article_id'] = $item['commentable_id'];
+                            break;
+
+                        case 'answer':
+                            $relationshipIds['answer_id'] = $item['commentable_id'];
+                            $relationshipIds['question_id'] = $answerIdToQuestionId[$item['commentable_id']];
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    NotificationService::add($item['user_id'], $type, $relationshipIds);
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        NotificationService::send();
+    }
+
+    /**
      * @inheritDoc
      */
     public function deleteMultiple(array $deletableIds): void
@@ -68,17 +164,12 @@ trait Deletable
 
         $model->force()->delete(array_column($items, $primaryKey));
 
-        if ($this->isNeedSendNotification()) {
-            foreach ($items as $item) {
-                if (!$item['delete_time']) {
-                    NotificationService::add($item['user_id'], "{$model->table}_deleted", [
-                        "{$model->table}_id" => $item[$primaryKey],
-                    ]);
-                }
-            }
+        // 不在回收站中才需要发送通知
+        $needSendNotificationItems = collect($items)->map(function ($value) {
+            return $value['delete_time'] ? false : $value;
+        })->filter()->all();
 
-            NotificationService::send();
-        }
+        $this->addNotifications($needSendNotificationItems);
 
         if (method_exists($this, 'afterDelete')) {
             $this->afterDelete($items);
@@ -113,10 +204,8 @@ trait Deletable
         $model->force()->delete($deletableId);
 
         // 不在回收站中才需要发送通知
-        if (!$item['delete_time'] && $this->isNeedSendNotification()) {
-            NotificationService::add($item['user_id'], "{$model->table}_deleted", [
-                "{$model->table}_id" => $deletableId,
-            ])->send();
+        if (!$item['delete_time']) {
+            $this->addNotifications([$item]);
         }
 
         if (method_exists($this, 'afterDelete')) {
@@ -139,16 +228,7 @@ trait Deletable
         }
 
         $model->delete($existIds);
-
-        if ($this->isNeedSendNotification()) {
-            foreach ($existItems as $item) {
-                NotificationService::add($item['user_id'], "{$model->table}_deleted", [
-                    "{$model->table}_id" => $item[$primaryKey],
-                ]);
-            }
-
-            NotificationService::send();
-        }
+        $this->addNotifications($existItems);
 
         $trashedItems = $model->force()->select($existIds);
 
@@ -172,12 +252,7 @@ trait Deletable
         }
 
         $model->delete($id);
-
-        if ($this->isNeedSendNotification()) {
-            NotificationService::add($item['user_id'], "{$model->table}_deleted", [
-                "{$model->table}_id" => $id,
-            ])->send();
-        }
+        $this->addNotifications([$item]);
 
         $trashedItem = $model->force()->get($id);
 

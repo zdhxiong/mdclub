@@ -104,7 +104,9 @@ abstract class Abstracts
 
         foreach ($items as &$item) {
             if (isset($item[$idName])) {
-                $item['relationships'][$name] = $item[$idName] ? $children[$item[$idName]] : null;
+                $item['relationships'][$name] = $item[$idName] && $children[$item[$idName]]
+                    ? $children[$item[$idName]]
+                    : null;
             }
         }
 
@@ -235,11 +237,12 @@ abstract class Abstracts
     /**
      * 转换数据
      *
-     * @param  array $items             数组，或多个元素组成的二维数组
-     * @param  array $knownRelationship 已知的 relationship，若指定了该参数，则对应的字段不再需要计算
+     * @param  array $items                数组，或多个元素组成的二维数组
+     * @param  array $knownRelationship    已知的 relationship，若指定了该参数，则对应的字段不再需要计算
+     * @param  bool  $canWithRelationships 是否允许包含 relationships，若为 false，则不会包含
      * @return array
      */
-    public function transform(array $items, array $knownRelationship = []): array
+    public function transform(array $items, array $knownRelationship = [], bool $canWithRelationships = true): array
     {
         if (!$items) {
             return $items;
@@ -261,11 +264,13 @@ abstract class Abstracts
         })->all();
 
         // 添加 relationships
-        foreach ($this->includes as $include) {
-            $method = Str::toCamelize($include);
+        if ($canWithRelationships) {
+            foreach ($this->includes as $include) {
+                $method = Str::toCamelize($include);
 
-            if (method_exists($this, $method)) {
-                $items = $this->{$method}($items, $knownRelationship);
+                if (method_exists($this, $method)) {
+                    $items = $this->{$method}($items, $knownRelationship);
+                }
             }
         }
 

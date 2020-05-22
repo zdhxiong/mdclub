@@ -12,7 +12,7 @@ use MDClub\Transformer\ReportReason;
  *
  * @method static void  setInclude(array $includes)
  * @method static array getAvailableIncludes()
- * @method static array transform(array $items, array $knownRelationship = [])
+ * @method static array transform(array $items, array $knownRelationship = [], bool $canWithRelationships = true)
  */
 class ReportReasonTransformer extends Facade
 {

@@ -25,6 +25,7 @@ class Notification extends Abstracts
         'answer_id',
         'comment_id',
         'reply_id',
+        'content_deleted',
         'create_time',
         'read_time'
     ];
@@ -40,12 +41,13 @@ class Notification extends Abstracts
     protected function beforeInsert(array $data): array
     {
         return collect($data)->union([
-            'sender_id'   => 0,
-            'article_id'  => 0,
-            'question_id' => 0,
-            'answer_id'   => 0,
-            'comment_id'  => 0,
-            'reply_id'    => 0,
+            'sender_id'       => 0,
+            'article_id'      => 0,
+            'question_id'     => 0,
+            'answer_id'       => 0,
+            'comment_id'      => 0,
+            'reply_id'        => 0,
+            'content_deleted' => '',
         ])->all();
     }
 

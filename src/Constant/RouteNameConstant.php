@@ -19,6 +19,7 @@ class RouteNameConstant
     public const ANSWER = 'answer';
     public const USERS = 'users';
     public const USER = 'user';
+    public const NOTIFICATIONS = 'notifications';
 
     public const RSS_QUESTIONS = 'rss-questions';
     public const RSS_QUESTION_ANSWERS = 'rss-question-answers';

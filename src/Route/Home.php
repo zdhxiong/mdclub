@@ -66,7 +66,8 @@ class Home
             ->setName(RouteNameConstant::USER);
 
         $slim
-            ->get('/notifications', Notification::class . ':index');
+            ->get('/notifications', Notification::class . ':index')
+            ->setName(RouteNameConstant::NOTIFICATIONS);
 
         $slim
             ->get('/inbox', Inbox::class . ':index');

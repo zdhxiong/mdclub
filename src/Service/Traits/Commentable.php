@@ -71,14 +71,17 @@ trait Commentable
                     case 'question':
                         $relationshipIds['question_id'] = $comment['commentable_id'];
                         break;
+
                     case 'article':
                         $relationshipIds['article_id'] = $comment['commentable_id'];
                         break;
+
                     case 'answer':
                         $answer = AnswerModel::field('question_id')->get($comment['commentable_id']);
                         $relationshipIds['answer_id'] = $comment['commentable_id'];
                         $relationshipIds['question_id'] = $answer['question_id'];
                         break;
+
                     default:
                         break;
                 }

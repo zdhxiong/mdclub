@@ -12,7 +12,7 @@ use MDClub\Transformer\Image;
  *
  * @method static void  setInclude(array $includes)
  * @method static array getAvailableIncludes()
- * @method static array transform(array $items, array $knownRelationship = [])
+ * @method static array transform(array $items, array $knownRelationship = [], bool $canWithRelationships = true)
  * @method static array getInRelationship(array $keys)
  */
 class ImageTransformer extends Facade
