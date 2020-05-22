@@ -21,13 +21,21 @@ properties:
       通知类型：
       * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id`
       * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id`
-      * `question_deleted`：提问被删除。此时会包含 `question_id`
+      * `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships` 中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容
       * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id`
-      * `article_deleted`：文章被删除。此时会包含 `article_id`
+      * `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在 `article`，可从 `content_deleted` 字段中获取被删除的文章内容
       * `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id`
-      * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`
+      * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但 `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容
       * `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
-      * `comment_deleted`：评论被删除。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
+      * `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含 `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
+
+      [//]: # (user_followed：有人关注了我。)
+      [//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`)
+      [//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`)
+      [//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`)
+      [//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`)
+      [//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`)
+      [//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`)
     enum:
       - question_answered
       - question_commented
@@ -63,6 +71,13 @@ properties:
     description: 相关回复ID
     minimum: 1
     example: 1
+  content_deleted:
+    description: 已删除的数据，数据中不包含 `relationships`
+    oneOf:
+      - $ref: '#/components/schemas/Question'
+      - $ref: '#/components/schemas/Article'
+      - $ref: '#/components/schemas/Answer'
+      - $ref: '#/components/schemas/Comment'
   create_time:
     type: integer
     description: 通知发送时间
