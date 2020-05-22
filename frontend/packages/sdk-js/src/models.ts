@@ -604,6 +604,10 @@ export interface Notification {
    */
   reply_id: number;
   /**
+   * 被删除的内容的备份
+   */
+  content_deleted: string;
+  /**
    * 通知发送时间
    */
   create_time: number;
