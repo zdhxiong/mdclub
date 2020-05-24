@@ -100,6 +100,9 @@
 /notifications/count:
   $ref: ./notifications.count.yaml
 
+/notifications/read:
+  $ref: ./notifications.read.yaml
+
 /notifications:
   $ref: ./notifications.yaml
 

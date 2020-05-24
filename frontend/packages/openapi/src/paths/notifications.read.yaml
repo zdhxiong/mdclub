@@ -1,0 +1,12 @@
+post:
+  operationId: readAll
+  summary: 把所有通知标记为已读
+  description: |
+    只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
+  responses:
+    '200':
+      $ref: '#/components/responses/Empty'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Notification
