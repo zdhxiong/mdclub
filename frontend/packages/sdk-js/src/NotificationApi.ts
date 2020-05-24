@@ -123,6 +123,13 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/notifications/{notification_id}', params));
 
 /**
+ * 删除所有通知
+ * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+ */
+export const deleteAll = (): Promise<EmptyResponse> =>
+  deleteRequest(buildURL('/notifications', {}));
+
+/**
  * 批量删除通知
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
@@ -165,6 +172,13 @@ export const read = (params: ReadParams): Promise<NotificationResponse> =>
   postRequest(
     buildURL('/notifications/{notification_id}/read', params, ['include']),
   );
+
+/**
+ * 把所有通知标记为已读
+ * 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
+ */
+export const readAll = (): Promise<EmptyResponse> =>
+  postRequest(buildURL('/notifications/read', {}));
 
 /**
  * 批量把通知标记为已读
