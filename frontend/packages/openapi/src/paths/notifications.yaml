@@ -22,6 +22,8 @@ delete:
   summary: 删除所有通知
   description: |
     只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+  parameters:
+    - $ref: '#/components/parameters/notification_type.query'
   responses:
     '200':
       $ref: '#/components/responses/Empty'
