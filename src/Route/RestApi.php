@@ -607,17 +607,21 @@ class RestApi
             ->add(NeedLogin::class);
 
         $group
+            ->post('/notifications/read', Notification::class . ':readAll')
+            ->add(NeedLogin::class);
+
+        $group
             ->get('/notifications', Notification::class . ':getList')
             ->add(TransformerForNotification::class)
             ->add(NeedLogin::class);
 
         $group
-            ->post('/notifications/{notification_ids}/read', Notification::class . ':readMultiple')
-            ->add(TransformerForNotification::class)
+            ->delete('/notifications', Notification::class . ':deleteAll')
             ->add(NeedLogin::class);
 
         $group
-            ->delete('/notifications/{notification_ids}', Notification::class . ':deleteMultiple')
+            ->post('/notifications/{notification_ids}/read', Notification::class . ':readMultiple')
+            ->add(TransformerForNotification::class)
             ->add(NeedLogin::class);
 
         $group
@@ -627,6 +631,10 @@ class RestApi
 
         $group
             ->delete('/notifications/{notification_id:\d+}', Notification::class . ':delete')
+            ->add(NeedLogin::class);
+
+        $group
+            ->delete('/notifications/{notification_ids}', Notification::class . ':deleteMultiple')
             ->add(NeedLogin::class);
     }
 

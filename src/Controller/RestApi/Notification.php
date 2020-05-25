@@ -32,6 +32,18 @@ class Notification extends Abstracts
     }
 
     /**
+     * 把所有通知标记为已读
+     *
+     * @return array
+     */
+    public function readAll(): array
+    {
+        NotificationService::readAll();
+
+        return [];
+    }
+
+    /**
      * 获取通知列表
      *
      * @return array
@@ -39,6 +51,18 @@ class Notification extends Abstracts
     public function getList(): array
     {
         return NotificationService::getList();
+    }
+
+    /**
+     * 删除所有通知
+     *
+     * @return array
+     */
+    public function deleteAll(): array
+    {
+        NotificationService::deleteAll();
+
+        return [];
     }
 
     /**

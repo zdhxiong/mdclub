@@ -50,6 +50,19 @@ class Notification extends Abstracts implements GetableInterface
     }
 
     /**
+     * 把所有通知标记为已读
+     */
+    public function readAll(): void
+    {
+        $model = $this->getModelInstance();
+
+        $model
+            ->where($model->getWhereFromRequest())
+            ->set('read_time', Request::time())
+            ->update();
+    }
+
+    /**
      * @inheritDoc
      */
     public function getList(): array
@@ -61,6 +74,18 @@ class Notification extends Abstracts implements GetableInterface
             ->where($model->getWhereFromRequest($defaultFilter))
             ->order('create_time', 'DESC')
             ->paginate();
+    }
+
+    /**
+     * 删除所有通知
+     */
+    public function deleteAll(): void
+    {
+        $model = $this->getModelInstance();
+
+        $model
+            ->where($model->getWhereFromRequest())
+            ->delete();
     }
 
     /**

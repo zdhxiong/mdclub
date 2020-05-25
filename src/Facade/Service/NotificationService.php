@@ -12,6 +12,8 @@ use MDClub\Service\Notification;
  * Class NotificationService
  *
  * @method static int   getCount()
+ * @method static void  readAll()
+ * @method static void  deleteAll()
  * @method static array readMultiple(array $notificationIds)
  * @method static array read(int $notificationId)
  * @method static void  deleteMultiple(array $notificationIds)
