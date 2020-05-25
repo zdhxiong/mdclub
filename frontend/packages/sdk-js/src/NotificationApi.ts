@@ -14,6 +14,22 @@ interface DeleteParams {
   notification_id: number;
 }
 
+interface DeleteAllParams {
+  /**
+   * 通知类型
+   */
+  type?:
+    | 'question_answered'
+    | 'question_commented'
+    | 'question_deleted'
+    | 'article_commented'
+    | 'article_deleted'
+    | 'answer_commented'
+    | 'answer_deleted'
+    | 'comment_replied'
+    | 'comment_deleted';
+}
+
 interface DeleteMultipleParams {
   /**
    * 多个用 `,` 分隔的通知ID，最多提供 100 个 ID
@@ -96,6 +112,22 @@ interface ReadParams {
   >;
 }
 
+interface ReadAllParams {
+  /**
+   * 通知类型
+   */
+  type?:
+    | 'question_answered'
+    | 'question_commented'
+    | 'question_deleted'
+    | 'article_commented'
+    | 'article_deleted'
+    | 'answer_commented'
+    | 'answer_deleted'
+    | 'comment_replied'
+    | 'comment_deleted';
+}
+
 interface ReadMultipleParams {
   /**
    * 多个用 `,` 分隔的通知ID，最多提供 100 个 ID
@@ -126,8 +158,10 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
  * 删除所有通知
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
-export const deleteAll = (): Promise<EmptyResponse> =>
-  deleteRequest(buildURL('/notifications', {}));
+export const deleteAll = (
+  params: DeleteAllParams = {},
+): Promise<EmptyResponse> =>
+  deleteRequest(buildURL('/notifications', params, ['type']));
 
 /**
  * 批量删除通知
@@ -177,8 +211,8 @@ export const read = (params: ReadParams): Promise<NotificationResponse> =>
  * 把所有通知标记为已读
  * 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
  */
-export const readAll = (): Promise<EmptyResponse> =>
-  postRequest(buildURL('/notifications/read', {}));
+export const readAll = (params: ReadAllParams = {}): Promise<EmptyResponse> =>
+  postRequest(buildURL('/notifications/read', params, ['type']));
 
 /**
  * 批量把通知标记为已读
