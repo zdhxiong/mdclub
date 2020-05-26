@@ -26,6 +26,9 @@ required:
   - question_can_edit_before
   - question_can_edit_only_no_answer
   - question_can_edit_only_no_comment
+  - search_third
+  - search_type
+  - search_url
   - site_description
   - site_gongan_beian
   - site_icp_beian

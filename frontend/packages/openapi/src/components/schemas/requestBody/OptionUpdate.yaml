@@ -210,6 +210,22 @@ properties:
     description: |
       仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
     example: false
+  search_third:
+    type: string
+    enum:
+      - google
+      - bing
+      - sougou
+      - 360
+      - baidu
+    description: 第三方搜索的名称
+    example: google
+  search_type:
+    type: string
+    enum:
+      - third
+    description: 搜索引擎类型
+    example: third
   site_description:
     type: string
     description: 站点简介
