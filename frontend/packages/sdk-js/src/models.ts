@@ -819,6 +819,14 @@ export interface Option {
    */
   question_can_edit_only_no_comment: boolean;
   /**
+   * 第三方搜索的名称
+   */
+  search_third: OptionSearchThirdEnum;
+  /**
+   * 搜索引擎类型
+   */
+  search_type: OptionSearchTypeEnum;
+  /**
    * 站点简介
    */
   site_description: string;
@@ -985,6 +993,21 @@ export type OptionCacheTypeEnum = 'pdo' | 'redis' | 'memcached';
  * Enum for the language property.
  */
 export type OptionLanguageEnum = 'en' | 'pl' | 'ru' | 'zh-CN' | 'zh-TW';
+
+/**
+ * Enum for the search_third property.
+ */
+export type OptionSearchThirdEnum =
+  | 'google'
+  | 'bing'
+  | 'sougou'
+  | '360'
+  | 'baidu';
+
+/**
+ * Enum for the search_type property.
+ */
+export type OptionSearchTypeEnum = 'third';
 
 /**
  * Enum for the smtp_secure property.
@@ -1156,6 +1179,14 @@ export interface OptionUpdateRequestBody {
    * 仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
    */
   question_can_edit_only_no_comment?: boolean;
+  /**
+   * 第三方搜索的名称
+   */
+  search_third?: OptionSearchThirdEnum;
+  /**
+   * 搜索引擎类型
+   */
+  search_type?: OptionSearchTypeEnum;
   /**
    * 站点简介
    */
