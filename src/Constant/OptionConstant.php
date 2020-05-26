@@ -44,6 +44,8 @@ class OptionConstant
     public const QUESTION_CAN_EDIT_BEFORE = 'question_can_edit_before';
     public const QUESTION_CAN_EDIT_ONLY_NO_ANSWER = 'question_can_edit_only_no_answer';
     public const QUESTION_CAN_EDIT_ONLY_NO_COMMENT = 'question_can_edit_only_no_comment';
+    public const SEARCH_TYPE = 'search_type';
+    public const SEARCH_THIRD = 'search_third';
     public const SITE_DESCRIPTION = 'site_description';
     public const SITE_GONGAN_BEIAN = 'site_gongan_beian';
     public const SITE_ICP_BEIAN = 'site_icp_beian';
@@ -115,6 +117,8 @@ class OptionConstant
         self::QUESTION_CAN_EDIT_BEFORE,
         self::QUESTION_CAN_EDIT_ONLY_NO_ANSWER,
         self::QUESTION_CAN_EDIT_ONLY_NO_COMMENT,
+        self::SEARCH_TYPE,
+        self::SEARCH_THIRD,
         self::SITE_DESCRIPTION,
         self::SITE_GONGAN_BEIAN,
         self::SITE_ICP_BEIAN,
