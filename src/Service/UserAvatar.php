@@ -99,8 +99,8 @@ class UserAvatar
         $Avatar = new MDAvatars(mb_substr($user['username'], 0, 1));
         $avatarTmpFilename = Str::guid() . '.png';
         $avatarTmpPath = sys_get_temp_dir() . '/' . $avatarTmpFilename;
-        $Avatar->Save($avatarTmpPath);
-        $Avatar->Free();
+        $Avatar->save($avatarTmpPath);
+        $Avatar->free();
         $uploadedFile = new UploadedFile($avatarTmpPath, $avatarTmpFilename, 'image/png');
 
         // 上传新头像

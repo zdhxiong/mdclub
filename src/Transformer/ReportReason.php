@@ -49,7 +49,7 @@ class ReportReason extends Abstracts
     /**
      * @inheritDoc
      */
-    public function transform(array $items, array $knownRelationship = []): array
+    public function transform(array $items, array $knownRelationship = [], bool $canWithRelationships = true): array
     {
         if (!$items) {
             return $items;
