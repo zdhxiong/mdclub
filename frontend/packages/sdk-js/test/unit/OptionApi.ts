@@ -55,6 +55,8 @@ const optionUpdateData: Option = {
   question_can_edit_before: 0,
   question_can_edit_only_no_answer: true,
   question_can_edit_only_no_comment: true,
+  search_third: 'bing',
+  search_type: 'third',
   site_description: 'MDClub 是一个优雅的社区应用',
   site_gongan_beian: '备案号',
   site_icp_beian: '浙-99999999',
