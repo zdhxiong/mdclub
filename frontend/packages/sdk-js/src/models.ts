@@ -1000,7 +1000,7 @@ export type OptionLanguageEnum = 'en' | 'pl' | 'ru' | 'zh-CN' | 'zh-TW';
 export type OptionSearchThirdEnum =
   | 'google'
   | 'bing'
-  | 'sougou'
+  | 'sogou'
   | '360'
   | 'baidu';
 
