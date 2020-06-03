@@ -1,0 +1,6 @@
+name: start_date
+in: query
+description: 统计数据的起始日期，例如 `2017-3-14`
+schema:
+  type: string
+example: 2017-3-14

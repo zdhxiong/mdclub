@@ -39,3 +39,6 @@
 
 - name: Image
   description: 图片
+
+- name: Stats
+  description: 数据统计

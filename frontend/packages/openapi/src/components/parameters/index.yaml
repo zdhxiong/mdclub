@@ -26,6 +26,8 @@ disabled.query:
   $ref: ./disabled.query.yaml
 email.query:
   $ref: ./email.query.yaml
+end_date.query:
+  $ref: ./end_date.query.yaml
 image_key.path:
   $ref: ./image_key.path.yaml
 image_key.query:
@@ -52,6 +54,8 @@ include.report:
   $ref: ./include.report.yaml
 include.reportReason:
   $ref: ./include.reportReason.yaml
+include.stats:
+  $ref: ./include.stats.yaml
 include.topic:
   $ref: ./include.topic.yaml
 include.user:
@@ -94,6 +98,8 @@ reportable_type.path:
   $ref: ./reportable_type.path.yaml
 reportable_type.query:
   $ref: ./reportable_type.query.yaml
+start_date.query:
+  $ref: ./start_date.query.yaml
 token:
   $ref: ./token.yaml
 topic_id.path:

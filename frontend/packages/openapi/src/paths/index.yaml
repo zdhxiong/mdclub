@@ -163,6 +163,9 @@
 /reports/{reportable_type}:{reportable_id}:
   $ref: ./reports.{reportable_type}-{reportable_id}.yaml
 
+/stats:
+  $ref: ./stats.yaml
+
 /tokens:
   $ref: ./tokens.yaml
 

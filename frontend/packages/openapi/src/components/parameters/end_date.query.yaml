@@ -1,0 +1,6 @@
+name: end_date
+in: query
+description: 统计数据的截止日期，例如 `2020-5-12`
+schema:
+  type: string
+example: 2020-5-12

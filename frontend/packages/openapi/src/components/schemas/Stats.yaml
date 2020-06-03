@@ -26,24 +26,24 @@ properties:
     type: object
     description: 键名为日期，键值为当日新增用户量
     additionalProperties:
-      type: string
+      type: integer
   new_question:
     type: object
     description: 键名为日期，键值为当日新增提问数量
     additionalProperties:
-      type: string
+      type: integer
   new_article:
     type: object
     description: 键名为日期，键值为当日新增文章数量
     additionalProperties:
-      type: string
+      type: integer
   new_answer:
     type: object
     description: 键名为日期，键值为当日新增回答数量
     additionalProperties:
-      type: string
+      type: integer
   new_comment:
     type: object
     description: 键名为日期，键值为当日新增评论数量
     additionalProperties:
-      type: string
+      type: integer
