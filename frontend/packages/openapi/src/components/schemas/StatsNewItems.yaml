@@ -1,0 +1,14 @@
+type: object
+properties:
+  date:
+    type: string
+    description: 日期
+    example: 2020-5-19
+  count:
+    type: integer
+    description: 当日新增数量
+    minimum: 0
+    example: 12
+required:
+  - date
+  - count

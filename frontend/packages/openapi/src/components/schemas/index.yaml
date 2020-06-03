@@ -33,6 +33,8 @@ ReportGroup:
   $ref: ./ReportGroup.yaml
 Stats:
   $ref: ./Stats.yaml
+StatsNewItems:
+  $ref: ./StatsNewItems.yaml
 SystemInfo:
   $ref: ./SystemInfo.yaml
 Token:

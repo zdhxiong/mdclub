@@ -23,27 +23,22 @@ properties:
     description: 评论总数
     example: 234
   new_user:
-    type: object
-    description: 键名为日期，键值为当日新增用户量
-    additionalProperties:
-      type: integer
+    type: array
+    items:
+      $ref: '#/components/schemas/StatsNewItems'
   new_question:
-    type: object
-    description: 键名为日期，键值为当日新增提问数量
-    additionalProperties:
-      type: integer
+    type: array
+    items:
+      $ref: '#/components/schemas/StatsNewItems'
   new_article:
-    type: object
-    description: 键名为日期，键值为当日新增文章数量
-    additionalProperties:
-      type: integer
+    type: array
+    items:
+      $ref: '#/components/schemas/StatsNewItems'
   new_answer:
-    type: object
-    description: 键名为日期，键值为当日新增回答数量
-    additionalProperties:
-      type: integer
+    type: array
+    items:
+      $ref: '#/components/schemas/StatsNewItems'
   new_comment:
-    type: object
-    description: 键名为日期，键值为当日新增评论数量
-    additionalProperties:
-      type: integer
+    type: array
+    items:
+      $ref: '#/components/schemas/StatsNewItems'
