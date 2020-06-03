@@ -1654,6 +1654,97 @@ export interface ReportsResponse {
   pagination: Pagination;
 }
 
+export interface Stats {
+  system_info?: SystemInfo;
+  /**
+   * 用户总数（含被禁用）
+   */
+  total_user?: number;
+  /**
+   * 提问总数
+   */
+  total_question?: number;
+  /**
+   * 文章总数
+   */
+  total_article?: number;
+  /**
+   * 回答总数
+   */
+  total_answer?: number;
+  /**
+   * 评论总数
+   */
+  total_comment?: number;
+  /**
+   * 键名为日期，键值为当日新增用户量
+   */
+  new_user?: { [key: string]: number };
+  /**
+   * 键名为日期，键值为当日新增提问数量
+   */
+  new_question?: { [key: string]: number };
+  /**
+   * 键名为日期，键值为当日新增文章数量
+   */
+  new_article?: { [key: string]: number };
+  /**
+   * 键名为日期，键值为当日新增回答数量
+   */
+  new_answer?: { [key: string]: number };
+  /**
+   * 键名为日期，键值为当日新增评论数量
+   */
+  new_comment?: { [key: string]: number };
+}
+
+export interface StatsResponse {
+  /**
+   * 无任务错误时，状态码为 0
+   */
+  code: number;
+  data: Stats;
+}
+
+export interface SystemInfo {
+  /**
+   * MDClub 的版本号
+   */
+  mdclub_version?: string;
+  /**
+   * 操作系统版本
+   */
+  os_version?: string;
+  /**
+   * PHP 版本号
+   */
+  php_version?: string;
+  /**
+   * Web Server 版本号
+   */
+  webserver_version?: string;
+  /**
+   * 数据库版本
+   */
+  database_version?: string;
+  /**
+   * 服务器上传文件大小限制
+   */
+  upload_max_filesize?: string;
+  /**
+   * PHP 执行时间限制
+   */
+  max_execution_time?: string;
+  /**
+   * 服务器剩余硬盘容量
+   */
+  disk_free_space?: string;
+  /**
+   * 数据库大小
+   */
+  database_size?: string;
+}
+
 export interface Token {
   /**
    * Token 字符串

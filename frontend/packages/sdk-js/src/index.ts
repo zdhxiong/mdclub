@@ -11,6 +11,7 @@ import * as NotificationApi from './NotificationApi';
 import * as OptionApi from './OptionApi';
 import * as QuestionApi from './QuestionApi';
 import * as ReportApi from './ReportApi';
+import * as StatsApi from './StatsApi';
 import * as TokenApi from './TokenApi';
 import * as TopicApi from './TopicApi';
 import * as UserApi from './UserApi';
@@ -30,6 +31,7 @@ export {
   OptionApi,
   QuestionApi,
   ReportApi,
+  StatsApi,
   TokenApi,
   TopicApi,
   UserApi,
