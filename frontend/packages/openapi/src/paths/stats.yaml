@@ -1,0 +1,19 @@
+get:
+  operationId: getStats
+  summary: 🔐获取站点统计数据
+  description: 仅管理员可调用该接口。
+  parameters:
+    - $ref: '#/components/parameters/include.stats'
+    - name: start_date
+      in: query
+      description: 统计数据的起始日期，例如 `2017-3-14`
+    - name: end_date
+      in: query
+      description: 统计数据的截止日期，例如 `2020-5-12`
+  responses:
+    '200':
+      $ref: '#/components/responses/Stats'
+    default:
+      $ref: '#/components/responses/Error'
+  tags:
+    - Stats

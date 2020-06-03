@@ -1,0 +1,5 @@
+description: 统计数据
+content:
+  application/json:
+    schema:
+      $ref: '#/components/schemas/StatsResponse'

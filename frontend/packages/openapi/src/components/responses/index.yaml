@@ -42,6 +42,8 @@ ReportGroups:
   $ref: ./ReportGroups.yaml
 Reports:
   $ref: ./Reports.yaml
+Stats:
+  $ref: ./Stats.yaml
 Token:
   $ref: ./Token.yaml
 Topic:

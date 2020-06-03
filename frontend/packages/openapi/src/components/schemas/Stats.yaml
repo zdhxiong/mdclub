@@ -1,0 +1,49 @@
+type: object
+properties:
+  system_info:
+    $ref: '#/components/schemas/SystemInfo'
+  total_user:
+    type: integer
+    description: 用户总数（含被禁用）
+    example: 243235
+  total_question:
+    type: integer
+    description: 提问总数
+    example: 5453
+  total_article:
+    type: integer
+    description: 文章总数
+    example: 123
+  total_answer:
+    type: integer
+    description: 回答总数
+    example: 5523
+  total_comment:
+    type: integer
+    description: 评论总数
+    example: 234
+  new_user:
+    type: object
+    description: 键名为日期，键值为当日新增用户量
+    additionalProperties:
+      type: string
+  new_question:
+    type: object
+    description: 键名为日期，键值为当日新增提问数量
+    additionalProperties:
+      type: string
+  new_article:
+    type: object
+    description: 键名为日期，键值为当日新增文章数量
+    additionalProperties:
+      type: string
+  new_answer:
+    type: object
+    description: 键名为日期，键值为当日新增回答数量
+    additionalProperties:
+      type: string
+  new_comment:
+    type: object
+    description: 键名为日期，键值为当日新增评论数量
+    additionalProperties:
+      type: string

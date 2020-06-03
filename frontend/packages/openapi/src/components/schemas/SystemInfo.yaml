@@ -1,0 +1,38 @@
+type: object
+properties:
+  mdclub_version:
+    type: string
+    description: MDClub 的版本号
+    example: '1.0'
+  os_version:
+    type: string
+    description: 操作系统版本
+    example: Windows NT 10.0 build 19041 (Windows 10) AMD64
+  php_version:
+    type: string
+    description: PHP 版本号
+    example: 7.4.3
+  webserver_version:
+    type: string
+    description: Web Server 版本号
+    example: Apache/2.4.39
+  database_version:
+    type: string
+    description: 数据库版本
+    example: mysql 8.0.17
+  upload_max_filesize:
+    type: string
+    description: 服务器上传文件大小限制
+    example: 2M
+  max_execution_time:
+    type: string
+    description: PHP 执行时间限制
+    example: 120秒
+  disk_free_space:
+    type: string
+    description: 服务器剩余硬盘容量
+    example: 120.02G
+  database_size:
+    type: string
+    description: 数据库大小
+    example: 12M

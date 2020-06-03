@@ -31,6 +31,10 @@ Report:
   $ref: ./Report.yaml
 ReportGroup:
   $ref: ./ReportGroup.yaml
+Stats:
+  $ref: ./Stats.yaml
+SystemInfo:
+  $ref: ./SystemInfo.yaml
 Token:
   $ref: ./Token.yaml
 Topic:
@@ -133,6 +137,8 @@ ReportResponse:
   $ref: ./response/Report.yaml
 ReportsResponse:
   $ref: ./response/Reports.yaml
+StatsResponse:
+  $ref: ./response/Stats.yaml
 TokenResponse:
   $ref: ./response/Token.yaml
 TopicResponse:

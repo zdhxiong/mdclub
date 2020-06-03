@@ -215,8 +215,8 @@ properties:
     enum:
       - google
       - bing
-      - sougou
-      - 360
+      - sogou
+      - '360'
       - baidu
     description: 第三方搜索的名称
     example: google
