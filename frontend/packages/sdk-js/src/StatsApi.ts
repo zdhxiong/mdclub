@@ -33,5 +33,5 @@ interface GetStatsParams {
  * 🔐获取站点统计数据
  * 仅管理员可调用该接口。
  */
-export const getStats = (params: GetStatsParams): Promise<StatsResponse> =>
+export const get = (params: GetStatsParams): Promise<StatsResponse> =>
   getRequest(buildURL('/stats', params, ['include', 'start_date', 'end_date']));
