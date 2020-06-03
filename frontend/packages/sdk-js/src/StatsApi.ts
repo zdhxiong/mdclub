@@ -2,7 +2,7 @@ import { getRequest } from './util/requestAlias';
 import { buildURL } from './util/requestHandler';
 import { StatsResponse } from './models';
 
-interface GetStatsParams {
+interface GetParams {
   /**
    * 统计数据中包含的数据，用“,”分隔，可以为 `system_info`, `total_user`, `total_question`, `total_article`, `total_answer`, `total_comment`, `new_user`, `new_question`, `new_article`, `new_answer`, `new_comment`
    */
@@ -33,5 +33,5 @@ interface GetStatsParams {
  * 🔐获取站点统计数据
  * 仅管理员可调用该接口。
  */
-export const get = (params: GetStatsParams): Promise<StatsResponse> =>
+export const get = (params: GetParams): Promise<StatsResponse> =>
   getRequest(buildURL('/stats', params, ['include', 'start_date', 'end_date']));

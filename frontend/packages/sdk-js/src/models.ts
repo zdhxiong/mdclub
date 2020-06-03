@@ -1677,25 +1677,36 @@ export interface Stats {
    */
   total_comment?: number;
   /**
-   * 键名为日期，键值为当日新增用户量
+   * 每日用户增长数量
    */
-  new_user?: { [key: string]: number };
+  new_user?: Array<StatsNewItems>;
   /**
-   * 键名为日期，键值为当日新增提问数量
+   * 每日提问增长数量
    */
-  new_question?: { [key: string]: number };
+  new_question?: Array<StatsNewItems>;
   /**
-   * 键名为日期，键值为当日新增文章数量
+   * 每日文章增长数量
    */
-  new_article?: { [key: string]: number };
+  new_article?: Array<StatsNewItems>;
   /**
-   * 键名为日期，键值为当日新增回答数量
+   * 每日回答增长数量
    */
-  new_answer?: { [key: string]: number };
+  new_answer?: Array<StatsNewItems>;
   /**
-   * 键名为日期，键值为当日新增评论数量
+   * 每日评论增长数量
    */
-  new_comment?: { [key: string]: number };
+  new_comment?: Array<StatsNewItems>;
+}
+
+export interface StatsNewItems {
+  /**
+   * 日期
+   */
+  date: string;
+  /**
+   * 当日新增数量
+   */
+  count: number;
 }
 
 export interface StatsResponse {
