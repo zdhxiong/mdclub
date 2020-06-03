@@ -24,21 +24,26 @@ properties:
     example: 234
   new_user:
     type: array
+    description: 每日用户增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
   new_question:
     type: array
+    description: 每日提问增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
   new_article:
     type: array
+    description: 每日文章增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
   new_answer:
     type: array
+    description: 每日回答增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
   new_comment:
     type: array
+    description: 每日评论增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
