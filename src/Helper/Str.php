@@ -15,6 +15,36 @@ use Parsedown;
 class Str
 {
     /**
+     * 检查字符串是否是日期格式
+     *
+     * @param  string $dateString
+     * @return bool
+     */
+    public static function isDate(string $dateString): bool
+    {
+        return strtotime(date('Y-m-d', strtotime($dateString))) === strtotime($dateString);
+    }
+
+    /**
+     * 把存储容量数值格式化为可读的格式
+     *
+     * @param  int    $memory
+     * @return string
+     */
+    public static function memoryFormat(int $memory): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $pos = 0;
+
+        while ($memory >= 1024) {
+            $memory /= 1024;
+            $pos++;
+        }
+
+        return round($memory, 2) . ' ' . $units[$pos];
+    }
+
+    /**
      * 下划线转驼峰
      *
      * @param  string $str

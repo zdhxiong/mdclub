@@ -14,6 +14,7 @@ use MDClub\Controller\RestApi\Notification;
 use MDClub\Controller\RestApi\Option;
 use MDClub\Controller\RestApi\Question;
 use MDClub\Controller\RestApi\Report;
+use MDClub\Controller\RestApi\Stats;
 use MDClub\Controller\RestApi\Token;
 use MDClub\Controller\RestApi\Topic;
 use MDClub\Controller\RestApi\User;
@@ -51,6 +52,7 @@ class RestApi
                     return App::$container->get(ResponseInterface::class);
                 });
 
+                $route->stats($group);
                 $route->token($group);
                 $route->option($group);
                 $route->user($group);
@@ -237,6 +239,17 @@ class RestApi
         $group
             ->delete($pattern, "{$controllerPath}:deleteVote")
             ->add(NeedLogin::class);
+    }
+
+    /**
+     * 统计数据
+     *
+     * @param RouteCollectorProxy $group
+     */
+    protected function stats(RouteCollectorProxy $group): void
+    {
+        $group->get('/stats', Stats::class . ':get')
+            ->add(NeedManager::class);
     }
 
     /**

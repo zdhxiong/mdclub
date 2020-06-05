@@ -17,6 +17,8 @@
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-iconv": "*",
+        "ext-com": "*",
+        "ext-csprng": "*",
         "psr/container": "^1.0",
         "pimple/pimple": "^3.3",
         "psr/http-client": "^1.0",

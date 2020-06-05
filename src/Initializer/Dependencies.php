@@ -36,6 +36,7 @@ use MDClub\Service\Image as ImageService;
 use MDClub\Service\Notification as NotificationService;
 use MDClub\Service\Question as QuestionService;
 use MDClub\Service\Report as ReportService;
+use MDClub\Service\Stats as StatsService;
 use MDClub\Service\Token as TokenService;
 use MDClub\Service\Topic as TopicService;
 use MDClub\Service\User as UserService;
@@ -112,6 +113,7 @@ class Dependencies
         $container->add(NotificationService::class);
         $container->add(QuestionService::class);
         $container->add(ReportService::class);
+        $container->add(StatsService::class);
         $container->add(TokenService::class);
         $container->add(TopicService::class);
         $container->add(UserService::class);

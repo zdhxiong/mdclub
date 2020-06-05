@@ -7,6 +7,7 @@ namespace MDClub\Middleware;
 use MDClub\Facade\Library\Cache;
 use MDClub\Facade\Library\Db;
 use MDClub\Facade\Library\Request;
+use MDClub\Helper\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -48,25 +49,6 @@ class Trace implements MiddlewareInterface
     }
 
     /**
-     * 把内存数值格式化为可读的格式
-     *
-     * @param  int    $memory 数值形式的内存
-     * @return string         格式化后的内存信息
-     */
-    protected function memoryFormat(int $memory): string
-    {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $pos = 0;
-
-        while ($memory >= 1024) {
-            $memory /= 1024;
-            $pos++;
-        }
-
-        return round($memory, 2) . ' ' . $units[$pos];
-    }
-
-    /**
      * 把时间数值转化为可读的格式
      *
      * @param  float   $time 微秒时间
@@ -100,7 +82,7 @@ class Trace implements MiddlewareInterface
 
         return [
             'TimeUsage'                    => $this->timeFormat($time),
-            'MemoryUsage'                  => $this->memoryFormat(memory_get_usage()),
+            'MemoryUsage'                  => Str::memoryFormat(memory_get_usage()),
             'ThroughputRate'               => number_format(1 / $time, 2) . ' req/s',
             'Cache(' . count($cache) . ')' => $cache,
             'SQL(' . count($sql) . ')'     => $sql,
