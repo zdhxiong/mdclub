@@ -1,0 +1,46 @@
+@import '../../vendor/mdui/variable.less';
+
+.mc-icon-button {
+  overflow: visible;
+
+  &.active {
+    .mdui-icon {
+      color: @primaryColor !important;
+
+      .mdui-theme-layout-dark & {
+        color: @primaryColorDark !important;
+      }
+    }
+  }
+
+  &+button {
+    margin-left: 8px;
+  }
+
+  .badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    height: 14px;
+    padding: 0 4px;
+    color: #fff;
+    font-size: 10px;
+    line-height: 14px;
+    background-color: rgba(red(@primaryColor), green(@primaryColor), blue(@primaryColor), .64);
+    border-radius: 7px;
+
+    .mdui-theme-layout-dark & {
+      background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), .64);
+    }
+  }
+
+  i {
+    font-size: 15px;
+  }
+
+  &.mdui-btn-dense {
+    i {
+      font-size: 14px;
+    }
+  }
+}

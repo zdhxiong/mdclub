@@ -1,0 +1,95 @@
+@import "../../../../../../vendor/mdui/variable.less";
+
+.mc-appbar .toolbar .search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 722px;
+  height: 46px;
+  margin-left: 30px;
+  background-color: #f1f3f4;
+  border-radius: 8px;
+  transition-duration: 180ms;
+  transition-property: background-color, box-shadow;
+
+  @media (max-width: @screen-xs-max) {
+    display: none;
+  }
+
+  &.focus {
+    background-color: #fff;
+    box-shadow: 0 1px 1px 0 rgba(65, 69, 73, .3), 0 1px 3px 1px rgba(65, 69, 73, .15);
+  }
+
+  .mdui-theme-layout-dark & {
+    background-color: @layout-dark-color-4 !important;
+
+    input {
+      color: #fff;
+    }
+
+    &.focus {
+      box-shadow: 0 2px 3px 0 rgba(0, 0, 0, .6), 0 6px 10px 4px rgba(0, 0, 0, .3);
+    }
+  }
+
+  input {
+    flex: 1;
+    height: 46px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+
+  .back,
+  .submit,
+  .cancel {
+    margin: 0 5px;
+  }
+
+  .back,
+  .cancel {
+    display: none;
+  }
+
+  &.not-empty {
+    .cancel {
+      display: flex;
+    }
+  }
+}
+
+.mc-appbar .toolbar.mobile {
+  .headline,
+  .title,
+  .search-icon,
+  .notification,
+  .avatar {
+    display: none;
+  }
+
+  .search-bar {
+    position: absolute;
+    display: flex;
+    height: 100%;
+    margin: 0;
+    background-color: #fff;
+    border-radius: 0;
+
+    .mdui-theme-layout-dark & {
+      background-color: @layout-dark-color-4 !important;
+    }
+
+    &.focus {
+      box-shadow: none;
+    }
+
+    .back {
+      display: flex;
+    }
+
+    .submit {
+      display: none;
+    }
+  }
+}

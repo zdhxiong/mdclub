@@ -1,34 +1,29 @@
+import '~/initializer/polyfill';
 import { app } from 'hyperapp';
-import { location } from '@hyperapp/router';
-import 'mdn-polyfills/CustomEvent';
-import Cookies from 'js-cookie';
-import mdui from 'mdui';
-import { defaults } from 'mdclub-sdk-js';
-import '../node_modules/mdui/dist/css/mdui.min.css';
-import '../node_modules/highlight.js/styles/github-gist.css';
+import { location } from 'hyperapp-router';
+import $ from 'mdui.jq';
+import { emit } from '~/utils/pubsub';
+import '~/initializer/index';
+import actions from '~/initializer/actions';
+import state from '~/initializer/state';
+import view from '~/initializer/view.jsx';
+import listener from '~/initializer/listener';
 
-import './init';
-import './init/index.less';
+// import { withLogger } from '@hyperapp/logger';
 
-import actions from './init/actions';
-import state from './init/state';
-import view from './init/view';
+$(() => {
+  document.body.innerHTML = '';
 
-// 设置 API 默认参数
-defaults.token = Cookies.get('token');
-defaults.baseURL = window.G_API;
-defaults.error = function () {
-  mdui.snackbar('网络连接失败');
-};
+  // window.app = withLogger(app)(state, actions, view, document.body);
+  window.app = app(state, actions, view, document.body);
 
-document.body.innerHTML = '';
+  listener(window.app);
+  location.subscribe(window.app.location);
 
-window.main = app(state, actions, view, document.body);
-location.subscribe(window.main.location);
-
-// 读取当前登陆用户
-const user = window.G_USER;
-if (user) {
-  window.main.user.setState({ user });
-  window.G_USER = null;
-}
+  // 读取当前登陆用户
+  const user = window.G_USER;
+  if (user) {
+    emit('user_update', user);
+    window.G_USER = null;
+  }
+});

@@ -1,0 +1,72 @@
+.mc-user-popover {
+  .popover {
+    z-index: 5999;
+    width: 320px;
+    padding: 16px;
+    overflow: visible;
+    cursor: default;
+  }
+
+  .mdui-spinner {
+    display: block;
+    margin: 20px auto;
+  }
+
+  .mc-user-line {
+    height: 48px;
+    padding-bottom: 16px;
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background-size: 48px 48px;
+    }
+
+    .username {
+      margin-left: 16px;
+      font-size: 17px;
+      line-height: 28px;
+    }
+
+    .headline {
+      margin-left: 64px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+  }
+
+  .stats {
+    display: flex;
+
+    a,
+    button {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      min-width: auto;
+      height: auto;
+      padding: 4px 0 3px 0;
+      line-height: 24px;
+
+      label,
+      span {
+        cursor: pointer;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+  }
+}

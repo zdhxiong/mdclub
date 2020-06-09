@@ -1,0 +1,61 @@
+@import "../../../../vendor/mdui/variable.less";
+
+#page-question .answers .item,
+.mc-comments .item {
+  padding: 16px 64px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  .mdui-theme-layout-dark & {
+    border-bottom-color: rgba(255, 255, 255, .12);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .content {
+    padding-top: 16px;
+    padding-left: 64px;
+  }
+
+  .reply_count,
+  .reply_more {
+    margin-top: 16px;
+    margin-left: 64px;
+  }
+
+  .actions {
+    display: flex;
+    margin-top: 16px;
+    padding-left: 64px;
+  }
+
+  .new-comment {
+    padding-left: 64px;
+  }
+
+  @media (max-width: 849px) {
+    .content,
+    .actions,
+    .new-comment {
+      padding-left: 0;
+    }
+
+    .reply_count {
+      margin-left: 0;
+    }
+
+    .reply_more {
+      margin-left: 40px;
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    padding-right: 16px;
+    padding-left: 16px;
+
+    .content {
+      padding-top: 16px;
+    }
+  }
+}

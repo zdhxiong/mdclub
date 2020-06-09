@@ -1,0 +1,30 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": [
+    "react"
+  ],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "rules": {
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/no-absolute-path": 0,
+    "camelcase": 0,
+    "no-unused-vars": [2, { "varsIgnorePattern": "h" }],
+    "react/jsx-uses-vars": 2,
+    "no-param-reassign": 0,
+    "func-names": 0
+  }
+}

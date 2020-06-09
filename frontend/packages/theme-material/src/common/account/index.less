@@ -1,0 +1,109 @@
+@import "../../vendor/mdui/variable.less";
+@import "../../utils/mixin.less";
+
+.mc-account {
+  max-width: 448px;
+  overflow-y: auto;
+
+  .arrow_back,
+  .close {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    display: block;
+    color: #fff;
+  }
+
+  .avatar {
+    position: absolute;
+    top: 40px;
+    left: 36px;
+    display: block;
+    color: rgba(255, 255, 255, 0.56);
+    font-size: 76px;
+  }
+
+  .mdui-dialog-title {
+    margin-bottom: 24px;
+    padding: 146px 40px 28px 40px;
+    color: #fff;
+
+    .mdui-theme-layout-dark & {
+      background-color: @layout-dark-color-3;
+    }
+  }
+
+  form {
+    padding: 0 40px 62px 40px;
+  }
+
+  .more-option {
+    margin-left: -16px;
+  }
+
+  .captcha-field {
+    margin-right: 116px;
+    overflow: visible;
+  }
+
+  .captcha-image {
+    position: absolute;
+    right: -116px;
+    bottom: 29px;
+    cursor: pointer;
+  }
+
+  .send-email-field {
+    margin-right: 116px;
+    overflow: visible;
+  }
+
+  .send-email {
+    position: absolute;
+    right: -116px;
+    bottom: 29px;
+  }
+
+  .actions {
+    margin-top: 24px;
+  }
+
+  .action-btn {
+    float: right;
+
+    .mdui-theme-layout-dark & {
+      background-color: #525252 !important;
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    .mc-dialog-fullscreen();
+
+    .back,
+    .close {
+      top: 10px;
+      left: 8px;
+    }
+
+    .avatar {
+      display: none;
+    }
+
+    .mdui-dialog-title {
+      padding: 10px 16px 10px 52px;
+      line-height: 36px;
+    }
+
+    form {
+      padding: 0 24px 24px 24px;
+
+      .mdui-textfield {
+        padding-top: 4px;
+      }
+    }
+
+    .actions {
+      margin-top: 14px;
+    }
+  }
+}

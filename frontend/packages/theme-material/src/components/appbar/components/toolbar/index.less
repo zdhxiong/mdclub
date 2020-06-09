@@ -1,0 +1,46 @@
+@import "../../../../vendor/mdui/variable.less";
+
+.mc-appbar .toolbar {
+  position: relative;
+
+  .headline,
+  .title {
+    overflow: visible;
+    opacity: .87;
+  }
+
+  .headline {
+    font-weight: 400;
+    font-size: 24px;
+
+    @media (max-width: @screen-xs-max) {
+      max-width: 124px;
+      overflow: hidden;
+    }
+  }
+
+  .title {
+    font-size: 20px;
+    letter-spacing: .02em;
+
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+
+  .login,
+  .register {
+    min-width: 52px !important;
+    margin: 0 24px 0 0 !important;
+
+    @media (max-width: @screen-sm-max) {
+      margin-right: 16px !important;
+      padding: 0 12px;
+    }
+
+    @media (max-width: @screen-xs-max) {
+      margin-right: 8px !important;
+      padding: 0 8px;
+    }
+  }
+}

@@ -1,77 +1,65 @@
-#page-users {
-  .item {
-    margin-bottom: 16px;
+@import '../../../../vendor/mdui/variable.less';
 
-    .info {
-      display: block;
-      text-decoration: none;
-      box-sizing: border-box;
+#page-users .item {
+  margin-bottom: 16px;
 
-      .avatar {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-        margin: 24px auto 16px auto;
-        background-size: 96px 96px;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
+  @media (max-width: @screen-xs-max) {
+    margin-bottom: 8px;
+  }
 
-      .username,
-      .headline {
-        padding: 0 16px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-break: break-all;
-        text-align: center;
-      }
+  .info {
+    display: block;
+    box-sizing: border-box;
+    text-decoration: none;
+  }
 
-      .username {
-        color: rgba(0, 0, 0, 0.87);
-        font-size: 17px;
-        line-height: 20px;
-        height: 20px;
-      }
+  .avatar {
+    width: 96px;
+    height: 96px;
+    margin: 24px auto 16px auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 96px 96px;
+    border-radius: 50%;
 
-      .headline {
-        color: rgba(0, 0, 0, 0.54);
-        font-size: 15px;
-        margin: 8px 0 16px 0;
-        line-height: 20px;
-        height: 20px;
-      }
-    }
-
-    .actions {
-      padding: 8px 0;
-      height: 36px;
-
-      .mdui-btn {
-        &.following {
-          opacity: 0.54;
-        }
-      }
+    @media (max-width: @screen-xs-max) {
+      width: 80px;
+      height: 80px;
+      margin: 16px auto 12px auto;
+      background-size: 80px 80px;
     }
   }
 
-  @media (max-width: 559px) {
-    .item {
-      margin-bottom: 8px;
+  .username,
+  .headline {
+    padding: 0 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
 
-      .info {
-        .avatar {
-          height: 80px;
-          width: 80px;
-          margin: 16px auto 12px auto;
-          background-size: 80px 80px;
-          background-position: center;
-        }
+  .username {
+    height: 20px;
+    font-size: 17px;
+    line-height: 20px;
+  }
 
-        .headline {
-          margin: 8px 0;
-        }
-      }
+  .headline {
+    height: 20px;
+    margin: 8px 0 16px 0;
+    font-size: 15px;
+    line-height: 20px;
+
+    @media (max-width: @screen-xs-max) {
+      margin: 8px 0;
     }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 8px 8px 16px;
   }
 }

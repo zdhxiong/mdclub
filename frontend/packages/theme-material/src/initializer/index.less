@@ -1,0 +1,141 @@
+@import '../vendor/mdui/index.less';
+@import '../vendor/mdui.editor/index.less';
+
+/* placeholder 颜色 */
+::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+:-moz-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+::-moz-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+:-ms-input-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.mdui-typo {
+  pre {
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 4px;
+  }
+
+  p {
+    min-height: .3em;
+  }
+}
+
+/**
+ * 应用最外层
+ */
+.mg-app {
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+/* 带文字的 fab 按钮 */
+.mdui-fab-extended {
+  width: auto;
+  min-width: auto;
+  height: 48px;
+  padding-left: 48px !important;
+  border-radius: 24px;
+}
+
+.mdui-fab-extended .mdui-icon {
+  margin-top: 12px;
+  margin-left: 12px;
+}
+
+.mdui-fab-extended span {
+  float: left;
+  margin-right: 20px;
+  font-size: 14px;
+
+  @media (max-width: @screen-xs-max) {
+    display: none;
+  }
+}
+
+/* 加载状态遮罩 */
+.mc-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, .65);
+  opacity: 0;
+  transition: opacity .2s ease;
+  will-change: opacity;
+}
+
+.mc-loading-overlay-show {
+  opacity: 1;
+}
+
+.mdui-container {
+  width: 100%;
+  max-width: 1100px;
+  padding: 8px 0 62px 0;
+
+  @media (min-width: @screen-sm-min) {
+    width: 96%;
+    padding-top: 16px;
+  }
+
+  @media (min-width: @screen-md-min) {
+    padding: 24px 8px 62px 8px;
+  }
+}
+
+.mdui-theme-layout-dark .mdui-btn-raised {
+  background-color: @layout-dark-color-4;
+}
+
+/* 带边框的按钮 */
+.mdui-btn-outlined {
+  line-height: 34px;
+  border: 1px solid rgba(0, 0, 0, .12);
+
+  &.mdui-btn-dense {
+    line-height: 30px;
+  }
+
+  &.mdui-color-theme {
+    border-color: @primaryColor;
+  }
+
+  .mdui-theme-layout-dark & {
+    border-color: rgba(255, 255, 255, .12);
+  }
+}

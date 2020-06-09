@@ -1,0 +1,44 @@
+@import "../../../../vendor/mdui/variable.less";
+
+.mc-comments .item .item {
+  padding-right: 0;
+  border-bottom: none;
+
+  .mc-user-line {
+    height: 24px;
+
+    .avatar {
+      width: 24px;
+      height: 24px;
+      background-size: 24px 24px;
+    }
+
+    .username {
+      margin-left: 16px;
+      line-height: 24px;
+    }
+
+    .headline {
+      display: none;
+    }
+  }
+
+  .content,
+  .actions {
+    padding-left: 40px;
+  }
+
+  @media (max-width: 849px) {
+    padding-left: 40px;
+
+    .content,
+    .actions {
+      padding-left: 0;
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    padding-right: 0;
+    padding-left: 40px;
+  }
+}

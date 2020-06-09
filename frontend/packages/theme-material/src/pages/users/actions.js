@@ -1,46 +1,61 @@
-import mdui, { JQ as $ } from 'mdui';
-import { User } from 'mdclub-sdk-js';
+import mdui from 'mdui';
+import extend from 'mdui.jq/es/functions/extend';
+import { $window } from 'mdui/es/utils/dom';
+import {
+  getList,
+  getMyFollowees,
+  getMyFollowers,
+} from 'mdclub-sdk-js/es/UserApi';
+import currentUser from '~/utils/currentUser';
+import commonActions from '~/utils/actionsAbstract';
+import { emit } from '~/utils/pubsub';
+import apiCatch from '~/utils/errorHandler';
+import { tabs } from './state';
 
-const TAB_INDEX = {
-  FOLLOWING: 0,
-  FOLLOWERS: 1,
-  RECOMMENDED: 2,
-};
-const tabs = ['following', 'followers', 'recommended'];
-let tabIndex;
-let Tab;
-let global_actions;
+const TABNAME_FOLLOWEES = 'followees';
+const TABNAME_FOLLOWERS = 'followers';
+const TABNAME_RECOMMENDED = 'recommended';
+
+let tab; // tab 选项卡实例。若未登录，则没有 tab
 let scroll_position;
 const is_updated = {
-  [TAB_INDEX.FOLLOWING]: false, // 已关注列表是否有更新，有更新则切换到该选项卡时需要重新加载
-  [TAB_INDEX.FOLLOWERS]: false, // 关注者列表是否有更新
-  [TAB_INDEX.RECOMMENDED]: false, // 推荐列表是否有更新
+  [TABNAME_FOLLOWEES]: false, // 已关注列表是否有更新，有更新则切换到该选项卡时需要重新加载
+  [TABNAME_FOLLOWERS]: false, // 关注者列表是否有更新
+  [TABNAME_RECOMMENDED]: false, // 推荐列表是否有更新
+};
+const include = ['is_following', 'is_me'];
+
+const per_page = 20;
+const getUsers = (tabName, page) => {
+  if (tabName === TABNAME_FOLLOWEES) {
+    return getMyFollowees({ include, page, per_page });
+  }
+
+  if (tabName === TABNAME_FOLLOWERS) {
+    return getMyFollowers({ include, page, per_page });
+  }
+
+  return getList({ include, page, per_page, order: '-follower_count' });
 };
 
-export default {
-  setState: value => (value),
-  getState: () => state => state,
-  setTitle: (title) => {
-    $('title').text(title);
-  },
-
+const as = {
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
-    global_actions = props.global_actions;
-    global_actions.theme.setPrimary('');
-    global_actions.routeChange(window.location.pathname);
+  onCreate: () => (_, actions) => {
+    emit('route_update');
 
-    Tab = new mdui.Tab('#tab-users');
-    tabIndex = Tab.activeIndex;
+    if (currentUser()) {
+      tab = new mdui.Tab('.mc-tab');
+      actions.setState({ tabIndex: tab.activeIndex });
 
-    Tab.$tab.on('change.mdui.tab', (event) => {
-      tabIndex = event._detail.index;
-      window.scrollTo(0, 0);
-      history.replaceState({}, '', `#${tabs[tabIndex]}`);
-      actions.afterChangeTab();
-    });
+      tab.$element.on('change.mdui.tab', () => {
+        actions.setState({ tabIndex: tab.activeIndex });
+        window.scrollTo(0, 0);
+        window.history.replaceState({}, '', `#${tabs[tab.activeIndex]}`);
+        actions.afterChangeTab();
+      });
+    }
 
     actions.afterChangeTab();
 
@@ -51,49 +66,52 @@ export default {
     }
 
     // 绑定加载更多
-    $(window).on('scroll', actions.infiniteLoad);
+    $window.on('scroll', actions.infiniteLoad);
+  },
+
+  onDestroy: () => (_, actions) => {
+    $window.off('scroll', actions.infiniteLoad);
   },
 
   /**
    * 切换 Tab 之后
    */
   afterChangeTab: () => (state, actions) => {
-    const tabName = tabs[tabIndex];
+    const tabName = tabs[state.tabIndex];
+    const TAB_NAME = tabName.toUpperCase();
 
-    switch (tabName) {
-      case 'following':
-        actions.setTitle('我关注的人');
-        break;
-      case 'followers':
-        actions.setTitle('我的关注者');
-        break;
-      case 'recommended':
-        actions.setTitle('推荐人脉');
-        break;
-      default:
-        actions.setTitle('推荐人脉');
-        break;
+    if (tabName === TABNAME_FOLLOWEES) {
+      actions.setTitle('我关注的人');
+    } else if (tabName === TABNAME_FOLLOWERS) {
+      actions.setTitle('我的关注者');
+    } else {
+      actions.setTitle('推荐人脉');
     }
 
     actions.setState({
       current_tab: tabName,
     });
 
-    if (!is_updated[tabIndex] && state[`${tabName}_pagination`]) {
+    if (!is_updated[tabName] && state[`${tabName}_pagination`]) {
       return;
     }
 
-    is_updated[tabIndex] = false;
+    is_updated[tabName] = false;
 
     // 从页面中加载初始数据
-    if (window[`G_${tabName.toUpperCase()}_USERS`]) {
+    if (window[`G_USERS_${TAB_NAME}`]) {
       actions.setState({
-        [`${tabName}_data`]: window[`G_${tabName.toUpperCase()}_USERS`].data,
-        [`${tabName}_pagination`]: window[`G_${tabName.toUpperCase()}_USERS`].pagination,
+        [`${tabName}_data`]: window[`G_USERS_${TAB_NAME}`].data,
+        [`${tabName}_pagination`]: window[`G_USERS_${TAB_NAME}`].pagination,
       });
 
       // 清空页面中的数据，下次需要从 ajax 加载
-      window[`G_${tabName.toUpperCase()}_USERS`] = false;
+      window[`G_USERS_${TAB_NAME}`] = null;
+
+      // 若第一页没有填满屏幕，则加载第二页
+      setTimeout(() => {
+        actions.infiniteLoad();
+      });
 
       return;
     }
@@ -101,178 +119,103 @@ export default {
     // ajax 加载数据
     actions.setState({
       [`${tabName}_data`]: [],
-      [`${tabName}_pagination`]: false,
+      [`${tabName}_pagination`]: null,
     });
 
     actions.loadStart(tabName);
 
-    const loaded = (response) => {
-      actions.loadEnd(tabName);
+    getUsers(tabName, 1)
+      .finally(() => {
+        actions.loadEnd(tabName);
+      })
+      .then((response) => {
+        actions.setState({
+          [`${tabName}_data`]: response.data,
+          [`${tabName}_pagination`]: response.pagination,
+        });
 
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        [`${tabName}_data`]: response.data,
-        [`${tabName}_pagination`]: response.pagination,
-      });
-    };
-
-    switch (tabIndex) {
-      case TAB_INDEX.FOLLOWING:
-        User.getMyFollowing({}, loaded);
-        break;
-
-      case TAB_INDEX.FOLLOWERS:
-        User.getMyFollowers({}, loaded);
-        break;
-
-      case TAB_INDEX.RECOMMENDED:
-        User.getMyNotFollowing({}, loaded);
-        break;
-
-      default:
-        break;
-    }
+        // 若第一页没有填满屏幕，则加载第二页
+        setTimeout(() => {
+          actions.infiniteLoad();
+        });
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 绑定下拉加载更多
    */
-  infiniteLoad: () => (_, actions) => {
-    const tabName = tabs[tabIndex];
+  infiniteLoad: () => (state, actions) => {
+    const tabName = tabs[state.tabIndex];
 
-    if (actions.getState()[`${tabName}_loading`]) {
+    if (state[`${tabName}_loading`]) {
       return;
     }
 
-    const pagination = actions.getState()[`${tabName}_pagination`];
+    const pagination = state[`${tabName}_pagination`];
 
-    if (!pagination) {
+    if (pagination.page >= pagination.pages) {
       return;
     }
 
-    if (pagination.page >= pagination.total_page) {
-      return;
-    }
-
-    if (document.body.scrollHeight - window.pageYOffset - window.innerHeight > 100) {
+    if (
+      document.body.scrollHeight - window.pageYOffset - window.innerHeight >
+      100
+    ) {
       return;
     }
 
     actions.loadStart(tabName);
 
-    const loaded = (response) => {
-      actions.loadEnd(tabName);
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        [`${tabName}_data`]: actions.getState()[`${tabName}_data`].concat(response.data),
-        [`${tabName}_pagination`]: response.pagination,
-      });
-    };
-
-    const data = {
-      page: pagination.page + 1,
-    };
-
-    switch (tabIndex) {
-      case TAB_INDEX.FOLLOWING:
-        User.getMyFollowing(data, loaded);
-        break;
-
-      case TAB_INDEX.FOLLOWERS:
-        User.getMyFollowers(data, loaded);
-        break;
-
-      case TAB_INDEX.RECOMMENDED:
-        User.getMyNotFollowing(data, loaded);
-        break;
-
-      default:
-        break;
-    }
-  },
-
-  /**
-   * 切换关注状态
-   */
-  toggleFollow: user_id => (state, actions) => {
-    const tabName = tabs[tabIndex];
-    const data = actions.getState()[`${tabName}_data`];
-
-    data.forEach((user, index) => {
-      if (user.user_id !== user_id) {
-        return;
-      }
-
-      data[index].relationship.is_following = !user.relationship.is_following;
-      actions.setState({
-        [`${tabName}_data`]: data,
-      });
-
-      const done = (response) => {
-        if (!response.code) {
-          actions.followUpdate();
-
-          return;
-        }
-
-        mdui.snackbar(response.message);
-
-        data[index].relationship.is_following = user.relationship.is_following;
+    getUsers(tabName, pagination.page + 1)
+      .finally(() => {
+        actions.loadEnd(tabName);
+      })
+      .then((response) => {
         actions.setState({
-          [`${tabName}_data`]: data,
+          [`${tabName}_data`]: state[`${tabName}_data`].concat(response.data),
+          [`${tabName}_pagination`]: response.pagination,
         });
-      };
-
-      if (user.relationship.is_following) {
-        User.addFollow(user_id, done);
-      } else {
-        User.deleteFollow(user_id, done);
-      }
-    });
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 切换到推荐用户
    */
   toRecommended: () => {
-    Tab.show(TAB_INDEX.RECOMMENDED);
+    tab.show(tabs.indexOf(TABNAME_RECOMMENDED));
   },
 
   /**
    * 在其他页面关注了用户后，需要调用该方法，以使下次切换到该页面时重新加载关注列表
    */
   followUpdate: () => {
-    is_updated[TAB_INDEX.FOLLOWING] = true;
-    is_updated[TAB_INDEX.RECOMMENDED] = true;
+    is_updated[TABNAME_FOLLOWEES] = true;
+    is_updated[TABNAME_RECOMMENDED] = true;
   },
 
   /**
-   * 保存滚动条位置
+   * 点击链接后，保存用户信息
    */
-  saveScrollPosition: () => {
+  afterItemClick: (user) => {
+    window.G_INTERVIEWEE = user;
     scroll_position = window.pageYOffset;
   },
 
   /**
    * 开始加载
    */
-  loadStart: tabName => ({
+  loadStart: (tabName) => ({
     [`${tabName}_loading`]: true,
   }),
 
   /**
    * 结束加载
    */
-  loadEnd: tabName => ({
+  loadEnd: (tabName) => ({
     [`${tabName}_loading`]: false,
   }),
 };
+
+export default extend(as, commonActions);

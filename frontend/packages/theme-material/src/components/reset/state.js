@@ -30,10 +30,10 @@ export default {
   sending: false,
 
   // 是否显示重新发送倒计时
-  show_re_send_countdown: false,
+  show_resend_countdown: false,
 
   // 重新发送验证码倒计时
-  re_send_countdown: 60,
+  resend_countdown: 60,
 
   // 是否正在验证中
   verifying: false,

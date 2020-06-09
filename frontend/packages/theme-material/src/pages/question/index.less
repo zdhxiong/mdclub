@@ -1,81 +1,113 @@
+@import "../../vendor/mdui/variable.less";
+
 #page-question {
-  max-width: 786px;
+  max-width: 846px;
+
+  &.mdui-container {
+    padding-top: 0;
+  }
 
   .question {
-    padding: 0 60px;
+    padding: 0 64px;
 
-    h1 {
+    .title {
       position: relative;
+      margin: 0;
+      padding: 36px 0 24px 0;
+      font-weight: normal;
       font-size: 24px;
       line-height: 36px;
-      margin: 0 0 24px 0;
-      padding: 24px 0;
-
-      &:after {
-        content: ' ';
-        position: absolute;
-        bottom: 0;
-        left: -60px;
-        right: -60px;
-        height: 1px;
-        background-color: rgba(0, 0, 0, 0.12);
-      }
     }
 
     .content {
-      padding: 48px 0 16px 0;
+      padding: 48px 0 32px 0;
     }
 
+    .mc-topics-bar {
+      padding-bottom: 16px;
+    }
 
     .actions {
-      margin-bottom: 16px;
-
-      .following {
-        color: rgba(33, 150, 243, 0.54) !important;
-      }
-
-      .mdui-btn {
-        border-radius: 18px;
-
-        &+.mdui-btn {
-          margin-left: 16px;
-        }
-      }
+      display: flex;
+      margin-right: -64px;
+      margin-left: -64px;
+      padding: 8px 64px;
+      background-color: rgba(0, 0, 0, .04);
     }
   }
 
-  .answers-count {
-    margin-top: 16px;
-    height: 72px;
-    line-height: 72px;
-    padding-left: 60px;
+  .mc-list-header {
+    margin-top: 32px;
+    margin-bottom: 20px;
+  }
+
+  .all-answers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin: 16px 0;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 8px;
+    opacity: .56;
+
+    .mdui-theme-layout-dark & {
+      border-color: rgba(255, 255, 255, .12);
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .answers {
+    min-height: 148px;
   }
 
-  @media (max-width: 599px) {
+  @media (max-width: @screen-xs-max) {
     .question {
       padding: 0 16px;
+      border-right: none;
+      border-left: none;
+      border-radius: 0;
 
-      h1 {
+      .title {
+        padding: 16px 0;
         font-size: 22px;
         line-height: 32px;
-        padding: 16px 0;
-        margin-bottom: 16px;
       }
 
       .content {
-        padding-top: 32px;
+        padding: 28px 0;
+      }
+
+      .mc-topics-bar {
+        padding-bottom: 8px;
+      }
+
+      .actions {
+        margin-right: -16px;
+        margin-left: -16px;
+        padding-right: 16px;
+        padding-left: 16px;
       }
     }
 
-    .answers-count {
-      margin-top: 8px;
-      height: 56px;
-      line-height: 56px;
-      font-size: 20px;
-      padding-left: 16px;
+    .mc-list-header {
+      margin-top: 20px;
+      margin-bottom: 12px;
+      padding: 0 16px;
+
+      .mdui-btn {
+        padding-right: 0;
+      }
+    }
+
+    .answers {
+      border-right: none;
+      border-left: none;
+      border-radius: 0;
     }
   }
 }

@@ -1,0 +1,74 @@
+/**
+ * =============================================================================
+ * ************   Color 颜色   ************
+ * =============================================================================
+ */
+
+// custom start
+.mdui-color-theme {
+  color: #fff !important;
+  background-color: @primaryColor !important;
+
+  .mdui-theme-layout-dark & {
+    background-color: @primaryColorDark !important;
+  }
+}
+
+.mdui-text-color-theme {
+  color: @primaryColor !important;
+
+  .mdui-theme-layout-dark & {
+    color: @primaryColorDark !important;
+  }
+}
+// custom end
+
+.mdui-text-color-theme-text {
+  color: @color-black-text !important;
+}
+
+.mdui-text-color-theme-secondary {
+  color: @color-black-secondary !important;
+}
+
+/* .mdui-text-color-theme-disabled {
+  color: @color-black-disabled !important;
+}
+
+.mdui-text-color-theme-divider {
+  color: @color-black-divider !important;
+} */
+
+.mdui-text-color-theme-icon {
+  color: @color-black-icon !important;
+}
+
+/* .mdui-text-color-theme-icon-disabled {
+  color: @color-black-icon-disabled !important;
+} */
+
+.mdui-theme-layout-dark {
+  .mdui-text-color-theme-text {
+    color: @color-white-text !important;
+  }
+
+  .mdui-text-color-theme-secondary {
+    color: @color-white-secondary !important;
+  }
+
+  /* .mdui-text-color-theme-disabled {
+    color: @color-white-disabled !important;
+  }
+
+  .mdui-text-color-theme-divider {
+    color: @color-white-divider !important;
+  } */
+
+  .mdui-text-color-theme-icon {
+    color: @color-white-icon !important;
+  }
+
+  /* .mdui-text-color-theme-icon-disabled {
+    color: @color-white-icon-disabled !important;
+  } */
+}

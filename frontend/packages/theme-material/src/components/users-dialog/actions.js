@@ -1,23 +1,38 @@
-import mdui, { JQ as $ } from 'mdui';
-import { User } from 'mdclub-sdk-js';
+import { location } from 'hyperapp-router';
+import $ from 'mdui.jq';
+import mdui from 'mdui';
+import extend from 'mdui.jq/es/functions/extend';
+import { getFollowees, getFollowers } from 'mdclub-sdk-js/es/UserApi';
+import { getFollowers as getArticleFollowers } from 'mdclub-sdk-js/es/ArticleApi';
+import { getFollowers as getQuestionFollowers } from 'mdclub-sdk-js/es/QuestionApi';
+import { getFollowers as getTopicFollowers } from 'mdclub-sdk-js/es/TopicApi';
+import commonActions from '~/utils/actionsAbstract';
+import stateDefault from '~/components/users-dialog/stateDefault';
+import { fullPath } from '~/utils/path';
+import apiCatch from '~/utils/errorHandler';
 
-let Dialog;
+let dialog;
 let $dialog;
 let $content;
 
 const service = {
-  following: User.getFollowing,
-  followers: User.getFollowers,
-  topic_followers: '',
-  question_followers: '',
-  article_followers: '',
+  followees: getFollowees,
+  followers: getFollowers,
+  topic_followers: getTopicFollowers,
+  question_followers: getQuestionFollowers,
+  article_followers: getArticleFollowers,
 };
 
-export default {
-  setState: value => (value),
-  getState: () => state => state,
+const paramField = {
+  followees: 'user_id',
+  followers: 'user_id',
+  topic_followers: 'topic_id',
+  question_followers: 'question_id',
+  article_followers: 'article_id',
+};
 
-  init: (element) => {
+const as = {
+  onCreate: ({ element }) => {
     $dialog = $(element);
     $content = $dialog.find('.mdui-dialog-content');
   },
@@ -26,39 +41,40 @@ export default {
    * 打开对话框
    * @param props
    * {type: string, id: int}
-   * 用户列表类型 following、followers、topic_followers、question_followers、article_followers
+   * 用户列表类型 followees, followers, topic_followers, question_followers, article_followers
    */
-  open: props => (state, actions) => {
-    const type = props.type;
-    const id = props.id;
-
-    if (!Dialog) {
-      Dialog = new mdui.Dialog('.mc-users-dialog', {
+  open: ({ type, id }) => (state, actions) => {
+    if (!dialog) {
+      dialog = new mdui.Dialog('.mc-users-dialog', {
         history: false,
+      });
+
+      dialog.$element.on('closed.mdui.dialog', () => {
+        actions.setState(stateDefault);
       });
     }
 
     actions.setState({
       type,
       data: [],
-      pagination: false,
+      pagination: null,
       loading: true,
     });
 
-    Dialog.open();
+    dialog.open();
 
-    const loaded = (response) => {
-      actions.loadEnd();
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        data: actions.getState().data.concat(response.data),
-        pagination: response.pagination,
-      });
+    const loaded = (promise) => {
+      promise
+        .finally(() => {
+          actions.setState({ loading: false });
+        })
+        .then(({ data, pagination }) => {
+          actions.setState({
+            data: actions.getState().data.concat(data),
+            pagination,
+          });
+        })
+        .catch(apiCatch);
     };
 
     const infiniteLoad = () => {
@@ -66,30 +82,41 @@ export default {
         return;
       }
 
-      const pagination = actions.getState().pagination;
+      const { pagination } = actions.getState();
 
       if (!pagination) {
         return;
       }
 
-      if (pagination.page >= pagination.total_page) {
+      if (pagination.page >= pagination.pages) {
         return;
       }
 
-      if ($content[0].scrollHeight - $content[0].scrollTop - $content[0].offsetHeight > 100) {
+      if (
+        $content[0].scrollHeight -
+          $content[0].scrollTop -
+          $content[0].offsetHeight >
+        100
+      ) {
         return;
       }
 
-      actions.loadStart();
+      actions.setState({ loading: true });
 
-      const data = {
-        page: pagination.page + 1,
-      };
-
-      service[type](id, data, loaded);
+      loaded(
+        service[type]({
+          [paramField[type]]: id,
+          page: pagination.page + 1,
+        }),
+      );
     };
 
-    service[type](id, {}, loaded);
+    loaded(
+      service[type]({
+        [paramField[type]]: id,
+        include: ['is_following', 'is_me'],
+      }),
+    );
 
     $content.on('scroll', infiniteLoad);
 
@@ -102,20 +129,18 @@ export default {
    * 关闭对话框
    */
   close: () => {
-    Dialog.close();
+    if (dialog) {
+      dialog.close();
+    }
   },
 
   /**
-   * 开始加载
+   * 点击 item
    */
-  loadStart: () => ({
-    loading: true,
-  }),
-
-  /**
-   * 结束加载
-   */
-  loadEnd: () => ({
-    loading: false,
-  }),
+  onItemClick: (user_id) => {
+    location.actions.go(fullPath(`/users/${user_id}`));
+    dialog.close();
+  },
 };
+
+export default extend(as, commonActions);

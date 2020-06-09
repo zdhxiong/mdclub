@@ -1,0 +1,84 @@
+@import '../../../../vendor/mdui/variable.less';
+
+#page-topic .topic {
+  padding: 24px 24px 16px 24px;
+
+  .info {
+    display: flex;
+
+    .cover {
+      width: 180px;
+      min-width: 180px;
+      height: 101px;
+      background-size: contain;
+      border-radius: 4px;
+    }
+
+    .main {
+      padding-left: 24px;
+    }
+
+    .name {
+      height: 26px;
+      font-size: 22px;
+    }
+
+    .meta {
+      padding-top: 10px;
+      font-size: 13px;
+
+      span+span::before {
+        margin: 0 8px;
+        content: '•';
+      }
+    }
+
+    .description {
+      box-sizing: border-box;
+      padding-top: 10px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    padding-top: 16px;
+  }
+
+  @media (max-width: 800px) {
+    .info {
+      .main {
+        padding-left: 16px;
+      }
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    padding: 16px;
+    border-right: none;
+    border-left: none;
+    border-radius: 0;
+
+    .info {
+      .cover {
+        width: 108px;
+        min-width: 108px;
+        height: 60px;
+      }
+
+      .name {
+        padding-top: 2px;
+      }
+
+      .meta {
+        padding-top: 12px;
+      }
+
+      .description {
+        margin-top: 8px;
+        margin-left: -124px;
+      }
+    }
+  }
+}

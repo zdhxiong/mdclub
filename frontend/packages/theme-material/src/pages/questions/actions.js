@@ -1,50 +1,69 @@
-import mdui, { JQ as $ } from 'mdui';
-import { location } from '@hyperapp/router';
-import { Question } from 'mdclub-sdk-js';
+import { location } from 'hyperapp-router';
+import mdui from 'mdui';
+import extend from 'mdui.jq/es/functions/extend';
+import { $window } from 'mdui/es/utils/dom';
+import {
+  getList,
+  create as createQuestion,
+} from 'mdclub-sdk-js/es/QuestionApi';
+import { getMyFollowingQuestions } from 'mdclub-sdk-js/es/UserApi';
+import { COMMON_FIELD_VERIFY_FAILED } from 'mdclub-sdk-js/es/errors';
+import commonActions from '~/utils/actionsAbstract';
+import editorActions from '~/components/editor/actions';
+import topicSelectorActions from '~/components/editor/components/topic-selector/actions';
+import userPopoverActions from '~/components/user-popover/actions';
+import { emit } from '~/utils/pubsub';
+import { tabs } from './state';
+import { fullPath } from '~/utils/path';
+import apiCatch from '~/utils/errorHandler';
+import { currentTimestamp } from '~/utils/time';
 
-const TAB_INDEX = {
-  RECENT: 0,
-  POPULAR: 1,
-  FOLLOWING: 2,
-};
-const tabs = ['recent', 'popular', 'following'];
-let tabIndex;
-let Tab;
-let global_actions;
+const TABNAME_RECENT = 'recent';
+const TABNAME_POPULAR = 'popular';
+const TABNAME_FOLLOWING = 'following';
+
+let tab;
+let tabIndex = tabs.indexOf(TABNAME_RECENT);
 let scroll_position;
 const is_updated = {
-  [TAB_INDEX.RECENT]: false, // 最近更新列表是否有更新
-  [TAB_INDEX.POPULAR]: false, // 最近热门列表是否有更新
-  [TAB_INDEX.FOLLOWING]: false, // 我关注的列表是否有更新
+  [TABNAME_RECENT]: false, // 最近更新列表是否有更新
+  [TABNAME_POPULAR]: false, // 最近热门列表是否有更新
+  [TABNAME_FOLLOWING]: false, // 我关注的列表是否有更新
 };
-let EditorDialog;
-let $editorDialog;
-let $editorTitle;
+// 上次更新的时间，若当前时间距离上次更新时间超过一定范围，则重新加载列表
+const last_update_time = {
+  [TABNAME_RECENT]: 0,
+  [TABNAME_POPULAR]: 0,
+  [TABNAME_FOLLOWING]: 0,
+};
+const include = ['user', 'topics', 'is_following'];
+const per_page = 20;
+const getQuestions = (tabName, page) => {
+  if (tabName === TABNAME_RECENT) {
+    return getList({ page, include, per_page, order: '-update_time' });
+  }
 
-export default {
-  setState: value => (value),
-  getState: () => state => state,
-  setTitle: (title) => {
-    $('title').text(title);
-  },
+  if (tabName === TABNAME_POPULAR) {
+    return getList({ page, include, per_page, order: '-vote_count' });
+  }
 
+  return getMyFollowingQuestions({ page, include, per_page });
+};
+
+const as = {
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
-    global_actions = props.global_actions;
-    global_actions.theme.setPrimary('indigo');
-    global_actions.routeChange(window.location.pathname);
+  onCreate: () => (_, actions) => {
+    emit('route_update');
 
-    // 实例化 Tab
-    Tab = new mdui.Tab('#tab-questions');
-    tabIndex = Tab.activeIndex;
+    tab = new mdui.Tab('.mc-tab');
+    tabIndex = tab.activeIndex;
 
-    // 绑定 Tab 切换
-    Tab.$tab.on('change.mdui.tab', (event) => {
-      tabIndex = event._detail.index;
+    tab.$element.on('change.mdui.tab', () => {
+      tabIndex = tab.activeIndex;
       window.scrollTo(0, 0);
-      history.replaceState({}, '', `#${tabs[tabIndex]}`);
+      window.history.replaceState({}, '', `#${tabs[tabIndex]}`);
       actions.afterChangeTab();
     });
 
@@ -57,27 +76,7 @@ export default {
     }
 
     // 绑定加载更多
-    $(window).on('scroll', actions.infiniteLoad);
-
-    $editorDialog = $('#page-questions-editor');
-    $editorTitle = $editorDialog.find('.title');
-
-    // 实时保存标题
-    $editorTitle
-      .val(localStorage.getItem('question-title'))
-      .on('input', () => {
-        localStorage.setItem('question-title', $editorTitle.val());
-      });
-
-    // 初始化编辑器
-    EditorDialog = new mdui.Dialog($editorDialog, {
-      history: false,
-    });
-
-    // 打开编辑器后聚焦到标题
-    $editorDialog.on('opened.mdui.dialog', () => {
-      $editorTitle[0].focus();
-    });
+    $window.on('scroll', actions.infiniteLoad);
   },
 
   /**
@@ -85,41 +84,43 @@ export default {
    */
   afterChangeTab: () => (state, actions) => {
     const tabName = tabs[tabIndex];
+    const TAB_NAME = tabName.toUpperCase();
 
-    switch (tabName) {
-      case 'recent':
-        actions.setTitle('最新问题');
-        break;
-      case 'popular':
-        actions.setTitle('近期热门问题');
-        break;
-      case 'following':
-        actions.setTitle('我关注的问题');
-        break;
-      default:
-        actions.setTitle('最新问题');
-        break;
+    if (tabName === TABNAME_RECENT) {
+      actions.setTitle('最新提问');
+    } else if (tabName === TABNAME_POPULAR) {
+      actions.setTitle('近期热门提问');
+    } else {
+      actions.setTitle('我关注的提问');
     }
 
-    actions.setState({
-      current_tab: tabName,
-    });
+    actions.setState({ current_tab: tabName });
 
-    if (!is_updated[tabIndex] && state[`${tabName}_pagination`]) {
+    if (
+      !is_updated[tabs[tabIndex]] &&
+      state[`${tabName}_pagination`] &&
+      currentTimestamp() - last_update_time[tabs[tabIndex]] < 180
+    ) {
       return;
     }
 
-    is_updated[tabIndex] = false;
+    is_updated[tabs[tabIndex]] = false;
+    last_update_time[tabs[tabIndex]] = currentTimestamp();
 
     // 从页面中加载初始数据
-    if (window[`G_${tabName.toUpperCase()}_QUESTIONS`]) {
+    if (window[`G_QUESTIONS_${TAB_NAME}`]) {
       actions.setState({
-        [`${tabName}_data`]: window[`G_${tabName.toUpperCase()}_QUESTIONS`].data,
-        [`${tabName}_pagination`]: window[`G_${tabName.toUpperCase()}_QUESTIONS`].pagination,
+        [`${tabName}_data`]: window[`G_QUESTIONS_${TAB_NAME}`].data,
+        [`${tabName}_pagination`]: window[`G_QUESTIONS_${TAB_NAME}`].pagination,
       });
 
       // 清空页面中的数据，下次需要从 ajax 加载
-      window[`G_${tabName.toUpperCase()}_QUESTIONS`] = false;
+      window[`G_QUESTIONS_${TAB_NAME}`] = null;
+
+      // 若第一页没有填满屏幕，则加载第二页
+      setTimeout(() => {
+        actions.infiniteLoad();
+      });
 
       return;
     }
@@ -127,249 +128,200 @@ export default {
     // ajax 加载数据
     actions.setState({
       [`${tabName}_data`]: [],
-      [`${tabName}_pagination`]: false,
+      [`${tabName}_pagination`]: null,
+      [`${tabName}_loading`]: true,
     });
 
-    actions.loadStart(tabName);
+    getQuestions(tabName, 1)
+      .finally(() => {
+        actions.setState({ [`${tabName}_loading`]: false });
+      })
+      .then((response) => {
+        actions.setState({
+          [`${tabName}_data`]: response.data,
+          [`${tabName}_pagination`]: response.pagination,
+        });
 
-    const loaded = (response) => {
-      actions.loadEnd(tabName);
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        [`${tabName}_data`]: response.data,
-        [`${tabName}_pagination`]: response.pagination,
-      });
-    };
-
-    switch (tabIndex) {
-      case TAB_INDEX.RECENT:
-        Question.getRecentList({}, loaded);
-        break;
-
-      case TAB_INDEX.POPULAR:
-        Question.getPopularList({}, loaded);
-        break;
-
-      case TAB_INDEX.FOLLOWING:
-        Question.getMyFollowing({}, loaded);
-        break;
-
-      default:
-        break;
-    }
+        // 若第一页没有填满屏幕，则加载第二页
+        setTimeout(() => {
+          actions.infiniteLoad();
+        });
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 绑定下拉加载更多
    */
-  infiniteLoad: () => (_, actions) => {
+  infiniteLoad: () => (state, actions) => {
     const tabName = tabs[tabIndex];
 
-    if (actions.getState()[`${tabName}_loading`]) {
+    if (state[`${tabName}_loading`]) {
       return;
     }
 
-    const pagination = actions.getState()[`${tabName}_pagination`];
+    const pagination = state[`${tabName}_pagination`];
 
-    if (!pagination) {
+    if (pagination.page >= pagination.pages) {
       return;
     }
 
-    if (pagination.page >= pagination.total_page) {
+    if (
+      document.body.scrollHeight - window.pageYOffset - window.innerHeight >
+      100
+    ) {
       return;
     }
 
-    if (document.body.scrollHeight - window.pageYOffset - window.innerHeight > 100) {
-      return;
-    }
+    actions.setState({ [`${tabName}_loading`]: true });
 
-    actions.loadStart(tabName);
-
-    const loaded = (response) => {
-      actions.loadEnd(tabName);
-
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
-
-      actions.setState({
-        [`${tabName}_data`]: actions.getState()[`${tabName}_data`].concat(response.data),
-        [`${tabName}_pagination`]: response.pagination,
-      });
-    };
-
-    const data = {
-      page: pagination.page + 1,
-    };
-
-    switch (tabIndex) {
-      case TAB_INDEX.RECENT:
-        Question.getRecentList(data, loaded);
-        break;
-
-      case TAB_INDEX.POPULAR:
-        Question.getPopularList(data, loaded);
-        break;
-
-      case TAB_INDEX.FOLLOWING:
-        Question.getMyFollowing(data, loaded);
-        break;
-
-      default:
-        break;
-    }
+    getQuestions(tabName, pagination.page + 1)
+      .finally(() => {
+        actions.setState({ [`${tabName}_loading`]: false });
+      })
+      .then((response) => {
+        actions.setState({
+          [`${tabName}_data`]: state[`${tabName}_data`].concat(response.data),
+          [`${tabName}_pagination`]: response.pagination,
+        });
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 切换到最近更新
    */
   toRecent: () => {
-    Tab.show(TAB_INDEX.RECENT);
+    tab.show(tabs.indexOf(TABNAME_RECENT));
   },
 
   /**
    * 切换到近期热门
    */
   toPopular: () => {
-    Tab.show(TAB_INDEX.POPULAR);
+    tab.show(tabs.indexOf(TABNAME_POPULAR));
   },
 
   /**
    * 切换到我关注的
    */
   toFolliwing: () => {
-    Tab.show(TAB_INDEX.FOLLOWING);
+    tab.show(tabs.indexOf(TABNAME_FOLLOWING));
   },
 
   /**
    * 在其他页面关注了问题后，需要调用该方法，以使下次切换到该页面时重新加载关注列表
    */
   followUpdate: () => {
-    is_updated[TAB_INDEX.FOLLOWING] = true;
+    is_updated[TABNAME_FOLLOWING] = true;
   },
 
   /**
-   * 问题信息更新后（发布回答，关注），需要调用该方法
-   * @param question
+   * 问题信息更新后（发布回答、评论、关注），需要调用该方法
    */
-  questionUpdate: question => (state, actions) => {
+  questionUpdate: (question) => (state, actions) => {
     let questions = [];
 
-    state.tabs.forEach((tab) => {
-      questions = state[`${tab}_data`];
+    tabs.forEach((tabName) => {
+      questions = state[`${tabName}_data`];
 
+      let hasUpdate = false;
       questions.forEach((_question, i) => {
         if (question.question_id === _question.question_id) {
+          hasUpdate = true;
           questions[i] = question;
         }
       });
 
-      actions.setState({
-        [`${tab}_data`]: questions,
-      });
+      if (hasUpdate) {
+        actions.setState({
+          [`${tabName}_data`]: questions,
+        });
+      }
     });
   },
 
   /**
-   * 打开编辑器
+   * 发布提问
    */
-  openEditor: () => {
-    if (!global_actions.getState().user.user.user_id) {
-      global_actions.components.login.open();
-
-      return;
-    }
-
-    EditorDialog.open();
-  },
-
-  /**
-   * 发布问题
-   */
-  publish: Editor => (state, actions) => {
-    const title = $editorTitle.val();
-    const content_rendered = Editor.getHTML();
+  publish: ({ title, content }) => (state, actions) => {
+    const { editor_selected_topic_ids: topic_ids, auto_save_key } = state;
 
     if (!title) {
-      mdui.snackbar('请填写标题');
-      $editorTitle[0].focus();
+      mdui.snackbar('请输入标题');
       return;
     }
 
-    actions.setState({
-      publishing: true,
-    });
+    if (!topic_ids.length) {
+      mdui.snackbar('请选择话题');
+      return;
+    }
 
-    Question.create({
+    if (!content || content === '<p><br></p>') {
+      mdui.snackbar('请输入正文');
+      return;
+    }
+
+    actions.setState({ publishing: true });
+
+    createQuestion({
       title,
-      content_rendered,
-      topic_id: 0,
-    }, (response) => {
-      actions.setState({
-        publishing: false,
-      });
+      topic_ids,
+      content_rendered: content,
+      include,
+    })
+      .finally(() => {
+        actions.setState({ publishing: false });
+      })
+      .then((response) => {
+        is_updated[TABNAME_RECENT] = true;
+        is_updated[TABNAME_POPULAR] = true;
+        is_updated[TABNAME_FOLLOWING] = true;
 
-      if (response.code) {
-        mdui.snackbar(response.message);
-        return;
-      }
+        // 清空草稿和编辑器内容
+        window.localStorage.removeItem(`${auto_save_key}-title`);
+        window.localStorage.removeItem(`${auto_save_key}-topics`);
+        window.localStorage.removeItem(`${auto_save_key}-content`);
+        actions.setState({
+          editor_selected_topics: [],
+          editor_selected_topic_ids: [],
+        });
+        actions.editorClose();
 
-      // 关闭编辑器
-      EditorDialog.close();
-
-      // 清空草稿和编辑器内容
-      localStorage.removeItem('question-title');
-      localStorage.removeItem('question-content');
-      Editor.clear();
-      $editorTitle.val('');
-
-      // 标记列表需要更新
-      is_updated[TAB_INDEX.RECENT] = true;
-      is_updated[TAB_INDEX.FOLLOWING] = true;
-
-      EditorDialog.$dialog.on('closed.mdui.dialog', () => {
-        // 供问题详情页使用，减少 ajax 请求
+        // 到提问详情页
         window.G_QUESTION = response.data;
+        location.actions.go(
+          fullPath(`/questions/${response.data.question_id}`),
+        );
+      })
+      .catch((response) => {
+        if (response.code === COMMON_FIELD_VERIFY_FAILED) {
+          mdui.snackbar(Object.values(response.errors)[0]);
+          return;
+        }
 
-        // 进入问题详情页
-        location.actions.go($.path(`/questions/${response.data.question_id}`));
+        apiCatch(response);
       });
+  },
+
+  /**
+   * 点击链接后，保存最后访问的提问ID和提问详情
+   * @param question
+   */
+  afterItemClick: (question) => (_, actions) => {
+    window.G_QUESTION = question;
+    scroll_position = window.pageYOffset;
+
+    actions.setState({
+      last_visit_id: question.question_id,
     });
   },
-
-  /**
-   * 舍弃问题草稿
-   */
-  clearDrafts: () => {
-    localStorage.removeItem('question-title');
-    $editorTitle.val('');
-    EditorDialog.close();
-  },
-
-  /**
-   * 保存滚动条位置
-   */
-  saveScrollPosition: () => {
-    scroll_position = window.pageYOffset;
-  },
-
-  /**
-   * 开始加载
-   */
-  loadStart: tabName => ({
-    [`${tabName}_loading`]: true,
-  }),
-
-  /**
-   * 结束加载
-   */
-  loadEnd: tabName => ({
-    [`${tabName}_loading`]: false,
-  }),
 };
+
+export default extend(
+  as,
+  commonActions,
+  editorActions,
+  topicSelectorActions,
+  userPopoverActions,
+);

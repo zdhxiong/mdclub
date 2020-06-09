@@ -1,0 +1,145 @@
+@import "../../vendor/mdui/variable.less";
+
+.mc-list-item {
+  position: relative;
+  display: block;
+  padding: 16px 24px 16px 64px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: background-color .18s cubic-bezier(.4,0,.2,1);
+
+  .mdui-theme-layout-dark & {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: @color-hover-black;
+
+    .mdui-theme-layout-dark & {
+      background-color: @color-hover-white;
+    }
+  }
+
+  &:active {
+    background-color: #eee;
+
+    .mdui-theme-layout-dark & {
+      background-color: #484848;
+    }
+  }
+
+  &.last-visit::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background-color: @primaryColor;
+    content: ' ';
+
+    .mdui-theme-layout-dark & {
+      background-color: rgba(255, 255, 255, .7);
+    }
+  }
+
+  .mc-user-popover {
+    position: absolute;
+    left: 26px;
+    width: 20px;
+    height: 20px;
+
+    &>.avatar {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 20px 20px;
+      border-radius: 50%;
+    }
+  }
+
+  .title {
+    height: 20px;
+    overflow: hidden;
+    font-size: 16px;
+    line-height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @media (max-width: @screen-xs-max) {
+      font-size: 15px;
+    }
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    height: 16px;
+    margin-top: 8px;
+  }
+
+  .snippet {
+    flex: 1;
+    overflow: hidden;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .meta {
+    display: flex;
+    padding-left: 48px;
+    font-size: 13px;
+  }
+
+  .update_time {
+    display: none;
+  }
+
+  .replys {
+    margin-left: 16px;
+  }
+
+  &:hover {
+    .meta {
+      padding-left: 12px;
+    }
+
+    .update_time {
+      display: block;
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    padding-left: 50px;
+
+    .mc-user-popover {
+      left: 16px;
+    }
+
+    .snippet {
+      display: none;
+    }
+
+    .meta {
+      flex-direction: row-reverse;
+      padding-left: 0 !important;
+    }
+
+    .update_time {
+      display: block;
+    }
+
+    .replys {
+      margin-right: 16px;
+      margin-left: 0;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+@import "../../../../utils/mixin.less";
+
+#page-user .edit-info {
+  max-width: 530px;
+
+  .mdui-dialog-title {
+    padding: 16px 24px;
+    line-height: 36px;
+  }
+
+  .close {
+    display: none;
+  }
+
+  .mdui-textfield {
+    padding-top: 0;
+  }
+
+  @media (max-width: 599px) {
+    .mc-dialog-fullscreen();
+
+    .mdui-dialog-title {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .mdui-dialog-content {
+      padding-top: 16px;
+    }
+
+    .close {
+      display: inline-block;
+      float: left;
+      margin-right: 8px;
+    }
+  }
+}

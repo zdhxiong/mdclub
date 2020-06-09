@@ -1,45 +1,56 @@
-import mdui, { JQ as $ } from 'mdui';
-import Cookies from 'js-cookie';
-import { User, Captcha } from 'mdclub-sdk-js';
+import $ from 'mdui.jq';
+import mdui from 'mdui';
+import extend from 'mdui.jq/es/functions/extend';
+import {
+  COMMON_FIELD_VERIFY_FAILED,
+  COMMON_EMAIL_VERIFY_EXPIRED,
+} from 'mdclub-sdk-js/es/errors';
+import { generate as generateCaptcha } from 'mdclub-sdk-js/es/CaptchaApi';
+import { register, sendRegisterEmail } from 'mdclub-sdk-js/es/UserApi';
+import { login } from 'mdclub-sdk-js/es/TokenApi';
+import { setCookie } from '~/utils/cookie';
+import { emit } from '~/utils/pubsub';
+import apiCatch from '~/utils/errorHandler';
+import commonActions from '~/utils/actionsAbstract';
 
-let Dialog;
+let dialog;
 let $email;
 let $emailCode;
-let $password;
 let $username;
+let $password;
 let $captchaCode;
 
-export default {
-  setState: value => (value),
-  getState: () => state => state,
-
+const as = {
   /**
    * 响应输入框输入事件
    */
-  input: e => ({
-    [e.target.name]: e.target.value,
-    [`${e.target.name}_msg`]: '',
-  }),
+  onInput: (e) => {
+    const input = e.target;
+
+    return {
+      [input.name]: input.value,
+      [`${input.name}_msg`]: '',
+    };
+  },
 
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
-    const element = props.element;
+  onCreate: (props) => (state) => {
+    const $element = $(props.element).mutation();
 
-    $(element).mutation();
-
-    Dialog = new mdui.Dialog(element, {
-      history: false,
+    dialog = new mdui.Dialog($element, {
       modal: true,
+      history: false,
     });
 
-    $email = Dialog.$dialog.find('[name="email"]');
-    $emailCode = Dialog.$dialog.find('[name="email_code"]');
-    $username = Dialog.$dialog.find('[name="username"]');
-    $password = Dialog.$dialog.find('[name="password"]');
+    $email = $element.find('[name="email"]');
+    $emailCode = $element.find('[name="email_code"]');
+    $username = $element.find('[name="username"]');
+    $password = $element.find('[name="password"]');
+    $captchaCode = $element.find('[name="captcha_code"]');
 
-    $(element).on('open.mdui.dialog', () => {
+    $element.on('open.mdui.dialog', () => {
       if (state.email_valid) {
         $username[0].focus();
       } else {
@@ -52,68 +63,58 @@ export default {
    * 打开注册界面对话框
    */
   open: () => {
-    Dialog.open();
+    dialog.open();
   },
 
   /**
    * 关闭注册界面对话框
    */
   close: () => {
-    Dialog.close();
+    if (dialog) {
+      dialog.close();
+    }
   },
 
   /**
-   * 显示验证码输入行
+   * 打开登录对话框
    */
-  showCaptchaLine: () => {
-    Dialog.handleUpdate();
-    $captchaCode = Dialog.$dialog.find('[name="captcha_code"]');
-  },
-
-  /**
-   * 隐藏验证码输入行
-   */
-  hideCaptchaLine: () => {
-    setTimeout(() => {
-      Dialog.handleUpdate();
-    }, 0);
+  toLogin: () => {
+    dialog.close();
+    emit('login_open');
   },
 
   /**
    * 刷新验证码
    */
-  captchaRefresh: () => (state, actions) => {
-    Captcha.create((response) => {
-      if (response.code === 0) {
+  refreshCaptcha: () => (_, actions) => {
+    generateCaptcha()
+      .then(({ data: { captcha_token, captcha_image } }) => {
         actions.setState({
-          captcha_token: response.data.captcha_token,
-          captcha_image: response.data.captcha_image,
+          captcha_token,
+          captcha_image,
           captcha_code: '',
         });
 
         setTimeout(() => {
           $captchaCode[0].focus();
         }, 0);
-
-        return;
-      }
-
-      mdui.snackbar(response.message);
-    });
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 60秒倒计时
    */
   countdown: () => (state, actions) => {
-    if (state.re_send_countdown > 0) {
+    if (state.resend_countdown > 0) {
       actions.setState({
-        re_send_countdown: state.re_send_countdown - 1,
+        resend_countdown: state.resend_countdown - 1,
       });
+
       setTimeout(actions.countdown, 1000);
     } else {
       actions.setState({
-        show_re_send_countdown: false,
+        show_resend_countdown: false,
       });
     }
   },
@@ -121,28 +122,14 @@ export default {
   /**
    * 开始重新发送倒计时
    */
-  sendCountdown: () => (state, actions) => {
+  sendCountdown: () => (_, actions) => {
     actions.setState({
-      show_re_send_countdown: true,
-      re_send_countdown: 60,
+      show_resend_countdown: true,
+      resend_countdown: 60,
     });
 
     actions.countdown();
   },
-
-  /**
-   * 开始发送邮件
-   */
-  sendStart: () => ({
-    sending: true,
-  }),
-
-  /**
-   * 结束发送邮件
-   */
-  sendEnd: () => ({
-    sending: false,
-  }),
 
   /**
    * 发送邮件
@@ -154,197 +141,110 @@ export default {
     }
 
     if (state.captcha_token && !$captchaCode[0].validity.valid) {
-      actions.setState({
-        captcha_code_msg: '请输入图形验证码',
-      });
+      actions.setState({ captcha_code_msg: '请输入图形验证码' });
       $captchaCode[0].focus();
       return;
     }
 
-    actions.sendStart();
+    actions.setState({ sending: true });
 
-    const data = {
+    const formData = {
       email: state.email,
     };
 
     if (state.captcha_token) {
-      data.captcha_token = state.captcha_token;
-      data.captcha_code = state.captcha_code;
+      formData.captcha_token = state.captcha_token;
+      formData.captcha_code = state.captcha_code;
     }
 
-    User.sendRegisterEmail(data, (response) => {
-      actions.sendEnd();
-      actions.setState({
-        captcha_token: response.captcha_token || '',
-        captcha_image: response.captcha_image || '',
-        captcha_code: '',
-        email_code: '',
-        email_code_msg: '',
-      });
-
-      if (response.code === 0) {
+    sendRegisterEmail(formData)
+      .finally(() => {
+        actions.setState({
+          sending: false,
+          captcha_token: '',
+          captcha_image: '',
+          captcha_code: '',
+          email_code: '',
+          email_code_msg: '',
+        });
+      })
+      .then(() => {
         mdui.snackbar('邮箱验证码已发送');
         actions.sendCountdown();
-        return;
-      }
-
-      if (response.code === 100002) {
-        const email_msg = response.errors.email || '';
-        const captcha_code_msg = response.errors.captcha_code || '';
-
+      })
+      .catch((response) => {
         actions.setState({
-          email_msg,
-          captcha_code_msg,
+          captcha_token: response.captcha_token || '',
+          captcha_image: response.captcha_image || '',
         });
 
-        if (email_msg) {
-          $email[0].focus();
-        } else if (captcha_code_msg) {
-          setTimeout(() => {
+        // 字段验证失败
+        if (response.code === COMMON_FIELD_VERIFY_FAILED) {
+          const email_msg = response.errors.email || '';
+          const captcha_code_msg = response.errors.captcha_code || '';
+
+          actions.setState({
+            email_msg,
+            captcha_code_msg,
+          });
+
+          if (email_msg) {
+            $email[0].focus();
+          } else if (captcha_code_msg) {
             $captchaCode[0].focus();
-          }, 0);
+          }
+
+          return;
         }
-      }
-    });
+
+        // 其他错误
+        apiCatch(response);
+      });
   },
-
-  /**
-   * 开始验证邮箱验证码
-   */
-  verifyStart: () => ({
-    verifying: true,
-  }),
-
-  /**
-   * 结束验证邮箱验证码
-   */
-  verifyEnd: () => ({
-    verifying: false,
-  }),
 
   /**
    * 回到上一步
    */
-  prevStep: () => (state, actions) => {
-    actions.setState({
-      email_valid: false,
-    });
+  prevStep: () => (_, actions) => {
+    actions.setState({ email_valid: false });
   },
 
   /**
    * 点击下一步
    */
-  nextStep: e => (state, actions) => {
+  nextStep: (e) => (state, actions) => {
     e.preventDefault();
-    actions.verifyStart();
+    actions.setState({ verifying: true });
 
-    const data = {
+    const formData = {
       email: state.email,
       email_code: state.email_code,
     };
 
-    User.create(data, (response) => {
-      actions.verifyEnd();
+    // 没有传入 username 和 password 参数，调用接口一定会返回错误
+    // 若返回字段验证失败，且不含 email 和 email_code，则表示邮箱验证通过
+    register(formData)
+      .finally(() => {
+        actions.setState({ verifying: false });
+      })
+      .catch((response) => {
+        if (response.code === COMMON_FIELD_VERIFY_FAILED) {
+          // 不含 email 和 email_code 即表示邮箱验证通过
+          if (!response.errors.email && !response.errors.email_code) {
+            actions.setState({ email_valid: true });
 
-      // 仅邮箱验证成功一定返回 100002
-      if (response.code === 100002) {
-        // 不含 email 和 email_code 即表示邮箱验证通过
-        if (typeof response.errors.email === 'undefined' && typeof response.errors.email_code === 'undefined') {
+            setTimeout(() => {
+              $username[0].focus();
+            }, 0);
+
+            return;
+          }
+
+          // 邮箱验证未通过
+          const email_msg = response.errors.email || '';
+          const email_code_msg = response.errors.email_code || '';
+
           actions.setState({
-            email_valid: true,
-          });
-
-          setTimeout(() => {
-            $username[0].focus();
-          }, 0);
-
-          return;
-        }
-
-        const email_msg = response.errors.email || '';
-        const email_code_msg = response.errors.email_code || '';
-
-        actions.setState({
-          email_msg,
-          email_code_msg,
-        });
-
-        if (email_msg) {
-          $email[0].focus();
-        } else if (email_code_msg) {
-          $emailCode[0].focus();
-        }
-
-        return;
-      } else if (response.code === 100004) {
-        // 验证码已失效，需要重新验证邮箱
-        mdui.snackbar('验证码已失效，请重新发送邮箱验证码', {
-          timeout: 10000,
-        });
-
-        actions.setState({
-          email_code: '',
-          email_code_msg: '',
-        });
-
-        return;
-      }
-
-      mdui.snackbar(response.message);
-    });
-  },
-
-  /**
-   * 开始提交注册
-   */
-  registerStart: () => ({
-    submitting: true,
-  }),
-
-  /**
-   * 结束提交注册
-   */
-  registerEnd: () => ({
-    submitting: false,
-  }),
-
-  /**
-   * 提交注册
-   */
-  register: e => (state, actions) => {
-    e.preventDefault();
-    actions.registerStart();
-
-    const data = {
-      email: state.email,
-      email_code: state.email_code,
-      username: state.username,
-      password: state.password,
-      device: navigator.userAgent,
-    };
-
-    User.create(data, (response) => {
-      // 成功
-      if (response.code === 0) {
-        Cookies.set('token', response.data.token, { expires: 15 });
-        window.location.reload();
-
-        return;
-      }
-
-      actions.registerEnd();
-
-      // 字段验证失败
-      if (response.code === 100002) {
-        const email_msg = response.errors.email || '';
-        const email_code_msg = response.errors.email_code || '';
-        const username_msg = response.errors.username || '';
-        const password_msg = response.errors.password || '';
-
-        // 如果是邮箱或验证码错误，回到上一步
-        if (email_msg || email_code_msg) {
-          actions.setState({
-            email_valid: false,
             email_msg,
             email_code_msg,
           });
@@ -358,34 +258,115 @@ export default {
           return;
         }
 
-        actions.setState({
-          username_msg,
-          password_msg,
-        });
+        // 邮箱验证码已失效，需要重新发送邮件
+        if (response.code === COMMON_EMAIL_VERIFY_EXPIRED) {
+          mdui.snackbar('验证码已失效，请重新发送邮箱验证码', {
+            timeout: 10000,
+          });
 
-        if (username_msg) {
-          $username[0].focus();
-        } else if (password_msg) {
-          $password[0].focus();
+          actions.setState({
+            email_code: '',
+            email_code_msg: '',
+          });
+
+          return;
         }
 
-        return;
-      } else if (response.code === 100004) {
-        // 验证码已失效，需要重新验证邮箱
-        mdui.snackbar('验证码已失效，请重新发送邮箱验证码', {
-          timeout: 10000,
-        });
+        // 其他错误
+        apiCatch(response);
+      });
+  },
 
-        actions.setState({
-          email_valid: false,
-          email_code: '',
-          email_code_msg: '',
-        });
+  /**
+   * 提交注册
+   */
+  register: (e) => (state, actions) => {
+    e.preventDefault();
+    actions.setState({ submitting: true });
 
-        return;
-      }
+    const registerData = {
+      email: state.email,
+      email_code: state.email_code,
+      username: state.username,
+      password: state.password,
+    };
 
-      mdui.snackbar(response.message);
-    });
+    const loginData = {
+      name: state.username,
+      password: state.password,
+      device: window.navigator.userAgent,
+    };
+
+    register(registerData)
+      .then((response) => {
+        emit('user_update', response.data);
+        return login(loginData);
+      })
+      .finally(() => {
+        actions.setState({ submitting: false });
+      })
+      .then(({ data }) => {
+        setCookie('token', data.token);
+        window.location.reload();
+      })
+      .catch((response) => {
+        // 字段验证失败
+        if (response.code === COMMON_FIELD_VERIFY_FAILED) {
+          const email_msg = response.errors.email || '';
+          const email_code_msg = response.errors.email_code || '';
+          const username_msg = response.errors.username || '';
+          const password_msg = response.errors.password || '';
+
+          // 如果是邮箱或验证码错误，回到上一步
+          if (email_msg || email_code_msg) {
+            actions.setState({
+              email_valid: false,
+              email_msg,
+              email_code_msg,
+            });
+
+            if (email_msg) {
+              $email[0].focus();
+            } else if (email_code_msg) {
+              $emailCode[0].focus();
+            }
+
+            return;
+          }
+
+          // 用户名或密码错误
+          actions.setState({
+            username_msg,
+            password_msg,
+          });
+
+          if (username_msg) {
+            $username[0].focus();
+          } else if (password_msg) {
+            $password[0].focus();
+          }
+
+          return;
+        }
+
+        // 验证码失效，重新验证邮箱，回到上一步
+        if (response.code === COMMON_EMAIL_VERIFY_EXPIRED) {
+          mdui.snackbar('验证码已失效，请重新发送邮箱验证码', {
+            timeout: 10000,
+          });
+
+          actions.setState({
+            email_valid: false,
+            email_code: '',
+            email_code_msg: '',
+          });
+
+          return;
+        }
+
+        apiCatch(response);
+      });
   },
 };
+
+export default extend(as, commonActions);

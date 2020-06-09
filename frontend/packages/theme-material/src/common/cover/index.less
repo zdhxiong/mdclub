@@ -1,0 +1,35 @@
+.mc-avatar-upload,
+.mc-cover-upload {
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+
+  .upload-btn {
+    display: block;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    background-color: rgba(0, 0, 0, 0.26) !important;
+
+    i {
+      color: #fff !important;
+      opacity: .9;
+    }
+
+    &:hover,
+    &:active {
+      background-color: rgba(0, 0, 0, 0.26) !important;
+
+      i {
+        opacity: 1;
+      }
+    }
+
+    &+input[type="file"] {
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+  }
+}

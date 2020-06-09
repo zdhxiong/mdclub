@@ -1,5 +1,27 @@
-@import "../../helper/mixin";
+@import "../../vendor/mdui/variable.less";
 
-#page-questions {
-  max-width: 786px;
+#page-questions,
+#page-articles,
+#page-notifications {
+  max-width: 800px;
+
+  .item-list {
+    @media (max-width: @screen-xs-max) {
+      border-top: 1px solid rgba(0, 0, 0, .12);
+      border-right: none;
+      border-bottom: 1px solid rgba(0, 0, 0, .12);
+      border-left: none;
+      border-radius: 0;
+      box-shadow: none;
+
+      .mdui-theme-layout-dark & {
+        border-top-color: rgba(255, 255, 255, .12);
+        border-bottom-color: rgba(255, 255, 255, .12);
+      }
+    }
+  }
+
+  .mc-loading {
+    margin-bottom: -62px;
+  }
 }

@@ -1,0 +1,93 @@
+@import '~mdui/src/styles/variable/global.less';
+
+.mc-appbar .toolbar .avatar {
+  display: block;
+  min-width: 32px;
+
+  .user {
+    transition: box-shadow .2s cubic-bezier(0.4, 0, 1, 1);
+
+    &:hover {
+      box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    }
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .popover {
+    width: 330px;
+    height: 192px;
+    padding: 0;
+
+    .info,
+    .bottom {
+      position: absolute;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .info {
+      top: 0;
+      left: 0;
+      height: 139px;
+      padding: 22px 20px;
+    }
+
+    .bottom {
+      bottom: 0;
+      left: 0;
+      padding: 10px 20px;
+      background-color: #f5f5f5;
+      border-color: rgba(0, 0, 0, .2);
+      border-top: 1px solid rgba(0, 0, 0, .12);
+
+      .mdui-theme-layout-dark & {
+        background-color: @layout-dark-color-4;
+        border-top-color: rgba(255, 255, 255, .12);
+      }
+
+      button {
+        float: right;
+        min-width: 46px;
+      }
+    }
+
+    .avatar-box {
+      position: relative;
+      float: left;
+      width: 96px;
+      height: 96px;
+      overflow: hidden;
+      border-radius: 50%;
+
+      .mc-avatar-upload {
+        display: none;
+      }
+
+      &:hover .mc-avatar-upload {
+        display: block;
+      }
+    }
+
+    .username,
+    .email {
+      margin-left: 112px;
+      line-height: 20px;
+    }
+
+    .username {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .email {
+      font-size: 13px;
+    }
+
+    .personal {
+      margin-left: 16px;
+    }
+  }
+}

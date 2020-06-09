@@ -1,16 +1,9 @@
-/* 应用栏中登录注册按钮 */
-.mc-login-btn,
-.mc-register-btn {
-  min-width: 52px !important;
-  margin: 0 24px 0 0 !important;
+@import "../../vendor/mdui/variable.less";
 
-  @media (max-width: 1023px) {
-    padding: 0 12px;
-    margin-right: 16px !important;
-  }
+.mc-appbar {
+  background-color: #fff;
 
-  @media (max-width: 599px) {
-    padding: 0 8px;
-    margin-right: 8px !important;
+  .mdui-theme-layout-dark & {
+    background-color: @layout-dark-color-3;
   }
 }

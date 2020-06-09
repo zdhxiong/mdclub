@@ -1,0 +1,215 @@
+@import '../../../../vendor/mdui/variable.less';
+
+#page-user .user {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+
+  .cover {
+    position: relative;
+    box-sizing: border-box;
+    height: 0;
+    padding-bottom: 56%; // 默认仅显示 24%
+    overflow: visible;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    .mc-cover-upload {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: none;
+    }
+
+    &:hover .mc-cover-upload {
+      display: block;
+    }
+  }
+
+  .info {
+    position: relative;
+    display: flex;
+    padding: 20px 24px 20px 20px;
+
+    .avatar-box {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 110px;
+      min-width: 110px;
+      height: 110px;
+      background-color: rgba(0, 0, 0, .06);
+      border-radius: 50%;
+
+      .mdui-theme-layout-dark & {
+        background-color: rgba(255, 255, 255, .06);
+      }
+
+      .avatar {
+        width: 102px;
+        height: 102px;
+        border-radius: 50%;
+        user-select: none;
+      }
+
+      .mc-avatar-upload {
+        display: none;
+      }
+
+      &:hover .mc-avatar-upload {
+        display: block;
+      }
+    }
+
+    .profile {
+      padding-left: 32px;
+
+      .meta {
+        display: block;
+        align-items: center;
+        padding-left: 30px;
+        line-height: 22px;
+
+        &+.meta {
+          margin-top: 8px;
+        }
+
+        i {
+          float: left;
+          margin-left: -30px;
+          padding-top: 2px;
+          font-size: 18px;
+        }
+      }
+
+      .username {
+        padding-top: 8px;
+        padding-bottom: 4px;
+        padding-left: 0;
+        font-size: 32px;
+        line-height: 32px;
+      }
+
+      &.fold {
+        .meta {
+          display: none;
+
+          &:first-child,
+          &:nth-child(2) {
+            display: block;
+          }
+        }
+      }
+
+      .fold-button {
+        margin-top: 8px;
+        margin-left: -16px;
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px 16px 57px;
+
+    .mc-follow,
+    .edit {
+      margin-right: 58px;
+    }
+
+    .edit i {
+      font-size: 21px;
+    }
+
+    .follow {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
+
+    .divider {
+      width: 1px;
+      height: 16px;
+      margin: 0 8px;
+      background-color: rgba(0, 0, 0, .12);
+
+      .mdui-theme-layout-dark & {
+        background-color: rgba(255, 255, 255, .12);
+      }
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    border-radius: 0;
+
+    .cover {
+      border-radius: 0;
+    }
+
+    .info {
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 16px 16px;
+
+      .avatar-box {
+        width: 106px;
+        min-width: 106px;
+        height: 106px;
+        margin-top: -53px;
+      }
+
+      .profile {
+        width: 100%;
+        padding-left: 0;
+
+        &.fold {
+          width: auto;
+        }
+
+        .username {
+          padding-top: 10px;
+          font-size: 24px;
+          text-align: center;
+        }
+      }
+    }
+
+    .actions {
+      position: relative;
+      margin-top: 54px;
+      padding: 0 16px 16px 16px;
+
+      .mc-follow,
+      .edit {
+        margin-right: 0;
+      }
+
+      .follow {
+        position: absolute;
+        top: -54px;
+        right: 16px;
+        left: 16px;
+        border-top: 1px solid rgba(0, 0, 0, .06);
+        border-bottom: 1px solid rgba(0, 0, 0, .06);
+
+        .mdui-theme-layout-dark & {
+          border-color: rgba(255, 255, 255, .06);
+        }
+      }
+
+      .followers,
+      .followees {
+        width: 50%;
+        border-radius: 0;
+      }
+
+      .divider {
+        margin: 0;
+      }
+    }
+  }
+}

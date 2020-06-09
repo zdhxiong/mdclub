@@ -1,3 +1,4 @@
-export default {
-  topic: {}, // 话题信息
-};
+import extend from 'mdui.jq/es/functions/extend';
+import stateDefault from './stateDefault';
+
+export default extend({}, stateDefault);

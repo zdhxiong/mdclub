@@ -1,0 +1,85 @@
+@import "../../vendor/mdui/variable.less";
+
+.mc-comments-page {
+  .mc-list-header {
+    margin-top: 32px;
+    margin-bottom: 20px;
+
+    @media (max-width: @screen-xs-max) {
+      margin-top: 20px;
+      margin-bottom: 12px;
+      padding: 0 16px;
+
+      .mdui-btn {
+        padding-right: 0;
+      }
+    }
+  }
+
+  .comments-wrapper {
+    margin-bottom: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 8px;
+
+    .mdui-theme-layout-dark & {
+      border-color: rgba(255, 255, 255, .12);
+    }
+
+    .mc-loaded {
+      margin-bottom: 24px !important;
+    }
+
+    @media (max-width: @screen-xs-max) {
+      border-right: none;
+      border-left: none;
+      border-radius: 0;
+    }
+  }
+
+  .comments {
+    border: none;
+  }
+
+  .new-comment-fixed {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    @media (min-width: @screen-md-min) {
+      .mdui-drawer-body-left & {
+        left: 240px;
+      }
+    }
+
+    .mdui-container {
+      max-width: 846px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .new-comment {
+      box-sizing: border-box;
+      padding-right: 64px !important;
+      padding-left: 64px !important;
+      border-right: 1px solid rgba(0, 0, 0, .12);
+      border-left: 1px solid rgba(0, 0, 0, .12);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      box-shadow: 0 -1px 3px rgba(26, 26, 26, 0.1);
+
+      .mdui-theme-layout-dark & {
+        border-top-color: rgba(255, 255, 255, .12);
+      }
+
+      @media (max-width: @screen-xs-max) {
+        padding-right: 16px !important;
+        padding-left: 16px !important;
+        border-right: none;
+        border-left: none;
+        border-radius: 0;
+      }
+    }
+  }
+}

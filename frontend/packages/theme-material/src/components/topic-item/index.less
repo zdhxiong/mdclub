@@ -1,0 +1,41 @@
+@import '../../vendor/mdui/variable.less';
+
+.mc-topic-item {
+  .item {
+    margin-bottom: 16px;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 8px;
+    }
+
+    .info {
+      display: block;
+      box-sizing: border-box;
+      padding: 56% 16px 0 16px;
+      text-decoration: none;
+    }
+
+    .name {
+      padding-top: 16px;
+      padding-bottom: 8px;
+      overflow: hidden;
+      font-size: 16px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      word-break: break-all;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0 8px 16px;
+    }
+
+    .followers {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}

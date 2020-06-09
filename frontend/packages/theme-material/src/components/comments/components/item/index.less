@@ -1,0 +1,52 @@
+@import "../../../../vendor/mdui/variable.less";
+
+// 部分样式位于 /pages/question/components/answer-item/index.less
+.mc-comments .item {
+  .content {
+    line-height: 1.6;
+  }
+
+  // 回复按钮
+  .actions > .mc-icon-button {
+    margin-left: 8px;
+
+    i {
+      font-size: 22px;
+    }
+  }
+
+  .reply_count,
+  .reply_more {
+    display: inline-block;
+    height: 24px;
+    color: @primaryColor;
+    line-height: 24px;
+    cursor: pointer;
+
+    i {
+      float: left;
+      transition: transform .3s;
+    }
+
+    span {
+      font-size: 14px;
+    }
+
+    .mdui-theme-layout-dark & {
+      color: @primaryColorDark;
+    }
+  }
+
+  .reply_more {
+    i {
+      margin-right: 3px;
+      font-size: 20px;
+    }
+  }
+
+  .show-replies {
+    i {
+      transform: rotate(180deg);
+    }
+  }
+}

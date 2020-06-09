@@ -1,0 +1,132 @@
+@import "../../../../vendor/mdui/variable.less";
+
+#page-notifications {
+  .item {
+    position: relative;
+    padding: 20px 24px;
+
+    @media (max-width: @screen-xs-max) {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+
+    &::after {
+      position: absolute;
+      right: 24px;
+      bottom: 0;
+      left: 24px;
+      height: 1px;
+      background-color: rgba(0, 0, 0, .08);
+      content: ' ';
+
+      @media (max-width: @screen-xs-max) {
+        right: 16px;
+        left: 16px;
+      }
+
+      .mdui-theme-layout-dark & {
+        background-color: rgba(255, 255, 255, .08);
+      }
+    }
+
+    .title {
+      padding-right: 32px;
+      line-height: 24px;
+
+      .user,
+      .article,
+      .question {
+        color: @primaryColor;
+        text-decoration: none;
+
+        .mdui-theme-layout-dark & {
+          color: @primaryColorDark;
+        }
+
+        &.deleted {
+          color: inherit;
+          font-weight: bold;
+          opacity: .68;
+        }
+      }
+    }
+
+    .content {
+      box-sizing: border-box;
+      min-height: 34px;
+      margin-top: 10px;
+      padding: 6px 32px 6px 8px;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 14px;
+      line-height: 22px;
+      background-color: rgba(0, 0, 0, .04);
+      border-radius: 4px;
+
+      .mdui-theme-layout-dark & {
+        color: rgba(255, 255, 255, .7);
+        background-color: #424242;
+      }
+
+      .mc-loading {
+        margin-bottom: 0;
+      }
+    }
+
+    .mdui-typo {
+      padding-top: 16px;
+      padding-bottom: 16px;
+
+      pre.hljs {
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, .12);
+
+        .mdui-theme-layout-dark & {
+          border-color: rgba(255, 255, 255, .12);
+        }
+      }
+    }
+
+    .more,
+    .delete {
+      position: absolute;
+      right: 28px;
+      display: none;
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      color: @primaryColor;
+      cursor: pointer;
+
+      .mdui-theme-layout-dark & {
+        color: @primaryColorDark;
+      }
+
+      @media (max-width: @screen-xs-max) {
+        right: 20px;
+      }
+    }
+
+    .more {
+      bottom: 25px;
+
+      @media (max-width: @screen-xs-max) {
+        display: block;
+      }
+    }
+
+    .delete {
+      top: 16px;
+
+      .mdui-icon {
+        font-size: 16px;
+      }
+    }
+
+    &:hover {
+      .more,
+      .delete {
+        display: block;
+      }
+    }
+  }
+}

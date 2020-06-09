@@ -1,39 +1,56 @@
+@import '../../vendor/mdui/variable.less';
+
 .mc-drawer {
-  /* 图标颜色 */
-  .mdui-text-color-theme {
-    .mdui-list-item-icon {
-      color: inherit;
-    }
+  .mdui-list {
+    box-sizing: border-box;
+    min-height: ~'calc(100% - 120px)';
   }
 
-  /* 桌面端文字不加粗 */
-  @media (min-width: 1024px) {
-    .mdui-list-item:hover,
-    .mdui-list-item-active {
-      background-color: rgba(0, 0, 0, .042);
-      font-weight: normal;
+  .mdui-list-item {
+    padding-left: 20px;
+    border-radius: 0 50px 50px 0;
+  }
 
-      .mdui-list-item-content {
-        font-weight: normal;
+  .mdui-list-item-icon {
+    transform: scale(.875);
+  }
+
+  .mdui-list-item-content {
+    font-weight: normal;
+    font-size: 14px;
+  }
+
+  .mdui-list-item-active {
+    color: @primaryColor;
+    background-color: #e8f0fe;
+
+    .mdui-theme-layout-dark & {
+      color: #fff;
+      background-color: @layout-dark-color-4;
+    }
+
+    .mdui-list-item-icon {
+      color: @primaryColor;
+
+      .mdui-theme-layout-dark & {
+        color: #fff;
       }
     }
   }
 
-  .mdui-list {
-    min-height: ~'calc(100% - 80px)';
-    box-sizing: border-box;
-  }
-
   .copyright {
-    padding: 20px 16px;
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
+    padding: 20px 16px;
 
     p {
       margin: 0;
-      line-height: 20px;
+      overflow: hidden;
       color: rgba(0, 0, 0, 0.38);
       font-size: 13px;
+      line-height: 20px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     a {

@@ -1,4 +1,5 @@
-@import "../../helper/mixin";
+@import '../../vendor/mdui/variable.less';
+@import "../../utils/mixin.less";
 
 .mc-users-dialog {
   max-width: 530px;
@@ -6,8 +7,8 @@
   max-height: 720px !important;
 
   .mdui-dialog-title {
-    line-height: 36px;
     padding: 16px 24px;
+    line-height: 36px;
   }
 
   .mdui-dialog-content,
@@ -19,6 +20,16 @@
     padding-bottom: 62px;
   }
 
+  .item {
+    position: relative;
+  }
+
+  .mc-follow {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+  }
+
   .mdui-list-item {
     padding: 8px 24px;
   }
@@ -27,18 +38,28 @@
     display: none;
   }
 
-  @media (max-width: 599px) {
+  @media (max-width: @screen-xs-max) {
     .mc-dialog-fullscreen();
 
     .mdui-dialog-title {
-      padding: 10px 8px;
+      padding: 10px 8px 10px 8px;
+      font-size: 16px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      .mdui-theme-layout-dark & {
+        border-bottom-color: rgba(255, 255, 255, .12);
+      }
+    }
+
+    .mdui-list-item {
+      padding-right: 16px;
+      padding-left: 16px;
     }
 
     .close {
-      float: left;
       display: inline-block;
-      margin-right: 8px;
+      float: left;
+      margin-right: 16px;
     }
   }
 }

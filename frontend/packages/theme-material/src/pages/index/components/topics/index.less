@@ -1,0 +1,82 @@
+@import '../../../../vendor/mdui/variable.less';
+
+#page-index .topics-wrapper {
+  position: relative;
+
+  .arrow-left,
+  .arrow-right {
+    position: absolute;
+    top: calc(~'50% - 18px');
+    background-color: #fff;
+
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
+
+    .mdui-theme-layout-dark & {
+      background-color: @layout-dark-color-4;
+    }
+  }
+
+  .arrow-left {
+    left: -10px;
+  }
+
+  .arrow-right {
+    right: -10px;
+  }
+
+  .topics {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    // 在手机上显示滚动条，但宽度为 0，可手指滑动左右滚动
+    // 在 PC 上，不显示滚动条，在左右侧显示箭头点击滚动
+    @media (min-width: @screen-sm-min) {
+      padding: 0;
+      overflow: hidden;
+    }
+  }
+
+  .mc-topic-item {
+    position: relative;
+    display: inline-block;
+    float: none;
+    box-sizing: border-box;
+    width: 46%;
+    padding-right: 4px;
+    padding-left: 4px;
+
+    &:first-child {
+      padding-left: 8px;
+    }
+
+    &:last-child {
+      padding-right: 8px;
+    }
+
+    @media (min-width: @screen-sm-min) {
+      width: 33.333333%;
+      padding-right: 8px !important;
+      padding-left: 8px !important;
+    }
+
+    @media (min-width: @screen-md-min) {
+      width: 25%;
+    }
+
+    .item {
+      margin-bottom: 0;
+    }
+  }
+}

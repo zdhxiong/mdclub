@@ -1,0 +1,38 @@
+@import '../../../../vendor/mdui/variable.less';
+
+#page-topic .contexts,
+#page-user .contexts {
+  margin-top: 16px;
+
+  .mc-list-header {
+    padding: 16px;
+
+    .title {
+      font-size: 16px;
+    }
+
+    button {
+      padding-right: 0;
+    }
+  }
+
+  .item-list {
+    border-top: 1px solid rgba(0, 0, 0, .12);
+
+    .mdui-theme-layout-dark & {
+      border-top-color: rgba(255, 255, 255, .12);
+    }
+  }
+
+  @media (max-width: @screen-xs-max) {
+    border-right: none;
+    border-left: none;
+    border-radius: 0;
+
+    .mc-list-header {
+      .title {
+        font-size: 15px;
+      }
+    }
+  }
+}

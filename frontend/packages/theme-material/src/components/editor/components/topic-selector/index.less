@@ -1,0 +1,72 @@
+@import "../../../../utils/mixin.less";
+
+.mc-topic-selector {
+  max-width: 530px;
+  height: 94% !important;
+  max-height: 720px !important;
+
+  .mdui-dialog-title {
+    padding: 16px 24px;
+    line-height: 36px;
+  }
+
+  .mdui-dialog-content,
+  .mdui-list {
+    padding: 0;
+  }
+
+  .mdui-dialog-content {
+    padding-bottom: 62px;
+  }
+
+  .mdui-list-item {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .mdui-list-item-avatar {
+    overflow: hidden;
+
+    img {
+      width: auto;
+      margin-left: -16px;
+      border-radius: 0;
+    }
+  }
+
+  .close {
+    display: none;
+  }
+
+  .selected {
+    padding: 0 24px 8px 24px;
+    line-height: 1;
+
+    .mdui-chip {
+      margin-right: 8px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .mc-dialog-fullscreen();
+
+    .mdui-dialog-title {
+      padding: 10px 8px 10px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+      .mdui-theme-layout-dark & {
+        border-bottom-color: rgba(255, 255, 255, .12);
+      }
+    }
+
+    .selected {
+      padding-top: 12px;
+    }
+
+    .close {
+      display: inline-block;
+      float: left;
+      margin-right: 16px;
+    }
+  }
+}
