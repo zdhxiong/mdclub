@@ -32,11 +32,6 @@ properties:
     description: 回答数量
     minimum: 0
     example: 18
-  view_count:
-    type: integer
-    description: 浏览量
-    minimum: 0
-    example: 168
   follower_count:
     type: integer
     description: 关注者数量
@@ -86,7 +81,6 @@ required:
   - content_rendered
   - comment_count
   - answer_count
-  - view_count
   - follower_count
   - vote_count
   - vote_up_count
