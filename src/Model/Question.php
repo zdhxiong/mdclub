@@ -25,7 +25,6 @@ class Question extends Abstracts
         'content_rendered',
         'comment_count',
         'answer_count',
-        'view_count',
         'follower_count',
         'vote_count',
         'vote_up_count',
@@ -65,7 +64,6 @@ class Question extends Abstracts
         return collect($data)->union([
             'comment_count'    => 0,
             'answer_count'     => 0,
-            'view_count'       => 0,
             'follower_count'   => 0,
             'vote_count'       => 0,
             'vote_up_count'    => 0,

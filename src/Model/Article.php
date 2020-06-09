@@ -23,7 +23,6 @@ class Article extends Abstracts
         'content_markdown',
         'content_rendered',
         'comment_count',
-        'view_count',
         'follower_count',
         'vote_count',
         'vote_up_count',
@@ -61,7 +60,6 @@ class Article extends Abstracts
     {
         return collect($data)->union([
             'comment_count'   => 0,
-            'view_count'      => 0,
             'follower_count'  => 0,
             'vote_count'      => 0,
             'vote_up_count'   => 0,
