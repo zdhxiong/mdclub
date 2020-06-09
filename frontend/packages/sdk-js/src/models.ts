@@ -139,10 +139,6 @@ export interface Article {
    */
   comment_count: number;
   /**
-   * 浏览量
-   */
-  view_count: number;
-  /**
    * 关注者数量
    */
   follower_count: number;
@@ -1403,10 +1399,6 @@ export interface Question {
    * 回答数量
    */
   answer_count: number;
-  /**
-   * 浏览量
-   */
-  view_count: number;
   /**
    * 关注者数量
    */
