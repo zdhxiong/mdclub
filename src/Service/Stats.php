@@ -28,7 +28,11 @@ class Stats
     {
         $dbInfo = Db::info();
 
-        $dbSizeSQL = "SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as size FROM information_schema.TABLES where TABLE_SCHEMA='mdclub_test'";
+        $dbSizeSQL = "
+         SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) as size
+         FROM information_schema.TABLES
+         WHERE TABLE_SCHEMA='mdclub_test'
+        ";
         $dbSize = (int) Db::query($dbSizeSQL)->fetchColumn(0);
 
         return [

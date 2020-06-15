@@ -12,7 +12,6 @@ use MDClub\Facade\Library\Option;
 use MDClub\Facade\Library\Request;
 use MDClub\Facade\Model\AnswerModel;
 use MDClub\Facade\Service\AnswerService;
-use MDClub\Facade\Service\QuestionService;
 use MDClub\Validator\Traits\Markdown;
 
 /**

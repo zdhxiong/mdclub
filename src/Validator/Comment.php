@@ -12,7 +12,6 @@ use MDClub\Facade\Library\Option;
 use MDClub\Facade\Library\Request;
 use MDClub\Facade\Model\CommentModel;
 use MDClub\Facade\Service\CommentService;
-use MDClub\Facade\Service\QuestionService;
 
 /**
  * 管理员可编辑所有评论，普通用户是否可编辑自己的评论由配置项设置

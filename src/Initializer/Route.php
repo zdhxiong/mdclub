@@ -8,6 +8,7 @@ use MDClub\Middleware\Trace;
 use MDClub\Middleware\TrailingSlash;
 use MDClub\Route\Admin;
 use MDClub\Route\Home;
+use MDClub\Route\Install;
 use MDClub\Route\RestApi;
 use MDClub\Route\Rss;
 use Psr\Http\Message\ServerRequestInterface;
@@ -54,6 +55,7 @@ class Route
         new RestApi();
         new Rss();
         new Admin();
+        new Install();
 
         $slim->map(
             ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

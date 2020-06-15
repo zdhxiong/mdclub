@@ -73,7 +73,7 @@ class App
      * @param  array $focusConfig
      * @return array
      */
-    protected function getConfig(array $focusConfig): array
+    protected function getConfig(array $focusConfig = []): array
     {
         $config = require __DIR__ . '/../../config.default.php';
 

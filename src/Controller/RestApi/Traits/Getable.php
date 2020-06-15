@@ -33,11 +33,11 @@ trait Getable
     /**
      * 获取对象的详情
      *
-     * @param int $getableId
+     * @param int|string $getableId
      *
      * @return array
      */
-    public function get(int $getableId): array
+    public function get($getableId): array
     {
         $service = $this->getServiceInstance();
 
