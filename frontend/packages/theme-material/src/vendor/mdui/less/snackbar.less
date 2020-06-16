@@ -128,8 +128,10 @@
  * ************   Snackbar dark   ************
  * =============================================================================
  */
-.mdui-theme-layout-dark when (@globalLayoutDark = true) {
-  .mdui-snackbar {
-    background-color: #5d5d5d;
+.layout-theme({
+  .mdui-theme-layout-dark when (@globalLayoutDark = true) {
+    .mdui-snackbar {
+      background-color: #5d5d5d;
+    }
   }
-}
+});
