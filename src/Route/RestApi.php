@@ -21,6 +21,7 @@ use MDClub\Controller\RestApi\User;
 use MDClub\Initializer\App;
 use MDClub\Middleware\EnableCrossRequest;
 use MDClub\Middleware\JsonBodyParser;
+use MDClub\Middleware\NeedInstalled;
 use MDClub\Middleware\NeedLogin;
 use MDClub\Middleware\NeedManager;
 use MDClub\Middleware\Transformer\Answer as TransformerForAnswer;
@@ -69,7 +70,8 @@ class RestApi
                 $route->image($group);
             })
             ->add(EnableCrossRequest::class)
-            ->add(JsonBodyParser::class);
+            ->add(JsonBodyParser::class)
+            ->add(NeedInstalled::class);
     }
 
     /**

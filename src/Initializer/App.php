@@ -75,10 +75,10 @@ class App
      */
     protected function getConfig(array $focusConfig = []): array
     {
-        $config = require __DIR__ . '/../../config.default.php';
+        $config = require __DIR__ . '/../../config/config.default.php';
 
-        if (is_file(__DIR__ . '/../../config.php')) {
-            $config = array_merge($config, require __DIR__ . '/../../config.php');
+        if (is_file(__DIR__ . '/../../config/config.php')) {
+            $config = array_merge($config, require __DIR__ . '/../../config/config.php');
         }
 
         return array_merge($config, $focusConfig);

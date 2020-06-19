@@ -10,6 +10,36 @@ use Markdownify\Converter;
 use Parsedown;
 
 /**
+ * 把存储容量转换为字节，如 200MB 转换为整型字节
+ *
+ * @param  string $memory
+ * @return int
+ */
+function memoryToByte(string $memory): int
+{
+    $memory = strtoupper(str_replace(' ', '', $memory));
+    [$number, $unit] = preg_split("/([0-9\.]+)/", $memory, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $number = (int) $number;
+
+    $units = [
+        ['B'],
+        ['KB', 'K'],
+        ['MB', 'M'],
+        ['GB', 'G'],
+        ['TB', 'T'],
+    ];
+    $result = 0;
+
+    foreach ($units as $index => $unitArr) {
+        if (in_array(strtoupper($unit), $unitArr)) {
+            $result = $number * pow(1024, $index);
+        }
+    }
+
+    return $result;
+}
+
+/**
  * 字符串相关方法
  */
 class Str
@@ -42,6 +72,18 @@ class Str
         }
 
         return round($memory, 2) . ' ' . $units[$pos];
+    }
+
+    /**
+     * 比较两个存储容量的大小，第一个大于第二个，则返回1，小于第二个则返回-1，相等则返回0
+     *
+     * @param  string $memory1
+     * @param  string $memory2
+     * @return int
+     */
+    public static function memoryCompare(string $memory1, string $memory2): int
+    {
+        return memoryToByte($memory1) <=> memoryToByte($memory2);
     }
 
     /**

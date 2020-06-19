@@ -24,6 +24,7 @@ class ApiErrorConstant
     public const SYSTEM_API_NOT_FOUND             = [100004, '接口不存在'];
     public const SYSTEM_API_NOT_ALLOWED           = [100005, '该接口不支持此 HTTP METHOD'];
     public const SYSTEM_REQUEST_JSON_INVALID      = [100006, '请求参数的 json 格式错误'];
+    public const SYSTEM_INSTALL_FAILED            = [100007, '系统安装失败'];
 
     /**
      * 通用服务错误，模块编号：0

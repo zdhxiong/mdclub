@@ -2,7 +2,7 @@
 
 return [
     'APP_DEBUG'         => false,             // 是否开启调试模式，
-    'APP_RUNTIME'       => __DIR__ . '/var',  // 临时文件存放目录
+    'APP_RUNTIME'       => __DIR__ . '/../var',  // 临时文件存放目录
     'APP_SHOW_API_DOCS' => false,             // 若为 true，则访问 /api 页面时，将显示 swagger 文档
 
     'DB_CONNECTION'     => 'mysql',           // 数据库类型

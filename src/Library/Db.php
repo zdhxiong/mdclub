@@ -13,9 +13,12 @@ use PDO;
  */
 class Db extends Medoo
 {
-    public function __construct()
+    /**
+     * @param array $customConfig
+     */
+    public function __construct(array $customConfig = [])
     {
-        $config = App::$config;
+        $config = array_merge(App::$config, $customConfig);
         $options = [
             'database_type' => $config['DB_CONNECTION'],
             'server'        => $config['DB_HOST'],

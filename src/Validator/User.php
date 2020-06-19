@@ -186,10 +186,15 @@ class User extends Abstracts
      */
     public function register(array $data): array
     {
-        $data = $this->data($data)
-            ->field('email')->exist()->emailNotExist()
-            ->field('email_code')->exist()->string()->notEmpty()->emailCode()
-            ->validate();
+        $this->data($data)
+            ->field('email')->exist()->emailNotExist();
+
+        // 只有安装完才需要验证邮箱，未安装时创建管理员账号不验证邮箱
+        if (file_exists(__DIR__ . '/../../config/config.php')) {
+            $this->field('email_code')->exist()->string()->notEmpty()->emailCode();
+        }
+
+        $data = $this->validate();
 
         return $this->data($data)
             ->field('username')->exist()->usernameNotExist()

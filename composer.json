@@ -12,15 +12,11 @@
     "require": {
         "php": ">=7.2.0",
         "ext-curl": "*",
-        "ext-ftp": "*",
         "ext-gd": "*",
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-iconv": "*",
-        "ext-com": "*",
-        "ext-password": "*",
-        "ext-csprng": "*",
         "psr/container": "^1.0",
         "pimple/pimple": "^3.3",
         "psr/http-client": "^1.0",
@@ -59,8 +55,7 @@
         "filp/whoops": "^2.7",
         "squizlabs/php_codesniffer": "^3.5",
         "phpstan/phpstan": "^0.12",
-        "roave/security-advisories": "dev-master",
-        "nette/php-generator": "^3.3"
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "files": [
