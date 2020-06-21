@@ -111,7 +111,7 @@ class Index
         UserModel
             ::set('username', $registerData['username'])
             ->set('email', $registerData['email'])
-            ->set('password', sha1($registerData['password']))
+            ->set('password', $registerData['password'])
             ->insert();
 
         // 写入 config.php 文件
