@@ -7,6 +7,7 @@ namespace MDClub\Controller\Install;
 use Exception;
 use MDClub\Constant\ApiErrorConstant;
 use MDClub\Exception\ApiException;
+use MDClub\Exception\ValidationException;
 use MDClub\Facade\Library\Request;
 use MDClub\Facade\Library\View;
 use MDClub\Facade\Model\UserModel;
@@ -54,11 +55,23 @@ class Index
                 App::$config[$key] = $value;
             }
         } catch (Exception $exception) {
-            throw new ApiException(ApiErrorConstant::SYSTEM_INSTALL_FAILED, false, $exception->getMessage());
+            throw new ApiException(
+                ApiErrorConstant::SYSTEM_INSTALL_FAILED,
+                false,
+                $exception->getMessage()
+            );
         }
 
         // 导入数据库文件
         $sqlFile = __DIR__ . '/../../../mdclub.sql';
+
+        if (!file_exists($sqlFile)) {
+            throw new ApiException(
+                ApiErrorConstant::SYSTEM_INSTALL_FAILED,
+                false,
+                '未找到根目录下的 mdclub.sql 文件，请检查安装包是否完整'
+            );
+        }
 
         $sql = file_get_contents($sqlFile);
         $sql = str_replace(
@@ -68,10 +81,18 @@ class Index
         );
         $sqlArr = explode(';', $sql);
 
-        foreach ($sqlArr as $sqlLine) {
-            if ($sqlLine) {
-                $database->query($sqlLine);
+        try {
+            foreach ($sqlArr as $sqlLine) {
+                if ($sqlLine) {
+                    $database->query($sqlLine);
+                }
             }
+        } catch (Exception $exception) {
+            throw new ApiException(
+                ApiErrorConstant::SYSTEM_INSTALL_FAILED,
+                false,
+                $exception->getMessage()
+            );
         }
 
         // 创建管理员账号
@@ -80,6 +101,13 @@ class Index
             'username' => $requestBody['admin_username'],
             'password' => sha1($requestBody['admin_password']),
         ]);
+
+        if (!$requestBody['admin_password']) {
+            throw new ValidationException([
+                'password' => '密码不能为空',
+            ]);
+        }
+
         UserModel
             ::set('username', $registerData['username'])
             ->set('email', $registerData['email'])
@@ -96,7 +124,15 @@ return [
     'DB_PASSWORD' => '${requestBody['db_password']}',
     'DB_PREFIX' => '${requestBody['db_prefix']}'
 ];";
-        file_put_contents(__DIR__ . '/../../../config/config.php', $configFile);
+        try {
+            file_put_contents(__DIR__ . '/../../../config/config.php', $configFile);
+        } catch (Exception $exception) {
+            throw new ApiException(
+                ApiErrorConstant::SYSTEM_INSTALL_FAILED,
+                false,
+                $exception->getMessage()
+            );
+        }
 
         return [];
     }

@@ -41,6 +41,33 @@ function checkResult($success, string $text, $failText = null, bool $must = true
             justify-content: center;
         }
 
+        /* 加载状态遮罩 */
+        .mc-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, .65);
+            opacity: 0;
+            transition: opacity .2s ease;
+            will-change: opacity;
+        }
+
+        .mc-loading-overlay-show {
+            opacity: 1;
+        }
+
+        @media screen and (prefers-color-scheme: dark) {
+            .mc-loading-overlay {
+                background: rgba(255, 255, 255, .16);
+            }
+        }
+
         /* 设置表格样式 */
         .mdui-table-fluid,
         .mdui-table {
@@ -331,8 +358,26 @@ function checkResult($success, string $text, $failText = null, bool $must = true
             }
         }
 
+        /* 导入数据库，创建管理员 */
         .database .form {
             margin-top: 16px;
+        }
+
+        /* 安装完成 */
+        .complete {
+            padding-top: 48px;
+            padding-bottom: 48px;
+            height: calc(100vh - 72px);
+            box-sizing: border-box;
+        }
+
+        .complete .mdui-typo-headline {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .complete .mdui-typo-body-2 {
+            line-height: 32px;
         }
     </style>
     <title>安装 MDClub</title>
@@ -582,7 +627,7 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
                     </div>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">密码</label>
-                        <input class="mdui-textfield-input" name="db_password"/>
+                        <input class="mdui-textfield-input" name="db_password" autocomplete="off"/>
                     </div>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">表前缀</label>
@@ -604,7 +649,7 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
                     </div>
                     <div class="mdui-textfield">
                         <label class="mdui-textfield-label">密码</label>
-                        <input class="mdui-textfield-input" name="admin_password"/>
+                        <input class="mdui-textfield-input" name="admin_password" autocomplete="off"/>
                     </div>
                 </div>
             </div>
@@ -613,7 +658,11 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
             </div>
         </form>
         <div class="content complete">
-
+            <div class="mdui-typo-headline">恭喜你完成安装</div>
+            <div class="mdui-typo">
+                <p>现在，你可以前往 <a href="<?= get_host_url() ?>"><?= get_host_url() ?></a> 访问网站首页，或前往 <a href="<?= get_host_url() ?>/admin"><?= get_host_url() ?>/admin</a> 访问后台管理系统。</p>
+                <p>建议你先在 <a href="<?= get_host_url() ?>/admin">后台管理系统</a> 中完成站点基本信息设置。</p>
+            </div>
         </div>
     </div>
 </div>
@@ -629,6 +678,38 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
         var $database = $('.database');
         var $complete = $('.complete');
 
+        function loadStart() {
+            if ($('.mc-loading-overlay').length) {
+                return;
+            }
+
+            $(
+                '<div class="mc-loading-overlay"><div class="mdui-spinner mdui-spinner-colorful"></div></div>',
+            )
+                .appendTo(document.body)
+                .reflow()
+                .addClass('mc-loading-overlay-show');
+
+            setTimeout(() => {
+                $('.mc-loading-overlay').mutation();
+            }, 0);
+
+            $.lockScreen();
+        }
+
+        function loadEnd() {
+            const $overlay = $('.mc-loading-overlay');
+
+            if (!$overlay.length) {
+                return;
+            }
+
+            $overlay.removeClass('mc-loading-overlay-show').transitionEnd(() => {
+                $overlay.remove();
+                $.unlockScreen();
+            });
+        }
+
         // 到第二步
         $('.next-step-0').on('click', function () {
             $stepperItem1.removeClass('active').addClass('done');
@@ -641,12 +722,60 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
         $database.on('submit', function (e) {
             e.preventDefault();
 
+            loadStart();
+
             $.ajax({
                 method: 'POST',
                 url: '<?= get_root_url() ?>/install/import_database',
                 data: $(e.target).serializeArray(),
+                dataType: 'json',
                 success: function(response) {
+                    loadEnd();
+                    switch (response.code) {
+                        // 安装成功，到第三步
+                        case 0:
+                            $stepperItem2.removeClass('active').addClass('done');
+                            $stepperItem3.addClass('active');
+                            $database.hide();
+                            $complete.show();
+
+                            // 安装完后自动登录
+
+                            break;
+                        // 安装失败
+                        case 100007:
+                            mdui.alert(
+                                response.extra_message,
+                                '安装失败',
+                                function () {},
+                                { history: false },
+                            );
+                            break;
+                        // 创建管理员账号时，字段验证失败
+                        case 200001:
+                            mdui.alert(
+                                Object.keys(response.errors).map(function (key) {
+                                    return '管理员' + response.errors[key];
+                                }).join('<br/>'),
+                                '安装失败',
+                                function () {},
+                                { history: false },
+                            );
+                            break;
+                        default:
+                            mdui.alert(
+                                '安装失败',
+                                function() {},
+                                { history: false },
+                            );
+                            break;
+                    }
+
                     console.log(response);
+                },
+                error: function () {
+                    loadEnd();
+                    mdui.alert('网络连接失败', function () {}, { history: false });
                 },
             });
         });

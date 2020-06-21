@@ -20,7 +20,7 @@ class Install
         App::$slim
             ->group('/install', function (RouteCollectorProxy $group) {
                 $group
-                    ->get('/', Index::class . ':index')
+                    ->get('', Index::class . ':index')
                     ->setName(RouteNameConstant::INSTALL);
 
                 $group
