@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#ffffff">
   <title><?php echo isset($meta_title) ? $meta_title.' - '.get_options()['site_name'] : get_options()['site_name'] ?></title>
   <?php if ($NODE_ENV === 'production'): ?>
-  <link rel="stylesheet" href="<?= get_theme_static_url() ?>/index.2a05d965.css">
+  <link rel="stylesheet" href="<?= get_theme_static_url() ?>/index.55b6e996.css">
   <?php endif; ?>
 </head>
 <body class="mdui-drawer-body-left">
