@@ -12,8 +12,6 @@
     "require": {
         "php": ">=7.2.0",
         "ext-curl": "*",
-        "ext-gd": "*",
-        "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-iconv": "*",
@@ -45,7 +43,7 @@
         "suin/php-rss-writer": "^1.6",
         "algolia/algoliasearch-client-php": "^2.6",
         "zhuzhichao/ip-location-zh": "^2.4",
-        "tightenco/collect": "^6.18",
+        "tightenco/collect": "^7.12",
         "intervention/image": "^2.5",
         "mcaskill/composer-exclude-files": "^1.1",
         "funkjedi/composer-include-files": "^1.0",
