@@ -25,7 +25,7 @@ class Article extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['title'])) {
-            $item['title'] = htmlentities($item['title']);
+            $item['title'] = htmlspecialchars($item['title']);
         }
 
         return $item;
@@ -49,7 +49,7 @@ class Article extends Abstracts
         return collect($articles)
             ->keyBy('article_id')
             ->map(function ($item) {
-                $item['title'] = htmlentities($item['title']);
+                $item['title'] = htmlspecialchars($item['title']);
 
                 return $item;
             })

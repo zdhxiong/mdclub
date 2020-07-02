@@ -25,7 +25,7 @@ class Comment extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['content'])) {
-            $item['content'] = htmlentities($item['content']);
+            $item['content'] = htmlspecialchars($item['content']);
         }
 
         return $item;
@@ -49,7 +49,7 @@ class Comment extends Abstracts
         return collect($comments)
             ->keyBy('comment_id')
             ->map(static function ($item) {
-                $item['content_summary'] = htmlentities(mb_substr($item['content'], 0, 80));
+                $item['content_summary'] = htmlspecialchars(mb_substr($item['content'], 0, 80));
                 unset($item['content']);
 
                 return $item;

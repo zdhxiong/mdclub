@@ -22,7 +22,7 @@ class ReportReason extends Abstracts
     protected function format(array $item): array
     {
         if (isset($item['reason'])) {
-            $item['reason'] = htmlentities($item['reason']);
+            $item['reason'] = htmlspecialchars($item['reason']);
         }
 
         return $item;

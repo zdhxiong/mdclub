@@ -51,23 +51,23 @@ class User extends Abstracts
         }
 
         if (isset($item['headline'])) {
-            $item['headline'] = htmlentities($item['headline']);
+            $item['headline'] = htmlspecialchars($item['headline']);
         }
 
         if (isset($item['bio'])) {
-            $item['bio'] = htmlentities($item['bio']);
+            $item['bio'] = htmlspecialchars($item['bio']);
         }
 
         if (isset($item['blog'])) {
-            $item['blog'] = htmlentities($item['blog']);
+            $item['blog'] = htmlspecialchars($item['blog']);
         }
 
         if (isset($item['company'])) {
-            $item['company'] = htmlentities($item['company']);
+            $item['company'] = htmlspecialchars($item['company']);
         }
 
         if (isset($item['location'])) {
-            $item['location'] = htmlentities($item['location']);
+            $item['location'] = htmlspecialchars($item['location']);
         }
 
         return $item;
@@ -170,7 +170,7 @@ class User extends Abstracts
             ->keyBy('user_id')
             ->map(function ($item) {
                 $item['avatar'] = UserAvatarService::getBrandUrls($item['user_id'], $item['avatar']);
-                $item['headline'] = htmlentities($item['headline']);
+                $item['headline'] = htmlspecialchars($item['headline']);
 
                 return $item;
             })

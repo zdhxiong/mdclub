@@ -31,11 +31,11 @@ class Topic extends Abstracts
         }
 
         if (isset($item['name'])) {
-            $item['name'] = htmlentities($item['name']);
+            $item['name'] = htmlspecialchars($item['name']);
         }
 
         if (isset($item['description'])) {
-            $item['description'] = htmlentities($item['description']);
+            $item['description'] = htmlspecialchars($item['description']);
         }
 
         return $item;
@@ -67,7 +67,7 @@ class Topic extends Abstracts
         return collect($topicable)
             ->map(function ($item) {
                 $item['cover'] = TopicService::getBrandUrls($item['topic_id'], $item['cover']);
-                $item['name'] = htmlentities($item['name']);
+                $item['name'] = htmlspecialchars($item['name']);
 
                 return $item;
             })
