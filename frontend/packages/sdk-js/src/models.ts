@@ -58,6 +58,10 @@ export interface AnswerInRelationship {
    */
   answer_id: number;
   /**
+   * 提问ID
+   */
+  question_id: number;
+  /**
    * 内容摘要
    */
   content_summary: string;
