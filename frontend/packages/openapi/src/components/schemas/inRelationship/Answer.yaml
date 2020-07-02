@@ -5,6 +5,11 @@ properties:
     description: 回答ID
     minimum: 1
     example: 1
+  question_id:
+    type: integer
+    description: 提问ID
+    minimum: 1
+    example: 1
   content_summary:
     type: string
     description: 内容摘要
