@@ -1,0 +1,84 @@
+@import '../mdui/less/button.less';
+@import '../mdui/less/textfield.less';
+@import '../mdui/less/dialog/alert.less';
+@import '../mdui/less/dialog/prompt.less';
+@import '~mdui/src/styles/typo.less';
+
+.mdui_editor-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+
+  &::after {
+    display: table;
+    clear: both;
+    content: '';
+  }
+}
+
+.mdui_editor-toolbar-menu {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  color: #212121;
+  line-height: 28px;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px transparent;
+  opacity: 0.6;
+
+  i {
+    font-size: 21px;
+  }
+
+  &:hover {
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  &+.mdui_editor-toolbar-menu {
+    margin-left: 2px;
+  }
+}
+
+.mdui_editor-toolbar-menu-active {
+  background-color: rgba(0, 0, 0, .12) !important;
+  opacity: 1;
+}
+
+.mdui_editor-toolbar-menu-image + input[type="file"] {
+  display: none;
+}
+
+/* .mdui_editor-toolbar-divider {
+  display: inline-block;
+  float: left;
+  width: 1px;
+  width: 0.8px;
+  height: 28px;
+  margin: 0 6px;
+  background-color: #e5e5e5;
+} */
+
+.mdui_editor-content {
+  box-sizing: border-box;
+  /* stylelint-disable-next-line */
+  height: calc(~'100% - 60px');
+  padding: 16px;
+  overflow-y: auto;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+  line-height: 22px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  outline: none;
+}
+
+.mdui_editor-content-empty {
+  &::before {
+    position: absolute;
+    color: rgba(0, 0, 0, .42);
+    cursor: text;
+    content: attr(placeholder);
+  }
+}

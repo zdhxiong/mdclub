@@ -20,7 +20,8 @@ const resizeImage = (items) => {
   let wrapperWidthRemaining = wrapperWidth;
 
   items.map((item, index) => {
-    const nextWidth = typeof widths[index + 1] === 'undefined' ? 0 : widths[index + 1];
+    const nextWidth =
+      typeof widths[index + 1] === 'undefined' ? 0 : widths[index + 1];
     wrapperWidthRemaining -= widths[index];
     rows[index] = item;
 
@@ -28,7 +29,7 @@ const resizeImage = (items) => {
     if (!nextWidth || wrapperWidthRemaining - nextWidth < 0) {
       let totalWidth = 0;
       rows.map((_item, _index) => {
-        totalWidth += (widths[_index] + 4);
+        totalWidth += widths[_index] + 4;
       });
 
       rows.map((_item, _index) => {
@@ -36,7 +37,7 @@ const resizeImage = (items) => {
         let width = widths[_index] * (wrapperWidth / totalWidth);
 
         if (height > maxHeight) {
-          width *= (maxHeight / height);
+          width *= maxHeight / height;
           height = maxHeight;
         }
 

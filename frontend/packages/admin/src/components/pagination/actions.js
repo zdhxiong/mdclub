@@ -1,11 +1,12 @@
-import mdui, { JQ as $ } from 'mdui';
-import actionsAbstract from '../../abstracts/actions/component';
+import $ from 'mdui.jq';
+import extend from 'mdui.jq/es/functions/extend';
+import commonActions from '~/utils/actionsAbstract';
 
-export default $.extend({}, actionsAbstract, {
+const as = {
   /**
    * 销毁前执行
    */
-  destroy: () => (state, actions) => {
+  onDestroy: () => (state, actions) => {
     actions.reset();
   },
 
@@ -33,21 +34,7 @@ export default $.extend({}, actionsAbstract, {
 
     actions.setState({ page: 1, per_page });
 
-    (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
-
-    onChange();
-  },
-
-  /**
-   * 切换页码
-   */
-  onPageChange: ({ e, onChange }) => (state, actions) => {
-    e.preventDefault();
-
-    const page = $(e.target).find('input[name="page"]').val();
-    actions.setState({ page: parseInt(page, 10) });
-
-    (new mdui.Menu('#pagination-setting-menu-trigger', '#pagination-setting-menu')).close();
+    $('#pagination-setting-menu-trigger').data('menu-instance').close();
 
     onChange();
   },
@@ -55,7 +42,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 切换到上一页
    */
-  toPrevPage: onChange => (state, actions) => {
+  toPrevPage: (onChange) => (state, actions) => {
     actions.setState({ page: state.page - 1 });
 
     onChange();
@@ -64,9 +51,11 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 切换到下一页
    */
-  toNextPage: onChange => (state, actions) => {
+  toNextPage: (onChange) => (state, actions) => {
     actions.setState({ page: state.page + 1 });
 
     onChange();
   },
-});
+};
+
+export default extend(as, commonActions);

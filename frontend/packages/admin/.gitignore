@@ -1,3 +1,4 @@
 .idea/
-dist/
+.vs/
 node_modules/
+yarn.lock

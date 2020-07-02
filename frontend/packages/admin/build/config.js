@@ -1,4 +1,8 @@
+const path = require('path');
+
 module.exports = {
-  // mdclub 的 public/static/admin 目录路径
-  targetFolder: 'C:\\workspace\\www\\mdclub\\public\\static\\admin',
-};
+  outputFolder: path.resolve(__dirname, '../../mdclub/public/static/admin'),
+  resolve: dir => path.resolve(__dirname, '..', dir),
+  isProduction: process.env.NODE_ENV === 'production',
+  isDevelopment: process.env.NODE_ENV === 'development',
+}

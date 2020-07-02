@@ -1,9 +1,11 @@
+@import '../../vendor/mdui/variable.less';
+
 .mc-datatable {
   // 移除表格边框
   .mdui-table {
-    box-shadow: none;
-    border: none !important;
     overflow: visible;
+    border: none !important;
+    box-shadow: none;
   }
 
   // 滚动时添加表头阴影
@@ -37,7 +39,7 @@
 
   // 加载中状态
   tbody.is-loading {
-    height: ~'calc(100vh - 142px)';
+    height: ~'calc(100vh - 174px)';
   }
 
   // 空状态
@@ -59,7 +61,8 @@
       float: left;
       width: 28px;
       height: 28px;
-      margin-left: -7px;
+      margin-left: -5px;
+      border-radius: 50%;
     }
 
     .mdui-checkbox {
@@ -91,7 +94,7 @@
 
   // checkbox 颜色修改
   tbody {
-    .mdui-checkbox-icon:after {
+    .mdui-checkbox-icon::after {
       border-color: rgba(0, 0, 0, 0.16);
 
       .mdui-theme-layout-dark & {
@@ -100,7 +103,7 @@
     }
 
     tr:hover {
-      .mdui-checkbox-icon:after {
+      .mdui-checkbox-icon::after {
         border-color: rgba(0, 0, 0, 0.54);
 
         .mdui-theme-layout-dark & {
@@ -117,16 +120,16 @@
 
   // 表头样式
   th {
-    font-size: 14px;
-    font-weight: normal;
     height: 48px;
-    line-height: 47px;
-    color: #5f6368;
-    cursor: default;
     padding-top: 0;
     padding-bottom: 0;
+    color: #5f6368;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 47px;
     border-bottom: none;
     box-shadow: inset 0 -1px 0 0 rgba(100, 121, 143, 0.122);
+    cursor: default;
   }
 
   // 有选择的行时，修改表头样式
@@ -143,16 +146,21 @@
     .mdui-btn {
       width: 40px;
       height: 40px;
-      margin-left: 8px;
-      color: #1a73e8 !important;
+      margin-right: 12px;
+      margin-left: -6px;
+      color: @primaryColor !important;
+
+      .mdui-theme-layout-dark & {
+        color: @primaryColorDark !important;
+      }
     }
   }
 
   // 行悬浮状态
   tbody tr {
+    box-shadow: inset 0 -1px 0 0 rgba(100, 121, 143, 0.122);
     cursor: pointer;
     transition: none;
-    box-shadow: inset 0 -1px 0 0 rgba(100, 121, 143, 0.122);
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.04);
@@ -174,19 +182,19 @@
 
   // body 表格样式
   td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 44px;
     padding-top: 0;
     padding-bottom: 0;
+    overflow: hidden;
+    line-height: 44px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     border-bottom: none !important;
   }
 
   // 表格内链接样式
   td a {
-    text-decoration: none;
     color: inherit;
+    text-decoration: none;
     border-bottom: 1px dotted rgba(0, 0, 0, 0.24);
 
     .mdui-theme-layout-dark & {
@@ -222,8 +230,8 @@
       }
 
       .mdui-menu {
-        text-align: left;
         width: 220px;
+        text-align: left;
       }
     }
   }
@@ -242,8 +250,8 @@
 
       .mdui-btn {
         display: none;
-        border-bottom: none;
         margin-top: -2px;
+        border-bottom: none;
 
         &:last-child {
           margin-right: -8px;
@@ -265,6 +273,24 @@
       .mdui-btn {
         display: inline-block;
       }
+    }
+  }
+
+  // 最后访问的一行高亮
+  tbody tr {
+    box-sizing: border-box;
+    border-left: 2px solid transparent;
+
+    &.last-visit {
+      border-left-color: #1a73e8;
+
+      .mdui-theme-layout-dark & {
+        border-left-color: rgba(255, 255, 255, .7);
+      }
+    }
+
+    .mdui-table-cell-checkbox {
+      padding-left: 22px !important;
     }
   }
 }

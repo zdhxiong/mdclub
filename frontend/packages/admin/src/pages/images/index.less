@@ -1,25 +1,25 @@
 #page-images {
   .header {
+    display: flex;
+    box-sizing: border-box;
     height: 60px;
     padding-top: 12px;
-    box-sizing: border-box;
-    display: flex;
     border-bottom: 1px solid rgba(0, 0, 0, .12);
     transition: box-shadow .15s cubic-bezier(0.4, 0, 0.2, 1);
 
     .toggle-all {
-      height: 36px;
       display: flex;
       align-items: center;
-      padding-left: 14px;
+      height: 36px;
       padding-right: 8px;
+      padding-left: 14px;
       cursor: pointer;
       user-select: none;
 
       i {
-        opacity: 0;
-        color: rgba(0, 0, 0, .54);
         margin-right: 8px;
+        color: rgba(0, 0, 0, .54);
+        opacity: 0;
         transition: opacity 0.165s;
 
         .mdui-theme-layout-dark & {
@@ -34,11 +34,11 @@
     }
 
     .actions {
-      height: 36px;
       display: flex;
       flex-grow: 1;
       align-items: center;
       justify-content: space-between;
+      height: 36px;
       padding-right: 24px;
       padding-left: 24px;
 
@@ -49,9 +49,9 @@
       }
 
       span {
-        cursor: default;
         color: #1a73e8;
         font-size: 16px;
+        cursor: default;
 
         .mdui-theme-layout-dark & {
           color: #fff;
@@ -69,24 +69,24 @@
   }
 
   .list {
-    padding: 8px;
-    height: ~'calc(100vh - 114px)';
     box-sizing: border-box;
+    height: ~'calc(100vh - 114px)';
+    padding: 8px;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
 
   .mdui-grid-tile {
     position: relative;
-    cursor: pointer;
     float: left;
-    margin-left: 2px;
     margin-right: 2px;
+    margin-left: 2px;
+    cursor: pointer;
   }
 
   .image {
-    background-size: cover;
     background-color: #e8eaed;
+    background-size: cover;
     transition: transform .135s cubic-bezier(0, 0, .2, 1);
   }
 
@@ -102,22 +102,22 @@
   .check-placeholder-btn,
   .preview-btn {
     position: absolute;
-    color: #fff;
-    opacity: 0;
     z-index: 99;
-    transition: opacity 0.125s cubic-bezier(0, 0, .2, 1);
-    width: 20px;
-    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.125s cubic-bezier(0, 0, .2, 1);
     user-select: none;
   }
 
   .check-btn,
   .check-placeholder-btn {
-    left: 8px;
     top: 8px;
+    left: 8px;
   }
 
   .preview-btn {
@@ -192,9 +192,9 @@
 
     .check-btn {
       color: #1a73e8;
-      opacity: 1 !important;
       background-color: #fff;
       border-radius: 50%;
+      opacity: 1 !important;
     }
   }
 }

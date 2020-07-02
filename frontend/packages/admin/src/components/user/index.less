@@ -1,12 +1,13 @@
-@import "../../helper/mixin";
+@import '../../vendor/mdui/variable.less';
+@import '../../utils/mixin.less';
 
 .mc-user {
   width: 85%;
   max-width: 800px;
   height: 94%;
   max-height: 94% !important;
-  background-color: #f9f9f9;
   overflow: auto;
+  background-color: #f9f9f9;
   -webkit-overflow-scrolling: touch;
 
   .mdui-theme-layout-dark & {
@@ -21,9 +22,9 @@
     position: relative;
     height: 0;
     padding-bottom: 56%;
+    overflow: visible;
     background-repeat: no-repeat;
     background-size: contain;
-    overflow: visible;
 
     .gradient {
       height: 100px;
@@ -39,8 +40,8 @@
       img {
         width: 56px;
         height: 56px;
-        border-radius: 50%;
         border: 2px solid #fff;
+        border-radius: 50%;
         user-select: none;
       }
     }
@@ -49,9 +50,9 @@
       position: absolute;
       bottom: 16px;
       left: 92px;
-      line-height: 60px;
-      font-size: 30px;
       color: #fff;
+      font-size: 30px;
+      line-height: 60px;
 
       small {
         font-size: 64%;
@@ -61,25 +62,25 @@
 
   .body {
     position: relative;
-    padding: 40px 38px 30px 40px;
     box-sizing: border-box;
+    padding: 40px 30px 30px 32px;
 
     @media (max-width: @screen-xs-max) {
-      padding: 24px 22px 18px 22px;
+      padding: 24px 14px 18px 14px;
     }
 
     .label {
+      float: left;
       width: 120px;
       margin-bottom: 10px;
-      float: left;
 
-      &:before {
-        background-color: #000;
-        content: ' ';
+      &::before {
         display: block;
+        width: 34px;
         height: 2px;
         margin-bottom: 10px;
-        width: 34px;
+        background-color: #000;
+        content: ' ';
 
         .mdui-theme-layout-dark & {
           background-color: #fff;
@@ -87,11 +88,12 @@
       }
 
       @media (max-width: @screen-xs-max) {
+        float: initial;
         width: 100%;
         margin-bottom: 14px;
         padding-left: 14px;
 
-        &:before {
+        &::before {
           content: none;
         }
       }
@@ -101,6 +103,11 @@
       margin-bottom: 20px;
       margin-left: 120px;
       padding: 16px 22px;
+      background-color: #fff;
+
+      .mdui-theme-layout-dark & {
+        background-color: @layout-dark-color-3;
+      }
 
       &.card-with-count {
         padding-bottom: 8px;
@@ -132,17 +139,17 @@
       }
 
       .count-item {
+        float: left;
+        box-sizing: border-box;
         width: 64px;
         height: 52px;
-        border-radius: 4px;
-        padding: 4px 0;
-        cursor: pointer;
-        float: left;
         margin-right: 8px;
         margin-bottom: 8px;
+        padding: 4px 0;
         border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        cursor: pointer;
         transition: background-color .24s;
-        box-sizing: border-box;
 
         .mdui-theme-layout-dark & {
           border-color: rgba(255, 255, 255, 0.08);
@@ -158,26 +165,35 @@
       }
 
       .count-label {
-        text-align: center;
         font-size: 13px;
         line-height: 18px;
+        text-align: center;
       }
 
       .count-number {
-        text-align: center;
         margin-top: 4px;
         line-height: 22px;
+        text-align: center;
       }
     }
 
     .actions {
-      text-align: right;
       position: absolute;
-      right: 30px;
       top: -28px;
+      right: 30px;
+      text-align: right;
 
       .mdui-fab {
         margin-left: 24px;
+        color: #fff;
+      }
+
+      .edit {
+        background-color: @primaryColor;
+      }
+
+      .disable {
+        background-color: @accentColor;
       }
 
       @media (max-width: @screen-xs-max) {

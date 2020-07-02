@@ -1,31 +1,36 @@
-import mdui, { JQ as $ } from 'mdui';
-import { User } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/actions/component';
+import mdui from 'mdui';
+import extend from 'mdui.jq/es/functions/extend';
+import { isNumber } from 'mdui.jq/es/utils';
+import {
+  get as getUser,
+  disable as disableUser,
+  enable as enableUser,
+} from 'mdclub-sdk-js/es/UserApi';
+import commonActions from '~/utils/actionsAbstract';
+import { loadStart } from '~/utils/loading';
+import { emit } from '~/utils/pubsub';
+import { apiCatch } from '~/utils/errorHandlers';
 
-let global_actions;
 let dialog;
-let $dialog;
 
-export default $.extend({}, actionsAbstract, {
-  /**
-   * 初始化
-   */
-  init: (props) => {
-    global_actions = props.global_actions;
-
-    dialog = new mdui.Dialog('.mc-user');
-    $dialog = dialog.$dialog;
+const as = {
+  onCreate: () => {
+    dialog = new mdui.Dialog('.mc-user', {
+      history: false,
+    });
   },
 
   /**
    * 打开对话框
-   * @param user 该参数为整型时，表示为用户ID，需要根据该ID获取用户信息；若该参数为对象，表示为完整的用户信息，不需要再请求数据
+   * @param user
+   * 该参数为整型时，表示为用户ID，需要根据该ID获取用户信息；
+   * 若该参数为对象，表示为完整的用户信息，不需要再请求数据
    */
-  open: user => (state, actions) => {
-    const isComplete = typeof user === 'object';
+  open: (user) => (state, actions) => {
+    const isComplete = !isNumber(user);
 
     actions.setState({
-      user: isComplete ? user : false,
+      user: isComplete ? user : null,
       loading: !isComplete,
     });
 
@@ -37,17 +42,18 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
-    User
-      .getOne(user)
+    getUser({ user_id: user })
+      .finally(() => {
+        actions.setState({ loading: false });
+      })
       .then(({ data }) => {
-        actions.setState({ loading: false, user: data });
+        actions.setState({ user: data });
 
         setTimeout(() => dialog.handleUpdate());
       })
-      .catch(({ message }) => {
-        actions.setState({ loading: false });
+      .catch((response) => {
         dialog.close();
-        mdui.snackbar(message);
+        apiCatch(response);
       });
   },
 
@@ -61,42 +67,69 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 禁用该账号
    */
-  disable: () => {
+  disable: () => (state, actions) => {
+    // eslint-disable-next-line no-restricted-globals,no-alert
+    if (!confirm('确认要禁用？')) {
+      return;
+    }
 
+    loadStart();
+    actions.close();
+
+    disableUser({ user_id: state.user.user_id })
+      .then(actions.deleteSuccess)
+      .catch(actions.deleteFail);
   },
 
   /**
    * 启用该账号
    */
-  enable: () => {
+  enable: () => (state, actions) => {
+    // eslint-disable-next-line no-restricted-globals,no-alert
+    if (!confirm('确认要启用？')) {
+      return;
+    }
 
+    loadStart();
+    actions.close();
+
+    enableUser({ user_id: state.user.user_id })
+      .then(actions.deleteSuccess)
+      .catch(actions.deleteFail);
   },
 
   /**
    * 到编辑界面
    */
-  toEdit: () => {
+  toEdit: () => (state, actions) => {
+    emit('user_edit_open', state.user);
 
+    actions.close();
   },
 
   /**
    * 重置 header 部分滚动条位置（向下滚动一段距离）
    */
   headerReset: () => {
-    $dialog[0].scrollTo(0, $dialog.width() * 0.56 * 0.58);
+    dialog.$element[0].scrollTo(0, dialog.$element.width() * 0.56 * 0.58);
   },
 
   /**
    * header 元素创建后，绑定滚动事件，使封面随着滚动条滚动
    */
-  headerInit: () => (state, actions) => {
-    const headerElem = $dialog.find('.header')[0];
-    const dialogElem = $dialog[0];
+  onHeaderCreate: () => (_, actions) => {
+    const headerElem = dialog.$element.find('.header')[0];
 
-    $dialog.on('scroll', () => window.requestAnimationFrame(() => {
-      headerElem.style['background-position-y'] = `${dialogElem.scrollTop / 2}px`;
-    }));
+    dialog.$element.on('scroll', () => {
+      window.requestAnimationFrame(() => {
+        headerElem.style['background-position-y'] = `${
+          dialog.$element[0].scrollTop / 2
+        }px`;
+      });
+    });
 
     actions.headerReset();
   },
-});
+};
+
+export default extend(as, commonActions);

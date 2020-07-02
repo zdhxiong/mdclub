@@ -1,0 +1,185 @@
+@import '../vendor/mdui/index.less';
+@import '../vendor/mdui.editor/index.less';
+
+/* placeholder 颜色 */
+::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+:-moz-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+::-moz-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+:-ms-input-placeholder {
+  color: rgba(0, 0, 0, .42);
+
+  .mdui-theme-layout-dark & {
+    color: rgba(255, 255, 255, .42);
+  }
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.mdui-typo {
+  pre {
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 4px;
+  }
+
+  p {
+    min-height: .3em;
+  }
+}
+
+.mdui-theme-layout-dark .mdui-btn-raised {
+  background-color: @layout-dark-color-4;
+}
+
+/* 带边框的按钮 */
+.mdui-btn-outlined {
+  line-height: 34px;
+  border: 1px solid rgba(0, 0, 0, .12);
+
+  &.mdui-btn-dense {
+    line-height: 30px;
+  }
+
+  &.mdui-color-theme {
+    border-color: @primaryColor;
+  }
+
+  .mdui-theme-layout-dark & {
+    border-color: rgba(255, 255, 255, .12);
+  }
+}
+
+/**
+ * mdui 内置样式重写
+ */
+
+.mdui-container {
+  width: 100%;
+  max-width: 1100px;
+  padding: 8px 0 62px 0;
+
+  @media (min-width: @screen-sm-min) {
+    width: 96%;
+    padding-top: 16px;
+  }
+
+  @media (min-width: @screen-md-min) {
+    padding: 24px 8px 62px 8px;
+  }
+}
+
+.mdui-container-fluid {
+  padding: 0;
+}
+
+// 打开抽屉栏时，内容区域需要和抽屉栏保持间距；关闭抽屉栏时，则不要间距
+@media (min-width: @screen-md-min) {
+  .mdui-container-fluid {
+    margin-left: 36px;
+  }
+}
+
+.mdui-drawer-close + .mdui-container-fluid {
+  margin-left: 0;
+}
+
+// 修改下拉选择下边框，使其样式和输入框保持一致
+.mdui-select {
+  border-bottom: 1px solid rgba(0, 0, 0, .42) !important;
+
+  .mdui-theme-layout-dark & {
+    border-bottom-color: rgba(255, 255, 255, .7) !important;
+  }
+
+  &:hover {
+    box-shadow: 0 1px 0 0 rgba(0,0,0,.87);
+
+    .mdui-theme-layout-dark & {
+      box-shadow: 0 1px 0 0 #fff !important;
+    }
+  }
+}
+
+// 修改菜单和下拉框的字体大小
+.mdui-select,
+.mdui-menu,
+.mdui-menu-cascade {
+  font-size: 14px;
+
+  .mdui-icon {
+    font-size: 22px;
+  }
+}
+
+// 取消 checkbox 的阴影
+.mdui-checkbox-icon {
+  box-shadow: none !important;
+}
+
+// 分割线
+.mdui-divider {
+  background-color: transparent;
+  box-shadow: inset 0 -1px 0 0 rgba(100, 121, 143, 0.122);
+}
+
+/**
+ * 全局样式
+ */
+body {
+  //height: 100%;
+  //overflow: hidden;
+}
+
+.mc-chip-group {
+  padding: 20px 0;
+
+  .mdui-chip {
+    margin-right: 20px;
+  }
+}
+
+/**
+ * 加载状态遮罩
+ */
+.mc-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, .65);
+  opacity: 0;
+  transition: opacity .2s ease;
+  will-change: opacity;
+}
+
+.mc-loading-overlay-show {
+  opacity: 1;
+}

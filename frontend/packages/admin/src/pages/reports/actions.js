@@ -1,11 +1,15 @@
-import mdui, { JQ as $ } from 'mdui';
+import mdui from 'mdui';
 import R from 'ramda';
-import { location } from '@hyperapp/router';
-import { Report } from 'mdclub-sdk-js';
-import loading from '../../helper/loading';
-import actionsAbstract from '../../abstracts/actions/page';
-
-let global_actions;
+import extend from 'mdui.jq/es/functions/extend';
+import { $document } from 'mdui/es/utils/dom';
+import {
+  getList as getReports,
+  del as deleteReport,
+  deleteMultiple as deleteMultipleReports,
+} from 'mdclub-sdk-js/es/ReportApi';
+import commonActions from '~/utils/actionsAbstract';
+import { emit } from '~/utils/pubsub';
+import { loadStart } from '~/utils/loading';
 
 /**
  * 为举报信息添加额外字段
@@ -14,11 +18,11 @@ const getExtraFields = (report) => {
   report.key = `${report.reportable_type}:${report.reportable_id}`;
 
   const map = {
-    question: () => `提问：${report.relationship.question.title}`,
-    article: () => `文章：${report.relationship.article.title}`,
-    answer: () => `回答：${report.relationship.answer.content_summary}`,
-    comment: () => `评论：${report.relationship.comment.content_summary}`,
-    user: () => `用户：${report.relationship.user.username}`,
+    question: () => `提问：${report.relationships.question.title}`,
+    article: () => `文章：${report.relationships.article.title}`,
+    answer: () => `回答：${report.relationships.answer.content_summary}`,
+    comment: () => `评论：${report.relationships.comment.content_summary}`,
+    user: () => `用户：${report.relationships.user.username}`,
   };
 
   report.reportable_title = map[report.reportable_type]();
@@ -26,17 +30,12 @@ const getExtraFields = (report) => {
   return report;
 };
 
-export default $.extend({}, actionsAbstract, {
-  /**
-   * 初始化
-   */
-  init: props => (state, actions) => {
-    actions.routeChange('举报管理 - MDClub 控制台');
-    global_actions = props.global_actions;
+const as = {
+  onCreate: () => (state, actions) => {
+    emit('route_update');
+    actions.setTitle('举报管理');
 
-    const { user, reporters, searchBar, datatable } = global_actions.components;
-
-    searchBar.setState({
+    emit('searchbar_state_update', {
       fields: [
         {
           name: 'reportable_type',
@@ -58,7 +57,7 @@ export default $.extend({}, actionsAbstract, {
       isNeedRender: true,
     });
 
-    datatable.setState({
+    emit('datatable_state_update', {
       columns: [
         {
           title: '内容',
@@ -69,15 +68,19 @@ export default $.extend({}, actionsAbstract, {
 
             switch (row.reportable_type) {
               case 'question':
+                emit('question_open', row.relationships.question.question_id);
                 break;
               case 'article':
+                emit('article_open', row.relationships.article.article_id);
                 break;
               case 'answer':
+                emit('answer_open', row.relationships.answer.answer_id);
                 break;
               case 'comment':
+                emit('comment_open', row.relationships.comment.comment_id);
                 break;
               case 'user':
-                user.open(row.relationship.user.user_id);
+                emit('user_open', row.relationships.user.user_id);
                 break;
               default:
                 break;
@@ -88,7 +91,7 @@ export default $.extend({}, actionsAbstract, {
           title: '举报人数',
           field: 'reporter_count',
           type: 'handler',
-          handler: row => `${row.reporter_count} 人举报`,
+          handler: (row) => `${row.reporter_count} 人举报`,
           width: 154,
         },
       ],
@@ -102,7 +105,7 @@ export default $.extend({}, actionsAbstract, {
               case 'article':
                 return `${window.G_ROOT}/articles/${row.reportable_id}`;
               case 'answer':
-                return '';
+                return `${window.G_ROOT}/questions/${row.relationships.answer.question_id}/answers/${row.relationships.answer.answer_id}`;
               case 'comment':
                 return '';
               case 'user':
@@ -127,36 +130,39 @@ export default $.extend({}, actionsAbstract, {
         },
       ],
       primaryKey: 'key',
-      onRowClick: reporters.open,
+      onRowClick: (report) => {
+        emit('reporters_open', report);
+        emit('datatable_state_update', {
+          lastVisitId: report.key,
+        });
+      },
     });
 
-    $(document).on('search-submit', actions.loadData);
+    $document.on('search-submit', actions.loadData);
     actions.loadData();
   },
 
-  /**
-   * 销毁前
-   */
-  destroy: () => {
-    $(document).off('search-submit');
+  onDestroy: () => {
+    $document.off('search-submit');
   },
 
   /**
    * 加载数据
    */
   loadData: () => {
-    const { datatable, pagination, searchBar } = global_actions.components;
+    const { datatable, pagination, searchBar } = window.app;
     const { page, per_page } = pagination.getState();
 
     const searchData = R.pipe(
-      R.filter(n => n),
+      R.filter((n) => n),
       R.mergeDeepLeft({ page, per_page }),
     )(searchBar.getState().data);
 
+    searchData.include = ['question', 'answer', 'article', 'comment', 'user'];
+
     datatable.loadStart();
 
-    Report
-      .getList(searchData)
+    getReports(searchData)
       .then((response) => {
         response.data.map((item, index) => {
           response.data[index] = getExtraFields(item);
@@ -171,40 +177,45 @@ export default $.extend({}, actionsAbstract, {
    * 删除一个举报
    */
   deleteOne: ({ reportable_type, reportable_id }) => (state, actions) => {
-    const options = { confirmText: '确认', cancelText: '取消' };
-
     const confirm = () => {
-      loading.start();
+      loadStart();
 
-      Report
-        .deleteOne(reportable_type, reportable_id)
+      deleteReport({ reportable_type, reportable_id })
         .then(actions.deleteSuccess)
-        .then(actions.deleteFail);
+        .catch(actions.deleteFail);
     };
 
-    mdui.confirm('确认已处理完该举报？', confirm, false, options);
+    const options = { confirmText: '确认', cancelText: '取消' };
+
+    mdui.confirm('确认已处理完该举报？', confirm, () => {}, options);
   },
 
   /**
    * 批量删除举报
    */
-  batchDelete: reports => (state, actions) => {
+  batchDelete: (reports) => (state, actions) => {
     const options = { confirmText: '确认', cancelText: '取消' };
 
     const confirm = () => {
-      loading.start();
+      loadStart();
 
-      const targets = R.pipe(
-        R.map(n => `${n.reportable_type}:${n.reportable_id}`),
+      const report_targets = R.pipe(
+        R.map((n) => `${n.reportable_type}:${n.reportable_id}`),
         R.join(','),
       )(reports);
 
-      Report
-        .deleteMultiple(targets)
+      deleteMultipleReports({ report_targets })
         .then(actions.deleteSuccess)
         .catch(actions.deleteFail);
     };
 
-    mdui.confirm(`确认已处理完这 ${reports.length} 个举报？`, confirm, false, options);
+    mdui.confirm(
+      `确认已处理完这 ${reports.length} 个举报？`,
+      confirm,
+      () => {},
+      options,
+    );
   },
-});
+};
+
+export default extend(as, commonActions);

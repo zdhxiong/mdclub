@@ -1,30 +1,38 @@
-import mdui, { JQ as $ } from 'mdui';
-import { Topic } from 'mdclub-sdk-js';
-import loading from '../../helper/loading';
-import actionsAbstract from '../../abstracts/actions/component';
+import mdui from 'mdui';
+import $ from 'mdui.jq';
+import extend from 'mdui.jq/es/functions/extend';
+import each from 'mdui.jq/es/functions/each';
+import { isNumber, isUndefined } from 'mdui.jq/es/utils';
+import { unescape } from 'html-escaper';
+import {
+  get as getTopic,
+  create as createTopic,
+  update as updateTopic,
+} from 'mdclub-sdk-js/es/TopicApi';
+import { COMMON_FIELD_VERIFY_FAILED } from 'mdclub-sdk-js/es/errors';
+import commonActions from '~/utils/actionsAbstract';
+import { emit } from '~/utils/pubsub';
+import { loadEnd, loadStart } from '~/utils/loading';
+import { apiCatch } from '~/utils/errorHandlers';
 
-let global_actions;
 let dialog;
 let $name;
 let $description;
 let $cover;
 
-export default $.extend({}, actionsAbstract, {
-  /**
-   * 初始化
-   */
-  init: (props) => {
-    global_actions = props.global_actions;
-
-    const $wrapper = $('.mc-topic-edit');
+const as = {
+  onCreate: ({ element }) => {
+    const $wrapper = $(element);
     $name = $wrapper.find('input[name="name"]');
     $description = $wrapper.find('textarea[name="description"]');
     $cover = $wrapper.find('input[name="cover"]');
 
-    dialog = new mdui.Dialog($wrapper);
+    dialog = new mdui.Dialog($wrapper, {
+      history: false,
+    });
 
     // 对话框打开后，自动聚焦到第一个输入框
-    dialog.$dialog.on('open.mdui.dialog', () => $name[0].focus());
+    dialog.$element.on('open.mdui.dialog', () => $name[0].focus());
   },
 
   /**
@@ -50,21 +58,32 @@ export default $.extend({}, actionsAbstract, {
         cover: '',
         loading: false,
       });
+      $cover.val('');
 
       dialog.open();
 
       return;
     }
 
-    const isComplete = typeof topic === 'object';
+    const isComplete = !isNumber(topic);
 
-    actions.setState({
-      topic_id: isComplete ? topic.topic_id : topic,
-      name: isComplete ? topic.name : '',
-      description: isComplete ? topic.description : '',
-      cover: isComplete ? topic.cover.s : '',
-      loading: !isComplete,
-    });
+    if (isComplete) {
+      actions.setState({
+        topic_id: topic.topic_id,
+        name: unescape(topic.name),
+        description: unescape(topic.description),
+        cover: topic.cover.middle,
+        loading: false,
+      });
+    } else {
+      actions.setState({
+        topic_id: topic,
+        name: '',
+        description: '',
+        cover: '',
+        loading: true,
+      });
+    }
 
     dialog.open();
 
@@ -72,23 +91,24 @@ export default $.extend({}, actionsAbstract, {
       return;
     }
 
-    Topic
-      .getOne(topic)
+    // 只传入了 ID，获取话题详情
+    getTopic({ topic_id: topic })
+      .finally(() => {
+        actions.setState({ loading: false });
+      })
       .then(({ data }) => {
         actions.setState({
-          loading: false,
           topic_id: data.topic_id,
-          name: data.name,
-          description: data.description,
-          cover: data.cover.s,
+          name: unescape(data.name),
+          description: unescape(data.description),
+          cover: data.cover.small,
         });
 
         setTimeout(() => dialog.handleUpdate());
       })
-      .catch(({ message }) => {
-        actions.setState({ loading: false });
+      .catch((response) => {
         dialog.close();
-        mdui.snackbar(message);
+        apiCatch(response);
       });
   },
 
@@ -100,13 +120,15 @@ export default $.extend({}, actionsAbstract, {
   },
 
   /**
-   * 响应输入框输入事件
+   * 输入框失去焦点时，更新状态
    */
-  input: e => (state, actions) => {
-    // 移除错误信息
-    actions.setState({ [`${e.target.name}_msg`]: '' });
+  onInput: (e) => {
+    const { name, value } = e.target;
 
-    return { [e.target.name]: e.target.value };
+    return {
+      [`${name}_msg`]: '',
+      [name]: value,
+    };
   },
 
   /**
@@ -125,82 +147,93 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 选择图片后
    */
-  coverSelected: e => (state, actions) => {
+  coverSelected: (e) => (state, actions) => {
     actions.setState({ cover_msg: '' });
 
     const fr = new FileReader();
 
-    fr.onload = frEvent => actions.setState({ cover: frEvent.target.result });
+    fr.onload = (frEvent) => {
+      actions.setState({ cover: frEvent.target.result });
+    };
     fr.readAsDataURL(e.target.files[0]);
   },
 
   /**
-   * 添加话题
+   * 提交添加或修改话题
    */
   submit: () => (state, actions) => {
-    loading.start();
+    loadStart();
 
     const handleValidationError = (errors) => {
       const errorsMsg = {};
 
-      Object.keys(errors).forEach((key) => {
-        errorsMsg[`${key}_msg`] = errors[key];
+      each(errors, (key, value) => {
+        errorsMsg[`${key}_msg`] = value;
       });
 
       actions.setState(errorsMsg);
 
       // 光标聚焦到错误字段
-      if (typeof errorsMsg.name_msg !== 'undefined') {
+      if (!isUndefined(errorsMsg.name_msg)) {
         $name[0].focus();
-      } else if (typeof errorsMsg.description_msg !== 'undefined') {
+      } else if (!isUndefined(errorsMsg.description_msg)) {
         $description[0].focus();
       }
     };
 
-    const submitFail = ({ code, message, errors }) => {
-      loading.end();
+    const submitFail = (response) => {
+      loadEnd();
 
-      if (code === 100002) {
-        handleValidationError(errors);
+      if (response.code === COMMON_FIELD_VERIFY_FAILED) {
+        handleValidationError(response.errors);
       } else {
-        mdui.snackbar(message);
+        apiCatch(response);
       }
     };
 
-    if (state.topic_id) { // 修改
+    // 修改话题
+    if (state.topic_id) {
       const { name, description } = state;
-      const params = { name, description };
+      const params = {
+        name,
+        description,
+        topic_id: state.topic_id,
+      };
 
       if ($cover[0].files.length) {
-        params.cover = $cover[0].files[0];
+        [params.cover] = $cover[0].files;
       }
 
-      Topic
-        .updateOne(state.topic_id, params)
+      updateTopic(params)
         .then(({ data }) => {
           // 修改成功，直接修改列表中的数据，不刷新
-          loading.end();
+          loadEnd();
           actions.close();
           mdui.snackbar('修改成功');
 
-          global_actions.components.datatable.updateOne(data);
+          emit('datatable_update_row', data);
         })
         .catch(submitFail);
-    } else { // 新增
-      const { name, description } = state;
-      const file = $cover[0].files[0];
+    }
 
-      Topic
-        .create(name, description, file)
+    // 新增话题
+    else {
+      const { name, description } = state;
+      const params = { name, description };
+      [params.cover] = $cover[0].files;
+
+      createTopic(params)
         .then(() => {
           // 添加成功，刷新列表
-          loading.end();
+          loadEnd();
           actions.close();
           mdui.snackbar('添加成功');
 
-          global_actions.topics.loadData();
+          window.app.topics.loadData();
         })
         .catch(submitFail);
     }
   },
-});
+};
+
+export default extend(as, commonActions);

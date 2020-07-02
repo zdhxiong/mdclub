@@ -1,0 +1,97 @@
+@import '../../vendor/mdui/variable.less';
+
+.mc-drawer {
+  overflow: hidden;
+
+  .mdui-list {
+    box-sizing: border-box;
+    height: ~'calc(100vh - 56px - 52px)';
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    @media (min-width: @screen-sm-min) {
+      height: ~'calc(100vh - 64px - 52px)';
+    }
+
+    @media (orientation: landscape) and (max-width: @screen-xs-max-landscape) {
+      height: ~'calc(100vh - 48px - 52px)';
+    }
+  }
+
+  .mdui-list-item {
+    padding-left: 20px;
+    border-radius: 0 50px 50px 0;
+  }
+
+  .mdui-list-item-icon {
+    transform: scale(.875);
+  }
+
+  .mdui-list-item-content {
+    font-weight: normal;
+    font-size: 14px;
+  }
+
+  .mdui-list-item-active {
+    color: @primaryColor;
+    background-color: #e8f0fe;
+
+    .mdui-theme-layout-dark & {
+      color: #fff;
+      background-color: @layout-dark-color-4;
+    }
+
+    .mdui-list-item-icon {
+      color: @primaryColor;
+
+      .mdui-theme-layout-dark & {
+        color: #fff;
+      }
+    }
+  }
+
+  .toggle {
+    padding: 6px 16px 6px 12px;
+
+    button {
+      width: 40px;
+      min-width: 40px;
+      height: 40px;
+      transform: rotate(-90deg);
+    }
+  }
+
+  // 平板及以下，抽屉栏高度 100%
+  @media (max-width: @screen-sm-max) {
+    .mdui-list {
+      height: 100vh;
+    }
+
+    .toggle {
+      display: none;
+    }
+  }
+}
+
+// 桌面及以上，显示小抽屉栏切换按钮
+@media (min-width: @screen-md-min) {
+  .mdui-drawer-body-left-mini {
+    &.mdui-drawer-body-left {
+      padding-left: 68px;
+    }
+
+    .mdui-drawer {
+      width: 68px;
+
+      .toggle {
+        button {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .mdui-drawer-close {
+      transform: translateX(-68px);
+    }
+  }
+}

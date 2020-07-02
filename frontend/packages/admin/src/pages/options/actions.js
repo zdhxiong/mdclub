@@ -1,137 +1,171 @@
-import mdui, { JQ as $ } from 'mdui';
-import { location } from '@hyperapp/router';
-import { Option, Email } from 'mdclub-sdk-js';
-import actionsAbstract from '../../abstracts/actions/page';
+import mdui from 'mdui';
+import $ from 'mdui.jq';
+import extend from 'mdui.jq/es/functions/extend';
+import each from 'mdui.jq/es/functions/each';
+import {
+  get as getOptions,
+  update as updateOptions,
+} from 'mdclub-sdk-js/es/OptionApi';
+import { send as sendEmail } from 'mdclub-sdk-js/es/EmailApi';
+import { COMMON_FIELD_VERIFY_FAILED } from 'mdclub-sdk-js/es/errors';
+import commonActions from '~/utils/actionsAbstract';
+import { emit } from '~/utils/pubsub';
+import { apiCatch } from '~/utils/errorHandlers';
 
-let global_actions;
-
-export default $.extend({}, actionsAbstract, {
-  /**
-   * 初始化
-   */
-  init: props => (state, actions) => {
-    actions.routeChange('系统设置 - MDClub 控制台');
-    global_actions = props.global_actions;
-
-    const { searchBar, appbar } = global_actions.components;
+// options 和 option 共用
+const as = {
+  onCreate: ({ element }) => (state, actions) => {
+    emit('route_update');
+    emit('searchbar_state_update', { isNeedRender: false });
+    actions.setTitle('系统设置');
 
     // 滚动时，应用栏添加阴影
-    $(props.element).on('scroll', e => appbar.setState({ shadow: !!e.target.scrollTop }));
-
-    searchBar.setState({ isNeedRender: false });
-    actions.setState({ loading: true });
+    $(element).on('scroll', (e) =>
+      emit('appbar_state_update', { shadow: !!e.target.scrollTop }),
+    );
 
     // 加载初始数据
-    Option
-      .getAll()
-      .then(({ data }) => actions.setState({ data, loading: false }))
-      .catch(({ message }) => mdui.snackbar(message));
+    if (!state.data) {
+      actions.setState({ loading: true });
+      getOptions()
+        .finally(() => {
+          actions.setState({ loading: false });
+        })
+        .then(({ data }) => {
+          actions.setState({ data });
+        })
+        .catch(apiCatch);
+    }
+  },
+
+  onDestroy: ({ element }) => (_, actions) => {
+    $(element).off('scroll');
+    emit('appbar_state_update', { shadow: false });
+    actions.setState({ loading: false });
   },
 
   /**
-   * 初始化可扩展面板
-   * @param props
-   * @returns {Function}
+   * 提交保存
+   * @param e
    */
-  initPanel: (props) => {
-    const panel = new mdui.Panel(props.element, { accordion: true });
+  onSubmit: (e) => (state, actions) => {
+    e.preventDefault();
 
-    panel.$collapse.find('.mdui-panel-item')
-      .on('open.mdui.panel', function () {
-        const $this = $(this);
+    const $form = $(e.target);
 
-        $this.addClass('item-open');
-        $this.prev().addClass('item-next-open');
-        $this.next().addClass('item-prev-open');
-      })
-      .on('opened.mdui.panel', function () {
-        $(this).addClass('item-opened');
-      })
-      .on('close.mdui.panel', function () {
-        const $this = $(this);
+    actions.setState({ submitting: true });
 
-        $this.addClass('item-close').removeClass('item-open item-opened');
-        $this.prev().addClass('item-next-close').removeClass('item-next-open');
-        $this.next().addClass('item-prev-close').removeClass('item-prev-open');
-      })
-      .on('closed.mdui.panel', function () {
-        const $this = $(this);
+    const dataArr = $form.serializeArray();
 
-        $this.removeClass('item-close');
-        $this.prev().removeClass('item-next-close');
-        $this.next().removeClass('item-prev-close');
+    // 未选中的 checkbox 值应为 false
+    $form.find('input[type=checkbox]:not(:checked)').map(function () {
+      dataArr.push({
+        name: this.name,
+        value: this.checked ? this.value : 'false',
       });
+    });
 
-    mdui.mutation();
-  },
+    const dataObj = {};
+    const integerFields = [
+      'answer_can_delete_before',
+      'answer_can_edit_before',
+      'article_can_delete_before',
+      'article_can_edit_before',
+      'cache_memcached_port',
+      'cache_redis_port',
+      'comment_can_delete_before',
+      'comment_can_edit_before',
+      'question_can_delete_before',
+      'question_can_edit_before',
+      'smtp_port',
+      'storage_ftp_port',
+      'storage_sftp_port',
+    ];
+    const booleanFields = [
+      'answer_can_delete',
+      'answer_can_delete_only_no_comment',
+      'answer_can_edit',
+      'answer_can_edit_only_no_comment',
+      'article_can_delete',
+      'article_can_delete_only_no_comment',
+      'article_can_edit',
+      'article_can_edit_only_no_comment',
+      'comment_can_delete',
+      'comment_can_edit',
+      'question_can_delete',
+      'question_can_delete_only_no_answer',
+      'question_can_delete_only_no_comment',
+      'question_can_edit',
+      'question_can_edit_only_no_answer',
+      'question_can_edit_only_no_comment',
+      'storage_ftp_passive',
+      'storage_ftp_ssl',
+    ];
 
-  /**
-   * 销毁前
-   */
-  destroy: props => (state, actions) => {
-    $(props.element).off('scroll');
+    each(dataArr, (_, item) => {
+      if (integerFields.indexOf(item.name) > -1) {
+        dataObj[item.name] = parseInt(item.value, 10);
+      } else if (booleanFields.indexOf(item.name) > -1) {
+        dataObj[item.name] = item.value === 'true' || item.value === 'on';
+      } else {
+        dataObj[item.name] = item.value;
+      }
+    });
 
-    actions.setState({ loading: true });
-    global_actions.components.appbar.setState({ shadow: false });
-  },
-
-  /**
-   * 响应输入框输入事件
-   */
-  data: {
-    input: e => ({
-      [e.target.name]: e.target.value,
-    }),
+    updateOptions(dataObj)
+      .finally(() => {
+        actions.setState({ submitting: false });
+      })
+      .then(({ data }) => {
+        actions.setState({ data });
+        mdui.snackbar('保存成功');
+      })
+      .catch(apiCatch);
   },
 
   /**
    * 发送测试邮件
    */
-  sendTestEmail: () => (state, actions) => {
-    mdui.prompt('请输入用于接收测试邮件的邮箱地址', (email) => {
+  sendTestEmail: () => (state) => {
+    const onConfirm = (email) => {
       const emailData = {
-        email,
+        email: [email],
         subject: `${state.data.site_name}的测试邮件`,
         content: '你收到了这封邮件，表示你的邮件服务器已设置成功',
       };
 
       const waitAlert = mdui.alert('正在发送邮件，请稍候…');
 
-      Email
-        .send(emailData)
-        .then(() => {
-          waitAlert.close();
-          mdui.alert(`请登录邮箱：${email}，查看是否收到了测试邮件`);
-        })
-        .catch(({ code, message, extra_message, errors }) => {
-          waitAlert.close();
+      setTimeout(() => {
+        sendEmail(emailData)
+          .finally(() => waitAlert.close())
+          .then(() => {
+            mdui.alert(`请登录邮箱：${email}，查看是否收到了测试邮件`);
+          })
+          .catch(({ code, message, extra_message, errors }) => {
+            if (code === COMMON_FIELD_VERIFY_FAILED) {
+              mdui.alert(Object.values(errors).join('<br/>'), message);
+            } else {
+              mdui.alert(extra_message, message);
+            }
+          });
+      }, 300);
+    };
 
-          if (code === 100002) {
-            mdui.alert(Object.values(errors).join('<br/>'), message);
-          } else {
-            mdui.alert(extra_message, message);
-          }
-        });
-    });
+    const onCancel = () => {};
+
+    const options = {
+      confirmText: '发送',
+      cancelText: '取消',
+    };
+
+    mdui.prompt(
+      '请输入用于接收测试邮件的邮箱地址',
+      onConfirm,
+      onCancel,
+      options,
+    );
   },
+};
 
-  /**
-   * 提交设置
-   */
-  submit: e => (state, actions) => {
-    e.preventDefault();
-
-    actions.setState({ submitting: true });
-
-    Option
-      .updateMultiple(state.data)
-      .then(() => {
-        actions.setState({ submitting: false });
-        mdui.snackbar('保存成功');
-      })
-      .catch(({ message }) => {
-        actions.setState({ submitting: false });
-        mdui.alert(message);
-      });
-  },
-});
+export default extend(as, commonActions);

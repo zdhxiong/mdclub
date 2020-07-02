@@ -1,0 +1,77 @@
+@import '../../vendor/mdui/variable.less';
+
+#page-index {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+
+    .title {
+      font-size: 18px;
+    }
+  }
+
+  .mdui-card {
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+
+  .total-number {
+    .rows {
+      display: flex;
+      padding-top: 14px;
+    }
+  }
+
+  .number-item {
+    flex: 1;
+
+    .label {
+      font-size: 14px;
+    }
+
+    .number {
+      margin-top: 12px;
+      font-size: 28px;
+    }
+  }
+
+  .system-info {
+    .items {
+      padding-top: 8px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      font-size: 14px;
+
+      label {
+        min-width: 160px;
+      }
+    }
+  }
+
+  .system-info,
+  .new-data {
+    float: left;
+    width: ~'calc(50% - 8px)';
+    height: 400px;
+  }
+
+  .system-info:nth-child(odd),
+  .new-data:nth-child(odd) {
+    margin-right: 16px;
+  }
+
+  .chart-wrapper {
+    margin-right: -16px;
+    margin-left: -16px;
+  }
+
+  .chart-container .axis.x g line {
+    display: none;
+  }
+}

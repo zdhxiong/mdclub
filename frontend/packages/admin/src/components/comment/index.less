@@ -1,0 +1,29 @@
+@import '../../vendor/mdui/variable.less';
+
+.mc-comment {
+  .mdui-dialog-content {
+    display: flex;
+  }
+
+  .content {
+    flex: 1;
+    padding-right: 24px;
+  }
+
+  .actions {
+    min-width: 96px;
+
+    .delete {
+      color: #fff;
+    }
+
+    .delete {
+      margin-left: 16px;
+      background-color: @accentColor !important;
+
+      &:active {
+        opacity: .76;
+      }
+    }
+  }
+}

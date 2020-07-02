@@ -15,15 +15,10 @@
     margin-top: 4px;
 
     .title {
-      color: rgba(0, 0, 0, 0.54);
+      padding-bottom: 8px;
       font-size: 16px;
       transform: scale(.75) translateY(0);
       transform-origin: left;
-      padding-bottom: 8px;
-
-      .mdui-theme-layout-dark & {
-        color: rgba(255, 255, 255, .7);
-      }
     }
 
     .content {
@@ -32,32 +27,32 @@
       padding-bottom: 56%;
 
       img {
+        position: absolute;
         width: 100%;
         height: 100%;
-        position: absolute;
       }
 
       .placeholder {
-        width: 100%;
-        height: 100%;
         position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 2px;
-        border: 1px solid rgba(0, 0, 0, 0.42);
         box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.42);
+        border-radius: 2px;
         cursor: pointer;
         transition: border, box-shadow .2s cubic-bezier(.4, 0, .2, 1);
 
         i {
-          font-size: 36px;
           padding: 12px;
           color: #fff;
+          font-size: 36px;
           background-color: rgba(0, 0, 0, .26);
           border-radius: 50%;
-          user-select: none;
           transition: color .2s cubic-bezier(.4, 0, .2, 1);
+          user-select: none;
         }
 
         &.selected i {
@@ -92,9 +87,9 @@
 
     .error {
       height: 28px;
-      line-height: 28px;
       color: rgba(255, 23, 68, .87);
       font-size: 12px;
+      line-height: 28px;
     }
 
     &.invalid {

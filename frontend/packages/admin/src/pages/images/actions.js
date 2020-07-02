@@ -16,7 +16,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 初始化
    */
-  init: props => (state, actions) => {
+  init: (props) => (state, actions) => {
     actions.routeChange('图片管理 - MDClub 控制台');
     global_actions = props.global_actions;
     const $element = $(props.element);
@@ -118,17 +118,14 @@ export default $.extend({}, actionsAbstract, {
 
     actions.loadStart();
 
-    const searchData = R.filter(n => n, searchBar.getState().data);
+    const searchData = R.filter((n) => n, searchBar.getState().data);
     const paginationData = {
       page: pagination.getState().page,
       per_page: pagination.getState().per_page,
     };
     const data = $.extend({}, searchData, paginationData);
 
-    Image
-      .getList(data)
-      .then(actions.loadSuccess)
-      .catch(actions.loadFail);
+    Image.getList(data).then(actions.loadSuccess).catch(actions.loadFail);
   },
 
   /**
@@ -178,7 +175,7 @@ export default $.extend({}, actionsAbstract, {
       isCheckedRows,
       isCheckedAll: false,
       checkedCount: 0,
-      data: data,
+      data,
       photoSwipeItems,
       thumbData,
     });
@@ -189,7 +186,7 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 切换一张图片的选中状态
    */
-  checkOne: hash => (state, actions) => {
+  checkOne: (hash) => (state, actions) => {
     const { isCheckedRows } = state;
     isCheckedRows[hash] = !isCheckedRows[hash];
 
@@ -230,19 +227,27 @@ export default $.extend({}, actionsAbstract, {
    * 打开图片
    */
   openImage: ({ item, index }) => (state) => {
-    const gallery = new PhotoSwipe($('.pswp')[0], PhotoSwipeUi_Default, state.photoSwipeItems, {
-      index,
-      loop: false,
-      getThumbBoundsFn: (i) => {
-        const offset = $('#page-images .mdui-grid-tile').eq(i).find('.image').offset();
+    const gallery = new PhotoSwipe(
+      $('.pswp')[0],
+      PhotoSwipeUi_Default,
+      state.photoSwipeItems,
+      {
+        index,
+        loop: false,
+        getThumbBoundsFn: (i) => {
+          const offset = $('#page-images .mdui-grid-tile')
+            .eq(i)
+            .find('.image')
+            .offset();
 
-        return {
-          x: offset.left,
-          y: offset.top,
-          w: offset.width,
-        };
+          return {
+            x: offset.left,
+            y: offset.top,
+            w: offset.width,
+          };
+        },
       },
-    });
+    );
 
     gallery.init();
   },
@@ -285,14 +290,19 @@ export default $.extend({}, actionsAbstract, {
         hashArr.push(item.hash);
       });
 
-      Image
-        .deleteMultiple(hashArr.join(','))
+      Image.deleteMultiple(hashArr.join(','))
         .then(actions.deleteSuccess)
         .catch(actions.deleteFail);
     };
 
     const options = { confirmText: '确认', cancelText: '取消' };
 
-    mdui.confirm('删除后，将无法恢复', `确认删除这 ${items.length} 张图片`, confirm, false, options);
+    mdui.confirm(
+      '删除后，将无法恢复',
+      `确认删除这 ${items.length} 张图片`,
+      confirm,
+      false,
+      options,
+    );
   },
 });

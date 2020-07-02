@@ -1,0 +1,117 @@
+@import '../../vendor/mdui/variable.less';
+@import '../../utils/mixin.less';
+
+.mc-user-edit {
+  width: 85%;
+  max-width: 620px;
+  max-height: 94% !important;
+  overflow: auto;
+  background-color: #f9f9f9;
+  -webkit-overflow-scrolling: touch;
+
+  .mdui-theme-layout-dark & {
+    background-color: #303030;
+  }
+
+  @media (max-width: @screen-xs-max) {
+    .mc-dialog-fullscreen();
+  }
+
+  .mdui-dialog-content {
+    padding: 0;
+
+    .form {
+      padding-top: 16px;
+      padding-right: 24px;
+      padding-left: 24px;
+
+      .mdui-textfield {
+        padding-top: 0;
+      }
+    }
+  }
+
+  .header {
+    position: relative;
+    height: 0;
+    padding-bottom: 56%;
+    overflow: visible;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    .gradient {
+      height: 100px;
+      background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .46));
+    }
+
+    .delete-avatar,
+    .delete-cover {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: none;
+      width: 42px;
+      min-width: 42px;
+      height: 42px;
+      background-color: rgba(0, 0, 0, .26) !important;
+      transform: translate(-50%, -50%);
+
+      i {
+        color: #fff !important;
+        opacity: .9;
+      }
+
+      &:hover,
+      &:active {
+        background-color: rgba(0, 0, 0, .26) !important;
+
+        i {
+          opacity: 1;
+        }
+      }
+    }
+
+    .delete-cover {
+      top: 16px;
+      right: 16px;
+      left: auto;
+      transform: none;
+    }
+
+    .avatar {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      height: 60px;
+
+      img {
+        width: 56px;
+        height: 56px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        user-select: none;
+      }
+
+      &:hover .delete-avatar {
+        display: block;
+      }
+    }
+
+    &:hover .delete-cover {
+      display: block;
+    }
+
+    .username {
+      position: absolute;
+      bottom: 16px;
+      left: 92px;
+      color: #fff;
+      font-size: 30px;
+      line-height: 60px;
+
+      small {
+        font-size: 64%;
+      }
+    }
+  }
+}

@@ -1,0 +1,137 @@
+@import '../../vendor/mdui/variable.less';
+
+.mc-searchbar {
+  flex-grow: 1;
+  height: 44px;
+  line-height: 44px;
+
+  // 平板和桌面
+  @media (min-width: @screen-sm-min) {
+    height: 48px;
+    line-height: 48px;
+  }
+
+  // 手机横屏
+  @media (orientation: landscape) and (max-width: @screen-xs-max-landscape) {
+    height: 38px;
+    line-height: 38px;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 720px;
+    height: 100%;
+    vertical-align: middle;
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 100ms ease-in;
+    user-select: none;
+
+    .mdui-theme-layout-dark & {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    &>i {
+      margin: 0 14px;
+    }
+
+    .placeholder {
+      margin-right: auto;
+      font-size: 16px;
+    }
+
+    .chips {
+      display: flex;
+      align-items: center;
+      margin-right: auto;
+      font-size: 14px;
+    }
+
+    .mdui-chip {
+      margin-right: 12px;
+    }
+
+    .mdui-chip-title {
+      float: left;
+    }
+
+    .mdui-chip-delete {
+      i {
+        float: right;
+      }
+    }
+  }
+
+  .form {
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 16px 24px 24px 24px;
+    overflow: visible;
+    border-radius: 8px;
+    transform: scaleY(0);
+    transition-duration: .18s;
+
+    .mdui-textfield {
+      padding-top: 16px;
+      padding-bottom: 4px;
+      overflow: visible;
+    }
+
+    .mdui-textfield-label {
+      float: left;
+      width: 128px;
+      height: 36px;
+      margin-right: 8px;
+      font-size: 13px;
+      line-height: 36px;
+      transform: inherit;
+    }
+
+    .mdui-textfield-input,
+    .mdui-select {
+      width: ~'calc(100% - 136px)' !important;
+    }
+
+    .mdui-select-selected {
+      height: 36px;
+      line-height: 36px;
+    }
+
+    .mdui-select-menu {
+      width: 136px !important;
+    }
+
+    .reset,
+    .submit {
+      float: right;
+      min-width: 72px;
+      margin-top: 20px;
+    }
+
+    .submit {
+      margin-left: 16px;
+      color: #fff !important;
+    }
+  }
+
+  .mdui-menu-open {
+    transform: scaleY(1);
+  }
+
+  &.is-open {
+    .bar {
+      background-color: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+
+      .mdui-theme-layout-dark & {
+        background-color: #424242;
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+}

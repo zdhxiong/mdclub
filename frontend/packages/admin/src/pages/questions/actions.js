@@ -1,23 +1,22 @@
-import mdui, { JQ as $ } from 'mdui';
+import mdui from 'mdui';
 import R from 'ramda';
-import { location } from '@hyperapp/router';
-import { Question } from 'mdclub-sdk-js';
-import loading from '../../helper/loading';
-import actionsAbstract from '../../abstracts/actions/page';
+import extend from 'mdui.jq/es/functions/extend';
+import { $document } from 'mdui/es/utils/dom';
+import {
+  getList as getQuestions,
+  del as deleteQuestion,
+  deleteMultiple as deleteMultipleQuestions,
+} from 'mdclub-sdk-js/es/QuestionApi';
+import commonActions from '~/utils/actionsAbstract';
+import { emit } from '~/utils/pubsub';
+import { loadStart } from '~/utils/loading';
 
-let global_actions;
+const as = {
+  onCreate: () => (state, actions) => {
+    emit('route_update');
+    actions.setTitle('提问管理');
 
-export default $.extend({}, actionsAbstract, {
-  /**
-   * 初始化
-   */
-  init: props => (state, actions) => {
-    actions.routeChange('提问管理 - MDClub 控制台');
-    global_actions = props.global_actions;
-
-    const { user, question, searchBar, datatable } = global_actions.components;
-
-    searchBar.setState({
+    emit('searchbar_state_update', {
       fields: [
         { name: 'question_id', label: '提问ID' },
         { name: 'user_id', label: '用户ID' },
@@ -30,16 +29,16 @@ export default $.extend({}, actionsAbstract, {
       isNeedRender: true,
     });
 
-    datatable.setState({
+    emit('datatable_state_update', {
       columns: [
         {
           title: '作者',
-          field: 'relationship.user.username',
+          field: 'relationships.user.username',
           type: 'relation',
           width: 160,
           onClick: ({ e, row }) => {
             e.preventDefault();
-            user.open(row.user_id);
+            emit('user_open', row.user_id);
           },
         },
         {
@@ -57,7 +56,9 @@ export default $.extend({}, actionsAbstract, {
       buttons: [
         {
           type: 'target',
-          getTargetLink: ({ question_id }) => `${window.G_ROOT}/questions/${question_id}`,
+          getTargetLink: ({ question_id }) => {
+            return `${window.G_ROOT}/questions/${question_id}`;
+          },
         },
         {
           type: 'btn',
@@ -86,37 +87,40 @@ export default $.extend({}, actionsAbstract, {
       ],
       order: '-create_time',
       primaryKey: 'question_id',
-      onRowClick: question.open,
+      onRowClick: (question) => {
+        emit('question_open', question);
+        emit('datatable_state_update', {
+          lastVisitId: question.question_id,
+        });
+      },
     });
 
-    $(document).on('search-submit', actions.loadData);
+    $document.on('search-submit', actions.loadData);
     actions.loadData();
   },
 
-  /**
-   * 销毁前
-   */
-  destroy: () => {
-    $(document).off('search-submit');
+  onDestroy: () => {
+    $document.off('search-submit');
   },
 
   /**
    * 加载数据
    */
   loadData: () => {
-    const { datatable, pagination, searchBar } = global_actions.components;
+    const { datatable, pagination, searchBar } = window.app;
     const { page, per_page } = pagination.getState();
     const { order } = datatable.getState();
 
     const searchData = R.pipe(
-      R.filter(n => n),
+      R.filter((n) => n),
       R.mergeDeepLeft({ page, per_page, order }),
     )(searchBar.getState().data);
 
+    searchData.include = ['user', 'topics'];
+
     datatable.loadStart();
 
-    Question
-      .getList(searchData)
+    getQuestions(searchData)
       .then(datatable.loadSuccess)
       .catch(datatable.loadFail);
   },
@@ -124,8 +128,8 @@ export default $.extend({}, actionsAbstract, {
   /**
    * 编辑指定提问
    */
-  editOne: question => (state, actions) => {
-
+  editOne: (question) => {
+    emit('question_edit_open', question);
   },
 
   /**
@@ -133,39 +137,44 @@ export default $.extend({}, actionsAbstract, {
    */
   deleteOne: ({ question_id }) => (state, actions) => {
     const confirm = () => {
-      loading.start();
+      loadStart();
 
-      Question
-        .deleteOne(question_id)
+      deleteQuestion({ question_id })
         .then(actions.deleteSuccess)
         .catch(actions.deleteFail);
     };
 
     const options = { confirmText: '确认', cancelText: '取消' };
 
-    mdui.confirm('删除后，你仍可以在回收站中恢复该提问', '确认删除该提问？', confirm, false, options);
+    mdui.confirm('确认删除该提问？', confirm, () => {}, options);
   },
 
   /**
    * 批量删除提问
    */
-  batchDelete: questions => (state, actions) => {
+  batchDelete: (questions) => (state, actions) => {
     const options = { confirmText: '确认', cancelText: '取消' };
 
     const confirm = () => {
-      loading.start();
+      loadStart();
 
       const question_ids = R.pipe(
         R.pluck('question_id'),
         R.join(','),
       )(questions);
 
-      Question
-        .deleteMultiple(question_ids)
+      deleteMultipleQuestions({ question_ids })
         .then(actions.deleteSuccess)
         .catch(actions.deleteFail);
     };
 
-    mdui.confirm('删除后，你仍可以在回收站中恢复这些提问', `确认删除这 ${questions.length} 个提问？`, confirm, false, options);
+    mdui.confirm(
+      `确认删除这 ${questions.length} 个提问？`,
+      confirm,
+      () => {},
+      options,
+    );
   },
-});
+};
+
+export default extend(as, commonActions);

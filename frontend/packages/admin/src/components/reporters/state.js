@@ -1,5 +1,5 @@
 export default {
   data: [],
-  pagination: false,
+  pagination: null,
   loading: false,
 };
