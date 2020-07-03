@@ -28,7 +28,7 @@ class Answer extends Abstracts
             return [];
         }
 
-        $answers = AnswerModel::field(['answer_id', 'content_rendered', 'create_time', 'update_time'])
+        $answers = AnswerModel::field(['answer_id', 'question_id', 'content_rendered', 'create_time', 'update_time'])
             ->select($answerIds);
 
         return collect($answers)
