@@ -43,8 +43,9 @@ export default ({ state, actions }) => {
         data={languageTypeMap}
       />
       <Input
-        label="static 目录静态资源访问路径"
+        label="public/static 目录外部访问 url 地址"
         name="site_static_url"
+        helper="可为 public/static 目录绑定独立域名。例如：https://cdn.mdclub.org/static/"
         value={data.site_static_url}
       />
       <SaveBtn submitting={submitting} />

@@ -16,7 +16,7 @@ export default ({ state, actions }) => {
         label="上传文件目录外部访问 URL 地址"
         name="storage_url"
         value={data.storage_url}
-        helper="留空时将使用 /public/static/upload 目录下的资源"
+        helper="留空时将使用 /public/upload 目录下的资源"
       />
       <Select
         label="存储类型"
@@ -40,7 +40,10 @@ export default ({ state, actions }) => {
           label="协议"
           name="storage_ftp_ssl"
           value={data.storage_ftp_ssl}
-          data={{ true: 'FTPS', false: 'FTP' }}
+          data={{
+            true: 'FTPS',
+            false: 'FTP',
+          }}
         />
         <Input
           label="FTP 服务器地址"
@@ -64,15 +67,18 @@ export default ({ state, actions }) => {
         />
         <Input
           label="上传目录"
-          name="storage_ftp_root"
-          value={data.storage_ftp_root}
+          name="storage_ftp_dir"
+          value={data.storage_ftp_dir}
           helper="例如：/path/to/root"
         />
         <Select
           label="传输模式"
           name="storage_ftp_passive"
           value={data.storage_ftp_passive}
-          data={{ true: '被动模式', false: '主动模式' }}
+          data={{
+            true: '被动模式',
+            false: '主动模式',
+          }}
         />
       </div>
       <div class={cc([{ 'mdui-hidden': data.storage_type !== 'sftp' }])}>
@@ -98,8 +104,8 @@ export default ({ state, actions }) => {
         />
         <Input
           label="上传目录"
-          name="storage_sftp_root"
-          value={data.storage_sftp_root}
+          name="storage_sftp_dir"
+          value={data.storage_sftp_dir}
           helper="例如：/path/to/root"
         />
       </div>
@@ -124,6 +130,12 @@ export default ({ state, actions }) => {
           name="storage_aliyun_endpoint"
           value={data.storage_aliyun_endpoint}
         />
+        <Input
+          label="上传目录"
+          name="storage_aliyun_dir"
+          value={data.storage_aliyun_dir}
+          helper="例如：upload"
+        />
       </div>
       <div class={cc([{ 'mdui-hidden': data.storage_type !== 'upyun' }])}>
         <Input
@@ -140,6 +152,12 @@ export default ({ state, actions }) => {
           label="操作员密码"
           name="storage_upyun_password"
           value={data.storage_upyun_password}
+        />
+        <Input
+          label="上传目录"
+          name="storage_upyun_dir"
+          value={data.storage_upyun_dir}
+          helper="例如：upload"
         />
       </div>
       <div class={cc([{ 'mdui-hidden': data.storage_type !== 'qiniu' }])}>
@@ -169,6 +187,12 @@ export default ({ state, actions }) => {
             na0: '北美',
             as0: '东南亚',
           }}
+        />
+        <Input
+          label="上传目录"
+          name="storage_qiniu_dir"
+          value={data.storage_qiniu_dir}
+          helper="例如：upload"
         />
       </div>
       <SaveBtn submitting={submitting} />
