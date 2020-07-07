@@ -889,6 +889,10 @@ export interface Option {
    */
   storage_aliyun_bucket?: string;
   /**
+   * 🔐阿里云 OSS 的存储子目录
+   */
+  storage_aliyun_dir?: string;
+  /**
    * 🔐阿里云 OSS 的 EndPoint
    */
   storage_aliyun_endpoint?: string;
@@ -911,7 +915,7 @@ export interface Option {
   /**
    * 🔐FTP 存储目录
    */
-  storage_ftp_root?: string;
+  storage_ftp_dir?: string;
   /**
    * 🔐FTP 是否启用 SSL。true（启用）；false（不启用）
    */
@@ -937,6 +941,10 @@ export interface Option {
    */
   storage_qiniu_bucket?: string;
   /**
+   * 🔐七牛云的存储子目录
+   */
+  storage_qiniu_dir?: string;
+  /**
    * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
    */
   storage_qiniu_zone?: OptionStorageQiniuZoneEnum;
@@ -955,7 +963,7 @@ export interface Option {
   /**
    * 🔐SFTP 存储目录
    */
-  storage_sftp_root?: string;
+  storage_sftp_dir?: string;
   /**
    * 🔐SFTP 用户名
    */
@@ -968,6 +976,10 @@ export interface Option {
    * 🔐又拍云 Bucket
    */
   storage_upyun_bucket?: string;
+  /**
+   * 🔐又拍云的存储子目录
+   */
+  storage_upyun_dir?: string;
   /**
    * 🔐又拍云操作员账号
    */
@@ -1250,6 +1262,10 @@ export interface OptionUpdateRequestBody {
    */
   storage_aliyun_bucket?: string;
   /**
+   * 🔐阿里云 OSS 的存储子目录
+   */
+  storage_aliyun_dir?: string;
+  /**
    * 🔐阿里云 OSS 的 EndPoint
    */
   storage_aliyun_endpoint?: string;
@@ -1272,7 +1288,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐FTP 存储目录
    */
-  storage_ftp_root?: string;
+  storage_ftp_dir?: string;
   /**
    * 🔐FTP 是否启用 SSL。true（启用）；false（不启用）
    */
@@ -1298,6 +1314,10 @@ export interface OptionUpdateRequestBody {
    */
   storage_qiniu_bucket?: string;
   /**
+   * 🔐七牛云的存储子目录
+   */
+  storage_qiniu_dir?: string;
+  /**
    * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
    */
   storage_qiniu_zone?: OptionStorageQiniuZoneEnum;
@@ -1316,7 +1336,7 @@ export interface OptionUpdateRequestBody {
   /**
    * 🔐SFTP 存储目录
    */
-  storage_sftp_root?: string;
+  storage_sftp_dir?: string;
   /**
    * 🔐SFTP 用户名
    */
@@ -1329,6 +1349,10 @@ export interface OptionUpdateRequestBody {
    * 🔐又拍云 Bucket
    */
   storage_upyun_bucket?: string;
+  /**
+   * 🔐又拍云的存储子目录
+   */
+  storage_upyun_dir?: string;
   /**
    * 🔐又拍云操作员账号
    */
