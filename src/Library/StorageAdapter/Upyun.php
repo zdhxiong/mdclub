@@ -48,6 +48,8 @@ class Upyun extends Abstracts implements Interfaces
 
     public function __construct()
     {
+        $this->setPathPrefix(OptionConstant::STORAGE_UPYUN_DIR);
+
         $this->bucket = Option::get(OptionConstant::STORAGE_UPYUN_BUCKET);
         $this->operator = Option::get(OptionConstant::STORAGE_UPYUN_OPERATOR);
         $this->password = Option::get(OptionConstant::STORAGE_UPYUN_PASSWORD);
@@ -63,11 +65,13 @@ class Upyun extends Abstracts implements Interfaces
      */
     protected function getRequestHeaders(string $method, string $path, array $headers = []): array
     {
+        $location = $this->applyPathPrefix($path);
+
         // 签名（https://help.upyun.com/knowledge-base/object_storage_authorization/#e4bba3e7a081e6bc94e7a4ba）
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $signature = base64_encode(hash_hmac(
             'sha1',
-            "{$method}&/{$this->bucket}/{$path}&{$date}",
+            "{$method}&/{$this->bucket}/{$location}&{$date}",
             md5($this->password),
             true
         ));
@@ -94,12 +98,14 @@ class Upyun extends Abstracts implements Interfaces
         StreamInterface $stream = null,
         array $headers = []
     ): void {
+        $location = $this->applyPathPrefix($path);
+
         if ($stream === null) {
             $stream = $this->getStreamFactory()->createStream();
         }
 
-        $uri = $this->getUriFactory()->createUri("https://{$this->endpoint}/{$this->bucket}/{$path}");
-        $headers = new Headers($this->getRequestHeaders($method, $path, $headers));
+        $uri = $this->getUriFactory()->createUri("https://{$this->endpoint}/{$this->bucket}/{$location}");
+        $headers = new Headers($this->getRequestHeaders($method, $location, $headers));
         $request = new Psr7Request($method, $uri, $headers, [], [], $stream);
 
         $client = new Curl(new ResponseFactory(), [
@@ -138,7 +144,9 @@ class Upyun extends Abstracts implements Interfaces
      */
     public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        $this->sendRequest('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
+        $location = $this->applyPathPrefix($path);
+
+        $this->sendRequest('PUT', $location, $stream, ['Content-Length' => $stream->getSize()]);
     }
 
     /**
@@ -146,6 +154,8 @@ class Upyun extends Abstracts implements Interfaces
      */
     public function delete(string $path, array $thumbs): void
     {
-        $this->sendRequest('DELETE', $path, null, ['x-upyun-async' => 'true']);
+        $location = $this->applyPathPrefix($path);
+
+        $this->sendRequest('DELETE', $location, null, ['x-upyun-async' => 'true']);
     }
 }

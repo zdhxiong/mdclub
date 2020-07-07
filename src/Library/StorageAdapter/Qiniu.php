@@ -59,6 +59,8 @@ class Qiniu extends Abstracts implements Interfaces
 
     public function __construct()
     {
+        $this->setPathPrefix(OptionConstant::STORAGE_QINIU_DIR);
+
         $this->accessKey = Option::get(OptionConstant::STORAGE_QINIU_ACCESS_ID);
         $this->secretKey = Option::get(OptionConstant::STORAGE_QINIU_ACCESS_SECRET);
         $this->bucket = Option::get(OptionConstant::STORAGE_QINIU_BUCKET);
@@ -86,8 +88,10 @@ class Qiniu extends Abstracts implements Interfaces
      */
     protected function getPolicy(string $path): string
     {
+        $location = $this->applyPathPrefix($path);
+
         $policy = [
-            'scope' => "{$this->bucket}:{$path}",
+            'scope' => "{$this->bucket}:{$location}",
             'deadline' => time() + 3600,
         ];
 
@@ -103,7 +107,8 @@ class Qiniu extends Abstracts implements Interfaces
      */
     protected function getUploadToken(string $path): string
     {
-        $policy = $this->getPolicy($path);
+        $location = $this->applyPathPrefix($path);
+        $policy = $this->getPolicy($location);
         $sign = $this->base64Encode(hash_hmac('sha1', $policy, $this->secretKey, true));
 
         return "{$this->accessKey}:{$sign}:{$policy}";
@@ -118,7 +123,8 @@ class Qiniu extends Abstracts implements Interfaces
      */
     protected function getAccessToken(string $path): string
     {
-        $sign = $this->base64Encode(hash_hmac('sha1', "{$path}\n", $this->secretKey, true));
+        $location = $this->applyPathPrefix($path);
+        $sign = $this->base64Encode(hash_hmac('sha1', "{$location}\n", $this->secretKey, true));
 
         return "{$this->accessKey}:{$sign}";
     }
@@ -147,12 +153,13 @@ class Qiniu extends Abstracts implements Interfaces
      */
     public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
+        $location = $this->applyPathPrefix($path);
         $zones = self::$zones;
         $headers = [ 'Host' => $zones[$this->zone] ];
 
         $builder = new FormRequestBuilder();
-        $builder->addField('key', $path);
-        $builder->addField('token', $this->getUploadToken($path));
+        $builder->addField('key', $location);
+        $builder->addField('token', $this->getUploadToken($location));
         $builder->addFile('file', (string) $stream->getMetadata('uri'));
 
         $response = $this->getBrowser()->submitForm(
@@ -172,7 +179,8 @@ class Qiniu extends Abstracts implements Interfaces
      */
     public function delete(string $path, array $thumbs): void
     {
-        $encodedEntryURI = $this->base64Encode("{$this->bucket}:{$path}");
+        $location = $this->applyPathPrefix($path);
+        $encodedEntryURI = $this->base64Encode("{$this->bucket}:{$location}");
 
         $headers = [
             'Host' => 'rs.qiniu.com',

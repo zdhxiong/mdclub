@@ -7,6 +7,7 @@ namespace MDClub\Library\StorageAdapter;
 use Buzz\Browser;
 use Buzz\Client\Curl;
 use Intervention\Image\ImageManagerStatic;
+use MDClub\Facade\Library\Option;
 use MDClub\Helper\Str;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
@@ -35,6 +36,45 @@ abstract class Abstracts
      * @var Browser
      */
     private $browser;
+
+    /**
+     * 存储路径
+     *
+     * @var string
+     */
+    protected $pathPrefix;
+
+    /**
+     * 设置文件存储路径前缀
+     *
+     * @param string $dirConstantName 目录的常量名
+     * @param string $defaultDir      默认目录
+     */
+    protected function setPathPrefix(string $dirConstantName, string $defaultDir = ''): void
+    {
+        $prefix = Option::get($dirConstantName);
+
+        if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
+            $prefix .= '/';
+        }
+
+        if (!$prefix) {
+            $prefix = $defaultDir;
+        }
+
+        $this->pathPrefix = $prefix;
+    }
+
+    /**
+     * 获取包含文件路径的文件存储地址
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function applyPathPrefix(string $path): string
+    {
+        return $this->pathPrefix . ltrim($path, '\\/');
+    }
 
     /**
      * 获取 Buzz 的 Browser 对象

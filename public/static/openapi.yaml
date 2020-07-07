@@ -922,6 +922,129 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Image
+  /notifications/count:
+    get:
+      operationId: getCount
+      summary: 获取未读通知数量
+      description: |
+        获取未读通知数量。
+      parameters:
+        - $ref: '#/components/parameters/notification_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/NotificationCount'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  /notifications/read:
+    post:
+      operationId: readAll
+      summary: 把所有通知标记为已读
+      description: |
+        只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  /notifications:
+    get:
+      operationId: getList
+      summary: 获取通知列表
+      description: |
+        获取通知列表。
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/include.notification'
+        - $ref: '#/components/parameters/notification_type.query'
+        - $ref: '#/components/parameters/notification_read.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notifications'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+    delete:
+      operationId: deleteAll
+      summary: 删除所有通知
+      description: |
+        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_type.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_ids}/read':
+    post:
+      operationId: readMultiple
+      summary: 批量把通知标记为已读
+      description: 批量把通知标记为已读
+      parameters:
+        - $ref: '#/components/parameters/notification_ids.path'
+        - $ref: '#/components/parameters/include.notification'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notifications'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_ids}':
+    delete:
+      operationId: deleteMultiple
+      summary: 批量删除通知
+      description: |
+        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_ids.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_id}/read':
+    post:
+      operationId: read
+      summary: 把一条通知标记为已读
+      description: 把一条通知标记为已读
+      parameters:
+        - $ref: '#/components/parameters/notification_id.path'
+        - $ref: '#/components/parameters/include.notification'
+      responses:
+        '200':
+          $ref: '#/components/responses/Notification'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
+  '/notifications/{notification_id}':
+    delete:
+      operationId: delete
+      summary: 删除一条通知
+      description: |
+        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      parameters:
+        - $ref: '#/components/parameters/notification_id.path'
+      responses:
+        '200':
+          $ref: '#/components/responses/Empty'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Notification
   /options:
     get:
       operationId: get
@@ -1366,6 +1489,22 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Report
+  /stats:
+    get:
+      operationId: get
+      summary: "\U0001F510获取站点统计数据"
+      description: 仅管理员可调用该接口。
+      parameters:
+        - $ref: '#/components/parameters/include.stats'
+        - $ref: '#/components/parameters/start_date.query'
+        - $ref: '#/components/parameters/end_date.query'
+      responses:
+        '200':
+          $ref: '#/components/responses/Stats'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Stats
   /tokens:
     post:
       operationId: login
@@ -2392,11 +2531,6 @@ components:
           description: 评论数量
           minimum: 0
           example: 22
-        view_count:
-          type: integer
-          description: 浏览量
-          minimum: 0
-          example: 487
         follower_count:
           type: integer
           description: 关注者数量
@@ -2440,7 +2574,6 @@ components:
         - content_markdown
         - content_rendered
         - comment_count
-        - view_count
         - follower_count
         - vote_count
         - vote_up_count
@@ -2563,20 +2696,6 @@ components:
         - email
         - subject
         - content
-    ErrorField:
-      type: object
-      properties:
-        field:
-          type: string
-          description: 错误字段名
-          example: email
-        message:
-          type: string
-          description: 错误描述
-          example: 邮箱格式错误
-      required:
-        - field
-        - message
     FollowerCount:
       type: object
       description: 关注者数量
@@ -2662,6 +2781,148 @@ components:
         - original
         - release
         - thumb
+    Notification:
+      type: object
+      properties:
+        notification_id:
+          type: integer
+          description: 通知ID
+          minimum: 1
+          example: 1
+        receiver_id:
+          type: integer
+          description: 通知接收者ID
+          minimum: 1
+          example: 1
+        sender_id:
+          type: integer
+          description: 通知发送者ID
+          minimum: 1
+          example: 2
+        type:
+          type: string
+          description: >
+            通知类型：
+
+            * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id`
+
+            * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id`
+
+            * `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships`
+            中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容
+
+            * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id`
+
+            * `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在
+            `article`，可从 `content_deleted` 字段中获取被删除的文章内容
+
+            * `answer_commented`：有人对回答发表了评论。此时会包含
+            `question_id`、`answer_id`、`comment_id`
+
+            * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但
+            `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容
+
+            * `comment_replied`：有人对评论发表了回复。此时会包含
+            `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含
+            `article_id`，属于回答时会包含 `answer_id`、`question_id`
+
+            * `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含
+            `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含
+            `question_id`，属于文章时会包含 `article_id`，属于回答时会包含
+            `answer_id`、`question_id`
+
+
+            [//]: # (user_followed：有人关注了我。)
+
+            [//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`)
+
+            [//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`)
+
+            [//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`)
+
+            [//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`)
+
+            [//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`)
+
+            [//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含
+            `question_id`，属于文章时会包含 `article_id`，属于回答时会包含
+            `answer_id`、`question_id`)
+          enum:
+            - question_answered
+            - question_commented
+            - question_deleted
+            - article_commented
+            - article_deleted
+            - answer_commented
+            - answer_deleted
+            - comment_replied
+            - comment_deleted
+        article_id:
+          type: integer
+          description: 相关文章ID
+          minimum: 1
+          example: 1
+        question_id:
+          type: integer
+          description: 相关提问ID
+          minimum: 1
+          example: 1
+        answer_id:
+          type: integer
+          description: 相关回答ID
+          minimum: 1
+          example: 1
+        comment_id:
+          type: integer
+          description: 相关评论ID
+          minimum: 1
+          example: 1
+        reply_id:
+          type: integer
+          description: 相关回复ID
+          minimum: 1
+          example: 1
+        content_deleted:
+          description: 已删除的数据，数据中不包含 `relationships`
+          oneOf:
+            - $ref: '#/components/schemas/Question'
+            - $ref: '#/components/schemas/Article'
+            - $ref: '#/components/schemas/Answer'
+            - $ref: '#/components/schemas/Comment'
+        create_time:
+          type: integer
+          description: 通知发送时间
+          minimum: 1
+          example: 1563512214
+        read_time:
+          type: integer
+          description: 通知阅读时间
+          minimum: 1
+          example: 1563512214
+        relationships:
+          $ref: '#/components/schemas/NotificationRelationship'
+      required:
+        - notification_id
+        - receiver_id
+        - sender_id
+        - type
+        - article_id
+        - question_id
+        - answer_id
+        - comment_id
+        - reply_id
+        - create_time
+        - read_time
+    NotificationCount:
+      type: object
+      description: 未读通知数量
+      properties:
+        notification_count:
+          type: integer
+          description: 未读通知数量
+          example: 12
+      required:
+        - notification_count
     Option:
       allOf:
         - $ref: '#/components/schemas/OptionUpdateRequestBody'
@@ -2691,6 +2952,8 @@ components:
         - question_can_edit_before
         - question_can_edit_only_no_answer
         - question_can_edit_only_no_comment
+        - search_third
+        - search_type
         - site_description
         - site_gongan_beian
         - site_icp_beian
@@ -2774,11 +3037,6 @@ components:
           description: 回答数量
           minimum: 0
           example: 18
-        view_count:
-          type: integer
-          description: 浏览量
-          minimum: 0
-          example: 168
         follower_count:
           type: integer
           description: 关注者数量
@@ -2828,7 +3086,6 @@ components:
         - content_rendered
         - comment_count
         - answer_count
-        - view_count
         - follower_count
         - vote_count
         - vote_up_count
@@ -2913,6 +3170,110 @@ components:
         - reportable_id
         - reportable_type
         - reporter_count
+    Stats:
+      type: object
+      properties:
+        system_info:
+          $ref: '#/components/schemas/SystemInfo'
+        total_user:
+          type: integer
+          description: 用户总数（含被禁用）
+          example: 243235
+        total_question:
+          type: integer
+          description: 提问总数
+          example: 5453
+        total_article:
+          type: integer
+          description: 文章总数
+          example: 123
+        total_answer:
+          type: integer
+          description: 回答总数
+          example: 5523
+        total_comment:
+          type: integer
+          description: 评论总数
+          example: 234
+        new_user:
+          type: array
+          description: 每日用户增长数量
+          items:
+            $ref: '#/components/schemas/StatsNewItems'
+        new_question:
+          type: array
+          description: 每日提问增长数量
+          items:
+            $ref: '#/components/schemas/StatsNewItems'
+        new_article:
+          type: array
+          description: 每日文章增长数量
+          items:
+            $ref: '#/components/schemas/StatsNewItems'
+        new_answer:
+          type: array
+          description: 每日回答增长数量
+          items:
+            $ref: '#/components/schemas/StatsNewItems'
+        new_comment:
+          type: array
+          description: 每日评论增长数量
+          items:
+            $ref: '#/components/schemas/StatsNewItems'
+    StatsNewItems:
+      type: object
+      properties:
+        date:
+          type: string
+          description: 日期
+          example: 2020-5-19
+        count:
+          type: integer
+          description: 当日新增数量
+          minimum: 0
+          example: 12
+      required:
+        - date
+        - count
+    SystemInfo:
+      type: object
+      properties:
+        mdclub_version:
+          type: string
+          description: MDClub 的版本号
+          example: '1.0'
+        os_version:
+          type: string
+          description: 操作系统版本
+          example: Windows NT 10.0 build 19041 (Windows 10) AMD64
+        php_version:
+          type: string
+          description: PHP 版本号
+          example: 7.4.3
+        webserver_version:
+          type: string
+          description: Web Server 版本号
+          example: Apache/2.4.39
+        database_version:
+          type: string
+          description: 数据库版本
+          example: mysql 8.0.17
+        upload_max_filesize:
+          type: string
+          description: 服务器上传文件大小限制
+          example: 2M
+        max_execution_time:
+          type: string
+          description: PHP 执行时间限制
+          example: 120秒
+        disk_free_space:
+          type: string
+          description: 服务器剩余硬盘容量
+          example: 120.02G
+        database_size:
+          type: string
+          description: 数据库大小
+          example: 12M
     Token:
       type: object
       properties:
@@ -3111,7 +3472,7 @@ components:
           example: 28
         notification_unread:
           type: integer
-          description: "\U0001F510未读消息数量"
+          description: "\U0001F510未读通知数量"
           minimum: 0
           example: 4
         inbox_unread:
@@ -3580,6 +3941,22 @@ components:
           description: |
             仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。
           example: false
+        search_third:
+          type: string
+          enum:
+            - google
+            - bing
+            - sogou
+            - '360'
+            - baidu
+          description: 第三方搜索的名称
+          example: google
+        search_type:
+          type: string
+          enum:
+            - third
+          description: 搜索引擎类型
+          example: third
         site_description:
           type: string
           description: 站点简介
@@ -3647,6 +4024,10 @@ components:
           type: string
           description: "\U0001F510阿里云 OSS 的 Bucket 名称"
           example: mdclub
+        storage_aliyun_dir:
+          type: string
+          description: "\U0001F510阿里云 OSS 的存储子目录"
+          example: upload
         storage_aliyun_endpoint:
           type: string
           description: "\U0001F510阿里云 OSS 的 EndPoint"
@@ -3697,6 +4078,10 @@ components:
           type: string
           description: "\U0001F510七牛云 Bucket"
           example: mdclub
+        storage_qiniu_dir:
+          type: string
+          description: "\U0001F510七牛云的存储子目录"
+          example: upload
         storage_qiniu_zone:
           type: string
           enum:
@@ -3744,6 +4129,10 @@ components:
           type: string
           description: "\U0001F510又拍云 Bucket"
           example: mdclub
+        storage_upyun_dir:
+          type: string
+          description: "\U0001F510又拍云的存储子目录"
+          example: upload
         storage_upyun_operator:
           type: string
           description: "\U0001F510又拍云操作员账号"
@@ -4091,9 +4480,10 @@ components:
           format: byte
           description: 图形验证码的base64格式图片
         errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorField'
+          type: object
+          description: 错误字段。键名为字段名，键值为错误信息
+          additionalProperties:
+            type: string
       required:
         - code
         - message
@@ -4126,6 +4516,41 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Image'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      required:
+        - code
+        - data
+        - pagination
+    NotificationResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Notification'
+      required:
+        - code
+        - data
+    NotificationCountResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/NotificationCount'
+      required:
+        - code
+        - data
+    NotificationsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
         pagination:
           $ref: '#/components/schemas/Pagination'
       required:
@@ -4207,6 +4632,16 @@ components:
         - code
         - data
         - pagination
+    StatsResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/CodeSuccess'
+        data:
+          $ref: '#/components/schemas/Stats'
+      required:
+        - code
+        - data
     TokenResponse:
       type: object
       properties:
@@ -4355,6 +4790,23 @@ components:
           $ref: '#/components/schemas/ArticleInRelationship'
         answer:
           $ref: '#/components/schemas/AnswerInRelationship'
+    NotificationRelationship:
+      type: object
+      properties:
+        receiver:
+          $ref: '#/components/schemas/UserInRelationship'
+        sender:
+          $ref: '#/components/schemas/UserInRelationship'
+        article:
+          $ref: '#/components/schemas/ArticleInRelationship'
+        question:
+          $ref: '#/components/schemas/QuestionInRelationship'
+        answer:
+          $ref: '#/components/schemas/AnswerInRelationship'
+        comment:
+          $ref: '#/components/schemas/CommentInRelationship'
+        reply:
+          $ref: '#/components/schemas/CommentInRelationship'
     QuestionRelationship:
       type: object
       properties:
@@ -4430,6 +4882,11 @@ components:
         answer_id:
           type: integer
           description: 回答ID
+          minimum: 1
+          example: 1
+        question_id:
+          type: integer
+          description: 提问ID
           minimum: 1
           example: 1
         content_summary:
@@ -4656,6 +5113,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ImagesResponse'
+    Notification:
+      description: 通知详情
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationResponse'
+    NotificationCount:
+      description: 未读通知数量
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationCountResponse'
+    Notifications:
+      description: 通知列表
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotificationsResponse'
     Option:
       description: 全局设置参数列表
       content:
@@ -4692,6 +5167,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ReportsResponse'
+    Stats:
+      description: 统计数据
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StatsResponse'
     Token:
       description: Token 信息
       content:
@@ -4869,6 +5350,13 @@ components:
         type: string
         format: email
       example: zdhxiong@gmail.com
+    end_date.query:
+      name: end_date
+      in: query
+      description: 统计数据的截止日期，例如 `2020-5-12`
+      schema:
+        type: string
+      example: 2020-5-12
     image_key.path:
       name: key
       in: path
@@ -4981,6 +5469,29 @@ components:
       example:
         - user
         - question
+    include.notification:
+      name: include
+      in: query
+      description: >-
+        响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`,
+        `answer`, `comment`, `reply`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - receiver
+            - sender
+            - article
+            - question
+            - answer
+            - comment
+            - reply
+      style: form
+      explode: false
+      example:
+        - receiver
+        - sender
     include.question:
       name: include
       in: query
@@ -5043,6 +5554,34 @@ components:
         - reporter
         - question
         - article
+    include.stats:
+      name: include
+      in: query
+      description: >-
+        统计数据中包含的数据，用“,”分隔，可以为 `system_info`, `total_user`, `total_question`,
+        `total_article`, `total_answer`, `total_comment`, `new_user`,
+        `new_question`, `new_article`, `new_answer`, `new_comment`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - system_info
+            - total_user
+            - total_question
+            - total_article
+            - total_answer
+            - total_comment
+            - new_user
+            - new_question
+            - new_article
+            - new_answer
+            - new_comment
+      style: form
+      explode: false
+      example:
+        - system_info
+        - total_user
     include.topic:
       name: include
       in: query
@@ -5074,6 +5613,48 @@ components:
       example:
         - is_followed
         - is_me
+    notification_id.path:
+      name: notification_id
+      in: path
+      description: 通知ID
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    notification_ids.path:
+      name: notification_ids
+      in: path
+      description: '多个用 `,` 分隔的通知ID，最多提供 100 个 ID'
+      required: true
+      schema:
+        type: string
+      example: '1,2,3'
+    notification_read.query:
+      name: read
+      in: query
+      description: |
+        默认包含已读和未读的通知。若 `read` 为 `true`，则仅包含已读的通知；若为 `false`，则仅包含未读的通知。
+      schema:
+        type: boolean
+      example: false
+    notification_type.query:
+      name: type
+      in: query
+      description: 通知类型
+      schema:
+        type: string
+        enum:
+          - question_answered
+          - question_commented
+          - question_deleted
+          - article_commented
+          - article_deleted
+          - answer_commented
+          - answer_deleted
+          - comment_replied
+          - comment_deleted
+      example: question_answered
     order.answers:
       name: order
       in: query
@@ -5291,6 +5872,13 @@ components:
           - comment
           - user
       example: question
+    start_date.query:
+      name: start_date
+      in: query
+      description: 统计数据的起始日期，例如 `2017-3-14`
+      schema:
+        type: string
+      example: 2017-3-14
     token:
       name: token
       in: header
@@ -5544,6 +6132,8 @@ tags:
     description: 邮件
   - name: Image
     description: 图片
+  - name: Stats
+    description: 数据统计
 externalDocs:
   description: 更多文档参见
   url: 'https://mdclub.org'

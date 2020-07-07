@@ -61,6 +61,7 @@ class OptionConstant
     public const STORAGE_ALIYUN_ACCESS_ID = 'storage_aliyun_access_id';
     public const STORAGE_ALIYUN_ACCESS_SECRET = 'storage_aliyun_access_secret';
     public const STORAGE_ALIYUN_BUCKET = 'storage_aliyun_bucket';
+    public const STORAGE_ALIYUN_DIR = 'storage_aliyun_dir';
     public const STORAGE_ALIYUN_ENDPOINT = 'storage_aliyun_endpoint';
     public const STORAGE_FTP_HOST = 'storage_ftp_host';
     public const STORAGE_FTP_PASSIVE = 'storage_ftp_passive';
@@ -73,6 +74,7 @@ class OptionConstant
     public const STORAGE_QINIU_ACCESS_ID = 'storage_qiniu_access_id';
     public const STORAGE_QINIU_ACCESS_SECRET = 'storage_qiniu_access_secret';
     public const STORAGE_QINIU_BUCKET = 'storage_qiniu_bucket';
+    public const STORAGE_QINIU_DIR = 'storage_qiniu_dir';
     public const STORAGE_QINIU_ZONE = 'storage_qiniu_zone';
     public const STORAGE_SFTP_HOST = 'storage_sftp_host';
     public const STORAGE_SFTP_PASSWORD = 'storage_sftp_password';
@@ -81,6 +83,7 @@ class OptionConstant
     public const STORAGE_SFTP_USERNAME = 'storage_sftp_username';
     public const STORAGE_TYPE = 'storage_type';
     public const STORAGE_UPYUN_BUCKET = 'storage_upyun_bucket';
+    public const STORAGE_UPYUN_DIR = 'storage_upyun_dir';
     public const STORAGE_UPYUN_OPERATOR = 'storage_upyun_operator';
     public const STORAGE_UPYUN_PASSWORD = 'storage_upyun_password';
     public const STORAGE_URL = 'storage_url';

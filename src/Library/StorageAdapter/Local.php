@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MDClub\Library\StorageAdapter;
 
 use MDClub\Constant\OptionConstant;
-use MDClub\Facade\Library\Option;
 use MDClub\Helper\Url;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,20 +15,13 @@ use Symfony\Component\Filesystem\Filesystem;
 class Local extends Abstracts implements Interfaces
 {
     /**
-     * 存储路径
-     *
-     * @var string
-     */
-    protected $pathPrefix;
-
-    /**
      * @var Filesystem
      */
     protected $filesystem;
 
     public function __construct()
     {
-        $this->setPathPrefix();
+        $this->setPathPrefix(OptionConstant::STORAGE_LOCAL_DIR, __DIR__ . '/../../../public/upload/');
     }
 
     /**
@@ -44,35 +36,6 @@ class Local extends Abstracts implements Interfaces
         }
 
         return $this->filesystem;
-    }
-
-    /**
-     * 设置文件存储路径
-     */
-    protected function setPathPrefix(): void
-    {
-        $prefix = Option::get(OptionConstant::STORAGE_LOCAL_DIR);
-
-        if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
-            $prefix .= '/';
-        }
-
-        if (!$prefix) {
-            $prefix = __DIR__ . '/../../../public/upload/';
-        }
-
-        $this->pathPrefix = $prefix;
-    }
-
-    /**
-     * 获取包含文件路径的文件存储地址
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function applyPathPrefix(string $path): string
-    {
-        return $this->pathPrefix . ltrim($path, '\\/');
     }
 
     /**

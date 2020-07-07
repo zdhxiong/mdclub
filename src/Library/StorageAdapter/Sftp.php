@@ -30,12 +30,6 @@ class Sftp extends Abstracts implements Interfaces
      * @var resource
      */
     protected $sftp;
-    /**
-     * 存储路径
-     *
-     * @var string
-     */
-    protected $pathPrefix;
 
     public function __construct()
     {
@@ -43,7 +37,7 @@ class Sftp extends Abstracts implements Interfaces
             throw new SystemException('PHP extension ssh2 is not loaded');
         }
 
-        $this->setPathPrefix();
+        $this->setPathPrefix(OptionConstant::STORAGE_SFTP_DIR);
 
         $username = Option::get(OptionConstant::STORAGE_SFTP_USERNAME);
         $password = Option::get(OptionConstant::STORAGE_SFTP_PASSWORD);
@@ -61,31 +55,6 @@ class Sftp extends Abstracts implements Interfaces
         if (!$this->sftp = @ssh2_sftp($this->connection)) {
             throw new SystemException('Could not initialize SFTP subsystem');
         }
-    }
-
-    /**
-     * 设置文件存储路径
-     */
-    protected function setPathPrefix(): void
-    {
-        $prefix = Option::get(OptionConstant::STORAGE_SFTP_DIR);
-
-        if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
-            $prefix .= '/';
-        }
-
-        $this->pathPrefix = $prefix;
-    }
-
-    /**
-     * 获取包含文件路径的文件存储地址
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function applyPathPrefix(string $path): string
-    {
-        return $this->pathPrefix . ltrim($path, '\\/');
     }
 
     /**

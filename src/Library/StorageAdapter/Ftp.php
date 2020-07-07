@@ -24,20 +24,13 @@ class Ftp extends Abstracts implements Interfaces
      */
     protected $connection;
 
-    /**
-     * 存储路径
-     *
-     * @var string
-     */
-    protected $pathPrefix;
-
     public function __construct()
     {
         if (!extension_loaded('ftp')) {
             throw new SystemException('PHP extension FTP is not loaded.');
         }
 
-        $this->setPathPrefix();
+        $this->setPathPrefix(OptionConstant::STORAGE_FTP_DIR);
 
         $username = Option::get(OptionConstant::STORAGE_FTP_USERNAME);
         $password = Option::get(OptionConstant::STORAGE_FTP_PASSWORD);
@@ -56,31 +49,6 @@ class Ftp extends Abstracts implements Interfaces
 
         ftp_login($this->connection, $username, $password);
         ftp_pasv($this->connection, !!$passive);
-    }
-
-    /**
-     * 设置文件存储路径
-     */
-    protected function setPathPrefix(): void
-    {
-        $prefix = Option::get(OptionConstant::STORAGE_FTP_DIR);
-
-        if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
-            $prefix .= '/';
-        }
-
-        $this->pathPrefix = $prefix;
-    }
-
-    /**
-     * 获取包含文件路径的文件存储地址
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function applyPathPrefix(string $path): string
-    {
-        return $this->pathPrefix . ltrim($path, '\\/');
     }
 
     /**
