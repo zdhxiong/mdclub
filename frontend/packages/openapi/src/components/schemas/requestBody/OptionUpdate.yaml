@@ -293,6 +293,10 @@ properties:
     type: string
     description: 🔐阿里云 OSS 的 Bucket 名称
     example: mdclub
+  storage_aliyun_dir:
+    type: string
+    description: 🔐阿里云 OSS 的存储子目录
+    example: upload
   storage_aliyun_endpoint:
     type: string
     description: 🔐阿里云 OSS 的 EndPoint
@@ -315,7 +319,7 @@ properties:
     maximum: 65535
     description: 🔐FTP 端口号
     example: 21
-  storage_ftp_root:
+  storage_ftp_dir:
     type: string
     description: 🔐FTP 存储目录
     example: /mdclub
@@ -343,6 +347,10 @@ properties:
     type: string
     description: 🔐七牛云 Bucket
     example: mdclub
+  storage_qiniu_dir:
+    type: string
+    description: 🔐七牛云的存储子目录
+    example: upload
   storage_qiniu_zone:
     type: string
     enum:
@@ -367,7 +375,7 @@ properties:
     maximum: 65535
     description: 🔐SFTP 端口号
     example: 22
-  storage_sftp_root:
+  storage_sftp_dir:
     type: string
     description: 🔐SFTP 存储目录
     example: /mdclub/storage
@@ -390,6 +398,10 @@ properties:
     type: string
     description: 🔐又拍云 Bucket
     example: mdclub
+  storage_upyun_dir:
+    type: string
+    description: 🔐又拍云的存储子目录
+    example: upload
   storage_upyun_operator:
     type: string
     description: 🔐又拍云操作员账号
