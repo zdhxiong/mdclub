@@ -94,7 +94,7 @@ class Url
         }
 
         if (!$storageUrl) {
-            $storageUrl = self::hostPath() . '/static/upload';
+            $storageUrl = self::hostPath() . '/upload';
         }
 
         return $storageUrl;

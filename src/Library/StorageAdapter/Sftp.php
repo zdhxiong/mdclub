@@ -68,7 +68,7 @@ class Sftp extends Abstracts implements Interfaces
      */
     protected function setPathPrefix(): void
     {
-        $prefix = Option::get(OptionConstant::STORAGE_SFTP_ROOT);
+        $prefix = Option::get(OptionConstant::STORAGE_SFTP_DIR);
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';

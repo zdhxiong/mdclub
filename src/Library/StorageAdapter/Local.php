@@ -58,7 +58,7 @@ class Local extends Abstracts implements Interfaces
         }
 
         if (!$prefix) {
-            $prefix = __DIR__ . '/../../../public/static/upload/';
+            $prefix = __DIR__ . '/../../../public/upload/';
         }
 
         $this->pathPrefix = $prefix;

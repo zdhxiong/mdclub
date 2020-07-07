@@ -3669,7 +3669,7 @@ components:
           maximum: 65535
           description: "\U0001F510FTP 端口号"
           example: 21
-        storage_ftp_root:
+        storage_ftp_dir:
           type: string
           description: "\U0001F510FTP 存储目录"
           example: /mdclub
@@ -3721,7 +3721,7 @@ components:
           maximum: 65535
           description: "\U0001F510SFTP 端口号"
           example: 22
-        storage_sftp_root:
+        storage_sftp_dir:
           type: string
           description: "\U0001F510SFTP 存储目录"
           example: /mdclub/storage

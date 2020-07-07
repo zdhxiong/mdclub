@@ -66,7 +66,7 @@ class OptionConstant
     public const STORAGE_FTP_PASSIVE = 'storage_ftp_passive';
     public const STORAGE_FTP_PASSWORD = 'storage_ftp_password';
     public const STORAGE_FTP_PORT = 'storage_ftp_port';
-    public const STORAGE_FTP_ROOT = 'storage_ftp_root';
+    public const STORAGE_FTP_DIR = 'storage_ftp_dir';
     public const STORAGE_FTP_SSL = 'storage_ftp_ssl';
     public const STORAGE_FTP_USERNAME = 'storage_ftp_username';
     public const STORAGE_LOCAL_DIR = 'storage_local_dir';
@@ -77,7 +77,7 @@ class OptionConstant
     public const STORAGE_SFTP_HOST = 'storage_sftp_host';
     public const STORAGE_SFTP_PASSWORD = 'storage_sftp_password';
     public const STORAGE_SFTP_PORT = 'storage_sftp_port';
-    public const STORAGE_SFTP_ROOT = 'storage_sftp_root';
+    public const STORAGE_SFTP_DIR = 'storage_sftp_dir';
     public const STORAGE_SFTP_USERNAME = 'storage_sftp_username';
     public const STORAGE_TYPE = 'storage_type';
     public const STORAGE_UPYUN_BUCKET = 'storage_upyun_bucket';

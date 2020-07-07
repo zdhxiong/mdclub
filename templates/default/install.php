@@ -505,10 +505,10 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
                             </td>
                         </tr>
                         <tr>
-                            <td>./public/static/upload</td>
+                            <td>./public/upload</td>
                             <td>可写</td>
                             <td>
-                                <?= checkResult(is_writable(__DIR__ . '/../../public/static/upload'), '可写', '不可写') ?>
+                                <?= checkResult(is_writable(__DIR__ . '/../../public/upload'), '可写', '不可写') ?>
                             </td>
                         </tr>
                         </tbody>

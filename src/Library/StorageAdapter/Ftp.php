@@ -63,7 +63,7 @@ class Ftp extends Abstracts implements Interfaces
      */
     protected function setPathPrefix(): void
     {
-        $prefix = Option::get(OptionConstant::STORAGE_FTP_ROOT);
+        $prefix = Option::get(OptionConstant::STORAGE_FTP_DIR);
 
         if ($prefix && !in_array(substr($prefix, -1), ['/', '\\'])) {
             $prefix .= '/';
