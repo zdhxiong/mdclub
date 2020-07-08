@@ -59,14 +59,12 @@ class Upyun extends Abstracts implements Interfaces
      * 获取请求头
      *
      * @param  string $method
-     * @param  string $path
+     * @param  string $location
      * @param  array  $headers
      * @return array
      */
-    protected function getRequestHeaders(string $method, string $path, array $headers = []): array
+    protected function getRequestHeaders(string $method, string $location, array $headers = []): array
     {
-        $location = $this->applyPathPrefix($path);
-
         // 签名（https://help.upyun.com/knowledge-base/object_storage_authorization/#e4bba3e7a081e6bc94e7a4ba）
         $date = gmdate('D, d M Y H:i:s \G\M\T');
         $signature = base64_encode(hash_hmac(
@@ -144,9 +142,7 @@ class Upyun extends Abstracts implements Interfaces
      */
     public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        $location = $this->applyPathPrefix($path);
-
-        $this->sendRequest('PUT', $location, $stream, ['Content-Length' => $stream->getSize()]);
+        $this->sendRequest('PUT', $path, $stream, ['Content-Length' => $stream->getSize()]);
     }
 
     /**
@@ -154,8 +150,6 @@ class Upyun extends Abstracts implements Interfaces
      */
     public function delete(string $path, array $thumbs): void
     {
-        $location = $this->applyPathPrefix($path);
-
-        $this->sendRequest('DELETE', $location, null, ['x-upyun-async' => 'true']);
+        $this->sendRequest('DELETE', $path, null, ['x-upyun-async' => 'true']);
     }
 }

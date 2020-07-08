@@ -82,14 +82,12 @@ class Qiniu extends Abstracts implements Interfaces
     /**
      * 获取上传策略
      *
-     * @param  string $path
+     * @param  string $location
      * @return string
      * @link https://developer.qiniu.com/kodo/manual/1206/put-policy
      */
-    protected function getPolicy(string $path): string
+    protected function getPolicy(string $location): string
     {
-        $location = $this->applyPathPrefix($path);
-
         $policy = [
             'scope' => "{$this->bucket}:{$location}",
             'deadline' => time() + 3600,
@@ -101,13 +99,12 @@ class Qiniu extends Abstracts implements Interfaces
     /**
      * 获取上传凭证
      *
-     * @param  string $path
+     * @param  string $location
      * @return string
      * @link https://developer.qiniu.com/kodo/manual/1208/upload-token
      */
-    protected function getUploadToken(string $path): string
+    protected function getUploadToken(string $location): string
     {
-        $location = $this->applyPathPrefix($path);
         $policy = $this->getPolicy($location);
         $sign = $this->base64Encode(hash_hmac('sha1', $policy, $this->secretKey, true));
 
@@ -117,13 +114,12 @@ class Qiniu extends Abstracts implements Interfaces
     /**
      * 获取管理凭证
      *
-     * @param  string $path
+     * @param  string $location
      * @return string
      * @link https://developer.qiniu.com/kodo/manual/1201/access-token
      */
-    protected function getAccessToken(string $path): string
+    protected function getAccessToken(string $location): string
     {
-        $location = $this->applyPathPrefix($path);
         $sign = $this->base64Encode(hash_hmac('sha1', "{$location}\n", $this->secretKey, true));
 
         return "{$this->accessKey}:{$sign}";

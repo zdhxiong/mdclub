@@ -62,14 +62,12 @@ class Aliyun extends Abstracts implements Interfaces
      * 获取请求头
      *
      * @param  string          $method
-     * @param  string          $path
+     * @param  string          $location
      * @param  StreamInterface $stream
      * @return array
      */
-    protected function getRequestHeaders(string $method, string $path, StreamInterface $stream): array
+    protected function getRequestHeaders(string $method, string $location, StreamInterface $stream): array
     {
-        $location = $this->applyPathPrefix($path);
-
         // 签名（https://help.aliyun.com/document_detail/31951.html?spm=a2c4g.11186623.6.1097.b2c43bdbx35G1S）
         $contentType = $method === 'PUT' ? 'application/x-www-form-urlencoded' : 'application/octet-stream';
         $date = gmdate('D, d M Y H:i:s \G\M\T');
@@ -146,9 +144,7 @@ class Aliyun extends Abstracts implements Interfaces
      */
     public function write(string $path, StreamInterface $stream, array $thumbs): void
     {
-        $location = $this->applyPathPrefix($path);
-
-        $this->sendRequest('PUT', $location, $stream);
+        $this->sendRequest('PUT', $path, $stream);
     }
 
     /**
@@ -156,8 +152,6 @@ class Aliyun extends Abstracts implements Interfaces
      */
     public function delete(string $path, array $thumbs): void
     {
-        $location = $this->applyPathPrefix($path);
-
-        $this->sendRequest('DELETE', $location);
+        $this->sendRequest('DELETE', $path);
     }
 }

@@ -58,6 +58,10 @@ abstract class Abstracts
             $prefix .= '/';
         }
 
+        if ($prefix && !in_array(substr($prefix, 0, 1), ['/', '\\'])) {
+            $prefix = '/' . $prefix;
+        }
+
         if (!$prefix) {
             $prefix = $defaultDir;
         }
