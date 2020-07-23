@@ -1530,6 +1530,29 @@
         ]
       }
     },
+    "/notifications/read": {
+      "post": {
+        "operationId": "readAll",
+        "summary": "把所有通知标记为已读",
+        "description": "只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/notification_type.query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Empty"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Notification"
+        ]
+      }
+    },
     "/notifications": {
       "get": {
         "operationId": "getList",
@@ -1555,6 +1578,27 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/Notifications"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Notification"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteAll",
+        "summary": "删除所有通知",
+        "description": "只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。\n",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/notification_type.query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Empty"
           },
           "default": {
             "$ref": "#/components/responses/Error"
@@ -2388,6 +2432,35 @@
         },
         "tags": [
           "Report"
+        ]
+      }
+    },
+    "/stats": {
+      "get": {
+        "operationId": "get",
+        "summary": "🔐获取站点统计数据",
+        "description": "仅管理员可调用该接口。",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/include.stats"
+          },
+          {
+            "$ref": "#/components/parameters/start_date.query"
+          },
+          {
+            "$ref": "#/components/parameters/end_date.query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Stats"
+          },
+          "default": {
+            "$ref": "#/components/responses/Error"
+          }
+        },
+        "tags": [
+          "Stats"
         ]
       }
     },
@@ -4021,12 +4094,6 @@
             "minimum": 0,
             "example": 22
           },
-          "view_count": {
-            "type": "integer",
-            "description": "浏览量",
-            "minimum": 0,
-            "example": 487
-          },
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
@@ -4079,7 +4146,6 @@
           "content_markdown",
           "content_rendered",
           "comment_count",
-          "view_count",
           "follower_count",
           "vote_count",
           "vote_up_count",
@@ -4366,7 +4432,7 @@
           },
           "type": {
             "type": "string",
-            "description": "通知类型",
+            "description": "通知类型：\n* `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id`\n* `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id`\n* `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships` 中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容\n* `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id`\n* `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在 `article`，可从 `content_deleted` 字段中获取被删除的文章内容\n* `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id`\n* `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但 `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容\n* `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`\n* `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含 `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`\n\n[//]: # (user_followed：有人关注了我。)\n[//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`)\n[//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`)\n[//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`)\n[//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`)\n[//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`)\n[//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`)\n",
             "enum": [
               "question_answered",
               "question_commented",
@@ -4408,6 +4474,23 @@
             "description": "相关回复ID",
             "minimum": 1,
             "example": 1
+          },
+          "content_deleted": {
+            "description": "已删除的数据，数据中不包含 `relationships`",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Question"
+              },
+              {
+                "$ref": "#/components/schemas/Article"
+              },
+              {
+                "$ref": "#/components/schemas/Answer"
+              },
+              {
+                "$ref": "#/components/schemas/Comment"
+              }
+            ]
           },
           "create_time": {
             "type": "integer",
@@ -4485,6 +4568,8 @@
           "question_can_edit_before",
           "question_can_edit_only_no_answer",
           "question_can_edit_only_no_comment",
+          "search_third",
+          "search_type",
           "site_description",
           "site_gongan_beian",
           "site_icp_beian",
@@ -4586,12 +4671,6 @@
             "minimum": 0,
             "example": 18
           },
-          "view_count": {
-            "type": "integer",
-            "description": "浏览量",
-            "minimum": 0,
-            "example": 168
-          },
           "follower_count": {
             "type": "integer",
             "description": "关注者数量",
@@ -4651,7 +4730,6 @@
           "content_rendered",
           "comment_count",
           "answer_count",
-          "view_count",
           "follower_count",
           "vote_count",
           "vote_up_count",
@@ -4756,6 +4834,144 @@
           "reportable_type",
           "reporter_count"
         ]
+      },
+      "Stats": {
+        "type": "object",
+        "properties": {
+          "system_info": {
+            "$ref": "#/components/schemas/SystemInfo"
+          },
+          "total_user": {
+            "type": "integer",
+            "description": "用户总数（含被禁用）",
+            "example": 243235
+          },
+          "total_question": {
+            "type": "integer",
+            "description": "提问总数",
+            "example": 5453
+          },
+          "total_article": {
+            "type": "integer",
+            "description": "文章总数",
+            "example": 123
+          },
+          "total_answer": {
+            "type": "integer",
+            "description": "回答总数",
+            "example": 5523
+          },
+          "total_comment": {
+            "type": "integer",
+            "description": "评论总数",
+            "example": 234
+          },
+          "new_user": {
+            "type": "array",
+            "description": "每日用户增长数量",
+            "items": {
+              "$ref": "#/components/schemas/StatsNewItems"
+            }
+          },
+          "new_question": {
+            "type": "array",
+            "description": "每日提问增长数量",
+            "items": {
+              "$ref": "#/components/schemas/StatsNewItems"
+            }
+          },
+          "new_article": {
+            "type": "array",
+            "description": "每日文章增长数量",
+            "items": {
+              "$ref": "#/components/schemas/StatsNewItems"
+            }
+          },
+          "new_answer": {
+            "type": "array",
+            "description": "每日回答增长数量",
+            "items": {
+              "$ref": "#/components/schemas/StatsNewItems"
+            }
+          },
+          "new_comment": {
+            "type": "array",
+            "description": "每日评论增长数量",
+            "items": {
+              "$ref": "#/components/schemas/StatsNewItems"
+            }
+          }
+        }
+      },
+      "StatsNewItems": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "日期",
+            "example": "2020-5-19"
+          },
+          "count": {
+            "type": "integer",
+            "description": "当日新增数量",
+            "minimum": 0,
+            "example": 12
+          }
+        },
+        "required": [
+          "date",
+          "count"
+        ]
+      },
+      "SystemInfo": {
+        "type": "object",
+        "properties": {
+          "mdclub_version": {
+            "type": "string",
+            "description": "MDClub 的版本号",
+            "example": "1.0"
+          },
+          "os_version": {
+            "type": "string",
+            "description": "操作系统版本",
+            "example": "Windows NT 10.0 build 19041 (Windows 10) AMD64"
+          },
+          "php_version": {
+            "type": "string",
+            "description": "PHP 版本号",
+            "example": "7.4.3"
+          },
+          "webserver_version": {
+            "type": "string",
+            "description": "Web Server 版本号",
+            "example": "Apache/2.4.39"
+          },
+          "database_version": {
+            "type": "string",
+            "description": "数据库版本",
+            "example": "mysql 8.0.17"
+          },
+          "upload_max_filesize": {
+            "type": "string",
+            "description": "服务器上传文件大小限制",
+            "example": "2M"
+          },
+          "max_execution_time": {
+            "type": "string",
+            "description": "PHP 执行时间限制",
+            "example": "120秒"
+          },
+          "disk_free_space": {
+            "type": "string",
+            "description": "服务器剩余硬盘容量",
+            "example": "120.02G"
+          },
+          "database_size": {
+            "type": "string",
+            "description": "数据库大小",
+            "example": "12M"
+          }
+        }
       },
       "Token": {
         "type": "object",
@@ -5466,6 +5682,26 @@
             "description": "仅在没有评论时，允许作者编辑提问。仅在 `question_can_edit` 为 `true` 时该参数才有效。\n",
             "example": false
           },
+          "search_third": {
+            "type": "string",
+            "enum": [
+              "google",
+              "bing",
+              "sogou",
+              "360",
+              "baidu"
+            ],
+            "description": "第三方搜索的名称",
+            "example": "google"
+          },
+          "search_type": {
+            "type": "string",
+            "enum": [
+              "third"
+            ],
+            "description": "搜索引擎类型",
+            "example": "third"
+          },
           "site_description": {
             "type": "string",
             "description": "站点简介",
@@ -5549,6 +5785,11 @@
             "description": "🔐阿里云 OSS 的 Bucket 名称",
             "example": "mdclub"
           },
+          "storage_aliyun_dir": {
+            "type": "string",
+            "description": "🔐阿里云 OSS 的存储子目录",
+            "example": "upload"
+          },
           "storage_aliyun_endpoint": {
             "type": "string",
             "description": "🔐阿里云 OSS 的 EndPoint",
@@ -5576,7 +5817,7 @@
             "description": "🔐FTP 端口号",
             "example": 21
           },
-          "storage_ftp_root": {
+          "storage_ftp_dir": {
             "type": "string",
             "description": "🔐FTP 存储目录",
             "example": "/mdclub"
@@ -5611,6 +5852,11 @@
             "description": "🔐七牛云 Bucket",
             "example": "mdclub"
           },
+          "storage_qiniu_dir": {
+            "type": "string",
+            "description": "🔐七牛云的存储子目录",
+            "example": "upload"
+          },
           "storage_qiniu_zone": {
             "type": "string",
             "enum": [
@@ -5640,7 +5886,7 @@
             "description": "🔐SFTP 端口号",
             "example": 22
           },
-          "storage_sftp_root": {
+          "storage_sftp_dir": {
             "type": "string",
             "description": "🔐SFTP 存储目录",
             "example": "/mdclub/storage"
@@ -5667,6 +5913,11 @@
             "type": "string",
             "description": "🔐又拍云 Bucket",
             "example": "mdclub"
+          },
+          "storage_upyun_dir": {
+            "type": "string",
+            "description": "🔐又拍云的存储子目录",
+            "example": "upload"
           },
           "storage_upyun_operator": {
             "type": "string",
@@ -6152,9 +6403,9 @@
           },
           "errors": {
             "type": "object",
+            "description": "错误字段。键名为字段名，键值为错误信息",
             "additionalProperties": {
-              "type": "string",
-              "description": "错误字段名与错误描述"
+              "type": "string"
             }
           }
         },
@@ -6376,6 +6627,21 @@
           "code",
           "data",
           "pagination"
+        ]
+      },
+      "StatsResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/CodeSuccess"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Stats"
+          }
+        },
+        "required": [
+          "code",
+          "data"
         ]
       },
       "TokenResponse": {
@@ -6725,6 +6991,12 @@
           "answer_id": {
             "type": "integer",
             "description": "回答ID",
+            "minimum": 1,
+            "example": 1
+          },
+          "question_id": {
+            "type": "integer",
+            "description": "提问ID",
             "minimum": 1,
             "example": 1
           },
@@ -7137,6 +7409,16 @@
           }
         }
       },
+      "Stats": {
+        "description": "统计数据",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/StatsResponse"
+            }
+          }
+        }
+      },
       "Token": {
         "description": "Token 信息",
         "content": {
@@ -7378,6 +7660,15 @@
         },
         "example": "zdhxiong@gmail.com"
       },
+      "end_date.query": {
+        "name": "end_date",
+        "in": "query",
+        "description": "统计数据的截止日期，例如 `2020-5-12`",
+        "schema": {
+          "type": "string"
+        },
+        "example": "2020-5-12"
+      },
       "image_key.path": {
         "name": "key",
         "in": "path",
@@ -7617,6 +7908,36 @@
           "reporter",
           "question",
           "article"
+        ]
+      },
+      "include.stats": {
+        "name": "include",
+        "in": "query",
+        "description": "统计数据中包含的数据，用“,”分隔，可以为 `system_info`, `total_user`, `total_question`, `total_article`, `total_answer`, `total_comment`, `new_user`, `new_question`, `new_article`, `new_answer`, `new_comment`",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "system_info",
+              "total_user",
+              "total_question",
+              "total_article",
+              "total_answer",
+              "total_comment",
+              "new_user",
+              "new_question",
+              "new_article",
+              "new_answer",
+              "new_comment"
+            ]
+          }
+        },
+        "style": "form",
+        "explode": false,
+        "example": [
+          "system_info",
+          "total_user"
         ]
       },
       "include.topic": {
@@ -7931,6 +8252,15 @@
           ]
         },
         "example": "question"
+      },
+      "start_date.query": {
+        "name": "start_date",
+        "in": "query",
+        "description": "统计数据的起始日期，例如 `2017-3-14`",
+        "schema": {
+          "type": "string"
+        },
+        "example": "2017-3-14"
       },
       "token": {
         "name": "token",
@@ -8321,6 +8651,10 @@
     {
       "name": "Image",
       "description": "图片"
+    },
+    {
+      "name": "Stats",
+      "description": "数据统计"
     }
   ],
   "externalDocs": {

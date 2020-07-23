@@ -1,7 +1,7 @@
 {
   "name": "mdclub-openapi",
   "description": "MDClub 的 OpenAPI 描述文件",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage": "https://www.mdclub.org/api",
   "author": "zdhxiong",
   "repository": {
@@ -36,8 +36,8 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^1.0.13-4.3.1",
-    "@stoplight/prism-cli": "^3.3.5",
+    "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
+    "@stoplight/prism-cli": "^3.3.6",
     "@stoplight/spectral": "^5.4.0",
     "js-yaml": "^3.14.0",
     "json-refs": "^3.0.15"
