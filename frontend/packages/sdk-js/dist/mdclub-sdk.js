@@ -1,5 +1,5 @@
 /*!
- * mdclub-sdk 1.0.0 (https://github.com/zdhxiong/mdclub-sdk-js#readme)
+ * mdclub-sdk 1.0.2 (https://github.com/zdhxiong/mdclub-sdk-js#readme)
  * Copyright 2018-2020 zdhxiong
  * Licensed under MIT
  */
@@ -9,7 +9,7 @@
   (global = global || self, factory(global.mdclubSDK = {}));
 }(this, (function (exports) { 'use strict';
 
-  !function(){try{return new MouseEvent("test")}catch(e){}var e=function(e,t){t=t||{bubbles:!1,cancelable:!1};var n=document.createEvent("MouseEvent");return n.initMouseEvent(e,t.bubbles,t.cancelable,window,0,t.screenX||0,t.screenY||0,t.clientX||0,t.clientY||0,t.ctrlKey||!1,t.altKey||!1,t.shiftKey||!1,t.metaKey||!1,t.button||0,t.relatedTarget||null),n};e.prototype=Event.prototype,window.MouseEvent=e;}();
+  !function(){try{return new MouseEvent("test")}catch(e$1){}var e=function(e,t){t=t||{bubbles:!1,cancelable:!1};var n=document.createEvent("MouseEvent");return n.initMouseEvent(e,t.bubbles,t.cancelable,window,0,t.screenX||0,t.screenY||0,t.clientX||0,t.clientY||0,t.ctrlKey||!1,t.altKey||!1,t.shiftKey||!1,t.metaKey||!1,t.button||0,t.relatedTarget||null),n};e.prototype=Event.prototype,window.MouseEvent=e;}();
 
   !function(){function t(t,e){e=e||{bubbles:!1,cancelable:!1,detail:void 0};var n=document.createEvent("CustomEvent");return n.initCustomEvent(t,e.bubbles,e.cancelable,e.detail),n}"function"!=typeof window.CustomEvent&&(t.prototype=window.Event.prototype,window.CustomEvent=t);}();
 
@@ -488,10 +488,7 @@
       var parts = type.split('.');
       return {
           type: parts[0],
-          ns: parts
-              .slice(1)
-              .sort()
-              .join(' '),
+          ns: parts.slice(1).sort().join(' '),
       };
   }
 
@@ -946,13 +943,10 @@
       defaultExport.prototype.constructor = defaultExport;
 
       defaultExport.prototype.request = function request (options) {
+          var isFormData = options.data instanceof FormData;
           var headers = {
-              'Content-Type': 'application/json',
               token: this.getStorage('token') || undefined,
           };
-          if (options.data && options.data instanceof FormData) {
-              headers['Content-Type'] = 'multipart/form-data';
-          }
           if (options.headers) {
               headers = extend({}, headers, options.headers);
           }
@@ -960,10 +954,10 @@
               ajax({
                   method: options.method || GET,
                   url: ("" + (defaults.apiPath) + (options.url || '')),
-                  data: JSON.stringify(options.data),
+                  data: isFormData ? options.data : JSON.stringify(options.data),
                   headers: headers,
                   dataType: 'json',
-                  contentType: 'application/json',
+                  contentType: isFormData ? false : 'application/json',
                   timeout: defaults.timeout,
                   global: false,
                   beforeSend: function () {
@@ -990,6 +984,172 @@
       return defaultExport;
   }(defaultExport));
 
+  /**
+   * 错误代码
+   *
+   * 错误码格式：A-BB-CCC
+   * A：错误级别，1：系统级错误；2：服务级错误
+   * B：模块编号
+   * C：具体错误编号
+   */
+  /**
+   * 系统级错误
+   */
+  var SYSTEM_ERROR = 100000;
+  var SYSTEM_MAINTAIN = 100001;
+  var SYSTEM_IP_LIMIT = 100002;
+  var SYSTEM_USER_LIMIT = 100003;
+  var SYSTEM_API_NOT_FOUND = 100004;
+  var SYSTEM_API_NOT_ALLOWED = 100005;
+  var SYSTEM_REQUEST_JSON_INVALID = 100006;
+  /**
+   * 通用服务错误，模块编号：0
+   */
+  var COMMON_FIELD_VERIFY_FAILED = 200001;
+  var COMMON_SEND_EMAIL_FAILED = 200002;
+  var COMMON_EMAIL_VERIFY_EXPIRED = 200003;
+  var COMMON_IMAGE_UPLOAD_FAILED = 200004;
+  var COMMON_IMAGE_NOT_FOUND = 200005;
+  var COMMON_VOTE_TYPE_ERROR = 200006;
+  /**
+   * 用户相关错误，模块编号：1
+   */
+  var USER_NEED_LOGIN = 201001;
+  var USER_NEED_MANAGE_PERMISSION = 201002;
+  var USER_NOT_FOUND = 201003;
+  var USER_TARGET_NOT_FOUND = 201004;
+  var USER_DISABLED = 201005;
+  var USER_PASSWORD_ERROR = 201006;
+  var USER_AVATAR_UPLOAD_FAILED = 201007;
+  var USER_COVER_UPLOAD_FAILED = 201008;
+  var USER_CANT_FOLLOW_YOURSELF = 201009;
+  /**
+   * 提问相关错误，模块编号：2
+   */
+  var QUESTION_NOT_FOUND = 202001;
+  var QUESTION_CANT_EDIT = 202002;
+  var QUESTION_CANT_EDIT_NOT_AUTHOR = 202003;
+  var QUESTION_CANT_EDIT_TIMEOUT = 202004;
+  var QUESTION_CANT_EDIT_HAS_ANSWER = 202005;
+  var QUESTION_CANT_EDIT_HAS_COMMENT = 202006;
+  var QUESTION_CANT_DELETE = 202007;
+  var QUESTION_CANT_DELETE_NOT_AUTHOR = 202008;
+  var QUESTION_CANT_DELETE_TIMEOUT = 202009;
+  var QUESTION_CANT_DELETE_HAS_ANSWER = 202010;
+  var QUESTION_CANT_DELETE_HAS_COMMENT = 202011;
+  /**
+   * 回答相关错误，模块编号：3
+   */
+  var ANSWER_NOT_FOUND = 203001;
+  var ANSWER_CANT_EDIT = 203002;
+  var ANSWER_CANT_EDIT_NOT_AUTHOR = 203003;
+  var ANSWER_CANT_EDIT_TIMEOUT = 203004;
+  var ANSWER_CANT_EDIT_HAS_COMMENT = 203005;
+  var ANSWER_CANT_DELETE = 203006;
+  var ANSWER_CANT_DELETE_NOT_AUTHOR = 203007;
+  var ANSWER_CANT_DELETE_TIMEOUT = 203008;
+  var ANSWER_CANT_DELETE_HAS_COMMENT = 203009;
+  /**
+   * 评论相关错误，模块编号：4
+   */
+  var COMMENT_NOT_FOUND = 204001;
+  var COMMENT_CANT_EDIT = 204002;
+  var COMMENT_CANT_EDIT_NOT_AUTHOR = 204003;
+  var COMMENT_CANT_EDIT_TIMEOUT = 204004;
+  var COMMENT_CANT_DELETE = 204005;
+  var COMMENT_CANT_DELETE_NOT_AUTHOR = 204006;
+  var COMMENT_CANT_DELETE_TIMEOUT = 204007;
+  /**
+   * 话题相关错误，模块编号：5
+   */
+  var TOPIC_NOT_FOUND = 205001;
+  var TOPIC_COVER_UPLOAD_FAILED = 205002;
+  /**
+   * 文章相关错误，模块编号：6
+   */
+  var ARTICLE_NOT_FOUND = 206001;
+  var ARTICLE_CANT_EDIT_NOT_AUTHOR = 206002;
+  var ARTICLE_CANT_EDIT = 206003;
+  var ARTICLE_CANT_EDIT_TIMEOUT = 206004;
+  var ARTICLE_CANT_EDIT_HAS_COMMENT = 206005;
+  var ARTICLE_CANT_DELETE_NOT_AUTHOR = 206006;
+  var ARTICLE_CANT_DELETE = 206007;
+  var ARTICLE_CANT_DELETE_TIMEOUT = 206008;
+  var ARTICLE_CANT_DELETE_HAS_COMMENT = 206009;
+  /**
+   * 举报相关错误，模块编号：7
+   */
+  var REPORT_NOT_FOUND = 207001;
+  var REPORT_TARGET_NOT_FOUND = 207002;
+  var REPORT_ALREADY_SUBMITTED = 207003;
+
+  var errors = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    SYSTEM_ERROR: SYSTEM_ERROR,
+    SYSTEM_MAINTAIN: SYSTEM_MAINTAIN,
+    SYSTEM_IP_LIMIT: SYSTEM_IP_LIMIT,
+    SYSTEM_USER_LIMIT: SYSTEM_USER_LIMIT,
+    SYSTEM_API_NOT_FOUND: SYSTEM_API_NOT_FOUND,
+    SYSTEM_API_NOT_ALLOWED: SYSTEM_API_NOT_ALLOWED,
+    SYSTEM_REQUEST_JSON_INVALID: SYSTEM_REQUEST_JSON_INVALID,
+    COMMON_FIELD_VERIFY_FAILED: COMMON_FIELD_VERIFY_FAILED,
+    COMMON_SEND_EMAIL_FAILED: COMMON_SEND_EMAIL_FAILED,
+    COMMON_EMAIL_VERIFY_EXPIRED: COMMON_EMAIL_VERIFY_EXPIRED,
+    COMMON_IMAGE_UPLOAD_FAILED: COMMON_IMAGE_UPLOAD_FAILED,
+    COMMON_IMAGE_NOT_FOUND: COMMON_IMAGE_NOT_FOUND,
+    COMMON_VOTE_TYPE_ERROR: COMMON_VOTE_TYPE_ERROR,
+    USER_NEED_LOGIN: USER_NEED_LOGIN,
+    USER_NEED_MANAGE_PERMISSION: USER_NEED_MANAGE_PERMISSION,
+    USER_NOT_FOUND: USER_NOT_FOUND,
+    USER_TARGET_NOT_FOUND: USER_TARGET_NOT_FOUND,
+    USER_DISABLED: USER_DISABLED,
+    USER_PASSWORD_ERROR: USER_PASSWORD_ERROR,
+    USER_AVATAR_UPLOAD_FAILED: USER_AVATAR_UPLOAD_FAILED,
+    USER_COVER_UPLOAD_FAILED: USER_COVER_UPLOAD_FAILED,
+    USER_CANT_FOLLOW_YOURSELF: USER_CANT_FOLLOW_YOURSELF,
+    QUESTION_NOT_FOUND: QUESTION_NOT_FOUND,
+    QUESTION_CANT_EDIT: QUESTION_CANT_EDIT,
+    QUESTION_CANT_EDIT_NOT_AUTHOR: QUESTION_CANT_EDIT_NOT_AUTHOR,
+    QUESTION_CANT_EDIT_TIMEOUT: QUESTION_CANT_EDIT_TIMEOUT,
+    QUESTION_CANT_EDIT_HAS_ANSWER: QUESTION_CANT_EDIT_HAS_ANSWER,
+    QUESTION_CANT_EDIT_HAS_COMMENT: QUESTION_CANT_EDIT_HAS_COMMENT,
+    QUESTION_CANT_DELETE: QUESTION_CANT_DELETE,
+    QUESTION_CANT_DELETE_NOT_AUTHOR: QUESTION_CANT_DELETE_NOT_AUTHOR,
+    QUESTION_CANT_DELETE_TIMEOUT: QUESTION_CANT_DELETE_TIMEOUT,
+    QUESTION_CANT_DELETE_HAS_ANSWER: QUESTION_CANT_DELETE_HAS_ANSWER,
+    QUESTION_CANT_DELETE_HAS_COMMENT: QUESTION_CANT_DELETE_HAS_COMMENT,
+    ANSWER_NOT_FOUND: ANSWER_NOT_FOUND,
+    ANSWER_CANT_EDIT: ANSWER_CANT_EDIT,
+    ANSWER_CANT_EDIT_NOT_AUTHOR: ANSWER_CANT_EDIT_NOT_AUTHOR,
+    ANSWER_CANT_EDIT_TIMEOUT: ANSWER_CANT_EDIT_TIMEOUT,
+    ANSWER_CANT_EDIT_HAS_COMMENT: ANSWER_CANT_EDIT_HAS_COMMENT,
+    ANSWER_CANT_DELETE: ANSWER_CANT_DELETE,
+    ANSWER_CANT_DELETE_NOT_AUTHOR: ANSWER_CANT_DELETE_NOT_AUTHOR,
+    ANSWER_CANT_DELETE_TIMEOUT: ANSWER_CANT_DELETE_TIMEOUT,
+    ANSWER_CANT_DELETE_HAS_COMMENT: ANSWER_CANT_DELETE_HAS_COMMENT,
+    COMMENT_NOT_FOUND: COMMENT_NOT_FOUND,
+    COMMENT_CANT_EDIT: COMMENT_CANT_EDIT,
+    COMMENT_CANT_EDIT_NOT_AUTHOR: COMMENT_CANT_EDIT_NOT_AUTHOR,
+    COMMENT_CANT_EDIT_TIMEOUT: COMMENT_CANT_EDIT_TIMEOUT,
+    COMMENT_CANT_DELETE: COMMENT_CANT_DELETE,
+    COMMENT_CANT_DELETE_NOT_AUTHOR: COMMENT_CANT_DELETE_NOT_AUTHOR,
+    COMMENT_CANT_DELETE_TIMEOUT: COMMENT_CANT_DELETE_TIMEOUT,
+    TOPIC_NOT_FOUND: TOPIC_NOT_FOUND,
+    TOPIC_COVER_UPLOAD_FAILED: TOPIC_COVER_UPLOAD_FAILED,
+    ARTICLE_NOT_FOUND: ARTICLE_NOT_FOUND,
+    ARTICLE_CANT_EDIT_NOT_AUTHOR: ARTICLE_CANT_EDIT_NOT_AUTHOR,
+    ARTICLE_CANT_EDIT: ARTICLE_CANT_EDIT,
+    ARTICLE_CANT_EDIT_TIMEOUT: ARTICLE_CANT_EDIT_TIMEOUT,
+    ARTICLE_CANT_EDIT_HAS_COMMENT: ARTICLE_CANT_EDIT_HAS_COMMENT,
+    ARTICLE_CANT_DELETE_NOT_AUTHOR: ARTICLE_CANT_DELETE_NOT_AUTHOR,
+    ARTICLE_CANT_DELETE: ARTICLE_CANT_DELETE,
+    ARTICLE_CANT_DELETE_TIMEOUT: ARTICLE_CANT_DELETE_TIMEOUT,
+    ARTICLE_CANT_DELETE_HAS_COMMENT: ARTICLE_CANT_DELETE_HAS_COMMENT,
+    REPORT_NOT_FOUND: REPORT_NOT_FOUND,
+    REPORT_TARGET_NOT_FOUND: REPORT_TARGET_NOT_FOUND,
+    REPORT_ALREADY_SUBMITTED: REPORT_ALREADY_SUBMITTED
+  });
+
   if (isUndefined(defaults.adapter)) {
       throw new Error('adapter must be set. e.g. new BrowserAdapter() or new MiniProgramAdapter()');
   }
@@ -1006,6 +1166,17 @@
               method = GET;
           }
       }
+      // header 中添加 accept
+      var accepts = ['application/json'];
+      if (typeof document !== 'undefined' &&
+          !![].map &&
+          document
+              .createElement('canvas')
+              .toDataURL('image/webp')
+              .indexOf('data:image/webp') === 0) {
+          accepts.push('image/webp');
+      }
+      headers['Accept'] = accepts.join(', ');
       return defaults.adapter.request({ method: method, url: url, data: data, headers: headers });
   };
   var getRequest = function (url, data) { return requestHandle(GET, url, data); };
@@ -1021,6 +1192,7 @@
    * @param queryParamNames  query 参数名数组
    */
   function buildURL(path, params, queryParamNames) {
+      if ( params === void 0 ) params = {};
       if ( queryParamNames === void 0 ) queryParamNames = [];
 
       // 替换 path 参数
@@ -1331,6 +1503,11 @@
    */
   var addVote$2 = function (params) { return postRequest(buildURL('/comments/{comment_id}/voters', params), buildRequestBody(params, ['type'])); };
   /**
+   * 在指定评论下发表回复
+   * 在指定评论下发表回复
+   */
+  var createReply = function (params) { return postRequest(buildURL('/comments/{comment_id}/replies', params, ['include']), buildRequestBody(params, ['content'])); };
+  /**
    * 🔐批量删除评论
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
    */
@@ -1363,6 +1540,15 @@
       'user_id',
       'trashed' ]));
   };
+  /**
+   * 获取指定评论的回复
+   * 获知指定评论的回复。
+   */
+  var getReplies = function (params) { return getRequest(buildURL('/comments/{comment_id}/replies', params, [
+      'page',
+      'per_page',
+      'order',
+      'include' ])); };
   /**
    * 获取评论的投票者
    * 获取评论的投票者
@@ -1402,10 +1588,12 @@
     __proto__: null,
     del: del$2,
     addVote: addVote$2,
+    createReply: createReply,
     deleteMultiple: deleteMultiple$2,
     deleteVote: deleteVote$2,
     get: get$2,
     getList: getList$2,
+    getReplies: getReplies,
     getVoters: getVoters$2,
     trash: trash$2,
     trashMultiple: trashMultiple$2,
@@ -1465,7 +1653,11 @@
    * 上传图片
    * 上传图片
    */
-  var upload = function (params) { return postRequest(buildURL('/images', params, ['include']), buildRequestBody(params, ['image'])); };
+  var upload = function (params) {
+      var formData = new FormData();
+      formData.append('image', params.image);
+      return postRequest(buildURL('/images', params, ['include']), formData);
+  };
 
   var ImageApi = /*#__PURE__*/Object.freeze({
     __proto__: null,
@@ -1475,6 +1667,80 @@
     getList: getList$3,
     update: update$3,
     upload: upload
+  });
+
+  /**
+   * 删除一条通知
+   * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+   */
+  var del$4 = function (params) { return deleteRequest(buildURL('/notifications/{notification_id}', params)); };
+  /**
+   * 删除所有通知
+   * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+   */
+  var deleteAll = function (params) {
+      if ( params === void 0 ) params = {};
+
+      return deleteRequest(buildURL('/notifications', params, ['type']));
+  };
+  /**
+   * 批量删除通知
+   * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+   */
+  var deleteMultiple$4 = function (params) { return deleteRequest(buildURL('/notifications/{notification_ids}', params)); };
+  /**
+   * 获取未读通知数量
+   * 获取未读通知数量。
+   */
+  var getCount = function (params) {
+      if ( params === void 0 ) params = {};
+
+      return getRequest(buildURL('/notifications/count', params, ['type']));
+  };
+  /**
+   * 获取通知列表
+   * 获取通知列表。
+   */
+  var getList$4 = function (params) {
+      if ( params === void 0 ) params = {};
+
+      return getRequest(buildURL('/notifications', params, [
+      'page',
+      'per_page',
+      'include',
+      'type',
+      'read' ]));
+  };
+  /**
+   * 把一条通知标记为已读
+   * 把一条通知标记为已读
+   */
+  var read = function (params) { return postRequest(buildURL('/notifications/{notification_id}/read', params, ['include'])); };
+  /**
+   * 把所有通知标记为已读
+   * 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
+   */
+  var readAll = function (params) {
+      if ( params === void 0 ) params = {};
+
+      return postRequest(buildURL('/notifications/read', params, ['type']));
+  };
+  /**
+   * 批量把通知标记为已读
+   * 批量把通知标记为已读
+   */
+  var readMultiple = function (params) { return postRequest(buildURL('/notifications/{notification_ids}/read', params, ['include'])); };
+
+  var NotificationApi = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    del: del$4,
+    deleteAll: deleteAll,
+    deleteMultiple: deleteMultiple$4,
+    getCount: getCount,
+    getList: getList$4,
+    read: read,
+    readAll: readAll,
+    readMultiple: readMultiple
   });
 
   /**
@@ -1522,6 +1788,8 @@
       'question_can_edit_before',
       'question_can_edit_only_no_answer',
       'question_can_edit_only_no_comment',
+      'search_third',
+      'search_type',
       'site_description',
       'site_gongan_beian',
       'site_icp_beian',
@@ -1537,26 +1805,29 @@
       'storage_aliyun_access_id',
       'storage_aliyun_access_secret',
       'storage_aliyun_bucket',
+      'storage_aliyun_dir',
       'storage_aliyun_endpoint',
       'storage_ftp_host',
       'storage_ftp_passive',
       'storage_ftp_password',
       'storage_ftp_port',
-      'storage_ftp_root',
+      'storage_ftp_dir',
       'storage_ftp_ssl',
       'storage_ftp_username',
       'storage_local_dir',
       'storage_qiniu_access_id',
       'storage_qiniu_access_secret',
       'storage_qiniu_bucket',
+      'storage_qiniu_dir',
       'storage_qiniu_zone',
       'storage_sftp_host',
       'storage_sftp_password',
       'storage_sftp_port',
-      'storage_sftp_root',
+      'storage_sftp_dir',
       'storage_sftp_username',
       'storage_type',
       'storage_upyun_bucket',
+      'storage_upyun_dir',
       'storage_upyun_operator',
       'storage_upyun_password',
       'storage_url',
@@ -1572,7 +1843,7 @@
    * 删除提问
    * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
    */
-  var del$4 = function (params) { return deleteRequest(buildURL('/questions/{question_id}', params)); };
+  var del$5 = function (params) { return deleteRequest(buildURL('/questions/{question_id}', params)); };
   /**
    * 添加关注
    * 添加关注
@@ -1611,7 +1882,7 @@
    * 🔐批量删除提问
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
    */
-  var deleteMultiple$4 = function (params) { return deleteRequest(buildURL('/questions/{question_ids}', params)); };
+  var deleteMultiple$5 = function (params) { return deleteRequest(buildURL('/questions/{question_ids}', params)); };
   /**
    * 取消为提问的投票
    * 取消为提问的投票
@@ -1652,7 +1923,7 @@
    * 获取提问列表
    * 获取提问列表。
    */
-  var getList$4 = function (params) {
+  var getList$5 = function (params) {
       if ( params === void 0 ) params = {};
 
       return getRequest(buildURL('/questions', params, [
@@ -1706,20 +1977,20 @@
 
   var QuestionApi = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    del: del$4,
+    del: del$5,
     addFollow: addFollow$1,
     addVote: addVote$3,
     create: create$1,
     createAnswer: createAnswer,
     createComment: createComment$2,
     deleteFollow: deleteFollow$1,
-    deleteMultiple: deleteMultiple$4,
+    deleteMultiple: deleteMultiple$5,
     deleteVote: deleteVote$3,
     get: get$5,
     getAnswers: getAnswers,
     getComments: getComments$2,
     getFollowers: getFollowers$1,
-    getList: getList$4,
+    getList: getList$5,
     getVoters: getVoters$3,
     trash: trash$3,
     trashMultiple: trashMultiple$3,
@@ -1732,7 +2003,7 @@
    * 🔐删除举报
    * 仅管理员可调用该接口
    */
-  var del$5 = function (params) { return deleteRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params)); };
+  var del$6 = function (params) { return deleteRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params)); };
   /**
    * 添加举报
    * 添加举报
@@ -1742,12 +2013,12 @@
    * 🔐批量删除举报
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
    */
-  var deleteMultiple$5 = function (params) { return deleteRequest(buildURL('/reports/{report_targets}', params)); };
+  var deleteMultiple$6 = function (params) { return deleteRequest(buildURL('/reports/{report_targets}', params)); };
   /**
    * 🔐获取被举报的内容列表
    * 仅管理员可调用该接口
    */
-  var getList$5 = function (params) {
+  var getList$6 = function (params) {
       if ( params === void 0 ) params = {};
 
       return getRequest(buildURL('/reports', params, [
@@ -1767,151 +2038,163 @@
 
   var ReportApi = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    del: del$5,
+    del: del$6,
     create: create$2,
-    deleteMultiple: deleteMultiple$5,
-    getList: getList$5,
+    deleteMultiple: deleteMultiple$6,
+    getList: getList$6,
     getReasons: getReasons
   });
 
-  var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+  /**
+   * 🔐获取站点统计数据
+   * 仅管理员可调用该接口。
+   */
+  var get$6 = function (params) { return getRequest(buildURL('/stats', params, ['include', 'start_date', 'end_date'])); };
 
-  function createCommonjsModule(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
+  var StatsApi = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    get: get$6
+  });
+
+  /**
+   * @file This is a SHA-1 hash generator by JavaScript.
+   * @author Hsun
+   * @description For your convenience, the code comments have been translated by Google.
+   ***/
+
+  // 消息填充位，补足长度。
+  // Message padding bits, complement the length.
+  function fillString(str) {
+    var blockAmount = ((str.length + 8) >> 6) + 1,
+      blocks = [],
+      i;
+
+    for (i = 0; i < blockAmount * 16; i++) {
+      blocks[i] = 0;
+    }
+    for (i = 0; i < str.length; i++) {
+      blocks[i >> 2] |= str.charCodeAt(i) << (24 - (i & 3) * 8);
+    }
+    blocks[i >> 2] |= 0x80 << (24 - (i & 3) * 8);
+    blocks[blockAmount * 16 - 1] = str.length * 8;
+
+    return blocks;
   }
 
-  var sha1 = createCommonjsModule(function (module, exports) {
-  (function(){
+  // 将输入的二进制数组转化为十六进制的字符串。
+  // Convert the input binary array to a hexadecimal string.
+  function binToHex(binArray) {
+    var hexString = "0123456789abcdef",
+      str = "",
+      i;
 
-      //消息填充位，补足长度。
-      function fillString(str){
-          var blockAmount = ((str.length + 8) >> 6) + 1,
-              blocks = [],
-              i;
+    for (i = 0; i < binArray.length * 4; i++) {
+      str += hexString.charAt((binArray[i >> 2] >> ((3 - i % 4) * 8 + 4)) & 0xF) +
+        hexString.charAt((binArray[i >> 2] >> ((3 - i % 4) * 8)) & 0xF);
+    }
 
-          for(i = 0; i < blockAmount * 16; i++){
-              blocks[i] = 0;
-          }
-          for(i = 0; i < str.length; i++){
-              blocks[i >> 2] |= str.charCodeAt(i) << (24 - (i & 3) * 8);
-          }
-          blocks[i >> 2] |= 0x80 << (24 - (i & 3) * 8);
-          blocks[blockAmount * 16 - 1] = str.length * 8;
+    return str;
+  }
 
-          return blocks;
+  // 核心函数，输出为长度为5的number数组，对应160位的消息摘要。
+  // The core function, the output is a number array with a length of 5,
+  // corresponding to a 160-bit message digest.
+  function core(blockArray) {
+    var w = [],
+      a = 0x67452301,
+      b = 0xEFCDAB89,
+      c = 0x98BADCFE,
+      d = 0x10325476,
+      e = 0xC3D2E1F0,
+      olda,
+      oldb,
+      oldc,
+      oldd,
+      olde,
+      t,
+      i,
+      j;
+
+    for (i = 0; i < blockArray.length; i += 16) {  //每次处理512位 16*32
+      olda = a;
+      oldb = b;
+      oldc = c;
+      oldd = d;
+      olde = e;
+
+      for (j = 0; j < 80; j++) {  //对每个512位进行80步操作
+        if (j < 16) {
+          w[j] = blockArray[i + j];
+        } else {
+          w[j] = cyclicShift(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1);
+        }
+        t = modPlus(modPlus(cyclicShift(a, 5), ft(j, b, c, d)), modPlus(modPlus(e, w[j]), kt(j)));
+        e = d;
+        d = c;
+        c = cyclicShift(b, 30);
+        b = a;
+        a = t;
       }
 
-      //将输入的二进制数组转化为十六进制的字符串。
-      function binToHex(binArray){
-          var hexString = "0123456789abcdef",
-              str = "",
-              i;
+      a = modPlus(a, olda);
+      b = modPlus(b, oldb);
+      c = modPlus(c, oldc);
+      d = modPlus(d, oldd);
+      e = modPlus(e, olde);
+    }
 
-          for(i = 0; i < binArray.length * 4; i++){
-              str += hexString.charAt((binArray[i >> 2] >> ((3 - i % 4) * 8 + 4)) & 0xF) +
-                      hexString.charAt((binArray[i >> 2] >> ((3 - i % 4) * 8  )) & 0xF);
-          }
+    return [a, b, c, d, e];
+  }
 
-          return str;
-      }
+  // 根据t值返回相应得压缩函数中用到的f函数。
+  // According to the t value, return the corresponding f function used in
+  // the compression function.
+  function ft(t, b, c, d) {
+    if (t < 20) {
+      return (b & c) | ((~b) & d);
+    } else if (t < 40) {
+      return b ^ c ^ d;
+    } else if (t < 60) {
+      return (b & c) | (b & d) | (c & d);
+    } else {
+      return b ^ c ^ d;
+    }
+  }
 
-      //核心函数，输出为长度为5的number数组，对应160位的消息摘要。
-      function coreFunction(blockArray){
-          var w = [],
-              a = 0x67452301,
-              b = 0xEFCDAB89,
-              c = 0x98BADCFE,
-              d = 0x10325476,
-              e = 0xC3D2E1F0,
-              olda,
-              oldb,
-              oldc,
-              oldd,
-              olde,
-              t,
-              i,
-              j;
+  // 根据t值返回相应得压缩函数中用到的K值。
+  // According to the t value, return the corresponding K value used in
+  // the compression function.
+  function kt(t) {
+    return (t < 20) ? 0x5A827999 :
+      (t < 40) ? 0x6ED9EBA1 :
+        (t < 60) ? 0x8F1BBCDC : 0xCA62C1D6;
+  }
 
-          for(i = 0; i < blockArray.length; i += 16){  //每次处理512位 16*32
-              olda = a;
-              oldb = b;
-              oldc = c;
-              oldd = d;
-              olde = e;
+  // 模2的32次方加法，因为JavaScript的number是双精度浮点数表示，所以将32位数拆成高16位和低16位分别进行相加
+  // Modulo 2 to the 32nd power addition, because JavaScript's number is a
+  // double-precision floating-point number, so the 32-bit number is split
+  // into the upper 16 bits and the lower 16 bits are added separately.
+  function modPlus(x, y) {
+    var low = (x & 0xFFFF) + (y & 0xFFFF),
+      high = (x >> 16) + (y >> 16) + (low >> 16);
 
-              for(j = 0; j < 80; j++){  //对每个512位进行80步操作
-                  if(j < 16){
-                      w[j] = blockArray[i + j];
-                  }else{
-                      w[j] = cyclicShift(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
-                  }
-                  t = modPlus(modPlus(cyclicShift(a, 5), ft(j, b, c, d)), modPlus(modPlus(e, w[j]), kt(j)));
-                  e = d;
-                  d = c;
-                  c = cyclicShift(b, 30);
-                  b = a;
-                  a = t;
-              }
+    return (high << 16) | (low & 0xFFFF);
+  }
 
-              a = modPlus(a, olda);
-              b = modPlus(b, oldb);
-              c = modPlus(c, oldc);
-              d = modPlus(d, oldd);
-              e = modPlus(e, olde);
-          }
+  // 对输入的32位的num二进制数进行循环左移 ,因为JavaScript的number是双精度浮点数表示，所以移位需需要注意
+  // Rotate left of the input 32-bit num binary number, because JavaScript's
+  // number is a double-precision floating-point number, so you need to pay
+  //  attention to the shift.
+  function cyclicShift(num, k) {
+    return (num << k) | (num >>> (32 - k));
+  }
 
-          return [a, b, c, d, e];
-      }
-
-      //根据t值返回相应得压缩函数中用到的f函数。
-      function ft(t, b, c, d){
-          if(t < 20){
-              return (b & c) | ((~b) & d);
-          }else if(t < 40){
-              return b ^ c ^ d;
-          }else if(t < 60){
-              return (b & c) | (b & d) | (c & d);
-          }else{
-              return b ^ c ^ d;
-          }
-      }
-
-      //根据t值返回相应得压缩函数中用到的K值。
-      function kt(t){
-          return (t < 20) ?  0x5A827999 :
-                  (t < 40) ? 0x6ED9EBA1 :
-                  (t < 60) ? 0x8F1BBCDC : 0xCA62C1D6;
-      }
-
-      //模2的32次方加法，因为JavaScript的number是双精度浮点数表示，所以将32位数拆成高16位和低16位分别进行相加
-      function modPlus(x, y){
-          var low = (x & 0xFFFF) + (y & 0xFFFF),
-              high = (x >> 16) + (y >> 16) + (low >> 16);
-
-          return (high << 16) | (low & 0xFFFF);
-      }
-
-      //对输入的32位的num二进制数进行循环左移 ,因为JavaScript的number是双精度浮点数表示，所以移位需需要注意
-      function cyclicShift(num, k){
-          return (num << k) | (num >>> (32 - k));
-      }
-
-      //主函数根据输入的消息字符串计算消息摘要，返回十六进制表示的消息摘要
-      function sha1(s){
-          return binToHex(coreFunction(fillString(s)));
-      }
-
-      // support AMD and Node
-      {
-          if( module.exports) {
-            exports = module.exports = sha1;
-          }
-          exports.sha1 = sha1;
-      }
-
-  }).call(commonjsGlobal);
-  });
-  var sha1_1 = sha1.sha1;
+  // 主函数根据输入的消息字符串计算消息摘要，返回十六进制表示的消息摘要
+  // The main function calculates the message digest based on the input message
+  // string and returns the message digest in hexadecimal.
+  function sha1(s) {
+    return binToHex(core(fillString(s)));
+  }
 
   // @ts-ignore
   /**
@@ -1919,13 +2202,20 @@
    * 通过账号密码登陆，返回 Token 信息。  若登录失败，且返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;， 表示下次调用该接口时，需要用户输入图形验证码，并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
    */
   var login = function (params) {
-      params.password = sha1(params.password);
+      if (params.password) {
+          params.password = sha1(params.password);
+      }
       return postRequest(buildURL('/tokens', params), buildRequestBody(params, [
           'name',
           'password',
           'device',
           'captcha_token',
-          'captcha_code' ]));
+          'captcha_code' ])).then(function (response) {
+          if (!response.code) {
+              defaults.adapter.setStorage('token', response.data.token);
+          }
+          return response;
+      });
   };
 
   var TokenApi = /*#__PURE__*/Object.freeze({
@@ -1937,7 +2227,7 @@
    * 🔐删除话题
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
    */
-  var del$6 = function (params) { return deleteRequest(buildURL('/topics/{topic_id}', params)); };
+  var del$7 = function (params) { return deleteRequest(buildURL('/topics/{topic_id}', params)); };
   /**
    * 关注指定话题
    * 关注指定话题
@@ -1947,7 +2237,13 @@
    * 🔐发布话题
    * 仅管理员可调用该接口
    */
-  var create$3 = function (params) { return postRequest(buildURL('/topics', params, ['include']), buildRequestBody(params, ['name', 'description', 'cover'])); };
+  var create$3 = function (params) {
+      var formData = new FormData();
+      formData.append('name', params.name);
+      formData.append('description', params.description);
+      formData.append('cover', params.cover);
+      return postRequest(buildURL('/topics', params, ['include']), formData);
+  };
   /**
    * 取消关注指定话题
    * 取消关注指定话题
@@ -1957,12 +2253,12 @@
    * 🔐批量删除话题
    * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
    */
-  var deleteMultiple$6 = function (params) { return deleteRequest(buildURL('/topics/{topic_ids}', params)); };
+  var deleteMultiple$7 = function (params) { return deleteRequest(buildURL('/topics/{topic_ids}', params)); };
   /**
    * 获取指定话题信息
    * 获取指定话题信息
    */
-  var get$6 = function (params) { return getRequest(buildURL('/topics/{topic_id}', params, ['include'])); };
+  var get$7 = function (params) { return getRequest(buildURL('/topics/{topic_id}', params, ['include'])); };
   /**
    * 获取指定话题下的文章
    * 获取指定话题下的文章。
@@ -1984,7 +2280,7 @@
    * 获取全部话题
    * 获取全部话题。
    */
-  var getList$6 = function (params) {
+  var getList$7 = function (params) {
       if ( params === void 0 ) params = {};
 
       return getRequest(buildURL('/topics', params, [
@@ -2029,19 +2325,26 @@
    * 🔐更新话题信息
    * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
    */
-  var update$6 = function (params) { return postRequest(buildURL('/topics/{topic_id}', params, ['include']), buildRequestBody(params, ['name', 'description', 'cover'])); };
+  var update$6 = function (params) {
+      var formData = new FormData();
+      formData.append('topic_id', params.topic_id.toString());
+      params.name && formData.append('name', params.name);
+      params.description && formData.append('description', params.description);
+      params.cover && formData.append('cover', params.cover);
+      return postRequest(buildURL('/topics/{topic_id}', params, ['include']), formData);
+  };
 
   var TopicApi = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    del: del$6,
+    del: del$7,
     addFollow: addFollow$2,
     create: create$3,
     deleteFollow: deleteFollow$2,
-    deleteMultiple: deleteMultiple$6,
-    get: get$6,
+    deleteMultiple: deleteMultiple$7,
+    get: get$7,
     getArticles: getArticles,
     getFollowers: getFollowers$2,
-    getList: getList$6,
+    getList: getList$7,
     getQuestions: getQuestions,
     trash: trash$4,
     trashMultiple: trashMultiple$4,
@@ -2105,7 +2408,7 @@
    * 获取指定用户信息
    * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。 其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
    */
-  var get$7 = function (params) { return getRequest(buildURL('/users/{user_id}', params, ['include'])); };
+  var get$8 = function (params) { return getRequest(buildURL('/users/{user_id}', params, ['include'])); };
   /**
    * 获取指定用户发表的回答
    * 获取指定用户发表的回答
@@ -2177,7 +2480,7 @@
    * 获取用户列表
    * 仅管理员可使用 email 参数进行搜索  仅管理员可获取已禁用的用户列表
    */
-  var getList$7 = function (params) {
+  var getList$8 = function (params) {
       if ( params === void 0 ) params = {};
 
       return getRequest(buildURL('/users', params, [
@@ -2312,7 +2615,9 @@
    * 返回用户信息
    */
   var register = function (params) {
-      params.password = sha1(params.password);
+      if (params.password) {
+          params.password = sha1(params.password);
+      }
       return postRequest(buildURL('/users', params, ['include']), buildRequestBody(params, ['email', 'email_code', 'username', 'password']));
   };
   /**
@@ -2350,19 +2655,29 @@
    * 验证邮箱并更新密码
    */
   var updatePassword = function (params) {
-      params.password = sha1(params.password);
+      if (params.password) {
+          params.password = sha1(params.password);
+      }
       return putRequest(buildURL('/user/password', params), buildRequestBody(params, ['email', 'email_code', 'password']));
   };
   /**
    * 上传当前登录用户的头像
    * 上传当前登录用户的头像
    */
-  var uploadMyAvatar = function (params) { return postRequest(buildURL('/user/avatar', params), buildRequestBody(params, ['avatar'])); };
+  var uploadMyAvatar = function (params) {
+      var formData = new FormData();
+      formData.append('avatar', params.avatar);
+      return postRequest(buildURL('/user/avatar'), formData);
+  };
   /**
    * 上传当前登录用户的封面
    * 上传当前登录用户的封面
    */
-  var uploadMyCover = function (params) { return postRequest(buildURL('/user/cover', params), buildRequestBody(params, ['cover'])); };
+  var uploadMyCover = function (params) {
+      var formData = new FormData();
+      formData.append('cover', params.cover);
+      return postRequest(buildURL('/user/cover'), formData);
+  };
 
   var UserApi = /*#__PURE__*/Object.freeze({
     __proto__: null,
@@ -2376,7 +2691,7 @@
     disableMultiple: disableMultiple,
     enable: enable,
     enableMultiple: enableMultiple,
-    get: get$7,
+    get: get$8,
     getAnswers: getAnswers$1,
     getArticles: getArticles$1,
     getComments: getComments$3,
@@ -2385,7 +2700,7 @@
     getFollowingArticles: getFollowingArticles,
     getFollowingQuestions: getFollowingQuestions,
     getFollowingTopics: getFollowingTopics,
-    getList: getList$7,
+    getList: getList$8,
     getMine: getMine,
     getMyAnswers: getMyAnswers,
     getMyArticles: getMyArticles,
@@ -2415,13 +2730,16 @@
   exports.CommentApi = CommentApi;
   exports.EmailApi = EmailApi;
   exports.ImageApi = ImageApi;
+  exports.NotificationApi = NotificationApi;
   exports.OptionApi = OptionApi;
   exports.QuestionApi = QuestionApi;
   exports.ReportApi = ReportApi;
+  exports.StatsApi = StatsApi;
   exports.TokenApi = TokenApi;
   exports.TopicApi = TopicApi;
   exports.UserApi = UserApi;
   exports.defaults = defaults;
+  exports.errors = errors;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
