@@ -22,6 +22,7 @@
   "files": [
     "dist/openapi.json",
     "dist/openapi.yaml",
+    "src",
     "LICENSE",
     "package.json",
     "README.md"
