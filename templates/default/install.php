@@ -667,6 +667,7 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdclub-sdk-js@1.0.4/dist/mdclub-sdk.min.js"></script>
 <script>
     var $ = mdui.$;
     $(function() {
@@ -677,6 +678,12 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
         var $environment = $('.environment');
         var $database = $('.database');
         var $complete = $('.complete');
+
+        function setCookie(key, value) {
+            const date = new Date();
+            date.setTime(date.getTime() + 15 * 24 * 3600 * 1000);
+            document.cookie = key + '=' + value + '; expires=' + date.toUTCString() + '; path=/';
+        }
 
         function loadStart() {
             if ($('.mc-loading-overlay').length) {
@@ -729,54 +736,59 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
                 url: '<?= get_root_url() ?>/install/import_database',
                 data: $(e.target).serializeArray(),
                 dataType: 'json',
-                success: function(response) {
-                    loadEnd();
-                    switch (response.code) {
-                        // 安装成功，到第三步
-                        case 0:
+            }).then((response) => {
+                switch (response.code) {
+                    // 安装成功，到第三步
+                    case 0:
+                        mdclubSDK.TokenApi.login({
+                            name: $('input[name="admin_email"]').val(),
+                            password: $('input[name="admin_password"]').val(),
+                        }).finally(() => {
+                            loadEnd();
+                        }).then((tokenResponse) => {
+                            setCookie('token', tokenResponse.data.token);
                             $stepperItem2.removeClass('active').addClass('done');
                             $stepperItem3.addClass('active');
                             $database.hide();
                             $complete.show();
-
-                            // 安装完后自动登录
-
-                            break;
-                        // 安装失败
-                        case 100007:
-                            mdui.alert(
-                                response.extra_message,
-                                '安装失败',
-                                function () {},
-                                { history: false },
-                            );
-                            break;
-                        // 创建管理员账号时，字段验证失败
-                        case 200001:
-                            mdui.alert(
-                                Object.keys(response.errors).map(function (key) {
-                                    return '管理员' + response.errors[key];
-                                }).join('<br/>'),
-                                '安装失败',
-                                function () {},
-                                { history: false },
-                            );
-                            break;
-                        default:
-                            mdui.alert(
-                                '安装失败',
-                                function() {},
-                                { history: false },
-                            );
-                            break;
-                    }
-
-                    console.log(response);
-                },
-                error: function () {
-                    loadEnd();
-                    mdui.alert('网络连接失败', function () {}, { history: false });
-                },
+                        }).catch(() => {
+                            mdui.alert('自动登陆失败', function () {}, { history: false });
+                        });
+                        break;
+                    // 安装失败
+                    case 100007:
+                        loadEnd();
+                        mdui.alert(
+                            response.extra_message,
+                            '安装失败',
+                            function () {},
+                            { history: false },
+                        );
+                        break;
+                    // 创建管理员账号时，字段验证失败
+                    case 200001:
+                        loadEnd();
+                        mdui.alert(
+                            Object.keys(response.errors).map(function (key) {
+                                return '管理员' + response.errors[key];
+                            }).join('<br/>'),
+                            '安装失败',
+                            function () {},
+                            { history: false },
+                        );
+                        break;
+                    default:
+                        loadEnd();
+                        mdui.alert(
+                            '安装失败',
+                            function() {},
+                            { history: false },
+                        );
+                        break;
+                }
+            }).catch(() => {
+                loadEnd();
+                mdui.alert('网络连接失败', function () {}, { history: false });
             });
         });
     });

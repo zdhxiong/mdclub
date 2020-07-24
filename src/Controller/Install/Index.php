@@ -11,6 +11,7 @@ use MDClub\Exception\ValidationException;
 use MDClub\Facade\Library\Request;
 use MDClub\Facade\Library\View;
 use MDClub\Facade\Model\UserModel;
+use MDClub\Facade\Service\UserAvatarService;
 use MDClub\Facade\Validator\UserValidator;
 use MDClub\Initializer\App;
 use MDClub\Library\Db;
@@ -108,11 +109,13 @@ class Index
             ]);
         }
 
-        UserModel
+        $userId = (int) UserModel
             ::set('username', $registerData['username'])
             ->set('email', $registerData['email'])
             ->set('password', $registerData['password'])
             ->insert();
+
+        UserAvatarService::delete($userId);
 
         // 把 user 表的 auto_increment 设为 10000
         $database
