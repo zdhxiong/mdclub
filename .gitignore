@@ -2,7 +2,8 @@
 .vs/
 /var/
 /vendor/
-/public/sitemap
+/public/sitemap/*
+!/public/sitemap/.gitkeep
 /public/static/admin
 /public/static/theme
 /public/upload
