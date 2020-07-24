@@ -3,6 +3,12 @@
  * Copyright 2018-2020 zdhxiong
  * Licensed under MIT
  */
+const defaults = {
+    apiPath: '',
+    methodOverride: false,
+    timeout: 30000,
+};
+
 function isFunction(target) {
     return typeof target === 'function';
 }
@@ -588,12 +594,6 @@ function ajax(options) {
     return XHR();
 }
 
-const defaults = {
-    apiPath: '',
-    methodOverride: false,
-    timeout: 30000,
-};
-
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';
@@ -668,6 +668,8 @@ class BrowserAdapter extends BrowserAbstract {
         });
     }
 }
+
+defaults.adapter = new BrowserAdapter();
 
 /**
  * 错误代码
@@ -2361,8 +2363,6 @@ var UserApi = /*#__PURE__*/Object.freeze({
     uploadMyAvatar: uploadMyAvatar,
     uploadMyCover: uploadMyCover
 });
-
-defaults.adapter = new BrowserAdapter();
 
 export { AnswerApi, ArticleApi, CaptchaApi, CommentApi, EmailApi, ImageApi, NotificationApi, OptionApi, QuestionApi, ReportApi, StatsApi, TokenApi, TopicApi, UserApi, defaults, errors };
 //# sourceMappingURL=mdclub-sdk.esm.js.map

@@ -307,6 +307,12 @@
     globalNS.Promise.prototype['finally'] = finallyConstructor;
   }
 
+  var defaults = {
+      apiPath: '',
+      methodOverride: false,
+      timeout: 30000,
+  };
+
   function isFunction(target) {
       return typeof target === 'function';
   }
@@ -897,12 +903,6 @@
       return XHR();
   }
 
-  var defaults = {
-      apiPath: '',
-      methodOverride: false,
-      timeout: 30000,
-  };
-
   var GET = 'GET';
   var POST = 'POST';
   var PUT = 'PUT';
@@ -983,6 +983,8 @@
 
       return defaultExport;
   }(defaultExport));
+
+  defaults.adapter = new defaultExport$1();
 
   /**
    * 错误代码
@@ -2721,8 +2723,6 @@
     uploadMyAvatar: uploadMyAvatar,
     uploadMyCover: uploadMyCover
   });
-
-  defaults.adapter = new defaultExport$1();
 
   exports.AnswerApi = AnswerApi;
   exports.ArticleApi = ArticleApi;

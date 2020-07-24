@@ -43,21 +43,21 @@ SDK 同时支持浏览器环境和小程序环境，你需要根据使用环境�
 若在小程序中使用，设置成小程序适配器。支持微信小程序、支付宝小程序、钉钉小程序、百度小程序。
 
 ```js
-import MiniProgram from 'mdclubSDK/src/adapter/MiniProgram';
+import MiniProgram from 'mdclubSDK/es/adapter/MiniProgram';
 defaults.adapter = new MiniProgram();
 ```
 
 若在浏览器中使用，设置成浏览器适配器。
 
 ```js
-import Browser from 'mdclubSDK/src/adapter/Browser';
+import Browser from 'mdclubSDK/es/adapter/Browser';
 defaults.adapter = new Browser();
 ```
 
 还可以选择对 SDK 进行一些全局设置，这些设置都是可选的。
 
 ```js
-import defaults from 'mdclubSDK/src/defaults';
+import defaults from 'mdclubSDK/es/defaults';
 
 // 设置 api 地址，默认为 {当前域名}/api
 defaults.apiPath = 'https://example.com/api';
@@ -75,7 +75,7 @@ defaults.complete = () => {};
 然后就可以调用 SDK 方法了
 
 ```js
-import QuestionApi from 'mdclubSDK/src/QuestionApi';
+import QuestionApi from 'mdclubSDK/es/QuestionApi';
 
 QuestionApi.getList({ question_id: 11 })
 .then((questions) => {
