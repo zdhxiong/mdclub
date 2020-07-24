@@ -36,7 +36,7 @@ interface DefaultsInterface {
 }
 
 const defaults: DefaultsInterface = {
-  apiPath: '',
+  apiPath: '/api',
   methodOverride: false,
   timeout: 30000,
 };

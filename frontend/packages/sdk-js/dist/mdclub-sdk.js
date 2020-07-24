@@ -1,5 +1,5 @@
 /*!
- * mdclub-sdk 1.0.2 (https://github.com/zdhxiong/mdclub-sdk-js#readme)
+ * mdclub-sdk 1.0.4 (https://github.com/zdhxiong/mdclub-sdk-js#readme)
  * Copyright 2018-2020 zdhxiong
  * Licensed under MIT
  */
@@ -308,7 +308,7 @@
   }
 
   var defaults = {
-      apiPath: '',
+      apiPath: '/api',
       methodOverride: false,
       timeout: 30000,
   };

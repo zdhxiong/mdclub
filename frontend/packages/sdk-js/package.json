@@ -1,6 +1,6 @@
 {
   "name": "mdclub-sdk-js",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "MDClub 的 Javascript 版 SDK",
   "main": "dist/mdclub-sdk.js",
   "module": "dist/mdclub-sdk.esm.js",
