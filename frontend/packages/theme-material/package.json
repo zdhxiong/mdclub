@@ -44,7 +44,7 @@
     "html-escaper": "^3.0.0",
     "hyperapp": "^1.2.10",
     "hyperapp-router": "github:zdhxiong/hyperapp-router",
-    "mdclub-sdk-js": "^1.0.2",
+    "mdclub-sdk-js": "^1.0.3",
     "mdn-polyfills": "^5.20.0",
     "mdui": "^1.0.0",
     "mdui.editor": "^1.0.1",

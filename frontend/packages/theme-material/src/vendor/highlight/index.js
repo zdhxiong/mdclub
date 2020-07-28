@@ -1,7 +1,7 @@
 import $ from 'mdui.jq';
 import hljs from 'highlight.js/lib/core';
-import 'highlight.js/styles/github-gist.css';
-import './style-dark.less';
+import 'highlight.js/styles/vs.css';
+import './vs2015-style.css';
 
 import xml from 'highlight.js/lib/languages/xml';
 import css from 'highlight.js/lib/languages/css';
