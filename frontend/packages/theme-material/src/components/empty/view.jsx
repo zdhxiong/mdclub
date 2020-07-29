@@ -13,7 +13,11 @@ export default ({
   <div
     class={cc(['mc-empty', { 'mdui-hidden': !show }])}
     style={{
-      backgroundImage: `url(${window.G_ROOT}/static/theme/material/${emptyImage})`,
+      backgroundImage: `url(${
+        window.G_OPTIONS.site_static_url
+          ? window.G_OPTIONS.site_static_url
+          : `${window.G_ROOT}/static`
+      }/theme/material/${emptyImage})`,
     }}
     key="mc-empty"
   >
