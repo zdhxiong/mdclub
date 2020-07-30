@@ -758,7 +758,7 @@ abstract class Abstracts
 
         $args = $join ? [$join, '*', $where] : [$where];
 
-        return Db::count($this->table, ...$args);
+        return (int) Db::count($this->table, ...$args);
     }
 
     /**
