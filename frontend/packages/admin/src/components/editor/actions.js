@@ -10,10 +10,7 @@ export default {
    */
   editorOpen: (item) => (state, actions) => {
     // 设置话题
-    if (
-      !isUndefined(item.relationships.topics) &&
-      item.relationships.topics.length
-    ) {
+    if (!isUndefined(item.relationships.topics)) {
       actions.setState({
         editor_selected_topics: item.relationships.topics,
         editor_selected_topic_ids: item.relationships.topics.map(
