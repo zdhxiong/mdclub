@@ -60,7 +60,9 @@ export default ({
         <span
           class="placeholder"
           title="点击添加话题"
-          onclick={actions.topicSelectorOpen}
+          onclick={() => {
+            actions.topicSelectorOpen(id);
+          }}
         >
           请至少选择 1 个话题
         </span>
@@ -68,7 +70,9 @@ export default ({
       <button
         class="add mdui-btn mdui-btn-icon mdui-btn-dense mdui-ripple"
         title="点击添加话题"
-        onclick={actions.topicSelectorOpen}
+        onclick={() => {
+          actions.topicSelectorOpen(id);
+        }}
       >
         <i class="mdui-icon material-icons mdui-text-color-theme-icon">add</i>
       </button>

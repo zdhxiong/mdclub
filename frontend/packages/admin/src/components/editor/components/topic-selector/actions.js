@@ -1,4 +1,5 @@
 import mdui from 'mdui';
+import $ from 'mdui.jq';
 import { getList } from 'mdclub-sdk-js/es/TopicApi';
 import each from 'mdui.jq/es/functions/each';
 import { apiCatch } from '~/utils/errorHandlers';
@@ -10,8 +11,9 @@ export default {
   /**
    * 打开对话框
    */
-  topicSelectorOpen: () => (state, actions) => {
-    const dialog = new mdui.Dialog('.mc-topic-selector', {
+  topicSelectorOpen: (editorID) => (state, actions) => {
+    const dialogElement = $(`#${editorID}`).next('.mc-topic-selector')[0];
+    const dialog = new mdui.Dialog(dialogElement, {
       history: false,
     });
 
