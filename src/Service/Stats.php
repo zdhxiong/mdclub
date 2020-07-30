@@ -36,7 +36,7 @@ class Stats
         $dbSize = (int) Db::query($dbSizeSQL)->fetchColumn(0);
 
         return [
-            'mdclub_version' => '0.0.1',
+            'mdclub_version' => App::$version,
             'os_version' => php_uname('v'),
             'php_version' => PHP_VERSION,
             'webserver_version' => explode(' ', $_SERVER['SERVER_SOFTWARE'])[0],

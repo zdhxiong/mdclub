@@ -37,6 +37,13 @@ class App
     public static $container;
 
     /**
+     * 当前 MDClub 的版本号
+     *
+     * @var string
+     */
+    public static $version = '1.0.0';
+
+    /**
      * 请求实例
      *
      * @var ServerRequestInterface
