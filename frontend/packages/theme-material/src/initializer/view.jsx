@@ -34,7 +34,7 @@ import ReportDialog from '~/components/report-dialog/view.jsx';
 import ShareDialog from '~/components/share-dialog/view.jsx';
 import CommentsDialog from '~/components/comments/dialog.jsx';
 
-const onCreate = () => {
+const onCreate = (user) => {
   // 根据操作系统的暗色模式设置主题
   const layoutMedia = window.matchMedia('(prefers-color-scheme: dark)');
   const changeLayout = (e) =>
@@ -56,8 +56,10 @@ const onCreate = () => {
       emit('notification_count_update', notification_count);
     });
   };
-  setInterval(loadNotificationCount, 30000);
-  loadNotificationCount();
+  if (user) {
+    setInterval(loadNotificationCount, 30000);
+    loadNotificationCount();
+  }
 };
 
 export default (globalState, globalActions) => {
@@ -79,7 +81,12 @@ export default (globalState, globalActions) => {
   );
 
   return (
-    <div class={cc(classList)} oncreate={onCreate}>
+    <div
+      class={cc(classList)}
+      oncreate={() => {
+        onCreate(globalState.user.user);
+      }}
+    >
       <Appbar
         user={globalState.user.user}
         interviewee={globalState.user.interviewee}
