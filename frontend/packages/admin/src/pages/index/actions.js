@@ -19,7 +19,7 @@ const getStartDate = (range) => {
 
   switch (range) {
     case '7day':
-      day = new Date().getDay() - 6;
+      day = new Date().getDate() - 6;
       break;
     case 'this-month':
       day = 1;
@@ -29,7 +29,7 @@ const getStartDate = (range) => {
       day = 1;
       break;
     case '30day':
-      day = new Date().getDay() - 30;
+      day = new Date().getDate() - 30;
       break;
     case 'this-year':
       month = 0;
@@ -41,7 +41,7 @@ const getStartDate = (range) => {
       day = 1;
       break;
     case '365day':
-      day = new Date().getDay() - 365;
+      day = new Date().getDate() - 365;
       break;
     default:
       break;
@@ -60,7 +60,7 @@ const getStartDate = (range) => {
 const getEndDate = (range) => {
   const year = new Date().getFullYear();
   let month = new Date().getMonth();
-  let day = new Date().getDay();
+  let day = new Date().getDate();
 
   switch (range) {
     case '7day':
