@@ -24,7 +24,10 @@ const as = {
   setTitle: (title) => {
     const metaTitle = title
       ? `${title} - ${window.G_OPTIONS.site_name}`
-      : window.G_OPTIONS.site_name;
+      : window.G_OPTIONS.site_name +
+        (window.G_OPTIONS.site_description
+          ? ` - ${window.G_OPTIONS.site_description}`
+          : '');
 
     $title.text(metaTitle);
   },
