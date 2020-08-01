@@ -37,7 +37,7 @@ class Stats
 
         return [
             'mdclub_version' => App::$version,
-            'os_version' => php_uname('v'),
+            'os_version' => php_uname('s') . ' ' . php_uname('r'),
             'php_version' => PHP_VERSION,
             'webserver_version' => explode(' ', $_SERVER['SERVER_SOFTWARE'])[0],
             'database_version' => "${dbInfo['driver']} ${dbInfo['version']}",
