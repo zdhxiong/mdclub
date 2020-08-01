@@ -8,9 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <meta name="theme-color" content="#ffffff">
-  <title><?php echo isset($meta_title) ? $meta_title.' - '.get_options()['site_name'] : get_options()['site_name'] ?></title>
+  <title><?php
+    echo isset($meta_title)
+      ? $meta_title . ' - ' . get_options()['site_name']
+      : get_options()['site_name'] .
+      (
+        get_options()['site_description']
+          ? ' - ' . get_options()['site_description']
+          : ''
+      )
+    ?></title>
   <?php if ($NODE_ENV === 'production'): ?>
-  <link rel="stylesheet" href="<?= get_theme_static_url() ?>/index.7a2e891c.css">
+  <link rel="stylesheet" href="<?= get_theme_static_url() ?>/index.9a10d747.css">
   <?php endif; ?>
 </head>
 <body class="mdui-drawer-body-left">
