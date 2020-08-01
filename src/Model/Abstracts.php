@@ -176,7 +176,7 @@ abstract class Abstracts
     /**
      * limit
      *
-     * @param  int|array      $limit
+     * @param  int|array|null  $limit
      * @return Abstracts
      */
     public function limit($limit = null): self
@@ -194,7 +194,7 @@ abstract class Abstracts
      * ->order('field', 'DESC')     // 传入两个字符串，指定排序方式
      *
      * @param  string|array    $order
-     * @param  string          $sort
+     * @param  string|null     $sort
      * @return Abstracts
      */
     public function order($order = [], string $sort = null): self
@@ -215,7 +215,7 @@ abstract class Abstracts
     /**
      * match
      *
-     * @param  array          $match
+     * @param  array|null $match
      * @return Abstracts
      */
     public function match(array $match = null): self
@@ -228,7 +228,7 @@ abstract class Abstracts
     /**
      * group
      *
-     * @param  array         $group
+     * @param  array|null $group
      * @return Abstracts
      */
     public function group(array $group = null): self
@@ -241,7 +241,7 @@ abstract class Abstracts
     /**
      * having
      *
-     * @param  array         $having
+     * @param  array|null $having
      * @return Abstracts
      */
     public function having(array $having = null): self
@@ -254,7 +254,7 @@ abstract class Abstracts
     /**
      * join
      *
-     * @param  array         $join
+     * @param  array|null $join
      * @return Abstracts
      */
     public function join(array $join = null): self
@@ -341,7 +341,7 @@ abstract class Abstracts
     /**
      * 获取供 medoo 使用的 where 参数
      *
-     * @param  array  $where
+     * @param  array|null $where
      * @return array
      */
     private function getWhere(array $where = null): array
@@ -363,7 +363,7 @@ abstract class Abstracts
                 continue;
             }
 
-            if (!$this->joinData) {
+            if (!$this->joinData || $name === 'LIMIT') {
                 $where[$name] = $value;
                 continue;
             }
@@ -490,7 +490,7 @@ abstract class Abstracts
     /**
      * 根据条件获取多条数据
      *
-     * @param  array $primaryValues 若传入了该参数，则根据主键值数组获取，否则根据前面的 where 条件获取；可传入多个主键组成的数组
+     * @param  array|null $primaryValues 若传入了该参数，则根据主键值数组获取，否则根据前面的 where 条件获取；可传入多个主键组成的数组
      * @return array
      */
     public function select($primaryValues = null): array
@@ -509,8 +509,8 @@ abstract class Abstracts
     /**
      * 获取指定列名对应的值的数组，第二个参数可指定键名
      *
-     * @param  string $value 列名
-     * @param  string $key
+     * @param  string      $value 列名
+     * @param  string|null $key
      * @return array
      */
     public function pluck(string $value, string $key = null): array
@@ -575,8 +575,8 @@ abstract class Abstracts
     /**
      * 插入数据
      *
-     * @param  array   $data_array 数据数组、或多个数据组成的二维数组。若没有传入该参数，则插入 $this->updateData 中的数据
-     * @return string|null         最后一条记录的ID，若主键是字符串，则返回 null
+     * @param  array|null   $data_array 数据数组、或多个数据组成的二维数组。若没有传入该参数，则插入 $this->updateData 中的数据
+     * @return string|null              最后一条记录的ID，若主键是字符串，则返回 null
      */
     public function insert(array $data_array = null)
     {
@@ -647,7 +647,7 @@ abstract class Abstracts
     /**
      * 根据条件删除数据
      *
-     * @param  int|string|array  $primaryValues 若传入该参数，则根据主键删除；否则根据前面的 where 条件删除；可传入多个主键组成的数组
+     * @param  int|string|array|null $primaryValues 若传入该参数，则根据主键删除；否则根据前面的 where 条件删除；可传入多个主键组成的数组
      * @return int
      */
     public function delete($primaryValues = null): int
@@ -676,7 +676,7 @@ abstract class Abstracts
     /**
      * 恢复处于软删除状态的数据
      *
-     * @param  int|string|array $primaryValues 若传入该参数，则根据主键恢复；否则根据前面的 where 条件恢复；可传入多个主键组成的数组
+     * @param  int|string|array|null $primaryValues 若传入该参数，则根据主键恢复；否则根据前面的 where 条件恢复；可传入多个主键组成的数组
      * @return int
      */
     public function restore($primaryValues = null): int
@@ -705,7 +705,7 @@ abstract class Abstracts
     /**
      * 根据条件获取一条数据
      *
-     * @param  int|string  $primaryValue 若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
+     * @param  int|string|null $primaryValue 若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
      * @return array|null
      */
     public function get($primaryValue = null): ?array
@@ -724,7 +724,7 @@ abstract class Abstracts
     /**
      * 判断数据是否存在
      *
-     * @param  int|string  $primaryValue  若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
+     * @param  int|string|null $primaryValue  若传入了该参数，则根据主键获取，否则根据前面的 where 参数获取
      * @return bool
      */
     public function has($primaryValue = null): bool
