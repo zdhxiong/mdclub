@@ -1,6 +1,7 @@
 .idea/
 .vs/
-/var/
+/var/*
+!/var/.gitkeep
 /vendor/
 /public/sitemap/*
 !/public/sitemap/.gitkeep
