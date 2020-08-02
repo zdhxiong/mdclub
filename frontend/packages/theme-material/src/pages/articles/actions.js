@@ -73,6 +73,10 @@ const as = {
     $window.on('scroll', actions.infiniteLoad);
   },
 
+  onDestroy: () => (_, actions) => {
+    $window.off('scroll', actions.infiniteLoad);
+  },
+
   /**
    * 切换 Tab 之后
    */

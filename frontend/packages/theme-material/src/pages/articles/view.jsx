@@ -13,6 +13,7 @@ import TopicSelector from '~/components/editor/components/topic-selector/view.js
 export default (state, actions) => ({ match }) => (
   <div
     oncreate={actions.onCreate}
+    ondestroy={actions.onDestroy}
     key={match.url}
     id="page-articles"
     class="mdui-container"
