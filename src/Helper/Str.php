@@ -7,6 +7,7 @@ namespace MDClub\Helper;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Markdownify\Converter;
+use MDClub\Initializer\App;
 use Parsedown;
 
 /**
@@ -248,6 +249,7 @@ class Str
 
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.Allowed', implode(',', $allow_tags));
+        $config->set('Cache.SerializerPath', App::$config['APP_RUNTIME']);
         $def = $config->getHTMLDefinition(true);
         $def->addElement('audio', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', [
             'autoplay' => 'Bool',
