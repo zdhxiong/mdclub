@@ -17,6 +17,8 @@ interface Interfaces
     /**
      * 获取文件的访问路径
      *
+     * 若其中一条边为 0，表示只进行缩放，不进行裁剪
+     *
      * @param  string  $path    写入时的文件路径
      * @param  array   $thumbs  缩略图尺寸
      * [
