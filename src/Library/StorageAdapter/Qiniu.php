@@ -135,7 +135,8 @@ class Qiniu extends Abstracts implements Interfaces
         $data['original'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
-            $params = "?imageView2/1/w/{$width}/h/{$height}";
+            $mode = $width === 0 || $height === 0 ? '2' : '1';
+            $params = "?imageView2/${mode}/w/{$width}/h/{$height}";
             $params .= $isSupportWebp ? '/format/webp' : '';
 
             $data[$size] = "{$storagePath}{$path}{$params}";
