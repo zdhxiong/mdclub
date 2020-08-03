@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MDClub\Controller\Home;
 
 use MDClub\Constant\RouteNameConstant;
-use MDClub\Facade\Library\Cache;
+use MDClub\Facade\Library\Cache as CacheFacade;
 use MDClub\Facade\Library\Request;
 use MDClub\Facade\Model\ArticleModel;
 use MDClub\Facade\Model\QuestionModel;
@@ -37,7 +37,7 @@ class Sitemap
      */
     public function index(): ResponseInterface
     {
-        $sitemapLastUpdateTime = Cache::get('sitemap_last_update_time') || 0;
+        $sitemapLastUpdateTime = CacheFacade::get('sitemap_last_update_time') || 0;
         $indexPath = $this->folder . '/sitemap_index.xml';
 
         // 每 24 小时更新一次 sitemap
@@ -56,7 +56,7 @@ class Sitemap
 
             $index->write();
 
-            Cache::set('sitemap_last_update_time', $this->time, 0);
+            CacheFacade::set('sitemap_last_update_time', $this->time, 86400);
         }
 
         /** @var ResponseInterface $response */
@@ -69,7 +69,7 @@ class Sitemap
     }
 
     /**
-     * 更加最后更新时间获取更新频率
+     * 根据最后更新时间获取更新频率
      *
      * @param int $lastModified
      *

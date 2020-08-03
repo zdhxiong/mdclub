@@ -1,10 +1,12 @@
 .idea/
 .vs/
-/var/*
-!/var/.gitkeep
-/vendor/
+/config/config.php
 /public/sitemap/*
 !/public/sitemap/.gitkeep
 /public/static/admin
 /public/static/theme
 /public/upload
+/templates/material
+/var/*
+!/var/.gitkeep
+/vendor/
