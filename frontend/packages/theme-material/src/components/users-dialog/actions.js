@@ -107,6 +107,7 @@ const as = {
         service[type]({
           [paramField[type]]: id,
           page: pagination.page + 1,
+          include: ['is_following', 'is_me'],
         }),
       );
     };
