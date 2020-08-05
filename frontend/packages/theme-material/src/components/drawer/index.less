@@ -1,9 +1,12 @@
 @import '../../vendor/mdui/variable.less';
 
 .mc-drawer {
+  display: flex;
+  flex-direction: column;
+
   .mdui-list {
     box-sizing: border-box;
-    min-height: ~'calc(100% - 120px)';
+    flex: 1;
   }
 
   .mdui-list-item {

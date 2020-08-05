@@ -109,9 +109,15 @@ export default ({ user, interviewee }) => (
           </a>
         </p>
       </If>
-      <p>© 2020 {site_name}</p>
+      <p>
+        © {new Date().getFullYear()} {site_name}
+      </p>
       <p>
         Powered by{' '}
+        <a href="https://mdui.org" target="_blank">
+          MDUI
+        </a>{' '}
+        &{' '}
         <a href="https://mdclub.org" target="_blank">
           MDClub
         </a>
