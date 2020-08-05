@@ -3,7 +3,7 @@ import extend from 'mdui.jq/es/functions/extend';
 import { update as updateComment } from 'mdclub-sdk-js/es/CommentApi';
 import commonActions from '~/utils/actionsAbstract';
 import { loadStart, loadEnd } from '~/utils/loading';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 import { emit } from '~/utils/pubsub';
 
 const as = {

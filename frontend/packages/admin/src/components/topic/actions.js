@@ -5,7 +5,7 @@ import { get as getTopic, del as deleteTopic } from 'mdclub-sdk-js/es/TopicApi';
 import commonActions from '~/utils/actionsAbstract';
 import { loadStart } from '~/utils/loading';
 import { emit } from '~/utils/pubsub';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 
 let dialog;
 

@@ -11,7 +11,7 @@ import {
 import commonActions from '~/utils/actionsAbstract';
 import { emit } from '~/utils/pubsub';
 import { loadEnd, loadStart } from '~/utils/loading';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 
 let dialog;
 

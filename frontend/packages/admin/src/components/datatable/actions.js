@@ -4,7 +4,7 @@ import extend from 'mdui.jq/es/functions/extend';
 import { $document } from 'mdui/es/utils/dom';
 import commonActions from '~/utils/actionsAbstract';
 import { emit, subscribe } from '~/utils/pubsub';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 import { findItem } from '~/utils/func';
 import stateDefault from './stateDefault';
 

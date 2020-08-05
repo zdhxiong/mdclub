@@ -3,7 +3,7 @@ import { get as getStats } from 'mdclub-sdk-js/es/StatsApi';
 import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
 import commonActions from '~/utils/actionsAbstract';
 import { emit } from '~/utils/pubsub';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 import { timeFormat } from '~/utils/time';
 
 const dateFormat = 'YYYY-MM-DD';

@@ -2,7 +2,7 @@ import mdui from 'mdui';
 import $ from 'mdui.jq';
 import { getList } from 'mdclub-sdk-js/es/TopicApi';
 import each from 'mdui.jq/es/functions/each';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 
 /**
  * 在含编辑器，且编辑器中含话题选择器的页面中，引入该 actions

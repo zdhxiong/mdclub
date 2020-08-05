@@ -6,7 +6,7 @@ import commonActions from '~/utils/actionsAbstract';
 import editorActions from '~/components/editor/actions';
 import topicSelectorActions from '~/components/editor/components/topic-selector/actions';
 import { loadStart, loadEnd } from '~/utils/loading';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 import { emit } from '~/utils/pubsub';
 
 const as = {

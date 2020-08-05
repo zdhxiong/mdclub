@@ -1,6 +1,6 @@
 import $ from 'mdui.jq';
 import { loadEnd } from '~/utils/loading';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 import {
   isPathAnswers,
   isPathArticles,

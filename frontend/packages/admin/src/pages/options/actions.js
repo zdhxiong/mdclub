@@ -10,7 +10,7 @@ import { send as sendEmail } from 'mdclub-sdk-js/es/EmailApi';
 import { COMMON_FIELD_VERIFY_FAILED } from 'mdclub-sdk-js/es/errors';
 import commonActions from '~/utils/actionsAbstract';
 import { emit } from '~/utils/pubsub';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 
 // options 和 option 共用
 const as = {

@@ -2,7 +2,7 @@ import mdui from 'mdui';
 import extend from 'mdui.jq/es/functions/extend';
 import { getReasons } from 'mdclub-sdk-js/es/ReportApi';
 import commonActions from '~/utils/actionsAbstract';
-import { apiCatch } from '~/utils/errorHandlers';
+import apiCatch from '~/utils/errorHandler';
 
 let dialog; // 对话框实例
 let $dialogContent;

@@ -1,9 +1,8 @@
 import mdui from 'mdui';
 
-export function apiCatch(response) {
+export default function apiCatch(response) {
   let message;
 
-  console.log(response);
   if (response.code === 999999) {
     message = '网络错误';
   } else if (!response.message) {

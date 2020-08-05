@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config build/webpack.dev.js",
     "lint-style": "stylelint --fix src/**/*.less",
     "lint-es": "eslint --fix src/**/*.js src/**/*.jsx",
-    "lint": "npm run lint-style && npm run list-es",
+    "lint": "npm run lint-style && npm run lint-es",
     "report": "npm run build --report"
   },
   "files": [
