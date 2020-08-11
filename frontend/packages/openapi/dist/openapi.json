@@ -6797,7 +6797,8 @@
             ],
             "example": "up"
           }
-        }
+        },
+        "required": []
       },
       "ArticleRelationship": {
         "type": "object",
@@ -6823,7 +6824,8 @@
             ],
             "example": "up"
           }
-        }
+        },
+        "required": []
       },
       "CommentRelationship": {
         "type": "object",
@@ -6841,7 +6843,8 @@
             ],
             "example": "up"
           }
-        }
+        },
+        "required": []
       },
       "ImageRelationship": {
         "type": "object",
@@ -6858,7 +6861,8 @@
           "answer": {
             "$ref": "#/components/schemas/AnswerInRelationship"
           }
-        }
+        },
+        "required": []
       },
       "NotificationRelationship": {
         "type": "object",
@@ -6884,7 +6888,8 @@
           "reply": {
             "$ref": "#/components/schemas/CommentInRelationship"
           }
-        }
+        },
+        "required": []
       },
       "QuestionRelationship": {
         "type": "object",
@@ -6910,7 +6915,8 @@
             ],
             "example": "up"
           }
-        }
+        },
+        "required": []
       },
       "ReportGroupRelationship": {
         "type": "object",
@@ -6930,7 +6936,8 @@
           "user": {
             "$ref": "#/components/schemas/UserInRelationship"
           }
-        }
+        },
+        "required": []
       },
       "ReportRelationship": {
         "type": "object",
@@ -6953,7 +6960,8 @@
           "user": {
             "$ref": "#/components/schemas/UserInRelationship"
           }
-        }
+        },
+        "required": []
       },
       "TopicRelationship": {
         "type": "object",
@@ -6963,7 +6971,8 @@
             "description": "当前登录用户是否已关注该话题",
             "example": true
           }
-        }
+        },
+        "required": []
       },
       "UserRelationship": {
         "type": "object",
@@ -6983,7 +6992,8 @@
             "description": "该用户是否已关注当前登录用户",
             "example": true
           }
-        }
+        },
+        "required": []
       },
       "AnswerInRelationship": {
         "type": "object",

@@ -4673,6 +4673,7 @@ components:
             - down
             - ''
           example: up
+      required: []
     ArticleRelationship:
       type: object
       properties:
@@ -4692,6 +4693,7 @@ components:
             - down
             - ''
           example: up
+      required: []
     CommentRelationship:
       type: object
       properties:
@@ -4705,6 +4707,7 @@ components:
             - down
             - ''
           example: up
+      required: []
     ImageRelationship:
       type: object
       properties:
@@ -4716,6 +4719,7 @@ components:
           $ref: '#/components/schemas/ArticleInRelationship'
         answer:
           $ref: '#/components/schemas/AnswerInRelationship'
+      required: []
     NotificationRelationship:
       type: object
       properties:
@@ -4733,6 +4737,7 @@ components:
           $ref: '#/components/schemas/CommentInRelationship'
         reply:
           $ref: '#/components/schemas/CommentInRelationship'
+      required: []
     QuestionRelationship:
       type: object
       properties:
@@ -4752,6 +4757,7 @@ components:
             - down
             - ''
           example: up
+      required: []
     ReportGroupRelationship:
       type: object
       properties:
@@ -4765,6 +4771,7 @@ components:
           $ref: '#/components/schemas/CommentInRelationship'
         user:
           $ref: '#/components/schemas/UserInRelationship'
+      required: []
     ReportRelationship:
       type: object
       properties:
@@ -4780,6 +4787,7 @@ components:
           $ref: '#/components/schemas/CommentInRelationship'
         user:
           $ref: '#/components/schemas/UserInRelationship'
+      required: []
     TopicRelationship:
       type: object
       properties:
@@ -4787,6 +4795,7 @@ components:
           type: boolean
           description: 当前登录用户是否已关注该话题
           example: true
+      required: []
     UserRelationship:
       type: object
       properties:
@@ -4802,6 +4811,7 @@ components:
           type: boolean
           description: 该用户是否已关注当前登录用户
           example: true
+      required: []
     AnswerInRelationship:
       type: object
       properties:
