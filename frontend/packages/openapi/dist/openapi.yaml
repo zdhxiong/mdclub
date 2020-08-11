@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: MDClub API 文档
-  description: "MDClub 是一个 Material Design 风格的社区应用。\n\n**接口文档说明**\n\n* 接口描述中，若含 \U0001F510 图标，表示该接口仅管理员有权限调用。\n* 接口返回值的字段描述中，若含 \U0001F510 图标，表示只有管理员调用接口时，返回值中才会包含该字段。\n* 接口参数的描述中，若含 \U0001F510 图标，表示只有管理员才能添加该参数。\n\n`GET`、`PUT`、`DELETE` 请求均符合幂等性。\n"
+  description: "MDClub 是一个 Material Design 风格的社区应用。\n\n**接口文档说明**\n\n* 接口描述中，若含 \U0001F511 图标，表示该接口需要登录后才能调用。\n* 接口描述中，若含 \U0001F510 图标，表示该接口需要登录、且仅管理员有权限调用。\n* 接口返回值的字段描述中，若含 \U0001F510 图标，表示只有管理员调用接口时，返回值中才会包含该字段。\n* 接口参数的描述中，若含 \U0001F510 图标，表示只有管理员才能添加该参数。\n\n`GET`、`PUT`、`DELETE` 请求均符合幂等性。\n"
   termsOfService: 'https://github.com/zdhxiong'
   contact:
     name: zdhxiong
@@ -34,8 +34,7 @@ paths:
     get:
       operationId: getList
       summary: 获取回答列表
-      description: |
-        获取回答列表。
+      description: 获取回答列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -56,8 +55,7 @@ paths:
     post:
       operationId: trashMultiple
       summary: "\U0001F510批量把回答放入回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把回答放入回收站。
       parameters:
         - $ref: '#/components/parameters/answer_ids.path'
         - $ref: '#/components/parameters/include.answer'
@@ -72,8 +70,7 @@ paths:
     post:
       operationId: untrashMultiple
       summary: "\U0001F510批量把回答移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把回答移出回收站。
       parameters:
         - $ref: '#/components/parameters/answer_ids.path'
         - $ref: '#/components/parameters/include.answer'
@@ -89,7 +86,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除回答"
       description: |
-        仅管理员可调用该接口。
+        批量删除回答。
+
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/answer_ids.path'
@@ -104,8 +102,7 @@ paths:
     get:
       operationId: getComments
       summary: 获取指定回答的评论
-      description: |
-        获取指定回答的评论。
+      description: 获取指定回答的评论。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/page'
@@ -122,8 +119,7 @@ paths:
     post:
       operationId: createComment
       summary: 在指定回答下发表评论
-      description: |
-        在指定回答下发表评论
+      description: 在指定回答下发表评论。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -140,8 +136,7 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把回答放入回收站"
-      description: |
-        仅管理员可调用该接口
+      description: 把回答放入回收站。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/include.answer'
@@ -156,8 +151,7 @@ paths:
     post:
       operationId: untrash
       summary: "\U0001F510把回答移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 把回答移出回收站。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/include.answer'
@@ -172,8 +166,7 @@ paths:
     get:
       operationId: getVoters
       summary: 获取回答的投票者
-      description: |
-        获取回答的投票者
+      description: 获取回答的投票者。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/page'
@@ -189,8 +182,8 @@ paths:
         - Answer
     post:
       operationId: addVote
-      summary: 为回答投票
-      description: 为回答投票
+      summary: "\U0001F511为回答投票"
+      description: 为回答投票。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
       requestBody:
@@ -204,8 +197,8 @@ paths:
         - Answer
     delete:
       operationId: deleteVote
-      summary: 取消为回答的投票
-      description: 取消为回答的投票
+      summary: "\U0001F511取消为回答的投票"
+      description: 取消为回答的投票。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
       responses:
@@ -219,8 +212,7 @@ paths:
     get:
       operationId: get
       summary: 获取回答详情
-      description: |
-        获取回答详情
+      description: 获取回答详情。
       parameters:
         - $ref: '#/components/parameters/answer_id.path'
         - $ref: '#/components/parameters/include.answer'
@@ -233,7 +225,7 @@ paths:
         - Answer
     patch:
       operationId: update
-      summary: 修改回答信息
+      summary: "\U0001F511修改回答信息"
       description: |
         管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。
 
@@ -253,7 +245,7 @@ paths:
         - Answer
     delete:
       operationId: delete
-      summary: 删除回答
+      summary: "\U0001F511删除回答"
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
@@ -271,8 +263,7 @@ paths:
     get:
       operationId: getList
       summary: 获取文章列表
-      description: |
-        获取文章列表。
+      description: 获取文章列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -291,7 +282,7 @@ paths:
         - Article
     post:
       operationId: create
-      summary: 发表文章
+      summary: "\U0001F511发表文章"
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -310,8 +301,7 @@ paths:
     post:
       operationId: trashMultiple
       summary: "\U0001F510批量把文章放入回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把文章放入回收站。
       parameters:
         - $ref: '#/components/parameters/article_ids.path'
         - $ref: '#/components/parameters/include.article'
@@ -326,8 +316,7 @@ paths:
     post:
       operationId: untrashMultiple
       summary: "\U0001F510批量把文章移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把文章移出回收站。
       parameters:
         - $ref: '#/components/parameters/article_ids.path'
         - $ref: '#/components/parameters/include.article'
@@ -343,7 +332,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除文章"
       description: |
-        仅管理员可调用该接口。
+        批量删除文章。
+
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/article_ids.path'
@@ -358,8 +348,7 @@ paths:
     get:
       operationId: getComments
       summary: 获取指定文章的评论列表
-      description: |
-        获取指定文章的评论列表。
+      description: 获取指定文章的评论列表。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
@@ -375,9 +364,8 @@ paths:
         - Article
     post:
       operationId: createComment
-      summary: 在指定文章下发表评论
-      description: |
-        在指定文章下发表评论
+      summary: "\U0001F511在指定文章下发表评论"
+      description: 在指定文章下发表评论。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -394,8 +382,7 @@ paths:
     get:
       operationId: getFollowers
       summary: 获取指定文章的关注者
-      description: |
-        获取指定文章的关注者
+      description: 获取指定文章的关注者。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
@@ -410,8 +397,8 @@ paths:
         - Article
     post:
       operationId: addFollow
-      summary: 添加关注
-      description: 添加关注
+      summary: "\U0001F511添加关注"
+      description: 添加关注。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       responses:
@@ -423,8 +410,8 @@ paths:
         - Article
     delete:
       operationId: deleteFollow
-      summary: 取消关注
-      description: 取消关注
+      summary: "\U0001F511取消关注"
+      description: 取消关注。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       responses:
@@ -438,7 +425,7 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把文章放入回收站"
-      description: 仅管理员可调用该接口
+      description: 把文章放入回收站。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/include.article'
@@ -453,8 +440,7 @@ paths:
     post:
       operationId: untrash
       summary: "\U0001F510把文章移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 把文章移出回收站。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/include.article'
@@ -469,8 +455,7 @@ paths:
     get:
       operationId: getVoters
       summary: 获取文章的投票者
-      description: |
-        获取文章的投票者
+      description: 获取文章的投票者。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/page'
@@ -486,8 +471,8 @@ paths:
         - Article
     post:
       operationId: addVote
-      summary: 为文章投票
-      description: 为文章投票
+      summary: "\U0001F511为文章投票"
+      description: 为文章投票。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       requestBody:
@@ -501,8 +486,8 @@ paths:
         - Article
     delete:
       operationId: deleteVote
-      summary: 取消为文章的投票
-      description: 取消为文章的投票
+      summary: "\U0001F511取消为文章的投票"
+      description: 取消为文章的投票。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
       responses:
@@ -516,7 +501,7 @@ paths:
     get:
       operationId: get
       summary: 获取指定文章信息
-      description: 获取指定文章信息
+      description: 获取指定文章信息。
       parameters:
         - $ref: '#/components/parameters/article_id.path'
         - $ref: '#/components/parameters/include.article'
@@ -529,7 +514,7 @@ paths:
         - Article
     patch:
       operationId: update
-      summary: 更新文章信息
+      summary: "\U0001F511更新文章信息"
       description: |
         管理员可修改文章。文章作者是否可修改文章，由管理员在后台的设置决定。
 
@@ -549,7 +534,7 @@ paths:
         - Article
     delete:
       operationId: delete
-      summary: 删除文章
+      summary: "\U0001F511删除文章"
       description: |
         只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
 
@@ -567,7 +552,7 @@ paths:
     post:
       operationId: generate
       summary: 生成新的图形验证码
-      description: 生成新的图形验证码
+      description: 生成新的图形验证码。
       responses:
         '200':
           $ref: '#/components/responses/Captcha'
@@ -579,8 +564,7 @@ paths:
     get:
       operationId: getList
       summary: "\U0001F510获取所有评论"
-      description: |
-        获取所有评论。
+      description: 获取所有评论。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -602,8 +586,7 @@ paths:
     post:
       operationId: trashMultiple
       summary: "\U0001F510批量把评论放入回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把评论放入回收站。
       parameters:
         - $ref: '#/components/parameters/comment_ids.path'
         - $ref: '#/components/parameters/include.comment'
@@ -618,8 +601,7 @@ paths:
     post:
       operationId: untrashMultiple
       summary: "\U0001F510批量把评论移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把评论移出回收站。
       parameters:
         - $ref: '#/components/parameters/comment_ids.path'
         - $ref: '#/components/parameters/include.comment'
@@ -635,7 +617,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除评论"
       description: |
-        仅管理员可调用该接口。
+        批量删除评论。
+
         只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/comment_ids.path'
@@ -650,8 +633,7 @@ paths:
     get:
       operationId: getReplies
       summary: 获取指定评论的回复
-      description: |
-        获知指定评论的回复。
+      description: 获知指定评论的回复。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/page'
@@ -667,9 +649,8 @@ paths:
         - Comment
     post:
       operationId: createReply
-      summary: 在指定评论下发表回复
-      description: |
-        在指定评论下发表回复
+      summary: "\U0001F511在指定评论下发表回复"
+      description: 在指定评论下发表回复。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -686,7 +667,7 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把评论放入回收站"
-      description: 仅管理员可调用该接口
+      description: 把评论放入回收站。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -701,8 +682,7 @@ paths:
     post:
       operationId: untrash
       summary: "\U0001F510把评论移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 把评论移出回收站。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -717,8 +697,7 @@ paths:
     get:
       operationId: getVoters
       summary: 获取评论的投票者
-      description: |
-        获取评论的投票者
+      description: 获取评论的投票者。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/page'
@@ -734,8 +713,8 @@ paths:
         - Comment
     post:
       operationId: addVote
-      summary: 为评论投票
-      description: 为评论投票
+      summary: "\U0001F511为评论投票"
+      description: 为评论投票。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
       requestBody:
@@ -749,8 +728,8 @@ paths:
         - Comment
     delete:
       operationId: deleteVote
-      summary: 取消为评论的投票
-      description: 取消为评论的投票
+      summary: "\U0001F511取消为评论的投票"
+      description: 取消为评论的投票。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
       responses:
@@ -764,8 +743,7 @@ paths:
     get:
       operationId: get
       summary: 获取评论详情
-      description: |
-        获取评论详情
+      description: 获取评论详情。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -778,9 +756,8 @@ paths:
         - Comment
     patch:
       operationId: update
-      summary: 修改评论
-      description: |
-        管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
+      summary: "\U0001F511修改评论"
+      description: 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
       parameters:
         - $ref: '#/components/parameters/comment_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -795,7 +772,7 @@ paths:
         - Comment
     delete:
       operationId: delete
-      summary: 删除评论
+      summary: "\U0001F511删除评论"
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
@@ -813,7 +790,7 @@ paths:
     post:
       operationId: send
       summary: "\U0001F510发送邮件"
-      description: 用于后台管理员发送邮件，需要管理员权限
+      description: 用于后台管理员发送邮件。
       requestBody:
         $ref: '#/components/requestBodies/Email'
       responses:
@@ -827,8 +804,7 @@ paths:
     get:
       operationId: getList
       summary: "\U0001F510获取图片列表"
-      description: |
-        仅管理员可调用该接口
+      description: 获取图片列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -846,9 +822,8 @@ paths:
         - Image
     post:
       operationId: upload
-      summary: 上传图片
-      description: |
-        上传图片
+      summary: "\U0001F511上传图片"
+      description: 上传图片。
       parameters:
         - $ref: '#/components/parameters/include.image'
       requestBody:
@@ -865,7 +840,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除图片"
       description: |
-        仅管理员可调用该接口。
+        批量删除图片。
+
         只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/image_keys.path'
@@ -880,8 +856,7 @@ paths:
     get:
       operationId: get
       summary: 获取指定图片信息
-      description: |
-        获取指定图片信息
+      description: 获取指定图片信息。
       parameters:
         - $ref: '#/components/parameters/image_key.path'
         - $ref: '#/components/parameters/include.image'
@@ -895,8 +870,7 @@ paths:
     patch:
       operationId: update
       summary: "\U0001F510更新指定图片信息"
-      description: |
-        仅管理员可调用该接口
+      description: 更新指定图片信息。
       parameters:
         - $ref: '#/components/parameters/image_key.path'
         - $ref: '#/components/parameters/include.image'
@@ -912,7 +886,7 @@ paths:
     delete:
       operationId: delete
       summary: "\U0001F510删除指定图片"
-      description: 仅管理员可调用该接口
+      description: 删除指定图片。
       parameters:
         - $ref: '#/components/parameters/image_key.path'
       responses:
@@ -925,9 +899,8 @@ paths:
   /notifications/count:
     get:
       operationId: getCount
-      summary: 获取未读通知数量
-      description: |
-        获取未读通知数量。
+      summary: "\U0001F511获取未读通知数量"
+      description: 获取未读通知数量。
       parameters:
         - $ref: '#/components/parameters/notification_type.query'
       responses:
@@ -940,9 +913,8 @@ paths:
   /notifications/read:
     post:
       operationId: readAll
-      summary: 把所有通知标记为已读
-      description: |
-        只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
+      summary: "\U0001F511把所有通知标记为已读"
+      description: 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/notification_type.query'
       responses:
@@ -955,9 +927,8 @@ paths:
   /notifications:
     get:
       operationId: getList
-      summary: 获取通知列表
-      description: |
-        获取通知列表。
+      summary: "\U0001F511获取通知列表"
+      description: 获取通知列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -973,9 +944,8 @@ paths:
         - Notification
     delete:
       operationId: deleteAll
-      summary: 删除所有通知
-      description: |
-        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      summary: "\U0001F511删除所有通知"
+      description: 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/notification_type.query'
       responses:
@@ -988,8 +958,8 @@ paths:
   '/notifications/{notification_ids}/read':
     post:
       operationId: readMultiple
-      summary: 批量把通知标记为已读
-      description: 批量把通知标记为已读
+      summary: "\U0001F511批量把通知标记为已读"
+      description: 批量把通知标记为已读。
       parameters:
         - $ref: '#/components/parameters/notification_ids.path'
         - $ref: '#/components/parameters/include.notification'
@@ -1003,9 +973,8 @@ paths:
   '/notifications/{notification_ids}':
     delete:
       operationId: deleteMultiple
-      summary: 批量删除通知
-      description: |
-        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      summary: "\U0001F511批量删除通知"
+      description: 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/notification_ids.path'
       responses:
@@ -1018,8 +987,8 @@ paths:
   '/notifications/{notification_id}/read':
     post:
       operationId: read
-      summary: 把一条通知标记为已读
-      description: 把一条通知标记为已读
+      summary: "\U0001F511把一条通知标记为已读"
+      description: 把一条通知标记为已读。
       parameters:
         - $ref: '#/components/parameters/notification_id.path'
         - $ref: '#/components/parameters/include.notification'
@@ -1033,9 +1002,8 @@ paths:
   '/notifications/{notification_id}':
     delete:
       operationId: delete
-      summary: 删除一条通知
-      description: |
-        只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+      summary: "\U0001F511删除一条通知"
+      description: 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/notification_id.path'
       responses:
@@ -1049,7 +1017,7 @@ paths:
     get:
       operationId: get
       summary: 获取站点全局设置参数
-      description: 获取站点全局设置参数
+      description: 获取站点全局设置参数。
       responses:
         '200':
           $ref: '#/components/responses/Option'
@@ -1060,7 +1028,7 @@ paths:
     patch:
       operationId: update
       summary: "\U0001F510更新站点全局设置"
-      description: 仅管理员可调用该接口
+      description: 更新站点全局设置。
       requestBody:
         $ref: '#/components/requestBodies/Option'
       responses:
@@ -1074,8 +1042,7 @@ paths:
     get:
       operationId: getList
       summary: 获取提问列表
-      description: |
-        获取提问列表。
+      description: 获取提问列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1094,7 +1061,7 @@ paths:
         - Question
     post:
       operationId: create
-      summary: 发表提问
+      summary: "\U0001F511发表提问"
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -1113,8 +1080,7 @@ paths:
     post:
       operationId: trashMultiple
       summary: "\U0001F510批量把提问放入回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把提问放入回收站。
       parameters:
         - $ref: '#/components/parameters/question_ids.path'
         - $ref: '#/components/parameters/include.question'
@@ -1129,8 +1095,7 @@ paths:
     post:
       operationId: untrashMultiple
       summary: "\U0001F510批量把提问移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把提问移出回收站。
       parameters:
         - $ref: '#/components/parameters/question_ids.path'
         - $ref: '#/components/parameters/include.question'
@@ -1146,7 +1111,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除提问"
       description: |
-        仅管理员可调用该接口。
+        批量删除提问。
+
         只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/question_ids.path'
@@ -1161,8 +1127,7 @@ paths:
     get:
       operationId: getAnswers
       summary: 获取指定提问下的回答
-      description: |
-        获取指定提问下的回答。
+      description: 获取指定提问下的回答。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
@@ -1178,7 +1143,7 @@ paths:
         - Question
     post:
       operationId: createAnswer
-      summary: 在指定提问下发表回答
+      summary: "\U0001F511在指定提问下发表回答"
       description: |
         `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
         若两个参数都传入，则以 `content_markdown` 为准。
@@ -1198,8 +1163,7 @@ paths:
     get:
       operationId: getComments
       summary: 获取指定提问的评论
-      description: |
-        获取指定提问的评论。
+      description: 获取指定提问的评论。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
@@ -1215,9 +1179,8 @@ paths:
         - Question
     post:
       operationId: createComment
-      summary: 在指定提问下发表评论
-      description: |
-        在指定提问下发表评论
+      summary: "\U0001F511在指定提问下发表评论"
+      description: 在指定提问下发表评论。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/include.comment'
@@ -1234,8 +1197,7 @@ paths:
     get:
       operationId: getFollowers
       summary: 获取指定提问的关注者
-      description: |
-        获取指定提问的关注者
+      description: 获取指定提问的关注者。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
@@ -1250,8 +1212,8 @@ paths:
         - Question
     post:
       operationId: addFollow
-      summary: 添加关注
-      description: 添加关注
+      summary: "\U0001F511添加关注"
+      description: 添加关注。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       responses:
@@ -1263,8 +1225,8 @@ paths:
         - Question
     delete:
       operationId: deleteFollow
-      summary: 取消关注
-      description: 取消关注
+      summary: "\U0001F511取消关注"
+      description: 取消关注。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       responses:
@@ -1278,7 +1240,7 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把提问放入回收站"
-      description: 仅管理员可调用该接口
+      description: 把提问放入回收站。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/include.question'
@@ -1293,8 +1255,7 @@ paths:
     post:
       operationId: untrash
       summary: "\U0001F510把提问移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 把提问移出回收站。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/include.question'
@@ -1309,8 +1270,7 @@ paths:
     get:
       operationId: getVoters
       summary: 获取提问的投票者
-      description: |
-        获取提问的投票者
+      description: 获取提问的投票者。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/page'
@@ -1326,8 +1286,8 @@ paths:
         - Question
     post:
       operationId: addVote
-      summary: 为提问投票
-      description: 为提问投票
+      summary: "\U0001F511为提问投票"
+      description: 为提问投票。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       requestBody:
@@ -1341,8 +1301,8 @@ paths:
         - Question
     delete:
       operationId: deleteVote
-      summary: 取消为提问的投票
-      description: 取消为提问的投票
+      summary: "\U0001F511取消为提问的投票"
+      description: 取消为提问的投票。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
       responses:
@@ -1356,8 +1316,7 @@ paths:
     get:
       operationId: get
       summary: 获取指定提问信息
-      description: |
-        获取指定提问信息
+      description: 获取指定提问信息。
       parameters:
         - $ref: '#/components/parameters/question_id.path'
         - $ref: '#/components/parameters/include.question'
@@ -1370,7 +1329,7 @@ paths:
         - Question
     patch:
       operationId: update
-      summary: 更新提问信息
+      summary: "\U0001F511更新提问信息"
       description: |
         管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。
 
@@ -1390,7 +1349,7 @@ paths:
         - Question
     delete:
       operationId: delete
-      summary: 删除提问
+      summary: "\U0001F511删除提问"
       description: |
         只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 
@@ -1408,8 +1367,7 @@ paths:
     get:
       operationId: getList
       summary: "\U0001F510获取被举报的内容列表"
-      description: |
-        仅管理员可调用该接口
+      description: 获取被举报的内容列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1427,7 +1385,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除举报"
       description: |
-        仅管理员可调用该接口。
+        批量删除举报。
+
         只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/report_targets'
@@ -1442,8 +1401,7 @@ paths:
     get:
       operationId: getReasons
       summary: "\U0001F510获取被举报内容的举报详情"
-      description: |
-        仅管理员可调用该接口
+      description: 获取被举报内容的举报详情。
       parameters:
         - $ref: '#/components/parameters/reportable_type.path'
         - $ref: '#/components/parameters/reportable_id.path'
@@ -1459,9 +1417,8 @@ paths:
         - Report
     post:
       operationId: create
-      summary: 添加举报
-      description: |
-        添加举报
+      summary: "\U0001F511添加举报"
+      description: 添加举报。
       parameters:
         - $ref: '#/components/parameters/reportable_type.path'
         - $ref: '#/components/parameters/reportable_id.path'
@@ -1478,7 +1435,7 @@ paths:
     delete:
       operationId: delete
       summary: "\U0001F510删除举报"
-      description: 仅管理员可调用该接口
+      description: 删除举报。
       parameters:
         - $ref: '#/components/parameters/reportable_type.path'
         - $ref: '#/components/parameters/reportable_id.path'
@@ -1493,7 +1450,7 @@ paths:
     get:
       operationId: get
       summary: "\U0001F510获取站点统计数据"
-      description: 仅管理员可调用该接口。
+      description: 获取站点统计数据。
       parameters:
         - $ref: '#/components/parameters/include.stats'
         - $ref: '#/components/parameters/start_date.query'
@@ -1527,8 +1484,7 @@ paths:
     get:
       operationId: getList
       summary: 获取全部话题
-      description: |
-        获取全部话题。
+      description: 获取全部话题。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1547,7 +1503,7 @@ paths:
     post:
       operationId: create
       summary: "\U0001F510发布话题"
-      description: 仅管理员可调用该接口
+      description: 发布话题。
       parameters:
         - $ref: '#/components/parameters/include.topic'
       requestBody:
@@ -1563,8 +1519,7 @@ paths:
     post:
       operationId: trashMultiple
       summary: "\U0001F510批量把话题放入回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把话题放入回收站。
       parameters:
         - $ref: '#/components/parameters/topic_ids.path'
         - $ref: '#/components/parameters/include.topic'
@@ -1579,8 +1534,7 @@ paths:
     post:
       operationId: untrashMultiple
       summary: "\U0001F510批量把话题移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量把话题移出回收站。
       parameters:
         - $ref: '#/components/parameters/topic_ids.path'
         - $ref: '#/components/parameters/include.topic'
@@ -1596,7 +1550,8 @@ paths:
       operationId: deleteMultiple
       summary: "\U0001F510批量删除话题"
       description: |
-        仅管理员可调用该接口。
+        批量删除话题。
+
         只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/topic_ids.path'
@@ -1611,8 +1566,7 @@ paths:
     get:
       operationId: getArticles
       summary: 获取指定话题下的文章
-      description: |
-        获取指定话题下的文章。
+      description: 获取指定话题下的文章。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
@@ -1630,8 +1584,7 @@ paths:
     get:
       operationId: getFollowers
       summary: 获取指定话题的关注者
-      description: |
-        不含已禁用的用户
+      description: 不含已禁用的用户。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
@@ -1646,8 +1599,8 @@ paths:
         - Topic
     post:
       operationId: addFollow
-      summary: 关注指定话题
-      description: 关注指定话题
+      summary: "\U0001F511关注指定话题"
+      description: 关注指定话题。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
       responses:
@@ -1659,8 +1612,8 @@ paths:
         - Topic
     delete:
       operationId: deleteFollow
-      summary: 取消关注指定话题
-      description: 取消关注指定话题
+      summary: "\U0001F511取消关注指定话题"
+      description: 取消关注指定话题。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
       responses:
@@ -1674,8 +1627,7 @@ paths:
     get:
       operationId: getQuestions
       summary: 获取指定话题下的提问
-      description: |
-        获取指定话题下的提问。
+      description: 获取指定话题下的提问。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/page'
@@ -1693,7 +1645,7 @@ paths:
     post:
       operationId: trash
       summary: "\U0001F510把话题放入回收站"
-      description: 仅管理员可调用该接口
+      description: 把话题放入回收站。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/include.topic'
@@ -1708,8 +1660,7 @@ paths:
     post:
       operationId: untrash
       summary: "\U0001F510把话题移出回收站"
-      description: |
-        仅管理员可调用该接口。
+      description: 把话题移出回收站。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/include.topic'
@@ -1724,8 +1675,7 @@ paths:
     get:
       operationId: get
       summary: 获取指定话题信息
-      description: |
-        获取指定话题信息
+      description: 获取指定话题信息。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
         - $ref: '#/components/parameters/include.topic'
@@ -1740,7 +1690,7 @@ paths:
       operationId: update
       summary: "\U0001F510更新话题信息"
       description: |
-        **仅管理员可调用该接口**
+        更新话题信息。
 
         因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
       parameters:
@@ -1759,7 +1709,8 @@ paths:
       operationId: delete
       summary: "\U0001F510删除话题"
       description: |
-        仅管理员可调用该接口。
+        删除话题。
+
         只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
       parameters:
         - $ref: '#/components/parameters/topic_id.path'
@@ -1773,9 +1724,8 @@ paths:
   /user/answers:
     get:
       operationId: getMyAnswers
-      summary: 获取当前登录用户发表的回答
-      description: |
-        获取当前登录用户发表的回答
+      summary: "\U0001F511获取当前登录用户发表的回答"
+      description: 获取当前登录用户发表的回答。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1791,9 +1741,8 @@ paths:
   /user/articles:
     get:
       operationId: getMyArticles
-      summary: 获取当前登录用户发表的文章
-      description: |
-        获取当前登录用户发表的文章
+      summary: "\U0001F511获取当前登录用户发表的文章"
+      description: 获取当前登录用户发表的文章。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1809,8 +1758,8 @@ paths:
   /user/avatar:
     post:
       operationId: uploadMyAvatar
-      summary: 上传当前登录用户的头像
-      description: 上传当前登录用户的头像
+      summary: "\U0001F511上传当前登录用户的头像"
+      description: 上传当前登录用户的头像。
       requestBody:
         $ref: '#/components/requestBodies/UserAvatar'
       responses:
@@ -1822,8 +1771,8 @@ paths:
         - User
     delete:
       operationId: deleteMyAvatar
-      summary: 删除当前登录用户的头像，并重置为默认头像
-      description: 删除当前登录用户的头像，并重置为默认头像
+      summary: "\U0001F511删除当前登录用户的头像，并重置为默认头像"
+      description: 删除当前登录用户的头像，并重置为默认头像。
       responses:
         '200':
           $ref: '#/components/responses/UserAvatar'
@@ -1834,9 +1783,8 @@ paths:
   /user/comments:
     get:
       operationId: getMyComments
-      summary: 获取当前登录用户发表的评论
-      description: |
-        获取当前登录用户发表的评论
+      summary: "\U0001F511获取当前登录用户发表的评论"
+      description: 获取当前登录用户发表的评论。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1852,8 +1800,8 @@ paths:
   /user/cover:
     post:
       operationId: uploadMyCover
-      summary: 上传当前登录用户的封面
-      description: 上传当前登录用户的封面
+      summary: "\U0001F511上传当前登录用户的封面"
+      description: 上传当前登录用户的封面。
       requestBody:
         $ref: '#/components/requestBodies/UserCover'
       responses:
@@ -1865,8 +1813,8 @@ paths:
         - User
     delete:
       operationId: deleteMyCover
-      summary: 删除当前登录用户的封面，并重置为默认封面
-      description: 删除当前登录用户的封面，并重置为默认封面
+      summary: "\U0001F511删除当前登录用户的封面，并重置为默认封面"
+      description: 删除当前登录用户的封面，并重置为默认封面。
       responses:
         '200':
           $ref: '#/components/responses/UserCover'
@@ -1877,9 +1825,8 @@ paths:
   /user/followees:
     get:
       operationId: getMyFollowees
-      summary: 获取当前登录用户关注的用户
-      description: |
-        获取当前登录用户关注的用户
+      summary: "\U0001F511获取当前登录用户关注的用户"
+      description: 获取当前登录用户关注的用户。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1894,9 +1841,8 @@ paths:
   /user/followers:
     get:
       operationId: getMyFollowers
-      summary: 获取当前登录用户的关注者
-      description: |
-        获取当前登录用户的关注者
+      summary: "\U0001F511获取当前登录用户的关注者"
+      description: 获取当前登录用户的关注者。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1911,9 +1857,8 @@ paths:
   /user/following_articles:
     get:
       operationId: getMyFollowingArticles
-      summary: 获取登录用户关注的文章
-      description: |
-        获取登录用户关注的文章
+      summary: "\U0001F511获取登录用户关注的文章"
+      description: 获取登录用户关注的文章。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1928,9 +1873,8 @@ paths:
   /user/following_questions:
     get:
       operationId: getMyFollowingQuestions
-      summary: 获取登录用户关注的提问
-      description: |
-        获取登录用户关注的提问
+      summary: "\U0001F511获取登录用户关注的提问"
+      description: 获取登录用户关注的提问。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1945,9 +1889,8 @@ paths:
   /user/following_topics:
     get:
       operationId: getMyFollowingTopics
-      summary: 获取登录用户关注的话题
-      description: |
-        获取登录用户关注的话题
+      summary: "\U0001F511获取登录用户关注的话题"
+      description: 获取登录用户关注的话题。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -1979,7 +1922,7 @@ paths:
     put:
       operationId: updatePassword
       summary: 验证邮箱并更新密码
-      description: 验证邮箱并更新密码
+      description: 验证邮箱并更新密码。
       requestBody:
         $ref: '#/components/requestBodies/UserPasswordReset'
       responses:
@@ -1992,9 +1935,8 @@ paths:
   /user/questions:
     get:
       operationId: getMyQuestions
-      summary: 获取登录用户发表的提问
-      description: |
-        获取登录用户发表的提问
+      summary: "\U0001F511获取登录用户发表的提问"
+      description: 获取登录用户发表的提问。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -2026,9 +1968,8 @@ paths:
   /user:
     get:
       operationId: getMine
-      summary: 获取当前登录用户的信息
-      description: |
-        获取当前登录用户的信息
+      summary: "\U0001F511获取当前登录用户的信息"
+      description: 获取当前登录用户的信息。
       parameters:
         - $ref: '#/components/parameters/include.user'
       responses:
@@ -2040,9 +1981,8 @@ paths:
         - User
     patch:
       operationId: updateMine
-      summary: 更新当前登录用户信息
-      description: |
-        更新当前登录用户信息
+      summary: "\U0001F511更新当前登录用户信息"
+      description: 更新当前登录用户信息。
       parameters:
         - $ref: '#/components/parameters/include.user'
       requestBody:
@@ -2059,9 +1999,9 @@ paths:
       operationId: getList
       summary: 获取用户列表
       description: |
-        仅管理员可使用 email 参数进行搜索
+        仅管理员可使用 email 参数进行搜索。
 
-        仅管理员可获取已禁用的用户列表
+        仅管理员可获取已禁用的用户列表。
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
@@ -2081,7 +2021,7 @@ paths:
     post:
       operationId: register
       summary: 验证邮箱并创建账号
-      description: 返回用户信息
+      description: 返回用户信息。
       parameters:
         - $ref: '#/components/parameters/include.user'
       requestBody:
@@ -2097,8 +2037,7 @@ paths:
     post:
       operationId: disableMultiple
       summary: "\U0001F510批量禁用用户"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量禁用用户。
       parameters:
         - $ref: '#/components/parameters/user_ids.path'
         - $ref: '#/components/parameters/include.user'
@@ -2113,8 +2052,7 @@ paths:
     post:
       operationId: enableMultiple
       summary: "\U0001F510批量恢复用户"
-      description: |
-        仅管理员可调用该接口。
+      description: 批量恢复用户。
       parameters:
         - $ref: '#/components/parameters/user_ids.path'
         - $ref: '#/components/parameters/include.user'
@@ -2129,8 +2067,7 @@ paths:
     get:
       operationId: getAnswers
       summary: 获取指定用户发表的回答
-      description: |
-        获取指定用户发表的回答
+      description: 获取指定用户发表的回答。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2148,8 +2085,7 @@ paths:
     get:
       operationId: getArticles
       summary: 获取指定用户发表的文章
-      description: |
-        获取指定用户发表的文章
+      description: 获取指定用户发表的文章。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2167,7 +2103,7 @@ paths:
     delete:
       operationId: deleteAvatar
       summary: "\U0001F510删除指定用户的头像，并重置为默认头像"
-      description: 仅管理员可调用该接口
+      description: 删除指定用户的头像，并重置为默认头像。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
       responses:
@@ -2181,8 +2117,7 @@ paths:
     get:
       operationId: getComments
       summary: 获取指定用户发表的评论
-      description: |
-        获取指定用户发表的评论
+      description: 获取指定用户发表的评论。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2200,7 +2135,7 @@ paths:
     delete:
       operationId: deleteCover
       summary: "\U0001F510删除指定用户的封面，并重置为默认封面"
-      description: 仅管理员可调用该接口
+      description: 删除指定用户的封面，并重置为默认封面。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
       responses:
@@ -2214,8 +2149,7 @@ paths:
     post:
       operationId: disable
       summary: "\U0001F510禁用指定用户"
-      description: |
-        仅管理员可调用该接口
+      description: 禁用指定用户。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/include.user'
@@ -2230,8 +2164,7 @@ paths:
     post:
       operationId: enable
       summary: "\U0001F510恢复指定用户"
-      description: |
-        仅管理员可调用该接口。
+      description: 恢复指定用户。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/include.user'
@@ -2246,8 +2179,7 @@ paths:
     get:
       operationId: getFollowees
       summary: 获取指定用户关注的用户列表
-      description: |
-        获取指定用户关注的用户列表
+      description: 获取指定用户关注的用户列表。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2264,8 +2196,7 @@ paths:
     get:
       operationId: getFollowers
       summary: 获取指定用户的关注者
-      description: |
-        获取指定用户的关注者
+      description: 获取指定用户的关注者。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2280,8 +2211,8 @@ paths:
         - User
     post:
       operationId: addFollow
-      summary: 添加关注
-      description: 添加关注
+      summary: "\U0001F511添加关注"
+      description: 添加关注。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
       responses:
@@ -2293,8 +2224,8 @@ paths:
         - User
     delete:
       operationId: deleteFollow
-      summary: 取消关注
-      description: 取消关注
+      summary: "\U0001F511取消关注"
+      description: 取消关注。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
       responses:
@@ -2308,8 +2239,7 @@ paths:
     get:
       operationId: getFollowingArticles
       summary: 获取指定用户关注的文章列表
-      description: |
-        获取指定用户关注的文章列表
+      description: 获取指定用户关注的文章列表。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2326,8 +2256,7 @@ paths:
     get:
       operationId: getFollowingQuestions
       summary: 获取指定用户关注的提问列表
-      description: |
-        获取指定用户关注的提问列表
+      description: 获取指定用户关注的提问列表。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2344,8 +2273,7 @@ paths:
     get:
       operationId: getFollowingTopics
       summary: 获取指定用户关注的话题列表
-      description: |
-        获取指定用户关注的话题列表
+      description: 获取指定用户关注的话题列表。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2362,8 +2290,7 @@ paths:
     get:
       operationId: getQuestions
       summary: 获取指定用户发表的提问
-      description: |
-        获取指定用户发表的提问
+      description: 获取指定用户发表的提问。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/page'
@@ -2381,7 +2308,7 @@ paths:
     get:
       operationId: get
       summary: 获取指定用户信息
-      description: "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 \U0001F510 标明）\n"
+      description: "若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。\n\n其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 \U0001F510 标明）\n"
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/include.user'
@@ -2395,8 +2322,7 @@ paths:
     patch:
       operationId: update
       summary: "\U0001F510更新指定用户信息"
-      description: |
-        仅管理员可调用该接口
+      description: 更新指定用户信息。
       parameters:
         - $ref: '#/components/parameters/user_id.path'
         - $ref: '#/components/parameters/include.user'
@@ -2595,7 +2521,7 @@ components:
         - captcha_image
     CodeSuccess:
       type: integer
-      description: 无任务错误时，状态码为 0
+      description: 无任何错误时，状态码为 0
       default: 0
       example: 0
     Comment:
@@ -4038,7 +3964,7 @@ components:
           example: 122.33.1.76
         storage_ftp_passive:
           type: boolean
-          description: "\U0001F510是否使用被动传输模式。true（被动模式）；false（主动模式）"
+          description: "\U0001F510是否使用被动传输模式。`true`（被动模式）；`false`（主动模式）"
           example: true
         storage_ftp_password:
           type: string
@@ -4056,7 +3982,7 @@ components:
           example: /mdclub
         storage_ftp_ssl:
           type: boolean
-          description: "\U0001F510FTP 是否启用 SSL。true（启用）；false（不启用）"
+          description: "\U0001F510FTP 是否启用 SSL。`true`（启用）；`false`（不启用）"
           example: true
         storage_ftp_username:
           type: string
@@ -4090,7 +4016,7 @@ components:
             - z2
             - na0
             - as0
-          description: "\U0001F510FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）"
+          description: "\U0001F510FTP 存储区域。`z0`（华东）；`z1`（华北）；`z2`（华南）；`na0`（北美）；`as0`（东南亚）"
           example: z0
         storage_sftp_host:
           type: string

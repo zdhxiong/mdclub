@@ -1,8 +1,7 @@
 get:
   operationId: getList
   summary: 获取回答列表
-  description: |
-    获取回答列表。
+  description: 获取回答列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

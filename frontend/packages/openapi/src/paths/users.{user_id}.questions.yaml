@@ -1,8 +1,7 @@
 get:
   operationId: getQuestions
   summary: 获取指定用户发表的提问
-  description: |
-    获取指定用户发表的提问
+  description: 获取指定用户发表的提问。
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'

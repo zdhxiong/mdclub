@@ -1,8 +1,7 @@
 get:
   operationId: getMyArticles
-  summary: 获取当前登录用户发表的文章
-  description: |
-    获取当前登录用户发表的文章
+  summary: 🔑获取当前登录用户发表的文章
+  description: 获取当前登录用户发表的文章。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

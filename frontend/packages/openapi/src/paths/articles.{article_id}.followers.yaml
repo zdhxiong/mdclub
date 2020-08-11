@@ -1,8 +1,7 @@
 get:
   operationId: getFollowers
   summary: 获取指定文章的关注者
-  description: |
-    获取指定文章的关注者
+  description: 获取指定文章的关注者。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/page'
@@ -18,8 +17,8 @@ get:
 
 post:
   operationId: addFollow
-  summary: 添加关注
-  description: 添加关注
+  summary: 🔑添加关注
+  description: 添加关注。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   responses:
@@ -32,8 +31,8 @@ post:
 
 delete:
   operationId: deleteFollow
-  summary: 取消关注
-  description: 取消关注
+  summary: 🔑取消关注
+  description: 取消关注。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
   responses:

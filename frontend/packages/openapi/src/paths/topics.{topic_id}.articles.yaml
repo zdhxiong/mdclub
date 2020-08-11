@@ -1,8 +1,7 @@
 get:
   operationId: getArticles
   summary: 获取指定话题下的文章
-  description: |
-    获取指定话题下的文章。
+  description: 获取指定话题下的文章。
   parameters:
     - $ref: '#/components/parameters/topic_id.path'
     - $ref: '#/components/parameters/page'

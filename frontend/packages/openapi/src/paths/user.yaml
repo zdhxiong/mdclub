@@ -1,8 +1,7 @@
 get:
   operationId: getMine
-  summary: 获取当前登录用户的信息
-  description: |
-    获取当前登录用户的信息
+  summary: 🔑获取当前登录用户的信息
+  description: 获取当前登录用户的信息。
   parameters:
     - $ref: '#/components/parameters/include.user'
   responses:
@@ -15,9 +14,8 @@ get:
 
 patch:
   operationId: updateMine
-  summary: 更新当前登录用户信息
-  description: |
-    更新当前登录用户信息
+  summary: 🔑更新当前登录用户信息
+  description: 更新当前登录用户信息。
   parameters:
     - $ref: '#/components/parameters/include.user'
   requestBody:

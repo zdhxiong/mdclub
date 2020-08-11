@@ -1,8 +1,7 @@
 get:
   operationId: getMyComments
-  summary: 获取当前登录用户发表的评论
-  description: |
-    获取当前登录用户发表的评论
+  summary: 🔑获取当前登录用户发表的评论
+  description: 获取当前登录用户发表的评论。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

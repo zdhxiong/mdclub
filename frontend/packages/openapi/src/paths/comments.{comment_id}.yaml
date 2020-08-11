@@ -1,8 +1,7 @@
 get:
   operationId: get
   summary: 获取评论详情
-  description: |
-    获取评论详情
+  description: 获取评论详情。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/include.comment'
@@ -16,9 +15,8 @@ get:
 
 patch:
   operationId: update
-  summary: 修改评论
-  description: |
-    管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
+  summary: 🔑修改评论
+  description: 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/include.comment'
@@ -34,7 +32,7 @@ patch:
 
 delete:
   operationId: delete
-  summary: 删除评论
+  summary: 🔑删除评论
   description: |
     只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 

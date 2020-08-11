@@ -1,8 +1,7 @@
 get:
   operationId: getReplies
   summary: 获取指定评论的回复
-  description: |
-    获知指定评论的回复。
+  description: 获知指定评论的回复。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/page'
@@ -19,9 +18,8 @@ get:
 
 post:
   operationId: createReply
-  summary: 在指定评论下发表回复
-  description: |
-    在指定评论下发表回复
+  summary: 🔑在指定评论下发表回复
+  description: 在指定评论下发表回复。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/include.comment'

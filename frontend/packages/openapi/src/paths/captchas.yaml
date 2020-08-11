@@ -1,7 +1,7 @@
 post:
   operationId: generate
   summary: 生成新的图形验证码
-  description: 生成新的图形验证码
+  description: 生成新的图形验证码。
   responses:
     '200':
       $ref: '#/components/responses/Captcha'

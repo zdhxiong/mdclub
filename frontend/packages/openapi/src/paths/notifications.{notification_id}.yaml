@@ -1,8 +1,7 @@
 delete:
   operationId: delete
-  summary: 删除一条通知
-  description: |
-    只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+  summary: 🔑删除一条通知
+  description: 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
   parameters:
     - $ref: '#/components/parameters/notification_id.path'
   responses:

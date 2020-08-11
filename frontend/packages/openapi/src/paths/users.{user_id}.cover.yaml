@@ -1,7 +1,7 @@
 delete:
   operationId: deleteCover
   summary: 🔐删除指定用户的封面，并重置为默认封面
-  description: 仅管理员可调用该接口
+  description: 删除指定用户的封面，并重置为默认封面。
   parameters:
     - $ref: '#/components/parameters/user_id.path'
   responses:

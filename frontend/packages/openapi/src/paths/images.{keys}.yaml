@@ -2,7 +2,8 @@ delete:
   operationId: deleteMultiple
   summary: 🔐批量删除图片
   description: |
-    仅管理员可调用该接口。
+    批量删除图片。
+
     只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
   parameters:
     - $ref: '#/components/parameters/image_keys.path'

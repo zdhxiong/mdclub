@@ -1,7 +1,7 @@
 get:
   operationId: get
   summary: 🔐获取站点统计数据
-  description: 仅管理员可调用该接口。
+  description: 获取站点统计数据。
   parameters:
     - $ref: '#/components/parameters/include.stats'
     - $ref: '#/components/parameters/start_date.query'

@@ -1,8 +1,7 @@
 get:
   operationId: getList
-  summary: 获取通知列表
-  description: |
-    获取通知列表。
+  summary: 🔑获取通知列表
+  description: 获取通知列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
@@ -19,9 +18,8 @@ get:
 
 delete:
   operationId: deleteAll
-  summary: 删除所有通知
-  description: |
-    只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
+  summary: 🔑删除所有通知
+  description: 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
   parameters:
     - $ref: '#/components/parameters/notification_type.query'
   responses:

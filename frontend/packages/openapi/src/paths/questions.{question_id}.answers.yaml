@@ -1,8 +1,7 @@
 get:
   operationId: getAnswers
   summary: 获取指定提问下的回答
-  description: |
-    获取指定提问下的回答。
+  description: 获取指定提问下的回答。
   parameters:
     - $ref: '#/components/parameters/question_id.path'
     - $ref: '#/components/parameters/page'
@@ -19,7 +18,7 @@ get:
 
 post:
   operationId: createAnswer
-  summary: 在指定提问下发表回答
+  summary: 🔑在指定提问下发表回答
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。

@@ -1,7 +1,7 @@
 get:
   operationId: get
   summary: 获取站点全局设置参数
-  description: 获取站点全局设置参数
+  description: 获取站点全局设置参数。
   responses:
     '200':
       $ref: '#/components/responses/Option'
@@ -13,7 +13,7 @@ get:
 patch:
   operationId: update
   summary: 🔐更新站点全局设置
-  description: 仅管理员可调用该接口
+  description: 更新站点全局设置。
   requestBody:
     $ref: '#/components/requestBodies/Option'
   responses:

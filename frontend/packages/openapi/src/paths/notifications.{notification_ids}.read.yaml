@@ -1,7 +1,7 @@
 post:
   operationId: readMultiple
-  summary: 批量把通知标记为已读
-  description: 批量把通知标记为已读
+  summary: 🔑批量把通知标记为已读
+  description: 批量把通知标记为已读。
   parameters:
     - $ref: '#/components/parameters/notification_ids.path'
     - $ref: '#/components/parameters/include.notification'

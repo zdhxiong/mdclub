@@ -1,8 +1,7 @@
 get:
   operationId: getMyQuestions
-  summary: 获取登录用户发表的提问
-  description: |
-    获取登录用户发表的提问
+  summary: 🔑获取登录用户发表的提问
+  description: 获取登录用户发表的提问。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

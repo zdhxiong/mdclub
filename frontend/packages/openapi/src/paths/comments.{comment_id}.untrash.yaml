@@ -1,8 +1,7 @@
 post:
   operationId: untrash
   summary: 🔐把评论移出回收站
-  description: |
-    仅管理员可调用该接口。
+  description: 把评论移出回收站。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/include.comment'

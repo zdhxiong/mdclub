@@ -1,7 +1,7 @@
 post:
   operationId: read
-  summary: 把一条通知标记为已读
-  description: 把一条通知标记为已读
+  summary: 🔑把一条通知标记为已读
+  description: 把一条通知标记为已读。
   parameters:
     - $ref: '#/components/parameters/notification_id.path'
     - $ref: '#/components/parameters/include.notification'

@@ -1,4 +1,4 @@
 type: integer
-description: 无任务错误时，状态码为 0
+description: 无任何错误时，状态码为 0
 default: 0
 example: 0

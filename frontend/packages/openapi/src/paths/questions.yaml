@@ -1,8 +1,7 @@
 get:
   operationId: getList
   summary: 获取提问列表
-  description: |
-    获取提问列表。
+  description: 获取提问列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
@@ -22,7 +21,7 @@ get:
 
 post:
   operationId: create
-  summary: 发表提问
+  summary: 🔑发表提问
   description: |
     `content_markdown` 和 `content_rendered` 两个参数仅传入其中一个即可，
     若两个参数都传入，则以 `content_markdown` 为准。

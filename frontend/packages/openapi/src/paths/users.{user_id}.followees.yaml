@@ -1,8 +1,7 @@
 get:
   operationId: getFollowees
   summary: 获取指定用户关注的用户列表
-  description: |
-    获取指定用户关注的用户列表
+  description: 获取指定用户关注的用户列表。
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'

@@ -1,7 +1,7 @@
 post:
   operationId: send
   summary: 🔐发送邮件
-  description: 用于后台管理员发送邮件，需要管理员权限
+  description: 用于后台管理员发送邮件。
   requestBody:
     $ref: '#/components/requestBodies/Email'
   responses:

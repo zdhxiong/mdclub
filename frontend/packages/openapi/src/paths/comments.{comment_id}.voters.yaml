@@ -1,8 +1,7 @@
 get:
   operationId: getVoters
   summary: 获取评论的投票者
-  description: |
-    获取评论的投票者
+  description: 获取评论的投票者。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
     - $ref: '#/components/parameters/page'
@@ -19,8 +18,8 @@ get:
 
 post:
   operationId: addVote
-  summary: 为评论投票
-  description: 为评论投票
+  summary: 🔑为评论投票
+  description: 为评论投票。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
   requestBody:
@@ -35,8 +34,8 @@ post:
 
 delete:
   operationId: deleteVote
-  summary: 取消为评论的投票
-  description: 取消为评论的投票
+  summary: 🔑取消为评论的投票
+  description: 取消为评论的投票。
   parameters:
     - $ref: '#/components/parameters/comment_id.path'
   responses:

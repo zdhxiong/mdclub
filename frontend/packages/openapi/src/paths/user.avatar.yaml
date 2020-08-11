@@ -1,7 +1,7 @@
 post:
   operationId: uploadMyAvatar
-  summary: 上传当前登录用户的头像
-  description: 上传当前登录用户的头像
+  summary: 🔑上传当前登录用户的头像
+  description: 上传当前登录用户的头像。
   requestBody:
     $ref: '#/components/requestBodies/UserAvatar'
   responses:
@@ -14,8 +14,8 @@ post:
 
 delete:
   operationId: deleteMyAvatar
-  summary: 删除当前登录用户的头像，并重置为默认头像
-  description: 删除当前登录用户的头像，并重置为默认头像
+  summary: 🔑删除当前登录用户的头像，并重置为默认头像
+  description: 删除当前登录用户的头像，并重置为默认头像。
   responses:
     '200':
       $ref: '#/components/responses/UserAvatar'

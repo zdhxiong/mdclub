@@ -1,8 +1,7 @@
 post:
   operationId: trashMultiple
   summary: 🔐批量把提问放入回收站
-  description: |
-    仅管理员可调用该接口。
+  description: 批量把提问放入回收站。
   parameters:
     - $ref: '#/components/parameters/question_ids.path'
     - $ref: '#/components/parameters/include.question'

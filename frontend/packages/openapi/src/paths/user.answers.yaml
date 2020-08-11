@@ -1,8 +1,7 @@
 get:
   operationId: getMyAnswers
-  summary: 获取当前登录用户发表的回答
-  description: |
-    获取当前登录用户发表的回答
+  summary: 🔑获取当前登录用户发表的回答
+  description: 获取当前登录用户发表的回答。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

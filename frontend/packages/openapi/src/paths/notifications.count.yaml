@@ -1,8 +1,7 @@
 get:
   operationId: getCount
-  summary: 获取未读通知数量
-  description: |
-    获取未读通知数量。
+  summary: 🔑获取未读通知数量
+  description: 获取未读通知数量。
   parameters:
     - $ref: '#/components/parameters/notification_type.query'
   responses:

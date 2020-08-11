@@ -1,8 +1,7 @@
 get:
   operationId: getList
   summary: 🔐获取图片列表
-  description: |
-    仅管理员可调用该接口
+  description: 获取图片列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
@@ -21,9 +20,8 @@ get:
 
 post:
   operationId: upload
-  summary: 上传图片
-  description: |
-    上传图片
+  summary: 🔑上传图片
+  description: 上传图片。
   parameters:
     - $ref: '#/components/parameters/include.image'
   requestBody:

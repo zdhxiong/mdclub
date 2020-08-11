@@ -307,7 +307,7 @@ properties:
     example: 122.33.1.76
   storage_ftp_passive:
     type: boolean
-    description: 🔐是否使用被动传输模式。true（被动模式）；false（主动模式）
+    description: 🔐是否使用被动传输模式。`true`（被动模式）；`false`（主动模式）
     example: true
   storage_ftp_password:
     type: string
@@ -325,7 +325,7 @@ properties:
     example: /mdclub
   storage_ftp_ssl:
     type: boolean
-    description: 🔐FTP 是否启用 SSL。true（启用）；false（不启用）
+    description: 🔐FTP 是否启用 SSL。`true`（启用）；`false`（不启用）
     example: true
   storage_ftp_username:
     type: string
@@ -359,7 +359,7 @@ properties:
       - z2
       - na0
       - as0
-    description: 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
+    description: 🔐FTP 存储区域。`z0`（华东）；`z1`（华北）；`z2`（华南）；`na0`（北美）；`as0`（东南亚）
     example: z0
   storage_sftp_host:
     type: string

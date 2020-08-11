@@ -1,8 +1,7 @@
 get:
   operationId: getMyFollowingQuestions
-  summary: 获取登录用户关注的提问
-  description: |
-    获取登录用户关注的提问
+  summary: 🔑获取登录用户关注的提问
+  description: 获取登录用户关注的提问。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

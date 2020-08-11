@@ -1,8 +1,7 @@
 get:
   operationId: getComments
   summary: 获取指定文章的评论列表
-  description: |
-    获取指定文章的评论列表。
+  description: 获取指定文章的评论列表。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/page'
@@ -19,9 +18,8 @@ get:
 
 post:
   operationId: createComment
-  summary: 在指定文章下发表评论
-  description: |
-    在指定文章下发表评论
+  summary: 🔑在指定文章下发表评论
+  description: 在指定文章下发表评论。
   parameters:
     - $ref: '#/components/parameters/article_id.path'
     - $ref: '#/components/parameters/include.comment'

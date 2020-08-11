@@ -1,8 +1,7 @@
 get:
   operationId: getFollowingTopics
   summary: 获取指定用户关注的话题列表
-  description: |
-    获取指定用户关注的话题列表
+  description: 获取指定用户关注的话题列表。
   parameters:
     - $ref: '#/components/parameters/user_id.path'
     - $ref: '#/components/parameters/page'

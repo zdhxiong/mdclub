@@ -1,8 +1,7 @@
 get:
   operationId: getList
   summary: 获取全部话题
-  description: |
-    获取全部话题。
+  description: 获取全部话题。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
@@ -22,7 +21,7 @@ get:
 post:
   operationId: create
   summary: 🔐发布话题
-  description: 仅管理员可调用该接口
+  description: 发布话题。
   parameters:
     - $ref: '#/components/parameters/include.topic'
   requestBody:

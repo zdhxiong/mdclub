@@ -1,8 +1,7 @@
 get:
   operationId: getMyFollowees
-  summary: 获取当前登录用户关注的用户
-  description: |
-    获取当前登录用户关注的用户
+  summary: 🔑获取当前登录用户关注的用户
+  description: 获取当前登录用户关注的用户。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

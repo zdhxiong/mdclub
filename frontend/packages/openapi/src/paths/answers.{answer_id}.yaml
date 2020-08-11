@@ -1,8 +1,7 @@
 get:
   operationId: get
   summary: 获取回答详情
-  description: |
-    获取回答详情
+  description: 获取回答详情。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
     - $ref: '#/components/parameters/include.answer'
@@ -16,7 +15,7 @@ get:
 
 patch:
   operationId: update
-  summary: 修改回答信息
+  summary: 🔑修改回答信息
   description: |
     管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。
 
@@ -37,7 +36,7 @@ patch:
 
 delete:
   operationId: delete
-  summary: 删除回答
+  summary: 🔑删除回答
   description: |
     只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
 

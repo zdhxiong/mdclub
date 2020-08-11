@@ -2,9 +2,9 @@ get:
   operationId: getList
   summary: 获取用户列表
   description: |
-    仅管理员可使用 email 参数进行搜索
+    仅管理员可使用 email 参数进行搜索。
 
-    仅管理员可获取已禁用的用户列表
+    仅管理员可获取已禁用的用户列表。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
@@ -25,7 +25,7 @@ get:
 post:
   operationId: register
   summary: 验证邮箱并创建账号
-  description: 返回用户信息
+  description: 返回用户信息。
   parameters:
     - $ref: '#/components/parameters/include.user'
   requestBody:

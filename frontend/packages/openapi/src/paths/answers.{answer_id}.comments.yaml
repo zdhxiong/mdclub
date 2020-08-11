@@ -1,8 +1,7 @@
 get:
   operationId: getComments
   summary: 获取指定回答的评论
-  description: |
-    获取指定回答的评论。
+  description: 获取指定回答的评论。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
     - $ref: '#/components/parameters/page'
@@ -20,8 +19,7 @@ get:
 post:
   operationId: createComment
   summary: 在指定回答下发表评论
-  description: |
-    在指定回答下发表评论
+  description: 在指定回答下发表评论。
   parameters:
     - $ref: '#/components/parameters/answer_id.path'
     - $ref: '#/components/parameters/include.comment'

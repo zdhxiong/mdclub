@@ -1,8 +1,7 @@
 get:
   operationId: getMyFollowingArticles
-  summary: 获取登录用户关注的文章
-  description: |
-    获取登录用户关注的文章
+  summary: 🔑获取登录用户关注的文章
+  description: 获取登录用户关注的文章。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

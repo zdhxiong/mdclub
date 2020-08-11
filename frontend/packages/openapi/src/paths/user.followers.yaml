@@ -1,8 +1,7 @@
 get:
   operationId: getMyFollowers
-  summary: 获取当前登录用户的关注者
-  description: |
-    获取当前登录用户的关注者
+  summary: 🔑获取当前登录用户的关注者
+  description: 获取当前登录用户的关注者。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'

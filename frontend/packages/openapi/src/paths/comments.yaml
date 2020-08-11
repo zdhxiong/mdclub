@@ -1,8 +1,7 @@
 get:
   operationId: getList
   summary: 🔐获取所有评论
-  description: |
-    获取所有评论。
+  description: 获取所有评论。
   parameters:
     - $ref: '#/components/parameters/page'
     - $ref: '#/components/parameters/per_page'
