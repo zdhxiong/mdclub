@@ -12,3 +12,4 @@ properties:
     type: boolean
     description: 该用户是否已关注当前登录用户
     example: true
+required: []

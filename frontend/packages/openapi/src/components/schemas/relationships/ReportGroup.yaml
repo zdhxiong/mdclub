@@ -10,3 +10,4 @@ properties:
     $ref: '#/components/schemas/CommentInRelationship'
   user:
     $ref: '#/components/schemas/UserInRelationship'
+required: []

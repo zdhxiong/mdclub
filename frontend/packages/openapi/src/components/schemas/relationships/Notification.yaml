@@ -14,3 +14,4 @@ properties:
     $ref: '#/components/schemas/CommentInRelationship'
   reply:
     $ref: '#/components/schemas/CommentInRelationship'
+required: []

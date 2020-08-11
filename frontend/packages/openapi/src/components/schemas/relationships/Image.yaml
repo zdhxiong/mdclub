@@ -8,3 +8,4 @@ properties:
     $ref: '#/components/schemas/ArticleInRelationship'
   answer:
     $ref: '#/components/schemas/AnswerInRelationship'
+required: []

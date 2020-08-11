@@ -16,3 +16,4 @@ properties:
       - down
       - ''
     example: up
+required: []

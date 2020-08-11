@@ -4,3 +4,4 @@ properties:
     type: boolean
     description: 当前登录用户是否已关注该话题
     example: true
+required: []
