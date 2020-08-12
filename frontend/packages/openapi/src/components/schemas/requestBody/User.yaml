@@ -20,3 +20,4 @@ properties:
     type: string
     description: 所属地区
     example: 杭州
+required: []

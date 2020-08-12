@@ -23,3 +23,4 @@ properties:
     type: string
     description: HTML 格式的正文
     example: <p>如题</p>
+required: []

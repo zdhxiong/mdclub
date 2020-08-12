@@ -12,3 +12,4 @@ properties:
     type: string
     format: binary
     description: 封面图片
+required: []

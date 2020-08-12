@@ -26,3 +26,4 @@ properties:
     type: string
     description: HTML 格式的正文
     example: <p>MDClub 是一个开源社区系统，使用 <a href="https://mdui.org" target="_blank">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>
+required: []
