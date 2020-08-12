@@ -1,6 +1,6 @@
 name: disabled
 in: query
-description: 是否仅获取已禁用的用户
+description: 🔐是否仅获取已禁用的用户
 schema:
   type: boolean
   default: false
