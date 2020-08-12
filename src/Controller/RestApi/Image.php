@@ -55,25 +55,25 @@ class Image extends Abstracts
      *
      * @param array $keys
      *
-     * @return array
+     * @return null
      */
-    public function deleteMultiple(array $keys): array
+    public function deleteMultiple(array $keys)
     {
         ImageService::deleteMultiple($keys);
 
-        return [];
+        return null;
     }
 
     /**
      * 删除图片
      *
      * @param  string   $key
-     * @return array
+     * @return null
      */
-    public function delete(string $key): array
+    public function delete(string $key)
     {
         ImageService::delete($key);
 
-        return [];
+        return null;
     }
 }

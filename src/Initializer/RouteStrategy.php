@@ -17,10 +17,10 @@ class RouteStrategy implements InvocationStrategyInterface
      * 根据控制器返回的数组构建响应
      *
      * @param  ResponseInterface $response
-     * @param  array             $data
+     * @param  array|null        $data
      * @return ResponseInterface
      */
-    protected function withArray(ResponseInterface $response, array $data): ResponseInterface
+    protected function withArray(ResponseInterface $response, array $data = null): ResponseInterface
     {
         $result = ['code' => 0];
 
@@ -79,9 +79,7 @@ class RouteStrategy implements InvocationStrategyInterface
 
         $data = $callable(...array_values($routeArguments));
 
-        if (is_null($data)) {
-            return $response;
-        } elseif ($data instanceof ResponseInterface) {
+        if ($data instanceof ResponseInterface) {
             return $data;
         } else {
             return $this->withArray($response, $data);

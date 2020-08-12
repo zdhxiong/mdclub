@@ -33,9 +33,9 @@ class Index
     /**
      * 导入数据库
      *
-     * @return array
+     * @return null
      */
-    public function importDatabase(): array
+    public function importDatabase()
     {
         $requestBody = Request::getParsedBody();
 
@@ -141,6 +141,6 @@ return [
             );
         }
 
-        return [];
+        return null;
     }
 }

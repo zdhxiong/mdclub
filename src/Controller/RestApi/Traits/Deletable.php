@@ -23,14 +23,14 @@ trait Deletable
      *
      * @param array $deletableIds
      *
-     * @return array
+     * @return null
      */
-    public function deleteMultiple(array $deletableIds): array
+    public function deleteMultiple(array $deletableIds)
     {
         $service = $this->getServiceInstance();
         $service->deleteMultiple($deletableIds);
 
-        return [];
+        return null;
     }
 
     /**
@@ -38,14 +38,14 @@ trait Deletable
      *
      * @param int $deletableId
      *
-     * @return array
+     * @return null
      */
-    public function delete(int $deletableId): array
+    public function delete(int $deletableId)
     {
         $service = $this->getServiceInstance();
         $service->delete($deletableId);
 
-        return [];
+        return null;
     }
 
     /**

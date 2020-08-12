@@ -250,37 +250,37 @@ class User extends Abstracts
     /**
      * 发送注册验证邮件
      *
-     * @return array
+     * @return null
      */
-    public function sendRegisterEmail(): array
+    public function sendRegisterEmail()
     {
         UserService::sendRegisterEmail(Request::getParsedBody());
 
-        return [];
+        return null;
     }
 
     /**
      * 发送重置密码验证邮件
      *
-     * @return array
+     * @return null
      */
-    public function sendPasswordResetEmail(): array
+    public function sendPasswordResetEmail()
     {
         UserService::sendPasswordResetEmail(Request::getParsedBody());
 
-        return [];
+        return null;
     }
 
     /**
      * 重置密码
      *
-     * @return array
+     * @return null
      */
-    public function updatePassword(): array
+    public function updatePassword()
     {
         UserService::updatePassword(Request::getParsedBody());
 
-        return [];
+        return null;
     }
 
     /**

@@ -35,13 +35,13 @@ class Report extends Abstracts
      *
      * @param array $reportTargets
      *
-     * @return array
+     * @return null
      */
-    public function deleteMultiple(array $reportTargets): array
+    public function deleteMultiple(array $reportTargets)
     {
         ReportService::deleteMultiple($reportTargets);
 
-        return [];
+        return null;
     }
 
     /**
@@ -76,12 +76,12 @@ class Report extends Abstracts
      *
      * @param  string   $reportableType
      * @param  int      $reportableId
-     * @return array
+     * @return null
      */
-    public function delete(string $reportableType, int $reportableId): array
+    public function delete(string $reportableType, int $reportableId)
     {
         ReportService::delete($reportableType, $reportableId);
 
-        return [];
+        return null;
     }
 }

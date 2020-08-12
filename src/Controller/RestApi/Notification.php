@@ -34,13 +34,13 @@ class Notification extends Abstracts
     /**
      * 把所有通知标记为已读
      *
-     * @return array
+     * @return null
      */
-    public function readAll(): array
+    public function readAll()
     {
         NotificationService::readAll();
 
-        return [];
+        return null;
     }
 
     /**
@@ -56,13 +56,13 @@ class Notification extends Abstracts
     /**
      * 删除所有通知
      *
-     * @return array
+     * @return null
      */
-    public function deleteAll(): array
+    public function deleteAll()
     {
         NotificationService::deleteAll();
 
-        return [];
+        return null;
     }
 
     /**
@@ -91,25 +91,25 @@ class Notification extends Abstracts
      * 批量删除
      *
      * @param array $notificationIds
-     * @return array
+     * @return null
      */
-    public function deleteMultiple(array $notificationIds): array
+    public function deleteMultiple(array $notificationIds)
     {
         NotificationService::deleteMultiple($notificationIds);
 
-        return [];
+        return null;
     }
 
     /**
      * 删除
      *
      * @param int $notificationId
-     * @return array
+     * @return null
      */
-    public function delete(int $notificationId): array
+    public function delete(int $notificationId)
     {
         NotificationService::delete($notificationId);
 
-        return [];
+        return null;
     }
 }
