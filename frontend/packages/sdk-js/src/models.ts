@@ -1,5 +1,3 @@
-import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
-
 export interface Answer {
   /**
    * 回答ID
@@ -425,7 +423,11 @@ export interface EmptyResponse {
    * 无任务错误时，状态码为 0
    */
   code: number;
-  data: PlainObject;
+
+  /**
+   * 该字段为 null，请通过 code 字段判断操作结果
+   */
+  data: null;
 }
 
 export interface ErrorResponse {
