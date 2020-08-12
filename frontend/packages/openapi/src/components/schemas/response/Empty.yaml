@@ -4,6 +4,9 @@ properties:
     $ref: '#/components/schemas/CodeSuccess'
   data:
     type: object
+    nullable: true
+    example: null
+    description: 该字段为 `null`，请通过 `code` 字段判断操作结果
 required:
   - code
   - data

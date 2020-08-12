@@ -3214,7 +3214,7 @@
       "post": {
         "operationId": "sendPasswordResetEmail",
         "summary": "发送重置密码邮箱验证码",
-        "description": "若返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，\n并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。\n",
+        "description": "若返回参数中含参数 `captcha_token` 和 `captcha_image`，表示下次调用该接口时，需要用户输入图形验证码，\n并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。\n",
         "requestBody": {
           "$ref": "#/components/requestBodies/UserSendEmail"
         },
@@ -6367,7 +6367,10 @@
             "$ref": "#/components/schemas/CodeSuccess"
           },
           "data": {
-            "type": "object"
+            "type": "object",
+            "nullable": true,
+            "example": null,
+            "description": "该字段为 `null`，请通过 `code` 字段判断操作结果"
           }
         },
         "required": [
