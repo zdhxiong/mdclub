@@ -5955,7 +5955,9 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Option'
+            allOf:
+              - $ref: '#/components/schemas/OptionUpdateRequestBody'
+            required: []
     QuestionCreate:
       required: true
       content:
