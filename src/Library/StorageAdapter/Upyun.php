@@ -128,7 +128,14 @@ class Upyun extends Abstracts implements Interfaces
         $data['original'] = $storagePath . $path;
 
         foreach ($thumbs as $size => [$width, $height]) {
-            $params = "!/both/{$width}x{$height}";
+            if ($width === 0) {
+                $params = "!/fw/${width}";
+            } elseif ($height === 0) {
+                $params = "!/fh/${height}";
+            } else {
+                $params = "!/both/{$width}x{$height}";
+            }
+
             $params .= $isSupportWebp ? '/format/webp' : '';
 
             $data[$size] = "{$storagePath}{$path}{$params}";

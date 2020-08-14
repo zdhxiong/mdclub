@@ -131,7 +131,8 @@ class Aliyun extends Abstracts implements Interfaces
 
         foreach ($thumbs as $size => [$width, $height]) {
             $mode = $width === 0 || $height === 0 ? 'm_lfit' : 'm_fill';
-            $params = "?x-oss-process=image/resize,${mode},w_{$width},h_{$height},limit_0";
+            $limit = $width === 0 || $height === 0 ? '1' : '0';
+            $params = "?x-oss-process=image/resize,${mode},w_{$width},h_{$height},limit_${limit}";
             $params .= $isSupportWebp ? '/format,webp' : '';
 
             $data[$size] = "{$storagePath}{$path}{$params}";
