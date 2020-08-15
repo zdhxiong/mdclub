@@ -77,7 +77,7 @@ export interface AnswerRelationship {
   user?: UserInRelationship;
   question?: QuestionInRelationship;
   /**
-   * 当前登录用户的投票类型（up、down），未投过票则为空字符串
+   * 当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串
    */
   voting?: AnswerRelationshipVotingEnum;
 }
@@ -100,7 +100,7 @@ export interface AnswerRequestBody {
 
 export interface AnswerResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Answer;
@@ -108,7 +108,7 @@ export interface AnswerResponse {
 
 export interface AnswersResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Answer>;
@@ -217,7 +217,7 @@ export interface ArticleRelationship {
    */
   is_following?: boolean;
   /**
-   * 当前登录用户的投票类型（up、down），未投过票则为空字符串
+   * 当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串
    */
   voting?: ArticleRelationshipVotingEnum;
 }
@@ -229,7 +229,7 @@ export type ArticleRelationshipVotingEnum = 'up' | 'down' | '';
 
 export interface ArticleResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Article;
@@ -256,7 +256,7 @@ export interface ArticleUpdateRequestBody {
 
 export interface ArticlesResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Article>;
@@ -276,7 +276,7 @@ export interface Captcha {
 
 export interface CaptchaResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Captcha;
@@ -361,7 +361,7 @@ export interface CommentInRelationship {
 export interface CommentRelationship {
   user?: UserInRelationship;
   /**
-   * 当前登录用户的投票类型（up、down），未投过票则为空字符串
+   * 当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串
    */
   voting?: CommentRelationshipVotingEnum;
 }
@@ -380,7 +380,7 @@ export interface CommentRequestBody {
 
 export interface CommentResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Comment;
@@ -388,7 +388,7 @@ export interface CommentResponse {
 
 export interface CommentsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Comment>;
@@ -412,7 +412,7 @@ export interface Email {
 
 export interface EmailResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Email;
@@ -420,12 +420,12 @@ export interface EmailResponse {
 
 export interface EmptyResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
 
   /**
-   * 该字段为 null，请通过 code 字段判断操作结果
+   * 该字段为 `null`，请通过 `code` 字段判断操作结果
    */
   data: null;
 }
@@ -469,7 +469,7 @@ export interface FollowerCount {
 
 export interface FollowerCountResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: FollowerCount;
@@ -526,7 +526,7 @@ export interface ImageRelationship {
 
 export interface ImageResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Image;
@@ -563,7 +563,7 @@ export interface ImageUrls {
 
 export interface ImagesResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Image>;
@@ -584,7 +584,7 @@ export interface Notification {
    */
   sender_id: number;
   /**
-   * 通知类型
+   * 通知类型： * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id` * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id` * `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships` 中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容 * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id` * `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在 `article`，可从 `content_deleted` 字段中获取被删除的文章内容 * `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id` * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但 `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容 * `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id` * `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含 `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`  [//]: # (user_followed：有人关注了我。) [//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`) [//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`) [//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`) [//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`) [//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`) [//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`)
    */
   type: NotificationTypeEnum;
   /**
@@ -608,9 +608,9 @@ export interface Notification {
    */
   reply_id: number;
   /**
-   * 被删除的内容的备份
+   * 已删除的数据，包含以下对象之一，数据中不包含 `relationships`
    */
-  content_deleted: string;
+  content_deleted?: Question | Article | Answer | Comment;
   /**
    * 通知发送时间
    */
@@ -648,7 +648,7 @@ export interface NotificationCount {
 
 export interface NotificationCountResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: NotificationCount;
@@ -666,7 +666,7 @@ export interface NotificationRelationship {
 
 export interface NotificationResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Notification;
@@ -674,7 +674,7 @@ export interface NotificationResponse {
 
 export interface NotificationsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Notification>;
@@ -1048,7 +1048,7 @@ export type OptionStorageTypeEnum =
 
 export interface OptionResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Option;
@@ -1276,7 +1276,7 @@ export interface OptionUpdateRequestBody {
    */
   storage_ftp_host?: string;
   /**
-   * 🔐是否使用被动传输模式。true（被动模式）；false（主动模式）
+   * 🔐是否使用被动传输模式。`true`（被动模式）；`false`（主动模式）
    */
   storage_ftp_passive?: boolean;
   /**
@@ -1292,7 +1292,7 @@ export interface OptionUpdateRequestBody {
    */
   storage_ftp_dir?: string;
   /**
-   * 🔐FTP 是否启用 SSL。true（启用）；false（不启用）
+   * 🔐FTP 是否启用 SSL。`true`（启用）；`false`（不启用）
    */
   storage_ftp_ssl?: boolean;
   /**
@@ -1320,7 +1320,7 @@ export interface OptionUpdateRequestBody {
    */
   storage_qiniu_dir?: string;
   /**
-   * 🔐FTP 存储区域。z0（华东）；z1（华北）；z2（华南）；na0（北美）；as0（东南亚）
+   * 🔐FTP 存储区域。`z0`（华东）；`z1`（华北）；`z2`（华南）；`na0`（北美）；`as0`（东南亚）
    */
   storage_qiniu_zone?: OptionStorageQiniuZoneEnum;
   /**
@@ -1510,7 +1510,7 @@ export interface QuestionRelationship {
    */
   is_following?: boolean;
   /**
-   * 当前登录用户的投票类型（up、down），未投过票则为空字符串
+   * 当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串
    */
   voting?: QuestionRelationshipVotingEnum;
 }
@@ -1522,7 +1522,7 @@ export type QuestionRelationshipVotingEnum = 'up' | 'down' | '';
 
 export interface QuestionResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Question;
@@ -1549,7 +1549,7 @@ export interface QuestionUpdateRequestBody {
 
 export interface QuestionsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Question>;
@@ -1636,7 +1636,7 @@ export interface ReportGroupRelationship {
 
 export interface ReportGroupsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<ReportGroup>;
@@ -1661,7 +1661,7 @@ export interface ReportRequestBody {
 
 export interface ReportResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Report;
@@ -1669,7 +1669,7 @@ export interface ReportResponse {
 
 export interface ReportsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Report>;
@@ -1733,7 +1733,7 @@ export interface StatsNewItems {
 
 export interface StatsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Stats;
@@ -1743,39 +1743,39 @@ export interface SystemInfo {
   /**
    * MDClub 的版本号
    */
-  mdclub_version?: string;
+  mdclub_version: string;
   /**
    * 操作系统版本
    */
-  os_version?: string;
+  os_version: string;
   /**
    * PHP 版本号
    */
-  php_version?: string;
+  php_version: string;
   /**
    * Web Server 版本号
    */
-  webserver_version?: string;
+  webserver_version: string;
   /**
    * 数据库版本
    */
-  database_version?: string;
+  database_version: string;
   /**
    * 服务器上传文件大小限制
    */
-  upload_max_filesize?: string;
+  upload_max_filesize: string;
   /**
    * PHP 执行时间限制
    */
-  max_execution_time?: string;
+  max_execution_time: string;
   /**
    * 服务器剩余硬盘容量
    */
-  disk_free_space?: string;
+  disk_free_space: string;
   /**
    * 数据库大小
    */
-  database_size?: string;
+  database_size: string;
 }
 
 export interface Token {
@@ -1807,7 +1807,7 @@ export interface Token {
 
 export interface TokenResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Token;
@@ -1901,7 +1901,7 @@ export interface TopicRelationship {
 
 export interface TopicResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Topic;
@@ -1924,7 +1924,7 @@ export interface TopicUpdateRequestBody {
 
 export interface TopicsResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<Topic>;
@@ -2069,7 +2069,7 @@ export interface UserAvatarRequestBody {
 
 export interface UserAvatarResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: UserAvatar;
@@ -2103,7 +2103,7 @@ export interface UserCoverRequestBody {
 
 export interface UserCoverResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: UserCover;
@@ -2139,11 +2139,11 @@ export interface UserLoginRequestBody {
    */
   device?: string;
   /**
-   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   * 图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数
    */
   captcha_token?: string;
   /**
-   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   * 图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_code?: string;
 }
@@ -2222,7 +2222,7 @@ export interface UserRequestBody {
 
 export interface UserResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: User;
@@ -2234,18 +2234,18 @@ export interface UserSendEmailRequestBody {
    */
   email: string;
   /**
-   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   * 图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数
    */
   captcha_token?: string;
   /**
-   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   * 图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_code?: string;
 }
 
 export interface UsersResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: Array<User>;
@@ -2272,7 +2272,7 @@ export interface VoteCount {
 
 export interface VoteCountResponse {
   /**
-   * 无任务错误时，状态码为 0
+   * 无任何错误时，状态码为 0
    */
   code: number;
   data: VoteCount;

@@ -250,7 +250,7 @@ interface GetListParams {
    */
   topic_id?: number;
   /**
-   * 是否仅获取回收站中的数据
+   * 🔐是否仅获取回收站中的数据
    */
   trashed?: boolean;
 }
@@ -350,15 +350,15 @@ interface UpdateParams {
 }
 
 /**
- * 删除提问
+ * 🔑删除提问
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/questions/{question_id}', params));
 
 /**
- * 添加关注
- * 添加关注
+ * 🔑添加关注
+ * 添加关注。
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -366,8 +366,8 @@ export const addFollow = (
   postRequest(buildURL('/questions/{question_id}/followers', params));
 
 /**
- * 为提问投票
- * 为提问投票
+ * 🔑为提问投票
+ * 为提问投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -376,7 +376,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   );
 
 /**
- * 发表提问
+ * 🔑发表提问
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const create = (params: CreateParams): Promise<QuestionResponse> =>
@@ -391,7 +391,7 @@ export const create = (params: CreateParams): Promise<QuestionResponse> =>
   );
 
 /**
- * 在指定提问下发表回答
+ * 🔑在指定提问下发表回答
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const createAnswer = (
@@ -403,8 +403,8 @@ export const createAnswer = (
   );
 
 /**
- * 在指定提问下发表评论
- * 在指定提问下发表评论
+ * 🔑在指定提问下发表评论
+ * 在指定提问下发表评论。
  */
 export const createComment = (
   params: CreateCommentParams,
@@ -415,8 +415,8 @@ export const createComment = (
   );
 
 /**
- * 取消关注
- * 取消关注
+ * 🔑取消关注
+ * 取消关注。
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -425,7 +425,7 @@ export const deleteFollow = (
 
 /**
  * 🔐批量删除提问
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
+ * 批量删除提问。  只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -433,8 +433,8 @@ export const deleteMultiple = (
   deleteRequest(buildURL('/questions/{question_ids}', params));
 
 /**
- * 取消为提问的投票
- * 取消为提问的投票
+ * 🔑取消为提问的投票
+ * 取消为提问的投票。
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -443,7 +443,7 @@ export const deleteVote = (
 
 /**
  * 获取指定提问信息
- * 获取指定提问信息
+ * 获取指定提问信息。
  */
 export const get = (params: GetParams): Promise<QuestionResponse> =>
   getRequest(buildURL('/questions/{question_id}', params, ['include']));
@@ -482,7 +482,7 @@ export const getComments = (
 
 /**
  * 获取指定提问的关注者
- * 获取指定提问的关注者
+ * 获取指定提问的关注者。
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -517,7 +517,7 @@ export const getList = (
 
 /**
  * 获取提问的投票者
- * 获取提问的投票者
+ * 获取提问的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -531,14 +531,14 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把提问放入回收站
- * 仅管理员可调用该接口
+ * 把提问放入回收站。
  */
 export const trash = (params: TrashParams): Promise<QuestionResponse> =>
   postRequest(buildURL('/questions/{question_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把提问放入回收站
- * 仅管理员可调用该接口。
+ * 批量把提问放入回收站。
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -547,7 +547,7 @@ export const trashMultiple = (
 
 /**
  * 🔐把提问移出回收站
- * 仅管理员可调用该接口。
+ * 把提问移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
   postRequest(
@@ -556,7 +556,7 @@ export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
 
 /**
  * 🔐批量把提问移出回收站
- * 仅管理员可调用该接口。
+ * 批量把提问移出回收站。
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -566,7 +566,7 @@ export const untrashMultiple = (
   );
 
 /**
- * 更新提问信息
+ * 🔑更新提问信息
  * 管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const update = (params: UpdateParams): Promise<QuestionResponse> =>

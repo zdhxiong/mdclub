@@ -150,7 +150,7 @@ interface GetListParams {
    */
   name?: string;
   /**
-   * 是否仅获取回收站中的数据
+   * 🔐是否仅获取回收站中的数据
    */
   trashed?: boolean;
 }
@@ -255,14 +255,14 @@ interface UpdateParams {
 
 /**
  * 🔐删除话题
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+ * 删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/topics/{topic_id}', params));
 
 /**
- * 关注指定话题
- * 关注指定话题
+ * 🔑关注指定话题
+ * 关注指定话题。
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -271,7 +271,7 @@ export const addFollow = (
 
 /**
  * 🔐发布话题
- * 仅管理员可调用该接口
+ * 发布话题。
  */
 export const create = (params: CreateParams): Promise<TopicResponse> => {
   const formData = new FormData();
@@ -283,8 +283,8 @@ export const create = (params: CreateParams): Promise<TopicResponse> => {
 };
 
 /**
- * 取消关注指定话题
- * 取消关注指定话题
+ * 🔑取消关注指定话题
+ * 取消关注指定话题。
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -293,7 +293,7 @@ export const deleteFollow = (
 
 /**
  * 🔐批量删除话题
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
+ * 批量删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -302,7 +302,7 @@ export const deleteMultiple = (
 
 /**
  * 获取指定话题信息
- * 获取指定话题信息
+ * 获取指定话题信息。
  */
 export const get = (params: GetParams): Promise<TopicResponse> =>
   getRequest(buildURL('/topics/{topic_id}', params, ['include']));
@@ -325,7 +325,7 @@ export const getArticles = (
 
 /**
  * 获取指定话题的关注者
- * 不含已禁用的用户
+ * 不含已禁用的用户。
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -373,14 +373,14 @@ export const getQuestions = (
 
 /**
  * 🔐把话题放入回收站
- * 仅管理员可调用该接口
+ * 把话题放入回收站。
  */
 export const trash = (params: TrashParams): Promise<TopicResponse> =>
   postRequest(buildURL('/topics/{topic_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把话题放入回收站
- * 仅管理员可调用该接口。
+ * 批量把话题放入回收站。
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -389,14 +389,14 @@ export const trashMultiple = (
 
 /**
  * 🔐把话题移出回收站
- * 仅管理员可调用该接口。
+ * 把话题移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
   postRequest(buildURL('/topics/{topic_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把话题移出回收站
- * 仅管理员可调用该接口。
+ * 批量把话题移出回收站。
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -405,7 +405,7 @@ export const untrashMultiple = (
 
 /**
  * 🔐更新话题信息
- * **仅管理员可调用该接口**  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
+ * 更新话题信息。  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
  */
 export const update = (params: UpdateParams): Promise<TopicResponse> => {
   const formData = new FormData();

@@ -323,11 +323,11 @@ interface GetListParams {
    */
   username?: string;
   /**
-   * 邮箱
+   * 🔐邮箱
    */
   email?: string;
   /**
-   * 是否仅获取已禁用的用户
+   * 🔐是否仅获取已禁用的用户
    */
   disabled?: boolean;
 }
@@ -692,8 +692,8 @@ interface UploadMyCoverParams {
 }
 
 /**
- * 添加关注
- * 添加关注
+ * 🔑添加关注
+ * 添加关注。
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -702,7 +702,7 @@ export const addFollow = (
 
 /**
  * 🔐删除指定用户的头像，并重置为默认头像
- * 仅管理员可调用该接口
+ * 删除指定用户的头像，并重置为默认头像。
  */
 export const deleteAvatar = (
   params: DeleteAvatarParams,
@@ -711,7 +711,7 @@ export const deleteAvatar = (
 
 /**
  * 🔐删除指定用户的封面，并重置为默认封面
- * 仅管理员可调用该接口
+ * 删除指定用户的封面，并重置为默认封面。
  */
 export const deleteCover = (
   params: DeleteCoverParams,
@@ -719,8 +719,8 @@ export const deleteCover = (
   deleteRequest(buildURL('/users/{user_id}/cover', params));
 
 /**
- * 取消关注
- * 取消关注
+ * 🔑取消关注
+ * 取消关注。
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -728,29 +728,29 @@ export const deleteFollow = (
   deleteRequest(buildURL('/users/{user_id}/followers', params));
 
 /**
- * 删除当前登录用户的头像，并重置为默认头像
- * 删除当前登录用户的头像，并重置为默认头像
+ * 🔑删除当前登录用户的头像，并重置为默认头像
+ * 删除当前登录用户的头像，并重置为默认头像。
  */
 export const deleteMyAvatar = (): Promise<UserAvatarResponse> =>
   deleteRequest(buildURL('/user/avatar', {}));
 
 /**
- * 删除当前登录用户的封面，并重置为默认封面
- * 删除当前登录用户的封面，并重置为默认封面
+ * 🔑删除当前登录用户的封面，并重置为默认封面
+ * 删除当前登录用户的封面，并重置为默认封面。
  */
 export const deleteMyCover = (): Promise<UserCoverResponse> =>
   deleteRequest(buildURL('/user/cover', {}));
 
 /**
  * 🔐禁用指定用户
- * 仅管理员可调用该接口
+ * 禁用指定用户。
  */
 export const disable = (params: DisableParams): Promise<UserResponse> =>
   postRequest(buildURL('/users/{user_id}/disable', params, ['include']));
 
 /**
  * 🔐批量禁用用户
- * 仅管理员可调用该接口。
+ * 批量禁用用户。
  */
 export const disableMultiple = (
   params: DisableMultipleParams,
@@ -759,14 +759,14 @@ export const disableMultiple = (
 
 /**
  * 🔐恢复指定用户
- * 仅管理员可调用该接口。
+ * 恢复指定用户。
  */
 export const enable = (params: EnableParams): Promise<UserResponse> =>
   postRequest(buildURL('/users/{user_id}/enable', params, ['include']));
 
 /**
  * 🔐批量恢复用户
- * 仅管理员可调用该接口。
+ * 批量恢复用户。
  */
 export const enableMultiple = (
   params: EnableMultipleParams,
@@ -775,14 +775,14 @@ export const enableMultiple = (
 
 /**
  * 获取指定用户信息
- * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。 其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
+ * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。  其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
  */
 export const get = (params: GetParams): Promise<UserResponse> =>
   getRequest(buildURL('/users/{user_id}', params, ['include']));
 
 /**
  * 获取指定用户发表的回答
- * 获取指定用户发表的回答
+ * 获取指定用户发表的回答。
  */
 export const getAnswers = (
   params: GetAnswersParams,
@@ -798,7 +798,7 @@ export const getAnswers = (
 
 /**
  * 获取指定用户发表的文章
- * 获取指定用户发表的文章
+ * 获取指定用户发表的文章。
  */
 export const getArticles = (
   params: GetArticlesParams,
@@ -814,7 +814,7 @@ export const getArticles = (
 
 /**
  * 获取指定用户发表的评论
- * 获取指定用户发表的评论
+ * 获取指定用户发表的评论。
  */
 export const getComments = (
   params: GetCommentsParams,
@@ -830,7 +830,7 @@ export const getComments = (
 
 /**
  * 获取指定用户关注的用户列表
- * 获取指定用户关注的用户列表
+ * 获取指定用户关注的用户列表。
  */
 export const getFollowees = (
   params: GetFolloweesParams,
@@ -845,7 +845,7 @@ export const getFollowees = (
 
 /**
  * 获取指定用户的关注者
- * 获取指定用户的关注者
+ * 获取指定用户的关注者。
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -860,7 +860,7 @@ export const getFollowers = (
 
 /**
  * 获取指定用户关注的文章列表
- * 获取指定用户关注的文章列表
+ * 获取指定用户关注的文章列表。
  */
 export const getFollowingArticles = (
   params: GetFollowingArticlesParams,
@@ -875,7 +875,7 @@ export const getFollowingArticles = (
 
 /**
  * 获取指定用户关注的提问列表
- * 获取指定用户关注的提问列表
+ * 获取指定用户关注的提问列表。
  */
 export const getFollowingQuestions = (
   params: GetFollowingQuestionsParams,
@@ -890,7 +890,7 @@ export const getFollowingQuestions = (
 
 /**
  * 获取指定用户关注的话题列表
- * 获取指定用户关注的话题列表
+ * 获取指定用户关注的话题列表。
  */
 export const getFollowingTopics = (
   params: GetFollowingTopicsParams,
@@ -905,7 +905,7 @@ export const getFollowingTopics = (
 
 /**
  * 获取用户列表
- * 仅管理员可使用 email 参数进行搜索  仅管理员可获取已禁用的用户列表
+ * 仅管理员可使用 email 参数进行搜索。  仅管理员可获取已禁用的用户列表。
  */
 export const getList = (params: GetListParams = {}): Promise<UsersResponse> =>
   getRequest(
@@ -922,15 +922,15 @@ export const getList = (params: GetListParams = {}): Promise<UsersResponse> =>
   );
 
 /**
- * 获取当前登录用户的信息
- * 获取当前登录用户的信息
+ * 🔑获取当前登录用户的信息
+ * 获取当前登录用户的信息。
  */
 export const getMine = (params: GetMineParams = {}): Promise<UserResponse> =>
   getRequest(buildURL('/user', params, ['include']));
 
 /**
- * 获取当前登录用户发表的回答
- * 获取当前登录用户发表的回答
+ * 🔑获取当前登录用户发表的回答
+ * 获取当前登录用户发表的回答。
  */
 export const getMyAnswers = (
   params: GetMyAnswersParams = {},
@@ -940,8 +940,8 @@ export const getMyAnswers = (
   );
 
 /**
- * 获取当前登录用户发表的文章
- * 获取当前登录用户发表的文章
+ * 🔑获取当前登录用户发表的文章
+ * 获取当前登录用户发表的文章。
  */
 export const getMyArticles = (
   params: GetMyArticlesParams = {},
@@ -956,8 +956,8 @@ export const getMyArticles = (
   );
 
 /**
- * 获取当前登录用户发表的评论
- * 获取当前登录用户发表的评论
+ * 🔑获取当前登录用户发表的评论
+ * 获取当前登录用户发表的评论。
  */
 export const getMyComments = (
   params: GetMyCommentsParams = {},
@@ -972,8 +972,8 @@ export const getMyComments = (
   );
 
 /**
- * 获取当前登录用户关注的用户
- * 获取当前登录用户关注的用户
+ * 🔑获取当前登录用户关注的用户
+ * 获取当前登录用户关注的用户。
  */
 export const getMyFollowees = (
   params: GetMyFolloweesParams = {},
@@ -983,8 +983,8 @@ export const getMyFollowees = (
   );
 
 /**
- * 获取当前登录用户的关注者
- * 获取当前登录用户的关注者
+ * 🔑获取当前登录用户的关注者
+ * 获取当前登录用户的关注者。
  */
 export const getMyFollowers = (
   params: GetMyFollowersParams = {},
@@ -994,8 +994,8 @@ export const getMyFollowers = (
   );
 
 /**
- * 获取登录用户关注的文章
- * 获取登录用户关注的文章
+ * 🔑获取登录用户关注的文章
+ * 获取登录用户关注的文章。
  */
 export const getMyFollowingArticles = (
   params: GetMyFollowingArticlesParams = {},
@@ -1009,8 +1009,8 @@ export const getMyFollowingArticles = (
   );
 
 /**
- * 获取登录用户关注的提问
- * 获取登录用户关注的提问
+ * 🔑获取登录用户关注的提问
+ * 获取登录用户关注的提问。
  */
 export const getMyFollowingQuestions = (
   params: GetMyFollowingQuestionsParams = {},
@@ -1024,8 +1024,8 @@ export const getMyFollowingQuestions = (
   );
 
 /**
- * 获取登录用户关注的话题
- * 获取登录用户关注的话题
+ * 🔑获取登录用户关注的话题
+ * 获取登录用户关注的话题。
  */
 export const getMyFollowingTopics = (
   params: GetMyFollowingTopicsParams = {},
@@ -1035,8 +1035,8 @@ export const getMyFollowingTopics = (
   );
 
 /**
- * 获取登录用户发表的提问
- * 获取登录用户发表的提问
+ * 🔑获取登录用户发表的提问
+ * 获取登录用户发表的提问。
  */
 export const getMyQuestions = (
   params: GetMyQuestionsParams = {},
@@ -1052,7 +1052,7 @@ export const getMyQuestions = (
 
 /**
  * 获取指定用户发表的提问
- * 获取指定用户发表的提问
+ * 获取指定用户发表的提问。
  */
 export const getQuestions = (
   params: GetQuestionsParams,
@@ -1068,7 +1068,7 @@ export const getQuestions = (
 
 /**
  * 验证邮箱并创建账号
- * 返回用户信息
+ * 返回用户信息。
  */
 export const register = (params: RegisterParams): Promise<UserResponse> => {
   if (params.password) {
@@ -1083,7 +1083,7 @@ export const register = (params: RegisterParams): Promise<UserResponse> => {
 
 /**
  * 发送重置密码邮箱验证码
- * 若返回参数中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
+ * 若返回参数中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
  */
 export const sendPasswordResetEmail = (
   params: SendPasswordResetEmailParams,
@@ -1095,7 +1095,7 @@ export const sendPasswordResetEmail = (
 
 /**
  * 发送注册邮箱验证码
- * 若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
+ * 若返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
  */
 export const sendRegisterEmail = (
   params: SendRegisterEmailParams,
@@ -1107,7 +1107,7 @@ export const sendRegisterEmail = (
 
 /**
  * 🔐更新指定用户信息
- * 仅管理员可调用该接口
+ * 更新指定用户信息。
  */
 export const update = (params: UpdateParams): Promise<UserResponse> =>
   patchRequest(
@@ -1122,8 +1122,8 @@ export const update = (params: UpdateParams): Promise<UserResponse> =>
   );
 
 /**
- * 更新当前登录用户信息
- * 更新当前登录用户信息
+ * 🔑更新当前登录用户信息
+ * 更新当前登录用户信息。
  */
 export const updateMine = (params: UpdateMineParams): Promise<UserResponse> =>
   patchRequest(
@@ -1139,7 +1139,7 @@ export const updateMine = (params: UpdateMineParams): Promise<UserResponse> =>
 
 /**
  * 验证邮箱并更新密码
- * 验证邮箱并更新密码
+ * 验证邮箱并更新密码。
  */
 export const updatePassword = (
   params: UpdatePasswordParams,
@@ -1155,8 +1155,8 @@ export const updatePassword = (
 };
 
 /**
- * 上传当前登录用户的头像
- * 上传当前登录用户的头像
+ * 🔑上传当前登录用户的头像
+ * 上传当前登录用户的头像。
  */
 export const uploadMyAvatar = (
   params: UploadMyAvatarParams,
@@ -1168,8 +1168,8 @@ export const uploadMyAvatar = (
 };
 
 /**
- * 上传当前登录用户的封面
- * 上传当前登录用户的封面
+ * 🔑上传当前登录用户的封面
+ * 上传当前登录用户的封面。
  */
 export const uploadMyCover = (
   params: UploadMyCoverParams,

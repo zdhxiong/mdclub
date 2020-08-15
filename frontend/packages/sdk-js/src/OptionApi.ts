@@ -4,14 +4,14 @@ import { OptionResponse, OptionUpdateRequestBody } from './models';
 
 /**
  * 获取站点全局设置参数
- * 获取站点全局设置参数
+ * 获取站点全局设置参数。
  */
 export const get = (): Promise<OptionResponse> =>
   getRequest(buildURL('/options', {}));
 
 /**
  * 🔐更新站点全局设置
- * 仅管理员可调用该接口
+ * 更新站点全局设置。
  */
 export const update = (
   params: OptionUpdateRequestBody,

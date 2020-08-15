@@ -91,14 +91,14 @@ interface UploadParams {
 
 /**
  * 🔐删除指定图片
- * 仅管理员可调用该接口
+ * 删除指定图片。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/images/{key}', params));
 
 /**
  * 🔐批量删除图片
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+ * 批量删除图片。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -106,14 +106,14 @@ export const deleteMultiple = (
 
 /**
  * 获取指定图片信息
- * 获取指定图片信息
+ * 获取指定图片信息。
  */
 export const get = (params: GetParams): Promise<ImageResponse> =>
   getRequest(buildURL('/images/{key}', params, ['include']));
 
 /**
  * 🔐获取图片列表
- * 仅管理员可调用该接口
+ * 获取图片列表。
  */
 export const getList = (params: GetListParams = {}): Promise<ImagesResponse> =>
   getRequest(
@@ -130,7 +130,7 @@ export const getList = (params: GetListParams = {}): Promise<ImagesResponse> =>
 
 /**
  * 🔐更新指定图片信息
- * 仅管理员可调用该接口
+ * 更新指定图片信息。
  */
 export const update = (params: UpdateParams): Promise<ImageResponse> =>
   patchRequest(
@@ -139,8 +139,8 @@ export const update = (params: UpdateParams): Promise<ImageResponse> =>
   );
 
 /**
- * 上传图片
- * 上传图片
+ * 🔑上传图片
+ * 上传图片。
  */
 export const upload = (params: UploadParams): Promise<ImageResponse> => {
   const formData = new FormData();

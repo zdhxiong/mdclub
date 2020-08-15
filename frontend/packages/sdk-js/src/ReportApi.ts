@@ -41,7 +41,7 @@ interface CreateParams {
 
 interface DeleteMultipleParams {
   /**
-   * 类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。  例如 question:12,comment:34
+   * 类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。  例如 `question:12,comment:34`
    */
   report_targets: string;
 }
@@ -92,14 +92,14 @@ interface GetReasonsParams {
 
 /**
  * 🔐删除举报
- * 仅管理员可调用该接口
+ * 删除举报。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params));
 
 /**
- * 添加举报
- * 添加举报
+ * 🔑添加举报
+ * 添加举报。
  */
 export const create = (params: CreateParams): Promise<ReportResponse> =>
   postRequest(
@@ -109,7 +109,7 @@ export const create = (params: CreateParams): Promise<ReportResponse> =>
 
 /**
  * 🔐批量删除举报
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
+ * 批量删除举报。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -118,7 +118,7 @@ export const deleteMultiple = (
 
 /**
  * 🔐获取被举报的内容列表
- * 仅管理员可调用该接口
+ * 获取被举报的内容列表。
  */
 export const getList = (
   params: GetListParams = {},
@@ -134,7 +134,7 @@ export const getList = (
 
 /**
  * 🔐获取被举报内容的举报详情
- * 仅管理员可调用该接口
+ * 获取被举报内容的举报详情。
  */
 export const getReasons = (
   params: GetReasonsParams,

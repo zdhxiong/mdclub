@@ -198,7 +198,7 @@ interface GetListParams {
    */
   topic_id?: number;
   /**
-   * 是否仅获取回收站中的数据
+   * 🔐是否仅获取回收站中的数据
    */
   trashed?: boolean;
 }
@@ -298,15 +298,15 @@ interface UpdateParams {
 }
 
 /**
- * 删除文章
+ * 🔑删除文章
  * 只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。  管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/articles/{article_id}', params));
 
 /**
- * 添加关注
- * 添加关注
+ * 🔑添加关注
+ * 添加关注。
  */
 export const addFollow = (
   params: AddFollowParams,
@@ -314,8 +314,8 @@ export const addFollow = (
   postRequest(buildURL('/articles/{article_id}/followers', params));
 
 /**
- * 为文章投票
- * 为文章投票
+ * 🔑为文章投票
+ * 为文章投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -324,7 +324,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   );
 
 /**
- * 发表文章
+ * 🔑发表文章
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const create = (params: CreateParams): Promise<ArticleResponse> =>
@@ -339,8 +339,8 @@ export const create = (params: CreateParams): Promise<ArticleResponse> =>
   );
 
 /**
- * 在指定文章下发表评论
- * 在指定文章下发表评论
+ * 🔑在指定文章下发表评论
+ * 在指定文章下发表评论。
  */
 export const createComment = (
   params: CreateCommentParams,
@@ -351,8 +351,8 @@ export const createComment = (
   );
 
 /**
- * 取消关注
- * 取消关注
+ * 🔑取消关注
+ * 取消关注。
  */
 export const deleteFollow = (
   params: DeleteFollowParams,
@@ -361,7 +361,7 @@ export const deleteFollow = (
 
 /**
  * 🔐批量删除文章
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
+ * 批量删除文章。  只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -369,8 +369,8 @@ export const deleteMultiple = (
   deleteRequest(buildURL('/articles/{article_ids}', params));
 
 /**
- * 取消为文章的投票
- * 取消为文章的投票
+ * 🔑取消为文章的投票
+ * 取消为文章的投票。
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -379,7 +379,7 @@ export const deleteVote = (
 
 /**
  * 获取指定文章信息
- * 获取指定文章信息
+ * 获取指定文章信息。
  */
 export const get = (params: GetParams): Promise<ArticleResponse> =>
   getRequest(buildURL('/articles/{article_id}', params, ['include']));
@@ -402,7 +402,7 @@ export const getComments = (
 
 /**
  * 获取指定文章的关注者
- * 获取指定文章的关注者
+ * 获取指定文章的关注者。
  */
 export const getFollowers = (
   params: GetFollowersParams,
@@ -437,7 +437,7 @@ export const getList = (
 
 /**
  * 获取文章的投票者
- * 获取文章的投票者
+ * 获取文章的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -451,14 +451,14 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把文章放入回收站
- * 仅管理员可调用该接口
+ * 把文章放入回收站。
  */
 export const trash = (params: TrashParams): Promise<ArticleResponse> =>
   postRequest(buildURL('/articles/{article_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把文章放入回收站
- * 仅管理员可调用该接口。
+ * 批量把文章放入回收站。
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -467,14 +467,14 @@ export const trashMultiple = (
 
 /**
  * 🔐把文章移出回收站
- * 仅管理员可调用该接口。
+ * 把文章移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<ArticleResponse> =>
   postRequest(buildURL('/articles/{article_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把文章移出回收站
- * 仅管理员可调用该接口。
+ * 批量把文章移出回收站。
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -482,7 +482,7 @@ export const untrashMultiple = (
   postRequest(buildURL('/articles/{article_ids}/untrash', params, ['include']));
 
 /**
- * 更新文章信息
+ * 🔑更新文章信息
  * 管理员可修改文章。文章作者是否可修改文章，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const update = (params: UpdateParams): Promise<ArticleResponse> =>

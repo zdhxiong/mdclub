@@ -112,7 +112,7 @@ interface GetListParams {
    */
   user_id?: number;
   /**
-   * 是否仅获取回收站中的数据
+   * 🔐是否仅获取回收站中的数据
    */
   trashed?: boolean;
 }
@@ -229,15 +229,15 @@ interface UpdateParams {
 }
 
 /**
- * 删除评论
+ * 🔑删除评论
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/comments/{comment_id}', params));
 
 /**
- * 为评论投票
- * 为评论投票
+ * 🔑为评论投票
+ * 为评论投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   postRequest(
@@ -246,8 +246,8 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
   );
 
 /**
- * 在指定评论下发表回复
- * 在指定评论下发表回复
+ * 🔑在指定评论下发表回复
+ * 在指定评论下发表回复。
  */
 export const createReply = (
   params: CreateReplyParams,
@@ -259,7 +259,7 @@ export const createReply = (
 
 /**
  * 🔐批量删除评论
- * 仅管理员可调用该接口。 只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
+ * 批量删除评论。  只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
   params: DeleteMultipleParams,
@@ -267,8 +267,8 @@ export const deleteMultiple = (
   deleteRequest(buildURL('/comments/{comment_ids}', params));
 
 /**
- * 取消为评论的投票
- * 取消为评论的投票
+ * 🔑取消为评论的投票
+ * 取消为评论的投票。
  */
 export const deleteVote = (
   params: DeleteVoteParams,
@@ -277,13 +277,13 @@ export const deleteVote = (
 
 /**
  * 获取评论详情
- * 获取评论详情
+ * 获取评论详情。
  */
 export const get = (params: GetParams): Promise<CommentResponse> =>
   getRequest(buildURL('/comments/{comment_id}', params, ['include']));
 
 /**
- * 获取所有评论
+ * 🔐获取所有评论
  * 获取所有评论。
  */
 export const getList = (
@@ -321,7 +321,7 @@ export const getReplies = (
 
 /**
  * 获取评论的投票者
- * 获取评论的投票者
+ * 获取评论的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
   getRequest(
@@ -335,14 +335,14 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把评论放入回收站
- * 仅管理员可调用该接口
+ * 把评论放入回收站。
  */
 export const trash = (params: TrashParams): Promise<CommentResponse> =>
   postRequest(buildURL('/comments/{comment_id}/trash', params, ['include']));
 
 /**
  * 🔐批量把评论放入回收站
- * 仅管理员可调用该接口。
+ * 批量把评论放入回收站。
  */
 export const trashMultiple = (
   params: TrashMultipleParams,
@@ -351,14 +351,14 @@ export const trashMultiple = (
 
 /**
  * 🔐把评论移出回收站
- * 仅管理员可调用该接口。
+ * 把评论移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
   postRequest(buildURL('/comments/{comment_id}/untrash', params, ['include']));
 
 /**
  * 🔐批量把评论移出回收站
- * 仅管理员可调用该接口。
+ * 批量把评论移出回收站。
  */
 export const untrashMultiple = (
   params: UntrashMultipleParams,
@@ -366,7 +366,7 @@ export const untrashMultiple = (
   postRequest(buildURL('/comments/{comment_ids}/untrash', params, ['include']));
 
 /**
- * 修改评论
+ * 🔑修改评论
  * 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
  */
 export const update = (params: UpdateParams): Promise<CommentResponse> =>

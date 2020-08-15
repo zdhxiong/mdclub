@@ -148,14 +148,14 @@ interface ReadMultipleParams {
 }
 
 /**
- * 删除一条通知
+ * 🔑删除一条通知
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
   deleteRequest(buildURL('/notifications/{notification_id}', params));
 
 /**
- * 删除所有通知
+ * 🔑删除所有通知
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 export const deleteAll = (
@@ -164,7 +164,7 @@ export const deleteAll = (
   deleteRequest(buildURL('/notifications', params, ['type']));
 
 /**
- * 批量删除通知
+ * 🔑批量删除通知
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -173,7 +173,7 @@ export const deleteMultiple = (
   deleteRequest(buildURL('/notifications/{notification_ids}', params));
 
 /**
- * 获取未读通知数量
+ * 🔑获取未读通知数量
  * 获取未读通知数量。
  */
 export const getCount = (
@@ -182,7 +182,7 @@ export const getCount = (
   getRequest(buildURL('/notifications/count', params, ['type']));
 
 /**
- * 获取通知列表
+ * 🔑获取通知列表
  * 获取通知列表。
  */
 export const getList = (
@@ -199,8 +199,8 @@ export const getList = (
   );
 
 /**
- * 把一条通知标记为已读
- * 把一条通知标记为已读
+ * 🔑把一条通知标记为已读
+ * 把一条通知标记为已读。
  */
 export const read = (params: ReadParams): Promise<NotificationResponse> =>
   postRequest(
@@ -208,15 +208,15 @@ export const read = (params: ReadParams): Promise<NotificationResponse> =>
   );
 
 /**
- * 把所有通知标记为已读
+ * 🔑把所有通知标记为已读
  * 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
  */
 export const readAll = (params: ReadAllParams = {}): Promise<EmptyResponse> =>
   postRequest(buildURL('/notifications/read', params, ['type']));
 
 /**
- * 批量把通知标记为已读
- * 批量把通知标记为已读
+ * 🔑批量把通知标记为已读
+ * 批量把通知标记为已读。
  */
 export const readMultiple = (
   params: ReadMultipleParams,
