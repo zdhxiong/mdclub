@@ -47,7 +47,7 @@
     "/answers": {
       "get": {
         "operationId": "getList",
-        "summary": "获取回答列表",
+        "summary": "🔐获取回答列表",
         "description": "获取回答列表。",
         "parameters": [
           {
@@ -3288,7 +3288,7 @@
       "post": {
         "operationId": "sendRegisterEmail",
         "summary": "发送注册邮箱验证码",
-        "description": "若返回信息中含参数 captcha_token 和 captcha_image，表示下次调用该接口时，需要用户输入图形验证码，\n并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。\n",
+        "description": "若返回信息中含参数 `captcha_token` 和 `captcha_image`，表示下次调用该接口时，需要用户输入图形验证码，\n并把 `captcha_token` 和 `captcha_code` 参数传递到服务端。\n",
         "requestBody": {
           "$ref": "#/components/requestBodies/UserSendEmail"
         },
@@ -4159,12 +4159,14 @@
         "properties": {
           "captcha_token": {
             "type": "string",
-            "description": "图形验证码token"
+            "description": "图形验证码token",
+            "example": "3b5ffd5a5f824973a15157c5f399603d"
           },
           "captcha_image": {
             "type": "string",
             "format": "byte",
-            "description": "base64格式的图形验证码图片"
+            "description": "base64格式的图形验证码图片",
+            "example": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...DM/9k="
           }
         },
         "required": [
@@ -4279,7 +4281,7 @@
             "maxItems": 100,
             "description": "邮箱地址",
             "example": [
-              "zdhxiong@gmail.com",
+              "test@example.com",
               "example@example.com"
             ]
           },
@@ -4392,15 +4394,18 @@
         "properties": {
           "original": {
             "type": "string",
-            "description": "原图地址"
+            "description": "原图地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg"
           },
           "release": {
             "type": "string",
-            "description": "宽度固定，高度自适应的图片地址"
+            "description": "宽度固定，高度自适应的图片地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg"
           },
           "thumb": {
             "type": "string",
-            "description": "固定宽高的缩略图地址"
+            "description": "固定宽高的缩略图地址",
+            "example": "https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg"
           }
         },
         "required": [
@@ -4443,7 +4448,8 @@
               "answer_deleted",
               "comment_replied",
               "comment_deleted"
-            ]
+            ],
+            "example": "question_answered"
           },
           "article_id": {
             "type": "integer",
@@ -4476,7 +4482,7 @@
             "example": 1
           },
           "content_deleted": {
-            "description": "已删除的数据，数据中不包含 `relationships`",
+            "description": "已删除的数据，包含以下对象之一，数据中不包含 `relationships`",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/Question"
@@ -4901,7 +4907,8 @@
               "$ref": "#/components/schemas/StatsNewItems"
             }
           }
-        }
+        },
+        "required": []
       },
       "StatsNewItems": {
         "type": "object",
@@ -4971,7 +4978,18 @@
             "description": "数据库大小",
             "example": "12M"
           }
-        }
+        },
+        "required": [
+          "mdclub_version",
+          "os_version",
+          "php_version",
+          "webserver_version",
+          "database_version",
+          "upload_max_filesize",
+          "max_execution_time",
+          "disk_free_space",
+          "database_size"
+        ]
       },
       "Token": {
         "type": "object",
@@ -5129,7 +5147,7 @@
             "type": "string",
             "description": "🔐邮箱",
             "format": "email",
-            "example": "zdhxiong@gmail.com"
+            "example": "example@example.com"
           },
           "avatar": {
             "$ref": "#/components/schemas/UserAvatar"
@@ -5394,7 +5412,8 @@
             "description": "HTML 格式的正文",
             "example": "<p><strong>mdui</strong> <a href=\"https://mdui.org\" target=\"_blank\">https://mdui.org</a> <br>mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。</p><p><strong>MDClub</strong> <a href=\"https://mdclub.org\" target=\"_blank\">https://mdclub.org</a> <br>MDClub 是使用 mdui 作为前端框架的开源社区应用。</p>"
           }
-        }
+        },
+        "required": []
       },
       "ArticleCreateRequestBody": {
         "allOf": [
@@ -5439,7 +5458,8 @@
             "description": "HTML 格式的正文",
             "example": "<p>MDClub 是一个开源社区系统，使用 <a href=\"https://mdui.org\" target=\"_blank\">mdui</a> 作为前端框架。</p><p>系统的所有功能都通过 Restful Api 开放，共提供了超过 200 个接口。你可以使用这些接口开发任意客户端。</p>"
           }
-        }
+        },
+        "required": []
       },
       "CommentRequestBody": {
         "type": "object",
@@ -5984,7 +6004,8 @@
             "description": "HTML 格式的正文",
             "example": "<p>如题</p>"
           }
-        }
+        },
+        "required": []
       },
       "ReportRequestBody": {
         "type": "object",
@@ -6029,7 +6050,8 @@
             "format": "binary",
             "description": "封面图片"
           }
-        }
+        },
+        "required": []
       },
       "UserAvatarRequestBody": {
         "type": "object",
@@ -6077,12 +6099,12 @@
           },
           "captcha_token": {
             "type": "string",
-            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数",
+            "description": "图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数",
             "example": "73687e77c8314821a8a301d96c776f01"
           },
           "captcha_code": {
             "type": "string",
-            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数",
+            "description": "图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数",
             "example": "f8h4d"
           }
         },
@@ -6097,7 +6119,7 @@
           "email": {
             "type": "string",
             "description": "邮箱",
-            "example": "zdhxiong@gmail.com"
+            "example": "example@example.com"
           },
           "email_code": {
             "type": "string",
@@ -6123,7 +6145,7 @@
             "type": "string",
             "description": "邮箱",
             "format": "email",
-            "example": "zdhxiong@gmail.com"
+            "example": "example@example.com"
           },
           "email_code": {
             "type": "string",
@@ -6176,7 +6198,8 @@
             "description": "所属地区",
             "example": "杭州"
           }
-        }
+        },
+        "required": []
       },
       "UserSendEmailRequestBody": {
         "type": "object",
@@ -6185,16 +6208,16 @@
             "type": "string",
             "description": "邮箱",
             "format": "email",
-            "example": "zdhxiong@gmail.com"
+            "example": "example@example.com"
           },
           "captcha_token": {
             "type": "string",
-            "description": "图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数",
+            "description": "图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数",
             "example": "73687e77c8314821a8a301d96c776f01"
           },
           "captcha_code": {
             "type": "string",
-            "description": "图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数",
+            "description": "图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数",
             "example": "f8h4d"
           }
         },
@@ -6792,7 +6815,7 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "description": "当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串",
             "enum": [
               "up",
               "down",
@@ -6819,7 +6842,7 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "description": "当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串",
             "enum": [
               "up",
               "down",
@@ -6838,7 +6861,7 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "description": "当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串",
             "enum": [
               "up",
               "down",
@@ -6910,7 +6933,7 @@
           },
           "voting": {
             "type": "string",
-            "description": "当前登录用户的投票类型（up、down），未投过票则为空字符串",
+            "description": "当前登录用户的投票类型（`up`、`down`），未投过票则为空字符串",
             "enum": [
               "up",
               "down",
@@ -7656,7 +7679,7 @@
       "disabled.query": {
         "name": "disabled",
         "in": "query",
-        "description": "是否仅获取已禁用的用户",
+        "description": "🔐是否仅获取已禁用的用户",
         "schema": {
           "type": "boolean",
           "default": false
@@ -7666,12 +7689,12 @@
       "email.query": {
         "name": "email",
         "in": "query",
-        "description": "邮箱",
+        "description": "🔐邮箱",
         "schema": {
           "type": "string",
           "format": "email"
         },
-        "example": "zdhxiong@gmail.com"
+        "example": "example@example.com"
       },
       "end_date.query": {
         "name": "end_date",
@@ -8215,7 +8238,7 @@
       "report_targets": {
         "name": "report_targets",
         "in": "path",
-        "description": "类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。\n\n例如 question:12,comment:34\n",
+        "description": "类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。\n\n例如 `question:12,comment:34`\n",
         "required": true,
         "schema": {
           "type": "string"
@@ -8327,7 +8350,7 @@
       "trashed.query": {
         "name": "trashed",
         "in": "query",
-        "description": "是否仅获取回收站中的数据",
+        "description": "🔐是否仅获取回收站中的数据",
         "schema": {
           "type": "boolean",
           "default": false

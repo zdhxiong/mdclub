@@ -1,6 +1,6 @@
 name: trashed
 in: query
-description: 是否仅获取回收站中的数据
+description: 🔐是否仅获取回收站中的数据
 schema:
   type: boolean
   default: false

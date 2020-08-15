@@ -4,7 +4,7 @@ properties:
     type: string
     description: 邮箱
     format: email
-    example: zdhxiong@gmail.com
+    example: example@example.com
   captcha_token:
     type: string
     description: 图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数

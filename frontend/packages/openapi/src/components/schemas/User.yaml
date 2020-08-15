@@ -13,7 +13,7 @@ properties:
     type: string
     description: 🔐邮箱
     format: email
-    example: zdhxiong@gmail.com
+    example: example@example.com
   avatar:
     $ref: '#/components/schemas/UserAvatar'
   cover:

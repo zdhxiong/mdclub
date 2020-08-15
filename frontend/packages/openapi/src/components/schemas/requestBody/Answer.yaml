@@ -12,3 +12,4 @@ properties:
     type: string
     description: HTML 格式的正文
     example: <p><strong>mdui</strong> <a href="https://mdui.org" target="_blank">https://mdui.org</a> <br>mdui 是目前最具有逻辑性、一致性、简洁性、高可用、且对规范实现的最好的 Material Design 框架。</p><p><strong>MDClub</strong> <a href="https://mdclub.org" target="_blank">https://mdclub.org</a> <br>MDClub 是使用 mdui 作为前端框架的开源社区应用。</p>
+required: []

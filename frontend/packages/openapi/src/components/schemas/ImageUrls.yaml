@@ -3,12 +3,15 @@ properties:
   original:
     type: string
     description: 原图地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
   release:
     type: string
     description: 宽度固定，高度自适应的图片地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
   thumb:
     type: string
     description: 固定宽高的缩略图地址
+    example: https://mdclub.org/user-avatar/c4/ca/bc03445db47540eea79148252e7a91fe.jpg
 required:
   - original
   - release

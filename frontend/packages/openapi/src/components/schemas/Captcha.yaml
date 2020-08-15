@@ -3,10 +3,12 @@ properties:
   captcha_token:
     type: string
     description: 图形验证码token
+    example: 3b5ffd5a5f824973a15157c5f399603d
   captcha_image:
     type: string
     format: byte
     description: base64格式的图形验证码图片
+    example: data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...DM/9k=
 required:
   - captcha_token
   - captcha_image

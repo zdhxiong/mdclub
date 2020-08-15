@@ -46,6 +46,7 @@ properties:
       - answer_deleted
       - comment_replied
       - comment_deleted
+    example: question_answered
   article_id:
     type: integer
     description: 相关文章ID
@@ -72,7 +73,7 @@ properties:
     minimum: 1
     example: 1
   content_deleted:
-    description: 已删除的数据，数据中不包含 `relationships`
+    description: 已删除的数据，包含以下对象之一，数据中不包含 `relationships`
     oneOf:
       - $ref: '#/components/schemas/Question'
       - $ref: '#/components/schemas/Article'

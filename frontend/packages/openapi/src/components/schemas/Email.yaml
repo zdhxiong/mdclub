@@ -8,7 +8,7 @@ properties:
     maxItems: 100
     description: 邮箱地址
     example:
-      - zdhxiong@gmail.com
+      - test@example.com
       - example@example.com
   subject:
     type: string

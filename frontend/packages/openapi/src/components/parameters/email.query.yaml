@@ -4,4 +4,4 @@ description: 🔐邮箱
 schema:
   type: string
   format: email
-example: zdhxiong@gmail.com
+example: example@example.com

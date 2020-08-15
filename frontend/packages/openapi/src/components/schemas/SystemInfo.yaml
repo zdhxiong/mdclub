@@ -36,3 +36,13 @@ properties:
     type: string
     description: 数据库大小
     example: 12M
+required:
+  - mdclub_version
+  - os_version
+  - php_version
+  - webserver_version
+  - database_version
+  - upload_max_filesize
+  - max_execution_time
+  - disk_free_space
+  - database_size

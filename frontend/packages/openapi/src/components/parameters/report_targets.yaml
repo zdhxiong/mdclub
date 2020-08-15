@@ -3,7 +3,7 @@ in: path
 description: |
   类型和ID之间用 `:` 分隔，多个记录之间用 `,` 分隔，最多可提供 100 个。
 
-  例如 question:12,comment:34
+  例如 `question:12,comment:34`
 required: true
 schema:
   type: string

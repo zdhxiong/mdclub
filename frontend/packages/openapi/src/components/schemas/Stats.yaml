@@ -47,3 +47,4 @@ properties:
     description: 每日评论增长数量
     items:
       $ref: '#/components/schemas/StatsNewItems'
+required: []
