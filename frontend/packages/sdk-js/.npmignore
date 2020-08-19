@@ -3,7 +3,8 @@
 .vscode/
 .vs/
 .idea/
-node_modules
-openapi-generator
-test
-tmp
+docs/
+node_modules/
+openapi-generator/
+test/
+tmp/

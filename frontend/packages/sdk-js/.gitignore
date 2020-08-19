@@ -1,6 +1,7 @@
 .vscode/
 .vs/
 .idea/
+docs/
 es/
 node_modules/
 tmp/

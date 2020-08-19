@@ -9,7 +9,9 @@
     "eslint": "eslint --fix src/**/*.ts",
     "test": "cd test && node reset_mysql.js && cd ../ && node build.js --test",
     "build": "npm run eslint && tsc -p src/tsconfig.json && node build.js --build",
-    "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec"
+    "build-sdk-tmp": "npx openapi-generator generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
+    "docs": "typedoc --out docs/html/ src/index.ts",
+    "docs-json": "typedoc --json docs/sdk-api.json src/index.ts"
   },
   "files": [
     "dist",
@@ -77,6 +79,7 @@
     "spa-server": "^1.0.0",
     "swagger-model-validator": "^3.0.19",
     "tslib": "^2.0.0",
+    "typedoc": "^0.18.0",
     "typescript": "^3.9.7"
   },
   "engines": {
