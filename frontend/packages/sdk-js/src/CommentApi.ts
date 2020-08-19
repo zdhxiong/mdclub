@@ -230,6 +230,7 @@ interface UpdateParams {
 
 /**
  * 🔑删除评论
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -237,6 +238,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔑为评论投票
+ *
  * 为评论投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
@@ -247,6 +249,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 
 /**
  * 🔑在指定评论下发表回复
+ *
  * 在指定评论下发表回复。
  */
 export const createReply = (
@@ -259,6 +262,7 @@ export const createReply = (
 
 /**
  * 🔐批量删除评论
+ *
  * 批量删除评论。  只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -268,6 +272,7 @@ export const deleteMultiple = (
 
 /**
  * 🔑取消为评论的投票
+ *
  * 取消为评论的投票。
  */
 export const deleteVote = (
@@ -277,6 +282,7 @@ export const deleteVote = (
 
 /**
  * 获取评论详情
+ *
  * 获取评论详情。
  */
 export const get = (params: GetParams): Promise<CommentResponse> =>
@@ -284,6 +290,7 @@ export const get = (params: GetParams): Promise<CommentResponse> =>
 
 /**
  * 🔐获取所有评论
+ *
  * 获取所有评论。
  */
 export const getList = (
@@ -305,6 +312,7 @@ export const getList = (
 
 /**
  * 获取指定评论的回复
+ *
  * 获知指定评论的回复。
  */
 export const getReplies = (
@@ -321,6 +329,7 @@ export const getReplies = (
 
 /**
  * 获取评论的投票者
+ *
  * 获取评论的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
@@ -335,6 +344,7 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把评论放入回收站
+ *
  * 把评论放入回收站。
  */
 export const trash = (params: TrashParams): Promise<CommentResponse> =>
@@ -342,6 +352,7 @@ export const trash = (params: TrashParams): Promise<CommentResponse> =>
 
 /**
  * 🔐批量把评论放入回收站
+ *
  * 批量把评论放入回收站。
  */
 export const trashMultiple = (
@@ -351,6 +362,7 @@ export const trashMultiple = (
 
 /**
  * 🔐把评论移出回收站
+ *
  * 把评论移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
@@ -358,6 +370,7 @@ export const untrash = (params: UntrashParams): Promise<CommentResponse> =>
 
 /**
  * 🔐批量把评论移出回收站
+ *
  * 批量把评论移出回收站。
  */
 export const untrashMultiple = (
@@ -367,6 +380,7 @@ export const untrashMultiple = (
 
 /**
  * 🔑修改评论
+ *
  * 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
  */
 export const update = (params: UpdateParams): Promise<CommentResponse> =>

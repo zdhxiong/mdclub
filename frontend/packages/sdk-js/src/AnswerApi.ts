@@ -234,6 +234,7 @@ interface UpdateParams {
 
 /**
  * 🔑删除回答
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -241,6 +242,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔑为回答投票
+ *
  * 为回答投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
@@ -251,6 +253,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 
 /**
  * 在指定回答下发表评论
+ *
  * 在指定回答下发表评论。
  */
 export const createComment = (
@@ -263,6 +266,7 @@ export const createComment = (
 
 /**
  * 🔐批量删除回答
+ *
  * 批量删除回答。  只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -272,6 +276,7 @@ export const deleteMultiple = (
 
 /**
  * 🔑取消为回答的投票
+ *
  * 取消为回答的投票。
  */
 export const deleteVote = (
@@ -281,6 +286,7 @@ export const deleteVote = (
 
 /**
  * 获取回答详情
+ *
  * 获取回答详情。
  */
 export const get = (params: GetParams): Promise<AnswerResponse> =>
@@ -288,6 +294,7 @@ export const get = (params: GetParams): Promise<AnswerResponse> =>
 
 /**
  * 获取指定回答的评论
+ *
  * 获取指定回答的评论。
  */
 export const getComments = (
@@ -304,6 +311,7 @@ export const getComments = (
 
 /**
  * 🔐获取回答列表
+ *
  * 获取回答列表。
  */
 export const getList = (params: GetListParams = {}): Promise<AnswersResponse> =>
@@ -322,6 +330,7 @@ export const getList = (params: GetListParams = {}): Promise<AnswersResponse> =>
 
 /**
  * 获取回答的投票者
+ *
  * 获取回答的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
@@ -336,6 +345,7 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把回答放入回收站
+ *
  * 把回答放入回收站。
  */
 export const trash = (params: TrashParams): Promise<AnswerResponse> =>
@@ -343,6 +353,7 @@ export const trash = (params: TrashParams): Promise<AnswerResponse> =>
 
 /**
  * 🔐批量把回答放入回收站
+ *
  * 批量把回答放入回收站。
  */
 export const trashMultiple = (
@@ -352,6 +363,7 @@ export const trashMultiple = (
 
 /**
  * 🔐把回答移出回收站
+ *
  * 把回答移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
@@ -359,6 +371,7 @@ export const untrash = (params: UntrashParams): Promise<AnswerResponse> =>
 
 /**
  * 🔐批量把回答移出回收站
+ *
  * 批量把回答移出回收站。
  */
 export const untrashMultiple = (
@@ -368,6 +381,7 @@ export const untrashMultiple = (
 
 /**
  * 🔑修改回答信息
+ *
  * 管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const update = (params: UpdateParams): Promise<AnswerResponse> =>

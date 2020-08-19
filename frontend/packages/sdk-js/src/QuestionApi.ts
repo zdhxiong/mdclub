@@ -351,6 +351,7 @@ interface UpdateParams {
 
 /**
  * 🔑删除提问
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -358,6 +359,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔑添加关注
+ *
  * 添加关注。
  */
 export const addFollow = (
@@ -367,6 +369,7 @@ export const addFollow = (
 
 /**
  * 🔑为提问投票
+ *
  * 为提问投票。
  */
 export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
@@ -377,6 +380,7 @@ export const addVote = (params: AddVoteParams): Promise<VoteCountResponse> =>
 
 /**
  * 🔑发表提问
+ *
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const create = (params: CreateParams): Promise<QuestionResponse> =>
@@ -392,6 +396,7 @@ export const create = (params: CreateParams): Promise<QuestionResponse> =>
 
 /**
  * 🔑在指定提问下发表回答
+ *
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const createAnswer = (
@@ -404,6 +409,7 @@ export const createAnswer = (
 
 /**
  * 🔑在指定提问下发表评论
+ *
  * 在指定提问下发表评论。
  */
 export const createComment = (
@@ -416,6 +422,7 @@ export const createComment = (
 
 /**
  * 🔑取消关注
+ *
  * 取消关注。
  */
 export const deleteFollow = (
@@ -425,6 +432,7 @@ export const deleteFollow = (
 
 /**
  * 🔐批量删除提问
+ *
  * 批量删除提问。  只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -434,6 +442,7 @@ export const deleteMultiple = (
 
 /**
  * 🔑取消为提问的投票
+ *
  * 取消为提问的投票。
  */
 export const deleteVote = (
@@ -443,6 +452,7 @@ export const deleteVote = (
 
 /**
  * 获取指定提问信息
+ *
  * 获取指定提问信息。
  */
 export const get = (params: GetParams): Promise<QuestionResponse> =>
@@ -450,6 +460,7 @@ export const get = (params: GetParams): Promise<QuestionResponse> =>
 
 /**
  * 获取指定提问下的回答
+ *
  * 获取指定提问下的回答。
  */
 export const getAnswers = (
@@ -466,6 +477,7 @@ export const getAnswers = (
 
 /**
  * 获取指定提问的评论
+ *
  * 获取指定提问的评论。
  */
 export const getComments = (
@@ -482,6 +494,7 @@ export const getComments = (
 
 /**
  * 获取指定提问的关注者
+ *
  * 获取指定提问的关注者。
  */
 export const getFollowers = (
@@ -497,6 +510,7 @@ export const getFollowers = (
 
 /**
  * 获取提问列表
+ *
  * 获取提问列表。
  */
 export const getList = (
@@ -517,6 +531,7 @@ export const getList = (
 
 /**
  * 获取提问的投票者
+ *
  * 获取提问的投票者。
  */
 export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
@@ -531,6 +546,7 @@ export const getVoters = (params: GetVotersParams): Promise<UsersResponse> =>
 
 /**
  * 🔐把提问放入回收站
+ *
  * 把提问放入回收站。
  */
 export const trash = (params: TrashParams): Promise<QuestionResponse> =>
@@ -538,6 +554,7 @@ export const trash = (params: TrashParams): Promise<QuestionResponse> =>
 
 /**
  * 🔐批量把提问放入回收站
+ *
  * 批量把提问放入回收站。
  */
 export const trashMultiple = (
@@ -547,6 +564,7 @@ export const trashMultiple = (
 
 /**
  * 🔐把提问移出回收站
+ *
  * 把提问移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
@@ -556,6 +574,7 @@ export const untrash = (params: UntrashParams): Promise<QuestionResponse> =>
 
 /**
  * 🔐批量把提问移出回收站
+ *
  * 批量把提问移出回收站。
  */
 export const untrashMultiple = (
@@ -567,6 +586,7 @@ export const untrashMultiple = (
 
 /**
  * 🔑更新提问信息
+ *
  * 管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 export const update = (params: UpdateParams): Promise<QuestionResponse> =>

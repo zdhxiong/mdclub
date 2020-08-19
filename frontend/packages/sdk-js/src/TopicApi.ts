@@ -255,6 +255,7 @@ interface UpdateParams {
 
 /**
  * 🔐删除话题
+ *
  * 删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -262,6 +263,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔑关注指定话题
+ *
  * 关注指定话题。
  */
 export const addFollow = (
@@ -271,6 +273,7 @@ export const addFollow = (
 
 /**
  * 🔐发布话题
+ *
  * 发布话题。
  */
 export const create = (params: CreateParams): Promise<TopicResponse> => {
@@ -284,6 +287,7 @@ export const create = (params: CreateParams): Promise<TopicResponse> => {
 
 /**
  * 🔑取消关注指定话题
+ *
  * 取消关注指定话题。
  */
 export const deleteFollow = (
@@ -293,6 +297,7 @@ export const deleteFollow = (
 
 /**
  * 🔐批量删除话题
+ *
  * 批量删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -302,6 +307,7 @@ export const deleteMultiple = (
 
 /**
  * 获取指定话题信息
+ *
  * 获取指定话题信息。
  */
 export const get = (params: GetParams): Promise<TopicResponse> =>
@@ -309,6 +315,7 @@ export const get = (params: GetParams): Promise<TopicResponse> =>
 
 /**
  * 获取指定话题下的文章
+ *
  * 获取指定话题下的文章。
  */
 export const getArticles = (
@@ -325,6 +332,7 @@ export const getArticles = (
 
 /**
  * 获取指定话题的关注者
+ *
  * 不含已禁用的用户。
  */
 export const getFollowers = (
@@ -340,6 +348,7 @@ export const getFollowers = (
 
 /**
  * 获取全部话题
+ *
  * 获取全部话题。
  */
 export const getList = (params: GetListParams = {}): Promise<TopicsResponse> =>
@@ -357,6 +366,7 @@ export const getList = (params: GetListParams = {}): Promise<TopicsResponse> =>
 
 /**
  * 获取指定话题下的提问
+ *
  * 获取指定话题下的提问。
  */
 export const getQuestions = (
@@ -373,6 +383,7 @@ export const getQuestions = (
 
 /**
  * 🔐把话题放入回收站
+ *
  * 把话题放入回收站。
  */
 export const trash = (params: TrashParams): Promise<TopicResponse> =>
@@ -380,6 +391,7 @@ export const trash = (params: TrashParams): Promise<TopicResponse> =>
 
 /**
  * 🔐批量把话题放入回收站
+ *
  * 批量把话题放入回收站。
  */
 export const trashMultiple = (
@@ -389,6 +401,7 @@ export const trashMultiple = (
 
 /**
  * 🔐把话题移出回收站
+ *
  * 把话题移出回收站。
  */
 export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
@@ -396,6 +409,7 @@ export const untrash = (params: UntrashParams): Promise<TopicResponse> =>
 
 /**
  * 🔐批量把话题移出回收站
+ *
  * 批量把话题移出回收站。
  */
 export const untrashMultiple = (
@@ -405,6 +419,7 @@ export const untrashMultiple = (
 
 /**
  * 🔐更新话题信息
+ *
  * 更新话题信息。  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
  */
 export const update = (params: UpdateParams): Promise<TopicResponse> => {

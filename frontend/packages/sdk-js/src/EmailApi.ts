@@ -19,6 +19,7 @@ interface SendParams {
 
 /**
  * 🔐发送邮件
+ *
  * 用于后台管理员发送邮件。
  */
 export const send = (params: SendParams): Promise<EmailResponse> =>

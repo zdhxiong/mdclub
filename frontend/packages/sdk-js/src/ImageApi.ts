@@ -91,6 +91,7 @@ interface UploadParams {
 
 /**
  * 🔐删除指定图片
+ *
  * 删除指定图片。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -98,6 +99,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔐批量删除图片
+ *
  * 批量删除图片。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -106,6 +108,7 @@ export const deleteMultiple = (
 
 /**
  * 获取指定图片信息
+ *
  * 获取指定图片信息。
  */
 export const get = (params: GetParams): Promise<ImageResponse> =>
@@ -113,6 +116,7 @@ export const get = (params: GetParams): Promise<ImageResponse> =>
 
 /**
  * 🔐获取图片列表
+ *
  * 获取图片列表。
  */
 export const getList = (params: GetListParams = {}): Promise<ImagesResponse> =>
@@ -130,6 +134,7 @@ export const getList = (params: GetListParams = {}): Promise<ImagesResponse> =>
 
 /**
  * 🔐更新指定图片信息
+ *
  * 更新指定图片信息。
  */
 export const update = (params: UpdateParams): Promise<ImageResponse> =>
@@ -140,6 +145,7 @@ export const update = (params: UpdateParams): Promise<ImageResponse> =>
 
 /**
  * 🔑上传图片
+ *
  * 上传图片。
  */
 export const upload = (params: UploadParams): Promise<ImageResponse> => {

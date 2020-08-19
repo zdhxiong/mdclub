@@ -31,6 +31,7 @@ interface GetParams {
 
 /**
  * 🔐获取站点统计数据
+ *
  * 获取站点统计数据。
  */
 export const get = (params: GetParams): Promise<StatsResponse> =>

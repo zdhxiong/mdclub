@@ -92,6 +92,7 @@ interface GetReasonsParams {
 
 /**
  * 🔐删除举报
+ *
  * 删除举报。
  */
 export const del = (params: DeleteParams): Promise<EmptyResponse> =>
@@ -99,6 +100,7 @@ export const del = (params: DeleteParams): Promise<EmptyResponse> =>
 
 /**
  * 🔑添加举报
+ *
  * 添加举报。
  */
 export const create = (params: CreateParams): Promise<ReportResponse> =>
@@ -109,6 +111,7 @@ export const create = (params: CreateParams): Promise<ReportResponse> =>
 
 /**
  * 🔐批量删除举报
+ *
  * 批量删除举报。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 export const deleteMultiple = (
@@ -118,6 +121,7 @@ export const deleteMultiple = (
 
 /**
  * 🔐获取被举报的内容列表
+ *
  * 获取被举报的内容列表。
  */
 export const getList = (
@@ -134,6 +138,7 @@ export const getList = (
 
 /**
  * 🔐获取被举报内容的举报详情
+ *
  * 获取被举报内容的举报详情。
  */
 export const getReasons = (
