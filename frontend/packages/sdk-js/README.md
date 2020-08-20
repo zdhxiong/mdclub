@@ -1,8 +1,6 @@
 # MDClub 的 Javascript 版 SDK
 
-## 使用方法
-
-### 通过 CDN 引入 JS 文件
+## 通过 CDN 引入 JS 文件
 
 注意：这种方式只适用于浏览器环境。
 
@@ -46,7 +44,7 @@ mdclubSDK.QuestionApi.getList({ question_id: 11 })
 });
 ```
 
-### 在 ES6 模块化环境或小程序中使用
+## 在 ES6 模块化环境或小程序中使用
 
 使用 `npm` 安装 SDK：
 
