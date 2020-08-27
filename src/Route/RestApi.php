@@ -583,7 +583,7 @@ class RestApi
             ->add(NeedManager::class);
 
         $group
-            ->delete('/reports/{report_targets:\S+,+}', Report::class . ':deleteMultiple')
+            ->delete('/reports/{report_targets:\S+,+\S+}', Report::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         $group
