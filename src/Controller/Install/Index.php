@@ -125,6 +125,7 @@ class Index
         $configFile = "<?php
 
 return [
+    'APP_DEBUG' => false,
     'DB_HOST' => '${requestBody['db_host']}',
     'DB_DATABASE' => '${requestBody['db_database']}',
     'DB_USERNAME' => '${requestBody['db_username']}',
