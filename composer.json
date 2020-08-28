@@ -78,7 +78,8 @@
         ],
         "start": "php -S localhost:8080 -t public public/index.php",
         "phpcs": "phpcs",
-        "phpstan": "phpstan analyse src --memory-limit=-1"
+        "phpstan": "phpstan analyse src --memory-limit=-1",
+        "zip": "git archive -o mdclub.zip HEAD && zip -r mdclub.zip ./public/static/admin && zip -r mdclub.zip ./public/static/theme/material && zip -r mdclub.zip ./templates/material && zip -r mdclub.zip ./vendor"
     },
     "suggest": {
         "ext-ftp": "Allow upload images to FTP server",
