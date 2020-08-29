@@ -16,6 +16,7 @@ use MDClub\Facade\Validator\UserValidator;
 use MDClub\Initializer\App;
 use MDClub\Library\Db;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Views\PhpRenderer;
 
 /**
  * 安装界面首页
@@ -23,11 +24,21 @@ use Psr\Http\Message\ResponseInterface;
 class Index
 {
     /**
+     * 访问该页面时，尚未安装数据库
+     *
      * @return ResponseInterface
      */
     public function index(): ResponseInterface
     {
-        return View::render('/install.php');
+        $view = new PhpRenderer(__DIR__ . '/../../../templates/');
+        $output = $view->fetch('/default/install.php');
+
+        /** @var ResponseInterface $response */
+        $response = App::$container->get(ResponseInterface::class);
+        $response = $response->withHeader('Content-Type', 'text/html; charset=utf-8');
+        $response->getBody()->write($output);
+
+        return $response;
     }
 
     /**
