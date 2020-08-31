@@ -1,44 +1,44 @@
-## 安装步骤
+## [MDClub 官网](https://mdclub.org) | [在线体验](https://community.mdclub.org)
 
-可写权限的目录：
+## 关于 MDClub
 
-var: 缓存，临时文件
-public/sitemap: 自动生成 sitemap 文件
+[MDClub](https://mdclub.org) 是一个漂亮、轻量的开源社区系统。它运行快速且易于使用，完全具备一个成熟社区所需的功能。它的特性包括：
 
-1. 执行 `composer install --no-dev` 安装依赖
-2. 复制 `config.example.php`，并重命名为 `config.php`，修改其中的数据库配置信息
+* **Material Design 设计语言**
+* **响应式设计**
+* **超级轻量级**
+* **自动适配暗色模式**
+* **单页面应用，且完美支持 SEO**
+* **定制的富文本编辑器**
+* **方便安装**
+* **强大的 Restful API 接口**
+* **OpenAPI 规范的文档**
+* **多平台 JavaScript SDK**
 
-## PSR 接口
+MDClub 项目由以下子项目组成：
 
-### psr/container
+| 项目  | 说明 |
+| ---- | ---- |
+| [mdclub](https://github.com/zdhxiong/mdclub) | mdclub 服务端代码 |
+| [mdclub-theme-material](https://github.com/zdhxiong/mdclub-theme-material) | mdclub 前端代码 |
+| [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) | mdclub 后台管理界面代码 |
+| [mdclub-openapi](https://github.com/zdhxiong/mdclub-openapi) | mdclub 的 OpenApi 描述文件代码 |
+| [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js) | mdclub 的 JavaScript SDK 代码 |
 
-使用 [silexphp/Pimple](https://github.com/silexphp/Pimple) 实现该接口
+## 安装
 
-### psr/event-dispatcher
+安装 MDClub 需要 PHP 7.2+ 和 MySQL 5.6+。请阅读 [安装说明](https://community.mdclub.org/articles/2) 了解安装过程。
 
-使用 [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher) 实现该接口
+若安装过程遇到困难，可以在 MDClub 的 [问答区](https://community.mdclub.org/questions) 进行搜索，或发帖寻求帮助。
 
+## 安全漏洞
 
-### psr/http-client
+如果你发现 MDClub 中存在安全漏洞，请给作者 [发送电子邮件](mailto:zdhxiong@gmail.com)。安全漏洞会最优先得到解决。
 
-使用 [kriswallsmith/buzz](https://github.com/kriswallsmith/Buzz) 实现该接口
+## 赞助
 
-### psr/http-factory
+赞助以帮助 MDClub 持续更新
 
-使用 [slim/psr7](https://github.com/slimphp/Slim-Psr7) 实现该接口
-
-### psr/http-message
-
-使用 [slim/psr7](https://github.com/slimphp/Slim-Psr7) 实现该接口
-
-### psr/http-server-handler
-
-### psr/http-server-middleware
-
-### psr/log
-
-使用 [monolog/monolog](https://github.com/Seldaek/monolog) 实现该接口
-
-### psr/simple-cache
-
-使用 [symfony/cache](https://github.com/symfony/cache) 实现该接口
+![通过支付宝赞助](https://ww1.sinaimg.cn/large/63f511e3gy1ffhw0jj5n4j206o089dge.jpg)
+![通过微信赞助](https://ww1.sinaimg.cn/large/63f511e3gy1ffhw0vkaeaj206o0890ta.jpg)
+[![通过 Paypal 赞助](https://ww1.sinaimg.cn/large/63f511e3gy1fff6937xzbj203w00y3yc.jpg)](https://www.paypal.me/zdhxiong/5)
