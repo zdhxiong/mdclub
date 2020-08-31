@@ -19,11 +19,11 @@ MDClub 项目由以下子项目组成：
 
 | 项目  | 说明 |
 | ---- | ---- |
-| [mdclub](https://github.com/zdhxiong/mdclub) | mdclub 服务端代码 |
-| [mdclub-theme-material](https://github.com/zdhxiong/mdclub-theme-material) | mdclub 前端代码 |
-| [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) | mdclub 后台管理界面代码 |
-| [mdclub-openapi](https://github.com/zdhxiong/mdclub-openapi) | mdclub 的 OpenApi 描述文件代码 |
-| [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js) | mdclub 的 JavaScript SDK 代码 |
+| [mdclub](https://github.com/zdhxiong/mdclub) | MDClub 服务端代码 |
+| [mdclub-theme-material](https://github.com/zdhxiong/mdclub-theme-material) | MDClub 前端代码 |
+| [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) | MDClub 后台管理界面代码 |
+| [mdclub-openapi](https://github.com/zdhxiong/mdclub-openapi) | MDClub 的 OpenApi 描述文件代码 |
+| [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js) | MDClub 的 JavaScript SDK 代码 |
 
 ## 安装
 
