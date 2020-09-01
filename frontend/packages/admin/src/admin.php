@@ -1,4 +1,4 @@
-<?php $NODE_ENV = 'development' ?>
+<?php $NODE_ENV = 'production' ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#ffffff">
     <title><?= get_options()['site_name'] ?> 后台管理</title>
     <?php if ($NODE_ENV === 'production'): ?>
-    <link rel="stylesheet" href="<?= get_static_url() ?>/admin/index.2a6e69e0.css">
+    <link rel="stylesheet" href="<?= get_static_url() ?>/admin/index.dad9846d.css">
     <?php endif; ?>
 </head>
 <body class="mdui-drawer-body-left mdui-appbar-with-toolbar">
@@ -23,7 +23,7 @@
     echo get_user_id() ? json_encode(get_user(null)) : 'null' ?>;
 </script>
 <?php if ($NODE_ENV === 'production'): ?>
-<script src="<?= get_static_url() ?>/admin/index.2a6e69e0.js"></script>
+<script src="<?= get_static_url() ?>/admin/index.dad9846d.js"></script>
 <?php else: ?>
 <script src="http://localhost:8081/index.js"></script>
 <?php endif; ?>
