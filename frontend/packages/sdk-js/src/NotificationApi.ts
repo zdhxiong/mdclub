@@ -55,15 +55,15 @@ interface GetCountParams {
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
    */
   include?: Array<
     | 'receiver'
@@ -99,7 +99,7 @@ interface ReadParams {
    */
   notification_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
    */
   include?: Array<
     | 'receiver'
@@ -134,7 +134,7 @@ interface ReadMultipleParams {
    */
   notification_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `receiver`, `sender`, `article`, `question`, `answer`, `comment`, `reply`
    */
   include?: Array<
     | 'receiver'

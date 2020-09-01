@@ -38,7 +38,7 @@ interface CreateParams {
    */
   cover: File;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -63,7 +63,7 @@ interface GetParams {
    */
   topic_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -74,11 +74,11 @@ interface GetArticlesParams {
    */
   topic_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -94,7 +94,7 @@ interface GetArticlesParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -105,30 +105,30 @@ interface GetFollowersParams {
    */
   topic_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
   /**
@@ -161,11 +161,11 @@ interface GetQuestionsParams {
    */
   topic_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -181,7 +181,7 @@ interface GetQuestionsParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -192,7 +192,7 @@ interface TrashParams {
    */
   topic_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -203,7 +203,7 @@ interface TrashMultipleParams {
    */
   topic_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -214,7 +214,7 @@ interface UntrashParams {
    */
   topic_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -225,7 +225,7 @@ interface UntrashMultipleParams {
    */
   topic_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
@@ -248,7 +248,7 @@ interface UpdateParams {
    */
   cover?: File;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }

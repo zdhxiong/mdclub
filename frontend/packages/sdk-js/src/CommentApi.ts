@@ -42,7 +42,7 @@ interface CreateReplyParams {
    */
   content: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -67,18 +67,18 @@ interface GetParams {
    */
   comment_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -92,7 +92,7 @@ interface GetListParams {
     | '-create_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
   /**
@@ -123,11 +123,11 @@ interface GetRepliesParams {
    */
   comment_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -141,7 +141,7 @@ interface GetRepliesParams {
     | '-create_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -152,15 +152,15 @@ interface GetVotersParams {
    */
   comment_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   /**
@@ -175,7 +175,7 @@ interface TrashParams {
    */
   comment_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -186,7 +186,7 @@ interface TrashMultipleParams {
    */
   comment_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -197,7 +197,7 @@ interface UntrashParams {
    */
   comment_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -208,7 +208,7 @@ interface UntrashMultipleParams {
    */
   comment_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -223,7 +223,7 @@ interface UpdateParams {
    */
   content: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }

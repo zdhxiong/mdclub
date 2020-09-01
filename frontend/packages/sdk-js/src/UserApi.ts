@@ -56,7 +56,7 @@ interface DisableParams {
    */
   user_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -67,7 +67,7 @@ interface DisableMultipleParams {
    */
   user_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -78,7 +78,7 @@ interface EnableParams {
    */
   user_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -89,7 +89,7 @@ interface EnableMultipleParams {
    */
   user_ids: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -100,7 +100,7 @@ interface GetParams {
    */
   user_id: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -111,11 +111,11 @@ interface GetAnswersParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -131,7 +131,7 @@ interface GetAnswersParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `voting`
    */
   include?: Array<'user' | 'question' | 'voting'>;
 }
@@ -142,11 +142,11 @@ interface GetArticlesParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -162,7 +162,7 @@ interface GetArticlesParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -173,11 +173,11 @@ interface GetCommentsParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -191,7 +191,7 @@ interface GetCommentsParams {
     | '-create_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
@@ -202,15 +202,15 @@ interface GetFolloweesParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -221,15 +221,15 @@ interface GetFollowersParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -240,15 +240,15 @@ interface GetFollowingArticlesParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -259,15 +259,15 @@ interface GetFollowingQuestionsParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -278,26 +278,26 @@ interface GetFollowingTopicsParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -311,7 +311,7 @@ interface GetListParams {
     | '-disable_time'
     | '-follower_count';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
   /**
@@ -334,18 +334,18 @@ interface GetListParams {
 
 interface GetMineParams {
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyAnswersParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -361,18 +361,18 @@ interface GetMyAnswersParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `voting`
    */
   include?: Array<'user' | 'question' | 'voting'>;
 }
 
 interface GetMyArticlesParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -388,18 +388,18 @@ interface GetMyArticlesParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyCommentsParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -413,93 +413,93 @@ interface GetMyCommentsParams {
     | '-create_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`
    */
   include?: Array<'user' | 'voting'>;
 }
 
 interface GetMyFolloweesParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowersParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
 
 interface GetMyFollowingArticlesParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingQuestionsParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
 
 interface GetMyFollowingTopicsParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`
    */
   include?: Array<'is_following'>;
 }
 
 interface GetMyQuestionsParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -515,7 +515,7 @@ interface GetMyQuestionsParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -526,11 +526,11 @@ interface GetQuestionsParams {
    */
   user_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
@@ -546,7 +546,7 @@ interface GetQuestionsParams {
     | '-update_time'
     | '-delete_time';
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`
    */
   include?: Array<'user' | 'topics' | 'is_following' | 'voting'>;
 }
@@ -565,11 +565,14 @@ interface RegisterParams {
    */
   username: string;
   /**
-   * hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -580,11 +583,11 @@ interface SendPasswordResetEmailParams {
    */
   email: string;
   /**
-   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   * 图形验证码token。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_token?: string;
   /**
-   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   * 图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_code?: string;
 }
@@ -595,11 +598,11 @@ interface SendRegisterEmailParams {
    */
   email: string;
   /**
-   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   * 图形验证码token。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_token?: string;
   /**
-   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   * 图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_code?: string;
 }
@@ -630,7 +633,7 @@ interface UpdateParams {
    */
   location?: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -657,7 +660,7 @@ interface UpdateMineParams {
    */
   location?: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`
    */
   include?: Array<'is_followed' | 'is_following' | 'is_me'>;
 }
@@ -672,7 +675,10 @@ interface UpdatePasswordParams {
    */
   email_code: string;
   /**
-   * hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
 }

@@ -27,22 +27,22 @@ interface GetParams {
    */
   key: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `article`, `answer`
    */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `article`, `answer`
    */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
   /**
@@ -73,7 +73,7 @@ interface UpdateParams {
    */
   filename: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `article`, `answer`
    */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }
@@ -84,7 +84,7 @@ interface UploadParams {
    */
   image: File;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `article`, `answer`
    */
   include?: Array<'user' | 'question' | 'article' | 'answer'>;
 }

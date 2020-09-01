@@ -674,101 +674,301 @@ defaults.adapter = new BrowserAdapter();
 /**
  * 错误代码
  *
- * 错误码格式：A-BB-CCC
+ * 错误码格式：ABBCCC
  * A：错误级别，1：系统级错误；2：服务级错误
  * B：模块编号
  * C：具体错误编号
  */
 /**
- * 系统级错误
+ * =================================================================== 系统级错误
+ */
+/**
+ * 服务器错误
  */
 const SYSTEM_ERROR = 100000;
+/**
+ * 系统维护中
+ */
 const SYSTEM_MAINTAIN = 100001;
+/**
+ * IP 请求超过上限
+ */
 const SYSTEM_IP_LIMIT = 100002;
+/**
+ * 用户请求超过上限
+ */
 const SYSTEM_USER_LIMIT = 100003;
+/**
+ * 接口不存在
+ */
 const SYSTEM_API_NOT_FOUND = 100004;
+/**
+ * 该接口不支持此 HTTP METHOD
+ */
 const SYSTEM_API_NOT_ALLOWED = 100005;
+/**
+ * 请求参数的 json 格式错误
+ */
 const SYSTEM_REQUEST_JSON_INVALID = 100006;
 /**
- * 通用服务错误，模块编号：0
+ * 系统安装失败
+ */
+const SYSTEM_INSTALL_FAILED = 100007;
+/**
+ * ===================================================== 通用服务错误，模块编号：0
+ */
+/**
+ * 字段验证失败
  */
 const COMMON_FIELD_VERIFY_FAILED = 200001;
+/**
+ * 邮件发送失败
+ */
 const COMMON_SEND_EMAIL_FAILED = 200002;
+/**
+ * 邮件验证码已失效
+ */
 const COMMON_EMAIL_VERIFY_EXPIRED = 200003;
+/**
+ * 图片上传失败
+ */
 const COMMON_IMAGE_UPLOAD_FAILED = 200004;
+/**
+ * 指定图片不存在
+ */
 const COMMON_IMAGE_NOT_FOUND = 200005;
+/**
+ * 投票类型只能是 up、down 中的一个
+ */
 const COMMON_VOTE_TYPE_ERROR = 200006;
 /**
- * 用户相关错误，模块编号：1
+ * ===================================================== 用户相关错误，模块编号：1
+ */
+/**
+ * 用户未登录
  */
 const USER_NEED_LOGIN = 201001;
+/**
+ * 需要管理员权限
+ */
 const USER_NEED_MANAGE_PERMISSION = 201002;
+/**
+ * 指定用户不存在
+ */
 const USER_NOT_FOUND = 201003;
+/**
+ * 目标用户不存在
+ */
 const USER_TARGET_NOT_FOUND = 201004;
+/**
+ * 该用户已被禁用
+ */
 const USER_DISABLED = 201005;
+/**
+ * 账号或密码错误
+ */
 const USER_PASSWORD_ERROR = 201006;
+/**
+ * 头像上传失败
+ */
 const USER_AVATAR_UPLOAD_FAILED = 201007;
+/**
+ * 封面上传失败
+ */
 const USER_COVER_UPLOAD_FAILED = 201008;
+/**
+ * 不能关注你自己
+ */
 const USER_CANT_FOLLOW_YOURSELF = 201009;
 /**
- * 提问相关错误，模块编号：2
+ * ===================================================== 提问相关错误，模块编号：2
+ */
+/**
+ * 指定提问不存在
  */
 const QUESTION_NOT_FOUND = 202001;
+/**
+ * 提问发表后即无法编辑
+ */
 const QUESTION_CANT_EDIT = 202002;
+/**
+ * 仅提问作者可以编辑提问
+ */
 const QUESTION_CANT_EDIT_NOT_AUTHOR = 202003;
+/**
+ * 已超过可编辑的时间
+ */
 const QUESTION_CANT_EDIT_TIMEOUT = 202004;
+/**
+ * 该提问下已有回答，不允许编辑
+ */
 const QUESTION_CANT_EDIT_HAS_ANSWER = 202005;
+/**
+ * 该提问下已有评论，不允许编辑
+ */
 const QUESTION_CANT_EDIT_HAS_COMMENT = 202006;
+/**
+ * 提问发表后即无法删除
+ */
 const QUESTION_CANT_DELETE = 202007;
+/**
+ * 仅提问作者可以删除提问
+ */
 const QUESTION_CANT_DELETE_NOT_AUTHOR = 202008;
+/**
+ * 已超过可删除的时间
+ */
 const QUESTION_CANT_DELETE_TIMEOUT = 202009;
+/**
+ * 该提问下已有回答，不允许删除
+ */
 const QUESTION_CANT_DELETE_HAS_ANSWER = 202010;
+/**
+ * 该提问下已有评论，不允许删除
+ */
 const QUESTION_CANT_DELETE_HAS_COMMENT = 202011;
 /**
- * 回答相关错误，模块编号：3
+ * ===================================================== 回答相关错误，模块编号：3
+ */
+/**
+ * 指定回答不存在
  */
 const ANSWER_NOT_FOUND = 203001;
+/**
+ * 回答发表后即无法编辑
+ */
 const ANSWER_CANT_EDIT = 203002;
+/**
+ * 仅回答的作者可以编辑回答
+ */
 const ANSWER_CANT_EDIT_NOT_AUTHOR = 203003;
+/**
+ * 已超过可编辑的时间
+ */
 const ANSWER_CANT_EDIT_TIMEOUT = 203004;
+/**
+ * 该回答下已有评论，不允许编辑
+ */
 const ANSWER_CANT_EDIT_HAS_COMMENT = 203005;
+/**
+ * 回答发表后即无法删除
+ */
 const ANSWER_CANT_DELETE = 203006;
+/**
+ * 仅回答的作者可以删除回答
+ */
 const ANSWER_CANT_DELETE_NOT_AUTHOR = 203007;
+/**
+ * 已超过可删除的时间
+ */
 const ANSWER_CANT_DELETE_TIMEOUT = 203008;
+/**
+ * 该回答下已有评论，不允许删除
+ */
 const ANSWER_CANT_DELETE_HAS_COMMENT = 203009;
 /**
- * 评论相关错误，模块编号：4
+ * ===================================================== 评论相关错误，模块编号：4
+ */
+/**
+ * 指定的评论不存在
  */
 const COMMENT_NOT_FOUND = 204001;
+/**
+ * 评论发表后即无法编辑
+ */
 const COMMENT_CANT_EDIT = 204002;
+/**
+ * 仅评论的作者可以编辑评论
+ */
 const COMMENT_CANT_EDIT_NOT_AUTHOR = 204003;
+/**
+ * 已超过可编辑时间
+ */
 const COMMENT_CANT_EDIT_TIMEOUT = 204004;
+/**
+ * 评论发表后即无法删除
+ */
 const COMMENT_CANT_DELETE = 204005;
+/**
+ * 仅评论的作者可以删除评论
+ */
 const COMMENT_CANT_DELETE_NOT_AUTHOR = 204006;
+/**
+ * 已超过可删除时间
+ */
 const COMMENT_CANT_DELETE_TIMEOUT = 204007;
 /**
- * 话题相关错误，模块编号：5
+ * ===================================================== 话题相关错误，模块编号：5
+ */
+/**
+ * 指定话题不存在
  */
 const TOPIC_NOT_FOUND = 205001;
+/**
+ * 话题封面上传失败
+ */
 const TOPIC_COVER_UPLOAD_FAILED = 205002;
 /**
- * 文章相关错误，模块编号：6
+ * ===================================================== 文章相关错误，模块编号：6
+ */
+/**
+ * 指定文章不存在
  */
 const ARTICLE_NOT_FOUND = 206001;
+/**
+ * 文章发表后即无法编辑
+ */
 const ARTICLE_CANT_EDIT_NOT_AUTHOR = 206002;
+/**
+ * 仅文章作者可以编辑文章
+ */
 const ARTICLE_CANT_EDIT = 206003;
+/**
+ * 已超过可编辑时间
+ */
 const ARTICLE_CANT_EDIT_TIMEOUT = 206004;
+/**
+ * 该文章下已有评论，不允许编辑
+ */
 const ARTICLE_CANT_EDIT_HAS_COMMENT = 206005;
+/**
+ * 文章发表后即无法删除
+ */
 const ARTICLE_CANT_DELETE_NOT_AUTHOR = 206006;
+/**
+ * 仅文章作者可以删除文章
+ */
 const ARTICLE_CANT_DELETE = 206007;
+/**
+ * 已超过可删除时间
+ */
 const ARTICLE_CANT_DELETE_TIMEOUT = 206008;
+/**
+ * 该文章下已有评论，不允许删除
+ */
 const ARTICLE_CANT_DELETE_HAS_COMMENT = 206009;
 /**
- * 举报相关错误，模块编号：7
+ * ===================================================== 举报相关错误，模块编号：7
+ */
+/**
+ * 指定举报不存在
  */
 const REPORT_NOT_FOUND = 207001;
+/**
+ * 举报目标不存在
+ */
 const REPORT_TARGET_NOT_FOUND = 207002;
+/**
+ * 不能重复举报
+ */
 const REPORT_ALREADY_SUBMITTED = 207003;
+/**
+ * ===================================================== 通知相关错误，模块编号：8
+ */
+/**
+ * 指定通知不存在
+ */
+const NOTIFICATION_NOT_FOUND = 208001;
 
 var errors = /*#__PURE__*/Object.freeze({
     __proto__: null,
@@ -779,6 +979,7 @@ var errors = /*#__PURE__*/Object.freeze({
     SYSTEM_API_NOT_FOUND: SYSTEM_API_NOT_FOUND,
     SYSTEM_API_NOT_ALLOWED: SYSTEM_API_NOT_ALLOWED,
     SYSTEM_REQUEST_JSON_INVALID: SYSTEM_REQUEST_JSON_INVALID,
+    SYSTEM_INSTALL_FAILED: SYSTEM_INSTALL_FAILED,
     COMMON_FIELD_VERIFY_FAILED: COMMON_FIELD_VERIFY_FAILED,
     COMMON_SEND_EMAIL_FAILED: COMMON_SEND_EMAIL_FAILED,
     COMMON_EMAIL_VERIFY_EXPIRED: COMMON_EMAIL_VERIFY_EXPIRED,
@@ -834,7 +1035,8 @@ var errors = /*#__PURE__*/Object.freeze({
     ARTICLE_CANT_DELETE_HAS_COMMENT: ARTICLE_CANT_DELETE_HAS_COMMENT,
     REPORT_NOT_FOUND: REPORT_NOT_FOUND,
     REPORT_TARGET_NOT_FOUND: REPORT_TARGET_NOT_FOUND,
-    REPORT_ALREADY_SUBMITTED: REPORT_ALREADY_SUBMITTED
+    REPORT_ALREADY_SUBMITTED: REPORT_ALREADY_SUBMITTED,
+    NOTIFICATION_NOT_FOUND: NOTIFICATION_NOT_FOUND
 });
 
 if (isUndefined(defaults.adapter)) {
@@ -914,36 +1116,43 @@ function buildRequestBody(params, requestBodyNames) {
 
 /**
  * 🔑删除回答
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除回答。回答作者是否可删除回答，由管理员在后台的设置决定。
  */
 const del = (params) => deleteRequest(buildURL('/answers/{answer_id}', params));
 /**
  * 🔑为回答投票
+ *
  * 为回答投票。
  */
 const addVote = (params) => postRequest(buildURL('/answers/{answer_id}/voters', params), buildRequestBody(params, ['type']));
 /**
  * 在指定回答下发表评论
+ *
  * 在指定回答下发表评论。
  */
 const createComment = (params) => postRequest(buildURL('/answers/{answer_id}/comments', params, ['include']), buildRequestBody(params, ['content']));
 /**
  * 🔐批量删除回答
+ *
  * 批量删除回答。  只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。
  */
 const deleteMultiple = (params) => deleteRequest(buildURL('/answers/{answer_ids}', params));
 /**
  * 🔑取消为回答的投票
+ *
  * 取消为回答的投票。
  */
 const deleteVote = (params) => deleteRequest(buildURL('/answers/{answer_id}/voters', params));
 /**
  * 获取回答详情
+ *
  * 获取回答详情。
  */
 const get = (params) => getRequest(buildURL('/answers/{answer_id}', params, ['include']));
 /**
  * 获取指定回答的评论
+ *
  * 获取指定回答的评论。
  */
 const getComments = (params) => getRequest(buildURL('/answers/{answer_id}/comments', params, [
@@ -954,6 +1163,7 @@ const getComments = (params) => getRequest(buildURL('/answers/{answer_id}/commen
 ]));
 /**
  * 🔐获取回答列表
+ *
  * 获取回答列表。
  */
 const getList = (params = {}) => getRequest(buildURL('/answers', params, [
@@ -968,6 +1178,7 @@ const getList = (params = {}) => getRequest(buildURL('/answers', params, [
 ]));
 /**
  * 获取回答的投票者
+ *
  * 获取回答的投票者。
  */
 const getVoters = (params) => getRequest(buildURL('/answers/{answer_id}/voters', params, [
@@ -978,26 +1189,31 @@ const getVoters = (params) => getRequest(buildURL('/answers/{answer_id}/voters',
 ]));
 /**
  * 🔐把回答放入回收站
+ *
  * 把回答放入回收站。
  */
 const trash = (params) => postRequest(buildURL('/answers/{answer_id}/trash', params, ['include']));
 /**
  * 🔐批量把回答放入回收站
+ *
  * 批量把回答放入回收站。
  */
 const trashMultiple = (params) => postRequest(buildURL('/answers/{answer_ids}/trash', params, ['include']));
 /**
  * 🔐把回答移出回收站
+ *
  * 把回答移出回收站。
  */
 const untrash = (params) => postRequest(buildURL('/answers/{answer_id}/untrash', params, ['include']));
 /**
  * 🔐批量把回答移出回收站
+ *
  * 批量把回答移出回收站。
  */
 const untrashMultiple = (params) => postRequest(buildURL('/answers/{answer_ids}/untrash', params, ['include']));
 /**
  * 🔑修改回答信息
+ *
  * 管理员可修改回答。回答作者是否可修改回答，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const update = (params) => patchRequest(buildURL('/answers/{answer_id}', params, ['include']), buildRequestBody(params, ['content_markdown', 'content_rendered']));
@@ -1022,21 +1238,25 @@ var AnswerApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔑删除文章
+ *
  * 只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。  管理员可删除文章。文章作者是否可删除文章，由管理员在后台的设置决定。
  */
 const del$1 = (params) => deleteRequest(buildURL('/articles/{article_id}', params));
 /**
  * 🔑添加关注
+ *
  * 添加关注。
  */
 const addFollow = (params) => postRequest(buildURL('/articles/{article_id}/followers', params));
 /**
  * 🔑为文章投票
+ *
  * 为文章投票。
  */
 const addVote$1 = (params) => postRequest(buildURL('/articles/{article_id}/voters', params), buildRequestBody(params, ['type']));
 /**
  * 🔑发表文章
+ *
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const create = (params) => postRequest(buildURL('/articles', params, ['include']), buildRequestBody(params, [
@@ -1047,31 +1267,37 @@ const create = (params) => postRequest(buildURL('/articles', params, ['include']
 ]));
 /**
  * 🔑在指定文章下发表评论
+ *
  * 在指定文章下发表评论。
  */
 const createComment$1 = (params) => postRequest(buildURL('/articles/{article_id}/comments', params, ['include']), buildRequestBody(params, ['content']));
 /**
  * 🔑取消关注
+ *
  * 取消关注。
  */
 const deleteFollow = (params) => deleteRequest(buildURL('/articles/{article_id}/followers', params));
 /**
  * 🔐批量删除文章
+ *
  * 批量删除文章。  只要没有错误异常，无论是否有文章被删除，该接口都会返回成功。
  */
 const deleteMultiple$1 = (params) => deleteRequest(buildURL('/articles/{article_ids}', params));
 /**
  * 🔑取消为文章的投票
+ *
  * 取消为文章的投票。
  */
 const deleteVote$1 = (params) => deleteRequest(buildURL('/articles/{article_id}/voters', params));
 /**
  * 获取指定文章信息
+ *
  * 获取指定文章信息。
  */
 const get$1 = (params) => getRequest(buildURL('/articles/{article_id}', params, ['include']));
 /**
  * 获取指定文章的评论列表
+ *
  * 获取指定文章的评论列表。
  */
 const getComments$1 = (params) => getRequest(buildURL('/articles/{article_id}/comments', params, [
@@ -1082,6 +1308,7 @@ const getComments$1 = (params) => getRequest(buildURL('/articles/{article_id}/co
 ]));
 /**
  * 获取指定文章的关注者
+ *
  * 获取指定文章的关注者。
  */
 const getFollowers = (params) => getRequest(buildURL('/articles/{article_id}/followers', params, [
@@ -1091,6 +1318,7 @@ const getFollowers = (params) => getRequest(buildURL('/articles/{article_id}/fol
 ]));
 /**
  * 获取文章列表
+ *
  * 获取文章列表。
  */
 const getList$1 = (params = {}) => getRequest(buildURL('/articles', params, [
@@ -1105,6 +1333,7 @@ const getList$1 = (params = {}) => getRequest(buildURL('/articles', params, [
 ]));
 /**
  * 获取文章的投票者
+ *
  * 获取文章的投票者。
  */
 const getVoters$1 = (params) => getRequest(buildURL('/articles/{article_id}/voters', params, [
@@ -1115,26 +1344,31 @@ const getVoters$1 = (params) => getRequest(buildURL('/articles/{article_id}/vote
 ]));
 /**
  * 🔐把文章放入回收站
+ *
  * 把文章放入回收站。
  */
 const trash$1 = (params) => postRequest(buildURL('/articles/{article_id}/trash', params, ['include']));
 /**
  * 🔐批量把文章放入回收站
+ *
  * 批量把文章放入回收站。
  */
 const trashMultiple$1 = (params) => postRequest(buildURL('/articles/{article_ids}/trash', params, ['include']));
 /**
  * 🔐把文章移出回收站
+ *
  * 把文章移出回收站。
  */
 const untrash$1 = (params) => postRequest(buildURL('/articles/{article_id}/untrash', params, ['include']));
 /**
  * 🔐批量把文章移出回收站
+ *
  * 批量把文章移出回收站。
  */
 const untrashMultiple$1 = (params) => postRequest(buildURL('/articles/{article_ids}/untrash', params, ['include']));
 /**
  * 🔑更新文章信息
+ *
  * 管理员可修改文章。文章作者是否可修改文章，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const update$1 = (params) => patchRequest(buildURL('/articles/{article_id}', params, ['include']), buildRequestBody(params, [
@@ -1168,6 +1402,7 @@ var ArticleApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 生成新的图形验证码
+ *
  * 生成新的图形验证码。
  */
 const generate = () => postRequest(buildURL('/captchas', {}));
@@ -1179,36 +1414,43 @@ var CaptchaApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔑删除评论
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除评论。评论作者是否可删除评论，由管理员在后台的设置决定。
  */
 const del$2 = (params) => deleteRequest(buildURL('/comments/{comment_id}', params));
 /**
  * 🔑为评论投票
+ *
  * 为评论投票。
  */
 const addVote$2 = (params) => postRequest(buildURL('/comments/{comment_id}/voters', params), buildRequestBody(params, ['type']));
 /**
  * 🔑在指定评论下发表回复
+ *
  * 在指定评论下发表回复。
  */
 const createReply = (params) => postRequest(buildURL('/comments/{comment_id}/replies', params, ['include']), buildRequestBody(params, ['content']));
 /**
  * 🔐批量删除评论
+ *
  * 批量删除评论。  只要没有错误异常，无论是否有评论被删除，该接口都会返回成功。
  */
 const deleteMultiple$2 = (params) => deleteRequest(buildURL('/comments/{comment_ids}', params));
 /**
  * 🔑取消为评论的投票
+ *
  * 取消为评论的投票。
  */
 const deleteVote$2 = (params) => deleteRequest(buildURL('/comments/{comment_id}/voters', params));
 /**
  * 获取评论详情
+ *
  * 获取评论详情。
  */
 const get$2 = (params) => getRequest(buildURL('/comments/{comment_id}', params, ['include']));
 /**
  * 🔐获取所有评论
+ *
  * 获取所有评论。
  */
 const getList$2 = (params = {}) => getRequest(buildURL('/comments', params, [
@@ -1224,6 +1466,7 @@ const getList$2 = (params = {}) => getRequest(buildURL('/comments', params, [
 ]));
 /**
  * 获取指定评论的回复
+ *
  * 获知指定评论的回复。
  */
 const getReplies = (params) => getRequest(buildURL('/comments/{comment_id}/replies', params, [
@@ -1234,6 +1477,7 @@ const getReplies = (params) => getRequest(buildURL('/comments/{comment_id}/repli
 ]));
 /**
  * 获取评论的投票者
+ *
  * 获取评论的投票者。
  */
 const getVoters$2 = (params) => getRequest(buildURL('/comments/{comment_id}/voters', params, [
@@ -1244,26 +1488,31 @@ const getVoters$2 = (params) => getRequest(buildURL('/comments/{comment_id}/vote
 ]));
 /**
  * 🔐把评论放入回收站
+ *
  * 把评论放入回收站。
  */
 const trash$2 = (params) => postRequest(buildURL('/comments/{comment_id}/trash', params, ['include']));
 /**
  * 🔐批量把评论放入回收站
+ *
  * 批量把评论放入回收站。
  */
 const trashMultiple$2 = (params) => postRequest(buildURL('/comments/{comment_ids}/trash', params, ['include']));
 /**
  * 🔐把评论移出回收站
+ *
  * 把评论移出回收站。
  */
 const untrash$2 = (params) => postRequest(buildURL('/comments/{comment_id}/untrash', params, ['include']));
 /**
  * 🔐批量把评论移出回收站
+ *
  * 批量把评论移出回收站。
  */
 const untrashMultiple$2 = (params) => postRequest(buildURL('/comments/{comment_ids}/untrash', params, ['include']));
 /**
  * 🔑修改评论
+ *
  * 管理员可修改评论。评论作者是否可修改评论，由管理员在后台的设置决定。
  */
 const update$2 = (params) => patchRequest(buildURL('/comments/{comment_id}', params, ['include']), buildRequestBody(params, ['content']));
@@ -1288,6 +1537,7 @@ var CommentApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔐发送邮件
+ *
  * 用于后台管理员发送邮件。
  */
 const send = (params) => postRequest(buildURL('/emails', params), buildRequestBody(params, ['email', 'subject', 'content']));
@@ -1299,21 +1549,25 @@ var EmailApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔐删除指定图片
+ *
  * 删除指定图片。
  */
 const del$3 = (params) => deleteRequest(buildURL('/images/{key}', params));
 /**
  * 🔐批量删除图片
+ *
  * 批量删除图片。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 const deleteMultiple$3 = (params) => deleteRequest(buildURL('/images/{keys}', params));
 /**
  * 获取指定图片信息
+ *
  * 获取指定图片信息。
  */
 const get$3 = (params) => getRequest(buildURL('/images/{key}', params, ['include']));
 /**
  * 🔐获取图片列表
+ *
  * 获取图片列表。
  */
 const getList$3 = (params = {}) => getRequest(buildURL('/images', params, [
@@ -1327,11 +1581,13 @@ const getList$3 = (params = {}) => getRequest(buildURL('/images', params, [
 ]));
 /**
  * 🔐更新指定图片信息
+ *
  * 更新指定图片信息。
  */
 const update$3 = (params) => patchRequest(buildURL('/images/{key}', params, ['include']), buildRequestBody(params, ['filename']));
 /**
  * 🔑上传图片
+ *
  * 上传图片。
  */
 const upload = (params) => {
@@ -1352,26 +1608,31 @@ var ImageApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔑删除一条通知
+ *
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 const del$4 = (params) => deleteRequest(buildURL('/notifications/{notification_id}', params));
 /**
  * 🔑删除所有通知
+ *
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 const deleteAll = (params = {}) => deleteRequest(buildURL('/notifications', params, ['type']));
 /**
  * 🔑批量删除通知
+ *
  * 只要没有错误异常，无论是否有通知被删除，该接口都会返回成功。
  */
 const deleteMultiple$4 = (params) => deleteRequest(buildURL('/notifications/{notification_ids}', params));
 /**
  * 🔑获取未读通知数量
+ *
  * 获取未读通知数量。
  */
 const getCount = (params = {}) => getRequest(buildURL('/notifications/count', params, ['type']));
 /**
  * 🔑获取通知列表
+ *
  * 获取通知列表。
  */
 const getList$4 = (params = {}) => getRequest(buildURL('/notifications', params, [
@@ -1383,16 +1644,19 @@ const getList$4 = (params = {}) => getRequest(buildURL('/notifications', params,
 ]));
 /**
  * 🔑把一条通知标记为已读
+ *
  * 把一条通知标记为已读。
  */
 const read = (params) => postRequest(buildURL('/notifications/{notification_id}/read', params, ['include']));
 /**
  * 🔑把所有通知标记为已读
+ *
  * 只要没有错误异常。无论是否有通知被标记为已读，该接口都会返回成功。
  */
 const readAll = (params = {}) => postRequest(buildURL('/notifications/read', params, ['type']));
 /**
  * 🔑批量把通知标记为已读
+ *
  * 批量把通知标记为已读。
  */
 const readMultiple = (params) => postRequest(buildURL('/notifications/{notification_ids}/read', params, ['include']));
@@ -1411,11 +1675,13 @@ var NotificationApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 获取站点全局设置参数
+ *
  * 获取站点全局设置参数。
  */
 const get$4 = () => getRequest(buildURL('/options', {}));
 /**
  * 🔐更新站点全局设置
+ *
  * 更新站点全局设置。
  */
 const update$4 = (params) => patchRequest(buildURL('/options', params), buildRequestBody(params, [
@@ -1508,21 +1774,25 @@ var OptionApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔑删除提问
+ *
  * 只要没有错误异常，无论是否有回答被删除，该接口都会返回成功。  管理员可删除提问。提问作者是否可删除提问，由管理员在后台的设置决定。
  */
 const del$5 = (params) => deleteRequest(buildURL('/questions/{question_id}', params));
 /**
  * 🔑添加关注
+ *
  * 添加关注。
  */
 const addFollow$1 = (params) => postRequest(buildURL('/questions/{question_id}/followers', params));
 /**
  * 🔑为提问投票
+ *
  * 为提问投票。
  */
 const addVote$3 = (params) => postRequest(buildURL('/questions/{question_id}/voters', params), buildRequestBody(params, ['type']));
 /**
  * 🔑发表提问
+ *
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const create$1 = (params) => postRequest(buildURL('/questions', params, ['include']), buildRequestBody(params, [
@@ -1533,36 +1803,43 @@ const create$1 = (params) => postRequest(buildURL('/questions', params, ['includ
 ]));
 /**
  * 🔑在指定提问下发表回答
+ *
  * &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const createAnswer = (params) => postRequest(buildURL('/questions/{question_id}/answers', params, ['include']), buildRequestBody(params, ['content_markdown', 'content_rendered']));
 /**
  * 🔑在指定提问下发表评论
+ *
  * 在指定提问下发表评论。
  */
 const createComment$2 = (params) => postRequest(buildURL('/questions/{question_id}/comments', params, ['include']), buildRequestBody(params, ['content']));
 /**
  * 🔑取消关注
+ *
  * 取消关注。
  */
 const deleteFollow$1 = (params) => deleteRequest(buildURL('/questions/{question_id}/followers', params));
 /**
  * 🔐批量删除提问
+ *
  * 批量删除提问。  只要没有错误异常，无论是否有提问被删除，该接口都会返回成功。
  */
 const deleteMultiple$5 = (params) => deleteRequest(buildURL('/questions/{question_ids}', params));
 /**
  * 🔑取消为提问的投票
+ *
  * 取消为提问的投票。
  */
 const deleteVote$3 = (params) => deleteRequest(buildURL('/questions/{question_id}/voters', params));
 /**
  * 获取指定提问信息
+ *
  * 获取指定提问信息。
  */
 const get$5 = (params) => getRequest(buildURL('/questions/{question_id}', params, ['include']));
 /**
  * 获取指定提问下的回答
+ *
  * 获取指定提问下的回答。
  */
 const getAnswers = (params) => getRequest(buildURL('/questions/{question_id}/answers', params, [
@@ -1573,6 +1850,7 @@ const getAnswers = (params) => getRequest(buildURL('/questions/{question_id}/ans
 ]));
 /**
  * 获取指定提问的评论
+ *
  * 获取指定提问的评论。
  */
 const getComments$2 = (params) => getRequest(buildURL('/questions/{question_id}/comments', params, [
@@ -1583,6 +1861,7 @@ const getComments$2 = (params) => getRequest(buildURL('/questions/{question_id}/
 ]));
 /**
  * 获取指定提问的关注者
+ *
  * 获取指定提问的关注者。
  */
 const getFollowers$1 = (params) => getRequest(buildURL('/questions/{question_id}/followers', params, [
@@ -1592,6 +1871,7 @@ const getFollowers$1 = (params) => getRequest(buildURL('/questions/{question_id}
 ]));
 /**
  * 获取提问列表
+ *
  * 获取提问列表。
  */
 const getList$5 = (params = {}) => getRequest(buildURL('/questions', params, [
@@ -1606,6 +1886,7 @@ const getList$5 = (params = {}) => getRequest(buildURL('/questions', params, [
 ]));
 /**
  * 获取提问的投票者
+ *
  * 获取提问的投票者。
  */
 const getVoters$3 = (params) => getRequest(buildURL('/questions/{question_id}/voters', params, [
@@ -1616,26 +1897,31 @@ const getVoters$3 = (params) => getRequest(buildURL('/questions/{question_id}/vo
 ]));
 /**
  * 🔐把提问放入回收站
+ *
  * 把提问放入回收站。
  */
 const trash$3 = (params) => postRequest(buildURL('/questions/{question_id}/trash', params, ['include']));
 /**
  * 🔐批量把提问放入回收站
+ *
  * 批量把提问放入回收站。
  */
 const trashMultiple$3 = (params) => postRequest(buildURL('/questions/{question_ids}/trash', params, ['include']));
 /**
  * 🔐把提问移出回收站
+ *
  * 把提问移出回收站。
  */
 const untrash$3 = (params) => postRequest(buildURL('/questions/{question_id}/untrash', params, ['include']));
 /**
  * 🔐批量把提问移出回收站
+ *
  * 批量把提问移出回收站。
  */
 const untrashMultiple$3 = (params) => postRequest(buildURL('/questions/{question_ids}/untrash', params, ['include']));
 /**
  * 🔑更新提问信息
+ *
  * 管理员可修改提问。提问作者是否可修改提问，由管理员在后台的设置决定。  &#x60;content_markdown&#x60; 和 &#x60;content_rendered&#x60; 两个参数仅传入其中一个即可， 若两个参数都传入，则以 &#x60;content_markdown&#x60; 为准。
  */
 const update$5 = (params) => patchRequest(buildURL('/questions/{question_id}', params, ['include']), buildRequestBody(params, [
@@ -1671,21 +1957,25 @@ var QuestionApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔐删除举报
+ *
  * 删除举报。
  */
 const del$6 = (params) => deleteRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params));
 /**
  * 🔑添加举报
+ *
  * 添加举报。
  */
 const create$2 = (params) => postRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params, ['include']), buildRequestBody(params, ['reason']));
 /**
  * 🔐批量删除举报
+ *
  * 批量删除举报。  只要没有错误异常，无论是否有记录被删除，该接口都会返回成功。
  */
 const deleteMultiple$6 = (params) => deleteRequest(buildURL('/reports/{report_targets}', params));
 /**
  * 🔐获取被举报的内容列表
+ *
  * 获取被举报的内容列表。
  */
 const getList$6 = (params = {}) => getRequest(buildURL('/reports', params, [
@@ -1696,6 +1986,7 @@ const getList$6 = (params = {}) => getRequest(buildURL('/reports', params, [
 ]));
 /**
  * 🔐获取被举报内容的举报详情
+ *
  * 获取被举报内容的举报详情。
  */
 const getReasons = (params) => getRequest(buildURL('/reports/{reportable_type}:{reportable_id}', params, [
@@ -1715,6 +2006,7 @@ var ReportApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔐获取站点统计数据
+ *
  * 获取站点统计数据。
  */
 const get$6 = (params) => getRequest(buildURL('/stats', params, ['include', 'start_date', 'end_date']));
@@ -1867,6 +2159,7 @@ function sha1(s) {
 // @ts-ignore
 /**
  * 生成 Token
+ *
  * 通过账号密码登陆，返回 Token 信息。  若登录失败，且返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;， 表示下次调用该接口时，需要用户输入图形验证码，并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
  */
 const login = (params) => {
@@ -1894,16 +2187,19 @@ var TokenApi = /*#__PURE__*/Object.freeze({
 
 /**
  * 🔐删除话题
+ *
  * 删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 const del$7 = (params) => deleteRequest(buildURL('/topics/{topic_id}', params));
 /**
  * 🔑关注指定话题
+ *
  * 关注指定话题。
  */
 const addFollow$2 = (params) => postRequest(buildURL('/topics/{topic_id}/followers', params));
 /**
  * 🔐发布话题
+ *
  * 发布话题。
  */
 const create$3 = (params) => {
@@ -1915,21 +2211,25 @@ const create$3 = (params) => {
 };
 /**
  * 🔑取消关注指定话题
+ *
  * 取消关注指定话题。
  */
 const deleteFollow$2 = (params) => deleteRequest(buildURL('/topics/{topic_id}/followers', params));
 /**
  * 🔐批量删除话题
+ *
  * 批量删除话题。  只要没有错误异常，无论是否有话题被删除，该接口都会返回成功。
  */
 const deleteMultiple$7 = (params) => deleteRequest(buildURL('/topics/{topic_ids}', params));
 /**
  * 获取指定话题信息
+ *
  * 获取指定话题信息。
  */
 const get$7 = (params) => getRequest(buildURL('/topics/{topic_id}', params, ['include']));
 /**
  * 获取指定话题下的文章
+ *
  * 获取指定话题下的文章。
  */
 const getArticles = (params) => getRequest(buildURL('/topics/{topic_id}/articles', params, [
@@ -1940,6 +2240,7 @@ const getArticles = (params) => getRequest(buildURL('/topics/{topic_id}/articles
 ]));
 /**
  * 获取指定话题的关注者
+ *
  * 不含已禁用的用户。
  */
 const getFollowers$2 = (params) => getRequest(buildURL('/topics/{topic_id}/followers', params, [
@@ -1949,6 +2250,7 @@ const getFollowers$2 = (params) => getRequest(buildURL('/topics/{topic_id}/follo
 ]));
 /**
  * 获取全部话题
+ *
  * 获取全部话题。
  */
 const getList$7 = (params = {}) => getRequest(buildURL('/topics', params, [
@@ -1962,6 +2264,7 @@ const getList$7 = (params = {}) => getRequest(buildURL('/topics', params, [
 ]));
 /**
  * 获取指定话题下的提问
+ *
  * 获取指定话题下的提问。
  */
 const getQuestions = (params) => getRequest(buildURL('/topics/{topic_id}/questions', params, [
@@ -1972,26 +2275,31 @@ const getQuestions = (params) => getRequest(buildURL('/topics/{topic_id}/questio
 ]));
 /**
  * 🔐把话题放入回收站
+ *
  * 把话题放入回收站。
  */
 const trash$4 = (params) => postRequest(buildURL('/topics/{topic_id}/trash', params, ['include']));
 /**
  * 🔐批量把话题放入回收站
+ *
  * 批量把话题放入回收站。
  */
 const trashMultiple$4 = (params) => postRequest(buildURL('/topics/{topic_ids}/trash', params, ['include']));
 /**
  * 🔐把话题移出回收站
+ *
  * 把话题移出回收站。
  */
 const untrash$4 = (params) => postRequest(buildURL('/topics/{topic_id}/untrash', params, ['include']));
 /**
  * 🔐批量把话题移出回收站
+ *
  * 批量把话题移出回收站。
  */
 const untrashMultiple$4 = (params) => postRequest(buildURL('/topics/{topic_ids}/untrash', params, ['include']));
 /**
  * 🔐更新话题信息
+ *
  * 更新话题信息。  因为 formData 类型的数据只能通过 post 请求提交，所以这里不用 patch 请求
  */
 const update$6 = (params) => {
@@ -2025,61 +2333,73 @@ var TopicApi = /*#__PURE__*/Object.freeze({
 // @ts-ignore
 /**
  * 🔑添加关注
+ *
  * 添加关注。
  */
 const addFollow$3 = (params) => postRequest(buildURL('/users/{user_id}/followers', params));
 /**
  * 🔐删除指定用户的头像，并重置为默认头像
+ *
  * 删除指定用户的头像，并重置为默认头像。
  */
 const deleteAvatar = (params) => deleteRequest(buildURL('/users/{user_id}/avatar', params));
 /**
  * 🔐删除指定用户的封面，并重置为默认封面
+ *
  * 删除指定用户的封面，并重置为默认封面。
  */
 const deleteCover = (params) => deleteRequest(buildURL('/users/{user_id}/cover', params));
 /**
  * 🔑取消关注
+ *
  * 取消关注。
  */
 const deleteFollow$3 = (params) => deleteRequest(buildURL('/users/{user_id}/followers', params));
 /**
  * 🔑删除当前登录用户的头像，并重置为默认头像
+ *
  * 删除当前登录用户的头像，并重置为默认头像。
  */
 const deleteMyAvatar = () => deleteRequest(buildURL('/user/avatar', {}));
 /**
  * 🔑删除当前登录用户的封面，并重置为默认封面
+ *
  * 删除当前登录用户的封面，并重置为默认封面。
  */
 const deleteMyCover = () => deleteRequest(buildURL('/user/cover', {}));
 /**
  * 🔐禁用指定用户
+ *
  * 禁用指定用户。
  */
 const disable = (params) => postRequest(buildURL('/users/{user_id}/disable', params, ['include']));
 /**
  * 🔐批量禁用用户
+ *
  * 批量禁用用户。
  */
 const disableMultiple = (params) => postRequest(buildURL('/users/{user_ids}/disable', params, ['include']));
 /**
  * 🔐恢复指定用户
+ *
  * 恢复指定用户。
  */
 const enable = (params) => postRequest(buildURL('/users/{user_id}/enable', params, ['include']));
 /**
  * 🔐批量恢复用户
+ *
  * 批量恢复用户。
  */
 const enableMultiple = (params) => postRequest(buildURL('/users/{user_ids}/enable', params, ['include']));
 /**
  * 获取指定用户信息
+ *
  * 若是管理员调用该接口、或当前登录用户读取自己的个人信息，将返回用户的所有信息。  其他情况仅返回部分字段（去掉了隐私信息，隐私字段已用 🔐 标明）
  */
 const get$8 = (params) => getRequest(buildURL('/users/{user_id}', params, ['include']));
 /**
  * 获取指定用户发表的回答
+ *
  * 获取指定用户发表的回答。
  */
 const getAnswers$1 = (params) => getRequest(buildURL('/users/{user_id}/answers', params, [
@@ -2090,6 +2410,7 @@ const getAnswers$1 = (params) => getRequest(buildURL('/users/{user_id}/answers',
 ]));
 /**
  * 获取指定用户发表的文章
+ *
  * 获取指定用户发表的文章。
  */
 const getArticles$1 = (params) => getRequest(buildURL('/users/{user_id}/articles', params, [
@@ -2100,6 +2421,7 @@ const getArticles$1 = (params) => getRequest(buildURL('/users/{user_id}/articles
 ]));
 /**
  * 获取指定用户发表的评论
+ *
  * 获取指定用户发表的评论。
  */
 const getComments$3 = (params) => getRequest(buildURL('/users/{user_id}/comments', params, [
@@ -2110,6 +2432,7 @@ const getComments$3 = (params) => getRequest(buildURL('/users/{user_id}/comments
 ]));
 /**
  * 获取指定用户关注的用户列表
+ *
  * 获取指定用户关注的用户列表。
  */
 const getFollowees = (params) => getRequest(buildURL('/users/{user_id}/followees', params, [
@@ -2119,6 +2442,7 @@ const getFollowees = (params) => getRequest(buildURL('/users/{user_id}/followees
 ]));
 /**
  * 获取指定用户的关注者
+ *
  * 获取指定用户的关注者。
  */
 const getFollowers$3 = (params) => getRequest(buildURL('/users/{user_id}/followers', params, [
@@ -2128,6 +2452,7 @@ const getFollowers$3 = (params) => getRequest(buildURL('/users/{user_id}/followe
 ]));
 /**
  * 获取指定用户关注的文章列表
+ *
  * 获取指定用户关注的文章列表。
  */
 const getFollowingArticles = (params) => getRequest(buildURL('/users/{user_id}/following_articles', params, [
@@ -2137,6 +2462,7 @@ const getFollowingArticles = (params) => getRequest(buildURL('/users/{user_id}/f
 ]));
 /**
  * 获取指定用户关注的提问列表
+ *
  * 获取指定用户关注的提问列表。
  */
 const getFollowingQuestions = (params) => getRequest(buildURL('/users/{user_id}/following_questions', params, [
@@ -2146,6 +2472,7 @@ const getFollowingQuestions = (params) => getRequest(buildURL('/users/{user_id}/
 ]));
 /**
  * 获取指定用户关注的话题列表
+ *
  * 获取指定用户关注的话题列表。
  */
 const getFollowingTopics = (params) => getRequest(buildURL('/users/{user_id}/following_topics', params, [
@@ -2155,6 +2482,7 @@ const getFollowingTopics = (params) => getRequest(buildURL('/users/{user_id}/fol
 ]));
 /**
  * 获取用户列表
+ *
  * 仅管理员可使用 email 参数进行搜索。  仅管理员可获取已禁用的用户列表。
  */
 const getList$8 = (params = {}) => getRequest(buildURL('/users', params, [
@@ -2169,16 +2497,19 @@ const getList$8 = (params = {}) => getRequest(buildURL('/users', params, [
 ]));
 /**
  * 🔑获取当前登录用户的信息
+ *
  * 获取当前登录用户的信息。
  */
 const getMine = (params = {}) => getRequest(buildURL('/user', params, ['include']));
 /**
  * 🔑获取当前登录用户发表的回答
+ *
  * 获取当前登录用户发表的回答。
  */
 const getMyAnswers = (params = {}) => getRequest(buildURL('/user/answers', params, ['page', 'per_page', 'order', 'include']));
 /**
  * 🔑获取当前登录用户发表的文章
+ *
  * 获取当前登录用户发表的文章。
  */
 const getMyArticles = (params = {}) => getRequest(buildURL('/user/articles', params, [
@@ -2189,6 +2520,7 @@ const getMyArticles = (params = {}) => getRequest(buildURL('/user/articles', par
 ]));
 /**
  * 🔑获取当前登录用户发表的评论
+ *
  * 获取当前登录用户发表的评论。
  */
 const getMyComments = (params = {}) => getRequest(buildURL('/user/comments', params, [
@@ -2199,16 +2531,19 @@ const getMyComments = (params = {}) => getRequest(buildURL('/user/comments', par
 ]));
 /**
  * 🔑获取当前登录用户关注的用户
+ *
  * 获取当前登录用户关注的用户。
  */
 const getMyFollowees = (params = {}) => getRequest(buildURL('/user/followees', params, ['page', 'per_page', 'include']));
 /**
  * 🔑获取当前登录用户的关注者
+ *
  * 获取当前登录用户的关注者。
  */
 const getMyFollowers = (params = {}) => getRequest(buildURL('/user/followers', params, ['page', 'per_page', 'include']));
 /**
  * 🔑获取登录用户关注的文章
+ *
  * 获取登录用户关注的文章。
  */
 const getMyFollowingArticles = (params = {}) => getRequest(buildURL('/user/following_articles', params, [
@@ -2218,6 +2553,7 @@ const getMyFollowingArticles = (params = {}) => getRequest(buildURL('/user/follo
 ]));
 /**
  * 🔑获取登录用户关注的提问
+ *
  * 获取登录用户关注的提问。
  */
 const getMyFollowingQuestions = (params = {}) => getRequest(buildURL('/user/following_questions', params, [
@@ -2227,11 +2563,13 @@ const getMyFollowingQuestions = (params = {}) => getRequest(buildURL('/user/foll
 ]));
 /**
  * 🔑获取登录用户关注的话题
+ *
  * 获取登录用户关注的话题。
  */
 const getMyFollowingTopics = (params = {}) => getRequest(buildURL('/user/following_topics', params, ['page', 'per_page', 'include']));
 /**
  * 🔑获取登录用户发表的提问
+ *
  * 获取登录用户发表的提问。
  */
 const getMyQuestions = (params = {}) => getRequest(buildURL('/user/questions', params, [
@@ -2242,6 +2580,7 @@ const getMyQuestions = (params = {}) => getRequest(buildURL('/user/questions', p
 ]));
 /**
  * 获取指定用户发表的提问
+ *
  * 获取指定用户发表的提问。
  */
 const getQuestions$1 = (params) => getRequest(buildURL('/users/{user_id}/questions', params, [
@@ -2252,6 +2591,7 @@ const getQuestions$1 = (params) => getRequest(buildURL('/users/{user_id}/questio
 ]));
 /**
  * 验证邮箱并创建账号
+ *
  * 返回用户信息。
  */
 const register = (params) => {
@@ -2262,16 +2602,19 @@ const register = (params) => {
 };
 /**
  * 发送重置密码邮箱验证码
+ *
  * 若返回参数中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
  */
 const sendPasswordResetEmail = (params) => postRequest(buildURL('/user/password/email', params), buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']));
 /**
  * 发送注册邮箱验证码
+ *
  * 若返回信息中含参数 &#x60;captcha_token&#x60; 和 &#x60;captcha_image&#x60;，表示下次调用该接口时，需要用户输入图形验证码， 并把 &#x60;captcha_token&#x60; 和 &#x60;captcha_code&#x60; 参数传递到服务端。
  */
 const sendRegisterEmail = (params) => postRequest(buildURL('/user/register/email', params), buildRequestBody(params, ['email', 'captcha_token', 'captcha_code']));
 /**
  * 🔐更新指定用户信息
+ *
  * 更新指定用户信息。
  */
 const update$7 = (params) => patchRequest(buildURL('/users/{user_id}', params, ['include']), buildRequestBody(params, [
@@ -2283,6 +2626,7 @@ const update$7 = (params) => patchRequest(buildURL('/users/{user_id}', params, [
 ]));
 /**
  * 🔑更新当前登录用户信息
+ *
  * 更新当前登录用户信息。
  */
 const updateMine = (params) => patchRequest(buildURL('/user', params, ['include']), buildRequestBody(params, [
@@ -2294,6 +2638,7 @@ const updateMine = (params) => patchRequest(buildURL('/user', params, ['include'
 ]));
 /**
  * 验证邮箱并更新密码
+ *
  * 验证邮箱并更新密码。
  */
 const updatePassword = (params) => {
@@ -2304,6 +2649,7 @@ const updatePassword = (params) => {
 };
 /**
  * 🔑上传当前登录用户的头像
+ *
  * 上传当前登录用户的头像。
  */
 const uploadMyAvatar = (params) => {
@@ -2313,6 +2659,7 @@ const uploadMyAvatar = (params) => {
 };
 /**
  * 🔑上传当前登录用户的封面
+ *
  * 上传当前登录用户的封面。
  */
 const uploadMyCover = (params) => {

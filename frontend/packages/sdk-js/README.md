@@ -1,3 +1,5 @@
+## [MDClub 官网](https://mdclub.org) | [SDK 完整文档](https://mdclub.org/sdk-js/)
+
 # MDClub 的 Javascript 版 SDK
 
 ## 通过 CDN 引入 JS 文件
@@ -22,7 +24,7 @@
 // 设置 api 地址（可选，默认为 {当前域名}/api）
 mdclubSDK.defaults.apiPath = 'https://example.com/api';
 
-// 若浏览器不支持 patch, put, delete 请求，则需要将该选项设为 true
+// 若浏览器不支持 patch, put, delete 请求，则需要将该选项设为 true（可选）
 mdclubSDK.defaults.methodOverride = true;
 
 // 设置全局回调函数（可选）
@@ -36,12 +38,12 @@ mdclubSDK.defaults.complete = function () {};
 
 ```js
 mdclubSDK.QuestionApi.getList({ question_id: 11 })
-.then((questions) => {
-  console.log(questions);
-})
-.catch((errMsg) => {
-  console.log(errMsg);
-});
+  .then((questions) => {
+    console.log(questions);
+  })
+  .catch((errMsg) => {
+    console.log(errMsg);
+  });
 ```
 
 ## 在 ES6 模块化环境或小程序中使用
@@ -52,7 +54,7 @@ mdclubSDK.QuestionApi.getList({ question_id: 11 })
 npm install mdclub-sdk-js --save
 ```
 
-SDK 同时支持浏览器环境和小程序环境，你需要根据使用环境设置适配器。
+SDK 同时支持浏览器环境和小程序环境，你需要先根据使用环境设置适配器。
 
 若在小程序中使用，需要设置成小程序适配器。支持微信小程序、支付宝小程序、钉钉小程序、百度小程序（注意：当前代码还未在小程序中进行过测试）：
 
@@ -90,7 +92,7 @@ import defaults from 'mdclub-sdk-js/es/defaults';
 // 设置 api 地址，默认为 {当前域名}/api
 defaults.apiPath = 'https://example.com/api';
 
-// 若浏览器不支持 patch, put, delete 方法，则需要将该选项设为 true
+// 若浏览器不支持 patch, put, delete 方法，则需要将该选项设为 true（可选）
 defaults.methodOverride = true;
 
 // 设置全局回调函数
@@ -106,12 +108,12 @@ defaults.complete = () => {};
 import QuestionApi from 'mdclub-sdk-js/es/QuestionApi';
 
 QuestionApi.getList({ question_id: 11 })
-.then((questions) => {
-  console.log(questions);
-})
-.catch((errMsg) => {
-  console.log(errMsg);
-});
+  .then((questions) => {
+    console.log(questions);
+  })
+  .catch((errMsg) => {
+    console.log(errMsg);
+  });
 ```
 
 ## API 分类
@@ -171,4 +173,4 @@ import errors from 'mdclub-sdk-js/es/errors';
 errors.USER_NEED_LOGIN;
 ```
 
-具体的常量和错误代码对应关系请 [参见源码](https://github.com/zdhxiong/mdclub-sdk-js/blob/master/src/errors.ts) 。
+具体的常量和错误代码对应关系请 [参见文档](https://mdclub.org/sdk-js/#error-code) 。

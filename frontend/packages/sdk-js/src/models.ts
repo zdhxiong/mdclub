@@ -584,7 +584,25 @@ export interface Notification {
    */
   sender_id: number;
   /**
-   * 通知类型： * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id` * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id` * `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships` 中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容 * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id` * `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在 `article`，可从 `content_deleted` 字段中获取被删除的文章内容 * `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id` * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但 `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容 * `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id` * `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含 `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`  [//]: # (user_followed：有人关注了我。) [//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`) [//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`) [//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`) [//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`) [//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`) [//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`)
+   * 通知类型：
+   *
+   * * `question_answered`：有人对提问发表了回答。此时会包含 `question_id`、`answer_id`
+   * * `question_commented`：有人对提问发表了评论。此时会包含 `question_id`、`comment_id`
+   * * `question_deleted`：提问被删除。此时会包含 `question_id`，但 `relationships` 中将不存在 `question`，可从 `content_deleted` 字段中获取被删除的提问内容
+   * * `article_commented`：有人对文章发表了评论。此时会包含 `article_id`、`comment_id`
+   * * `article_deleted`：文章被删除。此时会包含 `article_id`，但 `relationships` 中将不存在 `article`，可从 `content_deleted` 字段中获取被删除的文章内容
+   * * `answer_commented`：有人对回答发表了评论。此时会包含 `question_id`、`answer_id`、`comment_id`
+   * * `answer_deleted`：回答被删除。此时会包含 `answer_id`、`question_id`，但 `relationships` 中将不包含 `answer`，可从 `content_deleted` 字段中获取被删除的回答内容
+   * * `comment_replied`：有人对评论发表了回复。此时会包含 `reply_id`、`comment_id`，额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
+   * * `comment_deleted`：评论被删除。此时会包含 `comment_id`，但 `relationships` 中将不包含 `comment`，可从 `content_deleted` 字段中获取被删除的评论内容；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`
+   *
+   * [//]: # (user_followed：有人关注了我。)
+   * [//]: # (question_followed：有人关注了我的提问。此时会包含 `question_id`)
+   * [//]: # (article_followed：有人关注了我的文章。此时会包含 `article_id`)
+   * [//]: # (question_vote_up：有人赞了我的提问。此时会包含 `question_id`)
+   * [//]: # (article_vote_up：有人赞了我的文章。此时会包含 `article_id`)
+   * [//]: # (answer_vote_up：有人赞了我的回答。此时会包含 `question_id`、`answer_id`)
+   * [//]: # (comment_vote_up：有人赞了我的评论。此时会包含 `comment_id`；额外的，评论属于提问时会包含 `question_id`，属于文章时会包含 `article_id`，属于回答时会包含 `answer_id`、`question_id`)
    */
   type: NotificationTypeEnum;
   /**
@@ -683,7 +701,9 @@ export interface NotificationsResponse {
 
 export interface Option {
   /**
-   * 回答作者是否可删除回答。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
+   * 回答作者是否可删除回答。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
    */
   answer_can_delete: boolean;
   /**
@@ -695,7 +715,9 @@ export interface Option {
    */
   answer_can_delete_only_no_comment: boolean;
   /**
-   * 回答作者是否可编辑回答。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
+   * 回答作者是否可编辑回答。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
    */
   answer_can_edit: boolean;
   /**
@@ -707,7 +729,9 @@ export interface Option {
    */
   answer_can_edit_only_no_comment: boolean;
   /**
-   * 文章作者是否可删除文章。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
+   * 文章作者是否可删除文章。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
    */
   article_can_delete: boolean;
   /**
@@ -719,7 +743,9 @@ export interface Option {
    */
   article_can_delete_only_no_comment: boolean;
   /**
-   * 文章作者是否可编辑文章。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
+   * 文章作者是否可编辑文章。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
    */
   article_can_edit: boolean;
   /**
@@ -771,7 +797,9 @@ export interface Option {
    */
   cache_type?: OptionCacheTypeEnum;
   /**
-   * 评论作者是否可删除评论。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+   * 评论作者是否可删除评论。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
    */
   comment_can_delete: boolean;
   /**
@@ -779,7 +807,9 @@ export interface Option {
    */
   comment_can_delete_before: number;
   /**
-   * 评论作者是否可编辑评论。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+   * 评论作者是否可编辑评论。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
    */
   comment_can_edit: boolean;
   /**
@@ -791,7 +821,9 @@ export interface Option {
    */
   language: OptionLanguageEnum;
   /**
-   * 提问作者是否可删除提问。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
+   * 提问作者是否可删除提问。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
    */
   question_can_delete: boolean;
   /**
@@ -807,7 +839,9 @@ export interface Option {
    */
   question_can_delete_only_no_comment: boolean;
   /**
-   * 提问作者是否可编辑提问。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
+   * 提问作者是否可编辑提问。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
    */
   question_can_edit: boolean;
   /**
@@ -1056,7 +1090,9 @@ export interface OptionResponse {
 
 export interface OptionUpdateRequestBody {
   /**
-   * 回答作者是否可删除回答。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
+   * 回答作者是否可删除回答。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `answer_can_delete_before` 和 `answer_can_delete_only_no_comment` 的条件时可删除。
    */
   answer_can_delete?: boolean;
   /**
@@ -1068,7 +1104,9 @@ export interface OptionUpdateRequestBody {
    */
   answer_can_delete_only_no_comment?: boolean;
   /**
-   * 回答作者是否可编辑回答。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
+   * 回答作者是否可编辑回答。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `answer_can_edit_before` 和 `answer_can_edit_only_no_comment` 的条件时可编辑。
    */
   answer_can_edit?: boolean;
   /**
@@ -1080,7 +1118,9 @@ export interface OptionUpdateRequestBody {
    */
   answer_can_edit_only_no_comment?: boolean;
   /**
-   * 文章作者是否可删除文章。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
+   * 文章作者是否可删除文章。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `article_can_delete_before` 和 `article_can_delete_only_no_comment` 的条件时可删除。
    */
   article_can_delete?: boolean;
   /**
@@ -1092,7 +1132,9 @@ export interface OptionUpdateRequestBody {
    */
   article_can_delete_only_no_comment?: boolean;
   /**
-   * 文章作者是否可编辑文章。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
+   * 文章作者是否可编辑文章。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `article_can_edit_before` 和 `article_can_edit_only_no_comment` 的条件时可编辑。
    */
   article_can_edit?: boolean;
   /**
@@ -1144,7 +1186,9 @@ export interface OptionUpdateRequestBody {
    */
   cache_type?: OptionCacheTypeEnum;
   /**
-   * 评论作者是否可删除评论。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
+   * 评论作者是否可删除评论。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `comment_can_delete_before` 的条件时可删除。
    */
   comment_can_delete?: boolean;
   /**
@@ -1152,7 +1196,9 @@ export interface OptionUpdateRequestBody {
    */
   comment_can_delete_before?: number;
   /**
-   * 评论作者是否可编辑评论。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
+   * 评论作者是否可编辑评论。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `comment_can_edit_before` 的条件时可编辑。
    */
   comment_can_edit?: boolean;
   /**
@@ -1164,7 +1210,9 @@ export interface OptionUpdateRequestBody {
    */
   language?: OptionLanguageEnum;
   /**
-   * 提问作者是否可删除提问。  为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
+   * 提问作者是否可删除提问。
+   *
+   * 为 `false` 时，不允许删除； 为 `true` 时，在满足 `question_can_delete_before`、`question_can_delete_only_no_answer` 和 `question_can_delete_only_no_comment` 的条件时可删除。
    */
   question_can_delete?: boolean;
   /**
@@ -1180,7 +1228,9 @@ export interface OptionUpdateRequestBody {
    */
   question_can_delete_only_no_comment?: boolean;
   /**
-   * 提问作者是否可编辑提问。  为 `false` 时，不允许编辑； 为 `true` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
+   * 提问作者是否可编辑提问。
+   *
+   * 为 `false` 时，不允许编辑； 为 `true` 时，在满足 `question_can_edit_before`、`question_can_edit_only_no_answer` 和 `question_can_edit_only_no_comment` 的条件时可编辑。
    */
   question_can_edit?: boolean;
   /**
@@ -2131,7 +2181,10 @@ export interface UserLoginRequestBody {
    */
   name: string;
   /**
-   * 经过 hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
   /**
@@ -2158,7 +2211,10 @@ export interface UserPasswordResetRequestBody {
    */
   email_code: string;
   /**
-   * hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
 }
@@ -2177,7 +2233,10 @@ export interface UserRegisterRequestBody {
    */
   username: string;
   /**
-   * hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
 }

@@ -32,7 +32,7 @@ interface CreateParams {
    */
   reason: string;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
    */
   include?: Array<
     'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'
@@ -48,15 +48,15 @@ interface DeleteMultipleParams {
 
 interface GetListParams {
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`, `user`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `question`, `answer`, `article`, `comment`, `user`
    */
   include?: Array<'question' | 'answer' | 'article' | 'comment' | 'user'>;
   /**
@@ -75,15 +75,15 @@ interface GetReasonsParams {
    */
   reportable_id: number;
   /**
-   * 当前页数
+   * 当前页数，默认为 1
    */
   page?: number;
   /**
-   * 每页条数（最大为 100）
+   * 每页条数，默认为 15（最大为 100）
    */
   per_page?: number;
   /**
-   * 响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
+   * 响应中需要包含的关联数据，用 `,` 分隔。可以为 `reporter`, `question`, `answer`, `article`, `comment`, `user`
    */
   include?: Array<
     'reporter' | 'question' | 'answer' | 'article' | 'comment' | 'user'

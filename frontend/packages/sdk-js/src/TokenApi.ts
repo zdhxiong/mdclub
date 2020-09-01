@@ -11,7 +11,10 @@ interface LoginParams {
    */
   name: string;
   /**
-   * 经过 hash1 加密后的密码
+   * 经过 hash1 加密后的密码。
+   *
+   * * 若你使用的是 [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK 内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+   * * 若你直接调用 REST API，则需要自己实现 sha1 加密。
    */
   password: string;
   /**
@@ -19,11 +22,11 @@ interface LoginParams {
    */
   device?: string;
   /**
-   * 图形验证码token。若上一次请求返回了 captcha_token， 则必须传该参数
+   * 图形验证码token。若上一次请求返回了 `captcha_token`， 则必须传该参数
    */
   captcha_token?: string;
   /**
-   * 图形验证码的值。若上一次请求返回了 captcha_token，则必须传该参数
+   * 图形验证码的值。若上一次请求返回了 `captcha_token`，则必须传该参数
    */
   captcha_code?: string;
 }
