@@ -4189,7 +4189,15 @@ components:
           example: zdhxiong
         password:
           type: string
-          description: 经过 hash1 加密后的密码
+          description: >
+            经过 hash1 加密后的密码。
+
+
+            * 若你使用的是
+            [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK
+            内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+
+            * 若你直接调用 REST API，则需要自己实现 sha1 加密。
           example: 7c4a8d09ca3762af61e59520943dc26494f8941b
         device:
           type: string
@@ -4219,7 +4227,15 @@ components:
           example: hg8d3d
         password:
           type: string
-          description: hash1 加密后的密码
+          description: >
+            经过 hash1 加密后的密码。
+
+
+            * 若你使用的是
+            [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK
+            内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+
+            * 若你直接调用 REST API，则需要自己实现 sha1 加密。
           example: 7c4a8d09ca3762af61e59520943dc26494f8941b
       required:
         - email
@@ -4243,7 +4259,15 @@ components:
           example: zdhxiong
         password:
           type: string
-          description: hash1 加密后的密码
+          description: >
+            经过 hash1 加密后的密码。
+
+
+            * 若你使用的是
+            [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js)，则 SDK
+            内部已经实现了 sha1 加密，该参数直接传入明文密码即可。
+
+            * 若你直接调用 REST API，则需要自己实现 sha1 加密。
           example: 7c4a8d09ca3762af61e59520943dc26494f8941b
       required:
         - email
@@ -5214,7 +5238,7 @@ components:
     answer_ids:
       name: answer_id
       in: query
-      description: '用“,”分隔的回答ID，最多可提供100个ID'
+      description: '用 `,` 分隔的回答ID，最多可提供100个ID'
       schema:
         type: array
         items:
@@ -5367,7 +5391,7 @@ components:
     include.answer:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `voting`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `voting`'
       schema:
         type: array
         items:
@@ -5384,7 +5408,7 @@ components:
     include.article:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`'
       schema:
         type: array
         items:
@@ -5402,7 +5426,7 @@ components:
     include.comment:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `voting`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `voting`'
       schema:
         type: array
         items:
@@ -5418,7 +5442,7 @@ components:
     include.image:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `question`, `article`, `answer`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `question`, `article`, `answer`'
       schema:
         type: array
         items:
@@ -5437,7 +5461,7 @@ components:
       name: include
       in: query
       description: >-
-        响应中需要包含的关联数据，用“,”分隔。可以为 `receiver`, `sender`, `article`, `question`,
+        响应中需要包含的关联数据，用 `,` 分隔。可以为 `receiver`, `sender`, `article`, `question`,
         `answer`, `comment`, `reply`
       schema:
         type: array
@@ -5459,7 +5483,7 @@ components:
     include.question:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `user`, `topics`, `is_following`, `voting`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `user`, `topics`, `is_following`, `voting`'
       schema:
         type: array
         items:
@@ -5478,7 +5502,7 @@ components:
       name: include
       in: query
       description: >-
-        响应中需要包含的关联数据，用“,”分隔。可以为 `question`, `answer`, `article`, `comment`,
+        响应中需要包含的关联数据，用 `,` 分隔。可以为 `question`, `answer`, `article`, `comment`,
         `user`
       schema:
         type: array
@@ -5499,7 +5523,7 @@ components:
       name: include
       in: query
       description: >-
-        响应中需要包含的关联数据，用“,”分隔。可以为 `reporter`, `question`, `answer`, `article`,
+        响应中需要包含的关联数据，用 `,` 分隔。可以为 `reporter`, `question`, `answer`, `article`,
         `comment`, `user`
       schema:
         type: array
@@ -5522,7 +5546,7 @@ components:
       name: include
       in: query
       description: >-
-        统计数据中包含的数据，用“,”分隔，可以为 `system_info`, `total_user`, `total_question`,
+        统计数据中包含的数据，用 `,` 分隔，可以为 `system_info`, `total_user`, `total_question`,
         `total_article`, `total_answer`, `total_comment`, `new_user`,
         `new_question`, `new_article`, `new_answer`, `new_comment`
       schema:
@@ -5549,7 +5573,7 @@ components:
     include.topic:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_following`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_following`'
       schema:
         type: array
         items:
@@ -5563,7 +5587,7 @@ components:
     include.user:
       name: include
       in: query
-      description: '响应中需要包含的关联数据，用“,”分隔。可以为 `is_followed`, `is_following`, `is_me`'
+      description: '响应中需要包含的关联数据，用 `,` 分隔。可以为 `is_followed`, `is_following`, `is_me`'
       schema:
         type: array
         items:

@@ -1,6 +1,6 @@
 name: include
 in: query
-description: 统计数据中包含的数据，用“,”分隔，可以为 `system_info`, `total_user`, `total_question`, `total_article`, `total_answer`, `total_comment`, `new_user`, `new_question`, `new_article`, `new_answer`, `new_comment`
+description: 统计数据中包含的数据，用 `,` 分隔，可以为 `system_info`, `total_user`, `total_question`, `total_article`, `total_answer`, `total_comment`, `new_user`, `new_question`, `new_article`, `new_answer`, `new_comment`
 schema:
   type: array
   items:
