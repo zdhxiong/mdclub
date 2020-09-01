@@ -10,7 +10,7 @@ info:
   license:
     name: MIT
     url: 'https://github.com/zdhxiong/mdclub/blob/master/LICENSE'
-  version: 1.0.1
+  version: 1.0.2
 servers:
   - url: /api
     description: 当前服务器
