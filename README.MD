@@ -21,7 +21,7 @@ MDClub 项目由以下子项目组成：
 | ---- | ---- |
 | [mdclub](https://github.com/zdhxiong/mdclub) | MDClub 服务端代码 |
 | [mdclub-theme-material](https://github.com/zdhxiong/mdclub-theme-material) | MDClub 前端代码 |
-| [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) | MDClub 后台管理界面代码 |
+| [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) | MDClub 后台管理系统代码 |
 | [mdclub-openapi](https://github.com/zdhxiong/mdclub-openapi) | MDClub 的 OpenApi 描述文件代码 |
 | [mdclub-sdk-js](https://github.com/zdhxiong/mdclub-sdk-js) | MDClub 的 JavaScript SDK 代码 |
 
@@ -30,6 +30,27 @@ MDClub 项目由以下子项目组成：
 安装 MDClub 需要 PHP 7.2+ 和 MySQL 5.6+。请阅读 [安装说明](https://community.mdclub.org/articles/2) 了解安装过程。
 
 若安装过程遇到困难，可以在 MDClub 的 [问答区](https://community.mdclub.org/questions) 进行搜索，或发帖寻求帮助。
+
+## 在此项目基础上进行二次开发
+
+你需要在本地安装 mdclub。如果你还需要修改前端代码或后台管理系统代码，则还需要安装 [mdclub-theme-material](https://github.com/zdhxiong/mdclub-theme-material) 和 [mdclub-admin](https://github.com/zdhxiong/mdclub-admin) 。
+
+### mdclub 的安装步骤
+
+**克隆项目源码到本地**
+
+```
+git clone https://github.com/zdhxiong/mdclub
+```
+
+**安装项目依赖**
+
+```
+cd mdclub
+composer install
+```
+
+安装完依赖后，再根据 [MDClub 安装说明](https://community.mdclub.org/articles/2) 进行安装。
 
 ## 安全漏洞
 
