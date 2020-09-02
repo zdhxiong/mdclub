@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `mc_answer` (
   KEY `user_id` (`user_id`),
   KEY `vote_count` (`vote_count`),
   KEY `create_time` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回答表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='回答表';
 
 DROP TABLE IF EXISTS `mc_article`;
 CREATE TABLE IF NOT EXISTS `mc_article` (
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `mc_article` (
   KEY `user_id` (`user_id`),
   KEY `create_time` (`create_time`),
   KEY `vote_count` (`vote_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='文章表';
 
 DROP TABLE IF EXISTS `mc_cache`;
 CREATE TABLE IF NOT EXISTS `mc_cache` (
@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS `mc_cache` (
   `create_time` int(10) UNSIGNED DEFAULT NULL COMMENT '创建时间',
   `life_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '有效时间',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='缓存表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='缓存表';
 
 DROP TABLE IF EXISTS `mc_comment`;
 CREATE TABLE IF NOT EXISTS `mc_comment` (
   `comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '回答评论ID',
   `commentable_id` int(11) UNSIGNED NOT NULL COMMENT '评论目标的ID',
-  `commentable_type` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '评论目标类型：article、question、answer、comment',
+  `commentable_type` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论目标类型：article、question、answer、comment',
   `user_id` int(11) UNSIGNED NOT NULL COMMENT '用户ID',
   `content` text NOT NULL COMMENT '原始正文内容',
   `reply_count` int(11) NOT NULL DEFAULT '0' COMMENT '回复数量',
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `mc_comment` (
   KEY `commentable_id` (`commentable_id`),
   KEY `create_time` (`create_time`),
   KEY `vote_count` (`vote_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='回答评论表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='回答评论表';
 
 DROP TABLE IF EXISTS `mc_follow`;
 CREATE TABLE IF NOT EXISTS `mc_follow` (
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `mc_follow` (
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '关注时间',
   KEY `followable_id` (`followable_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章关注关系表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='文章关注关系表';
 
 DROP TABLE IF EXISTS `mc_image`;
 CREATE TABLE IF NOT EXISTS `mc_image` (
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `mc_image` (
   KEY `create_time` (`create_time`),
   KEY `item_id` (`item_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `mc_inbox`;
 CREATE TABLE IF NOT EXISTS `mc_inbox` (
@@ -108,14 +108,14 @@ CREATE TABLE IF NOT EXISTS `mc_inbox` (
   PRIMARY KEY (`inbox_id`),
   KEY `receiver_id` (`receiver_id`),
   KEY `sender_id` (`sender_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='私信表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='私信表';
 
 DROP TABLE IF EXISTS `mc_notification`;
 CREATE TABLE IF NOT EXISTS `mc_notification` (
   `notification_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '通知ID',
   `receiver_id` int(11) UNSIGNED NOT NULL COMMENT '接收者ID',
   `sender_id` int(11) NOT NULL COMMENT '发送者ID',
-  `type` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '消息类型：\r\nquestion_answered, \r\nquestion_commented, \r\nquestion_deleted, \r\narticle_commented, \r\narticle_deleted, \r\nanswer_commented, \r\nanswer_deleted, \r\ncomment_replied, \r\ncomment_deleted',
+  `type` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '消息类型：\r\nquestion_answered, \r\nquestion_commented, \r\nquestion_deleted, \r\narticle_commented, \r\narticle_deleted, \r\nanswer_commented, \r\nanswer_deleted, \r\ncomment_replied, \r\ncomment_deleted',
   `article_id` int(11) NOT NULL COMMENT '文章ID',
   `question_id` int(11) NOT NULL COMMENT '提问ID',
   `answer_id` int(11) NOT NULL COMMENT '回答ID',
@@ -126,14 +126,14 @@ CREATE TABLE IF NOT EXISTS `mc_notification` (
   `read_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '阅读时间',
   PRIMARY KEY (`notification_id`),
   KEY `receiver_id` (`receiver_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='通知表';
 
 DROP TABLE IF EXISTS `mc_option`;
 CREATE TABLE IF NOT EXISTS `mc_option` (
   `name` varchar(40) NOT NULL DEFAULT '' COMMENT '字段名',
   `value` text NOT NULL COMMENT '字段值',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='设置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='设置表';
 
 INSERT INTO `mc_option` (`name`, `value`) VALUES
 ('answer_can_delete', 'false'),
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `mc_question` (
   KEY `create_time` (`create_time`),
   KEY `update_time` (`update_time`),
   KEY `vote_count` (`vote_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='问题表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='问题表';
 
 DROP TABLE IF EXISTS `mc_report`;
 CREATE TABLE IF NOT EXISTS `mc_report` (
@@ -252,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `mc_report` (
   KEY `reportable_id` (`reportable_id`),
   KEY `reportable_type` (`reportable_type`),
   KEY `create_time` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='举报';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='举报';
 
 DROP TABLE IF EXISTS `mc_token`;
 CREATE TABLE IF NOT EXISTS `mc_token` (
@@ -264,14 +264,14 @@ CREATE TABLE IF NOT EXISTS `mc_token` (
   `expire_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '过期时间',
   PRIMARY KEY (`token`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户TOKEN';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户TOKEN';
 
 DROP TABLE IF EXISTS `mc_topic`;
 CREATE TABLE IF NOT EXISTS `mc_topic` (
   `topic_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '话题ID',
-  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '话题名称',
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '话题名称',
   `cover` varchar(50) DEFAULT NULL COMMENT '封面图片token',
-  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '话题描述',
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '话题描述',
   `article_count` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '文章数量',
   `question_count` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '问题数量',
   `follower_count` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '关注者数量',
@@ -279,23 +279,23 @@ CREATE TABLE IF NOT EXISTS `mc_topic` (
   PRIMARY KEY (`topic_id`),
   KEY `name` (`name`),
   KEY `follower_count` (`follower_count`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='话题表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='话题表';
 
 DROP TABLE IF EXISTS `mc_topicable`;
 CREATE TABLE IF NOT EXISTS `mc_topicable` (
   `topic_id` int(11) UNSIGNED NOT NULL COMMENT '话题ID',
   `topicable_id` int(11) UNSIGNED NOT NULL COMMENT '话题关系对应的ID',
-  `topicable_type` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '话题关系对应的类型 question、article',
+  `topicable_type` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '话题关系对应的类型 question、article',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0',
   KEY `topic_id` (`topic_id`),
   KEY `topicable_id` (`topicable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `mc_user`;
 CREATE TABLE IF NOT EXISTS `mc_user` (
   `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` varchar(20) NOT NULL COMMENT '用户名',
-  `email` varchar(320) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '邮箱',
+  `email` varchar(320) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '邮箱',
   `avatar` varchar(50) DEFAULT NULL COMMENT '头像token',
   `cover` varchar(50) DEFAULT NULL COMMENT '封面图片token',
   `password` varchar(255) NOT NULL COMMENT '密码',
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `mc_user` (
   `answer_count` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '我发表的回答数量',
   `notification_unread` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '未读通知数',
   `inbox_unread` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '未读私信数',
-  `headline` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '一句话介绍',
+  `headline` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '一句话介绍',
   `bio` varchar(160) DEFAULT NULL COMMENT '个人简介',
   `blog` varchar(255) DEFAULT NULL COMMENT '个人主页',
   `company` varchar(255) DEFAULT NULL COMMENT '公司名称',
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `mc_user` (
   KEY `email` (`email`),
   KEY `follower_count` (`follower_count`),
   KEY `create_time` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
 DROP TABLE IF EXISTS `mc_vote`;
 CREATE TABLE IF NOT EXISTS `mc_vote` (
@@ -339,4 +339,4 @@ CREATE TABLE IF NOT EXISTS `mc_vote` (
   KEY `user_id` (`user_id`),
   KEY `voteable_id` (`votable_id`),
   KEY `create_time` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
