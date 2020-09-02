@@ -55,11 +55,3 @@ composer install
 ## 安全漏洞
 
 如果你发现 MDClub 中存在安全漏洞，请给作者 [发送电子邮件](mailto:zdhxiong@gmail.com)。安全漏洞会最优先得到解决。
-
-## 赞助
-
-赞助以帮助 MDClub 持续更新
-
-![通过支付宝赞助](https://ww1.sinaimg.cn/large/63f511e3gy1ffhw0jj5n4j206o089dge.jpg)
-![通过微信赞助](https://ww1.sinaimg.cn/large/63f511e3gy1ffhw0vkaeaj206o0890ta.jpg)
-[![通过 Paypal 赞助](https://ww1.sinaimg.cn/large/63f511e3gy1fff6937xzbj203w00y3yc.jpg)](https://www.paypal.me/zdhxiong/5)
