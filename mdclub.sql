@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `mc_notification` (
   `answer_id` int(11) NOT NULL COMMENT '回答ID',
   `comment_id` int(11) NOT NULL COMMENT '评论ID',
   `reply_id` int(11) NOT NULL COMMENT '回复ID',
-  `content_deleted` text CHARACTER SET utf8mb4 COLLATE utf8mb4_cs_0900_ai_ci NOT NULL COMMENT '被删除的内容的备份',
+  `content_deleted` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '被删除的内容的备份',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '发送时间',
   `read_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '阅读时间',
   PRIMARY KEY (`notification_id`),
