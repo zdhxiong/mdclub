@@ -23,6 +23,6 @@
     </a>
   </div>
   <div class="copyright">
-    <p></p>
+    <p>Powered by <a href="https://mdui.org" target="_blank">MDUI</a> &amp; <a href="https://mdclub.org" target="_blank">MDClub</a></p>
   </div>
 </div>
