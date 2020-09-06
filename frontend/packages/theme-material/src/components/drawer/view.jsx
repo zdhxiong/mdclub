@@ -94,7 +94,7 @@ export default ({ user, interviewee }) => (
     <div class="copyright">
       <If condition={site_icp_beian}>
         <p>
-          <a href="http://www.beian.miit.gov.cn/" target="_blank">
+          <a href="https://beian.miit.gov.cn/" target="_blank">
             {site_icp_beian}
           </a>
         </p>
