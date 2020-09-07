@@ -7,7 +7,7 @@ $include = ['user', 'topics', 'is_following'];
 $articles_recent = get_articles([
   'include' => $include,
   'per_page' => 20,
-  'order' => '-create_time',
+  'order' => '-update_time',
 ]);
 
 $articles_popular = get_articles([
