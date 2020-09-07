@@ -1,6 +1,13 @@
 @import '../vendor/mdui/index.less';
 @import '../vendor/mdui.editor/index.less';
 
+/* 暗色模式下降低图片亮度 */
+.mdui-theme-layout-dark {
+  img {
+    filter: brightness(.8);
+  }
+}
+
 /* placeholder 颜色 */
 ::-webkit-input-placeholder {
   color: rgba(0, 0, 0, .42);
@@ -38,6 +45,8 @@
   flex-grow: 1;
 }
 
+
+/* 文字排版优化 */
 .mdui-typo {
   pre {
     background-color: #f6f6f6;
