@@ -23,7 +23,11 @@ class Url
     {
         $uri = Request::getUri();
 
-        return "{$uri->getScheme()}://{$uri->getHost()}";
+        if ($port = $uri->getPort()) {
+            $port = ":${port}";
+        }
+
+        return "{$uri->getScheme()}://{$uri->getHost()}{$port}";
     }
 
     /**
