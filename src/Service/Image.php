@@ -159,13 +159,13 @@ class Image extends Abstracts implements GetableInterface
     public function updateItemRelated($itemType, $itemId, $markdownContent): void
     {
         // 从 markdown 文本中提取链接
-        preg_match_all("/!\[([^_]+?)_release\.(.+?)\]/", $markdownContent, $matches);
+        preg_match_all("/\/([0-9a-z]{32})(_release)?\.(jpg|png|gif|jpeg)/i", $markdownContent, $matches);
 
         $count = count($matches[0]);
         $keys = [];
 
         for ($i = 0; $i < $count; $i++) {
-            $keys[] = $matches[1][$i] . '.' . $matches[2][$i];
+            $keys[] = $matches[1][$i] . '.' . $matches[3][$i];
         }
 
         if ($keys) {
