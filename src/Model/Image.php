@@ -16,7 +16,7 @@ class Image extends Abstracts
     protected const UPDATE_TIME = false;
 
     public $columns = [
-        'key',
+        'key', // 该字段在数据库中文件名和后缀以 . 分隔，但在接口的输入输出中，以 _ 分隔。因为请求的 url 不能图片后缀结尾
         'filename',
         'width',
         'height',

@@ -32,6 +32,11 @@ class Image extends Abstracts
             $item['filename'] = htmlspecialchars($item['filename']);
         }
 
+        // 接口的 url 不能以图片后缀结尾，所以把图片的 key 中的 . 替换为 _
+        if (isset($item['key'])) {
+            $item['key'] = str_replace('.', '_', $item['key']);
+        }
+
         return $item;
     }
 

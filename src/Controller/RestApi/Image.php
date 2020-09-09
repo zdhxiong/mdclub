@@ -59,6 +59,10 @@ class Image extends Abstracts
      */
     public function deleteMultiple(array $keys)
     {
+        foreach ($keys as &$key) {
+            $key = str_replace('_', '.', $key);
+        }
+
         ImageService::deleteMultiple($keys);
 
         return null;
@@ -72,6 +76,8 @@ class Image extends Abstracts
      */
     public function delete(string $key)
     {
+        $key = str_replace('_', '.', $key);
+
         ImageService::delete($key);
 
         return null;

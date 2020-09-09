@@ -694,7 +694,7 @@ class RestApi
             ->add(NeedLogin::class);
 
         $group
-            ->delete('/images/{keys:\S+,+}', Image::class . ':deleteMultiple')
+            ->delete('/images/{keys:\S+(?=.*,)\S+}', Image::class . ':deleteMultiple')
             ->add(NeedManager::class);
 
         $group
