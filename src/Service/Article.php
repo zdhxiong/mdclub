@@ -8,6 +8,7 @@ use MDClub\Facade\Library\Auth;
 use MDClub\Facade\Model\ArticleModel;
 use MDClub\Facade\Model\CommentModel;
 use MDClub\Facade\Model\FollowModel;
+use MDClub\Facade\Model\ImageModel;
 use MDClub\Facade\Model\ReportModel;
 use MDClub\Facade\Model\TopicableModel;
 use MDClub\Facade\Model\TopicModel;
@@ -281,5 +282,12 @@ class Article extends Abstracts implements
 
         CommentModel::deleteByArticleIds($articleIds);
         CommentService::afterDelete($comments, true);
+
+        // 删除图片文件
+        $images = ImageModel
+            ::where('item_type', 'article')
+            ->where('item_id', $articleIds)
+            ->select();
+        ImageService::doDelete($images);
     }
 }

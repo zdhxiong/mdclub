@@ -184,7 +184,7 @@ class Image extends Abstracts implements GetableInterface
      */
     public function doDelete(array $images): void
     {
-        $keys = collect($images)->pluck('key');
+        $keys = array_column($images, 'key');
 
         ImageModel::delete($keys);
 

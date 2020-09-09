@@ -14,6 +14,7 @@ use MDClub\Service\Image;
  * @method static string     upload(array $images)
  * @method static void       update(string $key, array $data)
  * @method static void       updateItemRelated($itemType, $itemId, $markdownContent)
+ * @method static void       doDelete(array $images)
  * @method static void       deleteMultiple(array $keys)
  * @method static void       delete(string $key)
  * @method static bool       has($id)

@@ -7,6 +7,7 @@ namespace MDClub\Service;
 use MDClub\Facade\Library\Auth;
 use MDClub\Facade\Model\AnswerModel;
 use MDClub\Facade\Model\CommentModel;
+use MDClub\Facade\Model\ImageModel;
 use MDClub\Facade\Model\QuestionModel;
 use MDClub\Facade\Model\ReportModel;
 use MDClub\Facade\Model\UserModel;
@@ -176,6 +177,13 @@ class Answer extends Abstracts implements CommentableInterface, DeletableInterfa
         foreach ($users as $userId => $count) {
             UserModel::decAnswerCount($userId, $count);
         }
+
+        // 删除图片文件
+        $images = ImageModel
+            ::where('item_type', 'answer')
+            ->where('item_id', $answerIds)
+            ->select();
+        ImageService::doDelete($images);
 
         if ($callByParent) {
             return;
