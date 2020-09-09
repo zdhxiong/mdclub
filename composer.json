@@ -47,10 +47,10 @@
         "intervention/image": "^2.5",
         "mcaskill/composer-exclude-files": "^1.1",
         "funkjedi/composer-include-files": "^1.0",
-        "samdark/sitemap": "^2.2"
+        "samdark/sitemap": "^2.2",
+        "filp/whoops": "^2.7"
     },
     "require-dev": {
-        "filp/whoops": "^2.7",
         "squizlabs/php_codesniffer": "^3.5",
         "phpstan/phpstan": "^0.12",
         "roave/security-advisories": "dev-master"
