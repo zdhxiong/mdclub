@@ -184,6 +184,10 @@ class Image extends Abstracts implements GetableInterface
      */
     public function doDelete(array $images): void
     {
+        if (!$images) {
+            return;
+        }
+
         $keys = array_column($images, 'key');
 
         ImageModel::delete($keys);
