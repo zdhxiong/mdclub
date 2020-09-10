@@ -26,13 +26,15 @@
   opacity: 0;
   opacity: 1;
   animation: mdui-spinner-layer-fill-unfill-rotate 5332ms @animation-curve-default infinite both;
+}
 
-  // custom start
-  .mdui-theme-layout-dark & {
+// custom start
+.layout-theme({
+  .mdui-spinner-layer {
     border-color: @primaryColorDark;
   }
-  // custom end
-}
+});
+// custom end
 
 /* .mdui-spinner-layer-1 {
   border-color: @color-blue-400 !important;

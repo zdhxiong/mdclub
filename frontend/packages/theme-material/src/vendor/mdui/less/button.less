@@ -29,6 +29,7 @@
   border: none;
   //border-radius: 2px;
   // start mdclub 自定义的样式
+
   border-radius: 4px;
   // end mdclub 自定义的样式
   outline: none;
@@ -70,37 +71,42 @@
   color: @primaryColor !important;
   background-color: transparent !important;
 
-  .mdui-theme-layout-dark & {
-    color: @primaryColorDark !important;
-  }
-
   &:hover {
     background-color: rgba(red(@primaryColor), green(@primaryColor), blue(@primaryColor), 0.1) !important;
-
-    .mdui-theme-layout-dark & {
-      background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.1) !important;
-    }
   }
 
   &:not(.mdui-ripple) {
     &:active,
     &.mdui-btn-active {
       background-color: rgba(red(@primaryColor), green(@primaryColor), blue(@primaryColor), 0.165) !important;
-
-      .mdui-theme-layout-dark & {
-        background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.165) !important;
-      }
     }
   }
 
   &.mdui-ripple .mdui-ripple-wave {
     background-color: rgba(red(@primaryColor), green(@primaryColor), blue(@primaryColor), 0.3) !important;
+  }
+}
 
-    .mdui-theme-layout-dark & {
+.layout-theme({
+  .mdui-btn.mdui-color-theme:not(.mdui-btn-raised) {
+    color: @primaryColorDark !important;
+
+    &:hover {
+      background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.1) !important;
+    }
+
+    &:not(.mdui-ripple) {
+      &:active,
+      &.mdui-btn-active {
+        background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.165) !important;
+      }
+    }
+
+    &.mdui-ripple .mdui-ripple-wave {
       background-color: rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.3) !important;
     }
   }
-}
+});
 // custom end
 
 /* 按钮内的图标 */

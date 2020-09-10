@@ -8,19 +8,21 @@
 .mdui-color-theme {
   color: #fff !important;
   background-color: @primaryColor !important;
-
-  .mdui-theme-layout-dark & {
-    background-color: @primaryColorDark !important;
-  }
 }
 
 .mdui-text-color-theme {
   color: @primaryColor !important;
+}
 
-  .mdui-theme-layout-dark & {
+.layout-theme({
+  .mdui-color-theme {
+    background-color: @primaryColorDark !important;
+  }
+
+  .mdui-text-color-theme {
     color: @primaryColorDark !important;
   }
-}
+});
 // custom end
 
 .mdui-text-color-theme-text {

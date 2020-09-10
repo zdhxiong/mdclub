@@ -98,17 +98,21 @@
     color: @color-default-500;
     opacity: 1;
 
-    // custom start
-    .mdui-theme-layout-dark & {
-      color: #fff;
-    }
-    // custom end
-
     /* .mdui-icon {
       opacity: 1;
     } */
   }
 }
+
+// custom start
+.layout-theme({
+  .mdui-tab {
+    .mdui-tab-active {
+      color: #fff;
+    }
+  }
+});
+// custom end
 
 /* 选项卡居中 */
 .mdui-tab-centered {
@@ -160,13 +164,15 @@
   background-color: @color-default-500;
   transition: all .35s @animation-curve-default;
   will-change: left, width;
+}
 
-  // custom start
-  .mdui-theme-layout-dark & {
+// custom start
+.layout-theme({
+  .mdui-tab-indicator {
     background-color: #fff;
   }
-  // custom end
-}
+});
+// custom end
 
 /**
  * =============================================================================
