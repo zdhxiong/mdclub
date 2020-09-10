@@ -51,30 +51,36 @@
     opacity: 0;
     transition: all .3s @animation-curve-default;
     content: ' ';
-
-    // custom start
-    .mdui-theme-layout-dark & {
-      background-color: @primaryColorDark;
-    }
-    // custom end
   }
 }
+
+// custom start
+.layout-theme({
+  .mdui-radio-icon {
+    &::before {
+      background-color: @primaryColorDark;
+    }
+  }
+});
+// custom end
 
 /* 选中状态的图标 */
 .mdui-radio input[type="radio"]:checked + .mdui-radio-icon {
   border-color: @color-default-a200;
-
-  // custom start
-  .mdui-theme-layout-dark & {
-    border-color: @primaryColorDark;
-  }
-  // custom end
 
   &::before {
     transform: scale(0.68);
     opacity: 1;
   }
 }
+
+// custom start
+.layout-theme({
+  .mdui-radio input[type="radio"]:checked + .mdui-radio-icon {
+    border-color: @primaryColorDark;
+  }
+});
+// custom end
 
 /* 禁用状态的图标 */
 
@@ -103,14 +109,19 @@
 .mdui-radio input[type="radio"]:focus {
   &:checked:not(:disabled) + .mdui-radio-icon {
     box-shadow: 0 0 0 15px rgba(red(@color-default-a200), green(@color-default-a200), blue(@color-default-a200), 0.16);
-
-    // custom start
-    .mdui-theme-layout-dark & {
-      box-shadow: 0 0 0 15px rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.16);
-    }
-    // custom end
   }
 }
+
+// custom start
+.layout-theme({
+  .mdui-radio:active input[type="radio"],
+  .mdui-radio input[type="radio"]:focus {
+    &:checked:not(:disabled) + .mdui-radio-icon {
+      box-shadow: 0 0 0 15px rgba(red(@primaryColorDark), green(@primaryColorDark), blue(@primaryColorDark), 0.16);
+    }
+  }
+});
+// custom end
 
 /**
  * =============================================================================

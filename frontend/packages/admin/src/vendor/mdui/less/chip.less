@@ -87,7 +87,6 @@
   * ************   Chip dark   ************
   * =============================================================================
   */
-
 .layout-theme({
   .mdui-chip {
     background-color: #484848;
@@ -110,14 +109,6 @@
 
   &:hover {
     background-color: rgba(0, 0, 0, .04);
-  }
-
-  .mdui-theme-layout-dark & {
-    border-color: rgba(255, 255, 255, .12);
-
-    &:hover {
-      background-color: rgba(255, 255, 255, .08);
-    }
   }
 }
 
@@ -143,3 +134,13 @@
     font-size: 18px;
   }
 }
+
+.layout-theme({
+  .mdui-chip {
+    border-color: rgba(255, 255, 255, .12);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, .08);
+    }
+  }
+});

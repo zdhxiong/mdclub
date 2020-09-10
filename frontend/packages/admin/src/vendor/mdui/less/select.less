@@ -187,10 +187,6 @@
     // custom start
     //color: @color-default-a200;
     color: @primaryColor;
-
-    .mdui-theme-layout-dark & {
-      color: @primaryColorDark;
-    }
     // custom end
   }
 }
@@ -324,6 +320,12 @@ select.mdui-select[multiple] {
     &[disabled] {
       color: @color-white-disabled !important;
     }
+
+    // custom start
+    &[selected] {
+      color: @primaryColorDark;
+    }
+    // custom end
   }
 
   // 原生 select 组件

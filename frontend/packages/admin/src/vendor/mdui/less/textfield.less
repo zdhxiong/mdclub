@@ -155,15 +155,21 @@
   &.mdui-textfield-focus {
     .mdui-textfield-label {
       .mdui-text-color(@color-accent-default-name);
-
-      // custom start
-      .mdui-theme-layout-dark & {
-        color: @primaryColorDark;
-      }
-      // custom end
     }
   }
 }
+
+// custom start
+.layout-theme({
+  .mdui-textfield-floating-label {
+    &.mdui-textfield-focus {
+      .mdui-textfield-label {
+        color: @primaryColorDark;
+      }
+    }
+  }
+});
+// custom end
 
 /* 可展开文本框，默认向右展开
    ========== */
