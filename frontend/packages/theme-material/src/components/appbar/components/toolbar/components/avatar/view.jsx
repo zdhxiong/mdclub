@@ -23,6 +23,15 @@ const Button = ({ user }) => (
   </div>
 );
 
+const PopoverBottomButton = ({ onClick, text }) => (
+  <button
+    onclick={onClick}
+    class="mdui-btn mdui-btn-dense mdui-btn-outlined mdui-color-theme mdui-ripple"
+  >
+    {text}
+  </button>
+);
+
 const Popover = ({ user }) => (
   <div class="popover mdui-menu" id="appbar-avatar-popover">
     <div class="info">
@@ -45,16 +54,24 @@ const Popover = ({ user }) => (
       </button>
     </div>
     <div class="bottom">
-      <button
-        onclick={() => {
+      <If condition={user.user_id === 1}>
+        <PopoverBottomButton
+          onClick={() => {
+            window.location.href = fullPath('/admin');
+            menu.close();
+          }}
+          text="管理后台"
+        />
+      </If>
+      <div class="mdui-toolbar-spacer" />
+      <PopoverBottomButton
+        onClick={() => {
           removeCookie('token');
           window.localStorage.removeItem('token');
           window.location.reload();
         }}
-        class="mdui-btn mdui-btn-dense mdui-btn-outlined mdui-color-theme mdui-ripple"
-      >
-        退出
-      </button>
+        text="退出"
+      />
     </div>
   </div>
 );
