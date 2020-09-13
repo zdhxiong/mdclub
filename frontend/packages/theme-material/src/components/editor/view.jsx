@@ -1,6 +1,7 @@
 import { h } from 'hyperapp';
 import cc from 'classcat';
 import $ from 'mdui.jq';
+import { COMMON_IMAGE_UPLOAD_FAILED } from 'mdclub-sdk-js/es/errors';
 import Editor from 'mdui.editor/es/index';
 import './index.less';
 
@@ -150,7 +151,13 @@ export default ({
           imageUploadUrl: `${window.G_API}/images`,
           imageUploadName: 'image',
           imageUploadResponseTransform: (response) => {
-            response.data.url = response.data.urls.release;
+            if (response.code === COMMON_IMAGE_UPLOAD_FAILED) {
+              response.message = response.extra_message;
+            }
+
+            if (response.code === 0) {
+              response.data.url = response.data.urls.release;
+            }
 
             return response;
           },
