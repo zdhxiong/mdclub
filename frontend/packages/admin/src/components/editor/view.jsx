@@ -129,6 +129,7 @@ export default ({
           ],
           placeholder: '请输入内容',
           autoSave: false,
+          imageUploadMaxSize: 0,
           imageUploadUrl: `${window.G_API}/images`,
           imageUploadName: 'image',
           imageUploadResponseTransform: (response) => {
