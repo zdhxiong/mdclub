@@ -123,7 +123,7 @@ export default (state, actions) => ({ match }) => {
             <SystemInfoItem
               label="上传文件限制"
               value={system_info.upload_max_filesize}
-              notice="可通过修改 php.ini 文件中的 upload_max_filesize 来修改该项。另外注意修改 post_max_size，使之大于 upload_max_filesize 的值"
+              notice="可通过修改 php.ini 文件中的 upload_max_filesize 来修改该项。若遇到“图片上传失败”，请检查 post_max_size 必须大于 upload_max_filesize 的值"
             />
             <SystemInfoItem
               label="PHP 执行时长限制"
