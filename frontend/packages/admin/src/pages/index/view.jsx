@@ -11,9 +11,19 @@ const CountItem = ({ label, count }) => (
   </div>
 );
 
-const SystemInfoItem = ({ label, value }) => (
+const SystemInfoItem = ({ label, value, notice = null }) => (
   <div class="item">
-    <label>{label}</label>
+    <label>
+      {label}
+      <If condition={notice}>
+        <i
+          class="mdui-icon material-icons"
+          mdui-tooltip={`{content: '${notice}', delay: 300}`}
+        >
+          help_outline
+        </i>
+      </If>
+    </label>
     <span class="mdui-text-color-theme-secondary">{value}</span>
   </div>
 );
@@ -113,10 +123,12 @@ export default (state, actions) => ({ match }) => {
             <SystemInfoItem
               label="上传文件限制"
               value={system_info.upload_max_filesize}
+              notice="可通过修改 php.ini 文件中的 upload_max_filesize 来修改该项。另外注意修改 post_max_size，使之大于 upload_max_filesize 的值"
             />
             <SystemInfoItem
               label="PHP 执行时长限制"
               value={system_info.max_execution_time}
+              notice="可通过修改 php.ini 文件中的 max_execution_time 来修改该项"
             />
             <SystemInfoItem
               label="剩余硬盘空间"
