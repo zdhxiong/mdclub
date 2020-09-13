@@ -146,6 +146,7 @@ export default ({
           placeholder: '请输入内容',
           autoSave: !!state.auto_save_key,
           autoSaveKey: `${state.auto_save_key}-content`,
+          imageUploadMaxSize: 0,
           imageUploadUrl: `${window.G_API}/images`,
           imageUploadName: 'image',
           imageUploadResponseTransform: (response) => {
