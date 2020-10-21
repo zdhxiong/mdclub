@@ -564,7 +564,7 @@ abstract class Abstracts
 
         if (isset($total)) {
             $result['pagination']['total']    = $total;
-            $result['pagination']['pages']    = ceil($total / $perPage);
+            $result['pagination']['pages']    = (int) ceil($total / $perPage);
             $result['pagination']['previous'] = $page > 1 ? $page - 1 : null;
             $result['pagination']['next']     = $result['pagination']['pages'] > $page ? $page + 1 : null;
         }
