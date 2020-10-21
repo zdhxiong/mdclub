@@ -37,7 +37,7 @@ class Sitemap
      */
     public function index(): ResponseInterface
     {
-        $sitemapLastUpdateTime = CacheFacade::get('sitemap_last_update_time') || 0;
+        $sitemapLastUpdateTime = CacheFacade::get('sitemap_last_update_time', 0);
         $indexPath = $this->folder . '/sitemap_index.xml';
 
         // 每 24 小时更新一次 sitemap
@@ -56,7 +56,7 @@ class Sitemap
 
             $index->write();
 
-            CacheFacade::set('sitemap_last_update_time', $this->time, 86400);
+            CacheFacade::set('sitemap_last_update_time', $this->time, $this->ttl);
         }
 
         /** @var ResponseInterface $response */
