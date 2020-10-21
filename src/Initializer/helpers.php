@@ -69,7 +69,9 @@ function get_request(array $queryParams = []): ServerRequestInterface
     /** @var ServerRequestInterface $request */
     $request = App::$container->get(ServerRequestInterface::class);
 
-    $request = $request->withQueryParams(array_merge($request->getQueryParams(), $queryParams));
+    if ($queryParams) {
+        $request = $request->withQueryParams(array_merge($request->getQueryParams(), $queryParams));
+    }
 
     App::$container->offsetSet(ServerRequestInterface::class, $request);
 
