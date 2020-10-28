@@ -29,7 +29,7 @@
         "psr/simple-cache": "^1.0",
         "symfony/cache": "^5.0",
         "slim/slim": "^4.5",
-        "slim/php-view": "^2.2",
+        "slim/php-view": "^3.0",
         "symfony/polyfill-mbstring": "^1.15",
         "symfony/filesystem": "^5.0",
         "ezyang/htmlpurifier": "^4.12",
@@ -45,7 +45,7 @@
         "zhuzhichao/ip-location-zh": "^2.4",
         "tightenco/collect": "^7.12",
         "intervention/image": "^2.5",
-        "mcaskill/composer-exclude-files": "^1.1",
+        "mcaskill/composer-exclude-files": "^2.0",
         "funkjedi/composer-include-files": "^1.0",
         "samdark/sitemap": "^2.2",
         "filp/whoops": "^2.7"
@@ -61,14 +61,14 @@
         ],
         "psr-4": {
             "MDClub\\": "src/"
-        },
-        "exclude-from-files": [
-            "tightenco/collect/src/Collect/Support/alias.php"
-        ]
+        }
     },
     "extra": {
         "include_files": [
             "src/Initializer/helpers.php"
+        ],
+        "exclude-from-files": [
+            "tightenco/collect/src/Collect/Support/alias.php"
         ]
     },
     "scripts": {
