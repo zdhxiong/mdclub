@@ -12,12 +12,12 @@
     "build": "node index.js",
     "validate": "npm run build && spectral lint -s=operation-operationId-unique dist/openapi.yaml",
     "mock": "npm run build && prism mock dist/openapi.yaml",
-    "build-php-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g php -o dist/php --skip-validate-spec",
-    "build-android-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g android -o dist/android --skip-validate-spec",
-    "build-dart-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g dart -o dist/dart --skip-validate-spec",
-    "build-objc-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g objc -o dist/objc --skip-validate-spec",
-    "build-swift4-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g swift4 -o dist/swift4 --skip-validate-spec",
-    "build-aurelia-sdk": "npm run build && npx openapi-generator generate -i dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o dist/aurelia --skip-validate-spec"
+    "build-php-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g php -o dist/php --skip-validate-spec",
+    "build-android-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g android -o dist/android --skip-validate-spec",
+    "build-dart-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g dart -o dist/dart --skip-validate-spec",
+    "build-objc-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g objc -o dist/objc --skip-validate-spec",
+    "build-swift4-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g swift4 -o dist/swift4 --skip-validate-spec",
+    "build-aurelia-sdk": "npm run build && npx openapi-generator-cli generate -i dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o dist/aurelia --skip-validate-spec"
   },
   "files": [
     "dist/openapi.json",
@@ -37,9 +37,9 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^1.0.15-4.3.1",
-    "@stoplight/prism-cli": "^3.3.6",
-    "@stoplight/spectral": "^5.4.0",
+    "@openapitools/openapi-generator-cli": "^2.0.3",
+    "@stoplight/prism-cli": "^4.1.0",
+    "@stoplight/spectral": "^5.6.0",
     "js-yaml": "^3.14.0",
     "json-refs": "^3.0.15"
   }
