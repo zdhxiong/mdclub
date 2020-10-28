@@ -4,7 +4,7 @@ import { fullPath } from '~/utils/path';
 import './index.less';
 import { plainText, richText, summaryText } from '~/utils/html';
 
-import Loading from '~/components/Loading/view.jsx';
+import Loading from '~/components/loading/view.jsx';
 
 export default ({ notification, actions }) => {
   // eslint-disable-next-line no-empty-pattern
