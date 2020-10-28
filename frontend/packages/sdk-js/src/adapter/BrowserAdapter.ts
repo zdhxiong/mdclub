@@ -13,7 +13,8 @@ import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 /**
  * 浏览器适配器，使用 mdui.jq 中的 ajax 函数实现
  */
-export default class extends BrowserAbstract
+export default class
+  extends BrowserAbstract
   implements RequestAdapterInterface {
   request(options: RequestOptionsInterface): Promise<ResponseInterface> {
     const isFormData = options.data instanceof FormData;

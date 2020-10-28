@@ -10,7 +10,8 @@ import { GET } from '../util/requestMethod';
 import PlainObject from 'mdui.jq/es/interfaces/PlainObject';
 import extend from 'mdui.jq/es/functions/extend';
 
-export default class extends BrowserAbstract
+export default class
+  extends BrowserAbstract
   implements RequestAdapterInterface {
   request(options: RequestOptionsInterface): Promise<ResponseInterface> {
     return new Promise((resolve, reject): void => {
