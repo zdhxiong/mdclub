@@ -1,7 +1,7 @@
 const FileSystem = require('fs');
 const copyDir = require('copy-dir');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -9,7 +9,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const commonConfig  = require('./webpack.common.js');
 const { outputFolder, resolve } = require('./config');
 
-const prodConfig = merge.smart(commonConfig, {
+const prodConfig = merge(commonConfig, {
   mode: 'production',
   devtool: 'source-map',
   optimization: {
@@ -17,7 +17,7 @@ const prodConfig = merge.smart(commonConfig, {
     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
   },
   output: {
-    filename: 'index.[hash:8].js',
+    filename: 'index.[contenthash:8].js',
     path: outputFolder,
     publicPath: './',
   },
@@ -29,7 +29,7 @@ const prodConfig = merge.smart(commonConfig, {
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'index.[hash:8].css',
+      filename: 'index.[contenthash:8].css',
     }),
     // 替换 HTML 中的 JS、CSS 文件名
     function() {
