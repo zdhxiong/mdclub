@@ -30,7 +30,7 @@ export default ({ state, actions }) => {
             google: 'Google',
             bing: 'Bing',
             sogou: '搜狗',
-            '360': '360',
+            360: '360',
             baidu: '百度',
           }}
         />

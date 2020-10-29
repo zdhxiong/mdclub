@@ -15,11 +15,13 @@ function styleLoaders(loader) {
     {
       loader: 'postcss-loader',
       options: {
-        plugins: [
-          postcssImport(),
-          autoprefixer(),
-        ],
-        sourceMap: true,
+        postcssOptions: {
+          plugins: [
+            postcssImport(),
+            autoprefixer(),
+          ],
+          sourceMap: true,
+        },
       }
     },
   ];

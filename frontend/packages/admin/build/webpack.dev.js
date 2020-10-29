@@ -1,10 +1,10 @@
 const FileSystem = require('fs');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const commonConfig = require('./webpack.common.js');
 const { outputFolder, resolve } = require('./config');
 
-const devConfig = merge.smart(commonConfig, {
+const devConfig = merge(commonConfig, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
