@@ -41,7 +41,7 @@ class App
      *
      * @var string
      */
-    public static $version = '1.0.0';
+    public static $version = '1.0.1';
 
     /**
      * 请求实例

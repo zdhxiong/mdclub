@@ -1,0 +1,17 @@
+{
+    "php_ext": "opcache,fileinfo",
+    "chmod": [
+        { "mode": 755, "path": "/config" },
+        { "mode": 755, "path": "/var" },
+        { "mode": 755, "path": "/public/sitemap" },
+        { "mode": 755, "path": "/public/upload" }
+    ],
+    "success_url": "/",
+    "php_versions": "73,74",
+    "db_config": "",
+    "admin_username": "",
+    "admin_password": "",
+    "run_path": "/public",
+    "remove_file": [],
+    "enable_functions": []
+}
