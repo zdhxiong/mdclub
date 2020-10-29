@@ -50,7 +50,7 @@ $articles_popular = get_articles([
       <div class="topics">
         <?php foreach ($topics_recommended['data'] as $topic): ?>
           <div class="mc-topic-item item-inner">
-            <div class="item mdui-card" style="background-image: url(<?= $topic['cover']['small'] ?>);">
+            <div class="item mdui-card" style="background-image: url(<?= $topic['cover']['small'] ?? '' ?>);">
               <a class="mdui-ripple info" href="<?= get_root_url() ?>/topics/<?= $topic['topic_id'] ?>">
                 <div class="name mdui-text-color-theme-text"><?= $topic['name'] ?></div>
               </a>
@@ -76,7 +76,7 @@ $articles_popular = get_articles([
             <?php foreach ($questions_recent['data'] as $question): ?>
               <a class="item" href="<?= get_root_url() ?>/questions/<?= $question['question_id'] ?>">
                 <div class="mc-user-popover">
-                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?>);"></div>
+                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?? '' ?>);"></div>
                 </div>
                 <div class="title mdui-text-color-theme-text"><?= $question['title'] ?></div>
               </a>
@@ -94,7 +94,7 @@ $articles_popular = get_articles([
             <?php foreach ($questions_popular['data'] as $question): ?>
               <a class="item" href="<?= get_root_url() ?>/questions/<?= $question['question_id'] ?>">
                 <div class="mc-user-popover">
-                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?>);"></div>
+                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?? '' ?>);"></div>
                 </div>
                 <div class="title mdui-text-color-theme-text"><?= $question['title'] ?></div>
               </a>
@@ -114,7 +114,7 @@ $articles_popular = get_articles([
             <?php foreach ($articles_recent['data'] as $article): ?>
               <a class="item" href="<?= get_root_url() ?>/articles/<?= $article['article_id'] ?>">
                 <div class="mc-user-popover">
-                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $article['relationships']['user']['avatar']['middle'] ?>);"></div>
+                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $article['relationships']['user']['avatar']['middle'] ?? '' ?>);"></div>
                 </div>
                 <div class="title mdui-text-color-theme-text"><?= $article['title'] ?></div>
               </a>
@@ -132,7 +132,7 @@ $articles_popular = get_articles([
             <?php foreach ($articles_popular['data'] as $article): ?>
               <a class="item" href="<?= get_root_url() ?>/articles/<?= $article['article_id'] ?>">
                 <div class="mc-user-popover">
-                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $article['relationships']['user']['avatar']['middle'] ?>);"></div>
+                  <div class="avatar user-popover-trigger" style="background-image: url(<?= $article['relationships']['user']['avatar']['middle'] ?? '' ?>);"></div>
                 </div>
                 <div class="title mdui-text-color-theme-text"><?= $article['title'] ?></div>
               </a>

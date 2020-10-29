@@ -42,7 +42,7 @@ $meta_title = $question['title'];
       <h1 class="title"><?= $question['title'] ?></h1>
       <div class="mc-user-line">
         <div class="mc-user-popover">
-          <a class="avatar user-popover-trigger" href="<?= get_root_url() ?>/users/<?= $question['user_id'] ?>" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?>);"></a>
+          <a class="avatar user-popover-trigger" href="<?= get_root_url() ?>/users/<?= $question['user_id'] ?>" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?? '' ?>);"></a>
           <a class="username user-popover-trigger mdui-text-color-theme-text" href="<?= get_root_url() ?>/users/<?= $question['user_id'] ?>"><?= $question['relationships']['user']['username'] ?></a>
           <div class="headline mdui-text-color-theme-secondary"><?= $question['relationships']['user']['headline'] ?></div>
           <div class="more">
@@ -56,7 +56,7 @@ $meta_title = $question['title'];
       <div class="mc-topics-bar">
         <?php foreach ($question['relationships']['topics'] as $topic): ?>
         <a class="mdui-chip mdui-ripple" href="<?= get_root_url() ?>/topics/<?= $topic['topic_id'] ?>">
-          <img class="mdui-chip-icon" src="<?= $topic['cover']['small'] ?>">
+          <img class="mdui-chip-icon" src="<?= $topic['cover']['small'] ?? '' ?>">
           <span class="mdui-chip-title"><?= $topic['name'] ?></span>
         </a>
         <?php endforeach; ?>
@@ -84,7 +84,7 @@ $meta_title = $question['title'];
         <div class="item">
           <div class="mc-user-line">
             <div class="mc-user-popover">
-              <a class="avatar user-popover-trigger" href="<?= get_root_url() ?>/users/<?= $answer['user_id'] ?>" style="background-image: url(<?= $answer['relationships']['user']['avatar']['middle'] ?>);"></a>
+              <a class="avatar user-popover-trigger" href="<?= get_root_url() ?>/users/<?= $answer['user_id'] ?>" style="background-image: url(<?= $answer['relationships']['user']['avatar']['middle'] ?? '' ?>);"></a>
               <a class="username user-popover-trigger mdui-text-color-theme-text" href="<?= get_root_url() ?>/users/<?= $answer['user_id'] ?>"><?= $answer['relationships']['user']['username'] ?></a>
               <div class="headline mdui-text-color-theme-secondary"><?= $answer['relationships']['user']['headline'] ?></div>
               <div class="more">

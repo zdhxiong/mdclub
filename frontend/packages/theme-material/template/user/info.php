@@ -37,7 +37,7 @@ $meta_title = $user['username'];
 <?php if (!get_user_id()): ?>
   <div id="page-user" class="mdui-container">
     <div class="user mdui-card mdui-card-shadow">
-      <div class="cover" style="background-image: url(<?= $user['cover']['large'] ?>); background-position-y: 0px;">
+      <div class="cover" style="background-image: url(<?= $user['cover']['large'] ?? '' ?>); background-position-y: 0px;">
         <div class="mc-cover-upload">
           <button class="upload-btn mdui-btn mdui-btn-icon mdui-ripple" type="button" title="点击上传封面">
             <i class="mdui-icon material-icons">photo_camera</i>
@@ -53,7 +53,7 @@ $meta_title = $user['username'];
             </button>
             <input type="file" title=" " accept="image/jpeg,image/png">
           </div>
-          <img src="<?= $user['avatar']['large'] ?>" class="avatar">
+          <img src="<?= $user['avatar']['large'] ?? '' ?>" class="avatar">
         </div>
         <div class="profile">
           <div class="meta username mdui-text-color-theme-text"><?= $user['username'] ?></div>
@@ -119,7 +119,7 @@ $meta_title = $user['username'];
           <?php foreach ($questions['data'] as $question): ?>
             <a class="mc-list-item" href="<?= get_root_url() ?>/questions/<?= $question['question_id'] ?>">
               <div class="mc-user-popover">
-                <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?>);"></div>
+                <div class="avatar user-popover-trigger" style="background-image: url(<?= $question['relationships']['user']['avatar']['middle'] ?? '' ?>);"></div>
               </div>
               <div class="title mdui-text-color-theme-text"><?= $question['title'] ?></div>
               <div class="content mdui-text-color-theme-secondary">

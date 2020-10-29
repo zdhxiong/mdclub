@@ -27,7 +27,7 @@ $meta_title = '话题列表';
       <div class="items-wrapper">
         <?php foreach ($topics_recommended['data'] as $topic): ?>
         <div class="mc-topic-item item-inner">
-          <div class="item mdui-card" style="background-image: url(<?= $topic['cover']['small'] ?>);">
+          <div class="item mdui-card" style="background-image: url(<?= $topic['cover']['small'] ?? '' ?>);">
             <a class="mdui-ripple info" href="<?= get_root_url() ?>/topics/<?= $topic['topic_id'] ?>">
               <div class="name mdui-text-color-theme-text"><?= $topic['name'] ?></div>
             </a>
