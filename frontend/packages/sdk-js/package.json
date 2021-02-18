@@ -11,7 +11,10 @@
     "build": "npm run eslint && tsc -p src/tsconfig.json && node build.js --build",
     "build-sdk-tmp": "npx openapi-generator-cli generate -i node_modules/mdclub-openapi/dist/openapi.yaml -g typescript-aurelia --additional-properties=modelPropertyNaming=original -o ./tmp -t ./openapi-generator --skip-validate-spec",
     "docs": "typedoc --out docs/html/ src/index.ts",
-    "docs-json": "typedoc --json docs/sdk-api.json src/index.ts"
+    "docs-json": "typedoc --json docs/sdk-api.json src/index.ts",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "files": [
     "dist",
@@ -21,11 +24,6 @@
     "package.json",
     "README.md"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run build"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zdhxiong/mdclub-sdk-js.git"
@@ -42,47 +40,48 @@
   },
   "homepage": "https://github.com/zdhxiong/mdclub-sdk-js#readme",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "jquery": "^3.5.1",
     "mdui.jq": "^2.0.1",
     "mithril": "^2.0.4",
     "sha-1": "^1.0.0"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.0.3",
+    "@openapitools/openapi-generator-cli": "^2.1.23",
     "@rollup/plugin-buble": "^0.21.3",
-    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^10.0.0",
-    "@rollup/plugin-typescript": "^6.1.0",
-    "@types/chai": "^4.2.14",
-    "@types/jquery": "^3.5.3",
-    "@types/mithril": "^2.0.5",
-    "@types/mocha": "^8.0.3",
-    "@types/weixin-app": "^2.9.1",
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
-    "chai": "^4.2.0",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-typescript": "^8.2.0",
+    "@types/chai": "^4.2.15",
+    "@types/jquery": "^3.5.5",
+    "@types/mithril": "^2.0.6",
+    "@types/mocha": "^8.2.1",
+    "@types/weixin-app": "^2.9.2",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "chai": "^4.3.0",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.3.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^5.0.9",
     "mdclub-openapi": "^1.0.2",
-    "mocha": "^8.2.0",
-    "mysql-import": "^4.0.24",
-    "prettier": "^2.1.2",
-    "rollup": "^2.32.1",
+    "mocha": "^8.3.0",
+    "mysql-import": "^5.0.21",
+    "pinst": "^2.1.4",
+    "prettier": "^2.2.1",
+    "rollup": "^2.39.0",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-polyfill": "^3.0.0",
     "rollup-plugin-uglify": "^6.0.4",
     "spa-server": "^1.0.0",
-    "swagger-model-validator": "^3.0.19",
-    "tslib": "^2.0.3",
+    "swagger-model-validator": "^3.0.20",
+    "tslib": "^2.1.0",
     "typedoc": "^0.19.2",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.5"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   }
 }

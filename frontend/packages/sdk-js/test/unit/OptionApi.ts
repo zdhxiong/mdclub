@@ -77,7 +77,7 @@ const optionUpdateData: Option = {
   storage_ftp_passive: true,
   storage_ftp_password: '123456',
   storage_ftp_port: 45,
-  storage_ftp_root: '/static',
+  storage_ftp_dir: '/static',
   storage_ftp_ssl: true,
   storage_ftp_username: 'test',
   storage_local_dir: '/static',
@@ -88,7 +88,7 @@ const optionUpdateData: Option = {
   storage_sftp_host: '102.22.21.12',
   storage_sftp_password: '123456',
   storage_sftp_port: 45,
-  storage_sftp_root: '/static',
+  storage_sftp_dir: '/static',
   storage_sftp_username: 'test',
   storage_type: 'local',
   storage_upyun_bucket: 'test',
@@ -141,7 +141,7 @@ describe('OptionApi', () => {
   it('update - 管理员', () => {
     setDefaultTokenToManager();
 
-    return OptionApi.update(optionUpdateData).then(response => {
+    return OptionApi.update(optionUpdateData).then((response) => {
       matchModel(response.data, models.Option);
       deepEqual(response.data, optionUpdateData);
     });
@@ -184,7 +184,7 @@ describe('OptionApi', () => {
   it('get - 未登录', () => {
     removeDefaultToken();
 
-    return OptionApi.get().then(response => {
+    return OptionApi.get().then((response) => {
       matchModel(response.data, models.Option);
       deepEqual(response.data, optionPubicData);
     });
@@ -193,7 +193,7 @@ describe('OptionApi', () => {
   it('get - 已登录', () => {
     setDefaultTokenToNormal();
 
-    return OptionApi.get().then(response => {
+    return OptionApi.get().then((response) => {
       matchModel(response.data, models.Option);
       deepEqual(response.data, optionPubicData);
     });
@@ -202,7 +202,7 @@ describe('OptionApi', () => {
   it('get - 管理员', () => {
     setDefaultTokenToManager();
 
-    return OptionApi.get().then(response => {
+    return OptionApi.get().then((response) => {
       matchModel(response.data, models.Option);
       deepEqual(response.data, optionUpdateData);
     });

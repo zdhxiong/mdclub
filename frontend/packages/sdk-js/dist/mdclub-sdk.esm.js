@@ -1,6 +1,6 @@
 /*!
  * mdclub-sdk 1.0.5 (https://github.com/zdhxiong/mdclub-sdk-js#readme)
- * Copyright 2018-2020 zdhxiong
+ * Copyright 2018-2021 zdhxiong
  * Licensed under MIT
  */
 const defaults = {
