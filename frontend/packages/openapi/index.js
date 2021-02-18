@@ -6,7 +6,7 @@ const srcPath = './src/index.yaml';
 const yamlDistPath = './dist/openapi.yaml';
 const jsonDistPath = './dist/openapi.json';
 
-const doc = YAML.safeLoad(fs.readFileSync(srcPath, 'utf8').toString());
+const doc = YAML.load(fs.readFileSync(srcPath, 'utf8').toString());
 const options = {
   filter: ['relative', 'remote'],
   location: srcPath,
@@ -18,6 +18,6 @@ const options = {
 };
 
 resolve(doc, options).then((results) => {
-  fs.writeFileSync(yamlDistPath, YAML.safeDump(results.resolved));
+  fs.writeFileSync(yamlDistPath, YAML.dump(results.resolved));
   fs.writeFileSync(jsonDistPath, JSON.stringify(results.resolved, null, 2));
 });
