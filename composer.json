@@ -41,14 +41,14 @@
         "predis/predis": "^1.1",
         "catfan/medoo": "^1.7",
         "suin/php-rss-writer": "^1.6",
-        "algolia/algoliasearch-client-php": "^2.6",
         "zhuzhichao/ip-location-zh": "^2.4",
         "tightenco/collect": "^8.19",
         "intervention/image": "^2.5",
         "mcaskill/composer-exclude-files": "^2.0",
         "funkjedi/composer-include-files": "^1.0",
         "samdark/sitemap": "^2.2",
-        "filp/whoops": "^2.7"
+        "filp/whoops": "^2.7",
+        "algolia/algoliasearch-client-php": "^3.1"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
