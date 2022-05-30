@@ -33,7 +33,7 @@ function checkResult($success, string $text, $failText = null, bool $must = true
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"/>
     <style>
         body {
             background-color: #eee;
@@ -666,8 +666,8 @@ $diskFreeSpace = Str::memoryFormat((int) disk_free_space("."));
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mdclub-sdk-js@1.0.4/dist/mdclub-sdk.min.js"></script>
+<script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+<script src="https://unpkg.com/mdclub-sdk-js@1.0.4/dist/mdclub-sdk.min.js"></script>
 <script>
     var $ = mdui.$;
     $(function() {
