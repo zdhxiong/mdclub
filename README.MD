@@ -1,5 +1,7 @@
 ## [MDClub 官网](https://mdclub.org) | [在线体验](https://community.mdclub.org)
 
+## 当前版本已停止更新
+
 ## 关于 MDClub
 
 [MDClub](https://mdclub.org) 是一个漂亮、轻量的开源社区系统。它运行快速且易于使用，完全具备一个成熟社区所需的功能。它的特性包括：
